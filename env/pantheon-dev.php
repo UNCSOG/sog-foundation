@@ -24,7 +24,7 @@ function wpsax_filter_option( $value, $option_name ) {
             'debug'        => defined( 'WP_DEBUG' ) && WP_DEBUG ? true : false,
             'baseurl'      => home_url(),
             'sp'           => array(
-                'entityId' => 'urn:' . parse_url( home_url(), PHP_URL_HOST ),
+                'entityId' => 'urn:' . $_ENV['PANTHEON_SITE_NAME'] . $_ENV['PANTHEON_ENVIRONMENT'],
                 'assertionConsumerService' => array(
                     'url'  => wp_login_url(),
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
