@@ -9,6 +9,9 @@ Clone the repo into /wp-content/plugins/
 
 ```bash
 git clone git@sc.unc.edu:sog-it/sog-saml-conf.git
+
+# Or to keep versioning
+git subtree add --prefix=wp-content/plugins/sog-saml-conf git@sc.unc.edu:sog-it/sog-saml-conf.git main
 ```
 
 ## Features
