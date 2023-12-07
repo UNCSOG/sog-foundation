@@ -12,20 +12,17 @@
 
 require_once( __DIR__ . '/admins.php' );
 
-if (getenv( 'PANTHEON_ENVIRONMENT' ) == 'true') {
+if (getenv( 'PANTHEON_ENVIRONMENT' )) {
     switch ($_ENV['PANTHEON_ENVIRONMENT']) {
         case 'live':
-            putenv('WP_ENVIRONMENT_TYPE=production');
             add_action( 'wp_login', 'disable_local_admin' );
             require_once( __DIR__ . '/env/pantheon-live.php' );
             break;
         case 'test':
-            putenv('WP_ENVIRONMENT_TYPE=staging');
             add_action( 'wp_login', 'enable_local_admin');
             require_once( __DIR__ . '/env/pantheon-test.php' );
             break;
         default:
-            putenv('WP_ENVIRONMENT_TYPE=development');
             add_action( 'wp_login', 'enable_local_admin');
             require_once( __DIR__ . '/env/pantheon-dev.php' );
             break;
