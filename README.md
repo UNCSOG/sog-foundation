@@ -1,2 +1,2 @@
 # sog-foundation
-Used for our custom pantheon WordPress upstream
+Used for School Of Government custom Pantheon WordPress upstream.
