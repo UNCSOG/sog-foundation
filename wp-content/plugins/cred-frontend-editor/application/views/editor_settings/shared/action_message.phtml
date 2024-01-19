@@ -1,0 +1,30 @@
+<?php
+/**
+ * Template for the forms notifications GUI, trigger section, meta value condition.
+ * 
+ * @var string $action_message The value of the action message
+ *
+ * @since 2.1.2
+ */
+$context = isset( $context ) ? $context : array();
+
+$action_message = toolset_getarr( $context, 'action_message', '' );
+
+?>
+<div data-cred-bind="{ action: 'toggle', condition: '_cred[form][action]=message' }">
+
+	<i><?php _e( 'Enter the message to display instead of the form. You can use HTML and shortcodes. (but no Toolset Forms)', 'wp-cred' ); ?></i>
+	
+	<div class="cred-editor-toolbar code-editor-toolbar js-cred-editor-toolbar js-toolset-editor-toolbar js-code-editor-toolbar" data-target="credformactionmessage">
+	<?php
+		do_action( 'cred_settings_action_message_editor_print_toolbar_buttons', 'credformactionmessage' );
+	?>
+	</div>
+	<textarea 
+		class="cred-settings-action-message js-cred-settings-action-message" 
+		style="width:100%" 
+		autocomplete="off" 
+		name="_cred[form][action_message]" 
+		id="credformactionmessage"><?php echo $action_message; ?></textarea>
+
+</div>

@@ -1,0 +1,85 @@
+<?php
+/**
+ * Template for the post expiration general settings.
+ *
+ * @since 2.3
+ */
+$context = isset( $context ) ? $context : array();
+
+$enabled = toolset_getarr( $context, 'enabled', false );
+$settings = toolset_getarr( $context, 'settings', false );
+$schedules = toolset_getarr( $context, 'schedules', array() );
+
+$schedule_selected = toolset_getnest( $settings, array( 'post_expiration_cron', 'schedule' ), '' );
+
+?>
+<h3>
+<?php
+/* translators: Title of the general settings section to enable the post expiration feature sitewide */
+echo esc_html( __( 'Post expiration', 'wp-cred' ) );
+?>
+</h3>
+<div class="toolset-advanced-setting">
+	<p>
+		<label class='cred-label'>
+			<input type="checkbox"
+				autocomplete="off"
+				class='js-cred-other-setting js-cred-other-setting-enable-post-expiration'
+				name="cred_enable_post_expiration"
+				value="1"
+				<?php checked( $enabled ); ?>
+				/>
+			<?php
+			/* translators: Label of the checkbox to enable or disable the post expiration feature sitewide */
+			_e( 'Enable the ability to set an automatic expiration date for posts created or edited with a form.', 'wp-cred' );
+			?>
+		</label>
+	</p>
+	<p class="js-cred-other-setting-enable-post-expiration-extra" style="<?php
+	if ( ! $enabled ) {
+		echo 'display:none;';
+	}
+	?>">
+		<label>
+			<?php
+			/* translators: Label of the option to set the frequency to check for expired posts */
+			_e('Check for expired posts:', 'wp-cred');
+			?>
+			<select id="cred_post_expiration_cron" autocomplete="off" name="cred_post_expiration_cron_schedule" class='cred_ajax_change'>
+				<?php
+				if ( ! array_key_exists( $schedule_selected, $schedules ) ) {
+					?>
+					<option value="" selected="selected" disabled="disabled"><?php
+					/* translators: Label of the dummy option to invite you to select one frequency interval to check for expired posts */
+					_e( 'Select one interval', 'wp-cred' );
+					?></option>
+					<?php
+				}
+				?>
+				<?php foreach ( $schedules as $schedule => $schedule_definition ) { ?>
+					<option value="<?php echo esc_attr( $schedule ); ?>" <?php selected( $schedule, $schedule_selected ); ?>><?php echo $schedule_definition['display']; ?></option>
+				<?php } ?>
+			</select>
+		</label>
+	</p>
+	<p>
+		<?php
+		$documentation_link_args = array(
+			'utm_source'	=> 'plugin',
+			'utm_campaign'	=> 'forms',
+			'utm_medium'	=> 'gui',
+			'utm_term'		=> 'Check our documentation'
+		);
+		$documentation_link = add_query_arg( $documentation_link_args, CRED_DOC_LINK_AUTOMATIC_POST_EXPIRATION );
+		echo sprintf(
+			'<a href="%1$s" title="%2$s" target="_blank">%3$s %4$s</a>.',
+			esc_url( $documentation_link ),
+			/* translators: Title attribute for the documentation link about the post expiration feature */
+			esc_attr( __( 'Check our documentation', 'wp-cred' ) ),
+			/* translators: Text for the documentation link about the post expiration feature */
+			__( 'Check our documentation', 'wp-cred' ),
+			'<i class="fa fa-external-link"></i>'
+		);
+		?>
+	</p>
+</div>

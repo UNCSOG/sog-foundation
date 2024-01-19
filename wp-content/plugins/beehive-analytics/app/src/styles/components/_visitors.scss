@@ -1,0 +1,103 @@
+@include body-class(true) {
+	.beehive-visitors {
+
+		.beehive-visitors-number {
+			flex: 0 0 auto;
+			margin: 0 0 $sui-gutter-md;
+			text-align: center;
+
+			strong {
+				display: block;
+				color: $nightrider;
+				font-size: 28px;
+				line-height: 37px;
+			}
+
+			span {
+				display: block;
+				margin-top: 0;
+				font-size: 12px;
+			}
+
+			@include media(min-width, md) {
+				margin: 0;
+				padding: 0 50px;
+			}
+		}
+
+		.beehive-visitors-percentage {
+			flex: 1;
+
+			.beehive-percentage-bar {
+				margin-bottom: $sui-gutter-md;
+
+				@include media(min-width, md) {
+					margin-bottom: #{$sui-gutter / 2};
+				}
+			}
+
+			.beehive-percentage-summary {
+				display: inline-block;
+				list-style: none;
+
+				&, li {
+					margin: 0;
+					padding: 0;
+					border: 0;
+				}
+
+				li {
+					position: relative;
+					padding-left: 18px;
+					list-style: none;
+					color: $grey;
+					font: 500 13px/22px $font;
+					letter-spacing: $font--letter-spacing;
+
+					span {
+						width: 8px;
+						height: 8px;
+						border-radius: 10px;
+						display: block;
+						position: absolute;
+						top: 7px;
+						left: 0;
+					}
+
+					strong {
+						margin-left: 20px;
+						color: $nightrider;
+					}
+
+					&:not(:last-child) {
+
+						@include media(min-width, md) {
+							margin-right: $sui-gutter;
+						}
+					}
+
+					@include media(min-width, md) {
+						min-width: 30px;
+						flex: 0 0 auto;
+					}
+				}
+
+				@include media(min-width, md) {
+					display: flex;
+					flex-flow: row wrap;
+					justify-content: center;
+				}
+			}
+
+			@include media(min-width, md) {
+				padding: 0 $sui-gutter;
+			}
+		}
+
+		@include media(min-width, md) {
+			display: flex;
+			flex-flow: row wrap;
+			align-items: center;
+		}
+	}
+}

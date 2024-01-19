@@ -1,0 +1,40 @@
+<?php
+/**
+ * Template File
+ * This file is the View editor section for the option to disable the View DIV wrapper.
+ *
+ * @since 2.6.4
+ */
+?>
+
+<div class="wpv-setting-container wpv-setting-container-horizontal wpv-settings-view-wrapper js-wpv-settings-view-wrapper">
+	<div class="wpv-setting js-wpv-setting">
+		<ul class="wpv-view-wrapper wpv-settings-view-wrapper">
+			<li>
+				<input type="checkbox"
+                       id="wpv-settings-disable-view-wrapper"
+				       class="js-wpv-settings-disable-view-wrapper"
+				       name="_wpv_settings[disable_view_wrapper]"
+				       value="true"
+                       autocomplete="off"
+                    <?php echo checked( toolset_getnest( $context['view_settings'], array( 'disable_view_wrapper' ), 'false' ), 'true' ); ?>
+                />
+				<label for="wpv-settings-disable-view-wrapper">
+					<?php esc_html_e( 'Disable the wrapping DIV around the View', 'wpv-views' ); ?>
+				</label>
+                <i class="icon-question-sign fa fa-question-circle js-display-tooltip"
+                   data-header="<?php echo esc_attr( $context['section_help_pointer']['title'] ); ?>"
+                   data-content="<?php echo esc_attr( $context['section_help_pointer']['content'] ); ?>">
+                </i>
+			</li>
+		</ul>
+	</div>
+	<span class="update-action-wrap auto-update js-wpv-update-action-wrap">
+				<span class="js-wpv-message-container"></span>
+				<input type="hidden"
+				       data-success="<?php echo esc_attr( __( 'Updated', 'wpv-views' ) ); ?>"
+				       data-unsaved="<?php echo esc_attr( __( 'Not saved', 'wpv-views' ) ); ?>"
+				       data-nonce="<?php echo wp_create_nonce( WPV_Ajax::CALLBACK_UPDATE_VIEW_WRAPPER_SECTION ); ?>"
+				       class="js-wpv-view-wrapper-update" />
+			</span>
+</div>

@@ -1,0 +1,64 @@
+<?php
+extract( $context );
+
+$roles_options = '';
+foreach ( $roles as $role => $role_data ) {
+	if ( ! isset( $role_data['capabilities']['wpcf_access_role'] ) ) {
+		$roles_options .= '<option value="' . $role . '">' . $role . '</option>';
+	}
+}
+wp_nonce_field( 'wpcf-access-edit', 'wpcf-access-edit', true, true );
+?>
+<div class="js-toolset-access-erase-message-before-start">
+	<?php _e( 'You can reset all Access settings here.', 'wpcf-access' )?><br>
+	<?php _e( 'Have in mind that this action cannot be undone and you should create a copy of your database first.', 'wpcf-access' )?>
+	<p>
+		<button class="button js-toolset-access-agree-erase-access-settings toolset-access-agree-erase-access-settings">
+		<?php _e( 'Remove Access settings from my database', 'wpcf-access' )?></button>
+	</p>
+</div>
+
+<div class="js-toolset-access-erase_database" style="display:none;">
+	<table class="toolset-access-misc-form-process">
+		<tr>
+			<td><input type="checkbox" id="js-toolset-access-misc-remove-settings" value="1"></td>
+			<td><label for="js-toolset-access-misc-remove-settings"><?php _e( 'Remove Access settings from the database', 'wpcf-access' )?></label></td>
+		</tr>
+
+
+<?php if ( count( $access_roles ) > 0 ) { ?>
+		<tr>
+			<td><input type="checkbox" id="js-toolset-access-misc-remove-roles" value="1"></td>
+			<td><label for="js-toolset-access-misc-remove-roles"><?php _e( 'Remove Access custom roles', 'wpcf-access' )?></label></td>
+		</tr>
+		<tr class="js-toolset-access-misc-existing-users hidden">
+			<td colspan="2" style="padding-left:26px;">
+				<?php _e( 'These roles will be removed', 'wpcf-access' )?>: <?php echo implode( ', ', $access_roles_names )?><br>
+			</td>
+		</tr>
+<?php }?>
+
+		<tr class="js-toolset-access-misc-reasign-users  hidden">
+			<td colspan="2" style="padding-left:26px;"><?php _e( 'Assign existing users to', 'wpcf-access' )?>:
+				<select>
+					<option value=""><?php _e( 'Select Role ', 'wpcf-access' )?></option>';
+					<?php echo $roles_options ?>
+				</select>
+				<input type="hidden" value="' . $total_users_to_reassign . '" class="js-toolset-access-misc-total-users">
+				<input type="hidden" value="0" class="js-toolset-access-misc-total-users-processed">
+			</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" id="js-toolset-access-misc-disable-plugin" value="1"></td>
+			<td><label for="js-toolset-access-misc-disable-plugin"><?php _e( 'Deactivate Toolset Access plugin', 'wpcf-access' )?></label></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p><button class="button js-toolset-access-misc-start toolset-access-misc-start"><?php _e( 'Reset Access settings', 'wpcf-access' )?></button><br>
+					<?php _e( 'Remember that this action cannot be undone', 'wpcf-access' )?></p>
+				<div class="js-error-container"></div>
+			</td>
+		</tr>
+	</table>
+	<p class="js-toolset-access-misc-spiner"></p>
+</div>

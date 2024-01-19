@@ -1,0 +1,34 @@
+<?php
+/**
+ * Template for the forms notifications GUI, body section.
+ * 
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form_type = toolset_getarr( $context, 'form_type' );
+
+$notification_html_name = "_cred[notification][notifications][{$ii}]";
+?>
+<fieldset class="cred-fieldset cred-notification-fieldset cred-notification-fieldset-body">
+    <h4><?php _e( 'Notification e-mail body', 'wp-cred' ); ?></h4>
+    <div class="cred-editor-toolbar code-editor-toolbar js-cred-editor-toolbar js-toolset-editor-toolbar js-code-editor-toolbar" data-target="credmailbody<?php echo esc_attr( $ii ); ?>">
+    <?php
+        do_action( 'cred_notification_body_editor_print_toolbar_buttons', 'credmailbody' . $ii );
+    ?>
+    </div>
+    <textarea 
+        class="cred-notification-body js-cred-notification-body" 
+        style="width:100%" 
+        autocomplete="off" 
+        name="<?php echo esc_attr( $notification_html_name ); ?>[mail][body]" 
+        id="credmailbody<?php echo esc_attr( $ii ); ?>"><?php echo $notification['mail']['body']; ?></textarea>
+</fieldset>

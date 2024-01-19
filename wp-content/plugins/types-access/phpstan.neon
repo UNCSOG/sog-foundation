@@ -1,0 +1,47 @@
+parameters:
+	level: 2
+	treatPhpDocTypesAsCertain: false
+	bootstrapFiles:
+		- tests/phpstan/bootstrap.php
+		- tests/phpstan/stubs/TC.stub
+		- tests/phpstan/stubs/Toolset.stub
+
+	paths:
+		- application
+		- legacy
+
+	parallel:
+		processTimeout: 300.0
+
+	ignoreErrors:
+		# Own
+		- '#^Function otgs_ui_initialize not found.$#'
+		- '#^Function onthego_initialize not found.$#'
+		- '#^Function toolset_common_initialize not found.$#'
+		- '#^Call to static method get_all_published_settings_as_array\(\) on an unknown class WPDD_Utils.$#'
+		- '#^Function wpml_version_is not found.$#'
+		# Toolset Common API
+		# WP API
+		- '#^Function apply_filters(_ref_array)? invoked with [34567] parameters, 2 required\.$#'
+		- '#^Function remove_filter invoked with [34567] parameters, 2-3 required\.$#'
+		# Known issues pending a solution
+		-
+			message: '#Call to an undefined method OTGS\\Toolset\\Access\\Controllers\\CustomErrors::set_frontend_read_permissions\(\).#'
+			path: application\controllers\custom_errors.php
+			#BUG
+		-
+			message: '#Undefined variable: \$total_processed_users#'
+			path: application\controllers\ajax\handler\clean_up_database.php
+			#BUG
+		-
+			message: '#Variable \$wpcf_access in empty\(\) always exists and is not falsy.#'
+			path: application\models\access_settings.php
+		-
+			message: '#Variable \$post_id in isset\(\) always exists and is not nullable.#'
+			path: application\controllers\actions\frontend_actions.php
+		-
+			message: '#Variable \$tax_post_type in isset\(\) always exists and is not nullable.#'
+			path: application\controllers\ajax\handler\save_settings.php
+		-
+			message: '#Method Access_Ajax_Handler_Import_Export::process_call\(\) should return array but return statement is missing.#'
+			path: application\controllers\ajax\handler\import_export.php

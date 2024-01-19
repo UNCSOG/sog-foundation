@@ -1,0 +1,158 @@
+.cred-wizard-header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2em;
+}
+.cred-wizard-subheader {
+    font-size: 20px;
+    font-weight: 400;
+}
+.cred-wizard-buttons {
+    padding-top: 60px;
+}
+.wp-core-ui .button-wizard {
+    height: 43px;
+    font-size: 15px;
+    padding: 0 15px;
+}
+.wp-core-ui .button-wizard .fa {
+    font-size: 12px;
+}
+.wp-core-ui  .button-wizard-next,
+.wp-core-ui  .button-wizard-finish {
+    float: right;
+}
+.wp-core-ui  .button-wizard-next {
+    padding: 0 15px 0 20px;
+}
+.wp-core-ui  .button-wizard-prev {
+    float: left;
+    padding: 0 20px 0 15px;
+}
+
+.icon-question-sign,
+.icon-warning-sign {
+    color: #ccc;
+    cursor: pointer;
+}
+
+#cred-association-form-exit-wizard{
+    float: right;
+}
+
+/*************************
+ * Wizard steps
+ *************************/
+.cred-wizard-steps {
+    display: flex;
+    padding: 0;
+    margin: 15px 0 40px;
+}
+.cred-wizard-steps li {
+    flex-grow: 1;
+    list-style: none;
+    margin: 0;
+    padding: 5px 10px 5px 25px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    font-size: 13px;
+    font-weight: 400;
+    white-space: nowrap;
+    background: #f7f7f7;
+    color: #666;
+}
+.cred-wizard-steps li:first-child {
+    border-left: 1px solid #d84326;
+}
+.cred-wizard-steps li:last-child {
+    border-right: 1px solid #ccc;
+}
+.cred-wizard-steps li.active:last-child {
+    border-right: 1px solid #d84326;
+}
+.cred-wizard-steps li:not(:last-child):after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -15px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 0 15px 15px;
+    border-color: transparent transparent transparent #f7f7f7;
+    z-index: 1;
+}
+.cred-wizard-steps li:not(:last-child):before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -16px;
+    width: 0;
+    bottom: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 0 15px 15px;
+    border-color: transparent transparent transparent #ccc;
+    z-index: 1;
+}
+.cred-wizard-steps li.active {
+    background: #F05A28;
+    color: #fff;
+    border-top-color: #d84326 ;
+    border-bottom-color: #d84326 ;
+}
+.cred-wizard-steps li.active:not(:last-child):after {
+    border-color: transparent transparent transparent #F05A28;
+}
+.cred-wizard-steps li.active:not(:last-child):before {
+    border-color: transparent transparent transparent #d84326;
+}
+.cred-wizard-steps li.disabled {
+    background: #e8e8e8;
+}
+.cred-wizard-steps li.disabled:not(:last-child):after {
+    border-color: transparent transparent transparent #e8e8e8;
+}
+
+.cred-wizard-step-wrapper .toolset-field-table{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+/*************************
+ * Wizard tabs
+ *************************/
+.wizard-content {
+    display: none;
+}
+.wizard-content.active {
+    display: block;
+}
+
+.cred-wizard-step-wrapper-title #title-prompt-text {
+	display: none;
+}
+.cred-top-bar .cred-wizard-header {
+	display: none;
+}
+#poststuff .cred-wizard-step-wrapper-title h2 {
+	margin: 1em 0;
+}
+.cred-top-bar .cred-wizard-step-wrapper-title {
+    display: inline;
+}
+.cred-top-bar .cred-wizard-step-wrapper-title tr td:first-child {
+    display: none;
+}
+.cred-top-bar .cred-wizard-step-wrapper-title table {
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: inline;
+}
+.cred-top-bar .cred-wizard-step-wrapper-title table td {
+	padding: 0;
+}

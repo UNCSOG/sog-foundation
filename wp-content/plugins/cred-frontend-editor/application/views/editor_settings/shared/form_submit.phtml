@@ -1,0 +1,26 @@
+<?php
+/**
+ * Template for the form submit settings: AJAX.
+ * 
+ * @var array $context
+ *
+ * @since 2.1.2
+ */
+$context = isset( $context ) ? $context : array();
+
+?>
+<tr>
+	<td>
+		<?php _e( 'Form submit:', 'wp-cred' ); ?>
+	</td>
+	<td>
+		<label>
+			<input type='checkbox'  
+				name='_cred[form][use_ajax]' 
+				id='cred_form_use_ajax' 
+				value='1' 
+				/>
+			<span><?php _e( 'Submit this form without reloading the page (use AJAX)', 'wp-cred' ); ?></span>
+		</label>
+	</td>
+</tr>

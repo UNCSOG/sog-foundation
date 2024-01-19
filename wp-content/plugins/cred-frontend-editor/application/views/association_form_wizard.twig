@@ -1,0 +1,86 @@
+{#
+	The Wizard screen for creating new association form
+#}
+
+{% import "@toolset/forms.twig" as forms %}
+
+<a data-bind="click: showFullEditor.bind($data, 'showFullEditor')" class="button button-secondary button-small" id="cred-association-form-exit-wizard">{{ __( 'Exit wizard', 'wp-cred' ) }}</a>
+<div class="clearfix"></div>
+
+{# Next button #}
+{% macro nextButton( moveToStep ) %}
+    <button type="button" data-bind="click: moveToStep.bind($data, '{{ moveToStep }}', null), enable: canGoToFinish" class="button-wizard button button-primary-toolset button-wizard-next">{{ __( 'Continue', 'wp-cred' ) }} <i class="fa fa-chevron-right"></i></button>
+{% endmacro %}
+
+
+{# Previous button #}
+{% macro prevButton( moveToStep, removeActiveClass ) %}
+    <button type="button" data-bind="click: moveToStep.bind($data, '{{ moveToStep }}', '{{ removeActiveClass }}')" class="button-wizard button button-secondary button-wizard-prev"><i class="fa fa-chevron-left"></i> {{ __( 'Back', 'wp-cred' ) }}</button>
+{% endmacro %}
+
+{% import _self as navigation %}
+
+{% block navigation %}
+    <div id="cred-wizard-association-forms-wrap" >
+        <ol class="cred-wizard-steps">
+            <li data-content="cred-wizard-step-1" class="active" data-bind="css: stepFormInstructionsClass">{{ __( 'Instructions', 'wp-cred' ) }}</li>
+            <li data-content="cred-wizard-step-2" data-bind="css: stepFormNameClass">{{ __( 'Form Name', 'wp-cred' ) }}</li>
+            <li data-content="cred-wizard-step-3" data-bind="css: stepFormSettingsClass">{{ __( 'Form Settings', 'wp-cred' ) }}</li>
+            <li data-content="cred-wizard-step-4" data-bind="css: stepFormContentClass">{{ __( 'Form Content', 'wp-cred' ) }}</li>
+        </ol>
+    </div>
+{% endblock %}
+
+<div class="cred-association-forms-wizard-step-1 cred-wizard-step-wrapper" data-bind="fadeVisible: stepFormInstructionsVisiblity">
+    <h2 class="cred-wizard-header">{{ __( 'Instructions', 'wp-cred' ) }}</h2>
+    {% include '@associations_editor_metaboxes/instructions.twig' %}
+    <div class="cred-wizard-buttons">
+        {{ navigation.nextButton( 'stepFormName') }}
+    </div>
+</div>
+
+<div class="cred-association-forms-wizard-step-2 cred-wizard-step-wrapper" data-bind="fadeVisible: stepFormNameVisiblity">
+    <h2 class="cred-wizard-header">{{ __( 'Form Name', 'wp-cred' ) }}</h2>
+    {% include '@associations_editor_metaboxes/title.twig' %}
+    <div class="cred-wizard-buttons">
+        {{ navigation.prevButton( 'stepFormInstructions', 'stepFormName' ) }}
+        {{ navigation.nextButton( 'stepFormSettings' ) }}
+    </div>
+</div>
+
+<div class="cred-association-forms-wizard-step-3 cred-wizard-step-wrapper" data-bind="fadeVisible: stepFormSettingsVisiblity">
+    <h2 class="cred-wizard-header">{{ __( 'Form Settings', 'wp-cred' ) }}</h2>
+    {% include '@associations_editor_metaboxes/settings.twig' %}
+    <div class="cred-wizard-buttons">
+        {{ navigation.prevButton( 'stepFormName', 'stepFormSettings' ) }}
+        {{ navigation.nextButton( 'stepFormContent') }}
+    </div>
+</div>
+
+<div class="cred-association-forms-wizard-step-4 cred-wizard-step-wrapper" data-bind="fadeVisible: stepFormContentVisiblity">
+    <h2 class="cred-wizard-header">{{ __( 'Form Content', 'wp-cred' ) }}</h2>
+    <div class="toolset-help toolset-help-sm">
+        <div class="toolset-help-content">
+            <p>{{ __( 'Use the drag-and-drop editor to create a complete form. If you need to edit the form\'s HTML markup, click to enter the "Expert Mode".', 'wp-cred' ) }}</p>
+        </div>
+        <div class="toolset-help-sidebar"></div>
+    </div>
+    {% include '@associations_editor_metaboxes/content.twig' %}
+
+    <div class="cred-wizard-buttons">
+        {{ navigation.prevButton( 'stepFormSettings', 'stepFormContent' ) }}
+        <button type="button" data-bind="click: onSave, onEnterKey: onSave, enable: can_submit" class="button-wizard button button-primary-toolset button-wizard-finish">
+            {{ __( 'Finish', 'wp-cred' ) }}
+        </button>
+        {{ forms.spinner('display.isSaving()') }}
+    </div>
+</div>
+
+
+
+{#
+	Do not show this step in wizard, only in full editor
+#}
+<div class="cred-association-forms-wizard-step-4" data-bind="fadeVisible: stepFormMessagesVisiblity">
+    {% include '@associations_editor_metaboxes/messages.twig' %}
+</div>

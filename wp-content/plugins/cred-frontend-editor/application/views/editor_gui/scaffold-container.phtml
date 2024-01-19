@@ -1,0 +1,56 @@
+<?php
+    $extra_scaffold = ! empty( $context['extra'] ) && isset( $context['extra']->scaffold ) ? esc_textarea( $context['extra']->scaffold ) : '';
+    $extra_editor_origin = ! empty( $context['extra'] ) && isset( $context['extra']->editor_origin ) ? esc_textarea( $context['extra']->editor_origin ) : '';
+    $extra_js = ! empty( $context['extra_js'] ) ? esc_textarea( $context['extra_js'] ) : '';
+    $extra_css = ! empty( $context['extra_css'] ) ? esc_textarea( $context['extra_css'] ) : '';
+    $form_post_content = ! empty( $context['form'] ) ? esc_textarea( $context['form']->post_content ) : '';
+
+?>
+<div id="cred-editor-container-content" class="cred-editor-container js-cred-editor-container js-cred-editor-container-content">
+    <input id="cred-scaffold-data" name="_cred[extra][scaffold]" value="<?php echo $extra_scaffold; ?>" type="hidden">
+    <input id="cred-editor-origin" name="_cred[extra][editor_origin]" value="<?php echo $extra_editor_origin; ?>" type="hidden">
+    <div class="cred-editor-expert-mode-container">
+		<div class="cred-editor-notice-switcher js-cred-editor-notice-switcher hidden">
+			<?php echo $context['notice']; ?>
+		</div>
+		<div class="cred-editor-notice-switcher js-cred-editor-notice-required hidden">
+			<?php echo $context['required_notice']; ?>
+		</div>
+		<input id="cred-editor-expert-mode-switcher" class="otgs-switcher-input" autocomplete="off" type="checkbox">
+		<label for="cred-editor-expert-mode-switcher" class="cred-editor-expert-mode-switcher otgs-switcher-text-inside otgs-switcher-md toolset-theme"><?php _e( 'Expert mode', 'wp-cred' ); ?></label>
+    </div>
+    <div class="cred-editor-wrap-content js-cred-editor-wrap-content clearfix">
+        <div id="cred-editor-scaffold" class="cred-editor-content">
+        </div>
+        <div id="cred-editor-html" class="cred-editor-content hidden" data-target="content">
+            <div class="cred-editor-toolbar code-editor-toolbar js-cred-editor-toolbar js-toolset-editor-toolbar js-code-editor-toolbar" data-target="content">
+            <?php
+                do_action( 'cred_content_editor_print_toolbar_buttons' );
+            ?>
+            </div>
+            <textarea style="width:100%" id="content" name="content" autocomplete="off"><?php echo $form_post_content; ?></textarea>
+        </div>
+    </div>
+</div>
+
+<div id='cred-editor-container-css' class='cred-editor-container js-cred-editor-container js-cred-editor-container-css'>
+    <h2 class="code-editor-toolbar cred-editor-toggler js-cred-editor-toggler" data-target="css">
+        <i class="fa fa-caret-down icon-large fa-lg" style="margin-right:5px"></i>
+        <i class="cred-icon-pushpin fa fa-thumb-tack js-editor-nonempty-flag"></i>
+        <?php _e( 'CSS editor', 'wp-cred' ); ?>
+    </h2>
+    <div class="cred-editor-wrap js-cred-editor-wrap-css" style="display:none">
+    <textarea id='cred-extra-css-editor' name='_cred[extra][css]' style="position:relative;overflow-y:auto;" class="cred-extra-css-editor" autocomplete="off"><?php echo $extra_css; ?></textarea>
+    </div>
+</div>
+
+<div id='cred-editor-container-js' style="border-bottom:solid 1px #ccc" class='cred-editor-container js-cred-editor-container js-cred-editor-container-js'>
+    <h2 class="code-editor-toolbar cred-editor-toggler js-cred-editor-toggler" data-target="js">
+        <i class="fa fa-caret-down icon-large fa-lg" style="margin-right:5px"></i>
+        <i class="cred-icon-pushpin fa fa-thumb-tack js-editor-nonempty-flag"></i>
+        <?php _e( 'JS editor', 'wp-cred' ); ?>
+    </h2>
+    <div class="cred-editor-wrap js-cred-editor-wrap-js" style="display:none">
+    <textarea id='cred-extra-js-editor' name='_cred[extra][js]' style="position:relative;overflow-y:auto;" class="cred-extra-js-editor" autocomplete="off"><?php echo $extra_js; ?></textarea>
+    </div>
+</div>

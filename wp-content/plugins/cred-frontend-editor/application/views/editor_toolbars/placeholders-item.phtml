@@ -1,0 +1,47 @@
+<?php
+/**
+ * underscore.js template for the button to insert a placeholder item.
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-placeholders-item">
+    <#
+    data = _.extend(
+        {
+            target__in: [ 'all' ], 
+            target__not_in: [], 
+            type__in: [ 'all' ], 
+            type__not_in: [] 
+        },
+        data
+    );
+    var disabled = false
+    if (
+        ! _.contains( data.target__in, 'all' )
+        && ! _.contains( data.target__in, data.notificationTarget )
+    ) {
+        disabled = true;
+    }
+    if ( _.contains( data.target__not_in, data.notificationTarget ) ) {
+        disabled = true;
+    }
+    if (
+        ! _.contains( data.type__in, 'all' )
+        && ! _.contains( data.type__in, data.notificationType )
+    ) {
+        disabled = true;
+    }
+    if ( _.contains( data.type__not_in, data.notificationType ) ) {
+        disabled = true;
+    }
+    #>
+    <li class="item">
+    <button class="button button-small cred-editor-placeholders-item js-cred-editor-placeholders-item<# if ( disabled ) { #> disabled<# } #>" 
+        title="{{data.label}}" 
+        data-placeholder="{{data.placeholder}}"
+    >
+        {{{data.label}}}
+    </button>
+    </li>
+</script>

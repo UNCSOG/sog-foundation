@@ -1,0 +1,43 @@
+<?php
+/**
+ * Template for the forms notifications GUI, subject section.
+ * 
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form_type = toolset_getarr( $context, 'form_type' );
+?>
+<fieldset class="cred-fieldset cred-notification-fieldset cred-notification-fieldset-subject">
+    <h4><?php _e( 'Notification e-mail subject', 'wp-cred '); ?></h4>
+    <div class="cred-editor-toolbar code-editor-toolbar js-cred-editor-toolbar js-code-editor-toolbar">
+    <?php
+        do_action( 'cred_notification_subject_editor_print_toolbar_buttons', 'credmailsubject' . $ii );
+    ?>
+    </div>
+    <input data-cred-bind="{
+            validate: {
+            required: {
+            actions: [
+            {action: 'requiredWarning' },
+            {action: 'validateSection' }
+            ]
+            }
+            }
+        }" 
+        type="text" 
+        placeholder="<?php echo esc_attr( __( 'Enter your notification email subject here', 'wp-cred' ) ); ?>" 
+        class='cred-notification-subject js-cred-notification-subject' 
+        id="credmailsubject<?php echo esc_attr( $ii ); ?>" 
+        name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][mail][subject]" 
+        value="<?php echo esc_attr( $notification['mail']['subject'] ); ?>" 
+        style="width:100%" />
+</fieldset>

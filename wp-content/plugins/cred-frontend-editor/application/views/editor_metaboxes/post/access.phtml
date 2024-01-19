@@ -1,0 +1,61 @@
+<?php
+/**
+ * Template for the forms notifications GUI, trigger section, meta value condition.
+ *
+ * @var string $action_message The value of the action message
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+
+$is_access_active = toolset_getarr( $context, 'is_access_active', false );
+?>
+<div class="toolset-alert <?php echo ( $is_access_active ? "toolset-alert-info" : "toolset-alert-error" ); ?>">
+    <?php
+    if ( $is_access_active ) {
+        ?>
+        <h3 style="color:#3a87ad">
+            <i class="fa fa-info-circle"></i> <?php _e( 'Who can use this form?', 'wp-cred' ); ?>
+        </h3>
+        <p>
+            <?php
+            _e( 'Toolset Access provides additional controls about who can see and submit this form. You can offer this form only to specific roles and users, or open it for everyone.', 'wp-cred' );
+            ?>
+        </p>
+        <hr style="height:1px;background-color:#3a87ad;color:#3a87ad;" />
+        <p>
+            <?php printf(
+                __( 'To control who can see and use this form, go to the %1$sAccess settings%2$s.', 'wp-cred' ),
+                '<a target="_parent" href="'
+                    . admin_url( 'admin.php?page=types_access&tab=cred-forms' )
+                    . '">',
+                '</a>'
+            ); ?>
+        </p>
+        <?php
+    } else {
+        ?>
+        <h3 style="color:#b94a48">
+            <i class="fa fa-warning"></i> <?php _e( 'Who can use this form?', 'wp-cred' ); ?>
+        </h3>
+        <ul style="list-style-type:disc;padding-left:15px;">
+            <li>
+                <?php _e( 'This Form will be accessible to everyone, including guest visitors and not logged in users.', 'wp-cred' ); ?>
+            </li>
+            <li>
+            <?php _e( 'Any visitor will be able to create or edit posts using this form.', 'wp-cred' ); ?>
+            </li>
+        </ul>
+        <hr style="height:1px;background-color:#b94a48;color:#b94a48;" />
+        <p>
+        <?php printf(
+            __( 'To control who can see and use this form, please install the %1$sToolset Access plugin %2$s%3$s.', 'wp-cred' ),
+            '<a target="_blank" href="https://toolset.com/home/toolset-components/?utm_source=plugin&utm_medium=gui&utm_campaign=forms#access">',
+            '<i class="fa fa-external-link"></i>',
+            '</a>'
+        ); ?>
+        </p>
+        <?php
+    }
+    ?>
+</div>

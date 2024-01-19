@@ -1,0 +1,35 @@
+<phpunit
+	bootstrap="./tests/phpunit/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	failOnWarning="true"
+>
+	<testsuites>
+		<testsuite name="toolset-common">
+			<directory suffix=".php">./tests/phpunit/tests/</directory>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<!--
+		Note that processUncoveredFilesFromWhitelist cannot be used because of
+		a similar issue like this: https://core.trac.wordpress.org/ticket/43067
+		-->
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./inc/autoloaded</directory>
+			<directory suffix=".php">./inc/m2m</directory>
+			<directory suffix=".php">./toolset-blocks</directory>
+			<directory suffix=".php">./user-editors</directory>
+			<directory suffix=".php">./utility</directory>
+			<exclude>
+				<file>autoload_classmap.php</file>
+				<directory>./inc/autoloaded/legacy_aliases</directory>
+				<directory>./inc/m2m/DatabaseLayer/Version1</directory>
+				<directory>./inc/m2m/deprecated</directory>
+				<file>./inc/m2m/autoload_classmap.php</file>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>

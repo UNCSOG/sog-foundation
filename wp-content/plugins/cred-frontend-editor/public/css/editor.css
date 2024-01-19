@@ -1,0 +1,88 @@
+body.cred-top-bar div#topbardiv > div.postbox-header,
+body.cred-top-bar div#topbardiv > h2.hndle,
+body.cred-top-bar div#topbardiv > button.handlediv,
+body.cred-top-bar div#titlediv > div.inside {
+	display: none !important;
+}
+
+body.cred-top-bar div#topbardiv {
+	background: #f1f1f1;
+	border: none;
+	border-bottom: solid 1px #ccc;
+	position: fixed;
+	z-index: 999;
+	padding: 0 0 8px;
+}
+
+body.cred-top-bar div#save-form-actions {
+	margin-top: 3px;
+}
+
+body.cred-top-bar div#topbardiv > div.inside {
+	padding: 0;
+}
+
+body.cred-top-bar #titlediv {
+	display: flex;
+}
+
+body.cred-top-bar div#titlewrap {
+	flex: 1;
+	padding: 5px 0;
+	margin-top: 5px;
+}
+
+body.cred-top-bar div#titlewrap {
+	flex: 1;
+}
+
+body.cred-top-bar div#titlewrap #title {
+	width: auto;
+}
+
+body.cred-top-bar #title-alt {
+	display: inline-block;
+	font-size: 1.7em;
+	font-style: italic;
+	height: 1.7em;
+	line-height: 1.7em;
+	margin: 0 0 3px;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+body.cred-top-bar #title-alt:hover {
+	text-decoration: underline;
+}
+
+body.cred-top-bar #title-alt i {
+	font-size: 0.8em;
+	padding: 0 0 0 10px;
+	color: #888;
+}
+
+body.cred-top-bar div#titlewrap .button.button-primary {
+	float: right;
+	margin-top: 7px;
+}
+
+body.cred-top-bar div#save-form-actions,
+body.cred-top-bar div#status-form-actions {
+    margin-top:3px;
+}
+
+body.cred-top-bar div#post-status-select {
+    display: inline;
+}
+
+body.cred-top-bar div#topbardiv .submitdelete {
+	float: right;
+	margin-top: 5px;
+}
+
+body.post-type-cred-form .wrap div.error,
+body.post-type-cred-user-form .wrap div.error,
+body.post-type-cred-form .wrap div.updated,
+body.post-type-cred-user-form .wrap div.updated {
+	display: none !important;
+}

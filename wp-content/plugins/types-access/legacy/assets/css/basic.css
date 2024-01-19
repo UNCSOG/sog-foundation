@@ -1,0 +1,1928 @@
+.toolset_page_types_access .wpcf-loading {
+    width: 20px;
+    height: 20px;
+    background: url('../images/wpspin.gif') no-repeat 50% 50%;
+    display: inline-block;
+}
+
+.toolset-access-table-notification{
+	left:50% !important;
+	margin-left:-20% !important;
+}
+
+/* Alarm notification */
+.toolset-access-alarm-wrap-left{
+	float: left;
+	width: 125px;
+}
+.toolset-access-alarm-wrap-left i{
+	margin: 40px;
+}
+.toolset-access-alarm-wrap-right{
+	float: left;
+	width: 300px;
+	padding-left: 16pxt;
+}
+
+
+
+/* Access */
+
+.otg-access-settings-container {
+	display: block;
+	clear: both;
+	background: #fff;
+	border: solid 1px #ccc;
+	padding: 20px;
+}
+
+.otg-access-settings-section-loading {
+	width: 100%;
+	height: 150px;
+	line-height: 150px;
+	text-align: center;
+	font-size: 1.8em;
+	font-weight: bold;
+}
+
+	.otg-access-new-nav .nav-tab.nav-tab-active {
+		background: #fff;
+		border-bottom: 1px solid #fff;
+	}
+
+.wpcf-access-type-item,
+.otg-access-settings-section-item {
+	background-color: #fafafa;
+    border: 1px solid #E5E5E5;
+	margin: 0 0 20px;
+	clear: both;
+}
+
+.wpcf-access-type-item.otg-access-settings-section-item-not-managed,
+.otg-access-settings-section-item.otg-access-settings-section-item-not-managed {
+	background-color: #f0f0f0;
+}
+
+.otg-access-settings-section-description {
+	font-style: italic;
+}
+
+.otg-access-settings-section-item {
+	box-shadow: none;
+	transition: all 1s linear;
+}
+
+	.otg-access-settings-section-item.otg-access-settings-section-item-saved {
+		border-color: #7ad03a;
+		box-shadow: 0 0 10px 2px #7ad03a;
+	}
+
+	.otg-access-settings-section-item.otg-access-settings-section-item-error {
+		border-color: red;
+		color: red;
+	}
+
+h4.otg-access-settings-section-item-toggle {
+	cursor: pointer;
+	margin: 0;
+	padding: 10px 20px;
+}
+
+	.otg-access-settings-section-item .otg-access-settings-section-item-content {
+		background-color: #fff;
+		border-top: solid 1px #E5E5E5;
+		margin: 0;
+		padding: 10px 20px;
+		transition: border 1s linear;
+		position:relative;
+	}
+
+		.otg-access-settings-section-item.otg-access-settings-section-item-saved .otg-access-settings-section-item-content {
+			border-top: solid 1px #7ad03a;
+		}
+
+	.toolset-access-posts-group-info{
+		background-color: #fff;
+		border: solid 1px #E5E5E5;
+		margin: 0;
+		padding: 10px 20px;
+		transition: border 1s linear;
+		text-align:right;
+	}
+		.toolset-access-posts-group-assigned-posts-list{
+			float:left;
+			line-height:30px;
+			font-size:14px;
+		}
+		.toolset-access-post-group-remove-group{
+			border-top:  solid 1px #E5E5E5;
+			margin-left:-20px;
+			padding-right:20px;
+			padding-top:10px;
+			float:left;
+			width:100%;
+			padding-left:20px;
+		}
+		.js-wpcf-remove-group{
+			color: #a00;
+			text-decoration: none;
+		}
+
+	.otg-access-settings-section-item .otg-access-settings-section-item-managed {
+		display: block;
+		float: right;
+		margin-left: 10px;
+		font-size: 0.9em;
+		font-weight: normal;
+		font-style: italic;
+	}
+
+	.wpcf-access-type-item + input[type=button],
+	.wpcf-access-type-item + button.button {
+		margin: -15px 0 25px;
+	}
+
+	.wpcf-access-type-item h4 {
+		font-size: 1.1em;
+	}
+
+.wpcf-access-custom-roles-table {
+    background-color: #F7F7F7;
+    border: 1px solid #E5E5E5;
+    border-bottom: 0px;
+    padding: 0;
+    margin: 0 0 5px 0;
+    width: 100%;
+}
+
+	.wpcf-access-custom-roles-table tbody {
+		padding: 0;
+		margin: 0;
+	}
+
+	.wpcf-access-custom-roles-table tbody td {
+		padding: 5px;
+		padding-left:15px;
+		vertical-align: top;
+	}
+
+	.wpcf-access-custom-roles-table th td{
+
+	}
+
+	.wpcf-access-custom-roles-table .wpcf-access-roles-builtin {
+	}
+
+	.wpcf-access-custom-roles-table .wpcf-access-roles-level {
+		color: #a0a0a0;
+	}
+
+	.wpcf-access-custom-roles-select {
+		margin-right: 20px;
+	}
+
+.wpcf-access-custom-roles-select-wrapper {
+    display: none;
+	padding: 2px;
+}
+
+	.wpcf-access-custom-roles-select-wrapper button {
+		vertical-align: middle;
+	}
+
+.wpcf-access-new-role-wrap {
+	padding: 15px 0;
+}
+
+
+.wpcf-access-mode {
+    margin: 10px 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.wpcf-access-mode-predefined,
+.wpcf-access-mode-custom,
+.wpcf-access-mode-not_managed {
+    margin: 10px 0 20px;
+}
+
+.wpcf-access-caps-wrapper {
+    margin-top: 10px;
+    border: none;
+}
+
+	.wpcf-access-caps-wrapper td {
+		vertical-align: top;
+		padding: 0;
+		border: none;
+	}
+
+.wpcf-access-add-user-wrapper {
+    float: left;
+}
+
+.wpcf-access-caps-role-item-wrapper {
+    float: left;
+}
+
+.wpcf-access-caps-item-wrapper {
+    margin-bottom: 20px;
+    display: block;
+    clear: both;
+}
+
+.types-suggest-user {
+	position: relative;
+}
+
+.wpcf-access-remove-user-wrapper {
+    max-width: 180px;
+	margin: 5px 0 5px 12px;
+	font-size: .9em;
+}
+
+.wpcf-access-remove-user {
+    background: url("../images/xit.gif") no-repeat scroll 0 0 transparent;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    /*float: left;*/
+    height: 10px;
+	width: 10px;
+    margin: 4px 0 0 -12px;
+    /*overflow: hidden;*/
+    /*position: absolute;*/
+    /*text-indent: -9999px;*/
+}
+
+.wpcf-access-remove-user i {
+	color: #999;
+}
+
+.wpcf-access-remove-user:hover {
+    background: url("../images/xit.gif") no-repeat scroll -10px 0 transparent;
+	color: #b94a48;
+}
+.wpcf-access-remove-user-wrapper input {
+    margin-left: 10px;
+}
+
+.wpcf-access-predefined-table td {
+    vertical-align: top;
+}
+
+.wpcf-access-mode table {
+    margin: 20px 0;
+}
+
+	.wpcf-access-table td,
+	.wpcf-access-table th {
+		text-align: left;
+		vertical-align:top;
+	}
+	.wpcf-access-table td{
+		height:30px;
+	}
+	.wpcf-access-table input[type=checkbox] {
+		/*margin-top: 5px;*/
+	}
+
+		.wpcf-access-mode table td.wpcf-access-table-action-title {
+			max-width: 120px;
+			padding-top: 8px;
+			min-width:100px;
+			font-weight:bold;
+		}
+
+		.wpcf-access-mode table td.wpcf-access-table-option-cell{
+			text-align:left;
+		}
+		.wpcf-access-mode table tbody th{
+			text-align:left;
+		}
+
+span.wpcf-access-shortcut-section {
+    background: url("../images/shortcut.gif") no-repeat scroll 0 0 transparent;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    height: 50px;
+}
+
+#wpcf-access-new-role .toggle {
+    display: none;
+    clear: both;
+	margin: 20px 0 0 0;
+}
+
+#wpcf-access-new-role .img-waiting {
+/*    position: absolute;
+    z-index: 10;*/
+    display: none;
+    /*margin: 4px 0 0 -20px;*/
+}
+
+a.wpcf-access-delete-role {
+    color: #aa0000;
+    text-decoration: none;
+}
+
+.wpcf-access-reassign-role .img-waiting {
+    display: none;
+}
+
+.wpcf-access-reassign-role-popup {
+    padding: 20px 0;
+}
+
+	.wpcf-access-reassign-role-popup ul {
+		margin-left: 20px;
+		list-style-type: square;
+	}
+
+	.wpcf-access-reassign-role-popup .modal {
+		margin-top: 20px;
+		text-align: right;
+	}
+
+		.wpcf-access-reassign-role-popup .modal .button-primary {
+			color: #FFF !important;
+			font-weight: normal !important;
+		}
+
+.toolset_page_types_access .icon-info-sign,
+.toolset_page_types_access .icon-ok,
+.toolset_page_types_access .icon-ok-sign,
+.toolset_page_types_access .icon-warning-sign,
+.toolset_page_types_access .icon-remove,
+.toolset_page_types_access .icon-refresh {
+	position: relative;
+	top: 2px;
+	cursor: pointer;
+	margin: 0 4px;
+	font-size: 16px;
+}
+
+	.toolset_page_types_access .icon-remove {
+		color: #c83025;
+	}
+
+	.toolset_page_types_access .icon-refresh {
+		color: #3a87ad;
+	}
+
+	.toolset_page_types_access .icon-warning-sign {
+		color:#9d261d;
+	}
+
+	.toolset_page_types_access .icon-ok {
+		color: #51a351;
+	}
+
+.js-otg-access-content button i,
+.js-otg-access-content .button i {
+	margin-right: 8px;
+}
+
+.wpcf-assigned-posts ul:empty {
+	display: none;
+}
+
+/* Error page labels */
+.wpcf-add-error-page {
+/*	position: relative;
+	top: 6px;
+	left: 3px;*/
+	font-size: 18px;
+	color: #999;
+	text-decoration: none;
+	display: none;
+}
+
+	.wpcf-add-error-page:hover, .wpcf-change-wpml-settings:hover {
+		color: #0074A2;
+		transition: all .3s;
+	}
+
+	.is-enabled .wpcf-add-error-page {
+		display: inline-block;
+	}
+
+	.wpcf-access-custom-group .wpcf-add-error-page {
+		display: inline-block;
+	}
+
+	.wpcf-access-check-left:checked ~ .wpcf-add-error-page,
+	.wpcf-access-check-left:checked ~ .error-page-name-wrap {
+		display: none;
+	}
+
+.error-page-set-wrap {
+	min-width: 45px;
+	white-space: nowrap;
+	position: relative;
+}
+span.toolset-access-disabled-detector {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+input+span.toolset-access-disabled-detector {
+    display: none;
+}
+
+input[disabled]+span.toolset-access-disabled-detector {
+    display: inline;
+}
+
+
+.error-page-name-wrap,
+.access-role-name-wrap {
+	margin: 0;
+	position: relative;
+	cursor: default;
+}
+
+.error-page-name-wrap{
+	margin: 0px !important;
+	padding:0px;
+	display:none;
+}
+
+.is-enabled .error-page-name-wrap {
+	display: block;
+}
+
+.error-page-name,
+.access-role-name {
+	display: block;
+	margin-top:0px;
+	max-width: 200px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: default;
+}
+
+.error-page-name {
+	font-size: .9em;
+}
+
+.columns-10 .error-page-name,
+.columns-10 .error-page-name,
+.columns-11 .access-role-name,
+.columns-11 .access-role-name {
+	max-width: 180px;
+}
+
+
+
+	.wpcf-access-post-type-name-attachment {}
+
+	@media only screen and (max-width: 1680px) {
+
+		.columns-10 .error-page-name, .columns-11 .error-page-name,
+		.columns-10 .access-role-name, .columns-11 .access-role-name {
+			max-width: 140px;
+		}
+
+		.columns-8 .error-page-name, .columns-9 .error-page-name,
+		.columns-8 .access-role-name, .columns-9 .access-role-name {
+			max-width: 160px;
+		}
+
+	}
+
+	@media only screen and (max-width: 1366px) {
+
+		.columns-10 .error-page-name, .columns-11 .error-page-name,
+		.columns-10 .access-role-name, .columns-11 .access-role-name {
+			max-width: 100px;
+		}
+
+		.columns-8 .error-page-name, .columns-9 .error-page-name,
+		.columns-8 .access-role-name, .columns-9 .access-role-name {
+			max-width: 120px;
+		}
+
+		.wpcf-access-mode-custom .access-role-name {
+			max-width: 130px;
+		}
+
+		.wpcf-access-mode table th,
+		.wpcf-access-mode table td {
+			padding-right: 10px;
+		}
+
+		.wpcf-access-mode-custom table th,
+		.wpcf-access-mode-custom table td {
+			padding-right: 15px;
+		}
+
+
+	}
+
+	@media only screen and (max-width: 1280px) {
+
+		.columns-10 .error-page-name, .columns-11 .error-page-name,
+		.columns-10 .access-role-name, .columns-11 .access-role-name {
+			max-width: 80px;
+		}
+
+		.columns-8 .error-page-name, .columns-9 .error-page-name,
+		.columns-8 .access-role-name, .columns-9 .access-role-name {
+			max-width: 100px;
+		}
+
+	}
+
+	@media only screen and (max-width: 1024px) {
+
+		.error-page-name {
+			max-width: 40px;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+/* temp alerts, dep message, fallback warning */
+
+.toolset_page_types_access .toolset-alert.dep-message {
+	position: absolute;
+	left: 200px;
+    margin-top:4px;
+}
+
+.toolset_page_types_access .toolset-access-post-groups-info{
+	float:left;
+	margin-top:-6px !important;
+}
+
+.error-page-name,
+.wpcf-access-user-list {
+	color: rgba(51,51,51,.5);
+}
+
+	.is-enabled .error-page-name,
+	.is-enabled .wpcf-access-user-list,
+	.wpcf-access-custom-group .wpcf-access-user-list,
+	.wpcf-access-custom-group .error-page-name {
+		color: #444;
+	}
+
+
+
+/* Custom roles labels */
+.wpcf-access-roles {
+	margin-top: 10px;
+}
+
+.wpcf-access-roles:first-child {
+	margin-top: 0;
+}
+
+.wpcf-access-roles span {
+	margin-right: 20px;
+}
+
+.wpcf-access-submit{
+	float:right;
+}
+
+/* Custom capabilities form */
+.wpcf-create-new-cap-div label {
+	display: inline-block;
+	min-width: 150px;
+}
+
+	.wpcf-access-buttons-wrap {
+		text-align: right;
+	}
+	.wpcf-access-buttons-wrap-left {
+		text-align: left;
+	}
+
+	.wpcf-access-buttons-wrap .spinner, .js-wpcf-remove-custom-cap .spinner, .js-wpcf-removediv  .spinner {
+		display: inline-block!important;
+		vertical-align: middle;
+		float: none!important;
+		/*margin-top: 0;*/
+	}
+
+    .wpcf-add-new-wpml-group{
+        padding-left:30px !important;
+        background-position: 11px 7px !important;
+        background-repeat: no-repeat !important;
+        background-size: 16px !important;
+    }
+
+    #wpcf-access-new-wpml-group-title{
+        width:100%;
+    }
+
+    .wpcf-available-languages li{
+        display: inline-block;
+        width:150px;
+    }
+.toolset_page_types_access .attribute li {
+    position: relative;
+}
+
+/* Tooltip */
+.toolset_page_types_access .tooltip,
+.toolset_page_types_access .tooltip:after {
+	position: absolute;
+	z-index: 10;
+}
+
+.toolset_page_types_access .tooltip {
+	top: -30px;
+	visibility: hidden;
+	padding: 2px 10px;
+	background: #0074a2;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	font-size: 12px;
+}
+
+.toolset_page_types_access .tooltip:after {
+	bottom: -8px;
+	left: 50%;
+	margin-left: -8px;
+	width: 0;
+	height: 0;
+	border-width: 8px 8px 0 8px;
+	border-style: solid;
+	border-color: #0074a2 transparent transparent transparent;
+	content: "";
+}
+
+
+/* Tooltip END */
+
+
+.toolset_page_types_access .debug {
+	outline: 1px solid red!important;
+	border: 1px solid red!important;
+	background: yellow;
+}
+
+.js-wpcf-remove-custom-cap{
+	display:block;
+}
+
+.js-wpcf-access-editor-button{
+	cursor:pointer;
+}
+.wpcf-access-margin{
+	margin-left: 30px;
+	margin-top: 0;
+}
+
+
+/* ************************************************************************** *\
+ 		RTL Adjustments
+\* ************************************************************************** */
+html[dir='rtl'] .wpcf-access-link-to-manual {
+	background-position-x: right;
+}
+
+html[dir='rtl'] .wpcf-access-submit {
+	float: left;
+}
+
+html[dir='rtl'] button i {
+	margin-right: 0;
+	margin-left: 8px;
+}
+
+.wpcf-access-capability-tabs{
+    position: relative;
+    float:left;
+    width:150px;
+
+}
+.wpcf-access-capability-tabs a{
+    display: block;
+    color: #444;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", "Open Sans", sans-serif;
+    font-size: 13px;
+    line-height: 2em;
+    text-decoration: none;
+    border-bottom:1px solid #ccc;
+}
+.wpcf-access-capability-tabs .ui-tabs-active a,
+.wpcf-access-capability-tabs a:hover{
+    font-weight: bold;
+    color:#000;
+}
+.wpcf-access-capability-content{
+    float:left;
+    width: 590px;
+    border-left:1px solid #ccc;
+    padding-left:10px;
+}
+.otg-access-shortcuts{
+	display:inline-block;
+	width: 100px;
+	height:100px;
+	text-align:center;
+	text-underline: none;
+	margin-right:20px;
+	position: relative;
+}
+.otg-access-shortcuts-link{
+	border:1px solid #ccc;
+	display:inline-block;
+	width: 100px;
+	height:80px;
+	padding-top:20px;
+	text-align:center;
+	text-underline: none;
+}
+.otg-access-nav-submenu{
+	position:absolute;
+	top:-2px;
+	left:-1px;
+	z-index:100;
+	border:1px solid #ccc;
+	background:#fff;
+	padding:5px;
+	text-align: left;
+	min-width:80px;
+	display:none;
+	font-size:17px;
+}
+.otg-access-nav-caret{
+	position:absolute;
+	top:-3px;
+	right:3px;
+	cursor:pointer;
+}
+.otg-access-nav-submenu a{
+	border:0;
+	display:block;
+	margin-bottom:5px;
+}
+span.otg-access-nav-icon{
+	display:block;
+	font-size:48px;
+}
+.otg-access-new-nav{
+
+	clear:both;
+
+}
+.otg-access-active-nav{
+	color: #b94a48 !important;
+	outline: 0 !important;
+	box-shadow:none !important;
+	border:1px solid #b94a48 !important;
+}
+/* TODO: monitor this
+a{
+	outline: none;
+	box-shadow:none !important;
+}*/
+
+/**
+* First seed of dialogs styling
+*/
+
+div.wpcf-access-dialog-container.ui-dialog-content {
+	padding: 5px 10px;
+}
+
+	.otg-access-change-role-caps-tabs .ui-tabs-panel {
+		display: block;
+		float: left;
+		padding: 0 10px;
+	}
+
+.otg-access-new-role-extra td{
+	line-height:50px;
+}
+.otg-access-new-role-extra td:nth-child(1){
+	text-align:right;
+	padding-right:10px;
+}
+
+.toolset-access-new-role-header{
+	margin-bottom:25px;
+	text-align:right;
+}
+
+.wpcf-access-roles-custom{
+	font-weight:bold;
+}
+
+.js-wpcf-access-process-button-red{
+	background: #aa0000 !important;
+	border-color: #aa0000 !important;
+	text-shadow: none  !important;
+	box-shadow: 0 1px 0 #aa0000 !important;
+}
+
+.toolset-access-align-right{
+	text-align: right;
+	width:30%;
+	display:inline-block;
+	float:right;
+}
+.toolset-access-specific-users-row td{
+		vertical-align: top;
+}
+.toolset-access-specific-users-row a{
+	font-size:16px;
+	color: #000;
+}
+/* Css for select2 4+*/
+.toplevel_page_types_access .toolset_select2-close-mask, .toolset_page_types_access  .toolset_select2-close-mask{
+    z-index: 100110 !important;
+}
+.toplevel_page_types_access .toolset_select2-results, .toolset_page_types_access .toolset_select2-results{
+    z-index: 100111 !important;
+}
+.toplevel_page_types_access .toolset_select2-dropdown, .toolset_page_types_access .toolset_select2-dropdown{
+    z-index: 100111 !important;
+}
+
+#toolset-access-user-suggest-field{
+	display:inline-block;
+    width:399px;
+}
+
+.otgs-access-posts-listing{
+	border:1px solid #ccc;
+	clear:both;
+	width:466px;
+	min-height:150px;
+	margin-left:1px;
+	max-height:250px;
+	overflow-y: scroll;
+}
+.otgs-access-users-listing{
+	width:475px;
+}
+.js-assigned-access-item, .js-assigned-access-post{
+	border-bottom:1px solid #ccc;
+	padding:10px;
+}
+.js-wpcf-unassign-access-item i, .js-wpcf-unassign-access-post i{
+	float:right;
+	margin-right:10px;
+	margin-top:2px;color:#aa0000;
+}
+.access-toolset-specific-users-list{
+	display:block;
+}
+
+.toolset-access-roles-column-fixed-width{
+	width: 20% !important;
+
+}
+.toolset-access-nag{
+	position: relative;
+}
+.js-toolset-access-dismiss-update-notice-notice{
+	position: absolute;
+	top:10px;
+	right:10px;
+	color: #666;
+	font-size:17px;
+}
+
+#wpcf-access-set_error_page select, #wpcf-access-set_error_page select option{
+	width: 100%;
+}
+.toolset-access-tab-info{
+	display:inline-block;
+	font-weight: bold;
+}
+
+.js-toolset-access-specific-user-disabled{
+	color: #ccc !important;
+}
+button.toolset-access-agree-erase-access-settings, .toolset-access-misc-start {
+	background: #a00 !important;
+	color: #fff !important;
+	border: 1px solid #a00 !important;
+}
+.wpcf-loading {
+    width: 20px;
+    height: 20px;
+    background: url('../images/wpspin.gif') no-repeat 50% 50%;
+    display: inline-block;
+}
+
+.toolset-access-table-notification{
+	left:50% !important;
+	margin-left:-20% !important;
+}
+
+/* Alarm notification */
+.toolset-access-alarm-wrap-left{
+	float: left;
+	width: 125px;
+}
+.toolset-access-alarm-wrap-left i{
+	margin: 40px;
+}
+.toolset-access-alarm-wrap-right{
+	float: left;
+	width: 300px;
+	padding-left: 16pxt;
+}
+
+
+
+/* Access */
+
+.otg-access-settings-container {
+	display: block;
+	clear: both;
+	background: #fff;
+	border: solid 1px #ccc;
+	padding: 20px;
+}
+
+.otg-access-settings-section-loading {
+	width: 100%;
+	height: 150px;
+	line-height: 150px;
+	text-align: center;
+	font-size: 1.8em;
+	font-weight: bold;
+}
+
+	.otg-access-new-nav .nav-tab.nav-tab-active {
+		background: #fff;
+		border-bottom: 1px solid #fff;
+	}
+
+.wpcf-access-type-item,
+.otg-access-settings-section-item {
+	background-color: #fafafa;
+    border: 1px solid #E5E5E5;
+	margin: 0 0 20px;
+	clear: both;
+}
+
+.wpcf-access-type-item.otg-access-settings-section-item-not-managed,
+.otg-access-settings-section-item.otg-access-settings-section-item-not-managed {
+	background-color: #f0f0f0;
+}
+
+.otg-access-settings-section-description {
+	font-style: italic;
+}
+
+.otg-access-settings-section-item {
+	box-shadow: none;
+	transition: all 1s linear;
+}
+
+	.otg-access-settings-section-item.otg-access-settings-section-item-saved {
+		border-color: #7ad03a;
+		box-shadow: 0 0 10px 2px #7ad03a;
+	}
+
+	.otg-access-settings-section-item.otg-access-settings-section-item-error {
+		border-color: red;
+		color: red;
+	}
+
+h4.otg-access-settings-section-item-toggle {
+	cursor: pointer;
+	margin: 0;
+	padding: 10px 20px;
+}
+
+	.otg-access-settings-section-item .otg-access-settings-section-item-content {
+		background-color: #fff;
+		border-top: solid 1px #E5E5E5;
+		margin: 0;
+		padding: 10px 20px;
+		transition: border 1s linear;
+		position:relative;
+	}
+
+		.otg-access-settings-section-item.otg-access-settings-section-item-saved .otg-access-settings-section-item-content {
+			border-top: solid 1px #7ad03a;
+		}
+
+	.toolset-access-posts-group-info{
+		background-color: #fff;
+		border: solid 1px #E5E5E5;
+		margin: 0;
+		padding: 10px 20px;
+		transition: border 1s linear;
+		text-align:right;
+	}
+		.toolset-access-posts-group-assigned-posts-list{
+			float:left;
+			line-height:30px;
+			font-size:14px;
+		}
+		.toolset-access-post-group-remove-group{
+			border-top:  solid 1px #E5E5E5;
+			margin-left:-20px;
+			padding-right:20px;
+			padding-top:10px;
+			float:left;
+			width:100%;
+			padding-left:20px;
+		}
+		.js-wpcf-remove-group{
+			color: #a00;
+			text-decoration: none;
+		}
+
+	.otg-access-settings-section-item .otg-access-settings-section-item-managed {
+		display: block;
+		float: right;
+		margin-left: 10px;
+		font-size: 0.9em;
+		font-weight: normal;
+		font-style: italic;
+	}
+
+	.wpcf-access-type-item + input[type=button],
+	.wpcf-access-type-item + button.button {
+		margin: -15px 0 25px;
+	}
+
+	.wpcf-access-type-item h4 {
+		font-size: 1.1em;
+	}
+
+.wpcf-access-custom-roles-table {
+    background-color: #F7F7F7;
+    border: 1px solid #E5E5E5;
+    border-bottom: 0px;
+    padding: 0;
+    margin: 0 0 5px 0;
+    width: 100%;
+}
+
+	.wpcf-access-custom-roles-table tbody {
+		padding: 0;
+		margin: 0;
+	}
+
+	.wpcf-access-custom-roles-table tbody td {
+		padding: 5px;
+		padding-left:15px;
+		vertical-align: top;
+	}
+
+	.wpcf-access-custom-roles-table th td{
+
+	}
+
+	.wpcf-access-custom-roles-table .wpcf-access-roles-builtin {
+	}
+
+	.wpcf-access-custom-roles-table .wpcf-access-roles-level {
+		color: #a0a0a0;
+	}
+
+	.wpcf-access-custom-roles-select {
+		margin-right: 20px;
+	}
+
+.wpcf-access-custom-roles-select-wrapper {
+    display: none;
+	padding: 2px;
+}
+
+	.wpcf-access-custom-roles-select-wrapper button {
+		vertical-align: middle;
+	}
+
+.wpcf-access-new-role-wrap {
+	padding: 15px 0;
+}
+
+
+.wpcf-access-mode {
+    margin: 10px 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.wpcf-access-mode-predefined,
+.wpcf-access-mode-custom,
+.wpcf-access-mode-not_managed {
+    margin: 10px 0 20px;
+}
+
+.wpcf-access-caps-wrapper {
+    margin-top: 10px;
+    border: none;
+}
+
+	.wpcf-access-caps-wrapper td {
+		vertical-align: top;
+		padding: 0;
+		border: none;
+	}
+
+.wpcf-access-add-user-wrapper {
+    float: left;
+}
+
+.wpcf-access-caps-role-item-wrapper {
+    float: left;
+}
+
+.wpcf-access-caps-item-wrapper {
+    margin-bottom: 20px;
+    display: block;
+    clear: both;
+}
+
+.types-suggest-user {
+	position: relative;
+}
+
+.wpcf-access-remove-user-wrapper {
+    max-width: 180px;
+	margin: 5px 0 5px 12px;
+	font-size: .9em;
+}
+
+.wpcf-access-remove-user {
+    background: url("../images/xit.gif") no-repeat scroll 0 0 transparent;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    /*float: left;*/
+    height: 10px;
+	width: 10px;
+    margin: 4px 0 0 -12px;
+    /*overflow: hidden;*/
+    /*position: absolute;*/
+    /*text-indent: -9999px;*/
+}
+
+.wpcf-access-remove-user i {
+	color: #999;
+}
+
+.wpcf-access-remove-user:hover {
+    background: url("../images/xit.gif") no-repeat scroll -10px 0 transparent;
+	color: #b94a48;
+}
+.wpcf-access-remove-user-wrapper input {
+    margin-left: 10px;
+}
+
+.wpcf-access-predefined-table td {
+    vertical-align: top;
+}
+
+.wpcf-access-mode table {
+    margin: 20px 0;
+}
+
+	.wpcf-access-table td,
+	.wpcf-access-table th {
+		text-align: left;
+		vertical-align:top;
+	}
+	.wpcf-access-table td{
+		height:30px;
+	}
+	.wpcf-access-table input[type=checkbox] {
+		/*margin-top: 5px;*/
+	}
+
+		.wpcf-access-mode table td.wpcf-access-table-action-title {
+			max-width: 120px;
+			padding-top: 8px;
+			min-width:100px;
+			font-weight:bold;
+		}
+
+		.wpcf-access-mode table td.wpcf-access-table-option-cell{
+			text-align:left;
+		}
+		.wpcf-access-mode table tbody th{
+			text-align:left;
+		}
+
+span.wpcf-access-shortcut-section {
+    background: url("../images/shortcut.gif") no-repeat scroll 0 0 transparent;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    height: 50px;
+}
+
+#wpcf-access-new-role .toggle {
+    display: none;
+    clear: both;
+	margin: 20px 0 0 0;
+}
+
+#wpcf-access-new-role .img-waiting {
+/*    position: absolute;
+    z-index: 10;*/
+    display: none;
+    /*margin: 4px 0 0 -20px;*/
+}
+
+a.wpcf-access-delete-role {
+    color: #aa0000;
+    text-decoration: none;
+}
+
+.wpcf-access-reassign-role .img-waiting {
+    display: none;
+}
+
+.wpcf-access-reassign-role-popup {
+    padding: 20px 0;
+}
+
+	.wpcf-access-reassign-role-popup ul {
+		margin-left: 20px;
+		list-style-type: square;
+	}
+
+	.wpcf-access-reassign-role-popup .modal {
+		margin-top: 20px;
+		text-align: right;
+	}
+
+		.wpcf-access-reassign-role-popup .modal .button-primary {
+			color: #FFF !important;
+			font-weight: normal !important;
+		}
+
+.icon-info-sign,
+.icon-ok,
+.icon-ok-sign,
+.icon-warning-sign,
+.icon-remove,
+.icon-refresh {
+	position: relative;
+	top: 2px;
+	cursor: pointer;
+	margin: 0 4px;
+	font-size: 16px;
+}
+
+	.icon-remove {
+		color: #c83025;
+	}
+
+	.icon-refresh {
+		color: #3a87ad;
+	}
+
+	.icon-warning-sign {
+		color:#9d261d;
+	}
+
+	.icon-ok {
+		color: #51a351;
+	}
+
+button i,
+.button i {
+	margin-right: 8px;
+}
+
+.wpcf-assigned-posts ul:empty {
+	display: none;
+}
+
+/* Error page labels */
+.wpcf-add-error-page {
+/*	position: relative;
+	top: 6px;
+	left: 3px;*/
+	font-size: 18px;
+	color: #999;
+	text-decoration: none;
+	display: none;
+}
+
+	.wpcf-add-error-page:hover, .wpcf-change-wpml-settings:hover {
+		color: #0074A2;
+		transition: all .3s;
+	}
+
+	.is-enabled .wpcf-add-error-page {
+		display: inline-block;
+	}
+
+	.wpcf-access-custom-group .wpcf-add-error-page {
+		display: inline-block;
+	}
+
+	.wpcf-access-check-left:checked ~ .wpcf-add-error-page,
+	.wpcf-access-check-left:checked ~ .error-page-name-wrap {
+		display: none;
+	}
+
+.error-page-set-wrap {
+	min-width: 45px;
+	white-space: nowrap;
+	position: relative;
+}
+span.toolset-access-disabled-detector {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+input+span.toolset-access-disabled-detector {
+    display: none;
+}
+
+input[disabled]+span.toolset-access-disabled-detector {
+    display: inline;
+}
+
+
+.error-page-name-wrap,
+.access-role-name-wrap {
+	margin: 0;
+	position: relative;
+	cursor: default;
+}
+
+.error-page-name-wrap{
+	margin: 0px !important;
+	padding:0px;
+	display:none;
+}
+
+.is-enabled .error-page-name-wrap {
+	display: block;
+}
+
+.error-page-name,
+.access-role-name {
+	display: block;
+	margin-top:0px;
+	max-width: 200px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: default;
+}
+
+.error-page-name {
+	font-size: .9em;
+}
+
+.columns-10 .error-page-name,
+.columns-10 .error-page-name,
+.columns-11 .access-role-name,
+.columns-11 .access-role-name {
+	max-width: 180px;
+}
+
+
+
+	.wpcf-access-post-type-name-attachment {}
+
+	@media only screen and (max-width: 1680px) {
+
+		.columns-10 .error-page-name, .columns-11 .error-page-name,
+		.columns-10 .access-role-name, .columns-11 .access-role-name {
+			max-width: 140px;
+		}
+
+		.columns-8 .error-page-name, .columns-9 .error-page-name,
+		.columns-8 .access-role-name, .columns-9 .access-role-name {
+			max-width: 160px;
+		}
+
+	}
+
+	@media only screen and (max-width: 1366px) {
+
+		.columns-10 .error-page-name, .columns-11 .error-page-name,
+		.columns-10 .access-role-name, .columns-11 .access-role-name {
+			max-width: 100px;
+		}
+
+		.columns-8 .error-page-name, .columns-9 .error-page-name,
+		.columns-8 .access-role-name, .columns-9 .access-role-name {
+			max-width: 120px;
+		}
+
+		.wpcf-access-mode-custom .access-role-name {
+			max-width: 130px;
+		}
+
+		.wpcf-access-mode table th,
+		.wpcf-access-mode table td {
+			padding-right: 10px;
+		}
+
+		.wpcf-access-mode-custom table th,
+		.wpcf-access-mode-custom table td {
+			padding-right: 15px;
+		}
+
+
+	}
+
+	@media only screen and (max-width: 1280px) {
+
+		.columns-10 .error-page-name, .columns-11 .error-page-name,
+		.columns-10 .access-role-name, .columns-11 .access-role-name {
+			max-width: 80px;
+		}
+
+		.columns-8 .error-page-name, .columns-9 .error-page-name,
+		.columns-8 .access-role-name, .columns-9 .access-role-name {
+			max-width: 100px;
+		}
+
+	}
+
+	@media only screen and (max-width: 1024px) {
+
+		.error-page-name {
+			max-width: 40px;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+/* temp alerts, dep message, fallback warning */
+
+.toolset-alert.dep-message {
+	position: absolute;
+	left: 200px;
+    margin-top:4px;
+}
+
+.toolset-access-post-groups-info{
+	float:left;
+	margin-top:-6px !important;
+}
+
+.error-page-name,
+.wpcf-access-user-list {
+	color: rgba(51,51,51,.5);
+}
+
+	.is-enabled .error-page-name,
+	.is-enabled .wpcf-access-user-list,
+	.wpcf-access-custom-group .wpcf-access-user-list,
+	.wpcf-access-custom-group .error-page-name {
+		color: #444;
+	}
+
+
+
+/* Custom roles labels */
+.wpcf-access-roles {
+	margin-top: 10px;
+}
+
+.wpcf-access-roles:first-child {
+	margin-top: 0;
+}
+
+.wpcf-access-roles span {
+	margin-right: 20px;
+}
+
+.wpcf-access-submit{
+	float:right;
+}
+
+/* Custom capabilities form */
+.wpcf-create-new-cap-div label {
+	display: inline-block;
+	min-width: 150px;
+}
+
+	.wpcf-access-buttons-wrap {
+		text-align: right;
+	}
+	.wpcf-access-buttons-wrap-left {
+		text-align: left;
+	}
+
+	.wpcf-access-buttons-wrap .spinner, .js-wpcf-remove-custom-cap .spinner, .js-wpcf-removediv  .spinner {
+		display: inline-block!important;
+		vertical-align: middle;
+		float: none!important;
+		/*margin-top: 0;*/
+	}
+
+    .wpcf-add-new-wpml-group{
+        padding-left:30px !important;
+        background-position: 11px 7px !important;
+        background-repeat: no-repeat !important;
+        background-size: 16px !important;
+    }
+
+    #wpcf-access-new-wpml-group-title{
+        width:100%;
+    }
+
+    .wpcf-available-languages li{
+        display: inline-block;
+        width:150px;
+    }
+.attribute li {
+    position: relative;
+}
+
+/* Tooltip */
+.tooltip,
+.tooltip:after {
+	position: absolute;
+	z-index: 10;
+}
+
+.tooltip {
+	top: -30px;
+	visibility: hidden;
+	padding: 2px 10px;
+	background: #0074a2;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	font-size: 12px;
+}
+
+.tooltip:after {
+	bottom: -8px;
+	left: 50%;
+	margin-left: -8px;
+	width: 0;
+	height: 0;
+	border-width: 8px 8px 0 8px;
+	border-style: solid;
+	border-color: #0074a2 transparent transparent transparent;
+	content: "";
+}
+
+
+/* Tooltip END */
+
+
+.debug {
+	outline: 1px solid red!important;
+	border: 1px solid red!important;
+	background: yellow;
+}
+
+.js-wpcf-remove-custom-cap{
+	display:block;
+}
+
+.js-wpcf-access-editor-button{
+	cursor:pointer;
+}
+.wpcf-access-margin{
+	margin-left: 30px;
+	margin-top: 0;
+}
+
+
+/* ************************************************************************** *\
+ 		RTL Adjustments
+\* ************************************************************************** */
+html[dir='rtl'] .wpcf-access-link-to-manual {
+	background-position-x: right;
+}
+
+html[dir='rtl'] .wpcf-access-submit {
+	float: left;
+}
+
+html[dir='rtl'] button i {
+	margin-right: 0;
+	margin-left: 8px;
+}
+
+.wpcf-access-capability-tabs{
+    position: relative;
+    float:left;
+    width:24% !important;
+
+}
+.wpcf-access-capability-tabs a{
+    display: block;
+    color: #444;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", "Open Sans", sans-serif;
+    font-size: 13px;
+    line-height: 2em;
+    text-decoration: none;
+    border-bottom:1px solid #ccc;
+}
+.wpcf-access-capability-tabs .ui-tabs-active a,
+.wpcf-access-capability-tabs a:hover{
+    font-weight: bold;
+    color:#000;
+}
+.wpcf-access-capability-content{
+    float:left;
+    width: 590px;
+    border-left:1px solid #ccc;
+    padding-left:10px;
+}
+.otg-access-shortcuts{
+	display:inline-block;
+	width: 100px;
+	height:100px;
+	text-align:center;
+	text-underline: none;
+	margin-right:20px;
+	position: relative;
+}
+.otg-access-shortcuts-link{
+	border:1px solid #ccc;
+	display:inline-block;
+	width: 100px;
+	height:80px;
+	padding-top:20px;
+	text-align:center;
+	text-underline: none;
+}
+.otg-access-nav-submenu{
+	position:absolute;
+	top:-2px;
+	left:-1px;
+	z-index:100;
+	border:1px solid #ccc;
+	background:#fff;
+	padding:5px;
+	text-align: left;
+	min-width:80px;
+	display:none;
+	font-size:17px;
+}
+.otg-access-nav-caret{
+	position:absolute;
+	top:-3px;
+	right:3px;
+	cursor:pointer;
+}
+.otg-access-nav-submenu a{
+	border:0;
+	display:block;
+	margin-bottom:5px;
+}
+span.otg-access-nav-icon{
+	display:block;
+	font-size:48px;
+}
+.otg-access-new-nav{
+
+	clear:both;
+
+}
+.otg-access-active-nav{
+	color: #b94a48 !important;
+	outline: 0 !important;
+	box-shadow:none !important;
+	border:1px solid #b94a48 !important;
+}
+/* TODO: monitor this
+a{
+	outline: none;
+	box-shadow:none !important;
+}*/
+
+/**
+* First seed of dialogs styling
+*/
+
+.wpcf-access-dialog-container.ui-dialog-content {
+	padding: 5px 10px;
+}
+
+	.otg-access-change-role-caps-tabs .ui-tabs-panel {
+		display: block;
+		float: left;
+		padding: 0 10px;
+	}
+
+.otg-access-new-role-extra td{
+	line-height:50px;
+}
+.otg-access-new-role-extra td:nth-child(1){
+	text-align:right;
+	padding-right:10px;
+}
+
+.toolset-access-new-role-header{
+	margin-bottom:25px;
+	text-align:right;
+}
+
+.wpcf-access-roles-custom{
+	font-weight:bold;
+}
+.js-wpcf-access-gui-close{
+	position: absolute;
+    left: 0px;
+}
+
+.wpcf-access-dialog-container + .ui-dialog-buttonpane button.wpcf-access-gui-close{
+	margin-left: 10px;
+}
+
+.js-wpcf-access-process-button-red{
+	background: #aa0000 !important;
+	border-color: #aa0000 !important;
+	text-shadow: none  !important;
+	box-shadow: 0 1px 0 #aa0000 !important;
+}
+
+.toolset-access-align-right{
+	text-align: right;
+	width:30%;
+	display:inline-block;
+	float:right;
+}
+.toolset-access-specific-users-row td{
+		vertical-align: top;
+}
+.toolset-access-specific-users-row a{
+	font-size:16px;
+	color: #000;
+}
+/* Css for select2 4+*/
+.toplevel_page_types_access .toolset_select2-close-mask, .toolset_page_types_access  .toolset_select2-close-mask{
+    z-index: 100110 !important;
+}
+.toplevel_page_types_access .toolset_select2-results, .toolset_page_types_access .toolset_select2-results{
+    z-index: 100111 !important;
+}
+.toplevel_page_types_access .toolset_select2-dropdown, .toolset_page_types_access .toolset_select2-dropdown{
+    z-index: 100111 !important;
+}
+
+#toolset-access-user-suggest-field{
+	display:inline-block;
+    width:399px;
+}
+
+.otgs-access-posts-listing{
+	border:1px solid #ccc;
+	clear:both;
+	width:466px;
+	min-height:150px;
+	margin-left:1px;
+	max-height:250px;
+	overflow-y: scroll;
+}
+.otgs-access-users-listing{
+	width:475px;
+}
+.js-assigned-access-item, .js-assigned-access-post{
+	border-bottom:1px solid #ccc;
+	padding:10px;
+}
+.js-wpcf-unassign-access-item i, .js-wpcf-unassign-access-post i{
+	float:right;
+	margin-right:10px;
+	margin-top:2px;color:#aa0000;
+}
+.access-toolset-specific-users-list{
+	display:block;
+}
+
+.toolset-access-roles-column-fixed-width{
+	width: 20% !important;
+
+}
+.toolset-access-nag{
+	position: relative;
+}
+.js-toolset-access-dismiss-update-notice-notice{
+	position: absolute;
+	top:10px;
+	right:10px;
+	color: #666;
+	font-size:17px;
+}
+
+#wpcf-access-set_error_page select, #wpcf-access-set_error_page select option{
+	width: 100%;
+}
+.toolset-access-tab-info{
+	display:inline-block;
+	font-weight: bold;
+}
+
+.js-toolset-access-specific-user-disabled{
+	color: #ccc !important;
+}
+button.toolset-access-agree-erase-access-settings, .toolset-access-misc-start{
+	background: #a00 !important;
+	color:#fff !important;
+	border:1px solid #a00 !important;
+}
+.toolset-access-disabled-link{
+	pointer-events: none;
+	cursor: default;
+	color: gray;
+}
+
+.toolset-access-capability-tip {
+	cursor: help;
+    text-decoration: none!important;
+    font-size: 16px!important;
+    color: #999!important;
+    transition: all 0.15s linear;
+    -webkit-transition: all 0.15s linear;
+    -moz-transition: all 0.15s linear;
+    -o-transition: all 0.15s linear;
+    -ms-transition: all 0.15s linear;
+    margin-left: 5px;
+    cursor: help;
+}
+
+.toolset-access-capability-tip:hover {
+    color: #D0001A!important;
+}
+
+.otg-access-settings-container .sticky-wrap {
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: relative;
+	width: 100%;
+}
+.otg-access-settings-container .sticky-wrap .sticky-thead,
+.otg-access-settings-container .sticky-wrap .sticky-col,
+.otg-access-settings-container .sticky-wrap .sticky-intersect {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 50;
+	width: auto; /* Prevent table from stretching to full size */
+}
+.otg-access-settings-container .sticky-wrap .sticky-col{
+	z-index: 200 !important;
+	position: absolute !important;
+	top:-20px;
+}
+.otg-access-settings-container .sticky-wrap .sticky-thead {
+	z-index: 100;
+	width: 100%; /* Force stretch */
+	background: rgba(255, 255, 255, 0.8);
+	padding-top:10px;
+}
+.otg-access-settings-container .sticky-wrap .sticky-intersect {
+	opacity: 1;
+	z-index: 150;
+	background: rgba(255, 255, 255, 0.8);
+	padding-top:20px;
+	top:20px !important;
+}
+.otg-access-settings-container .sticky-wrap .sticky-intersect th {
+
+}
+.otg-access-settings-container .sticky-wrap .sticky-col tbody tr {
+	font-weight: bold !important;
+}
+.otg-access-settings-container .sticky-wrap.overflow-y {
+	overflow-y: auto;
+	max-height:100%;
+}
+.wpcf-access-table-action-title{
+	font-weight: bold !important;
+}
+.otg-access-settings-container .sticky-intersect{
+	display:none;
+}

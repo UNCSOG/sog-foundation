@@ -1,0 +1,30 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a new option in a generic field with manually inserted options.
+ *
+ * @since 2.1
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-generic-fields-options-manual-row">
+    <tr>
+        <td class="cred-editor-generic-fields-options-manual-row-move js-cred-editor-generic-fields-options-manual-row-move">
+            <i class="fa fa-arrows cred-editor-editable-list-item-move js-cred-editor-generic-fields-options-manual-row-move-handle"></i>
+        </td>
+        <td class="cred-editor-generic-fields-options-manual-row-default js-cred-editor-generic-fields-options-manual-row-default">
+            <# if ( data.type == 'checkboxes' ) { #>
+            <input type="checkbox" name="credEditorGenericFieldsOptionsManualRowDefault[]" />
+            <# } else { #>
+            <input type="radio" name="credEditorGenericFieldsOptionsManualRowDefault[]" />
+            <# } #>
+        </td>
+        <td class="cred-editor-generic-fields-options-manual-row-label js-cred-editor-generic-fields-options-manual-row-label">
+            <input type="text" class="large-text" />
+        </td>
+        <td class="cred-editor-generic-fields-options-manual-row-value js-cred-editor-generic-fields-options-manual-row-value">
+            <input type="text" class="large-text" />
+        </td>
+        <td class="cred-editor-generic-fields-options-manual-row-remove js-cred-editor-generic-fields-options-manual-row-remove">
+            <i class="fa fa-times cred-editor-editable-list-item-remove js-cred-editor-generic-fields-options-manual-row-remove"></i>
+        </td>
+    </tr>
+</script>

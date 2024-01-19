@@ -1,0 +1,19 @@
+<?php
+$permission_options = isset( $context['permission_options'] ) ? $context['permission_options'] : '';
+$permission_checkboxes = isset( $context['permission_checkboxes'] ) ? $context['permission_checkboxes'] : '';
+?>
+<table class="wpcf-access-table table table-condensed table-striped js-access-table widefat fixed striped">
+	<thead>
+	<tr>
+		<?php echo $permission_options?>
+	</tr>
+	</thead>
+	<tbody>
+		<?php echo $permission_checkboxes?>
+	</tbody>
+	<tfoot>
+	<tr>
+		<?php echo $permission_options?>
+	</tr>
+</tfoot>
+</table>

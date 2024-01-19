@@ -1,0 +1,19 @@
+{% import "@toolset/forms.twig" as forms %}
+
+<table class="widefat toolset-field-table">
+    <tbody>
+
+
+    {% for message_key, message_value in messages %}
+
+        {{
+        forms.twoColumnRow(
+            forms.label( message_value.description, false),
+            forms.textInput('', '', message_value.message, '', false, message_key, message_key, message_value.message)
+        )
+        }}
+
+    {% endfor %}
+
+    </tbody>
+</table>

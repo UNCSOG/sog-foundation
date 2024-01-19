@@ -1,0 +1,11 @@
+<div class="cred-editor-metadata-toggle js-cred-editor-metadata-toggle js-cred-assets-editor-toggle" data-instance="filter-css-editor" data-target="js-cred-assets-filter-css-editor" data-id="{{ id }}" data-type="css" data-bind="click: toggleExtraEditorsVisibility">
+						<span class="cred-toggle-toggler-icon js-cred-toggle-toggler-icon">
+							<i class="fa fa-caret-down icon-large fa-lg"></i>
+						</span>
+	<i class="icon-pushpin fa fa-thumb-tack" data-bind="visible: form_style"></i>
+
+    <strong>{{ __( 'CSS editor', 'cred-views' ) }}</strong>
+</div>
+<div id="cred-assets-filter-css-editor" class="cred-assets-editor hidden js-cred-assets-filter-css-editor js-cred-assets-editor">
+    <textarea cols="30" rows="10" id="cred_filter_meta_html_css_{{ id }}" autocomplete="off" data-bind="value: form_style" name="_cred_settings[filter_meta_html_css]"></textarea>
+</div>

@@ -1,0 +1,64 @@
+{#
+	Sidebar for the Drag & Drop editor. It includes the list of fields grouped in blocks
+
+	@since 2.2
+#}
+<div id="js-cred-editor-scaffold-sidebar" class="cred-editor-scaffold-sidebar js-cred-editor-scaffold-sidebar" data-bind="visible: isScaffoldVisible">
+	<div class="cred-editor-scaffold-sidebar-buttons">
+		<button class="cred-editor-scaffold-sidebar-toggle js-cred-editor-scaffold-sidebar-toggle js-cred-editor-tippy" data-tippy-content="{{ __( 'Toggle sidebar', 'wp-cred' ) }}">
+			<i class="fa fa-fw fa-angle-right"></i>
+		</button>
+	</div>
+	<div class="cred-editor-scaffold-sidebar-group cred-editor-scaffold-options-container js-cred-editor-scaffold-sidebar-group" data-bind="visible: hasOptions()">
+		<h3 class="cred-editor-scaffold-sidebar-toggler js-cred-editor-toggler" data-target="scaffold-options">
+			{{ __( 'Options', 'wp-cred' ) }}
+			<i class="fa fa-lg fa-angle-up"></i>
+		</h3>
+		<div class="cred-editor-wrap-scaffold-options js-cred-editor-wrap-scaffold-options">
+			<ul data-bind="foreach: formOptions">
+				<li>
+					<label>
+						<input type="checkbox" data-bind="attr: { class: className}, checked: checked" />
+						<span data-bind="text: label"></span>
+					</label>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="cred-editor-scaffold-sidebar-group cred-editor-scaffold-form-elements-container js-cred-editor-scaffold-sidebar-group hidden" >
+		<h3 class="cred-editor-scaffold-sidebar-toggler js-cred-editor-toggler" data-target="scaffold-form-elements">
+			{{ __( 'Form elements', 'wp-cred' ) }}
+			<i class="fa fa-lg fa-angle-up"></i>
+		</h3>
+		<div class="cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-form-elements">
+			<div class="cred-editor-scaffold-form-elements-list js-cred-editor-scaffold-list">
+			</div>
+		</div>
+	</div>
+
+	<div class="cred-editor-scaffold-sidebar-group cred-editor-scaffold-meta-container js-cred-editor-scaffold-sidebar-group" data-bind="visible: metaFields().length > 0" >
+		<h3 class="cred-editor-scaffold-sidebar-toggler js-cred-editor-toggler" data-target="scaffold-meta">
+			{{ __( 'Relationship fields', 'wp-cred' ) }}
+			<i class="fa fa-lg fa-angle-up"></i>
+		</h3>
+		<div class="cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-meta">
+			<div class="cred-editor-scaffold-meta-list js-cred-editor-scaffold-list" >
+			</div>
+		</div>
+	</div>
+
+	<div class="cred-editor-scaffold-sidebar-group cred-editor-scaffold-meta-container js-cred-editor-scaffold-sidebar-group" data-bind="visible: extraFields().length > 0" >
+		<h3 class="cred-editor-scaffold-sidebar-toggler js-cred-editor-toggler" data-target="scaffold-extra">
+			{# translators: A group of miscelaneous fields.  #}
+			{{ __( 'Extra elements', 'wp-cred' ) }}
+			<i class="fa fa-lg fa-angle-up"></i>
+		</h3>
+		<div class="cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-extra">
+			<div class="cred-editor-scaffold-extra-list js-cred-editor-scaffold-list" data-bind="foreach: extraFields">
+				{% include '@associations/editor_metaboxes/content-item.twig' %}
+			</div>
+		</div>
+	</div>
+
+</div>

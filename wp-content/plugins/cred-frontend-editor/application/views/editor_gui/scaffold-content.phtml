@@ -1,0 +1,198 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a Toolset Form scaffold.
+ *
+ * @since 2.2
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-scaffold-content">
+    <div class="cred-editor-scaffold-general-container">
+        <div class="clearfix">
+            <button class="cred-editor-scaffold-sidebar-collapse js-cred-editor-scaffold-sidebar-collapse">
+                <?php esc_html_e( 'Collapse all', 'wp-cred' ); ?>
+            </button>
+            <button class="cred-editor-scaffold-sidebar-expand js-cred-editor-scaffold-sidebar-expand hidden">
+                <?php esc_html_e( 'Expand all', 'wp-cred' ); ?>
+            </button>
+        </div>
+        <div id="js-cred-editor-scaffold-sidebar" class="cred-editor-scaffold-sidebar js-cred-editor-scaffold-sidebar" >
+            <div class="cred-editor-scaffold-sidebar-buttons">
+                <button class="cred-editor-scaffold-sidebar-toggle js-cred-editor-scaffold-sidebar-toggle js-cred-editor-tippy" data-tippy-content="<?php esc_html_e( 'Toggle sidebar', 'wp-cred' ); ?>">
+                    <i class="fa fa-fw fa-angle-right"></i>
+                </button>
+            </div>
+            <#
+            if ( _.has( data, 'options' ) && _.size( data.options ) > 0 ) {
+                #>
+                <div class="cred-editor-scaffold-sidebar-group cred-editor-scaffold-options-container js-cred-editor-scaffold-sidebar-group" <# if ( 0 == _.size( data.options ) > 0 ) { #> style="display:none;" <# } #>>
+                    <h3 class="cred-editor-scaffold-sidebar-toggler js-cred-editor-toggler" data-target="scaffold-options">
+                        <?php esc_html_e( 'Options', 'wp-cred' ); ?>
+                        <i class="fa fa-lg fa-angle-up"></i>
+                    </h3>
+                    <div class="cred-editor-wrap-scaffold-options js-cred-editor-wrap-scaffold-options">
+                        <div>
+                        <# _.each( data.options, function( scaffoldOption, scaffoldOptionKey ) {
+                            scaffoldOption = _.extend(
+                                { checked: false },
+                                scaffoldOption
+                            );
+                            #>
+                            <div>
+                                <label>
+                                <input name="_cred[form][{{scaffoldOption.inputName}}]" class="cred-editor-scaffold-options-{{scaffoldOptionKey}} js-cred-editor-scaffold-options-{{scaffoldOptionKey}}" type="checkbox"<# if ( scaffoldOption.checked ) { #> checked="checked"<# } #> />
+                                    {{scaffoldOption.label}}
+                                </label>
+                            </div>
+                            <#
+                        }); #>
+                        </div>
+                    </div>
+                </div>
+                <#
+                }
+            #>
+
+            <#
+                var availableFieldTypes = [
+                    {
+                        id: 'post-elements',
+                        'title': data.formType === 'cred-form'
+                            ? '<?php esc_html_e( 'Post elements', 'wp-cred' ); ?>'
+                            : '<?php esc_html_e( 'User elements', 'wp-cred' ); ?>',
+                        types:  [ 'basic', 'legacyParent', 'hierarchicalParent' ],
+                    },
+                    {
+                        id: 'taxonomy',
+                        'title': '<?php esc_html_e( 'Taxonomies', 'wp-cred' ); ?>',
+                        types:  [ 'taxonomy' ],
+                    },
+                    {
+                        id: 'roles',
+                        'title': '<?php esc_html_e( 'Roles', 'wp-cred' ); ?>',
+                        types:  [ 'roles' ],
+                    },
+                    {
+                        id: 'meta',
+                        'title': '<?php esc_html_e( 'Custom fields', 'wp-cred' ); ?>',
+                        types:  [ 'meta' ],
+                    },
+                    {
+                        id: 'relationship',
+                        'title': '<?php esc_html_e( 'Relationships', 'wp-cred' ); ?>',
+                        types:  [ 'relationship' ],
+                    },
+                    {
+                        id: 'extra',
+                        'title': '<?php esc_html_e( 'Extra elements', 'wp-cred' ); ?>',
+                        types:  [ 'extra', 'blocked' ],
+                    },
+                    {
+                        id: 'generic',
+                        'title': '<?php esc_html_e( 'Generic fields', 'wp-cred' ); ?>',
+                        types:  [ 'generic' ],
+                        tooltip: '<?php esc_html_e( 'Custom form fields whose values are not stored in the database but can be used for other custom purpose', 'wp-cred' ); ?>'
+                    }
+                ];
+                _.each( availableFieldTypes, function( availableType ) {
+                    var hasElements = false;
+                    _.each( availableType.types, function( type ) {
+                        hasElements |= _.has( data.extraFields, type )
+                            && _.size( data.extraFields[ type ] ) > 0;
+                    } );
+                    #>
+                    <div class="cred-editor-scaffold-sidebar-group cred-editor-scaffold-{{{availableType.id}}}-container js-cred-editor-scaffold-sidebar-group<# if ( ! hasElements ) { #> hidden <# } #>" >
+                        <h3 class="cred-editor-scaffold-sidebar-toggler js-cred-editor-toggler" data-target="scaffold-{{{availableType.id}}}">
+                            {{{availableType.title}}}
+                            <# if ( !! availableType.tooltip ) { #>
+                                <i class="fa fa-lg fa-question-circle js-cred-editor-tippy" data-tippy-content="{{{ availableType.tooltip }}}"></i>
+                            <# } #>
+                            <i class="fa fa-lg fa-angle-up"></i>
+                        </h3>
+                        <div class="cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-block js-cred-editor-wrap-scaffold-{{{availableType.id}}}">
+                            <div class="cred-editor-scaffold-{{{availableType.id}}}-list js-cred-editor-scaffold-list">
+                            <#
+                            _.each( availableType.types, function( type ) {
+                                if (
+                                    _.has( data.extraFields, type )
+                                    && _.size( data.extraFields[ type ] ) > 0
+                                ) {
+                                    _.each( data.extraFields[ type ], function( field, fieldKey ) {
+                                        field = _.defaults( field, {
+                                            environment: data.environment,
+                                            templates: data.templates,
+                                            fieldType: type,
+                                            scaffold_field_id: data.scaffold_field_id
+                                        } );
+                                        print( data.templates.scaffold.item( field ) );
+                                    });
+                                }
+                            });
+                        #>
+                            </div>
+                        </div>
+                    </div>
+                    <#
+                });
+            #>
+        </div>
+        <div id="js-cred-editor-scaffold-item-list-container" class="cred-editor-scaffold-item-list-container js-cred-editor-scaffold-item-list-container">
+            <div class="cred-editor-scaffold-item-list js-cred-editor-scaffold-item-list">
+            <#
+            if (
+                _.has( data, 'formElements' )
+                && _.size( data.formElements ) > 0
+            ) {
+                _.each( data.formElements, function( field, fieldKey ) {
+                    field = _.defaults( field, {
+                        environment: data.environment,
+                        templates: data.templates,
+                        fieldType: 'formElement',
+                        location: 'bottom',
+                        scaffold_field_id: data.scaffold_field_id
+                    } );
+                    if ( 'top' == field.location ) {
+                        print( data.templates.scaffold.item( field ) );
+                    }
+                });
+            }
+
+            var availableFieldTypes = [ 'basic', 'taxonomy', 'roles', 'meta', 'legacyParent', 'hierarchicalParent', 'relationship' ];
+            _.each( availableFieldTypes, function( availableType ) {
+                if (
+                    _.has( data, availableType )
+                    && _.size( data[ availableType ] ) > 0
+                ) {
+                    _.each( data[ availableType ], function( field, fieldKey ) {
+                        field = _.defaults( field, {
+                            environment: data.environment,
+                            templates: data.templates,
+                            fieldType: availableType,
+                            scaffold_field_id: data.scaffold_field_id
+                        } );
+                        print( data.templates.scaffold.item( field ) );
+                    });
+                }
+            });
+
+            if (
+                _.has( data, 'formElements' )
+                && _.size( data.formElements ) > 0
+            ) {
+                _.each( data.formElements, function( field, fieldKey ) {
+                    field = _.defaults( field, {
+                        environment: data.environment,
+                        templates: data.templates,
+                        fieldType: 'formElement',
+                        location: 'bottom',
+                        scaffold_field_id: data.scaffold_field_id
+                    } );
+                    if ( 'bottom' == field.location ) {
+                        print( data.templates.scaffold.item( field ) );
+                    }
+                });
+            }
+            #>
+            </div>
+        </div>
+    </div>
+</script>

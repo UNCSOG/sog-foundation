@@ -1,0 +1,63 @@
+<?php
+/**
+ * Template for the top bar save describe actions container.
+ *
+ * @var \WP_Post $view
+ * @var array $data
+ *
+ * @since 2.7
+ */
+
+$context = isset( $context ) ? $context : array();
+
+$view_id = toolset_getarr( $context, 'view_id', false );
+
+if ( ! $view_id ) {
+	return;
+}
+
+?>
+<div id="describe-actions" style="margin-top:7px;display:flex;line-height:27px;">
+	<?php
+	$view_description = get_post_meta( $view_id, '_wpv_description', true );
+	?>
+	<label>
+		<?php
+		/* translators: Label for the input to save a description for a View or WordPress Archive */
+		_e( 'Description:', 'wpv-views' );
+		?>
+	</label>
+	<div class="wpv-description-wrap" style="flex:1;padding-left:5px;">
+		<?php if ( ! empty( $view_description ) ) { ?>
+			<span id="description-alt">
+			<?php echo esc_html( $view_description ); ?><i class="fa fa-pencil"></i>
+			</span>
+		<?php } ?>
+		<textarea
+			id="wpv-description"
+			class="js-wpv-description"
+			style="width:100%;resize:none;<?php
+			if ( ! empty( $view_description ) ) {
+			echo 'display:none;';
+			} ?>"
+			autocomplete="off"><?php
+			echo esc_textarea( $view_description );
+			?></textarea>
+		<span class="js-wpv-update-button-wrap">
+			<span class="js-wpv-message-container-description"></span>
+			<input
+				type="hidden"
+				class="js-wpv-description-update"
+				data-nonce="<?php echo wp_create_nonce( 'wpv_view_description_nonce' ); ?>"
+				data-success="<?php
+				/* translators: Message when successfully saving a View or WordPress Archive description */
+				echo esc_attr( __( 'Description updated', 'wpv-views' ) );
+				?>"
+				data-unsaved="<?php
+				/* translators: Message when failing to save a View or WordPress Archive description */
+				echo esc_attr( __( 'Description not saved', 'wpv-views' ) );
+				?>"
+			/>
+		</span>
+	</div>
+</div>

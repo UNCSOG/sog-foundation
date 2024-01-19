@@ -1,0 +1,32 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a generic field with manually inserted options.
+ *
+ * @since 2.1
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-generic-fields-options-manual-table">
+    <table class="cred-editor-editable-list cred-editor-generic-fields-options-manual-table js-cred-editor-generic-fields-options-manual-table">
+        <thead>
+            <tr>
+                <td class="cred-editor-generic-fields-options-manual-row-move">
+                </td>
+                <td class="cred-editor-generic-fields-options-manual-row-default">
+                    <?php _e( 'Selected', 'wp-cred' ); ?>
+                </td>
+                <td class="cred-editor-generic-fields-options-manual-row-label">
+                    <?php _e( 'Label', 'wp-cred' ); ?>
+                </td>
+                <td class="cred-editor-generic-fields-options-manual-row-value">
+                    <?php _e( 'Value', 'wp-cred' ); ?>
+                </td>
+                <td class="cred-editor-generic-fields-options-manual-row-remove">
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <button class="button button-small cred-editor-generic-fields-options-manual-row-add js-cred-editor-generic-fields-options-manual-row-add" data-type="{{data.type}}"><?php _e( 'Add option', 'wp-cred' ); ?></button>
+</script>

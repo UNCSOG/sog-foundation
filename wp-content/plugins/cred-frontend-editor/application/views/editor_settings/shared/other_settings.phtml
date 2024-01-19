@@ -1,0 +1,129 @@
+<?php
+/**
+ * Template for the forms extra settings: AJAX, media management, comments support.
+ *
+ * @var array $context
+ *
+ * @since 2.1.2
+ */
+$context = isset( $context ) ? $context : array();
+
+?>
+<tr>
+	<td>
+		<?php _e( 'Other settings:', 'wp-cred' ); ?>
+	</td>
+	<td>
+		<label class='cred-label-chk'>
+			<input type='checkbox'
+				class='cred-checkbox-10'
+				name='_cred[form][hide_comments]'
+				id='cred_form_hide_comments'
+				value='1'
+				/>
+			<span><?php
+			/* translators: Label for the option to hide comments on pages that contain a form */
+			_e( 'Hide comments when displaying this form', 'wp-cred' );
+			?></span>
+		</label>
+
+		<label class='cred-label-chk'>
+			<input type='checkbox'
+				class='cred-checkbox-10'
+				name='_cred[form][has_media_button]'
+				id='cred_content_has_media_button'
+				value='1'
+				/>
+			<span><?php
+			/* translators: Label for the option to include a button to manage media files on specific frontend form elements */
+			_e( 'Include the Add Media button in the rich text editors from this form', 'wp-cred' );
+			?></span>
+			<span class="cred-tip-link js-otgs-popover-tooltip" data-tippy-content="
+			<h3><?php echo esc_attr(
+				/* translators: Title of a helper tooltip about including a media manager on specific frontend form elements */
+				__( 'Add Media button', 'wp-cred' )
+			); ?></h3>
+				<p>
+					<?php echo esc_attr(
+						/* translators: Part of the content of a helper tooltip about including a media manager on specific frontend form elements */
+						__( 'This form might contain WYSIWYG fields.', 'wp-cred' )
+					); ?>
+				</p>
+				<p>
+					<?php echo esc_attr(
+						/* translators: Part of the content of a helper tooltip about including a media manager on specific frontend form elements */
+						__( 'You can enable its <em>Add Media</em> button on them, for users with the right <strong>upload_files</strong> capability (by default, authors and above).', 'wp-cred' )
+					); ?>
+				</p>
+			">
+				<i class="fa fa-question-circle"></i>
+			</span>
+		</label>
+
+		<label class='cred-label-chk'>
+			<input type='checkbox'
+				class='cred-checkbox-10'
+				name='_cred[form][has_toolset_buttons]'
+				id='cred_content_has_toolset_buttons'
+				value='1'
+				/>
+			<span><?php
+			/* translators: Label for the option to include a the Toolset buttons to generate shortcodes on specific frontend form elements */
+			_e( 'Include the Toolset buttons in the rich text editors from this form', 'wp-cred' );
+			?></span>
+			<span class="cred-tip-link js-otgs-popover-tooltip" data-tippy-content="
+				<h3><?php echo esc_attr(
+					/* translators: Title of a helper tooltip about including the Toolset buttons to generate shortcodes on specific frontend form elements */
+					__( 'Add Toolset buttons', 'wp-cred' )
+				); ?></h3>
+				<p>
+					<?php echo esc_attr(
+						/* translators: Part of the content of a helper tooltip about including the Toolset buttons to generate shortcodes on specific frontend form elements */
+						__( 'This form might contain WYSIWYG fields.', 'wp-cred' )
+					); ?>
+				</p>
+				<p>
+					<?php echo esc_attr(
+						/* translators: Part of the content of a helper tooltip about including the Toolset buttons to generate shortcodes on specific frontend form elements */
+						__( 'You can enable the Toolset buttons on them, for users with the right <strong>upload_files</strong> capability (by default, authors and above).', 'wp-cred' )
+					); ?>
+				</p>
+				">
+				<i class="fa fa-question-circle"></i>
+			</span>
+		</label>
+
+		<label class='cred-label-chk'>
+			<input type='checkbox'
+				class='cred-checkbox-10'
+				name='_cred[form][has_media_manager]'
+				id='cred_content_has_media_manager'
+				value='1'
+				/>
+			<span><?php
+			/* translators: Label for the option to use the native media manager on media fields in frontend forms */
+			_e( 'Use the WordPress Media Library manager for image, video, audio, or file fields', 'wp-cred' );
+			?></span>
+			<span class="cred-tip-link js-otgs-popover-tooltip" data-tippy-content="
+				<h3><?php echo esc_attr(
+					/* translators: Title of a helper tooltip about the option to use the native media manager on media fields in frontend forms */
+					__( 'Use the media manager', 'wp-cred' )
+				); ?></h3>
+				<p>
+					<?php echo esc_attr(
+						/* translators: Part of the content of a helper tooltip about the option to use the native media manager on media fields in frontend forms */
+						__( 'This form might contain media fields (image, audio, video, file fields).', 'wp-cred' )
+					); ?>
+				</p>
+				<p>
+					<?php echo esc_attr(
+						/* translators: Part of the content of a helper tooltip about the option to use the native media manager on media fields in frontend forms */
+						__( 'You can enable the native WordPress media manager on them, so <strong>logged in users</strong> can select multiple items at once in repeating fields, and also edit images.', 'wp-cred' )
+					); ?>
+				</p>
+				">
+				<i class="fa fa-question-circle"></i>
+			</span>
+		</label>
+	</td>
+</tr>

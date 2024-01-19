@@ -1,0 +1,60 @@
+{#
+	Container of the Drag & Drop editor
+
+	@since 2.2
+#}
+<div id="cred-editor-container-content" class="cred-editor-container js-cred-editor-container js-cred-editor-container-content">
+	<input type="hidden" id="cred-scaffold-data" name="scaffold_data" data-bind="value: scaffold_data"/>
+	<input type="hidden" id="cred-editor-origin" name="editor_origin" data-bind="value: editor_origin"/>
+	<div class="cred-editor-expert-mode-container">
+		<div class="cred-editor-notice-switcher js-cred-editor-notice-switcher" data-bind="visible: expertModeActive">
+			<div data-bind="html: warningNotice"></div>
+		</div>
+		<input type="checkbox" id="cred-editor-expert-mode-switcher" class="otgs-switcher-input" autocomplete="off" data-bind="event: { change: toggleEditorMode}, enable: hasRelationship" />
+		<label for="cred-editor-expert-mode-switcher" class="cred-editor-expert-mode-switcher otgs-switcher-text-inside otgs-switcher-md toolset-theme" data-bind="event: {click: maybeCancelSwitchingEditors}">{{ __( 'Expert mode', 'wp-cred' ) }}</label>
+	</div>
+
+	<div class="cred-editor-wrap-content js-cred-editor-wrap-content clearfix">
+		<div id="cred-editor-scaffold" class="cred-editor-content">
+			<div class="cred-editor-scaffold-general-container">
+				<span data-bind="visible: isScaffoldVisible">
+					<div class="clearfix">
+						<button class="cred-editor-scaffold-sidebar-collapse js-cred-editor-scaffold-sidebar-collapse">
+							{{ __( 'Collapse all', 'wp-cred' ) }}
+						</button>
+						<button class="cred-editor-scaffold-sidebar-expand js-cred-editor-scaffold-sidebar-expand hidden">
+							{{ __( 'Expand all', 'wp-cred' ) }}
+						</button>
+					</div>
+				</span>
+				<div class="cred-editor-no-data" data-bind="visible: !hasRelationship()">
+					<div class="cred-notification cred-info">
+						<p><i class="fa fa-info-circle"></i> {{ __( 'Please, select a relationship before creating a Form', 'wp-cred' ) }} </p>
+					</div>
+				</div>
+				{% include '@associations/editor_metaboxes/content-sidebar.twig' %}
+				<div id="js-cred-editor-scaffold-item-list-container" class="cred-editor-scaffold-item-list-container js-cred-editor-scaffold-item-list-container" data-bind="visible: isScaffoldVisible">
+					<div class="cred-editor-scaffold">
+						<div class="cred-editor-scaffold-item-list js-cred-editor-scaffold-item-list" data-bind="foreach: mainFields">
+							{% include '@associations/editor_metaboxes/content-item.twig' %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="cred-editor-html" class="cred-editor-content" data-target="content" data-bind="visible: expertModeActive">
+			<!-- Action to add Toolset buttons to the Filter editor -->
+			<div class="cred-editor-toolbar code-editor-toolbar js-cred-editor-toolbar js-toolset-editor-toolbar js-code-editor-toolbar" data-target="content">
+				{{ print_content_editor_toolbar_buttons( 'cred_association_form_content' ) }}
+			</div>
+			<textarea data-bind="value: form_content" id="cred_association_form_content"></textarea>
+		</div>
+	</div>
+</div>
+
+<!-- ko template: { afterRender: afterRenderCallback } -->
+<!-- /ko-->
+
+{% include '@associations/editor_metaboxes/css.twig' %}
+
+{% include '@associations/editor_metaboxes/javascript.twig' %}

@@ -1,0 +1,124 @@
+@import "variables";
+
+@mixin background-border-color($color){
+	background-color: $color;
+	border: 1px solid darken($color, 4%);
+};
+
+$otgs-switcher-width: 48px;
+$otgs-switcher-height: 19px;
+$otgs-switcher-height-md: 25px;
+
+
+.otgs-switcher-input {
+	width:0 !important;
+	min-width: 0 !important;
+	height:0 !important;
+	visibility:hidden !important;
+	margin: 0 !important;
+	border: none !important;
+}
+
+.otgs-switcher,
+.otgs-switcher-text-inside {
+	cursor:pointer;
+	display:inline-block;
+	position:relative;
+	&::after {
+		content:'';
+		position:absolute;
+		left:3px;
+		top:2px;
+		width:$otgs-switcher-height - 6px;
+		height:$otgs-switcher-height - 6px;
+		background:#fff;
+		border-radius:90px;
+		transition:.3s;
+		z-index:3;
+	}
+}
+
+.otgs-switcher::before,
+.otgs-switcher-text-inside {
+	height:$otgs-switcher-height;
+	line-height:$otgs-switcher-height - 2px;
+	box-sizing:border-box;
+	@include background-border-color(#e0e0e0);
+	display:inline-block;
+	border-radius:100px;
+	vertical-align:middle;
+	font-size:11px;
+	color: $text-color;
+	transition:background .1s linear, color .1s linear, border .1s linear;
+	padding:0 6px 0 ($otgs-switcher-height + 1px);
+}
+
+.otgs-switcher-text-inside.otgs-switcher-md {
+	height: $otgs-switcher-height-md;
+	line-height: $otgs-switcher-height-md - 2px;
+	padding: 0 6px 0 ($otgs-switcher-height-md + 1px);
+
+	&::after {
+		width: $otgs-switcher-height-md - 6px;
+		height: $otgs-switcher-height-md - 6px;
+	}
+}
+
+.otgs-switcher {
+	padding-left: $otgs-switcher-width + 8px;
+	margin-top: 4px;
+	min-height: $otgs-switcher-height;
+	&::before {
+		content: attr(data-off);
+		width: $otgs-switcher-width;
+		position: absolute;
+		left: 0;
+	}
+	&::after {
+		top: 3px;
+	}
+	.rtl &,
+	&.switcher-after {
+
+	}
+}
+
+.otgs-switcher-input:disabled {
+	& + .otgs-switcher::before,
+	& + .otgs-switcher-text-inside,
+	& + .otgs-switcher::after,
+	& + .otgs-switcher-text-inside::after {
+		opacity: .6;
+	}
+}
+
+.otgs-switcher-input:checked {
+	& + .otgs-switcher::before {
+		content:attr(data-on);
+	}
+	& + .otgs-switcher::before,
+	& + .otgs-switcher-text-inside {
+		@include background-border-color($otgs-green);
+		color:#fff;
+		padding:0 ($otgs-switcher-height + 1px) 0 6px;
+	}
+	& + .otgs-switcher-text-inside.otgs-switcher-md {
+		padding:0 ($otgs-switcher-height-md + 1px) 0 6px;
+	}
+	& + .otgs-switcher.toolset-theme::before,
+	& + .otgs-switcher-text-inside.toolset-theme {
+		@include background-border-color($toolset-orange);
+	}
+	& + .otgs-switcher.wpml-theme::before,
+	& + .otgs-switcher-text-inside.wpml-theme {
+		@include background-border-color($wpml-blue);
+	}
+	& + .otgs-switcher::after {
+		left: calc(#{$otgs-switcher-width} - 3px);
+		transform:translateX(-100%);
+	}
+	& + .otgs-switcher-text-inside::after {
+		left:calc(100% - 3px);
+		transform:translateX(-100%);
+	}
+}

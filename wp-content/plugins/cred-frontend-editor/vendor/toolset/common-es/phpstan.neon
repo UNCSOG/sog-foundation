@@ -1,0 +1,33 @@
+parameters:
+	level: 3
+	bootstrapFiles:
+		- test/phpstan/bootstrap.php
+		- test/phpstan/stubs/TCES.stub
+		- test/phpstan/stubs/TC.stub
+		- test/phpstan/stubs/WooCommerce.stub
+
+	scanFiles:
+		#- toolset-blocks.php
+
+	paths:
+		- server
+
+	excludePaths:
+		- server/Library/Auryn/*
+		- server/*__test__*
+
+	parallel:
+		processTimeout: 300.0
+
+	ignoreErrors:
+		- '#PHPDoc tag \@method has invalid value#'
+		# Own
+		-
+			message: '#Variable \$selector in empty\(\) always exists and is not falsy#'
+			path: server/Block/Style/Loader.php
+		- '#Call to an undefined method WP_Query\:\:have_posts\(\)#'
+		- '#Call to an undefined method WP_Query\:\:the_post\(\)#'
+		- '#Class WP_Query does not have a constructor and must be instantiated without any parameters#'
+		- '#Method ToolsetCommonEs\\Library\\WordPress\\Blocks\:\:parse_blocks\(\) should return#'
+		# Toolset API
+		- '#Function toolset_array_merge_recursive_distinct not found#'

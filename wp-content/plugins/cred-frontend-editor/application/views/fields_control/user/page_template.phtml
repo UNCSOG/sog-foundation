@@ -1,0 +1,18 @@
+<?php
+/**
+ * Template for the Forms control for non Toolset usermeta fields.
+ *
+ * @since 2.1
+ */
+?>
+<div class="wrap">
+    <h1 class="wp-heading-inline"><?php _e( 'Manage non-Toolset User Fields with Toolset Forms', 'wp-cred' ) ?></h1>
+    <form id="custom_fields" action="" method="get">
+    <input type="hidden" name="page" value="<?php echo esc_attr( toolset_getget( 'page' ) ); ?>" />
+    <?php
+    $wp_list_table = new OTGS\Toolset\CRED\Controller\Forms\User\FieldsControl\Table();
+    $wp_list_table->prepare_items();
+    $wp_list_table->display();
+    ?>
+    </form>
+</div>

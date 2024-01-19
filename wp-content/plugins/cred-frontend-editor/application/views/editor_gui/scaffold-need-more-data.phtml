@@ -1,0 +1,25 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a Toolset Form scaffold.
+ *
+ * @since 2.2
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-scaffold-need-more-data">
+    <div class="cred-editor-scaffold-general-container">
+        <div class="cred-editor-scaffold-item-list-container js-cred-editor-scaffold-item-list-container">
+            <p>
+            {{{data.panels.scaffold.introduction}}}
+            </p>
+            <div class="cred-notification cred-info">
+                <p><i class="fa fa-info-circle"></i>
+                    <# if ( data.formType === 'cred-form' ) { #>
+                        {{{data.panels.scaffold.no_post_type}}}
+                    <# } else { #>
+                        {{{data.panels.scaffold.no_user_role}}}
+                    <# } #>
+                </p>
+            </div>
+        </div>
+    </div>
+</script>

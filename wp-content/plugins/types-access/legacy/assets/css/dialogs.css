@@ -1,0 +1,195 @@
+/* ------- */
+/* DIALOGS */
+/* ------- */
+
+/* Dialogs global */
+.popup-window-container {
+	display: none;
+}
+
+.otg-access-dialog {
+	background: #fff;
+	box-shadow: 0 0 15px rgba(0,0,0,.4);
+	max-width: 800px;
+}
+
+	.otg-access-dialog-header,
+	.otg-access-dialog-content,
+	.otg-access-dialog-nav,
+	.otg-access-dialog-footer {
+		margin: 0;
+		padding: 10px;
+		background: #fafafa;
+		overflow: hidden;
+		border: 1px solid #ededed;
+	}
+
+	.otg-access-dialog-content {
+		overflow-y: auto;
+		padding-right: 20px;
+		min-width: 380px;
+		max-height: 400px;
+		border-width: 0 1px 0 0;
+		background: #fff;
+	}
+	.otg-access-dialog-content::-webkit-scrollbar {
+	    width: 12px;
+	    height: 12px;
+	    background-color: #fafafa;
+	    border-left: 1px solid #f1f1f1;
+	}
+	.otg-access-dialog-content::-webkit-scrollbar:hover {
+	    background-color: #eee;
+	}
+	.otg-access-dialog-content::-webkit-scrollbar-thumb {
+	    min-width: 13px;
+	    min-height: 12px;
+	    background-color: rgba(0, 0, 0, .1);
+	}
+		.otg-access-dialog-content::-webkit-scrollbar-thumb:hover {
+		    background-color: rgba(0, 0, 0, .2);
+		}
+		.otg-access-dialog-content:-webkit-scrollbar-thumb:active {
+		    background-color: rgba(0, 0, 0, .3);
+		}
+
+	.otg-access-dialog-content.no-scrollbar {
+		max-height: none;
+		padding-right: 10px;
+	}
+	@media only screen and (max-width:1200px) {
+		.otg-access-dialog-content,
+		.otg-access-dialog-content.no-scrollbar {
+			max-height: 300px;
+		}
+	}
+
+	.otg-access-dialog-nav + .otg-access-dialog-content,
+	.otg-access-dialog-sidebar + .otg-access-dialog-content {
+		float: left;
+	}
+
+	.otg-access-dialog-nav + .otg-access-dialog-content {
+		border-width: 0 0 0 1px;
+	}
+
+	.otg-access-dialog-content>:first-child {
+		margin-top: 0;
+	}
+
+		.otg-access-dialog-content fieldset {
+			border: 1px solid #ededed;
+			padding: 0 10px;
+			margin: 20px 0 0;
+		}
+
+		.otg-access-dialog-content fieldset:first-child {
+			margin-top: 0;
+		}
+		.otg-access-dialog-content fieldset.fieldset-no-border
+		{
+			border:none;
+		}
+			.otg-access-dialog-content legend {
+				font-weight: bold;
+			}
+
+		.otg-access-dialog-content .helper-text {
+			color: #999;
+			font-size: 11px;
+			margin-top: 0;
+		}
+
+		.otg-access-dialog-content table {
+			text-align: left;
+			border-collapse: collapse;
+		}
+
+			.otg-access-dialog-content th,
+			.otg-access-dialog-content td {
+				font-weight: normal;
+				padding: 2px 2px 2px 0;
+			}
+
+	.otg-access-dialog-header {
+		border-width: 0 0 1px 0;
+	}
+		.otg-access-dialog-header .icon-remove {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+		}
+
+	.otg-access-dialog-sidebar {
+		float: right;
+		padding: 10px;
+		max-width: 200px;
+	}
+
+	.otg-access-dialog-nav {
+		background: #fff;
+		padding: 10px 0;
+		float: left;
+		min-width: 150px;
+		border-width: 0;
+		margin: 7px 0;
+		/*box-shadow: -7px 0px 5px -5px rgba(0,0,0,.05) inset;*/
+	}
+
+		.otg-access-dialog-nav-tab {
+			line-height: 30px;
+			font-size: 14px;
+			margin: 0;
+			cursor: pointer;
+		}
+			.otg-access-dialog-nav-tab a {
+				padding: 0 10px;
+				display: block;
+				text-decoration: none;
+				color: inherit;
+				outline: none;
+			}
+			.otg-access-dialog-nav-tab a.active,
+			.otg-access-dialog-nav-tab a:hover {
+				background: #f1f1f1;
+				-webkit-transition: all 0.05s linear;
+				-moz-transition: all 0.05s linear;
+				-o-transition: all 0.05s linear;
+				-ms-transition: all 0.05s linear;
+				transition: all 0.05s linear;
+			}
+
+	.otg-access-dialog-foooter {
+		border-width: 1px 0 0 0;
+	}
+
+		.otg-access-dialog-header h2 {
+			font-size: 14px;
+			font-weight: normal;
+			margin: 0;
+			padding: 0 20px 0 0;
+		}
+
+	.otg-access-dialog-footer {
+		text-align: right;
+		clear: both;
+	}
+
+		.otg-access-dialog-footer .dont-show-again {
+			float: left;
+			margin: 0;
+		}
+        
+.otg-access-spinner {
+	display: inline-block;
+	float: none;
+	margin: 0 5px;
+	vertical-align: middle;
+    font-size: 25px;
+}
+
+.otg-access-dialog-wraper{
+    padding:20px;
+}
+/* Dialogs global END */

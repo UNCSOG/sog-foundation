@@ -1,0 +1,28 @@
+<?php
+/**
+* Disable View Wrapper pointer for the list with separators
+*/
+$dismissed_classname = '';
+if ( isset( $context['dismissed_pointers']['disable-view-wrapper-for-separators-list'] ) ) {
+$dismissed_classname = ' js-wpv-pointer-dismissed';
+}
+
+?>
+<div class="js-wpv-disable-view-wrapper-for-separators-list-pointer<?php echo $dismissed_classname; ?>">
+	<h3><?php esc_html_e( 'View wrapping DIV disabled', 'wpv-views' ); ?></h3>
+	<p>
+		<?php
+		esc_html_e( 'The wrapping DIV around the View was disabled.', 'wpv-views' );
+		echo WPV_MESSAGE_SPACE_CHAR;
+		esc_html_e( 'This happened because the list with separators loop output is mostly selected for inline View usage.', 'wpv-views' );
+		echo WPV_MESSAGE_SPACE_CHAR;
+		esc_html_e( 'If, for some reason, the wrapping DIV around the View is needed, it can be enabled again by unchecking this option.', 'wpv-views' );
+		?>
+	</p>
+	<p>
+		<label>
+			<input type="checkbox" class="js-wpv-dismiss-pointer" data-pointer="disable-view-wrapper-for-separators-list" id="wpv-dismiss-disable-view-wrapper-for-separators-list-pointer" />
+			<?php esc_html_e( 'Don\'t show this again', 'wpv-views' ); ?>
+		</label>
+	</p>
+</div>

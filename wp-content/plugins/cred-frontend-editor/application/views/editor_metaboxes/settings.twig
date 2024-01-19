@@ -1,0 +1,70 @@
+{#
+    Name and Slug for association forms edit page
+#}
+
+{% import "@toolset/forms.twig" as forms %}
+
+<table class="widefat toolset-field-table">
+    <tbody>
+
+    {{
+    forms.twoColumnRow(
+        forms.label(__( 'Relationship', 'wp-cred' ), true),
+        forms.selectInput("value: relationship, css: { error: relationship.hasError }, event: { change: loadRelationshipData }", '', relationships_set, true, 'relationship', 'relationship')
+    )
+    }}
+
+	{{
+    forms.twoColumnRow(
+        forms.label( __( 'Form submit:', 'wp-cred' ), false ),
+        forms.checkbox( 'checked: ajax_submission', '', __( 'AJAX submission', 'wp-cred' ), 'ajax_submission' )
+    )
+    }}
+
+    {{
+    forms.twoColumnRow(
+        forms.label( __( 'After visitors submit this form:', 'wp-cred' ), true ),
+        forms.selectInput("value: redirect_to, css: { error: redirect_to.hasError }", '', redirect_to, true, 'redirect_to', 'redirect_to')
+    )
+    }}
+
+    {{
+    forms.twoColumnRow(
+        forms.label( __( 'Select post:', 'wp-cred' ), true ),
+        forms.selectInput(' css: { error: redirect_custom_post.hasError }', '', null, true, 'select_post', 'select_post'),
+        "postSelectorRowVisiblity"
+    )
+    }}
+
+    {{
+    forms.twoColumnRow(
+        forms.label( __( 'Other Settings:', 'wp-cred' ), false ),
+        forms.checkbox('checked: disable_comments', '', __( 'Hide comments when displaying this form', 'wp-cred' ), 'disable_comments' )
+    )
+    }}
+
+    {{
+    forms.twoColumnRow(
+        forms.label( '', false ),
+        forms.checkbox('checked: has_media_button', '', __( 'Include the Add Media button in the rich text editors from this form', 'wp-cred' ), 'has_media_button' )
+    )
+    }}
+
+    {{
+    forms.twoColumnRow(
+        forms.label( '', false ),
+        forms.checkbox('checked: has_toolset_buttons', '', __( 'IInclude the Toolset buttons in the rich text editors from this form', 'wp-cred' ), 'has_toolset_buttons' )
+    )
+    }}
+
+    {{
+    forms.twoColumnRow(
+        forms.label( '', false ),
+        forms.checkbox('checked: has_media_manager', '', __( 'Use the WordPress Media Library manager for image, video, audio, or file fields', 'wp-cred' ), 'has_media_manager' )
+    )
+    }}
+
+
+
+    </tbody>
+</table>

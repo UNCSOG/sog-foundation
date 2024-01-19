@@ -1,0 +1,61 @@
+<?php
+/**
+ * Template for the forms notifications GUI, name section.
+ * 
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ * 
+ * @todo Evaluate the error message about trigger event, it does not belong here
+ */
+$context = isset( $context ) ? $context : array();
+
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form_type = toolset_getarr( $context, 'form_type' );
+
+$notification_name = ( '' === toolset_getarr( $notification, 'name' ) ) 
+    ? __( '(notification-name)', 'wp-cred' ) 
+    : $notification['name'];
+
+$notification_html_name = "_cred[notification][notifications][{$ii}]";
+?>
+<fieldset class="cred-fieldset cred-notification-fieldset cred-notification-fieldset-name">
+    <p>
+        <label class='cred-label'>
+            <input type='checkbox' 
+                name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][disabled]' 
+                value='1' 
+                <?php checked( 1, toolset_getarr( $notification, 'disabled' ) ); ?> />
+            <span><?php _e( 'Disable this notification', 'wp-cred' ); ?></span>
+        </label>
+    </p>  
+
+    <h4>
+        <i title="<?php echo esc_attr( __( 'Please select the notification trigger event', 'wp-cred' ) ); ?>" id="notification_event_required-<?php echo esc_attr( $ii ); ?>" class="fa fa-warning" style="display:none;"></i>
+        <?php _e( 'Notification name', 'wp-cred' ); ?>
+    </h4>
+
+    <input data-cred-bind="{
+            validate: {
+            required: {
+            actions: [
+            {action: 'requiredWarning'},
+            {action: 'validateSection' }
+            ]
+            }
+            }
+        }" 
+        type="text" 
+        id="crednotificationname<?php echo esc_attr( $ii ); ?>" 
+        style="position:relative;width:100%;" 
+        name="<?php echo esc_attr( $notification_html_name ); ?>[name]" 
+        value="<?php echo esc_attr( $notification_name ); ?>" />
+
+     
+</fieldset>

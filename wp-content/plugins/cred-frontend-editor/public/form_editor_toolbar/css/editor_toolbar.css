@@ -1,0 +1,86 @@
+/**
+ * Toolbar for quicktags
+ */
+.quicktags-toolbar {
+    border: solid 1px #ccc;
+    background: #f4f4f4;
+    padding: 3px;
+}
+/**
+ * Toolbar buttons
+ */
+ .cred-editor-toolbar button.button,
+ .cred-editor-toolbar button.button-secondary {
+	margin: 0 2px 5px 2px;
+ }
+ .cred-editor-toolbar [class^="icon-"],
+ .cred-content-editor-toolbar [class^="icon-"] {
+    margin-top: -5px;
+    padding-right: 3px;
+}
+/**
+ * Editor fields dialog
+ */
+.cred-editor-fields-container-group {
+	margin-bottom: 15px;
+}
+.cred-editor-fields-item {
+	margin: 0 5px 5px 0;
+}
+/**
+ * Editable lists
+ */
+table.cred-editor-editable-list {
+	width: 100%;
+	table-layout: fixed;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-move {
+	cursor: move;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-remove {
+	color: #b94a48;
+	cursor: pointer;
+	padding: 2px 4px;
+	margin: 0 5px;
+	border-radius: 3px;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-remove:hover {
+	background: #b94a48;
+	color: #eee;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-deleted {
+	background: #b94a48;
+}
+/**
+ * Conditional groups dialog
+ */
+.cred-editor-conditional-groups-conditions {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.cred-editor-conditional-groups-conditions .cred-editor-conditional-groups-value,
+.cred-editor-conditional-groups-conditions .cred-editor-conditional-groups-connect {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.cred-editor-conditional-groups-conditions select {
+    width: 100%;
+}
+/**
+ * Generic fields custom options
+ */
+.cred-editor-generic-fields-options-manual-row-move,
+.cred-editor-generic-fields-options-manual-row-remove {
+	width: 30px;
+}
+.cred-editor-generic-fields-options-manual-row-default {
+	width: 15%;
+}
+/**
+ * Extra editors toggle
+ */
+h2.cred-editor-toggler {
+	cursor: pointer;
+}

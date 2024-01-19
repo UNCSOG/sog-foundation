@@ -1,0 +1,263 @@
+<?php
+
+use OTGS\Toolset\CRED\Controller\Forms\Post\Main as PostMain;
+use OTGS\Toolset\CRED\Controller\Forms\User\Main as UserMain;
+
+/**
+ * Template for the forms notifications GUI.
+ *
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ */
+
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form = toolset_getarr( $context, 'form' );
+$form_type = toolset_getarr( $context, 'form_type' );
+$form_settings = toolset_getarr( $context, 'form_settings' );
+
+$notification = CRED_Helper::mergeArrays( array(
+    'event' => array(
+        'type' => 'form_submit',
+        'post_status' => 'publish',
+        'condition' => array(),
+        'any_all' => 'ALL'
+    ),
+    'to' => array(
+        'type' => array(),
+        'wp_user' => array(
+            'to_type' => 'to',
+            'user' => ''
+        ),
+        'mail_field' => array(
+            'to_type' => 'to',
+            'address_field' => '',
+            'name_field' => '',
+            'lastname_field' => ''
+        ),
+        'user_id_field' => array(
+            'to_type' => 'to',
+            'field_name' => ''
+        ),
+        'specific_mail' => array(
+            'address' => ''
+        )
+    ),
+    'from' => array(
+        'address' => '',
+        'name' => ''
+    ),
+    'mail' => array(
+        'subject' => '',
+        'body' => ''
+    )
+), $notification );
+
+// make sure everything needign to be array, is array
+$notification = (array) $notification;
+$notification['event'] = (array) $notification['event'];
+$notification['to'] = (array) $notification['to'];
+
+if ( ! isset( $notification['to']['type'] ) ) {
+    $notification['to']['type'] = array();
+}
+
+if ( ! is_array( $notification['to']['type'] ) ) {
+    $notification['to']['type'] = (array) $notification['to']['type'];
+}
+
+$notification_name = ( '' === toolset_getarr( $notification, 'name' ) )
+    ? __( '(notification-name)', 'wp-cred' )
+    : $notification['name'];
+
+
+$template_repository = CRED_Output_Template_Repository::get_instance();
+$renderer = Toolset_Renderer::get_instance();
+$templates_data = array(
+    'notification' => $notification,
+    'ii' => $ii,
+    'enableTestMail' => $enableTestMail,
+    'form' => $form,
+    'form_type' => $form_type,
+	'form_settings' => $form_settings,
+);
+
+if ( PostMain::POST_TYPE === $form_type ) {
+	$templates_data['stati'] = array(
+		'basic' => toolset_getnest( $context, array( 'stati', 'basic' ), array() ),
+		'native' => toolset_getnest( $context, array( 'stati', 'native' ), array() ),
+		'custom' => toolset_getnest( $context, array( 'stati', 'custom' ), array() ),
+	);
+	$templates_data['stati_label'] = array(
+		'native' => toolset_getnest( $context, array( 'stati_label', 'native' ), array() ),
+		'custom' => toolset_getnest( $context, array( 'stati_label', 'custom' ), array() ),
+	);
+}
+
+$is_notifications_generic_template = ( '__i__' === $ii );
+?>
+
+<!-- BEGIN row -->
+<div rel="cred_notification_settings_panel-<?php echo esc_attr( $ii ); ?>"
+    id="cred_notification_settings_row-<?php echo esc_attr( $ii ); ?>"
+    class="cred-notification-settings-row clearfix<?php if ( $is_notifications_generic_template ) { ?> cred-notification-settings-row-open<?php } ?>">
+
+    <div class="cred-notification-handle-actions">
+        <strong class="cred-notification-title"><?php echo esc_html( $notification_name ); ?></strong>
+
+        <?php if ( 1 == toolset_getarr( $notification, 'disabled' ) ) { ?>
+            <span class="cred-notification-status"> — <?php _e( 'Disabled', 'wp-cred' );?></span>
+        <?php } ?>
+
+        <div class="cred-notification-actions">
+            <button class="button button-secondary cred-notification-action cred-notification-close js-cred-notification-close"
+        data-index="<?php echo esc_attr( $ii ); ?>"<?php if ( ! $is_notifications_generic_template ) { ?> style="display:none"<?php } ?>>
+                <i class="fa fa-chevron-up"></i> <?php _e( 'Close', 'wp-cred' );?>
+            </button>
+            <button class="button button-secondary cred-notification-action cred-notification-edit js-cred-notification-edit"
+                data-index="<?php echo esc_attr( $ii ); ?>"<?php if ( $is_notifications_generic_template ) { ?> style="display:none"<?php } ?>>
+                <i class="fa fa-edit"></i> <?php _e( 'Edit', 'wp-cred' );?>
+            </button>
+            <a class='button button-secondary cred-notification-action cred-notification-delete'
+                data-cred-bind="{
+                    event: 'click',
+                    action: 'removeItem',
+                    confirm: '<?php echo esc_attr( __( 'Are you sure you want to remove this notification?', 'wp-cred' ) ); ?>',
+                    domRef: '#cred_notification_settings_panel-<?php echo esc_attr( $ii ); ?>',
+                    domRow: '#cred_notification_settings_row-<?php echo esc_attr( $ii ); ?>',
+                    modelRef: '_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>]'
+                    }">
+            <i class="fa fa-trash"></i> <?php _e( 'Delete', 'wp-cred' ); ?>
+            </a>
+
+
+        </div>
+    </div>
+
+    <!-- BEGIN container -->
+    <div id="cred_notification_settings_panel-<?php echo esc_attr( $ii ); ?>"
+                class='cred_notification_settings_panel cred_validation_section cred-notifications-settings-container js-cred-notifications-settings-container'
+                <?php if ( ! $is_notifications_generic_template ) { ?>style="display:none;"<?php } ?>>
+
+        <div  id="notification_validation_error-<?php echo esc_attr( $ii ); ?>"
+            class="cred-notification cred-error cred-section-validation-message"
+            style="display:none">
+            <p>
+                <i class="fa fa-warning"></i>
+                <?php _e( 'This notification is not setup properly because some settings are not complete. Please review and select values.', 'wp-cred' ); ?>
+            </p>
+        </div>
+
+    <?php
+    if ( has_action( 'cred_admin_notification_fields_before' ) ) {
+        /**
+         * Action to extend the notifications GUI,
+         * possibly with extra settings above the official ones.
+         *
+         * This will get deprecated and eventually replaced in a future version of Forms,
+         * so please do not use it.
+         *
+         * @note Why would you pass the $ii counter here?
+         */
+        do_action('cred_admin_notification_fields_before', $form, $ii, $notification);
+    }
+    ?>
+
+    <?php
+    $renderer->render(
+        $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_SHARED_NAME ),
+        $templates_data
+    );
+
+    switch ( $form_type ) {
+        case PostMain::POST_TYPE:
+            $renderer->render(
+                $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_POST_TRIGGER ),
+                $templates_data
+            );
+            break;
+        case UserMain::POST_TYPE:
+            $renderer->render(
+                $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_USER_TRIGGER ),
+                $templates_data
+            );
+            break;
+    }
+
+    $renderer->render(
+        $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_SHARED_RECIPIENT ),
+        $templates_data
+    );
+
+    $renderer->render(
+        $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_SHARED_FROM ),
+        $templates_data
+    );
+    $renderer->render(
+        $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_SHARED_SUBJECT ),
+        $templates_data
+    );
+    $renderer->render(
+        $template_repository->get( CRED_Output_Template_Repository::NOTIFICATION_EDITOR_SECTION_SHARED_BODY ),
+        $templates_data
+    );
+    ?>
+
+    <?php
+    if ( has_action( 'cred_admin_notification_fields_after' ) ) {
+        /**
+         * Action to extend the notifications GUI,
+         * possibly with extra settings below the official ones.
+         *
+         * This will get deprecated and eventually replaced in a future version of Forms,
+         * so please do not use it.
+         *
+         * @note Why would you pass the $ii counter here?
+         */
+        do_action('cred_admin_notification_fields_after', $form, $ii, $notification);
+    }
+    ?>
+
+    <?php if ( $enableTestMail ) { ?>
+        <p>
+            <a class='button' href='javascript:;' data-cred-bind="{
+                event: 'click',
+                action: 'show',
+                domRef: '#cred_notification_test_container_<?php echo esc_attr( $ii ); ?>'
+                }">
+                <i class="fa fa-envelope-open"></i> <?php _e('Send a test email', 'wp-cred'); ?>
+            </a>
+        </p>
+
+        <div style="display:none;" id="cred_notification_test_container_<?php echo esc_attr( $ii ); ?>" class='cred-notification-test-container'>
+            <label>
+                <span style="margin-right:10px;">
+                    <?php _e( 'Send a test notification to:', 'wp-cred' ); ?>
+                </span>
+                <input type="text" class="js-test-notification-to" data-sendbutton="#send_test_notification_<?php echo esc_attr( $ii ); ?>" id="test_notification_to_<?php echo esc_attr( $ii ); ?>" style="width:180px;" value="" placeholder="<?php echo esc_attr( __( 'Enter an email address', 'wp-cred' ) ); ?>" />
+            </label>
+            <a disabled="disabled" class="button js-send-test-notification" id="send_test_notification_<?php echo esc_attr( $ii ); ?>" data-cancelbutton="#cancel_test_notification_<?php echo esc_attr( $ii ); ?>" data-results="#send_test_notification_results_<?php echo esc_attr( $ii ); ?>" data-loader="#send_test_notification_loader_<?php echo esc_attr( $ii ); ?>" data-notification="<?php echo esc_attr( $ii ); ?>" data-addressfield="#test_notification_to_<?php echo esc_attr( $ii ); ?>"><?php _e( 'Send now', 'wp-cred' ); ?></a>
+            <a class='button' id="cancel_test_notification_<?php echo esc_attr( $ii ); ?>" href='javascript:;' data-cred-bind="{
+                event: 'click',
+                action: 'hide',
+                delay: 100,
+                domRef: '#cred_notification_test_container_<?php echo esc_attr( $ii ); ?>'
+                }"><?php _e('Cancel', 'wp-cred'); ?></a>
+            <span style="display:none" id="send_test_notification_loader_<?php echo esc_attr( $ii ); ?>" class='cred_ajax_loader_small_1'></span>
+            <div id="send_test_notification_results_<?php echo esc_attr( $ii ); ?>">
+            </div>
+        </div>
+    <?php } ?>
+
+    </div>
+    <!-- END container -->
+
+</div>
+<!-- END row -->

@@ -1,0 +1,27 @@
+<?php
+/**
+ * underscore.js template for the options of each item in the dialog to insert a Toolset Form scaffold.
+ *
+ * @since 2.2
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-scaffold-itemOptions-media">
+	<div class="toolset-shortcode-gui-dialog-item-group js-toolset-shortcode-gui-dialog-item-group">
+		<div>
+			<div class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-value" data-attribute="value" data-type="text" data-helper="false" data-default="">
+				<h3><?php _e( 'Select media file', 'wp-cred' ); ?></h3>
+				<div class="toolset-shortcode-gui-field-input-media-container js-shortcode-gui-field-input-media-container">
+					<input id="cred_field-value" data-type="text" class="toolset-shortcode-gui-field-input-media js-shortcode-gui-field js-shortcode-gui-field-input-media" value="" placeholder="" type="text">
+					<button class="button button-secondary toolset-shortcode-gui-field-input-media-button js-shortcode-gui-field-input-media-button">
+						<i class="dashicons dashicons-admin-media"></i>
+						<?php _e( 'Add media', 'wp-cred' ); ?>
+					</button>
+				</div>
+				<div class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-value" data-attribute="thumbnail" data-type="text">
+					<img class="hidden" src="" /> <input type="hidden" data-type="text" class="js-shortcode-gui-field js-shortcode-gui-field-input-media-thumbnail" value="" />
+				</div>
+				<p class="description"><?php _e( 'Or paste an image HTML tag', 'wp-cred' ); ?></p>
+			</div>
+		</div>
+	</div>
+</script>

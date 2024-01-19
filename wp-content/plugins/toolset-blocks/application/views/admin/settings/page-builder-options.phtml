@@ -1,0 +1,44 @@
+<?php
+/**
+ * Template File
+ * This file is the Views Settings section for the Page Builders settings.
+ *
+ * @since 2.6.4
+ */
+?>
+
+<h3><?php esc_html_e( __( 'Elementor Page Builder', 'wpv-views' ) ); ?></h3>
+<div class="toolset-advanced-setting">
+	<p>
+		<label>
+			<input type="checkbox"
+			       name="wpv-allow-views-wp-widgets-in-elementor"
+			       class="js_wpv_allow_views_wp_widgets_in_elementor"
+			       autocomplete="off"
+			       value="1" <?php checked( $context['allow_views_wp_widgets_in_elementor'] === true ); ?>/>
+			<?php
+			echo sprintf(
+				esc_html( __( 'Allow to use the %1$s and the %2$s WordPress widgets in %3$s.', 'wpv-views' ) ),
+				'<strong>'. esc_html( __( 'WP Views', 'wpv-views' ) ) . '</strong>',
+				'<strong>'. esc_html( __( 'WP Views Filter', 'wpv-views' ) ) . '</strong>',
+				'<strong>'. esc_html( __( 'Elementor Page Builder', 'wpv-views' ) ) . '</strong>'
+			);
+			?>
+		</label>
+	</p>
+	<p>
+		<?php
+		echo sprintf(
+			esc_html( __( 'The %1$s and the %2$s WordPress widgets can be shown/hidden from the list of offered widgets in the %3$s sidebar.', 'wpv-views' ) ),
+			'<strong>'. esc_html( __( 'WP Views', 'wpv-views' ) ) . '</strong>',
+			'<strong>'. esc_html( __( 'WP Views Filter', 'wpv-views' ) ) . '</strong>',
+			'<strong>'. esc_html( __( 'Elementor Page Builder', 'wpv-views' ) ) . '</strong>'
+		);
+		echo WPV_MESSAGE_SPACE_CHAR;
+		echo sprintf(
+			esc_html( __( 'If those WordPress widgets are already used anywhere inside a post designed with the %1$s, choosing to hide them will also hide them in the frontend for these posts.', 'wpv-views' ) ),
+			'<strong>'. esc_html( __( 'Elementor Page Builder', 'wpv-views' ) ) . '</strong>'
+		);
+		?>
+	</p>
+</div>

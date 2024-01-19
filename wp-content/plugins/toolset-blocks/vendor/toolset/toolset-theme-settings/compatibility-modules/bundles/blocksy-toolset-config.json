@@ -1,0 +1,380 @@
+{
+	"data": [
+		{
+			"name": "has_back_top",
+			"type": ["customizer"],
+			"group": "General",
+			"target": ["single", "archive"],
+			"gui": {
+				"display_name": "Scroll to Top",
+				"type": "select",
+				"values": [
+					{
+						"text": "Enable",
+						"value": "yes"
+					},
+					{
+						"text": "Disable",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_hero_enabled",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_hero_enabled",
+				"%%POST_TYPE%%_single_hero_enabled"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Post Header",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Header (title, categories, author, date)",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_structure",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_structure",
+				"%%POST_TYPE%%_single_structure"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Post Structure",
+				"type": "select",
+				"values": [
+					{
+						"text": "Right Sidebar",
+						"value": "type-1"
+					},
+					{
+						"text": "Left Sidebar",
+						"value": "type-2"
+					},
+					{
+						"text": "Narrow Width",
+						"value": "type-3"
+					},
+					{
+						"text": "Normal Width",
+						"value": "type-4"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_post_tags",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_post_tags",
+				"%%POST_TYPE%%_single_has_post_tags"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Post Tags",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Tags",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_featured_image",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_featured_image",
+				"%%POST_TYPE%%_single_has_featured_image"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Featured Image",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Featured Image",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_share_box",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_share_box",
+				"%%POST_TYPE%%_single_has_share_box"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Share Box",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Share Box",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_author_box",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_author_box",
+				"%%POST_TYPE%%_single_has_author_box"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Author Box",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Author Box",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_post_nav",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_post_nav",
+				"%%POST_TYPE%%_single_has_post_nav"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Post Navigation",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Post Navigation",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_related_posts",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_related_posts",
+				"%%POST_TYPE%%_single_has_related_posts"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Related Posts",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Related Posts",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "single_blog_post_has_comments",
+			"type": ["customizer"],
+			"aliases": [
+				"single_page_has_comments",
+				"%%POST_TYPE%%_single_comments"
+			],
+			"group": "Layout and elements",
+			"target": ["single"],
+			"gui": {
+				"display_name": "Comments",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Comments",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "blog_hero_enabled",
+			"type": ["customizer"],
+      "aliases": [
+				"%%POST_TYPE%%_archive_hero_enabled",
+        "categories_hero_enabled",
+        "search_hero_enabled",
+        "author_hero_enabled",
+        "woo_categories_hero_enabled"
+			],
+			"group": "Layout and elements",
+			"target": ["archive"],
+			"gui": {
+				"display_name": "Archive Title",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Archive Title",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "blog_has_sidebar",
+			"type": ["customizer"],
+      "aliases": [
+				"%%POST_TYPE%%_archive_has_sidebar",
+        "categories_has_sidebar",
+        "search_has_sidebar",
+        "author_has_sidebar",
+        "woo_categories_has_sidebar"
+			],
+			"group": "Layout and elements",
+			"target": ["archive"],
+			"gui": {
+				"display_name": "Archive Sidebar",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Archive Sidebar",
+						"value": "no"
+					},
+					{
+						"text": "Enable Archive Sidebar",
+						"value": "yes"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "blog_sidebar_position",
+			"type": ["customizer"],
+      "aliases": [
+				"%%POST_TYPE%%_archive_sidebar_position",
+        "categories_sidebar_position",
+        "search_sidebar_position",
+        "author_sidebar_position",
+        "woo_categories_sidebar_position"
+			],
+			"group": "Layout and elements",
+			"target": ["archive"],
+			"gui": {
+				"display_name": "Archive Sidebar Position (if sidebar is enabled)",
+				"type": "select",
+				"values": [
+					{
+						"text": "Right Sidebar",
+						"value": "right"
+					},
+					{
+						"text": "Left Sidebar",
+						"value": "left"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "sidebar_type",
+			"type": ["customizer"],
+			"group": "Sidebar",
+			"target": ["single", "archive"],
+			"gui": {
+				"display_name": "Sidebar type (when using it)",
+				"type": "select",
+				"values": [
+					{
+						"text": "Type 1 (flat)",
+						"value": "type-1"
+					},
+					{
+						"text": "Type 2 (boxed)",
+						"value": "type-2"
+					},
+					{
+						"text": "Type 3 (separated)",
+						"value": "type-3"
+					},
+					{
+						"text": "Type 4 (separated with background)",
+						"value": "type-4"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "has_sticky_sidebar",
+			"type": ["customizer"],
+			"group": "Sidebar",
+			"target": ["single", "archive"],
+			"gui": {
+				"display_name": "Sticky Sidebar (when using it)",
+				"type": "select",
+				"values": [
+					{
+						"text": "Enable",
+						"value": "yes"
+					},
+					{
+						"text": "Disable",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "blog_has_pagination",
+			"type": ["customizer"],
+      "aliases": [
+				"%%POST_TYPE%%_archive_has_pagination",
+        "categories_has_pagination",
+        "search_has_pagination",
+        "author_has_pagination",
+        "woo_categories_has_pagination"
+			],
+			"group": "Pagination",
+			"target": ["archive"],
+			"gui": {
+				"display_name": "Archive Pagination",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disable Archive Pagination",
+						"value": "no"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		}
+	]
+}

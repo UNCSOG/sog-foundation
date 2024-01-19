@@ -1,0 +1,35 @@
+<?php
+/**
+ * Template for the MCE view for the Forms shortcodes.
+ *
+ * @since 2.2
+ */
+?>
+<script type="text/html" id="tmpl-toolset-shortcode-cred_form-mce-banner">
+	<div class="toolset-forms-shortcode-mce-view toolset-shortcode-mce-view"
+		data-tag="{{ data.tag }}"
+		data-keymap="{{ data.keymap }}"
+		<#
+		_.each( data.attributes, function( value, key, list ) {
+			#>
+			data-{{ key }}="{{ value }}"
+			<#
+		});
+		#>
+		contenteditable="false">
+		<i class="ont-icon-block-classic-mce-view icon-cred-logo ont-icon-38 ont-color-orange"></i>
+		<span class="toolset-shortcode-mce-view-header">
+		<?php
+		/* translators: Label of the editor placeholder when using a shortcode to render a post form */
+		echo __( 'Post form', 'wp-cred' );
+		?>
+		</span>
+		<# if ( _.has( Toolset.Forms.dataCache.forms.post, data.attributes.form ) ) {
+			#>
+			{{ Toolset.Forms.dataCache.forms.post[ data.attributes.form ].title }}
+			<#
+		} else { #>
+			{{ data.attributes.form }}
+		<# } #>
+	</div>
+</script>

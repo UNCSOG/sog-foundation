@@ -1,0 +1,127 @@
+<?php
+/**
+ * Template for the singular editor post expiration metabox.
+ *
+ * @since 2.3
+ */
+use OTGS\Toolset\CRED\Controller\ExpirationManager\Post\Singular as SingularExpirationManager;
+
+$context = isset( $context ) ? $context : array();
+
+$post_expiration_time = toolset_getarr( $context, 'post_expiration_time', 0 );
+$post_expiration_action = toolset_getarr( $context, 'post_expiration_action', array() );
+$post_expiration_values = toolset_getarr( $context, 'post_expiration_values', array() );
+$post_type_object = toolset_getarr( $context, 'post_type_object', null );
+
+$basic_stati = toolset_getnest( $context, array( 'stati', 'basic' ), array() );
+$native_stati_label = toolset_getnest( $context, array( 'stati_label', 'native' ), '' );
+$native_stati = toolset_getnest( $context, array( 'stati', 'native' ), array() );
+$custom_stati_label = toolset_getnest( $context, array( 'stati_label', 'custom' ), '' );
+$custom_stati = toolset_getnest( $context, array( 'stati', 'custom' ), array() );
+
+?>
+<p>
+	<label>
+		<input id="js-cred-post-expiration-switcher"
+			type="checkbox"
+			name="<?php echo SingularExpirationManager::POST_METABOX_NAMESPACE; ?>[enable]"
+			value="1"
+			<?php checked( ! empty( $post_expiration_time ) ); ?>
+			/>
+		<?php
+		echo sprintf(
+			/* translators: Title of the metabox for enabling post expiration for a post while editing it, the placeholder will get replaced by the post type singular name laber */
+			__( 'Set an expiration date for this %s', 'wp-cred' ),
+			$post_type_object->labels->singular_name
+		);
+		?>
+	</label>
+</p>
+<div id="js-cred-post-expiration-panel" class="cred_post_expiration_panel js_cred_post_expiration_panel" style="display: none;">
+	<?php
+	wp_nonce_field( SingularExpirationManager::POST_EDIT_NONCE_VALUE, SingularExpirationManager::POST_EDIT_NONCE_NAME );
+	?>
+	<!-- For the sake of styling, force the components-panel__row classname to make this look good in Gutenberg -->
+	<div class="components-panel__row" style="margin-top: 5px">
+		<label for="cred-post-expiration-datepicker">
+			<?php
+			/* translators: Title of the setting to set the date for expiring the post being edited */
+			echo esc_html( __( 'Day', 'wp-cred' ) );
+			?>
+		</label>
+		<span>
+			<input id="cred-post-expiration-datepicker"
+				class="js-cred-post-expiration-datepicker"
+				type="text"
+				name=""
+				readonly="readonly"
+				title="<?php
+				/* translators: Title of the button to select a date for expiring a post while editing it */
+				echo esc_attr( 'Select date', 'wp-cred' );
+				?>"
+				value="<?php echo esc_attr( toolset_getarr( $post_expiration_values, 'date', '' ) ); ?>"
+				/>
+			<input id="cred-post-expiration-datepicker-aux"
+				class="js-cred-post-expiration-datepicker-aux hidden"
+				type="hidden"
+				name="<?php echo SingularExpirationManager::POST_METABOX_NAMESPACE; ?>[<?php echo SingularExpirationManager::POST_META_TIME; ?>][date]"
+				value="<?php echo esc_attr( $post_expiration_time ); ?>"
+				/>
+		</span>
+	</div>
+	<div class="components-panel__row" style="margin-top: 5px">
+		<label>
+			<?php
+			/* translators: Title of the setting to set the hour for expiring the post being edited */
+			echo esc_html( __( 'Hour', 'wp-cred' ) );
+			?>
+		</label>
+		<select name="<?php echo SingularExpirationManager::POST_METABOX_NAMESPACE; ?>[<?php echo SingularExpirationManager::POST_META_TIME; ?>][hours]" id="<?php echo SingularExpirationManager::POST_META_TIME; ?>-hours" class="js-cred-pe-date-hour">
+		<?php for ( $i = 0; $i < 24 ; $i++ ) {?>
+			<option value="<?php echo $i; ?>" <?php selected( $i, intval( $post_expiration_values['hours'] ) ); ?>><?php echo sprintf( '%02d', $i ) . ':00'; ?></option>
+		<?php } ?>
+		</select>
+	</div>
+	<div class="components-panel__row" style="margin-top: 5px">
+		<label>
+			<?php
+			/* translators: Title of the setting to set the minute for expiring the post being edited */
+			echo esc_html( __( 'Minute', 'wp-cred' ) );
+			?>
+		</label>
+		<select name="<?php echo SingularExpirationManager::POST_METABOX_NAMESPACE; ?>[<?php echo SingularExpirationManager::POST_META_TIME; ?>][minutes]" id="<?php echo SingularExpirationManager::POST_META_TIME; ?>-minutes" class="js-cred-pe-date-minute">
+		<?php for ( $i = 0; $i < 60 ; $i++ ) {?>
+			<option value="<?php echo $i ; ?>" <?php selected( $i, intval( $post_expiration_values['minutes'] ) ); ?>><?php echo sprintf("%02d", $i) ; ?></option>
+		<?php } ?>
+		</select>
+	</div>
+	<div class="components-panel__row" style="margin-top: 5px">
+		<label for="cred_post_expiration_post_status">
+			<?php
+			/* translators: Title of the setting to set the action to execute after expiring the post being edited */
+			echo esc_html( __( 'Set status', 'wp-cred' ) );
+			?>
+		</label>
+		<select id="cred_post_expiration_post_status" name="<?php echo SingularExpirationManager::POST_METABOX_NAMESPACE; ?>[<?php echo SingularExpirationManager::POST_META_ACTION; ?>][post_status]">
+			<?php foreach ( $basic_stati as $value => $text ) { ?>
+				<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $post_expiration_action['post_status'] ); ?>><?php echo esc_html( $text ); ?></option>
+			<?php } ?>
+			<optgroup label="<?php echo esc_attr( $native_stati_label ); ?>">
+				<?php foreach ( $native_stati as $value => $text ) { ?>
+					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $post_expiration_action['post_status'] ); ?>><?php echo esc_html( $text ); ?></option>
+				<?php } ?>
+			</optgroup>
+			<?php
+			if ( count( $custom_stati ) > 0 ) {
+			?>
+			<optgroup label="<?php echo esc_attr( $custom_stati_label ); ?>">
+				<?php foreach ( $custom_stati as $value => $text ) { ?>
+					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $post_expiration_action['post_status'] ); ?>><?php echo esc_html( $text ); ?></option>
+				<?php } ?>
+			</optgroup>
+			<?php
+			}
+			?>
+		</select>
+	</div>
+</div>

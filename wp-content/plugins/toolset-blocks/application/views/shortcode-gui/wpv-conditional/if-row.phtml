@@ -1,0 +1,68 @@
+<?php
+/**
+ * Template for each row in the wpv-conditional if attribute
+ *
+ * @since 2.7.3
+ */
+?>
+<script type="text/html" id="tmpl-wpv-shortcode-attribute-wpv-conditional-if-row">
+	<tr class="js-wpv-views-condtional-item">
+		<td class="js-wpv-views-conditional-origin">
+			<select class="js-wpv-views-condtional-field" data-placeholder="<?php echo esc_attr( __( 'Select one field', 'wpv-views' ) ); ?>">
+				<option value="" data-group=""></option>
+			<# _.each( data.fields, function( groupData, groupKey ) { #>
+				<optgroup label="{{groupData.label}}" data-key="{{groupKey}}">
+				<# _.each( groupData.fields, function( fieldData, fieldKey ) { #>
+					<option value="{{fieldData.slug}}" data-group="{{groupData.type}}">{{{fieldData.label}}}</option>
+				<# }); #>
+				</optgroup>
+			<# }); #>
+			</select>
+			<select class="js-wpv-views-conditional-relationship" style="display:none;width:47%;">
+				<option value=""><?php
+					/* translators: Label of the conditional output shortcode GUI dialog option to get data from the current post */
+					echo esc_html( __( 'from the current post', 'wpv-views' ) );
+				?></option>
+			<# _.each( data.relationships, function( relationshipData, relationshipKey ) { #>
+				<option value="{{relationshipData.slug}}">{{{relationshipData.label}}}</option>
+			<# }); #>
+			</select>
+		</td>
+		<td class="js-wpv-views-condtional-operator">
+			<select class="js-wpv-views-condtional-operator" style="width:100%">
+				<option value="eq">=</option>
+				<option value="ne">!=</option>
+				<option value="include" style="display:none"><?php
+					/* translators: Label of the conditional output shortcode GUI dialog option to compare whether an item is included in a set */
+					echo esc_html__( 'include the term', 'wpv-views' );
+				?></option>
+				<option value="exclude" style="display:none"><?php
+					/* translators: Label of the conditional output shortcode GUI dialog option to compare whether an item is not included in a set */
+					echo esc_html__( 'don\'t include the term', 'wpv-views' );
+				?></option>
+				<option value="gt">&gt;</option>
+				<option value="lt">&lt;</option>
+				<option value="gte">&gt;=</option>
+				<option value="lte">&lt;=</option>
+			</select>
+		</td>
+		<td class="js-wpv-views-condtional-value">
+			<input class="js-wpv-views-condtional-value" type="text" style="width:100%">
+		</td>
+		<td class="js-wpv-views-condtional-connect">
+			<select class="js-wpv-views-condtional-connect" style="width:100%">
+				<option value="AND"><?php
+					/* translators: Label of the conditional output shortcode GUI dialog option to combine two conditions */
+					echo esc_html__( 'AND', 'wpv-views' );
+				?></option>
+				<option value="OR"><?php
+					/* translators: Label of the conditional output shortcode GUI dialog option to combine two conditions */
+					echo esc_html__( 'OR', 'wpv-views' );
+				?></option>
+			</select>
+		</td>
+		<td>
+			<i class="icon-remove fa fa-times wpv-views-condtional-remove js-wpv-views-condtional-remove"></i>
+		</td>
+	</tr>
+</script>

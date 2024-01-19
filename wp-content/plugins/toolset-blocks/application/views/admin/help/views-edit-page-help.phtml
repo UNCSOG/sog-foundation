@@ -1,0 +1,24 @@
+<?php
+/**
+ * Template File
+ * This file is the help message template for the Admin Help tab of the Views edit page.
+ *
+ * @since 2.5.0
+ */
+?>
+
+<p><?php echo __( '<strong>Views</strong> load content from the database and display it anyway you choose.', 'wpv-views'); ?></p>
+<p><?php echo __( 'To make it easier to use Views, we’ve created different preset usage modes for <strong>Views</strong>. Each usage mode emphasizes the features that you need and hides the ones that are not needed.', 'wpv-views'); ?></p>
+<p><?php echo __( 'You can switch between the different <strong>Views</strong> usage mode by opening the ‘Screen options’ tab.', 'wpv-views'); ?></p>
+<p><?php echo __( 'To create a <strong>View</strong>:', 'wpv-views'); ?></p>
+<ol>
+	<li><?php echo __( 'Set the title', 'wpv-views'); ?></li>
+	<li><?php echo __( 'Select the content to load', 'wpv-views'); ?></li>
+	<li><?php echo __( 'Optionally, apply a filter to the query', 'wpv-views'); ?></li>
+    <?php if(!wpv_is_views_lite()):?><li><?php echo __( 'If needed, enable pagination and front-end filters', 'wpv-views'); ?></li></ol><?php endif;?>
+	<li><?php echo __( 'Design the output for the View by inserting fields and styling with HTML', 'wpv-views'); ?></li>
+</ol>
+<p><?php echo __( 'When you are done, remember to add the <strong>View</strong> to your content. You can do that by inserting the <strong>View</strong> as a shortcode to content or displaying it as a widget.', 'wpv-views'); ?></p>
+<p>
+	<a href="https://toolset.com/course-lesson/creating-a-view/?utm_source=plugin&utm_medium=gui&utm_campaign=blocks" target="_blank"><?php echo __( 'Views online help', 'wpv-views'); ?></a>
+</p>
