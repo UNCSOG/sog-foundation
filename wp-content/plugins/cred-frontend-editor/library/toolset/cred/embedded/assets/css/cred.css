@@ -1,0 +1,889 @@
+.cm-s-default span.cm-shortcode {color: #ed8027;}
+.clear {
+    clear: both;
+}
+.clearfix:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.cred-icon-pushpin{
+    margin-right: 5px;
+    color: green;
+    display: none;
+}
+
+.toolset-spinner.hidden,
+.hidden {
+    display:none;
+}
+
+.cred-no-bottom-margin{
+    margin-bottom:0px !important;
+}
+
+.editor-tools-padding{
+    padding-top: 38px !important;
+}
+.cred_left_margin{
+    margin-left: 15px !important;
+}
+
+.cred_create_form_label{
+    font-weight: bold;
+}
+
+.cred_create_form-explain-text{
+    float: left;
+    width: 40%;
+    font-weight: bold;
+}
+
+.cred_form_input{
+    float:left;
+    width:60%;
+}
+
+.left-margin-second-child label label{
+    margin-left: 10px !important;
+}
+
+.form-item
+{
+    margin-bottom: 1em;
+}
+
+#crednotificationdiv .fa-plus,
+#crednotificationdiv .fa-info-circle,
+#crednotificationdiv .fa-check,
+#crednotificationdiv .fa-check-circle,
+#crednotificationdiv .fa-warning,
+#crednotificationdiv .fa-times,
+#crednotificationdiv .fa-refresh {
+    position: relative;
+    top: -2px;
+    cursor: pointer;
+    margin: 0 4px;
+    font-size: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+#crednotificationdiv .fa-plus {
+    color: #51a351;
+}
+
+#crednotificationdiv .fa-times {
+    color: #c83025;
+}
+#crednotificationdiv .cred-notification-remove-container .fa-times {
+    top: 0;
+}
+#crednotificationdiv .fa-refresh {
+    color: #3a87ad;
+}
+
+#crednotificationdiv .fa-warning {
+    color:#9d261d;
+}
+
+#crednotificationdiv .fa-check {
+    color: #51a351;
+}
+
+table.widefat.cred-editor-table {
+    border: 0px;
+}
+
+table.cred-editor-table tbody td:first-child {
+    text-align: right;
+    vertical-align: top;
+    min-width: 200px;
+    width: 20%;
+}
+
+#credformtypediv input[type=text],
+#credposttypediv input[type=text],
+#postdivrichwrap input[type=text],
+/*#crednotificationdiv input[type=text],*/
+#credmessagesdiv input[type=text],
+#credformtypediv select,
+#credposttypediv select,
+#postdivrichwrap select,
+#crednotificationdiv select,
+#credmessagesdiv select {
+    width: auto;
+}
+
+#credformtypediv select {
+    width: auto;
+}
+#crednotificationdiv input[type=text]
+{
+    width: 95%;
+    width: calc(100% - 30px);
+}
+.cred_ajax_loader,
+.cred_ajax_loader_small
+{
+    position:relative;
+    width:16px;
+    height:16px;
+    background:url(../images/290.png);
+    display:none;
+}
+.cred_ajax_loader_small_1
+{
+    position:relative;
+    width:16px;
+    height:16px;
+    background:url(../images/290.png);
+    display:inline-block;
+}
+.cred_disabled_container
+{
+    margin: 10px 5px 0 3px
+}
+.cred-field-disabled-reason
+{
+    display:inline-block;
+    color:#f00 !important;
+    font-size:11px !important;
+}
+.cred-field-disabled-reason a
+{
+    text-decoration:underline !important;
+    color:#f00 !important;
+    font-size:11px !important;
+}
+
+.cred_cred_input
+{
+    position:relative !important;
+}
+
+.cred_disabled_overlay
+{
+    position:absolute;
+    margin:0;
+    padding:0;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    background:none;
+    background:rgba(255,255,255,0.5);
+    z-index:1000;
+    /*display:none;*/
+}
+.cred_overlay_loader
+{
+    position:absolute;
+    margin:0;
+    padding:0;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    background:none;
+    background-color:rgba(255,255,255,0.4);
+    background-image:url(../images/325.png);
+    background-repeat:no-repeat;
+    background-position:center center;
+    z-index:1000;
+    display:none;
+}
+
+.cred-tip-link,
+.cred-help-link,
+.cred-help-link-white {
+    text-decoration: none!important;
+    font-size: 16px!important;
+    color: #999!important;
+    transition: all 0.15s linear;
+    -webkit-transition: all 0.15s linear;
+    -moz-transition: all 0.15s linear;
+    -o-transition: all 0.15s linear;
+    -ms-transition: all 0.15s linear;
+    margin-left: 5px;
+    cursor: help;
+}
+.cred-tip-link {
+    cursor: help;
+}
+
+.cred-tip-link .active,
+.cred-tip-link:hover,
+.cred-help-link:hover {
+    color: #D0001A!important;
+}
+.cred-help-link-white {
+    color: #eee!important;
+}
+.cred-help-link-white:hover {
+    color: #fff!important;
+}
+
+.cred-help-link span,
+.cred-help-link-white span {
+    text-indent: -999em;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.cred-explain-text,
+.cred-label-holder {
+    margin: 10px 0 5px 0;
+}
+
+.cred-fieldset p.cred-label-holder
+{
+    clear: left;
+}
+
+.cred-explain-text {
+    color: #999;
+}
+
+#credextradiv
+{
+    margin-top:20px;
+}
+
+.cred-ignore-field td
+{
+    background:#aaa;
+}
+
+.cred-field-actions
+{
+    display:inline-block;
+    margin-right:10px;
+}
+
+.cred-warn
+{
+    color:#f00;
+    padding-left:15px;
+}
+
+.cred-table-choose-form td, .cred-table td
+{
+    padding:5px 0;
+}
+
+#cred-edit-link-text-container
+{
+    position:relative;
+    display:inline-block;
+}
+
+.cred-cred-clear
+{
+    height:1px;
+    float:none;
+    clear:both;
+    zoom:1;
+}
+
+.ui-datepicker-trigger
+{
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+/**
+ * ====================
+ * Generic validation =
+ * ====================
+ */
+input.cred-required-warning {
+    border-color: #B94A48;
+	background-color: #F2DEDE;
+	color: #B94A48;
+}
+
+/**
+ * ===============
+ * Notifications =
+ * ===============
+ */
+
+.cred-notification-settings-panel-header {
+    margin: 5px 0 30px;
+}
+.cred-explain-text + .cred-notification-add-button {
+    margin-top: 5px;
+}
+
+.cred-notification-settings-row {
+    border: 1px solid #ddd;
+    border-left: solid 2px #ddd;
+    background-color: #efefef;
+}
+.cred-notification-handle-actions {
+    display: block;
+    overflow: hidden;
+    padding: 10px;
+    height: 28px;
+    line-height: 28px;
+}
+.cred-notification-settings-row .cred-notification-actions {
+    float: right;
+}
+.cred-notification-settings-row.cred-notification-settings-row-open {
+    border-left: solid 2px #f6921e;
+}
+
+.cred-notifications-settings-container {
+    margin-bottom: 30px;
+    padding: 0 10px 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f6f6f6;
+}
+.cred-notifications-settings-container:last-child {
+    margin-bottom: 0;
+}
+
+.cred-notification-title {
+    max-width: calc(100% - 100px - 100px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    float: left;
+    font-size: 1.1em;
+}
+.cred-notification-status {
+    width: 100px;
+    display: block;
+    float: left;
+    font-size: 1.1em;
+}
+.cred-notification-action {
+    display: inline-block;
+    text-decoration: none;
+    margin: 0 4px;
+    cursor: pointer;
+}
+.cred-notification-delete {
+    color: #aa0000;
+}
+
+.cred-wizard-buttons
+{
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.cred-exit-wizard-button
+{
+    text-align: right;
+}
+
+.cred-exit-wizard-button:after,
+.cred-wizard-buttons:after
+{
+    display:block;
+    float:none;
+    clear:both;
+}
+
+.cred-wizard-buttons .button-primary
+{
+    display:inline-block;
+}
+
+.cred_form_action_page_container
+{
+    position:relative;
+    display:inline-block;
+    margin-left:10px;
+}
+
+.cred_notification_settings_panel
+{
+    position:relative;
+}
+
+.cred_notification_settings_panel:hover .cred-notification-remove-container
+{
+    display:block;
+}
+
+#cred-submit
+{
+    display:inline-block;
+    float:right;
+}
+
+label.cred-label {
+    display: block;
+    margin-bottom: 5px !important;
+	float: none !important;
+	margin: 0px 0px 0px 0px !important;
+	padding: 0px 0px 0px 0px !important;
+	font-weight: normal !important;
+}
+
+.cred_form_input label.cred-label {
+    vertical-align:top;
+}
+
+label.cred-label-chk {
+    position:relative;
+    display:block;
+    vertical-align:middle;
+    margin-bottom:5px;
+}
+
+.cred-fieldset table {
+    border-collapse: collapse;
+}
+
+
+input.cred-textfield
+{
+    outline:none;
+    background-color: #FFFFFF;
+    color: #333333;
+    padding:7px 10px;
+    font-size:12px;
+    border:1px solid #ddd;
+    -moz-border-radius:7px;
+    -webkit-border-radius:7px;
+    -o-border-radius:7px;
+    -ms-border-radius:7px;
+    border-radius:7px;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+input.cred-textfield:focus
+{
+    border-color:#aaa;
+    -webkit-box-shadow: 0px 0px 20px rgba(200, 200, 200, 0.75);
+    -moz-box-shadow: 0px 0px 20px rgba(200, 200, 200, 0.75);
+    box-shadow: 0px 0px 20px rgba(150, 150, 150, 0.75);
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+.cred-editor-wrap{
+    position:relative;
+    border:1px solid #ddd;
+    margin:0;
+    padding:0;
+    height:100%;
+}
+.cred-editor-container{
+    position:relative;
+    margin:0 15px;
+    padding:0;
+}
+
+.horlist {
+    margin-bottom: 12px;
+}
+.horlist li {
+    float: left;
+    line-height: 20px;
+    margin-right: 10px;
+}
+
+.cred_cyan_box{
+    border: 1px solid #8cceea;
+    background-color: #eff8fc;
+    padding:10px;
+    margin-bottom:0px;
+    margin-top:0px;
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    border-bottom-left-radius: 5px 5px;
+    border-bottom-right-radius: 5px 5px;
+    border-top-left-radius: 5px 5px;
+    border-top-right-radius: 5px 5px;
+}
+
+.cred_cyan_box p{
+    line-height: 100%; margin: 5px 0;
+}
+.cred_cyan_box H3 { margin-top: 2px; }
+
+.cred_cyan_box ul{
+    margin-top:5px;
+    font-size: 11px;
+}
+
+.cred-fieldset h4 {
+    background: #efefef;
+    padding: 3px 10px;
+    margin-left: -10px;
+}
+
+.cred-form-texts {
+    width: 100%;
+    max-width: 900px;
+}
+
+.cred-form-texts .cred-form-texts-desc {
+    width: 30%;
+}
+
+.cred-form-texts .cred-form-texts-msg {
+    width: 70%;
+}
+
+#credmessagesdiv .cred-form-texts .cred-form-texts-msg input {
+    width: 100%;
+}
+
+#cred_form_action_message {
+    width: 100%;
+}
+
+#cred_general_settings_table td {
+    border: none;
+}
+
+.cred_notification_field_condition
+{
+    position:relative;
+    padding-right:20px;
+}
+
+.cred-remove-option
+{
+    display:inline-block;
+    width:16px;
+    height:16px;
+    background:url(../images/delete-2.png);
+    margin:0px;
+    vertical-align:top;
+    position: relative;
+}
+
+.cred_notify_event_field_conditions_container_fields label {
+    margin: 0 0 5px 0;
+}
+
+.cred-dialog.wp-dialog {
+    position: fixed;
+    left: 45%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -150px;
+}
+
+.cred-dialog.wp-dialog .ui-dialog-titlebar
+{
+    line-height:25px;
+}
+.cred-dialog.wp-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close
+{
+    display:none;
+}
+
+.cred-notification {
+    position:relative;
+    border-style: solid;
+    border-width: 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    padding: 0 0.6em;
+    margin: 20px 20px 0 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cred-notification p {
+    position:relative;
+    line-height: 1.7;
+    margin: 10px 0;
+}
+
+.cred-notification.cred-error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    margin: 10px 0;
+}
+.cred-notification.cred-error [class^="icon-"] {
+    color: #b94a48;
+}
+
+.cred-notification.cred-success {
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+.cred-notification.cred-success [class^="icon-"] {
+    color: #468847;
+}
+
+.cred-notification.cred-info {
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+.cred-notification.cred-info [class^="icon-"] {
+    color: #3a87ad;
+}
+
+.cred-dialog .ui-icon, .cred-dialog .ui-widget-content .ui-icon {
+    background-image: url("../images/confirm.png");
+    padding-left: 69px;
+    min-height: 80px;
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    text-indent: 0;
+    width:auto;
+    height:auto;
+    font-weight:normal;
+}
+
+.cred-dialog .ui-icon p {
+    margin: 25px 0 0 20px
+}
+.cred-dialog .ui-icon-alert {
+    background-image: url('../images/alert.png');
+}
+.cred-dialog .ui-icon-confirm {
+    background-image: url('../images/confirm.png');
+}
+.cred-dialog .ui-icon-info {
+    background-image: url('../images/info.png');
+}
+.cred-dialog.wp-dialog .ui-dialog-titlebar {
+    background: #444444;
+    color: #E5E5E5;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 0 1em;
+    border: 1px solid #444444;
+}
+.cred-dialog.wp-dialog .ui-widget-content {
+    color: #333;
+    background:#eee;
+}
+.cred-dialog.wp-dialog .ui-state-default.button.button-primary,
+.cred-dialog.wp-dialog .ui-widget-content .ui-state-default.button.button-primary,
+.cred-dialog.wp-dialog .ui-widget-header .ui-state-default.button.button-primary {
+    background-color: #21759B;
+    background-image: linear-gradient(to bottom, #2A95C5, #21759B);
+    border-color: #21759B #21759B #1E6A8D;
+    box-shadow: 0 1px 0 rgba(120, 200, 230, 0.5) inset;
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    font-weight:normal;
+}
+.cred-dialog.wp-dialog .ui-state-default.button,
+.cred-dialog.wp-dialog .ui-widget-content .ui-state-default.button,
+.cred-dialog.wp-dialog .ui-widget-header .ui-state-default.button {
+    background: linear-gradient(to bottom, #FEFEFE, #F4F4F4) repeat scroll 0 0 #F3F3F3;
+    border-color: #BBBBBB;
+    color: #333333;
+    text-shadow: 0 1px 0 #FFFFFF;
+    font-weight:normal;
+}
+
+.cred-pointer .wp-pointer-content h3:before {
+    background: url("../images/tip.png") no-repeat scroll 0 50% transparent;
+    content: " ";
+    height: 100%;
+    left: 15px;
+    position: absolute;
+    top: 0;
+    width: 36px;
+}
+
+/* OVERRIDES */
+
+/* UI DIALOG OVERLAY*/
+body.post-type-cred-form .ui-widget-overlay{position:fixed;z-index:1000;}
+/*body.post-type-cred-form #wp-content-editor-tools{background-color: transparent}*/
+body.post-type-cred-form .ui-dialog{z-index:99999;}
+
+/* ************************************************************************** *\
+                EDITOR Fixes
+\* ************************************************************************** */
+
+.cred_related .CodeMirror-wrap {
+    border: solid 1px #ccc;
+    border-top: none;
+}
+
+.cred-widefat {
+    background: none;
+    border: none;
+    width: 100%;
+}
+
+.cred-widefat td {
+    padding: 8px;
+}
+
+.cred-notification-fieldset-subject .cred-editor-toolbar {
+    padding-bottom: 5px;
+}
+
+
+/* ************************************************************************** *\
+                RTL Adjustments
+\* ************************************************************************** */
+html[dir='rtl'] .wpv-setting-container .wpv-settings-header,
+html[dir='rtl'] .wpv-setting .code-editor-toolbar>ul>li {
+    float: right;
+}
+
+html[dir='rtl'] .wpv-settings-save-all .update-button-wrap {
+    float: left;
+}
+
+html[dir='rtl'] .CodeMirror-code {
+    direction: ltr;
+}
+
+html[dir='rtl'] .CodeMirror-code > div,
+html[dir='rtl'] .wpv-setting .update-button-wrap {
+    text-align: left;
+}
+
+html[dir='rtl'] .wpv-inline-content-template-title .wpv-inline-content-template-action-buttons {
+    right: auto;
+    left: 5px;
+}
+
+html[dir='rtl'] .toolset-help-sidebar {
+    left: auto;
+    right: 1px;
+}
+
+html[dir='rtl'] .toolset-help .fa-times-circle,
+html[dir='rtl'] .toolset-help .fa-times {
+    right: auto;
+    left: 0;
+}
+
+html[dir='rtl'] .toolset-help-content {
+    padding-left: 25px;
+    padding-right: 180px;
+}
+
+html[dir='rtl'] .js-wpv-query-type {
+    margin-left: 3px !important;
+    margin-right: 15px !important;
+}
+
+html[dir='rtl'] .wpv-settings-content-filter .edit-filter,
+html[dir='rtl'] .wpv-settings-content-filter .wpv-edit-filter,
+html[dir='rtl'] .wpv-itembox-header .wpv-code-editor-toggler {
+    right: auto;
+    left: 2px;
+}
+
+html[dir='rtl'] .cred-tip-link,
+html[dir='rtl'] .cred-help-link,
+html[dir='rtl'] .cred-help-link-white {
+    right: auto !important;
+    left: 25px;
+}
+
+.cred-extra-editor-tab{
+    display: block;
+    margin: 0;
+    padding: 0 28px 0 0;
+    line-height: 35px;
+    border: solid 1px #ccc;
+    font-weight: bold;
+    cursor: pointer;
+    background: #e5e5e5;
+    background: -moz-linear-gradient(top, #e5e5e5 0%, #f4f4f4 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(100%,#f4f4f4));
+    background: -webkit-linear-gradient(top, #e5e5e5 0%,#f4f4f4 100%);
+    background: -o-linear-gradient(top, #e5e5e5 0%,#f4f4f4 100%);
+    background: -ms-linear-gradient(top, #e5e5e5 0%,#f4f4f4 100%);
+    background: linear-gradient(to bottom, #e5e5e5 0%,#f4f4f4 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#f4f4f4',GradientType=0 );
+}
+
+#credextrajsdiv .button-link{
+    display: inline-block;
+    float: left;
+    width: 28px;
+    margin-right: 10px;
+    text-align: center;
+    border-right: solid 1px #ccc;
+}
+
+#credextracssdiv .button-link{
+    display: inline-block;
+    float: left;
+    width: 28px;
+    margin-right: 10px;
+    text-align: center;
+    border-right: solid 1px #ccc;
+}
+
+#credextrajsdiv{
+    margin-bottom:0px;
+}
+
+#credextrajsdiv, #credextracssdiv{
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    line-height: 35px;
+    border: solid 1px #ccc;
+    background: #e5e5e5;
+    background: -moz-linear-gradient(top, #e5e5e5 0%, #f4f4f4 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(100%,#f4f4f4));
+    background: -webkit-linear-gradient(top, #e5e5e5 0%,#f4f4f4 100%);
+    background: -o-linear-gradient(top, #e5e5e5 0%,#f4f4f4 100%);
+    background: -ms-linear-gradient(top, #e5e5e5 0%,#f4f4f4 100%);
+    background: linear-gradient(to bottom, #e5e5e5 0%,#f4f4f4 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#f4f4f4',GradientType=0 )
+}
+
+.toolset_page_CRED_User_Forms .tablenav.top > .bulkactions,
+.toolset_page_CRED_Forms .tablenav.top > .bulkactions {
+    margin-top:28px;
+}
+
+.cred-wizard-preview-button{
+    margin-left: 10px;
+}
+
+/*************************
+* Wizard custom css
+*************************/
+
+#poststuff h2.cred-wizard-header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2em;
+}
+.cred-wizard-subheader {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+/*************************
+* H2 Override for Wizard
+***************************/
+#poststuff div.toolset-help-content h2 {
+    font-size: 1.3em;
+    padding-left: 0px;
+}

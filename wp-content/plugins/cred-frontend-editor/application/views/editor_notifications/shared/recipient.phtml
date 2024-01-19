@@ -1,0 +1,338 @@
+<?php
+
+use OTGS\Toolset\CRED\Controller\Forms\Post\Main as PostMain;
+use OTGS\Toolset\CRED\Controller\Forms\User\Main as UserMain;
+
+/**
+ * Template for the forms notifications GUI, recipient section.
+ * 
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var WP_Post $form
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ * 
+ * @todo Evaluate the error message about trigger event, it does not belong here
+ */
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form = toolset_getarr( $context, 'form' );
+$form_type = toolset_getarr( $context, 'form_type' );
+
+$notification_html_name = "_cred[notification][notifications][{$ii}]";
+?>
+<fieldset class="cred-fieldset cred-notification-fieldset cred-notification-fieldset-recipient">
+    <h4>
+        <i title="<?php echo esc_attr(__('Please select recipients', 'wp-cred')); ?>" id="notification_recipient_required-<?php echo $ii; ?>" class="fa fa-warning" style="display:none;"></i>
+        <?php _e( 'Notification e-mail recipients', 'wp-cred' ); ?>
+        <span class="cred-tip-link js-otgs-popover-tooltip" data-tippy-content="
+					<h3><?php _e('Notification recipients', 'wp-cred'); ?></h3>
+           <p><?php _e('You can select multiple recipients for email notifications. Select the check-boxes for different recipient types and their target type (to/cc/bcc).', 'wp-cred'); ?></p>
+				">
+	        <i class="fa fa-question-circle"></i>
+        </span>
+    </h4>
+    <?php do_action( 'cred_admin_notification_recipient_options_before', $form, array( $ii, "_cred[notification][notifications][$ii][to][type][]", $notification['to']['type'] ), $notification ); ?>
+    <p>
+        <label class='cred-label'>
+            <input data-cred-bind="{ 
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_recipient_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    } 
+            }" 
+            type='checkbox' 
+            name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type][]' 
+            value='wp_user' 
+            <?php checked( in_array( 'wp_user', toolset_getnest( $notification, array( 'to', 'type' ), array() ) ) ); ?> />
+            <span><?php _e( 'Send notification to a WordPress user:', 'wp-cred' ); ?></span>
+        </label>
+        <span style="display:block;margin-left:20px;" data-cred-bind="{ 
+                action: 'show', 
+                condition: '_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type] has wp_user' 
+            }">
+            <select name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][wp_user][to_type]">
+                <option value="to" <?php selected( 'to', toolset_getnest( $notification, array( 'to', 'wp_user', 'to_type' ) ) ); ?>><?php _e('To:', 'wp-cred'); ?></option>
+                <option value="cc" <?php selected( 'cc', toolset_getnest( $notification, array( 'to', 'wp_user', 'to_type' ) ) ); ?>><?php _e('Cc:', 'wp-cred'); ?></option>
+                <option value="bcc" <?php selected( 'bcc', toolset_getnest( $notification, array( 'to', 'wp_user', 'to_type' ) ) ); ?>><?php _e('Bcc:', 'wp-cred'); ?></option>
+            </select>
+            <i title="<?php echo esc_attr( __('Please select a user', 'wp-cred') ); ?>" 
+                id="notification_user_required-<?php echo esc_attr( $ii ); ?>" 
+                class="fa fa-warning" 
+                style="display:none;"></i>
+            <input data-cred-bind="{                                      
+                    validate: {
+                        required: {
+                            actions: [
+                                {   
+                                    action: 'validationMessage', 
+                                    domRef: '#notification_user_required-<?php echo $ii; ?>' 
+                                },
+                                {
+                                    action: 'validateSection' 
+                                }
+                            ]
+                        }
+                    }, 
+                    event: 'init', 
+                    action: {
+                        suggest: {
+                            url: '<?php echo CRED_CRED::route('/Forms/suggestUserMail'); ?>', 
+                            param: 'user', 
+                            loader: '#cred_notification_user_mail_suggest_loader_<?php echo $ii; ?>'
+                        }                                            
+                    }
+                }"
+                type="text" 
+                class="cred_mail_to_user" 
+                style="width:200px" 
+                name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][wp_user][user]" 
+                placeholder="<?php echo esc_attr(__('-- Choose user --', 'wp-cred')); ?>" 
+                value="<?php echo esc_attr( toolset_getnest( $notification, array( 'to', 'wp_user', 'user' ), '' ) ); ?>"/>
+            <span style="display:none" 
+                id="cred_notification_user_mail_suggest_loader_<?php echo esc_attr( $ii ); ?>" 
+                class='cred_ajax_loader_small_1'></span>
+        </span>
+    </p>
+
+    <p>
+        <label class='cred-label'>
+            <input data-cred-bind="{ 
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_recipient_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    } 
+                }" 
+                type='checkbox' 
+                name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type][]' 
+                value='mail_field' 
+                <?php checked( in_array( 'mail_field', toolset_getnest( $notification, array( 'to', 'type' ), array() ) ) ); ?> />
+            <span><?php _e('Send notification to an email specified in an email field included in the form:', 'wp-cred'); ?></span>
+        </label>
+        <span style="display:block;margin-left:20px;" data-cred-bind="{ 
+            action: 'show', 
+            condition: '_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type] has mail_field' 
+        }">
+            <select name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][mail_field][to_type]">
+                <option value="to" <?php selected( 'to', toolset_getnest( $notification, array( 'to', 'mail_field', 'to_type' ) ) ); ?>><?php _e('To:', 'wp-cred'); ?></option>
+                <option value="cc" <?php selected( 'cc', toolset_getnest( $notification, array( 'to', 'mail_field', 'to_type' ) ) ); ?>><?php _e('Cc:', 'wp-cred'); ?></option>
+                <option value="bcc" <?php selected( 'bcc', toolset_getnest( $notification, array( 'to', 'mail_field', 'to_type' ) ) ); ?>><?php _e('Bcc:', 'wp-cred'); ?></option>
+            </select>
+            <i title="<?php echo esc_attr(__('Please select an email field', 'wp-cred')); ?>" id="notification_mail_field_required-<?php echo esc_attr( $ii ); ?>" class="fa fa-warning" style="display:none;"></i>
+            <select data-cred-bind="{ 
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_mail_field_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    }, 
+                    action: 'set', 
+                    what: { 
+                        options: '_cred[_persistent_mail_fields]' 
+                    } 
+                }" 
+                name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][mail_field][address_field]">
+                <optgroup label="<?php echo esc_attr(__('-- Choose email field --', 'wp-cred')); ?>">
+                    <option value='' disabled selected style='display:none;' data-dummy-option='1'><?php _e('-- Choose email field --', 'wp-cred'); ?></option>
+                    <?php
+                    if ('' != toolset_getnest( $notification, array( 'to', 'mail_field', 'address_field' ) ) ) {
+                        ?><option value="<?php echo esc_attr( toolset_getnest( $notification, array( 'to', 'mail_field', 'address_field' ) ) ); ?>" selected="selected"><?php echo $notification['to']['mail_field']['address_field']; ?></option><?php
+                    }
+                    ?>
+                </optgroup>
+            </select>
+            <select data-cred-bind="{ 
+                    action: 'set', 
+                    what: { 
+                        options: '_cred[_persistent_text_fields]' 
+                    } 
+                }" 
+                name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][mail_field][name_field]">
+                <optgroup label="<?php echo esc_attr(__('-- Name field --', 'wp-cred')); ?>">
+                    <option value='' disabled selected style='display:none;' data-dummy-option='1'><?php _e('-- Name field --', 'wp-cred'); ?></option>
+                    <option value='###none###' data-dummy-option='1' <?php selected( '###none###', toolset_getnest( $notification, array( 'to', 'mail_field', 'name_field' ) ) ); ?>><?php _e('-- none --', 'wp-cred'); ?></option>
+                    <?php
+                    if (
+                        '' != toolset_getnest( $notification, array( 'to', 'mail_field', 'name_field' ) ) 
+                        && '###none###' != toolset_getnest( $notification, array( 'to', 'mail_field', 'name_field' ) ) 
+                    ) {
+                        ?><option value="<?php echo esc_attr( toolset_getnest( $notification, array( 'to', 'mail_field', 'name_field' ) ) ); ?>" selected="selected"><?php echo $notification['to']['mail_field']['name_field']; ?></option><?php
+                    }
+                    ?>
+                </optgroup>
+            </select>
+            <select data-cred-bind="{ 
+                    action: 'set', 
+                    what: { 
+                        options: '_cred[_persistent_text_fields]' 
+                    } 
+                }" 
+                name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][mail_field][lastname_field]">
+                <optgroup label="<?php echo esc_attr(__('-- Lastname field --', 'wp-cred')); ?>">
+                    <option value='' disabled selected style='display:none;' data-dummy-option='1'><?php _e('-- Lastname field --', 'wp-cred'); ?></option>
+                    <option value='###none###' data-dummy-option='1' <?php selected( '###none###', toolset_getnest( $notification, array( 'to', 'mail_field', 'lastname_field' ) ) ); ?>><?php _e('-- none --', 'wp-cred'); ?></option>
+                    <?php
+                    if (
+                        '' != toolset_getnest( $notification, array( 'to', 'mail_field', 'lastname_field' ) ) 
+                        && '###none###' != toolset_getnest( $notification, array( 'to', 'mail_field', 'lastname_field' ) )
+                    ) {
+                        ?><option value="<?php echo esc_attr( toolset_getnest( $notification, array( 'to', 'mail_field', 'lastname_field' ) ) ); ?>" selected="selected"><?php echo $notification['to']['mail_field']['lastname_field']; ?></option><?php
+                    }
+                    ?>
+                </optgroup>
+            </select>
+            <a href="javascript:;" data-cred-bind="{ 
+                    event: 'click', 
+                    action: 'refreshFormFields' 
+                }" 
+                class='fa fa-refresh cred-refresh-button' 
+                title="<?php echo esc_attr(__('Click to refresh (if settings changed)', 'wp-cred')); ?>">
+            </a>
+        </span>
+    </p>
+
+    <p>
+        <label class='cred-label'>
+            <input data-cred-bind="{ 
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_user_id_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    } 
+                }" 
+                type='checkbox' 
+                name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type][]' 
+                value='user_id_field' 
+                <?php checked( in_array( 'user_id_field', toolset_getnest( $notification, array( 'to', 'type' ), array() ) ) ); ?> />
+            <span><?php _e('Send notification to a WordPress user with an ID coming from a generic field in the form:', 'wp-cred'); ?></span>
+        </label>
+        <span style="display:block;margin-left:20px;" data-cred-bind="{ action: 'show', condition: '_cred[notification][notifications][<?php echo $ii; ?>][to][type] has user_id_field' }">
+            <select name="_cred[notification][notifications][<?php echo $ii; ?>][to][user_id_field][to_type]">
+                <option value="to" <?php selected( 'to', toolset_getnest( $notification, array( 'to', 'user_id_field', 'to_type' ) ) ); ?>><?php _e('To:', 'wp-cred'); ?></option>
+                <option value="cc" <?php selected( 'cc', toolset_getnest( $notification, array( 'to', 'user_id_field', 'to_type' ) ) ); ?>><?php _e('Cc:', 'wp-cred'); ?></option>
+                <option value="bcc" <?php selected( 'bcc', toolset_getnest( $notification, array( 'to', 'user_id_field', 'to_type' ) ) ); ?>><?php _e('Bcc:', 'wp-cred'); ?></option>    
+            </select>
+            <i title="<?php echo esc_attr(__('Please select a user id field', 'wp-cred')); ?>" id="notification_user_id_required-<?php echo $ii; ?>" class="fa fa-warning" style="display:none;"></i>
+            <select data-cred-bind="{ 
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_user_id_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    }, 
+                    action: 'set', 
+                    what: { 
+                        options: '_cred[_persistent_user_id_fields]' 
+                    } 
+                }" 
+                name="_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][user_id_field][field_name]">
+                <optgroup label="<?php echo esc_attr(__('-- Choose user id field --', 'wp-cred')); ?>">
+                    <option value='' disabled selected style='display:none;' data-dummy-option='1'><?php _e('-- Choose user id field --', 'wp-cred'); ?></option>
+                    <?php
+                    if ('' != toolset_getnest( $notification, array( 'to', 'user_id_field', 'field_name' ) ) ) {
+                        ?><option value="<?php echo esc_attr( toolset_getnest( $notification, array( 'to', 'user_id_field', 'field_name' ) ) ); ?>" selected="selected"><?php echo $notification['to']['user_id_field']['field_name']; ?></option><?php
+                    }
+                    ?>
+                </optgroup>
+            </select>
+            <a href="javascript:;" data-cred-bind="{ 
+                    event: 'click', 
+                    action: 'refreshFormFields' 
+                }" 
+                class='fa fa-refresh cred-refresh-button' 
+                title="<?php echo esc_attr(__('Click to refresh (if settings changed)', 'wp-cred')); ?>">
+            </a>
+        </span>
+    </p>
+
+    <p class="cred-label-holder">
+        <label class='cred-label'>
+            <input data-cred-bind="{ 
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_recipient_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    } 
+                }" 
+                type='checkbox' 
+                name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type][]' 
+                value='specific_mail' 
+                <?php checked( in_array( 'specific_mail', toolset_getnest( $notification, array( 'to', 'type' ), array() ) ) ); ?> />
+            <span><?php _e('Send notification to a specific email address:', 'wp-cred'); ?></span>
+            <span class="cred-tip-link js-otgs-popover-tooltip" data-tippy-content="
+							 <h3><?php _e('Additional notification recipients', 'wp-cred'); ?></h3>
+               <p><?php _e('You can enter additional recipients as:<br />email<br />name &lt;email&gt;<br />to/cc/bcc: name &lt;email&gt;<br /><br />If no recipient type is specified, the recipient will be added as \'to\'.<br />Separate multiple recipients with commas.', 'wp-cred'); ?></p>
+						">
+                <i class="fa fa-question-circle"></i>
+            </span>
+        </label>
+        <span style="display:block;margin-left:20px;" data-cred-bind="{ 
+                action: 'show', 
+                condition: '_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][type] has specific_mail' 
+            }">
+            <i title="<?php echo esc_attr(__('Please enter an email address', 'wp-cred')); ?>" id="notification_mail_required-<?php echo esc_attr( $ii ); ?>" class="fa fa-warning" style="display:none;"></i>
+            <input data-cred-bind="{
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage', domRef: '#notification_mail_required-<?php echo $ii; ?>' },
+                                {action: 'validateSection' }
+                            ]
+                        }
+                    }
+                }" 
+                type="text" 
+                id="cred-additional-recipients-<?php echo esc_attr( $ii ); ?>" 
+                name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][specific_mail][address]' 
+                value="<?php echo esc_attr( toolset_getnest( $notification, array( 'to', 'specific_mail', 'address' ) ) ); ?>" />
+        </span>
+    </p>
+    
+<?php if ( PostMain::POST_TYPE === $form_type ) { ?>
+    <p>
+        <label class='cred-label'>
+            <input data-cred-bind="{
+                    validate: {
+                        required: {
+                            actions: [
+                                {action: 'validationMessage2', domRef: '#notification_recipient_required-<?php echo $ii; ?>' },
+                            ]
+                        }
+                    }
+                }" 
+                type='checkbox' 
+                class='cred-checkbox-<?php echo esc_attr( $ii ); ?>' 
+                id='send_to_author' 
+                name='_cred[notification][notifications][<?php echo esc_attr( $ii ); ?>][to][author]' 
+                value='author' 
+                <?php checked( 'author', toolset_getnest( $notification, array( 'to', 'author' ) ) ); ?> />
+            <span><?php _e('Send notification to the post author', 'wp-cred'); ?></span>
+        </label>
+    </p>                
+<?php } ?>
+</fieldset>
+
+ <?php do_action('cred_admin_notification_recipient_options_after', $form, array( $ii, "_cred[notification][notifications][$ii][to][type][]", $notification['to']['type'] ), $notification ); ?>

@@ -1,0 +1,13 @@
+.otg-access-mightlong-list {
+	overflow: hidden;
+}
+
+	.otg-access-mightlong-list li {
+		min-width:45%;
+		float:left;
+		padding-right:4%;
+		margin: 0 0 6px;
+	}
+form#wpcf-access-set_error_page {
+	padding: 20px;
+}

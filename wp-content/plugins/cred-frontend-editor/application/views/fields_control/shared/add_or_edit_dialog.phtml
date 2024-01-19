@@ -1,0 +1,37 @@
+<?php
+/**
+ * underscore.js template for the dialog for adding a non Toolset field under Forms control.
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+?>
+<script type="text/html" id="tmpl-cred-fields-control-add-or-edit-dialog">
+    <div class="cred-fields-control-add-or-edit-container js-cred-fields-control-add-or-edit-container">
+        <p>
+            <label>
+                <?php _e( 'Display this field as', 'wp-cred' ); ?>
+                <select class="js-cred-fields-control-add-or-edit-type">
+                    <option value="" disabled="disabled"<# if ( data.selectedType == '' ) { #> selected="selected"<# } #>><?php _e( 'Select a field type', 'wp-cred' ); ?></option>
+                    <#
+                    if (
+                        _.has( data, 'fieldTypes' ) 
+                        && _.size( data.fieldTypes ) > 0 
+                    ) {
+                        _.each( data.fieldTypes, function( fieldData, fieldKey ) {
+                            #>
+                            <option value="{{{fieldKey}}}"<# if ( data.selectedType == fieldKey ) { #> selected="selected"<# } #>>{{{fieldData.label}}}</option>
+                            <#
+                        });
+                    }
+                    #>
+                </select>
+            </label>
+        </p>
+        <div class="cred-fields-control-add-or-edit-options js-cred-fields-control-add-or-edit-options">
+            <p class="toolset-alert toolset-alert-info">
+                <?php _e( 'Select a field type to get some extra options.', 'wp-cred' ); ?>
+            </p>
+        </div>
+    </div>
+</script>

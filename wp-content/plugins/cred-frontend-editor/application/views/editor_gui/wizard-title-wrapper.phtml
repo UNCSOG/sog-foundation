@@ -1,0 +1,33 @@
+<?php
+/**
+ * Post and User forms uses WP post editing page. For the wizard some default WP layout must be changed
+ *
+ * @since 2.3
+ */
+?>
+<script type="text/html" id="tmpl-cred-wizard-title-wrapper">
+	<div class="cred-wizard-step-wrapper cred-wizard-step-wrapper-title">
+		<h2 class="cred-wizard-header"><?php
+			// translators: A form label for an input that contains the name of a Form.
+			esc_html_e( 'Form Name', 'wp-cred' );
+		?></h2>
+		<table class="widefat toolset-field-table">
+			<tbody>
+				<tr>
+					<td>
+						<label for=""><?php
+								// translators: A form label for an input that contains the name of a Form.
+								esc_html_e( 'Form Name', 'wp-cred' );
+							?>
+							(<strong><?php
+								// translators: A required element of a form.
+								esc_html_e( 'required', 'wp-cred' );
+							?></strong>)
+						</label>
+					</td>
+				<td id="js-cred-wizard-title-wrapper-input"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</script>

@@ -1,0 +1,2 @@
+.tb-grid,.tb-grid>.block-editor-inner-blocks>.block-editor-block-list__layout{display:grid;grid-row-gap:25px;grid-column-gap:25px}.tb-grid-item{background:#d38a03;padding:30px}.tb-grid-column{flex-wrap:wrap}.tb-grid-column>*{width:100%}.tb-grid-column.tb-grid-align-top{width:100%;display:flex;align-content:flex-start}.tb-grid-column.tb-grid-align-center{width:100%;display:flex;align-content:center}.tb-grid-column.tb-grid-align-bottom{width:100%;display:flex;align-content:flex-end}
+

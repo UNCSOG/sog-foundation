@@ -1,0 +1,39 @@
+/** OVERRIDES **/
+.wrap .page-title-action.disabled, .wrap .page-title-action.disabled:hover, .wrap .page-title-action.disabled:focus{
+    color: #a0a5aa !important;
+    border-color: #ddd !important;
+    background: #f7f7f7 !important;
+    box-shadow: none !important;
+    text-shadow: 0 1px 0 #fff !important;
+    cursor: default;
+    -webkit-transform: none !important;
+    transform: none !important;
+}
+/* Make sure that table inside postbox doesn't have grey border */
+.cred-association-forms-editor .toolset-field-table{
+    border: 0px !important;
+}
+
+.cred-association-form-cancel-button{
+    position: absolute;
+    left: 10px;
+}
+
+/* Dialogs */
+.cred-association-form-dialog{
+    margin-left: 100px;
+}
+.cred-association-form-dialog .dialog-body{
+    float: right;
+    width: 100%;
+}
+.cred-association-form-dialog .dialog-icon{
+    float: left;
+    width: 100px;
+    margin-left: -100px;
+}
+
+.cred-association-form-dialog .dialog-icon i.fa{
+    margin: 20px;
+}
+

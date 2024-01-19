@@ -1,0 +1,131 @@
+{
+	"data": [
+		{
+			"name": "toolset_disable_archive_pagination",
+			"type": [
+				"toolset_custom"
+			],
+			"target": [
+				"archive"
+			],
+			"group": "Disable Elements",
+			"gui": {
+				"display_name": "Archive Pagination",
+				"type": "select",
+				"values": [
+					{
+					"text": "Disable Theme Pagination",
+					"value": 1
+					},
+					{
+					"text": "Enable Theme Pagination",
+					"value": 0
+					}
+				]
+			},
+			"default_value": 0
+		},
+		{
+			"name": "toolset_disable_archive_title",
+			"type": [
+				"toolset_info"
+			],
+			"target": [
+				"archive"
+			],
+			"group": "Layout",
+			"gui": {
+				"display_name": "",
+				"type": "info",
+				"text": "<p>You can manage the title and layout for each archive loop in the Theme Customizer options for <a href='%%CUSTOMIZER%%?autofocus[panel]=kadence_customizer_blog_posts' title='Theme Customizer' target='_blank'>posts</a> or <a href='%%CUSTOMIZER%%?autofocus[panel]=kadence_customizer_custom_post' title='Theme Customizer' target='_blank'>custom post types</a>.</p>"
+			}
+		},
+		{
+			"name": "toolset_disable_single_title",
+			"type": [
+				"toolset_info"
+			],
+			"target": [
+				"single"
+			],
+			"group": "Layout",
+			"gui": {
+				"display_name": "",
+				"type": "info",
+				"text": "<p>You can manage the title, layout and metadata for each post type in the Theme Customizer options for <a href='%%CUSTOMIZER%%?autofocus[panel]=kadence_customizer_blog_posts' title='Theme Customizer' target='_blank'>posts</a>, <a href='%%CUSTOMIZER%%?autofocus[section]=kadence_customizer_page_layout' title='Theme Customizer' target='_blank'>pages</a> or <a href='%%CUSTOMIZER%%?autofocus[panel]=kadence_customizer_custom_post' title='Theme Customizer' target='_blank'>custom post types</a>.</p>"
+			}
+		},
+		{
+			"name": "scroll_up",
+			"type": ["customizer"],
+			"global_key": "theme_mods_kadence",
+			"group": "General",
+			"target": ["single", "archive"],
+			"gui": {
+				"display_name": "Scroll To Top",
+				"type": "select",
+				"values": [
+					{
+						"text": "Disabled",
+						"value": "false"
+					},
+					{
+						"text": "Enabled",
+						"value": "true"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "header_sticky",
+			"type": ["customizer"],
+			"global_key": "theme_mods_kadence",
+			"group": "Header",
+			"target": ["single", "archive"],
+			"gui": {
+				"display_name": "Sticky Header",
+				"type": "select",
+				"values": [
+					{
+						"text": "No",
+						"value": "no"
+					},
+					{
+						"text": "Yes - Only Main Row",
+						"value": "main"
+					},
+					{
+						"text": "Yes - Top Row & Main Row",
+						"value": "top_main"
+					},
+					{
+						"text": "Yes - Whole Header",
+						"value": "top_main_bottom"
+					},
+					{
+						"text": "Yes - Only Top Row",
+						"value": "top"
+					},
+					{
+						"text": "Yes - Only Bottom Row",
+						"value": "bottom"
+					}
+				]
+			},
+			"default_value": "toolset_use_theme_setting"
+		},
+		{
+			"name": "footer_html_content",
+			"type": ["customizer"],
+			"global_key": "theme_mods_kadence",
+			"group": "Footer",
+			"target": ["single", "archive"],
+			"gui": {
+				"display_name": "Footer Copyright HTML",
+				"type": "text"
+			},
+			"default_value": "{copyright} {year} {site-title} {theme-credit}"
+		}
+	]
+}

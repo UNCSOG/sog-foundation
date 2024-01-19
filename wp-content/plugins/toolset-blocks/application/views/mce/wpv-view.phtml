@@ -1,0 +1,35 @@
+<?php
+/**
+ * Template for the MCE view for the wpv-view shortcodes.
+ *
+ * @since 2.7
+ */
+?>
+<script type="text/html" id="tmpl-toolset-shortcode-wpv-view-mce-banner">
+	<div class="toolset-views-shortcode-mce-view toolset-shortcode-mce-view"
+		data-tag="{{ data.tag }}"
+		data-keymap="{{ data.keymap }}"
+		<#
+		_.each( data.attributes, function( value, key, list ) {
+			#>
+			data-{{ key }}="{{ value }}"
+			<#
+		});
+		#>
+		contenteditable="false">
+		<i class="ont-icon-block-classic-mce-view icon-views-logo ont-icon-36 ont-color-orange"></i>
+		<span class="toolset-shortcode-mce-view-header">
+		<?php
+		/* translators: Label of the editor placeholder when using a shortcode to render a View */
+		echo __( 'View', 'wpv-views' );
+		?>
+		</span>
+		<# if ( _.has( WPViews.dataCache.views, data.attributes.name ) ) {
+			#>
+			{{ WPViews.dataCache.views[ data.attributes.name ].title }}
+			<#
+		} else { #>
+			{{ data.attributes.name }}
+		<# } #>
+	</div>
+</script>

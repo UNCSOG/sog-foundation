@@ -1,0 +1,44 @@
+<?php
+/**
+ * underscore.js template for each item in the dialog to insert a Toolset Form scaffold.
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-fields-item">
+    <#
+    data = _.extend(
+        { attributes: {}, options: {}, requiredItem: false, blockedItem: false },
+        data
+    );
+    var templateData = {
+        containerInclude: 'true',
+        disabledAttribute: '',
+        buttonTitle: data.label
+    };
+    if ( data.blockedItem ) {
+        templateData.containerInclude = 'false';
+        templateData.disabledAttribute = 'disabled="disabled" ';
+        if ( _.has( data, 'blockedReason' ) ) {
+            templateData.buttonTitle = data.blockedReason;
+        }
+    }
+    if ( 'edit' == data.environment.formType ) {
+        data.options = _.omit( data.options, 'valueAndUrl' );
+    }
+    #>
+    <div class="item">
+        <button class="button button-small cred-editor-fields-item js-cred-editor-fields-item"
+            title="{{templateData.buttonTitle}}"
+            {{templateData.disabledAttribute}}
+            data-shortcode="{{data.shortcode}}"
+            data-fieldtype="{{data.fieldType}}"
+            data-label="{{data.label}}"
+            data-attributes="<# print( _.escape( ( JSON.stringify( data.attributes ) ) ) ); #>"
+            data-options="<# print( _.escape( ( JSON.stringify( data.options ) ) ) ); #>"
+            data-include="{{templateData.containerInclude}}"
+        >
+            <span class="cred-editor-scaffold-field-title">{{{data.label}}}</span>
+        </button>
+    </div>
+</script>

@@ -1,0 +1,80 @@
+<?php
+/**
+ * Template for the Forms control table row.
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+
+$cred_fields = toolset_getarr( $context, 'cred_fields', array() );
+$field_types_labels = toolset_getarr( $context, 'field_types_labels', array() );
+$columns = toolset_getarr( $context, 'columns', array() );
+$meta_key = toolset_getarr( $context, 'meta_key', '' );
+
+$meta_key_has_space = ( strpos( $meta_key, ' ' ) !== false );
+$meta_key_has_dot = ( strpos( $meta_key, '.' ) !== false );
+$is_supported_meta_key = ! ( $meta_key_has_space || $meta_key_has_dot );
+
+$is_cred_field = false;
+$field_data = array();
+$credfieldname = __( 'Not Set', 'wp-cred' );
+
+if ( isset( $cred_fields[ $meta_key ] ) ) {
+    $is_cred_field = true;
+    $field_data = $cred_fields[ $meta_key ];
+    $field_type = toolset_getarr( $cred_fields[ $meta_key ], 'type' );
+    $credfieldname = toolset_getarr( $field_types_labels, $field_type, __( 'Unknown', 'wp-cred' ) );
+}
+
+?>
+<tr id="<?php echo esc_attr( $meta_key ); ?>" 
+    class="js-cred-actions-row" 
+    data-field="<?php echo esc_attr( $meta_key ); ?>" 
+    data-data="<?php echo esc_js( json_encode( $field_data ) ); ?>">
+<?php
+foreach ( $columns as $column_name => $column_display_name ) {
+    $attributes = "class='$column_name column-$column_name'";
+    switch ( $column_name ) {
+        case "cred_field_name":
+            ?>
+            <td <?php echo $attributes; ?>>
+                <strong><?php echo stripslashes( $meta_key ); ?></strong>
+            </td>
+            <?php
+            break;
+        case "cred_cred_type":
+            if ( $is_supported_meta_key ) {
+            ?>
+            <td <?php echo $attributes; ?>>
+                <span class="cred-field-type"><?php echo $credfieldname; ?></span>
+            </td>
+            <?php
+            } else {
+            ?>
+            <td <?php echo $attributes; ?> colspan="2">
+                <span>
+                    <?php _e( 'Toolset Forms can not manage fields containing spaces or dots.', 'wp-cred' ); ?>
+                </span>
+            </td>
+            <?php
+            }
+            break;
+        case "cred_actions":
+            if ( $is_supported_meta_key ) { ?>
+            <td <?php echo $attributes; ?>>
+                <?php
+                    $actions = array(
+                        '<a class="cred-field-actions button button-small button-secondary js-cred-field-actions js-cred-field-actions-set" href="#" title="' . esc_attr( __( 'Set field type', 'wp-cred' ) ) . '"' . ( $is_cred_field ? ' style="display:none"' : '' ) . '><i class="fa fa-plus"></i> ' . __( 'Add', 'wp-cred' ) . '</a>',
+                        '<a class="cred-field-actions button button-small button-secondary js-cred-field-actions js-cred-field-actions-edit" href="#" title="' . esc_attr( __( 'Edit field settings', 'wp-cred' ) ) . '"' . ( ! $is_cred_field ? ' style="display:none"' : '' ) . '><i class="fa fa-pencil-square-o"></i> ' . __( 'Edit', 'wp-cred' ) . '</a>',
+                        '<a class="cred-field-actions button button-small button-secondary js-cred-field-actions js-cred-field-actions-remove" href="#" title="' . esc_attr( __( 'Remove this field as a Toolset Forms field type', 'wp-cred' ) ) . '"' . ( ! $is_cred_field ? ' style="display:none"' : '' ) . '><i class="fa fa-trash"></i> ' . __( 'Remove', 'wp-cred' ) . '</a>',
+                    );
+                    $act_out = implode( '', $actions );
+                    echo $act_out;
+                ?>
+            </td>
+            <?php }
+            break;
+    }
+}
+?>
+</tr>

@@ -1,0 +1,57 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a Toolset Form field.
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-fields-dialog">
+    <div class="cred-editor-fields-container js-cred-editor-fields-container">
+        <#
+        if (
+            _.has( data, 'formElements' )
+            && _.size( data.formElements ) > 0
+        ) {
+            #><div class="cred-editor-fields-container-group js-cred-editor-fields-container-group">
+                <h2><?php _e( 'Form elements', 'wp-cred' ); ?></h2>
+                <div class="toolset-shortcode-gui-group-list cred-shortcode-gui-group-list js-cred-shortcode-gui-group-list"><#
+            _.each( data.formElements, function( field, fieldKey ) {
+                field = _.defaults( field, {
+                    environment: data.environment,
+                    templates: data.templates,
+                    fieldType: 'formElement'
+                } );
+                print( data.templates.fields.item( field ) );
+            });
+            #>
+                </div>
+            </div><#
+        }
+
+        var availableFieldTypes = [ 'basic', 'taxonomy', 'roles', 'meta', 'legacyParent', 'hierarchicalParent', 'relationship' ];
+        _.each( availableFieldTypes, function( availableType ) {
+            if (
+                _.has( data, availableType )
+                && _.size( data[ availableType ] ) > 0
+            ) {
+                #><div class="cred-editor-fields-container-group js-cred-editor-fields-container-group">
+                    <# if ( _.has( data.labels, availableType ) ) { #>
+                    <h2>{{data.labels[ availableType ]}}</h2>
+                    <# } #>
+                    <div class="toolset-shortcode-gui-group-list cred-shortcode-gui-group-list js-cred-shortcode-gui-group-list"><#
+                _.each( data[ availableType ], function( field, fieldKey ) {
+                    field = _.defaults( field, {
+                        environment: data.environment,
+                        templates: data.templates,
+                        fieldType: availableType
+                    } );
+                    print( data.templates.fields.item( field ) );
+                });
+                #>
+                    </div>
+                </div><#
+            }
+        });
+        #>
+    </div>
+</script>

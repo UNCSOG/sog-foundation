@@ -1,0 +1,60 @@
+<?php
+/**
+ * Template for the forms notifications GUI, from section.
+ *
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form_type = toolset_getarr( $context, 'form_type' );
+
+$notification_html_name = "_cred[notification][notifications][{$ii}]";
+
+// Get the site domain and get rid of www.
+$sitename = strtolower( $_SERVER['SERVER_NAME'] );
+if ( substr( $sitename, 0, 4 ) == 'www.' ) {
+	$sitename = substr( $sitename, 4 );
+}
+$from_email_placeholder = 'wordpress@' . $sitename;
+?>
+<fieldset class="cred-fieldset cred-notification-fieldset cred-notification-fieldset-from">
+    <h4>
+		<?php _e( 'Notification e-mail sender information', 'wp-cred' ); ?>
+		<span class="cred-tip-link js-otgs-popover-tooltip" data-tippy-content="
+					<h3><?php _e('Notification sender', 'wp-cred'); ?></h3>
+           <p><?php echo sprintf( __('You can set the name and email that will appear as sender for the notifications. By default, the name is WordPress and the email is %s.', 'wp-cred'), $from_email_placeholder ); ?></p>
+				">
+	        <i class="fa fa-question-circle"></i>
+        </span>
+	</h4>
+    <p class="cred-label-holder">
+        <label for="cred-notification-sender-email-<?php echo esc_attr( $ii ); ?>">
+            <?php _e( 'Email (leave blank for default):', 'wp-cred' ); ?><br />
+        </label>
+    </p>
+    <input type="text" class="notification-sender-email"
+        id="cred-notification-sender-email-<?php echo esc_attr( $ii ); ?>"
+        name='<?php echo esc_attr( $notification_html_name ); ?>[from][address]'
+        value="<?php echo esc_attr( $notification['from']['address'] ); ?>"
+		placeholder="<?php echo esc_attr( $from_email_placeholder ); ?>"
+        style="width: 100%" />
+    <p class="cred-label-holder">
+        <label for="cred-notification-sender-name-<?php echo esc_attr( $ii ); ?>">
+            <?php _e( 'Name (leave blank for default):', 'wp-cred' ); ?><br />
+        </label>
+    </p>
+    <input type="text"
+        id="cred-notification-sender-name-<?php echo esc_attr( $ii ); ?>"
+        name='<?php echo esc_attr( $notification_html_name ); ?>[from][name]'
+        value="<?php echo esc_attr( $notification['from']['name'] ); ?>"
+		placeholder="<?php echo esc_attr( 'WordPress' ); ?>"
+        style="width: 100%" />
+</fieldset>

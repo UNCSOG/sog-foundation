@@ -1,0 +1,28 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a placeholder
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-placeholders-dialog">
+    <div class="cred-editor-placeholders-container js-cred-editor-placeholders-container">
+        <#
+        if (
+            _.has( data, 'itemList' ) 
+            && _.size( data.itemList ) > 0 
+        ) {
+            #><div class="cred-editor-placeholders-container-group js-cred-editor-placeholders-container-group">
+                <ul class="toolset-shortcode-gui-group-list cred-shortcode-gui-group-list js-cred-shortcode-gui-group-list"><#
+            _.each( data.itemList, function( placeholder, placeholderKey ) {
+                placeholder.notificationType = data.type;
+                placeholder.notificationTarget = data.target;
+                print( data.itemTemplate( placeholder ) );
+            });
+            #>
+                </ul>
+            </div><#
+        }
+        #>
+    </div>
+</script>

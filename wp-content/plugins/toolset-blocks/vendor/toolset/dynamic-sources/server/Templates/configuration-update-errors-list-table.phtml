@@ -1,0 +1,14 @@
+<div class="wrap">
+	<h2><?php _e( 'Toolset Dynamic Sources Remote XML Config Log', 'wpv-views' ); ?></h2>
+	<p>
+		<?php
+		_e(
+			'Toolset Dynamic Sources need to load configuration files, which allow automatic integration of Dynamic Sources to the blocks of your themes and plugins. ' .
+			'If there are errors below, try to manually update the configuration files from the WordPress update screen. ' .
+			'If the errors persist, please contact Toolset support and share the error details so that we help you resolve it.',
+			'wpv-views'
+		);
+		?>
+	</p>
+	<?php echo $context['ds_errors_list_table']; ?>
+</div>

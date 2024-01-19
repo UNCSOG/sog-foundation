@@ -1,0 +1,140 @@
+@include body-class(true) {
+
+	.beehive-accordion {
+		background-color: $white;
+	}
+
+	.sui-tab-boxed {
+
+		.beehive-accordion {
+			margin: $sui-gutter-md 0;
+
+			.beehive-accordion-item--header {
+				display: block;
+				margin: 0;
+				padding: 0;
+				border: 0;
+
+				button {
+					width: 100%;
+					cursor: pointer;
+					display: block;
+					position: relative;
+					margin: 0;
+					padding: 15px 49px 13px 57px;
+					border: 0 solid palette(silver, soft);
+					border-top-width: 1px;
+					background-color: $white;
+					color: palette(gray, light);
+					font: 500 13px/30px $font;
+					letter-spacing: -0.2px;
+					text-align: left;
+
+					[class*="sui-icon-"] {
+						display: block;
+						position: absolute;
+						top: 50%;
+						transform: translateY(-50%);
+
+						&:before {
+							display: block;
+							color: inherit;
+						}
+
+						&.handler {
+							right: 27px;
+						}
+
+						&:not(.handler) {
+							left: 31px;
+							color: palette(silver, medium);
+						}
+					}
+
+					&:focus {
+						outline: none;
+						box-shadow: none;
+					}
+
+					&.open {
+						background-color: palette(silver, light);
+					}
+				}
+			}
+
+			.beehive-accordion-item--body {
+				display: none;
+				padding: 2px $sui-gutter-md $sui-gutter-md;
+				border-bottom-right-radius: #{$border-radius - 1px};
+				border-bottom-left-radius: #{$border-radius - 1px};
+				background-color: palette(silver, light);
+
+				.sui-form-field {
+
+					[class*="sui-col-"] {
+
+						input.sui-form-control {
+							height: 30px;
+							padding: 6px 11px;
+							padding-right: 40px;
+							font-size: 12px;
+							line-height: 16px;
+							letter-spacing: -0.2px;
+						}
+
+						.sui-with-button {
+
+							&.sui-with-button-icon {
+
+								.sui-button-icon {
+									width: 26px;
+									height: 26px;
+									top: 2px;
+									right: 2px;
+								}
+							}
+						}
+					}
+				}
+
+				&.open {
+					display: block;
+				}
+
+				@include media(min-width, md) {
+					padding: 2px $sui-gutter $sui-gutter;
+				}
+			}
+
+			&:last-child,
+			&.last-child {
+				margin-right: -#{$sui-gutter-md};
+				margin-bottom: -#{$sui-gutter-md};
+				margin-left: -#{$sui-gutter-md};
+
+				.beehive-accordion-item--header {
+
+					button {
+						border-bottom-right-radius: #{$border-radius - 1px};
+						border-bottom-left-radius: #{$border-radius - 1px};
+
+						&.open {
+							border-bottom-right-radius: 0;
+							border-bottom-left-radius: 0;
+						}
+					}
+				}
+
+				@include media(min-width, md) {
+					margin-right: -#{$sui-gutter};
+					margin-bottom: -#{$sui-gutter};
+					margin-left: -#{$sui-gutter};
+				}
+			}
+
+			@include media(min-width, md) {
+				margin: $sui-gutter 0;
+			}
+		}
+	}
+}

@@ -1,0 +1,109 @@
+<?php
+/**
+ * Template for the post expiration general settings.
+ *
+ * @since 2.3
+ */
+$context = isset( $context ) ? $context : array();
+
+$is_halted  = (bool) toolset_getarr( $context, 'is_halted', false );
+$constant   = toolset_getarr( $context, 'constant', '' );
+$nonce_id   = toolset_getarr( $context, 'nonce_id', '' );
+$schedule   = toolset_getarr( $context, 'schedule', '' );
+$threshold  = toolset_getarr( $context, 'threshold', '' );
+$schedules  = toolset_getarr( $context, 'schedules', array() );
+$thresholds = toolset_getarr( $context, 'thresholds', array() );
+
+
+?>
+<?php
+wp_nonce_field( $nonce_id, $nonce_id );
+if ( $is_halted ) {
+	?>
+	<div class="toolset-notice-wp notice notice-warning inline">
+		<p>
+		<?php
+		_e( 'Your site has disabled Forms auto-drafts management.', 'wp-cred' );
+		?>
+		</p>
+	</div>
+	<p>
+	<?php
+	echo sprintf(
+		__( 'Remove the %s constant to manually manage Forms drafts.', 'wp-cred' ),
+		'<code>' . $constant . '</code>'
+	);
+	?>
+	</p>
+	<?php
+	return;
+}
+?>
+<p>
+	<?php
+	_e( 'Forms generates auto-drafts for forms that add new content, so we can attach fields and media items to them before the form is submitted. This is the same mechanism that WordPress uses when creating a new post.', 'wp-cred' )
+	?>
+</p>
+<p>
+	<?php
+	_e( 'WordPress automatically removes drafts older than 7 days. Forms lets you adjust that schedule to your needs.', 'wp-cred' )
+	?>
+</p>
+<table class="form-table">
+	<tbody>
+		<tr>
+			<th>
+				<label for="cred_post_drafts_cron_schedule">
+				<?php
+				/* translators: Label of the option to set the frequency to check for draft posts */
+				_e( 'Find and delete drafts', 'wp-cred' );
+				?>
+				</label>
+			</th>
+			<td>
+				<select id="cred_post_drafts_cron_schedule" autocomplete="off" name="cred_post_drafts_cron_schedule" class='js-cred-post-drafts-setting'>
+					<?php
+					if ( ! array_key_exists( $schedule, $schedules ) ) {
+						?>
+						<option value="" selected="selected" disabled="disabled"><?php
+						/* translators: Label of the dummy option to invite you to select one frequency interval to check for draft posts */
+						_e( 'Select one interval', 'wp-cred' );
+						?></option>
+						<?php
+					}
+					?>
+					<?php foreach ( $schedules as $schedule_slug => $schedule_definition ) { ?>
+						<option value="<?php echo esc_attr( $schedule_slug ); ?>" <?php selected( $schedule_slug, $schedule ); ?>><?php echo $schedule_definition['name']; ?></option>
+					<?php } ?>
+				</select>
+			</td>
+		</tr>
+		<tr id="cred_post_drafts_cron_threshold_row"<?php if ( $schedule === 'never' ) { echo ' style="display:none"'; } ?>>
+			<th>
+			<label for="cred_post_drafts_cron_threshold">
+				<?php
+				/* translators: Label of the option to set the frequency to check for draft posts */
+				_e( 'Delete drafts older than', 'wp-cred' );
+				?>
+				</label>
+			</th>
+			<td>
+				<select id="cred_post_drafts_cron_threshold" autocomplete="off" name="cred_post_drafts_cron_threshold" class='js-cred-post-drafts-setting'>
+					<?php
+					if ( empty( $threshold ) ) {
+						?>
+						<option value="" selected="selected" disabled="disabled"><?php
+						/* translators: Label of the dummy option to invite you to select one frequency interval to check for draft posts */
+						_e( 'Select one threshold', 'wp-cred' );
+						?></option>
+						<?php
+					}
+					?>
+					<?php foreach ( $thresholds as $threshold_slug => $threshold_definition ) { ?>
+						<option value="<?php echo esc_attr( $threshold_slug ); ?>" <?php selected( $threshold_definition['value'], $threshold ); ?>><?php echo $threshold_definition['name']; ?></option>
+					<?php } ?>
+				</select>
+			</td>
+		</tr>
+	</tbody>
+</table>

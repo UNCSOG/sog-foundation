@@ -1,0 +1,680 @@
+<?php
+/**
+ * underscore.js template for the dialog for the cred-relationship-form shortcode.
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-instructions">
+	<div class="toolset-help" style="margin:0">
+		<div class="toolset-help-content" style="border:none">
+			<h3 style="margin-top:0"><?php _e( 'Relationship Forms Instructions', 'wp-cred' ); ?></h3>
+			<p>
+				<?php _e( 'Toolset Relationship Forms allow to connect between posts or edit the connections between related posts.', 'wp-cred' ); ?>
+			</p>
+			<p>
+				<?php echo sprintf(
+					__( '%1$s Before you get started, you should read the documentation on %2$screating and using Toolset Relationship Forms%3$s.', 'wp-cred' ),
+					'<i class="fa fa-exclamation-triangle"></i>',
+					'<a href="https://toolset.com/course-lesson/front-end-relationship-forms-for-connecting-posts/?utm_source=plugin&utm_medium=gui&utm_campaign=forms">',
+					' <i class="fa fa-external-link"></i></a>'
+				); ?>
+			</p>
+			<h4><?php _e('Connecting any two posts together', 'wp-cred' ); ?></h4>
+			<ol>
+				<li>
+					<?php _e( 'Create the relationship form.', 'wp-cred' ); ?>
+				</li>
+				<li>
+					<?php _e( 'Insert it into a page.', 'wp-cred' ); ?>
+				</li>
+			</ol>
+			<h4><?php _e('Connecting a post to a given post or editing existing connections', 'wp-cred' ); ?></h4>
+			<ol>
+				<li>
+					<?php _e( 'Create the relationship form.', 'wp-cred' ); ?>
+				</li>
+				<# if ( data.conditions.layoutsActive ) { #>
+				<li>
+					<?php _e( 'Create an "editing-mode" layout and insert the form into it.', 'wp-cred' ); ?>
+				</li>
+				<li>
+					<?php _e( 'Link to this layout from the "display-mode" layout or a View.', 'wp-cred' ); ?>
+				</li>
+				<# } else {  #>
+				<li>
+					<?php _e( 'Create an "editing-mode" template and insert the form into it.', 'wp-cred' ); ?>
+				</li>
+				<li>
+					<?php _e( 'Link to this template from the "display-mode" template or a View.', 'wp-cred' ); ?>
+				</li>
+				<# } #>
+			</ol>
+			<?php if ( is_user_logged_in() ) { ?>
+			<p>
+				<label>
+					<input type="checkbox" class="js-cred-relationship-form-wizard-dismiss" value="dismiss" />
+					<?php _e( 'Do not show this again', 'wp-cred' ); ?>
+				</label>
+			</p>
+			<?php } ?>
+		</div>
+		<div class="toolset-help-sidebar"></div>
+	</div>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-insertForm">
+	<input value="<?php echo CRED_Shortcode_Association_Form::SHORTCODE_NAME; ?>"
+		class="toolset-shortcode-gui-shortcode-handle js-toolset-shortcode-gui-shortcode-handle"
+		type="hidden" />
+	<span class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-form" data-attribute="form" data-type="parameter">
+		<input type="hidden" name="form" value="{{data.parameters.form}}" disabled="disabled" />
+	</span>
+	<h2><?php echo sprintf(
+		__( 'What should the %1$s form do?', 'wp-cred' ),
+		'<em>{{data.title}}</em>'
+	); ?></h2>
+	<# print( data.templates.afw.purpose( data ) ); #>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-insertLink">
+	<input value="<?php echo OTGS\Toolset\CRED\Model\Shortcode\Form\Link\Association::SHORTCODE_NAME; ?>"
+		class="toolset-shortcode-gui-shortcode-handle js-toolset-shortcode-gui-shortcode-handle"
+		type="hidden" />
+	<span class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-form" data-attribute="form" data-type="parameter">
+		<input type="hidden" name="form" value="{{data.parameters.form}}" disabled="disabled" />
+	</span>
+	<h2><?php echo sprintf(
+		__( 'What should the link to the %1$s form do?', 'wp-cred' ),
+		'<em>{{data.title}}</em>'
+	); ?></h2>
+	<# print( data.templates.afw.purpose( data ) ); #>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-purpose">
+	<ul class="toolset-shortcode-gui-wizard-options-container js-toolset-shortcode-gui-wizard-options-container">
+		<li class="toolset-shortcode-gui-wizard-option js-toolset-shortcode-gui-wizard-option<# if ( 'insertLink' == data.currentStep ) { #> toolset-shortcode-gui-wizard-option-disabled<# } #>">
+			<label>
+				<i class="fa fa-plus-circle fa-4x toolset-shortcode-gui-wizard-option-icon"></i>
+				<input type="radio"
+					class="js-cred-relationship-form-wizard-purpose toolset-shortcode-gui-wizard-option-hidden"
+					name="cred-relationship-form-wizard-purpose"
+					value="create"
+					<# if ( 'insertLink' == data.currentStep ) { #>disabled="disabled" <# } #>/>
+				<?php echo sprintf(
+					__( 'Connect between any %1$s and %2$s as %3$s', 'wp-cred' ),
+					'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+					'<strong>{{data.relationship.child.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.relationship.labelSingularPrefixed}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php echo sprintf(
+					__( 'Create a new %1$s', 'wp-cred' ),
+					'<strong>{{data.relationship.labelSingular}}</strong>'
+				); ?></h3>
+				<# if ( 'insertLink' != data.currentStep ) { #>
+				<p>
+					<?php echo sprintf(
+						__( 'Visitors will create %1$s by selecting the %2$s and %3$s that they want to connect.', 'wp-cred' ),
+						'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+						'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+						'<strong>{{data.relationship.child.labelSingular}}</strong>'
+					); ?>
+				</p>
+				<# } else { #>
+				<p>
+					<?php _e( 'You can not insert a link to this kind of form, because there is no fixed end to link to.', 'wp-cred' ); ?>
+				</p>
+				<p>
+					<?php echo sprintf(
+						__( 'You should insert the form to create new %1$s between %2$s and %3$s directly into a page. Then, you can link to that page.', 'wp-cred' ),
+						'<strong>{{data.relationship.label}}</strong>',
+						'<strong>{{data.relationship.parent.labelSingularPrefixed}}</strong>',
+						'<strong>{{data.relationship.child.labelSingularPrefixed}}</strong>'
+					); ?>
+				</p>
+				<# } #>
+			</div>
+		</li>
+		<li class="toolset-shortcode-gui-wizard-option toolset-shortcode-gui-wizard-option-has-settings js-toolset-shortcode-gui-wizard-option">
+			<label>
+				<i class="fa fa-plus-circle fa-4x toolset-shortcode-gui-wizard-option-icon"></i>
+				<input type="radio"
+					class="js-cred-relationship-form-wizard-purpose toolset-shortcode-gui-wizard-option-hidden"
+					name="cred-relationship-form-wizard-purpose"
+					value="createChild" />
+				<?php echo sprintf(
+					__( 'Connect %1$s to a given %2$s as %3$s', 'wp-cred' ),
+					'<strong>{{data.relationship.child.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+					'<strong>{{data.relationship.labelSingularPrefixed}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php echo sprintf(
+					__( 'Connect %1$s to a given %2$s as %3$s', 'wp-cred' ),
+					'<strong>{{data.relationship.child.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+					'<strong>{{data.relationship.labelSingularPrefixed}}</strong>'
+				); ?></h3>
+				<p>
+				<?php echo sprintf(
+					__( 'Visitors will create %1$s by selecting the %2$s to connect to a given %3$s.', 'wp-cred' ),
+					'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.relationship.child.labelSingular}}</strong>',
+					'<strong>{{data.relationship.parent.labelSingular}}</strong>'
+				); ?>
+				</p>
+				<p>
+					<?php echo sprintf(
+						__( 'You will need to choose (now) which %1$s to add %2$s to.', 'wp-cred' ),
+						'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+						'<strong>{{data.relationship.child.label}}}</strong>'
+					); ?>
+				</p>
+			</div>
+		</li>
+		<li class="toolset-shortcode-gui-wizard-option toolset-shortcode-gui-wizard-option-has-settings js-toolset-shortcode-gui-wizard-option">
+			<label>
+				<i class="fa fa-plus-circle fa-4x toolset-shortcode-gui-wizard-option-icon"></i>
+				<input type="radio"
+					class="js-cred-relationship-form-wizard-purpose toolset-shortcode-gui-wizard-option-hidden"
+					name="cred-relationship-form-wizard-purpose"
+					value="createParent" />
+				<?php echo sprintf(
+					__( 'Connect %1$s to a given %2$s as %3$s', 'wp-cred' ),
+					'<strong>{{data.relationship.parent.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.relationship.child.labelSingular}}</strong>',
+					'<strong>{{data.relationship.labelSingularPrefixed}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php echo sprintf(
+					__( 'Connect %1$s to a given %2$s as %3$s', 'wp-cred' ),
+					'<strong>{{data.relationship.parent.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.relationship.child.labelSingular}}</strong>',
+					'<strong>{{data.relationship.labelSingularPrefixed}}</strong>'
+				); ?></h3>
+				<p>
+					<?php echo sprintf(
+						__( 'Visitors will create %1$s by selecting the %2$s to connect to a given %3$s.', 'wp-cred' ),
+						'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+						'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+						'<strong>{{data.relationship.child.labelSingular}}</strong>'
+					); ?>
+				</p>
+				<p>
+					<?php echo sprintf(
+						__( 'You will need to choose (now) which %1$s to add %2$s to.', 'wp-cred' ),
+						'<strong>{{data.relationship.child.labelSingular}}</strong>',
+						'<strong>{{data.relationship.parent.label}}</strong>'
+					); ?>
+				</p>
+			</div>
+		</li>
+		<#
+		if ( ( data.conditions.editingCt || data.conditions.editingLayout ) && 'insertForm' == data.currentStep ) { #>
+		<li class="toolset-shortcode-gui-wizard-option js-toolset-shortcode-gui-wizard-option">
+			<label>
+				<i class="fa fa-clipboard fa-4x toolset-shortcode-gui-wizard-option-icon"></i>
+				<input type="radio"
+					class="js-cred-relationship-form-wizard-purpose toolset-shortcode-gui-wizard-option-hidden"
+					name="cred-relationship-form-wizard-purpose"
+					value="template" />
+				<?php echo sprintf(
+					__( 'Create an "editing-mode" template for managing %1$s', 'wp-cred' ),
+					'<strong>{{data.relationship.label}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php echo sprintf(
+					__( 'Create an "editing-mode" template for managing %1$s', 'wp-cred' ),
+					'<strong>{{data.relationship.label}}</strong>'
+				); ?></h3>
+				<p>
+					<?php echo sprintf(
+						__( 'Use an "editing-mode" template for both connecting posts to a given post, or for editing an existing %1$s connections.', 'wp-cred' ),
+						'<strong>{{data.relationship.labelSingular}}</strong>'
+					); ?>
+				</p>
+				<p>
+					<?php echo sprintf(
+						__( 'After inserting the form here, you can link to it from the "display-mode" template for %1$s or %2$s, or from a View.', 'wp-cred' ),
+						'<strong>{{data.relationship.parent.label}}</strong>',
+						'<strong>{{data.relationship.child.label}}</strong>'
+					); ?>
+				</p>
+			</div>
+		</li>
+		<# } else {
+			var canEdit = true;
+			if ( ! data.relationship.hasFields ) {
+				canEdit = false;
+			}
+			if ( ! data.conditions.editingView || 'insertLink' != data.currentStep ) {
+				canEdit = false;
+			}
+			#>
+		<li class="toolset-shortcode-gui-wizard-option toolset-shortcode-gui-wizard-option-has-settings js-toolset-shortcode-gui-wizard-option<# if ( ! canEdit ) { #> toolset-shortcode-gui-wizard-option-disabled<# } #>">
+			<label>
+				<i class="fa <# if ( ! canEdit ) { #>fa-ban<# } else { #>fa-edit<# } #> fa-4x toolset-shortcode-gui-wizard-option-icon"></i>
+				<input type="radio"
+					class="js-cred-relationship-form-wizard-purpose toolset-shortcode-gui-wizard-option-hidden"
+					name="cred-relationship-form-wizard-purpose"
+					value="edit"
+					<# if ( ! canEdit ) { #>disabled="disabled" <# } #>/>
+				<?php echo sprintf(
+					__( 'Edit an existing %1$s between a pair of %2$s and %3$s', 'wp-cred' ),
+					'<strong>{{data.relationship.labelSingular}}</strong>',
+					'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+					'<strong>{{data.relationship.child.labelSingular}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<# if ( ! data.relationship.hasFields ) { #>
+					<h3><?php _e( 'No fields to edit', 'wp-cred' ); ?></h3>
+					<p>
+						<?php echo sprintf(
+							__( '%1$s don\'t have their own fields, so there is nothing to edit.', 'wp-cred' ),
+							'<strong>{{data.relationship.label}}</strong>'
+						); ?>
+					</p>
+				<# } else if ( ! data.conditions.viewsActive ) { #>
+					<h3><?php _e( 'Toolset Views is not installed', 'wp-cred' ); ?></h3>
+					<p>
+						<?php _e( 'You need Toolset Views to edit the fields of a relationship.', 'wp-cred' ); ?>
+					</p>
+				<# } else if ( ! data.conditions.editingView ) { #>
+					<# switch( data.currentStep ) {
+						case 'insertForm': #>
+							<# if ( data.conditions.layoutsActive ) { #>
+							<h3><?php _e( 'Add this form as a cell to a Layout', 'wp-cred' ); ?></h3>
+							<p>
+								<?php echo sprintf(
+									__( 'You need to use a layout to edit %1$s between a pair of given %2$s and %3$s, and then insert a link to that layout from a View loop.', 'wp-cred' ),
+									'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+									'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+									'<strong>{{data.relationship.child.labelSingular}}</strong>'
+								); ?>
+							</p>
+							<# } else { #>
+							<h3><?php _e( 'Add this form to a Content Template', 'wp-cred' ); ?></h3>
+							<p>
+								<?php echo sprintf(
+									__( 'You need to use a template to edit %1$s between a pair of given %2$s and %3$s, and then insert a link to that template from a View loop.', 'wp-cred' ),
+									'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+									'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+									'<strong>{{data.relationship.child.labelSingular}}</strong>'
+								); ?>
+							</p>
+							<# } #>
+							<# break;
+						case 'insertLink': #>
+							<h3><?php _e( 'Add this form link to a View', 'wp-cred' ); ?></h3>
+							<p>
+								<?php echo sprintf(
+									__( 'Links to edit %1$s contection require some context, like the related %2$s and %3$s. A View will provide this context.', 'wp-cred' ),
+									'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+									'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+									'<strong>{{data.relationship.child.labelSingular}}</strong>'
+								); ?>
+							</p>
+							<p>
+								<?php echo sprintf(
+									__( 'Create a View to list %1$s and add a filter by post relationship to set the relevant %2$s, and then insert this link to the form to edit the %3$s connections inside the View loop.', 'wp-cred' ),
+									'<strong>{{data.relationship.child.label}}</strong>',
+									'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+									'<strong>{{data.relationship.label}}</strong>'
+								); ?>
+							</p>
+							<# break; #>
+					<# } #>
+				<# } else if ( data.conditions.editingView && 'insertLink' != data.currentStep ) { #>
+					<# if ( data.conditions.layoutsActive ) { #>
+					<h3><?php _e( 'Add this form to a Layout', 'wp-cred' ); ?></h3>
+					<p>
+						<?php echo sprintf(
+							__( 'You need to use a layout to edit %1$s between a pair of given %2$s and %3$s, and then insert a link to that layout from a View loop.', 'wp-cred' ),
+							'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+							'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+							'<strong>{{data.relationship.child.labelSingular}}</strong>'
+						); ?>
+					</p>
+					<# } else { #>
+					<h3><?php _e( 'Add this form to a Content Template', 'wp-cred' ); ?></h3>
+					<p>
+						<?php echo sprintf(
+							__( 'You need to use a template to edit %1$s between a pair of given %2$s and %3$s, and then insert a link to that template from a View loop.', 'wp-cred' ),
+							'<strong>{{data.relationship.labelSingularPrefixed}}</strong>',
+							'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+							'<strong>{{data.relationship.child.labelSingular}}</strong>'
+						); ?>
+					</p>
+					<# } #>
+				<# } else { #>
+					<h3><?php echo sprintf(
+						__( 'Edit an existing %1$s', 'wp-cred' ),
+						'<strong>{{data.relationship.labelSingular}}</strong>'
+					); ?></h3>
+					<p>
+						<?php echo sprintf(
+							__( 'Visitors will edit an existing %1$s between the two %2$s and %3$s given by the current View.', 'wp-cred' ),
+							'<strong>{{data.relationship.labelSingular}}</strong>',
+							'<strong>{{data.relationship.parent.labelSingular}}</strong>',
+							'<strong>{{data.relationship.child.labelSingular}}</strong>'
+						); ?>
+					</p>
+				<# } #>
+			</div>
+		</li>
+		<# } #>
+	</ul>
+	<div class="toolset-shortcode-gui-wizard-option-extra js-toolset-shortcode-gui-wizard-option-extra">
+		<div class="js-cred-relationship-form-wizard-setRole"></div>
+		<div class="js-cred-relationship-form-wizard-linkTargets"></div>
+		<div class="js-cred-relationship-form-wizard-linkOptions"></div>
+	</div>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-roleSources">
+	<h4><?php
+		echo sprintf(
+			__( '%1$s to add %2$s to', 'wp-cred' ),
+			'<strong>{{data.oppositeRole.labelSingular}}</strong>',
+			'<strong>{{data.role.label}}</strong>'
+		);
+	?></h4>
+	<ul id="{{data.shortcode}}-{{data.attribute}}"
+		class="js-cred-relationship-form-shortcode-wizard-role-sources js-toolset-shortcode-gui-attribute-wrapper"
+		data-attribute="{{data.attribute}}"
+		data-type="radio"
+		data-default="">
+		<# if ( data.conditions.editingView ) { #>
+		<li>
+			<label>
+				<input type="radio"
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-role-source"
+					name="{{data.shortcode}}-{{data.attribute}}"
+					value="$fromfilter"
+					<# if ( data.relationship != data.postRelationshipFilterData.relationship || data.fixedRole == data.postRelationshipFilterData.role ) { #>disabled="disabled" <# } #>/>
+				<?php echo sprintf(
+					__( 'Use the %s set by the post relationship query filter', 'wp-cred' ),
+					'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+			<# if ( data.relationship != data.postRelationshipFilterData.relationship ) { #>
+				<h3><?php _e( 'The relationship does not match', 'wp-cred' ); ?></h3>
+				<p>
+					<?php echo sprintf(
+						__( 'This View does not have a query filter by the %1$s relationship.', 'wp-cred' ),
+						'<strong>{{data.relationshipLabelSingular}}</strong>'
+					); ?>
+				</p>
+			<# } else if ( data.fixedRole == data.postRelationshipFilterData.role ) { #>
+				<h3><?php echo sprintf(
+					__( 'The filter fixed value is not %1$s', 'wp-cred' ),
+					'<strong>{{data.oppositeRole.labelSingularPrefixed}}</strong>'
+				); ?></h3>
+				<p>
+					<?php echo sprintf(
+						__( 'The value set in the query filter by the %1$s relationship in this View is not %2$s ', 'wp-cred' ),
+						'<strong>{{data.relationshipLabelSingular}}</strong>',
+						'<strong>{{data.oppositeRole.labelSingularPrefixed}}</strong>'
+					); ?>
+				</p>
+			<# } else { #>
+				<h3><?php echo sprintf(
+					__( 'Add %1$s to the %2$s provided by the query filter by post relationship', 'wp-cred' ),
+					'<strong>{{data.role.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+				); ?></h3>
+				<p>
+				<?php
+					echo sprintf(
+						__( 'Use this to connect %1$s to the %2$s set as fixed by this View post relationship query filter.', 'wp-cred' ),
+						'<strong>{{data.role.labelSingularPrefixed}}</strong>',
+						'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+					);
+				?>
+				</p>
+			<# } #>
+			</div>
+		</li>
+		<# } #>
+		<li>
+			<label>
+				<input type="radio"
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-role-source"
+					name="{{data.shortcode}}-{{data.attribute}}"
+					value="$current"
+					<# if ( data.conditions.editingView && data.relationship == data.postRelationshipFilterData.relationship && data.fixedRole != data.postRelationshipFilterData.role ) { #>disabled="disabled" <# } #>/>
+				<?php echo sprintf(
+					__( 'Use the current %s', 'wp-cred' ),
+					'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+				); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+			<# if ( data.conditions.editingView && data.relationship == data.postRelationshipFilterData.relationship && data.fixedRole != data.postRelationshipFilterData.role ) { #>
+				<h3><?php echo sprintf(
+					__( 'This View does not list %1$s', 'wp-cred' ),
+					'<strong>{{data.oppositeRole.label}}</strong>'
+				); ?></h3>
+				<p>
+				<?php
+					echo sprintf(
+						__( 'This View loop will not provide any %1$s as the current post.', 'wp-cred' ),
+						'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+					);
+				?>
+				</p>
+			<# } else { #>
+				<h3><?php echo sprintf(
+					__( 'Add %1$s to the current %2$s', 'wp-cred' ),
+					'<strong>{{data.role.labelSingularPrefixed}}</strong>',
+					'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+				); ?></h3>
+				<p>
+				<?php
+					echo sprintf(
+						__( 'Use this to connect %1$s to the currently displayed %2$s or to %3$s in a View loop.', 'wp-cred' ),
+						'<strong>{{data.role.labelSingularPrefixed}}</strong>',
+						'<strong>{{data.oppositeRole.labelSingular}}</strong>',
+						'<strong>{{data.oppositeRole.labelSingularPrefixed}}</strong>'
+					);
+				?>
+				</p>
+			<# } #>
+			</div>
+		</li>
+		<li>
+			<label>
+				<input type="radio"
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-role-source"
+					name="{{data.shortcode}}-{{data.attribute}}"
+					value="toolsetCombo"
+					/>
+				<?php echo sprintf(
+					__( 'Use a specific %s', 'wp-cred' ),
+					'<strong>{{data.oppositeRole.labelSingular}}</strong>'
+				); ?>
+			</label>
+			<span class="js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-toolsetCombo:{{data.attribute}}" style="display:none"
+				data-type="select"
+				data-attribute="toolsetCombo:{{data.attribute}}"
+				data-default="">
+				<select
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-role"
+					data-placeholder="<?php echo esc_attr( sprintf( __( 'Select %1$s', 'wp-cred' ), '{{data.oppositeRole.labelSingularPrefixed}}' ) ); ?>"
+				>
+				</select>
+			</span>
+		</li>
+	</ul>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-editSources">
+	<div class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-role_items"
+		data-attribute="role_items"
+		data-type="text"
+		data-default="">
+		<input id="{{data.shortcode}}-role_items"
+			data-type="text"
+			class="js-shortcode-gui-field"
+			value="$fromViews"
+			type="hidden" />
+	</div>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-linkTargetsCt">
+	<h4><?php _e( 'Content Template', 'wp-cred' ); ?></h4>
+	<ul id="cred-relationship-form-link-content_template_slug"
+		class="js-toolset-shortcode-gui-attribute-wrapper"
+		data-attribute="content_template_slug"
+		data-type="radio"
+		data-default="createct">
+		<li>
+			<label>
+				<input type="radio"
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-link-target"
+					name="{{data.shortcode}}-content_template_slug"
+					value="toolsetCombo" checked="checked" />
+				<?php _e( 'Link to an existing Content Template that contains the form', 'wp-cred' ); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<span class="js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-toolsetCombo:content_template_slug"
+				data-type="select"
+				data-attribute="toolsetCombo:content_template_slug"
+				data-default="">
+				<select
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-link-target-existingct-selector"
+					data-placeholder="<?php echo esc_attr( __( 'Select a Content Template', 'wp-cred' ) ); ?>">
+				</select>
+			</span>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php _e( 'Link to a Content Template that contains the form', 'wp-cred' ); ?></h3>
+				<p>
+				<?php
+					_e( 'When you edit that Content Template, you will need to add the form to it.', 'wp-cred' );
+				?>
+				</p>
+			</div>
+		</li>
+		<li>
+			<label>
+				<input type="radio"
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-link-target"
+					name="{{data.shortcode}}-content_template_slug"
+					value="createct" />
+				<?php _e( 'Create a new Content Template and link to it', 'wp-cred' ); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<span class="js-cred-relationship-form-shortcode-wizard-link-target-createct" style="display:none">
+				<input type="text"
+					class="js-cred-relationship-form-shortcode-wizard-link-target-createct-title"
+					placeholder="<?php echo esc_attr( __( 'Content Template name', 'wp-cred' ) ); ?>" />
+			</span>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php _e( 'Create a new Content Template', 'wp-cred' ); ?></h3>
+				<p>
+				<?php
+					_e( 'This will create a new Content Template which will have the form. Then, it will insert a shortcode that links to that Content Template into the element that you are editing right now.', 'wp-cred' );
+				?></p>
+			</div>
+		</li>
+	</ul>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-linkTargetsLayouts">
+	<h4><?php _e( 'Layout', 'wp-cred' ); ?></h4>
+	<ul id="cred-relationship-form-link-layout_slug"
+		class="js-toolset-shortcode-gui-attribute-wrapper"
+		data-attribute="layout_slug"
+		data-type="radio"
+		data-default="">
+		<li>
+			<label>
+				<input type="radio"
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-link-target"
+					name="{{data.shortcode}}-layout_slug"
+					value="toolsetCombo" checked="checked" />
+				<?php _e( 'Link to an existing Layout that contains the form', 'wp-cred' ); ?>
+			</label>
+			<i class="fa fa-question-circle wp-toolset-pointer-trigger js-wp-cred-shortcode-pointer"></i>
+			<span class="js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-toolsetCombo:layout_slug"
+				data-type="select"
+				data-attribute="toolsetCombo:layout_slug"
+				data-default="">
+				<select
+					class="js-shortcode-gui-field js-cred-relationship-form-shortcode-wizard-link-target-existinglayout-selector"
+					data-placeholder="<?php echo esc_attr( __( 'Select a Layout', 'wp-cred' ) ); ?>">
+				</select>
+			</span>
+			<div class="wp-toolset-pointer-content js-wp-cred-shortcode-pointer-content">
+				<h3><?php _e( 'Link to a Layout that contains the form', 'wp-cred' ); ?></h3>
+				<p>
+				<?php
+					_e( 'When you edit that Layout, you will need to add the form to it.', 'wp-cred' );
+				?>
+				</p>
+			</div>
+		</li>
+	</ul>
+</script>
+
+<script type="text/html" id="tmpl-cred-relationship-form-shortcode-wizard-linkOptions">
+	<h4><?php _e( 'Link options', 'wp-cred' ); ?></h4>
+	<ul>
+		<li class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-content-wrapper">
+			<label>
+			<?php _e( 'Link text', 'wp-cred' ); ?>
+			<input id="toolset-shortcode-gui-content-{{data.shortcode}}"
+				type="text"
+				class="regular-text js-toolset-shortcode-gui-content" value="{{data.linkLabel}}" />
+			</label>
+		</li>
+		<li class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-class"
+			data-attribute="class" data-type="text" data-default="">
+			<label>
+			<?php _e( 'Link classnames', 'wp-cred' ); ?>
+			<input id="{{data.shortcode}}-class"
+				data-type="text"
+				class="js-shortcode-gui-field regular-text"
+				value=""
+				type="text" />
+			</label>
+		</li>
+		<li class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-style"
+			data-attribute="style" data-type="text" data-default="">
+			<label>
+			<?php _e( 'Link inline styles', 'wp-cred' ); ?>
+			<input id="{{data.shortcode}}-style"
+				data-type="text"
+				class="js-shortcode-gui-field regular-text"
+				value=""
+				type="text" />
+			</label>
+		</li>
+		<li class="toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper js-toolset-shortcode-gui-attribute-wrapper-for-target"
+			data-attribute="target" data-type="select" data-default="self">
+			<label>
+			<?php _e( 'Link target', 'wp-cred' ); ?>
+			<select id="{{data.shortcode}}-target"
+				data-type="select"
+				class="js-shortcode-gui-field">
+				<option value="self" selected="selected"><?php _e( 'Open link in the current window', 'wp-cred' ); ?></option>
+				<option value="top"><?php _e( 'Open link in the parent window', 'wp-cred' ); ?></option>
+				<option value="blank"><?php _e( 'Open link in a new window', 'wp-cred' ); ?></option>
+			</select>
+			</label>
+		</li>
+	</ul>
+</script>

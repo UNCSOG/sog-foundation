@@ -1,0 +1,29 @@
+<?php
+/**
+ * underscore.js template for the dialog for the cred_form shortcode.
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-post-edit-form-template">
+	<#
+	data = _.extend(
+		data,
+		{
+			attributes: {
+				postSelection: {
+					header: '<?php echo esc_js( __( 'Post selection', 'wp-cred' ) ); ?>',
+					fields: {
+						post: {
+							label: '<?php echo esc_js( __( 'Post to edit', 'wp-cred' ) ); ?>',
+							type: 'post',
+							defaultValue: 'current'
+						}
+					}
+				}
+			}
+		}
+	);
+	#>
+	<# print( data.templates.dialog( data ) ); #>
+</script>

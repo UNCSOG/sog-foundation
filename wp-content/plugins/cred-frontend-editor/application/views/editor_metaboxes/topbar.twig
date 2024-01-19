@@ -1,0 +1,53 @@
+{#
+    Name and Slug for association forms edit page
+#}
+
+{% import "@toolset/forms.twig" as forms %}
+
+<div id="titlediv">
+    <div id="titlewrap">
+        <label class="screen-reader-text" id="title-prompt-text" for="title">
+        {{
+            __( 'Enter title here', 'wp-cred' )
+        }}
+        </label>
+        {{
+            forms.textInput('value: form_name, valueUpdate: "input", css: { error: form_name.hasError }', '', '', '', true, 'form_name', 'form_name', __( 'Enter title here', 'wp-cred' ) )
+        }}
+        {{ forms.button('click: onSave, enable: can_submit, text: saveButtonLabel', '', 'primary', false ) }}
+        {{ forms.spinner('display.isSaving()') }}
+    </div>
+</div>
+<div id="save-form-actions" style="display:none">
+    <label>
+        {{
+            __( 'Form slug:', 'wp-cred' )
+        }}
+        {{
+            forms.textInput('value: slug', 'regular-text', '', '', true, 'slug', 'slug', '')
+        }}
+    </label>
+    <label>
+        {{ __( 'Status:', 'wp-cred' ) }}
+        <span id="post-status-display" class="relationship-status" data-bind="text: (post_status() === 'draft') ? '{{ __( 'Draft', 'wp-cred' ) }}' : '{{ __( 'Published', 'wp-cred' ) }}'"></span>
+        <a data-bind="click: function() { display.isActive.isStatusMenuExpanded(true) }, visible: ! display.isActive.isStatusMenuExpanded()" class="edit-post-status">
+            {{ __( 'Edit', 'wp-cred' ) }}
+        </a>
+    </label>
+    <div id="post-status-select" data-bind="visible: display.isActive.isStatusMenuExpanded">
+
+        {{ forms.selectInput('value: post_status', '', post_status, true, 'post_status', 'post_status') }}
+
+        <a class="save-post-status button"
+            data-bind="click: display.isActive.applyLastInput"
+        >
+            {{ __( 'OK', 'wp-cred' ) }}
+        </a>
+        <a class="cancel-post-status button-cancel"
+            data-bind="click: display.isActive.cancelLastInput"
+        >
+            {{ __( 'Cancel', 'wp-cred' ) }}
+        </a>
+    </div>
+    <a class="submitdelete deletion js-cred-delete-form button-link-delete" href="#" data-bind="click: onDelete">{{ __( 'Delete form', 'wp-cred' ) }}</a>
+</div>

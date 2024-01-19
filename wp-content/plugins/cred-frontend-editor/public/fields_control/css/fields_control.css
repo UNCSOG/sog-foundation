@@ -1,0 +1,42 @@
+.column-cred_actions .button-secondary.button-small {
+    margin-right: 5px;
+}
+/**
+ * Editable lists
+ *
+ * Shared with the editor toolbar styles
+ */
+ table.cred-editor-editable-list {
+	width: 100%;
+	table-layout: fixed;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-move {
+	cursor: move;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-remove {
+	color: #b94a48;
+	cursor: pointer;
+	padding: 2px 4px;
+	margin: 0 5px;
+	border-radius: 3px;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-remove:hover {
+	background: #b94a48;
+	color: #eee;
+}
+table.cred-editor-editable-list .cred-editor-editable-list-item-deleted {
+	background: #b94a48;
+}
+/**
+ * Generic fields custom options
+ */
+.cred-editor-generic-fields-options-manual-row-move,
+.cred-editor-generic-fields-options-manual-row-remove {
+    width: 30px;
+}
+.cred-editor-generic-fields-options-manual-row-default {
+    width: 15%;
+}
+.cred-editor-generic-fields-options-manual-row-add {
+    float: none;
+}

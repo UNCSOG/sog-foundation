@@ -1,0 +1,8 @@
+@include body-class(true) {
+	.sui-image {
+		&.beehive-rebranded-logo {
+			max-width: 150px;
+			height: auto;
+		}
+	}
+}

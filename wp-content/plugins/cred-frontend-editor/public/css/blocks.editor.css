@@ -1,0 +1,129 @@
+/**
+ * Toolset Toolset Form block editor style.
+ *
+ * This file contains all the needed styles to be used inside Gutenberg editor
+ * when the Toolset Toolset Form block is used.
+ */
+/**
+ * Probably not safe to do so, but there is no other way to have
+ * the select2 suggestion appear
+ * above InpectorControl's "components-panel".
+ * Github issue on the Gutenberg repo:
+ * https://github.com/WordPress/gutenberg/issues/5535
+ */
+.components-panel {
+  overflow: visible !important; }
+
+.wp-block-toolset-cred-form-placeholder .tces-wp-toolset-block-icon::before {
+  font-family: onthegosystems-icons, sans-serif !important;
+  font-size: 30px;
+  content: "\F115";
+  color: #ed793e;
+  margin-right: 7px;
+  vertical-align: -1px; }
+
+.wp-block-toolset-cred-form-preview .cred-form-info-warning {
+  padding: 10px;
+  color: #f00;
+  background-color: #fcf8e3;
+  border: 1px solid #faebcc;
+  border-radius: 3px;
+  text-align: center;
+  overflow: hidden; }
+
+.wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render {
+  position: relative;
+  transition: min-height 0.2s ease;
+  min-height: 0; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render input[type="text"],
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render textarea,
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render select {
+    width: 100%; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render input.date {
+    width: initial; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render textarea {
+    resize: none; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render label {
+    width: 100%;
+    display: inline-block;
+    font-weight: 700;
+    cursor: default; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render li {
+    list-style-type: none; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render a.add-new::before {
+    content: "\F502";
+    font-family: dashicons, sans-serif; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render textarea.wysiwyg-editor {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render .block-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.5); }
+    .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render .block-overlay .logo::before {
+      font-family: 'onthegosystems-icons', sans-serif !important;
+      content: "\F115";
+      font-size: 36px; }
+    .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render .block-overlay-content {
+      display: none;
+      position: sticky;
+      position: -webkit-sticky;
+      top: 50px;
+      width: 75%;
+      margin: 3px auto;
+      text-align: center;
+      padding: 15px;
+      border: 1px solid #f05a28;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.7);
+      max-height: 100%;
+      overflow: hidden; }
+    .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render .block-overlay .button {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 26px;
+      height: 28px;
+      margin: 0;
+      padding: 0 10px 1px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      border-radius: 3px;
+      white-space: nowrap;
+      box-sizing: border-box;
+      background: #f05a28;
+      border: 1px solid #ef6223;
+      color: #fff !important; }
+      .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render .block-overlay .button:hover {
+        box-shadow: none; }
+  .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render:hover {
+    min-height: 210px;
+    vertical-align: middle; }
+    .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render:hover .block-overlay {
+      background: rgba(246, 201, 86, 0.7); }
+      .wp-block-toolset-cred-form-preview .cred-form-information .cred-form-preview-render:hover .block-overlay-content {
+        display: block; }
+
+.toolset-gutenberg-block-image.toolset-cred-form-gutenberg-block {
+  text-indent: 0; }
+
+.toolset-gutenberg-block-image.toolset-cred-form-gutenberg-block::before {
+  font-family: 'onthegosystems-icons', sans-serif !important;
+  content: "\F115";
+  font-size: 23px; }
+
+.editor-inserter-with-shortcuts .toolset-gutenberg-block-image.toolset-cred-form-gutenberg-block::before {
+  line-height: 19px; }
+
+.toolset-gutenberg-block-placeholder.toolset-cred-form-gutenberg-block::before {
+  font-family: onthegosystems-icons, sans-serif !important;
+  content: "\F115";
+  font-size: 30px;
+  color: #ed793e;
+  margin-right: 7px;
+  vertical-align: -1px; }
+

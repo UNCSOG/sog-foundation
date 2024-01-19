@@ -1,0 +1,13 @@
+<?php
+$is_roles_protected = get_option( 'toolset-access-is-roles-protected', true );
+wp_nonce_field( 'toolset_access_user_settings', 'toolset_access_user_settings', true, true )
+?>
+<p><?php _e( "If a user has <strong>list_users</strong> and <strong>promote_users</strong> capabilities, they can change roles for all users. ", 'wpcf-access' )
+	. _e( "This includes the ones with higher user roles than themselves. Use the option here to prevent this behavior and allow users to change roles only for users with the same or lower capabilities.", 'wpcf-access' ) ;?>
+</p>
+<p>
+	<label>
+		<input type="checkbox" value="1" class="js-is-roles-protected" <?php checked( true, $is_roles_protected, true ) ?>>
+		<?php _e( "Do not allow users to view and modify other users with higher privileges", 'wpcf-access' ) ?>
+	</label>
+</p>

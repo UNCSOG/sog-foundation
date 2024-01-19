@@ -1,0 +1,13 @@
+@include body-class(true) {
+	.beehive-tutorials-slider-box {
+		.sui-box {
+			&.sui-tutorials-slider-box {
+				margin-bottom: 30px;
+			}
+		}
+
+		.sui-notice {
+			margin-bottom: 30px;
+		}
+	}
+}

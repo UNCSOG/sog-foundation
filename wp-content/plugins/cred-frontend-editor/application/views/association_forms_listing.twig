@@ -1,0 +1,45 @@
+
+{% extends "@toolset/listing.twig" %}
+
+{# we need its macros #}
+{% import "@toolset/listing.twig" as listing %}
+
+{% block title %}
+    {{ wp_nonce_field( 'cred_associations_form_nonce', 'cred_associations_form_nonce', true, false ) | raw }}
+    <span class="wp-core-ui">{{ strings.misc.pageTitle }}</span>
+    <a data-bind="click: onAddNew" href="{{ strings.misc.addNewFormURL }}" class="page-title-action add_new_button {% if not has_relationship %}disabled{% endif %}">{{ __('Add New', 'wp-cred' ) }}</a>
+    <div id="message" data-bind="threeModeVisibility: messageVisibilityMode, attr: { class: 'notice is-dismissible ' + messageNagClass() }">
+        <p data-bind="html: displayedMessage().text"></p>
+        <button class="notice-dismiss" data-bind="click: removeDisplayedMessage"></button>
+    </div>
+{% endblock %}
+
+
+
+{% block columnHeaders %}
+    {{ listing.columnHeader(strings.column.form_name, true, 'displayName', 'column-title column-primary') }}
+    {{ listing.columnHeader(strings.column.relationship, true, 'relationshipLabel') }}
+    {{ listing.columnHeader(strings.column.date, true, 'lastModified', 'column-date', 'numeric') }}
+{% endblock %}
+
+{# Only the row actions, which will be embedded in the main column. #}
+{% block rowActions %}
+    <span class="edit">
+        <a data-bind="click: onRedirectEditAction">{{ strings.rowAction.edit }}</a> |
+    </span>
+    <span class="status">
+        <a data-bind="click: onDuplicateAction">{{ strings.rowAction.duplicate }}</a> |
+    </span>
+    <span class="delete">
+        <a data-bind="click: onDeleteAction">{{ strings.rowAction.delete }}</a>
+    </span>
+{% endblock %}
+
+{% block afterDisplayName %}
+{% endblock %}
+
+{# Other table cells besides the main one (with displayName and row actions) #}
+{% block tdCells %}
+    <td data-colname="{{ strings.column.relationship }}" data-bind="text: relationshipLabel"></td>
+    <td data-colname="{{ strings.column.date }}" data-bind="html: lastModifiedVisible"></td>
+{% endblock %}

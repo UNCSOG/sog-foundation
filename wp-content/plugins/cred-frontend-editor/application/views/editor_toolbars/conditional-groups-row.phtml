@@ -1,0 +1,63 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a conditional group condition row in a form.
+ *
+ * @since 2.1
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-conditional-groups-row">
+    <tr class="cred-editor-conditional-groups-item js-cred-editor-conditional-groups-item">
+        <td class="cred-editor-conditional-groups-origin js-cred-editor-conditional-groups-origin">
+            <select>
+                <# _.each( data.basic, function( basicObject, basicKey, basicList ) {
+                    if ( 'post_content' == basicKey ) {
+                        return;
+                    }
+                    #>
+                <option value="{{basicKey}}">{{basicObject.label}}</option>
+                    <#
+                }); #>
+                <# _.each( data.meta, function( metaObject, metaKey, metaList ) {
+                    if ( _.contains( [ 'wysiwyg', 'post', 'image', 'audio', 'video', 'file' ], metaObject.type ) ) {
+                        return;
+                    }
+                    if ( 
+                        _.has( metaObject, 'isRepetitive' ) 
+                        && metaObject.isRepetitive
+                    ) {
+                        return;
+                    }
+                    #>
+                <option value="{{metaKey}}">{{metaObject.label}}</option>
+                    <#
+                }); #>
+            </select>
+        </td>
+
+        <td class="cred-editor-conditional-groups-operator js-cred-editor-conditional-groups-operator">
+            <select>
+                <option value="eq">=</option>
+                <option value="ne">!=</option>
+                <option value="gt">&gt;</option>
+                <option value="lt">&lt;</option>
+                <option value="gte">&gt;=</option>
+                <option value="lte">&lt;=</option>
+            </select>
+        </td>
+
+        <td class="cred-editor-conditional-groups-value js-cred-editor-conditional-groups-value">
+            <input type="text" style="width:100%" />
+        </td>
+
+        <td class="cred-editor-conditional-groups-connect js-cred-editor-conditional-groups-connect">
+            <select>
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+            </select>
+        </td>
+
+        <td>
+            <i class="icon-remove fa fa-times cred-editor-editable-list-item-remove js-cred-editor-conditional-groups-item-remove"></i>
+        </td>
+    </tr>
+</script>

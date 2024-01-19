@@ -1,0 +1,99 @@
+$placements: 'top', 'bottom', 'left', 'right';
+
+@mixin arrowBorder ($placement, $width, $color, $borderColor) {
+	@if ($placement == 'top') {
+		border-top: $width solid $borderColor;
+		border-right: $width solid transparent;
+		border-left: $width solid transparent;
+		&::after {
+			content: '';
+			position: absolute;
+			top: -$width;
+			left: -($width - 1px);
+			border-top: ($width - 1px) solid $color;
+			border-right: ($width - 1px) solid transparent;
+			border-left: ($width - 1px)solid transparent;
+		}
+
+	} @else if ($placement == 'bottom') {
+		border-bottom: $width solid $borderColor;
+		border-right: $width solid transparent;
+		border-left: $width solid transparent;
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: -$width;
+			left: -($width - 1px);
+			border-bottom: ($width - 1px) solid $color;
+			border-right: ($width - 1px) solid transparent;
+			border-left: ($width - 1px)solid transparent;
+		}
+
+	} @else if ($placement == 'left') {
+		border-left: $width solid $borderColor;
+		border-top: $width solid transparent;
+		border-bottom: $width solid transparent;
+
+
+		&::after {
+			content: '';
+			position: absolute;
+			left: -$width;
+			top: -($width - 1px);
+			border-left: ($width - 1px) solid $color;
+			border-top: ($width - 1px) solid transparent;
+			border-bottom: ($width - 1px)solid transparent;
+		}
+
+	} @else if ($placement == 'right') {
+		border-right: $width solid $borderColor;
+		border-top: $width solid transparent;
+		border-bottom: $width solid transparent;
+
+		&::after {
+			content: '';
+			position: absolute;
+			right: -$width;
+			top: -($width - 1px);
+			border-right: ($width - 1px) solid $color;
+			border-top: ($width - 1px) solid transparent;
+			border-bottom: ($width - 1px)solid transparent;
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+.tippy-popper {
+	@each $placement in $placements {
+		&[x-placement^='#{$placement}'] {
+			.tippy-tooltip.otgs-theme {
+				.tippy-arrow {
+					@include arrowBorder($placement, 7px, #fff, #ddd)
+				}
+			}
+		}
+	}
+}
+
+.tippy-tooltip.otgs-theme {
+	font-size: 13px;
+	background: #fff;
+	border: 1px solid #ddd;
+	box-shadow: 0 1px 4px rgba(0,0,0,.075);
+	color: #444;
+	border-radius: 2px;
+
+	.tippy-backdrop {
+		background-color: #fff;
+	}
+
+	.tippy-roundarrow {
+		fill: #fff;
+	}
+
+	&[data-animatefill] {
+		background-color: transparent;
+	}
+}

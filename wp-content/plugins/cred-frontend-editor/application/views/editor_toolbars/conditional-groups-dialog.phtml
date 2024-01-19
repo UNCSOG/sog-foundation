@@ -1,0 +1,75 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a conditional group in a form.
+ *
+ * @since 2.1
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-conditional-groups-dialog">
+    <p class="toolset-alert toolset-alert-info" style="margin-top:0">
+    <?php
+    $documentation_link_args = array(
+        'utm_source'	=> 'plugin',
+        'utm_campaign'	=> 'forms',
+        'utm_medium'	=> 'gui',
+        'utm_term'		=> 'See our documentation on conditional display for form inputs'
+    );
+    $documentation_link = add_query_arg( $documentation_link_args, CRED_DOC_LINK_CONDITIONAL_GROUP );
+    echo sprintf(
+        '<a href="%1$s" title="%2$s" target="_blank">%3$s %4$s</a>.',
+        esc_url( $documentation_link ),
+        esc_attr( __( 'See our documentation on conditional display for form inputs', 'wp-cred' ) ),
+        __( 'See our documentation on conditional display for form inputs', 'wp-cred' ),
+        '<i class="fa fa-external-link"></i>'
+    );
+    ?>
+    </p>
+    <div class="cred-editor-conditional-groups-general-container js-cred-editor-conditional-groups-general-container">
+        <div class="cred-editor-conditional-groups-options-container">
+            <h3><?php _e( 'Options', 'wp-cred' ); ?></h3>
+            <div>
+                <div>
+                    <label>
+                        <?php _e( 'Effect to show or hide the group:', 'wp-cred' ); ?>
+                        <select class="cred-editor-conditional-groups-options-effect js-cred-editor-conditional-groups-options-effect">
+                            <option value="fade-slide"><?php _e( 'Fade-slide the group', 'wp-cred' ); ?></option>
+                            <option value="slide"><?php _e( 'Slide the group', 'wp-cred' ); ?></option>
+                            <option value="fade"><?php _e( 'Fade the group', 'wp-cred' ); ?></option>
+                            <option value="none"><?php _e( 'No effect, just show or hide', 'wp-cred' ); ?></option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="cred-editor-conditional-groups-conditions-container js-cred-editor-conditional-groups-conditions-container">
+            <h3><?php _e( 'Conditions to evaluate', 'wp-cred' ); ?></h3>
+            <table id="js-cred-editor-conditional-groups-conditions" class="cred-editor-editable-list cred-editor-conditional-groups-conditions">
+                <thead>
+                    <tr>
+                        <th style="width:100%"><?php _e( 'Field', 'wp-cred' ); ?></th>
+                        <th style="width:100%"><?php _e( 'Comparison', 'wp-cred' ); ?></th>
+                        <th style="width:100%"><?php _e( 'Value', 'wp-cred' ); ?></th>
+                        <th style="width:40%"><?php _e( 'Relationship', 'wp-cred' ); ?></th>
+                        <th style="width:10%">&nbsp</th>
+                    </tr>
+                </thead>
+                <tbody class="js-cred-editor-conditional-groups-conditions-body"></tbody>
+            </table>
+        </div>
+        <div class="cred-editor-conditional-groups-custom-expressions-container js-cred-editor-conditional-groups-custom-expressions-container" style="display:none">
+            <textarea id="cred-editor-conditional-groups-custom-expressions" class="js-cred-gui-field large-text" placeholder="" data-type="textarea"></textarea>
+        </div>
+        <p>
+            <?php
+            echo sprintf(
+                '<a href="#" class="js-cred-editor-conditional-groups-expression-switcher">%s</a>',
+                esc_html( __( 'Edit conditions manually', 'wp-cred' ) )
+            );
+            echo sprintf(
+                '<button class="button js-cred-editor-conditional-groups-add-term" style="float:right">%s</button>',
+                esc_html( __( 'Add another condition', 'wp-cred' ) )
+            );
+            ?>
+        </p>
+    </div>
+</script>

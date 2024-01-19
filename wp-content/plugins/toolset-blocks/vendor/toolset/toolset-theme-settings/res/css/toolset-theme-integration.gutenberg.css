@@ -1,0 +1,28 @@
+.theme-settings-wrap.wpv-advanced-setting .components-panel__row {
+	display: block;
+	margin-top: 12px;
+}
+
+.theme-option-switch-container {
+	margin: 5px 0 10px 20px;
+}
+
+	.theme-settings-wrap .components-panel__row label {
+		display: block;
+		max-width: 100%;
+		margin-bottom: 4px;
+		margin-right: 0;
+	}
+
+	.theme-option-switch-container .theme-option-switch-label {
+		display: block;
+		margin-bottom: 5px;
+	}
+
+	.theme-option-switch-container .theme-option-switch-target-input {
+		margin-left: 30px;
+	}
+
+	.theme-settings-wrap .theme-settings-section {
+		margin-bottom: .5em;
+	}

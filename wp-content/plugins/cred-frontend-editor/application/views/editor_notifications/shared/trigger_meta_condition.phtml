@@ -1,0 +1,85 @@
+<?php
+/**
+ * Template for the forms notifications GUI, trigger section, meta value condition.
+ * 
+ * @var array $notification Data for the current notification
+ * @var string $ii Index for the current notification
+ * @var boolean $enableTestMail
+ * @var string $form_type Post type of the current edited form
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$ii = toolset_getarr( $context, 'ii', '__i__' );
+$jj = toolset_getarr( $context, 'jj', '__j__' );
+$condition = toolset_getarr( $context, 'condition', array() );
+$enableTestMail = toolset_getarr( $context, 'enableTestMail', false );
+$form_type = toolset_getarr( $context, 'form_type' );
+
+$condition = CRED_Helper::mergeArrays(
+    array(
+        'field' => '',
+        'op' => '=',
+        'value' => '',
+        'only_if_changed' => 1
+    ), 
+    $condition
+);
+
+$condition_html_name = "_cred[notification][notifications][{$ii}][event][condition][{$jj}]";
+?>
+<p id="cred_notification_field_condition-<?php echo esc_attr( $ii ); ?>-<?php echo esc_attr( $jj ); ?>">
+    <i title="<?php echo esc_attr(__('Please select a field', 'wp-cred')); ?>" id="notification_field_required-<?php echo esc_attr( $ii ); ?>-<?php echo esc_attr( $jj ); ?>" class="fa fa-warning" style="display:none;"></i>
+    <select data-cred-bind="{ 
+            validate: {
+                required: {
+                    actions: [
+                        {action: 'validationMessage', domRef: '#notification_field_required-<?php echo $ii; ?>-<?php echo $jj; ?>' },
+                        {action: 'validateSection' }
+                    ]
+                }
+            }, 
+            action: 'set', 
+            what: { 
+                options: '_cred[_all_persistent_meta_fields]' 
+            } 
+        }" 
+        name="<?php echo esc_attr( $condition_html_name ); ?>[field]">
+
+        <optgroup label="<?php echo esc_attr( __( 'Please select...', 'wp-cred' ) ); ?>">
+            <option value='' disabled selected style='display:none;' data-dummy-option="1"><?php _e('Select field..','wp-cred'); ?></option>
+            <?php if ( '' != toolset_getarr( $condition, 'field' ) ) {
+                ?><option value='<?php echo esc_attr( $condition['field'] ); ?>' selected="selected" ><?php echo esc_html( $condition['field'] ); ?></option><?php
+            }?>
+        </optgroup>
+    </select>
+    <select name="<?php echo esc_attr( $condition_html_name ); ?>[op]">
+        <option value='=' <?php selected( '=', toolset_getarr( $condition, 'op' ) ); ?>>=</option>
+        <option value='<>' <?php selected( '<>', toolset_getarr( $condition, 'op' ) );?>>&lt;&gt;</option>
+        <option value='>=' <?php selected( '>=', toolset_getarr( $condition, 'op' ) ); ?>>&gt;=</option>
+        <option value='<=' <?php selected( '<=', toolset_getarr( $condition, 'op' ) ); ?>>&lt;=</option>
+        <option value='>' <?php selected( '>', toolset_getarr( $condition, 'op' ) ); ?>>&gt;</option>
+        <option value='<' <?php selected( '<', toolset_getarr( $condition, 'op' ) ); ?>>&lt;</option>
+    </select>
+    <label>
+        <input name="<?php echo esc_attr( $condition_html_name ); ?>[value]" type="text" style="width:auto" value="<?php echo esc_attr( toolset_getarr( $condition, 'value' ) ); ?>" />
+    </label>
+    <label class="cred_notification_field_only_if_changed">
+        <input name="<?php echo esc_attr( $condition_html_name ); ?>[only_if_changed]" type="checkbox" value="1" <?php checked( toolset_getarr( $condition, 'only_if_changed' ) ); ?> />
+        <span><?php _e('Only if field value has changed', 'wp-cred'); ?></span>
+    </label>
+    <a href="javascript:;" data-cred-bind="{ 
+            event: 'click', 
+            action: 'refreshFormFields' 
+        }" 
+        class='fa fa-refresh cred-refresh-button' 
+        title="<?php echo esc_attr(__('Click to refresh (if settings changed)','wp-cred')); ?>">&nbsp;</a>&nbsp;
+    <a class="fa fa-times" data-cred-bind="{
+	   event: 'click',
+	   action: 'removeItem',
+	   domRef: '#cred_notification_field_condition-<?php echo esc_attr( $ii ); ?>-<?php echo esc_attr( $jj ); ?>',
+	   modelRef: '<?php echo esc_attr( $condition_html_name ); ?>'
+       }" title="<?php echo esc_attr(__( 'Remove', 'wp-cred' )); ?>">&nbsp;</a>
+</p>

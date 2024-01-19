@@ -1,0 +1,38 @@
+<?php
+/**
+ * Template for the forms notifications GUI, trigger section, post forms, post expiration option.
+ *
+ * @var array $notification Data for the current notification
+ * @var string $notification_index Index for the current notification
+ *
+ * @since 2.3
+ */
+$context = isset( $context ) ? $context : array();
+
+$notification = toolset_getarr( $context, 'notification', array() );
+$notification_index = toolset_getarr( $context, 'notification_index', '__i__' );
+?>
+<p class="cred_post_expiration_options">
+     <label class="cred-label">
+        <input data-cred-bind="{
+				validate: {
+					required: {
+						actions: [
+							{ action: 'validationMessage', domRef: '#notification_event_required-<?php echo $notification_index; ?>' },
+							{ action: 'validateSection' }
+						]
+					}
+				}
+			}" type="radio" class="js-cred-notification-trigger" name="_cred[notification][notifications][<?php echo $notification_index; ?>][event][type]" value="expiration_date" <?php checked( 'expiration_date', toolset_getnest( $notification, array( 'event', 'type' ) ) ); ?> />
+        <span class="cred_expiration_period_by_span">
+            <input data-cred-bind="{ action:'enable', condition:'_cred[notification][notifications][<?php echo $notification_index; ?>][event][type]=expiration_date' }" value='0' type="number" min="0" class="cred_when_status_changes cred_number_input cred_expiration_period_amount" name="_cred[notification][notifications][<?php echo $notification_index; ?>][event][expiration_date]" />
+            <select data-cred-bind="{ action:'enable', condition:'_cred[notification][notifications][<?php echo $notification_index; ?>][event][type]=expiration_date' }" class="cred_expiration_period_by" name="_cred[notification][notifications][<?php echo $notification_index; ?>][event][expiration_period]">
+                <option value="60"><?php _e( 'Minutes', 'wp-cred');  ?></option>
+                <option value="3600"><?php _e( 'Hours', 'wp-cred');  ?></option>
+                <option value="86400"><?php _e( 'Days', 'wp-cred');  ?></option>
+                <option value="604800"><?php _e( 'Weeks', 'wp-cred');  ?></option>
+            </select>
+            <?php _e( 'before the automatic expiration date.', 'wp-cred'); ?>
+        </span>
+    </label>
+</p>

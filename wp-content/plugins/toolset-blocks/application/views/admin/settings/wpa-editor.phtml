@@ -1,0 +1,41 @@
+<?php
+/**
+ * Template File
+ * This file is the Views Settings section for the WordPress Archive Editor settings.
+ *
+ * @since 2.8.1
+ */
+?>
+
+<div class="js-wpv-default-wpa-editor-summary">
+	<ul>
+		<li>
+			<label>
+				<input id="wpv-default-wpa-editor-basic"
+				       type="radio"
+				       autocomplete="off"
+				       name="wpv-default-wpa-editor"
+					<?php checked( $context['default_wpa_editor'], Toolset_User_Editors_Editor_Basic::BASIC_SCREEN_ID ); ?>
+					   value="<?php echo Toolset_User_Editors_Editor_Basic::BASIC_SCREEN_ID; ?>" />
+				<?php
+				/* translators: Label of the option to use the classic default editor on Content Templates. */
+				_e( 'Classic Editor', 'wpv-views' );
+				?>
+			</label>
+		</li>
+		<li>
+			<label>
+				<input id="wpv-default-wpa-editor-gutenberg"
+				       type="radio"
+				       autocomplete="off"
+				       name="wpv-default-wpa-editor"
+					<?php checked( $context['default_wpa_editor'], Toolset_User_Editors_Editor_Gutenberg::GUTENBERG_SCREEN_ID ); ?>
+					   value="<?php echo Toolset_User_Editors_Editor_Gutenberg::GUTENBERG_SCREEN_ID; ?>" />
+				<?php
+				/* translators: Label of the option to use the blocks editor on Content Templates. */
+				_e( 'Block Editor', 'wpv-views' );
+				?>
+			</label>
+		</li>
+	</ul>
+</div>

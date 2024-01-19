@@ -1,0 +1,13 @@
+{
+  "name": "toolset-common",
+  "version": "4.1.2",
+  "author": "OnTheGoSystems",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "fs-extra": "^8.1.0",
+    "recursive-copy": "^2.0.10",
+    "replace-in-file": "^4.1.0"
+  }
+}

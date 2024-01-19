@@ -1,0 +1,16 @@
+{#
+    Name and Slug for association forms edit page
+#}
+
+{% import "@toolset/forms.twig" as forms %}
+
+<table class="widefat toolset-field-table">
+    <tbody>
+    {{
+    forms.twoColumnRow(
+        forms.label(__( 'Form Name', 'wp-cred' ), true),
+        forms.textInput('value: form_name, valueUpdate: "input", css: { error: form_name.hasError }', '', '', '', true, 'form_name', 'form_name', '')
+    )
+    }}
+    </tbody>
+</table>

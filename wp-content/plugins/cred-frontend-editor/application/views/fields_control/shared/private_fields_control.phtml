@@ -1,0 +1,14 @@
+<?php
+/**
+ * Template for the Forms control private fields show/hide selector.
+ *
+ * @since 2.1
+ */
+$context = isset( $context ) ? $context : array();
+$show_private = toolset_getarr( $context, 'show_private', false );
+?>
+<select name="show_private">
+    <option value="0" <?php selected( $show_private, false ); ?>><?php _e( 'Do not include hidden fields', 'wp-cred' ); ?></option>
+    <option value="1" <?php selected( $show_private ); ?>><?php _e( 'Include hidden fields', 'wp-cred' ); ?></option>
+</select>
+<input type='submit' class='button' value="<?php echo esc_attr( __( 'Apply', 'wp-cred' ) ); ?>" />

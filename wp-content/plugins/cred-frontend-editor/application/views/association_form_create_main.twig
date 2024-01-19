@@ -1,0 +1,32 @@
+
+
+{# we need its macros #}
+{% import "@toolset/base.twig" as base %}
+<div class="wrap">
+
+    {% block title %}
+        <h1 class="wp-heading-inline"><span class="wp-core-ui" data-bind="text: pageTitle">{{ strings.misc.currentPageTitle }}</span></h1>
+    {% endblock %}
+
+    <div id="message" data-bind="threeModeVisibility: messageVisibilityMode, attr: { class: 'notice is-dismissible ' + messageNagClass() }">
+        <p data-bind="html: displayedMessage().text"></p>
+        <button class="notice-dismiss" data-bind="click: removeDisplayedMessage"></button>
+    </div>
+
+    {% block Screens %}
+        <div id="association_form_create_new" style="display:none;" data-bind="if: fullFormActivate, visible: fullFormVisibility">
+        {% include '@associations/association_form_create_new.twig' %}
+        </div>
+
+        <div id="association_form_wizard" style="display:none;" data-bind="if: wizardFormActivate, visible: wizardFormVisibility">
+        {% include '@associations/association_form_wizard.twig' %}
+        </div>
+
+    {% endblock %}
+
+    {% block footer %}
+        {{ wp_nonce_field( wpnonce, wpnonce, true, false ) | raw }}
+        <script id="toolset_model_data" type="text/plain">{{ js_model_data }}</script>
+    {% endblock %}
+
+</div>

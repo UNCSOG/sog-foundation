@@ -1,0 +1,9 @@
+@include body-class(true) {
+	.sui-header {
+		.sui-actions-right {
+			.sui-select:not(:last-child) {
+				margin-right: 10px;
+			}
+		}
+	}
+}

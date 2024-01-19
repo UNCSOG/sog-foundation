@@ -1,0 +1,26 @@
+<div class="wrap">
+	<div id="icon-wpcf-access" class="icon32"><br /></div>
+	<h1><?php  _e( 'Access Control', 'wpcf-access' ) ?></h1>
+<?php
+$section_content = isset( $context['section_content'] ) ? $context['section_content'] : '';
+$tab_items = isset( $context['tab_items'] ) ? $context['tab_items'] : '';
+$nonce = isset( $context['nonce'] ) ? $context['nonce'] : '';
+echo $nonce;
+?>
+<p class="otg-access-new-nav">
+	<?php echo $tab_items; ?>
+</p>
+
+<div class="otg-access-settings-container">
+	<form id="wpcf_access_admin_form" method="post" action="">
+		<div class="js-otg-access-content">
+			<div class="otg-access-settings-section-loading js-otg-access-settings-section-loading" style="display:none;">
+				<i class="fa fa-refresh fa-spin"></i>
+				<?php _e( 'Loading...', 'wpcf-access' )?>
+			</div>
+			<?php echo $section_content ?>
+		</div>
+	</form>
+</div>
+
+</div>

@@ -1,0 +1,50 @@
+<?php
+/**
+ * underscore.js template for the options of each item in the dialog to insert a Toolset Form scaffold.
+ *
+ * @since 2.2
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-scaffold-itemOptions">
+    <#
+    data = _.extend(
+        { options: {} },
+        data
+    );
+    if ( 'edit' == data.environment.formType ) {
+        data.options = _.omit( data.options, 'valueAndUrl' );
+    }
+    #>
+    <# if ( _.size( data.options ) > 0 ) { #>
+    <div class="cred-editor-scaffold-item-options js-cred-editor-scaffold-item-options hidden">
+        <form>
+        <#
+        _.each( data.options, function( attributeOptions, attributeKey ) {
+            if ( attributeKey === 'template' ) {
+                print( data.templates.byid[ attributeOptions ]( { templates: data.templates } ) );
+            } else {
+                attributeOptions = _.defaults( attributeOptions, {
+                    shortcode: data.shortcode,
+                    attribute: attributeKey,
+                    templates: data.templates.shortcodeGui,
+                    defaultValue: '',
+                    required: false,
+                    hidden: false,
+                    placeholder: ''
+                } );
+                attributeOptions = _.defaults( attributeOptions, { defaultForceValue: attributeOptions.defaultValue } );
+                if ( 'group' == attributeOptions.type ) {
+                    print( attributeOptions.templates.attributeGroupWrapper( attributeOptions ) );
+                } else {
+                    print( attributeOptions.templates.attributeWrapper( attributeOptions ) );
+                }
+            }
+        });
+        #>
+            <div class="cred-editor-scaffold-options-close-container">
+                <button class="cred-editor-scaffold-options-close js-cred-editor-scaffold-options-close button secondary"><?php esc_html_e( 'OK', 'wp-cred' ); ?></button>
+            </div>
+        </form>
+    </div>
+    <# } #>
+</script>

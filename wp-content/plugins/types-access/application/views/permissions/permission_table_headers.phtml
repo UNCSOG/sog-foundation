@@ -1,0 +1,61 @@
+<?php
+$tab_slug = isset( $context['tab_slug'] ) ? $context['tab_slug'] : '';
+$section_content = isset( $context['section_content'] ) ? $context['section_content'] : '';
+?>
+<div class="js-otg-access-settings-tab-section js-otg-access-settings-section-for-<?php echo $tab_slug; ?>"
+	data-tab="<?php echo $tab_slug ?>">
+
+	<p class="toolset-access-tab-info">
+		<?php if ( $tab_slug === 'post-type' ): ?>
+			<?php _e( 'Expand each of these post types to set their access control. Select the \'Managed by Access\' checkbox to customize the access rules. ', 'wpcf-access' ) ?>
+			<br>
+			<a href="https://toolset.com/course-lesson/setting-access-control/?utm_source=plugin&utm_medium=gui&utm_campaign=access"
+				title="<?php _e( 'Access Control for Standard and Custom Content Types', 'wpcf-access' ) ?>"
+				target="_blank">
+				<?php _e( 'Access Control for Standard and Custom Content Types', 'wpcf-access' ) ?>
+			</a>
+
+		<?php elseif ( $tab_slug === 'taxonomy' ): ?>
+			<?php _e( 'Expand each of these taxonomies to set their access control. Select the \'Managed by Access\' checkbox to customize the access rules. ', 'wpcf-access' ) ?>
+			<br>
+			<a href="https://toolset.com/course-lesson/setting-access-control/?utm_source=plugin&utm_medium=gui&utm_campaign=access"
+				title="'. __('Access Control for Taxonomy ', 'wpcf-access') .'"
+				target="_blank"><?php _e( 'Access Control for Taxonomy', 'wpcf-access' ) ?></a>
+
+		<?php elseif ( $tab_slug === 'types-fields' ): ?>
+			<?php _e( 'Expand each of these field groups to set their access control.', 'wpcf-access' ) ?><br>
+			<a href="https://toolset.com/course-lesson/access-control-for-custom-fields/?utm_source=plugin&utm_medium=gui&utm_campaign=access"
+				title="<?php _e( 'Access Control for Fields', 'wpcf-access' ) ?>"
+				target="_blank"><?php _e( 'Access Control for Fields', 'wpcf-access' ) ?></a>
+
+		<?php elseif ( $tab_slug === 'cred-forms' ): ?>
+			<?php _e( 'Expand each of these groups of forms (for posts and for users) to set their access control on the front-end.', 'wpcf-access' ) ?>
+			<br>
+			<a href="https://toolset.com/course-lesson/controlling-access-to-front-end-forms/?utm_source=plugin&utm_medium=gui&utm_campaign=access"
+				title="<?php _e( 'Access Control for Toolset Forms', 'wpcf-access' ) ?>"
+				target="_blank"><?php _e( 'Access Control for Toolset Forms', 'wpcf-access' ) ?></a>
+
+		<?php elseif ( $tab_slug === 'custom-roles' ): ?>
+			<?php _e( 'Create custom user roles. Then, grant privileges for them.', 'wpcf-access' ) ?><br>
+			<a href="https://toolset.com/course-lesson/setting-up-custom-roles-for-members/?utm_source=plugin&utm_medium=gui&utm_campaign=access"
+				title="'<?php _e( 'Managing WordPress Admin Capabilities', 'wpcf-access' ) ?>"
+				target="_blank"><?php _e( 'Managing WordPress Admin Capabilities', 'wpcf-access' ) ?></a>
+
+		<?php elseif ( $tab_slug === 'wpml-group' ): ?>
+			<?php _e( 'Create \'permission per language\', where you select the post types and languages that you want to control. Then, choose who can access it.', 'wpcf-access' ) ?>
+			<br>
+			<a href="https://wpml.org/documentation/translating-your-contents/how-to-use-access-plugin-to-create-editors-for-specific-language/?utm_source=access&utm_medium=admin-tabs&utm_term=Access%20Control%20for%20WPML%20groups&utm_campaign=access"
+				title="<?php _e( 'Creating Editors for Specific Language', 'wpcf-access' ) ?>"
+				target="_blank"><?php _e( 'Creating Editors for Specific Language', 'wpcf-access' ) ?></a>
+
+		<?php elseif ( $tab_slug === 'custom-group' ): ?>
+			<?php _e( 'Create \'post groups\', which hold together content that will share the same front-end access control. Then, set the access control for each group', 'wpcf-access' ) ?>
+			<br>
+			<a href="https://toolset.com/course-lesson/restricting-access-to-pages/?utm_source=plugin&utm_medium=gui&utm_campaign=access"
+				title="<?php _e( 'Limiting read access to specific content', 'wpcf-access' ) ?>"
+				target="_blank"><?php _e( 'Limiting read access to specific content', 'wpcf-access' ) ?></a>
+
+		<?php endif; ?>
+		<?php echo $section_content; ?>
+	</p>
+</div>

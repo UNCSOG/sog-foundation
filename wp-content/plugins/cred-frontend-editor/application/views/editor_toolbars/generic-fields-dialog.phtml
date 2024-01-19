@@ -1,0 +1,23 @@
+<?php
+/**
+ * underscore.js template for the dialog for inserting a generic field.
+ *
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-cred-editor-generic-fields-dialog">
+    <div class="cred-editor-generic-fields-container js-cred-editor-generic-fields-container">
+        <div class="toolset-shortcode-gui-group-list cred-shortcode-gui-group-list js-cred-shortcode-gui-group-list">
+        <#
+        _.each( data.dialog.fields, function( field, fieldKey ) {
+            field = _.defaults( field, {
+                environment: data.environment,
+                templates: data.templates,
+                fieldType: 'generic'
+            } );
+                print( data.templates.fields.item( field ) );
+            });
+        #>
+        </div>
+    </div>
+</script>

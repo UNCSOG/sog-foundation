@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<ruleset name="ToolsetPHP">
+	<description>Toolset PHP Compatibility Standards</description>
+
+	<config name="testVersion" value="5.6-"/>
+    <config name="installed_paths" value="../../phpcompatibility/php-compatibility,../../phpcompatibility/phpcompatibility-paragonie,../../phpcompatibility/phpcompatibility-wp" />
+
+    <rule ref="PHPCompatibilityWP">
+        <exclude name="PHPCompatibility.PHP.DefaultTimezoneRequired.Missing"/>
+    </rule>
+
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName.FunctionDoubleUnderscore">
+    </rule>
+
+    <rule ref="Internal.NoCodeFound">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName.MethodDoubleUnderscore">
+    </rule>
+
+    <file>./classes</file>
+    <file>./debug</file>
+    <file>./expression-parser</file>
+    <file>./inc</file>
+    <file>./lib</file>
+    <file>./templates</file>
+    <file>./toolset-blocks</file>
+    <file>./toolset-forms</file>
+    <file>./user-editors</file>
+    <file>./utility</file>
+    <file>./visual-editor</file>
+
+    <file>./api.php</file>
+    <file>./bootstrap.php</file>
+    <file>./deprecated.php</file>
+    <file>./loader.php</file>
+    <file>./toolset-common-loader.php</file>
+    <file>./wplogger.php</file>
+    <file>./wpv-filter-date-embedded.php</file>
+
+</ruleset>
