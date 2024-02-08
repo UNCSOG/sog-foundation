@@ -1,0 +1,9 @@
+# Make sure dev files aren't uploaded to the site.
+node_modules
+node_modules/*
+
+# Theme development - Don't upload these either, place all 
+# files that you are working on and don't want pushed up in
+# this directory or add them individually to this file below.
+development
+development/*
