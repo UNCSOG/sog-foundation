@@ -1,6 +1,18 @@
 // The following styles/ tips are from the link below
 // https://www.sitepoint.com/15-rules-making-accessible-links/
 
+// Things to consider when making things accessible:
+// Day/Night Mode
+// Color Contrast Options
+// Font Size Increase/Decrease Options
+// Keyboard Navigation
+// Video and Multimedia Accessible
+// Use Descriptive URLs
+// Use ARIA Roles
+// Avoid Using Placeholder Text in Forms
+// Minimize the Use of Tables
+// Add Images with Alt Text
+
 // For links that open up in a new window
 .sr-only,
 a .sr-only {

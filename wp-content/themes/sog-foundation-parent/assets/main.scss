@@ -65,9 +65,9 @@ $font-family-base: $font-family-sans-serif;
 $link-decoration: none;
 
 // UNC Custom Theme Variables
-@import "dist/scss/base/init";
-@import "dist/scss/base/mixins";
-@import "dist/scss/base/accessibility";
+// @import "dist/scss/base/init";
+// @import "dist/scss/base/mixins";
+// @import "dist/scss/base/accessibility";
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import '../node_modules/bootstrap/scss/variables';
