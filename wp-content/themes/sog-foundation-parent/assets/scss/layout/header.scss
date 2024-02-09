@@ -1,1 +1,12 @@
-// header#headerMain {}
+header#headerMain {
+	color: $white;
+	background-color: $unc-web-carolina-blue;
+
+	a {
+		color: $white;
+
+		&:hover,
+		&:focus,
+		&:active {}
+	}
+}
