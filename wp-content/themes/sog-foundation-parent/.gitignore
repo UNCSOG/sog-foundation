@@ -1,9 +1,18 @@
-# Make sure dev files aren't uploaded to the site.
-node_modules
+# Make sure development files aren't uploaded to the site, they slow down the production, etc.
 node_modules/*
 
 # Theme development - Don't upload these either, place all 
 # files that you are working on and don't want pushed up in
 # this directory or add them individually to this file below.
-development
 development/*
+
+# Design Assests - Ignore these file types, do not upload the to the codebase.
+*.ai
+*.zip
+*.gzip
+*.tar.gz
+
+# Other Theme assets.
+*.mp4
+*.mp3
+videos/*
