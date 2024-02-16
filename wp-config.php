@@ -84,3 +84,10 @@ if ( !defined('ABSPATH') )
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
+
+// Load Composer’s autoloader
+require_once ( __DIR__ . '/content/vendor/autoload.php' );
+
+// Move the location of the content dir
+define( 'WP_CONTENT_DIR', dirname(__FILE__) . '/content' );
+
