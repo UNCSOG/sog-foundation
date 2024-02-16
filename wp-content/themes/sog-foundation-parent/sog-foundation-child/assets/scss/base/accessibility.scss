@@ -1,0 +1,57 @@
+// The following styles/ tips are from the link below
+// https://www.sitepoint.com/15-rules-making-accessible-links/
+
+// Things to consider when making things accessible:
+// Day/Night Mode
+// Color Contrast Options
+// Font Size Increase/Decrease Options
+// Keyboard Navigation
+// Video and Multimedia Accessible
+// Use Descriptive URLs
+// Use ARIA Roles
+// Avoid Using Placeholder Text in Forms
+// Minimize the Use of Tables
+// Add Images with Alt Text
+
+// For links that open up in a new window
+.sr-only,
+a .sr-only {
+	border: 0;
+	padding: 0;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	position: absolute;
+	clip: rect(0, 0, 0, 0);
+}
+
+// Pagination increase the hit space for
+// touch screen, joystick and mouse users
+.pagination-centered .item-list .pagination.pager li {
+	a {
+		padding: 0.25em;
+		text-decoration: none;
+
+		&:hover,
+		&:focus,
+		&:active {
+			text-decoration: underline;
+		}
+	}
+}
+
+.l-main,
+.main {
+	// Must set the minium font size for the body text on the whole site 12px = 0.75rem.
+	@media #{$small-only} {
+		font-size: 0.75rem !important;
+	}
+}
+
+// Dark / Night Mode
+// https://getbootstrap.com/docs/5.3/customize/color-modes/#building-with-sass
+// Color mode variables in _root.scss
+// @include color-mode( dark ) {
+  // color: ;
+// }
