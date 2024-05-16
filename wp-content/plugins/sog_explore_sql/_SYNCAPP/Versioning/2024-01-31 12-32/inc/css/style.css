@@ -1,0 +1,88 @@
+.sort_helper_hidden {
+	display:none;
+}
+
+.clickable {
+	cursor:pointer;
+}
+
+.sog_ex_menu_button {
+	width: 100%;
+}
+
+.report_checkboxes .form-check {
+	min-height:unset;
+}
+
+.report_checkboxes label {
+	overflow-wrap:anywhere;
+}
+
+.report_checkboxes {
+	/* font-size:.9rem; */
+	column-count:6;
+	column-width:200px;
+}
+
+.report_filters {
+	column-count:6;
+	column-width:200px;
+}
+
+.report_filters {
+    break-inside: avoid;
+}
+
+.sog_ex_report_limit {
+	max-width:200px;
+}
+
+.sog_ex_report_table_here .spinner_arrows img {
+	max-height:20px;
+}
+
+.sog_ex_hide_until_limit_ready {
+	display:none;
+}
+
+.report_count_number {
+	font-weight:bold;
+	text-decoration
+}
+
+.sog_explore_fixed_spinner_arrows img {
+	width:100%;
+}
+
+.sog_explore_fixed_spinner_arrows {
+	position: fixed;
+    top: 250px;
+    z-index: 2;
+    left: 50%;
+    background-color: #ffffff88;
+    border-radius: 50%;
+    width: 40px;
+}
+
+.sog_ex_add_explore_filter {
+	font-size:.75rem;
+	opacity:.7;
+}
+
+
+.sog_ex_skinny_col {
+	width:85px !important;
+	padding-left:4px !important;
+	padding-right:4px !important;
+	text-align:center;
+}
+
+.sog_ex_help-block {
+display:none;
+font-size:12px;
+padding: 6px;
+}
+
+.sog_ex_help_info_sign {
+	font-size:.85rem;
+}

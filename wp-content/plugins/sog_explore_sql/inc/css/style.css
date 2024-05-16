@@ -1,0 +1,154 @@
+.report_builder {
+	max-width:90%;	
+}
+
+.report_data_table .sort_helper_hidden,
+.report_builder .sort_helper_hidden {
+	display:none;
+}
+
+.report_builder .clickable {
+	cursor:pointer;
+}
+
+.sog_ex_menu_button {
+	width: 100%;
+}
+
+.report_builder .report_checkboxes .form-check {
+	min-height:unset;
+}
+
+.report_builder .report_checkboxes label {
+	overflow-wrap:anywhere;
+}
+
+.report_builder .report_checkboxes {
+	/* font-size:.report_builder .9rem; */
+	column-count:6;
+	column-width:300px;
+}
+
+.report_builder .report_filters {
+	column-count:6;
+	column-width:200px;
+}
+
+.report_builder .report_filters {
+    break-inside: avoid;
+}
+
+.report_builder .report_limit {
+	max-width:200px;
+}
+
+.report_table_here .dataTables_wrapper  {
+	overflow-x: scroll;
+}
+
+.report_table_here .spinner_arrows img {
+	max-height:20px;
+}
+
+.report_builder .hide_until_limit_ready {
+	display:none;
+}
+
+.report_builder .report_count_number {
+	font-weight:bold;
+}
+
+.sog_explore_fixed_spinner_arrows img {
+	width:100%;
+}
+
+.sog_explore_fixed_spinner_arrows {
+	position: fixed;
+    top: 250px;
+    z-index: 2;
+    left: 50%;
+    background-color: #ffffff88;
+    border-radius: 50%;
+    width: 40px;
+}
+
+.report_builder .fa_icon {
+	font-size:.75rem;
+	opacity:.7;
+}
+
+.report_builder .sog_ex_available {
+	font-size:.75rem;
+	opacity:.7;
+}
+
+.report_builder .sog_ex_unavailable {
+	font-size:.75rem;
+	opacity:.2;
+}
+
+
+.report_builder .sog_ex_skinny_col {
+	width:85px !important;
+	padding-left:4px !important;
+	padding-right:4px !important;
+	text-align:center;
+}
+
+.report_builder .help-block {
+display:none;
+font-size:12px;
+padding: 6px;
+}
+
+.report_builder .sog_ex_help_info_sign {
+	font-size:.85rem;
+}
+
+.report_builder .grouping_field:hover{
+	text-decoration:underline;
+}
+
+.report_builder .grouping_field{
+	cursor:pointer;
+}
+
+.report_checkbox_wrapper .all_none_label {
+	font-weight:bold;
+}
+
+.report_checkbox_wrapper .all_none_row {
+	background-color:#e2e2e2;
+}
+
+.sog_ex_edit_warning {
+	background-color: #ff000033 !important;
+	padding:20px;
+}
+
+.report_builder .refresh_table_button {
+	display:none;
+}
+
+.report_builder .output_update_query {
+	display:none;
+}
+
+
+
+
+
+
+.farley img {
+	width:100%;
+}
+
+
+.farley  {
+	position:fixed;
+	top: 50%;
+    margin-top: -100px;
+	z-index:999999999;
+	left: 50%;
+    margin-left: -200px;
+}
