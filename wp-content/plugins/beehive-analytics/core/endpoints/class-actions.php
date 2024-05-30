@@ -182,7 +182,7 @@ class Actions extends Endpoint {
 		// Send response.
 		return $this->get_response(
 			array(
-				'message' => $success ? __( 'Plugin settings reset succesfully.', 'ga_trans' ) : __( 'Couldn\'t reset the settings.', 'ga_trans' ),
+				'message' => $success ? __( 'Plugin settings reset successfully.', 'ga_trans' ) : __( 'Couldn\'t reset the settings.', 'ga_trans' ),
 			),
 			$success
 		);

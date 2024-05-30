@@ -68,7 +68,7 @@ new WPCOM_JSON_API_Site_Settings_V1_3_Endpoint(
 			'moderation_notify'                       => '(bool) Email me when a comment is helf for moderation?',
 			'social_notifications_like'               => '(bool) Email me when someone likes my post?',
 			'social_notifications_reblog'             => '(bool) Email me when someone reblogs my post?',
-			'social_notifications_subscribe'          => '(bool) Email me when someone follows my blog?',
+			'social_notifications_subscribe'          => '(bool) Email me when someone subscribes to my blog?',
 			'comment_moderation'                      => '(bool) Moderate comments for manual approval?',
 			'comment_previously_approved'             => '(bool) Moderate comments unless author has a previously-approved comment?',
 			'comment_max_links'                       => '(int) Moderate comments that contain X or more links',
@@ -159,7 +159,7 @@ class WPCOM_JSON_API_Site_Settings_V1_3_Endpoint extends WPCOM_JSON_API_Site_Set
 	 * @return array
 	 */
 	public function filter_site_settings_endpoint_get( $settings ) {
-		$option_name     = defined( 'IS_WPCOM' ) && IS_WPCOM ? 'wga' : 'jetpack_wga';
+		$option_name     = $this->get_google_analytics_option_name();
 		$option          = get_option( $option_name, array() );
 		$settings['wga'] = wp_parse_args( $option, $this->get_defaults() );
 		return $settings;

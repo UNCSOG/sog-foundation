@@ -24,12 +24,18 @@ class GetReportsResponse extends \Beehive\Google\Collection
      * @var int
      */
     public $queryCost;
+    /**
+     * @var Report[]
+     */
+    public $reports;
     protected $reportsType = Report::class;
     protected $reportsDataType = 'array';
-    public $reports;
+    /**
+     * @var ResourceQuotasRemaining
+     */
+    public $resourceQuotasRemaining;
     protected $resourceQuotasRemainingType = ResourceQuotasRemaining::class;
     protected $resourceQuotasRemainingDataType = '';
-    public $resourceQuotasRemaining;
     /**
      * @param int
      */

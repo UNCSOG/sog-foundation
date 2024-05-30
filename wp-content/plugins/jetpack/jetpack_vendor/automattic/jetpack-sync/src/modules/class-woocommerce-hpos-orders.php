@@ -89,23 +89,12 @@ class WooCommerce_HPOS_Orders extends Module {
 	public function init_listeners( $callable ) {
 		foreach ( $this->get_order_types_to_sync() as $type ) {
 			add_action( "woocommerce_after_{$type}_object_save", $callable );
-		}
-		add_action( 'woocommerce_delete_order', $callable );
-		add_action( 'woocommerce_trash_order', $callable );
-	}
-
-	/**
-	 * Hooks expanding order data with sync events, so that order data is populated against IDs before syncing.
-	 *
-	 * @access public
-	 */
-	public function init_before_send() {
-		foreach ( $this->get_order_types_to_sync() as $type ) {
 			add_filter( "jetpack_sync_before_enqueue_woocommerce_after_{$type}_object_save", array( $this, 'expand_order_object' ) );
 		}
+		add_action( 'woocommerce_delete_order', $callable );
 		add_filter( 'jetpack_sync_before_enqueue_woocommerce_delete_order', array( $this, 'expand_order_object' ) );
+		add_action( 'woocommerce_trash_order', $callable );
 		add_filter( 'jetpack_sync_before_enqueue_woocommerce_trash_order', array( $this, 'expand_order_object' ) );
-		add_filter( 'jetpack_sync_before_enqueue_full_sync_orders', array( $this, 'expand_order_objects' ) );
 	}
 
 	/**
@@ -117,6 +106,7 @@ class WooCommerce_HPOS_Orders extends Module {
 	 */
 	public function init_full_sync_listeners( $callable ) {
 		add_action( 'jetpack_full_sync_orders', $callable );
+		add_filter( 'jetpack_sync_before_enqueue_full_sync_orders', array( $this, 'expand_order_objects' ) );
 	}
 
 	/**
@@ -211,6 +201,9 @@ class WooCommerce_HPOS_Orders extends Module {
 	 * @return array
 	 */
 	public function expand_order_object( $args ) {
+		if ( ! is_array( $args ) || ! isset( $args[0] ) ) {
+			return false;
+		}
 		$order_object = $args[0];
 
 		if ( is_int( $order_object ) ) {
@@ -260,6 +253,18 @@ class WooCommerce_HPOS_Orders extends Module {
 			if ( in_array( $key_parts[0], array( 'billing', 'shipping' ), true ) && 2 === count( $key_parts ) ) {
 				if ( isset( $order_data[ $key_parts[0] ][ $key_parts[1] ] ) ) {
 					$filtered_order_data[ $key ] = $order_data[ $key_parts[0] ][ $key_parts[1] ];
+					continue;
+				}
+			}
+
+			/**
+			 * We need to convert the WC_DateTime objects to stdClass objects to ensure they are properly encoded.
+			 *
+			 * @see Automattic\Jetpack\Sync\Functions::json_wrap as the return value of get_object_vars can vary depending on PHP version.
+			 */
+			if ( in_array( $key, array( 'date_created', 'date_modified', 'date_paid', 'date_completed' ), true ) && isset( $order_data[ $key ] ) ) {
+				if ( is_a( $order_data[ $key ], 'WC_DateTime' ) ) {
+					$filtered_order_data[ $key ] = (object) (array) $order_data[ $key ];
 					continue;
 				}
 			}
@@ -325,7 +330,7 @@ class WooCommerce_HPOS_Orders extends Module {
 
 		$query = "SELECT count(*) FROM {$this->table_name()} WHERE {$this->get_where_sql( $config ) }";
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Hardcoded query, no user variable
-		$count = $wpdb->get_var( $query );
+		$count = (int) $wpdb->get_var( $query );
 
 		return (int) ceil( $count / self::ARRAY_CHUNK_SIZE );
 	}

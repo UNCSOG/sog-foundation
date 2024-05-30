@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\Analytics;
 
 class EntityAdWordsLinkEntity extends \Beehive\Google\Model
 {
+    /**
+     * @var WebPropertyRef
+     */
+    public $webPropertyRef;
     protected $webPropertyRefType = WebPropertyRef::class;
     protected $webPropertyRefDataType = '';
-    public $webPropertyRef;
     /**
      * @param WebPropertyRef
      */

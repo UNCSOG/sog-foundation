@@ -23,12 +23,18 @@ class DynamicSegment extends \Beehive\Google\Model
      * @var string
      */
     public $name;
+    /**
+     * @var SegmentDefinition
+     */
+    public $sessionSegment;
     protected $sessionSegmentType = SegmentDefinition::class;
     protected $sessionSegmentDataType = '';
-    public $sessionSegment;
+    /**
+     * @var SegmentDefinition
+     */
+    public $userSegment;
     protected $userSegmentType = SegmentDefinition::class;
     protected $userSegmentDataType = '';
-    public $userSegment;
     /**
      * @param string
      */

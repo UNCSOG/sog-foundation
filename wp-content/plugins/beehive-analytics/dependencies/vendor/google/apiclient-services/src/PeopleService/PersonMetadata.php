@@ -36,9 +36,12 @@ class PersonMetadata extends \Beehive\Google\Collection
      * @var string[]
      */
     public $previousResourceNames;
+    /**
+     * @var Source[]
+     */
+    public $sources;
     protected $sourcesType = Source::class;
     protected $sourcesDataType = 'array';
-    public $sources;
     /**
      * @param bool
      */

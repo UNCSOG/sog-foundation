@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\AnalyticsData;
 
 class Dimension extends \Beehive\Google\Model
 {
+    /**
+     * @var DimensionExpression
+     */
+    public $dimensionExpression;
     protected $dimensionExpressionType = DimensionExpression::class;
     protected $dimensionExpressionDataType = '';
-    public $dimensionExpression;
     /**
      * @var string
      */

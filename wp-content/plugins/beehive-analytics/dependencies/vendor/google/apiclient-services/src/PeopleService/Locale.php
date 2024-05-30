@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\PeopleService;
 
 class Locale extends \Beehive\Google\Model
 {
+    /**
+     * @var FieldMetadata
+     */
+    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

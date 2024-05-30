@@ -93,7 +93,7 @@ class Capability extends Base {
 		// Custom capability.
 		$custom_cap = beehive_analytics()->settings->get( 'custom_cap', 'permissions' );
 
-		global $wp_roles;
+		$wp_roles = wp_roles();
 
 		// Make sure admin user has the capability in single installations.
 		if ( ! in_array( 'administrator', $enabled_roles, true ) ) {

@@ -19,15 +19,24 @@ namespace Beehive\Google\Service\PeopleService;
 
 class Membership extends \Beehive\Google\Model
 {
+    /**
+     * @var ContactGroupMembership
+     */
+    public $contactGroupMembership;
     protected $contactGroupMembershipType = ContactGroupMembership::class;
     protected $contactGroupMembershipDataType = '';
-    public $contactGroupMembership;
+    /**
+     * @var DomainMembership
+     */
+    public $domainMembership;
     protected $domainMembershipType = DomainMembership::class;
     protected $domainMembershipDataType = '';
-    public $domainMembership;
+    /**
+     * @var FieldMetadata
+     */
+    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @param ContactGroupMembership
      */

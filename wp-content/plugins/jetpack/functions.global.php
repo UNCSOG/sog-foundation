@@ -34,7 +34,7 @@ require_once __DIR__ . '/functions.is-mobile.php';
  */
 function jetpack_deprecated_function( $function, $replacement, $version ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	// Bail early for non-Jetpack deprecations.
-	if ( 0 !== strpos( $version, 'jetpack-' ) ) {
+	if ( ! str_starts_with( $version, 'jetpack-' ) ) {
 		return;
 	}
 
@@ -74,7 +74,7 @@ add_action( 'deprecated_function_run', 'jetpack_deprecated_function', 10, 3 );
  */
 function jetpack_deprecated_file( $file, $replacement, $version, $message ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 	// Bail early for non-Jetpack deprecations.
-	if ( 0 !== strpos( $version, 'jetpack-' ) ) {
+	if ( ! str_starts_with( $version, 'jetpack-' ) ) {
 		return;
 	}
 
@@ -251,8 +251,6 @@ function jetpack_get_migration_data( $option_name ) {
 /**
  * Prints a TOS blurb used throughout the connection prompts.
  *
- * Note: custom ToS messages are also defined in Jetpack_Pre_Connection_JITMs->get_raw_messages()
- *
  * @since 5.3
  *
  * @echo string
@@ -337,8 +335,8 @@ add_filter( 'upgrader_pre_download', 'jetpack_upgrader_pre_download' );
 
  * @deprecated Automattic\Jetpack\Sync\Functions::json_wrap
  *
- * @param array|obj $any        Source data to be cleaned up.
- * @param array     $seen_nodes Built array of nodes.
+ * @param mixed $any        Source data to be cleaned up.
+ * @param array $seen_nodes Built array of nodes.
  *
  * @return array
  */
@@ -440,12 +438,12 @@ function jetpack_get_vary_headers( $headers = array() ) {
 
 	foreach ( $headers as $header ) {
 		// Check for a Vary header.
-		if ( 'vary:' !== substr( strtolower( $header ), 0, 5 ) ) {
+		if ( ! str_starts_with( strtolower( $header ), 'vary:' ) ) {
 			continue;
 		}
 
 		// If the header is a wildcard, we'll return that.
-		if ( false !== strpos( $header, '*' ) ) {
+		if ( str_contains( $header, '*' ) ) {
 			$vary_header_parts = array( '*' );
 			break;
 		}

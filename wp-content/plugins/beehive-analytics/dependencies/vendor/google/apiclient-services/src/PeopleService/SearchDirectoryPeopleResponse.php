@@ -24,9 +24,12 @@ class SearchDirectoryPeopleResponse extends \Beehive\Google\Collection
      * @var string
      */
     public $nextPageToken;
+    /**
+     * @var Person[]
+     */
+    public $people;
     protected $peopleType = Person::class;
     protected $peopleDataType = 'array';
-    public $people;
     /**
      * @var int
      */

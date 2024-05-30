@@ -19,24 +19,42 @@ namespace Beehive\Google\Service\AnalyticsData;
 
 class PropertyQuota extends \Beehive\Google\Model
 {
+    /**
+     * @var QuotaStatus
+     */
+    public $concurrentRequests;
     protected $concurrentRequestsType = QuotaStatus::class;
     protected $concurrentRequestsDataType = '';
-    public $concurrentRequests;
+    /**
+     * @var QuotaStatus
+     */
+    public $potentiallyThresholdedRequestsPerHour;
     protected $potentiallyThresholdedRequestsPerHourType = QuotaStatus::class;
     protected $potentiallyThresholdedRequestsPerHourDataType = '';
-    public $potentiallyThresholdedRequestsPerHour;
+    /**
+     * @var QuotaStatus
+     */
+    public $serverErrorsPerProjectPerHour;
     protected $serverErrorsPerProjectPerHourType = QuotaStatus::class;
     protected $serverErrorsPerProjectPerHourDataType = '';
-    public $serverErrorsPerProjectPerHour;
+    /**
+     * @var QuotaStatus
+     */
+    public $tokensPerDay;
     protected $tokensPerDayType = QuotaStatus::class;
     protected $tokensPerDayDataType = '';
-    public $tokensPerDay;
+    /**
+     * @var QuotaStatus
+     */
+    public $tokensPerHour;
     protected $tokensPerHourType = QuotaStatus::class;
     protected $tokensPerHourDataType = '';
-    public $tokensPerHour;
+    /**
+     * @var QuotaStatus
+     */
+    public $tokensPerProjectPerHour;
     protected $tokensPerProjectPerHourType = QuotaStatus::class;
     protected $tokensPerProjectPerHourDataType = '';
-    public $tokensPerProjectPerHour;
     /**
      * @param QuotaStatus
      */

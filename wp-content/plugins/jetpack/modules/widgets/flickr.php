@@ -81,7 +81,7 @@ if ( ! class_exists( 'Jetpack_Flickr_Widget' ) ) {
 				if (
 					! empty( $flickr_parameters['host'] )
 					&& ! empty( $flickr_parameters['query'] )
-					&& false !== strpos( $flickr_parameters['host'], 'flickr' )
+					&& str_contains( $flickr_parameters['host'], 'flickr' )
 				) {
 					parse_str( $flickr_parameters['query'], $vars );
 
@@ -91,7 +91,7 @@ if ( ! class_exists( 'Jetpack_Flickr_Widget' ) ) {
 						// Flickr Feeds can be used for groups or for individuals.
 						if (
 							! empty( $flickr_parameters['path'] )
-							&& false !== strpos( $flickr_parameters['path'], 'groups' )
+							&& str_contains( $flickr_parameters['path'], 'groups' )
 						) {
 							$feed_url = 'https://api.flickr.com/services/feeds/groups_pool.gne';
 						} else {
@@ -115,7 +115,8 @@ if ( ! class_exists( 'Jetpack_Flickr_Widget' ) ) {
 
 			$rss = fetch_feed( $rss_url );
 
-			$photos = '';
+			$photos      = '';
+			$flickr_home = null; // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Used in flickr/widget.php template file.
 			if ( ! is_wp_error( $rss ) ) {
 				foreach ( $rss->get_items( 0, $instance['items'] ) as $photo ) {
 					switch ( $instance['flickr_image_size'] ) {

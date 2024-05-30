@@ -23,9 +23,12 @@ class AgeRangeType extends \Beehive\Google\Model
      * @var string
      */
     public $ageRange;
+    /**
+     * @var FieldMetadata
+     */
+    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @param string
      */

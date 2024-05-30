@@ -23,9 +23,12 @@ class DimensionCompatibility extends \Beehive\Google\Model
      * @var string
      */
     public $compatibility;
+    /**
+     * @var DimensionMetadata
+     */
+    public $dimensionMetadata;
     protected $dimensionMetadataType = DimensionMetadata::class;
     protected $dimensionMetadataDataType = '';
-    public $dimensionMetadata;
     /**
      * @param string
      */

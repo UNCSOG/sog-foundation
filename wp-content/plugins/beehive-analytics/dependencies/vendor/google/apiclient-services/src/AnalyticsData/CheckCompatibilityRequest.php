@@ -24,18 +24,30 @@ class CheckCompatibilityRequest extends \Beehive\Google\Collection
      * @var string
      */
     public $compatibilityFilter;
+    /**
+     * @var FilterExpression
+     */
+    public $dimensionFilter;
     protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
-    public $dimensionFilter;
+    /**
+     * @var Dimension[]
+     */
+    public $dimensions;
     protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
-    public $dimensions;
+    /**
+     * @var FilterExpression
+     */
+    public $metricFilter;
     protected $metricFilterType = FilterExpression::class;
     protected $metricFilterDataType = '';
-    public $metricFilter;
+    /**
+     * @var Metric[]
+     */
+    public $metrics;
     protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    public $metrics;
     /**
      * @param string
      */

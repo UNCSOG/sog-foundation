@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\PeopleService;
 class ContactGroup extends \Beehive\Google\Collection
 {
     protected $collection_key = 'memberResourceNames';
+    /**
+     * @var GroupClientData[]
+     */
+    public $clientData;
     protected $clientDataType = GroupClientData::class;
     protected $clientDataDataType = 'array';
-    public $clientData;
     /**
      * @var string
      */
@@ -43,9 +46,12 @@ class ContactGroup extends \Beehive\Google\Collection
      * @var string[]
      */
     public $memberResourceNames;
+    /**
+     * @var ContactGroupMetadata
+     */
+    public $metadata;
     protected $metadataType = ContactGroupMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

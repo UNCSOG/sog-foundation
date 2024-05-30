@@ -20,35 +20,56 @@ namespace Beehive\Google\Service\AnalyticsData;
 class RunRealtimeReportResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'totals';
+    /**
+     * @var DimensionHeader[]
+     */
+    public $dimensionHeaders;
     protected $dimensionHeadersType = DimensionHeader::class;
     protected $dimensionHeadersDataType = 'array';
-    public $dimensionHeaders;
     /**
      * @var string
      */
     public $kind;
+    /**
+     * @var Row[]
+     */
+    public $maximums;
     protected $maximumsType = Row::class;
     protected $maximumsDataType = 'array';
-    public $maximums;
+    /**
+     * @var MetricHeader[]
+     */
+    public $metricHeaders;
     protected $metricHeadersType = MetricHeader::class;
     protected $metricHeadersDataType = 'array';
-    public $metricHeaders;
+    /**
+     * @var Row[]
+     */
+    public $minimums;
     protected $minimumsType = Row::class;
     protected $minimumsDataType = 'array';
-    public $minimums;
+    /**
+     * @var PropertyQuota
+     */
+    public $propertyQuota;
     protected $propertyQuotaType = PropertyQuota::class;
     protected $propertyQuotaDataType = '';
-    public $propertyQuota;
     /**
      * @var int
      */
     public $rowCount;
+    /**
+     * @var Row[]
+     */
+    public $rows;
     protected $rowsType = Row::class;
     protected $rowsDataType = 'array';
-    public $rows;
+    /**
+     * @var Row[]
+     */
+    public $totals;
     protected $totalsType = Row::class;
     protected $totalsDataType = 'array';
-    public $totals;
     /**
      * @param DimensionHeader[]
      */

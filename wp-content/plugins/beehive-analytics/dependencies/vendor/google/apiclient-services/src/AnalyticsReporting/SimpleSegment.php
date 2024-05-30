@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class SimpleSegment extends \Beehive\Google\Collection
 {
     protected $collection_key = 'orFiltersForSegment';
+    /**
+     * @var OrFiltersForSegment[]
+     */
+    public $orFiltersForSegment;
     protected $orFiltersForSegmentType = OrFiltersForSegment::class;
     protected $orFiltersForSegmentDataType = 'array';
-    public $orFiltersForSegment;
     /**
      * @param OrFiltersForSegment[]
      */

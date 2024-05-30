@@ -1,70 +1,58 @@
 /**
  * External dependencies
  */
-import apiFetch from '@wordpress/api-fetch';
-import { useEffect, useState } from '@wordpress/element';
-/**
- * Types & constants
- */
-export type UpgradeTypeProp = 'vip' | 'default';
-import type { SiteAIAssistantFeatureEndpointResponseProps } from '../../../../types';
+import { useDispatch, useSelect } from '@wordpress/data';
+import {
+	PLAN_TYPE_FREE,
+	PLAN_TYPE_TIERED,
+	usePlanType as getPlanType,
+} from '../../../../shared/use-plan-type';
+import type { WordPressPlansSelectors } from 'extensions/store/wordpress-com';
 
-type AIFeatureProps = {
-	hasFeature: boolean;
-	isOverLimit: boolean;
-	requestsCount: number;
-	requestsLimit: number;
-	requireUpgrade: boolean;
-	errorMessage: string;
-	errorCode: string;
-	upgradeType: UpgradeTypeProp;
-};
+export default function useAiFeature() {
+	const { data, loading, requestsLimit, requestsCount } = useSelect( select => {
+		const { getAiAssistantFeature, getIsRequestingAiAssistantFeature } = select(
+			'wordpress-com/plans'
+		) as WordPressPlansSelectors;
 
-const NUM_FREE_REQUESTS_LIMIT = 20;
+		const featureData = getAiAssistantFeature();
 
-const aiAssistantFeature = window?.Jetpack_Editor_Initial_State?.[ 'ai-assistant' ];
+		const {
+			currentTier,
+			usagePeriod,
+			requestsCount: allTimeRequestsCount,
+			requestsLimit: freeRequestsLimit,
+		} = featureData;
 
-export const AI_Assistant_Initial_State = {
-	hasFeature: !! aiAssistantFeature?.[ 'has-feature' ],
-	isOverLimit: !! aiAssistantFeature?.[ 'is-over-limit' ],
-	requestsCount: aiAssistantFeature?.[ 'requests-count' ] || 0,
-	requestsLimit: aiAssistantFeature?.[ 'requests-limit' ] || NUM_FREE_REQUESTS_LIMIT,
-	requireUpgrade: !! aiAssistantFeature?.[ 'site-require-upgrade' ],
-	errorMessage: aiAssistantFeature?.[ 'error-message' ] || '',
-	errorCode: aiAssistantFeature?.[ 'error-code' ],
-	upgradeType: aiAssistantFeature?.[ 'upgrade-type' ] || 'default',
-};
+		const planType = getPlanType( currentTier );
 
-export async function getAIFeatures(): Promise< AIFeatureProps > {
-	const response: SiteAIAssistantFeatureEndpointResponseProps = await apiFetch( {
-		path: '/wpcom/v2/jetpack-ai/ai-assistant-feature',
-	} );
+		const actualRequestsCount =
+			planType === PLAN_TYPE_TIERED ? usagePeriod?.requestsCount : allTimeRequestsCount;
+		const actualRequestsLimit =
+			planType === PLAN_TYPE_FREE ? freeRequestsLimit : currentTier?.limit;
 
-	try {
 		return {
-			hasFeature: !! response[ 'has-feature' ],
-			isOverLimit: !! response[ 'is-over-limit' ],
-			requestsCount: response[ 'requests-count' ],
-			requestsLimit: response[ 'requests-limit' ],
-			requireUpgrade: !! response[ 'site-require-upgrade' ],
-			errorMessage: response[ 'error-message' ],
-			errorCode: response[ 'error-code' ],
-			upgradeType: response[ 'upgrade-type' ],
+			data: featureData,
+			loading: getIsRequestingAiAssistantFeature(),
+			requestsCount: actualRequestsCount,
+			requestsLimit: actualRequestsLimit,
 		};
-	} catch ( error ) {
-		console.error( error ); // eslint-disable-line no-console
-	}
-}
-
-export default function useAIFeature() {
-	const [ data, setData ] = useState< AIFeatureProps >( AI_Assistant_Initial_State );
-
-	useEffect( () => {
-		getAIFeatures().then( setData );
 	}, [] );
+
+	const {
+		fetchAiAssistantFeature: loadFeatures,
+		increaseAiAssistantRequestsCount: increaseRequestsCount,
+		dequeueAiAssistantFeatureAsyncRequest: dequeueAsyncRequest,
+	} = useDispatch( 'wordpress-com/plans' );
 
 	return {
 		...data,
-		refresh: () => getAIFeatures().then( setData ),
+		requestsCount,
+		requestsLimit,
+		loading,
+		error: null, // @todo: handle error at store level
+		refresh: loadFeatures,
+		increaseRequestsCount,
+		dequeueAsyncRequest,
 	};
 }

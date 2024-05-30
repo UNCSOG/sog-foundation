@@ -28,9 +28,12 @@ class Columns extends \Beehive\Google\Collection
      * @var string
      */
     public $etag;
+    /**
+     * @var Column[]
+     */
+    public $items;
     protected $itemsType = Column::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var string
      */

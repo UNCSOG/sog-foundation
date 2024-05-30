@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\Analytics;
 
 class AccountTicket extends \Beehive\Google\Model
 {
+    /**
+     * @var Account
+     */
+    public $account;
     protected $accountType = Account::class;
     protected $accountDataType = '';
-    public $account;
     /**
      * @var string
      */
@@ -30,16 +33,22 @@ class AccountTicket extends \Beehive\Google\Model
      * @var string
      */
     public $kind;
+    /**
+     * @var Profile
+     */
+    public $profile;
     protected $profileType = Profile::class;
     protected $profileDataType = '';
-    public $profile;
     /**
      * @var string
      */
     public $redirectUri;
+    /**
+     * @var Webproperty
+     */
+    public $webproperty;
     protected $webpropertyType = Webproperty::class;
     protected $webpropertyDataType = '';
-    public $webproperty;
     /**
      * @param Account
      */

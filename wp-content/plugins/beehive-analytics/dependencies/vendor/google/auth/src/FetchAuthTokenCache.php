@@ -22,7 +22,7 @@ use Beehive\Psr\Cache\CacheItemPoolInterface;
  * A class to implement caching for any object implementing
  * FetchAuthTokenInterface
  */
-class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface, UpdateMetadataInterface
+class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInterface, GetUniverseDomainInterface, SignBlobInterface, ProjectIdProviderInterface, UpdateMetadataInterface
 {
     use CacheTrait;
     /**
@@ -30,16 +30,12 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
      */
     private $fetcher;
     /**
-     * @var array
+     * @var int
      */
-    private $cacheConfig;
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
+    private $eagerRefreshThresholdSeconds = 10;
     /**
      * @param FetchAuthTokenInterface $fetcher A credentials fetcher
-     * @param array $cacheConfig Configuration for the cache
+     * @param array<mixed> $cacheConfig Configuration for the cache
      * @param CacheItemPoolInterface $cache
      */
     public function __construct(FetchAuthTokenInterface $fetcher, array $cacheConfig = null, CacheItemPoolInterface $cache)
@@ -62,7 +58,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
      * from the supplied fetcher.
      *
      * @param callable $httpHandler callback which delivers psr7 request
-     * @return array the response
+     * @return array<mixed> the response
      * @throws \Exception
      */
     public function fetchAuthToken(callable $httpHandler = null)
@@ -82,7 +78,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         return $this->getFullCacheKey($this->fetcher->getCacheKey());
     }
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getLastReceivedToken()
     {
@@ -121,7 +117,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         // This saves a call to the metadata server when a cached token exists.
         if ($this->fetcher instanceof Credentials\GCECredentials) {
             $cached = $this->fetchAuthTokenFromCache();
-            $accessToken = isset($cached['access_token']) ? $cached['access_token'] : null;
+            $accessToken = $cached['access_token'] ?? null;
             return $this->fetcher->signBlob($stringToSign, $forceOpenSsl, $accessToken);
         }
         return $this->fetcher->signBlob($stringToSign, $forceOpenSsl);
@@ -137,6 +133,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
+        return null;
     }
     /*
      * Get the Project ID from the fetcher.
@@ -153,13 +150,25 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         }
         return $this->fetcher->getProjectId($httpHandler);
     }
+    /*
+     * Get the Universe Domain from the fetcher.
+     *
+     * @return string
+     */
+    public function getUniverseDomain() : string
+    {
+        if ($this->fetcher instanceof GetUniverseDomainInterface) {
+            return $this->fetcher->getUniverseDomain();
+        }
+        return GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
+    }
     /**
      * Updates metadata with the authorization token.
      *
-     * @param array $metadata metadata hashmap
+     * @param array<mixed> $metadata metadata hashmap
      * @param string $authUri optional auth uri
      * @param callable $httpHandler callback which delivers psr7 request
-     * @return array updated metadata hashmap
+     * @return array<mixed> updated metadata hashmap
      * @throws \RuntimeException If the fetcher does not implement
      *     `Google\Auth\UpdateMetadataInterface`.
      */
@@ -183,6 +192,10 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         }
         return $newMetadata;
     }
+    /**
+     * @param string|null $authUri
+     * @return array<mixed>|null
+     */
     private function fetchAuthTokenFromCache($authUri = null)
     {
         // Use the cached value if its available.
@@ -200,13 +213,18 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
                 // (for JwtAccess and ID tokens)
                 return $cached;
             }
-            if (\time() < $cached['expires_at']) {
+            if (\time() + $this->eagerRefreshThresholdSeconds < $cached['expires_at']) {
                 // access token is not expired
                 return $cached;
             }
         }
         return null;
     }
+    /**
+     * @param array<mixed> $authToken
+     * @param string|null  $authUri
+     * @return void
+     */
     private function saveAuthTokenInCache($authToken, $authUri = null)
     {
         if (isset($authToken['access_token']) || isset($authToken['id_token'])) {

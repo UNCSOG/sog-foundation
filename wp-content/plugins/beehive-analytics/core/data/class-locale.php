@@ -69,7 +69,7 @@ class Locale {
 				'tos'          => __( 'Terms of Service', 'ga_trans' ),
 				'privacy'      => __( 'Privacy Policy', 'ga_trans' ),
 				'facebook'     => __( 'Facebook', 'ga_trans' ),
-				'twitter'      => __( 'Twitter', 'ga_trans' ),
+				'twitter'      => __( 'X', 'ga_trans' ),
 				'instagram'    => __( 'Instagram', 'ga_trans' ),
 				'free_plugins' => __( 'Free Plugins', 'ga_trans' ),
 				'membership'   => __( 'Membership', 'ga_trans' ),

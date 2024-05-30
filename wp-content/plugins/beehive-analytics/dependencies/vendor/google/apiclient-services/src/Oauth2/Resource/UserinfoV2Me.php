@@ -32,7 +32,7 @@ class UserinfoV2Me extends \Beehive\Google\Service\Resource
      * (me.get)
      *
      * @param array $optParams Optional parameters.
-     * @return Userinfo
+     * @return UserinfoModel
      */
     public function get($optParams = [])
     {

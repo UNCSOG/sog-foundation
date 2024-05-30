@@ -20,31 +20,52 @@ namespace Beehive\Google\Service\AnalyticsData;
 class RunPivotReportResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'rows';
+    /**
+     * @var Row[]
+     */
+    public $aggregates;
     protected $aggregatesType = Row::class;
     protected $aggregatesDataType = 'array';
-    public $aggregates;
+    /**
+     * @var DimensionHeader[]
+     */
+    public $dimensionHeaders;
     protected $dimensionHeadersType = DimensionHeader::class;
     protected $dimensionHeadersDataType = 'array';
-    public $dimensionHeaders;
     /**
      * @var string
      */
     public $kind;
+    /**
+     * @var ResponseMetaData
+     */
+    public $metadata;
     protected $metadataType = ResponseMetaData::class;
     protected $metadataDataType = '';
-    public $metadata;
+    /**
+     * @var MetricHeader[]
+     */
+    public $metricHeaders;
     protected $metricHeadersType = MetricHeader::class;
     protected $metricHeadersDataType = 'array';
-    public $metricHeaders;
+    /**
+     * @var PivotHeader[]
+     */
+    public $pivotHeaders;
     protected $pivotHeadersType = PivotHeader::class;
     protected $pivotHeadersDataType = 'array';
-    public $pivotHeaders;
+    /**
+     * @var PropertyQuota
+     */
+    public $propertyQuota;
     protected $propertyQuotaType = PropertyQuota::class;
     protected $propertyQuotaDataType = '';
-    public $propertyQuota;
+    /**
+     * @var Row[]
+     */
+    public $rows;
     protected $rowsType = Row::class;
     protected $rowsDataType = 'array';
-    public $rows;
     /**
      * @param Row[]
      */

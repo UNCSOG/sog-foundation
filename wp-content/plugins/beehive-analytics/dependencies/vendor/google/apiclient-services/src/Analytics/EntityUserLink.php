@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\Analytics;
 
 class EntityUserLink extends \Beehive\Google\Model
 {
+    /**
+     * @var EntityUserLinkEntity
+     */
+    public $entity;
     protected $entityType = EntityUserLinkEntity::class;
     protected $entityDataType = '';
-    public $entity;
     /**
      * @var string
      */
@@ -30,16 +33,22 @@ class EntityUserLink extends \Beehive\Google\Model
      * @var string
      */
     public $kind;
+    /**
+     * @var EntityUserLinkPermissions
+     */
+    public $permissions;
     protected $permissionsType = EntityUserLinkPermissions::class;
     protected $permissionsDataType = '';
-    public $permissions;
     /**
      * @var string
      */
     public $selfLink;
+    /**
+     * @var UserRef
+     */
+    public $userRef;
     protected $userRefType = UserRef::class;
     protected $userRefDataType = '';
-    public $userRef;
     /**
      * @param EntityUserLinkEntity
      */

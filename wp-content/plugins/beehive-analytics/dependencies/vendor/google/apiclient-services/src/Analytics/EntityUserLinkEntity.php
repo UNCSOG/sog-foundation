@@ -19,15 +19,24 @@ namespace Beehive\Google\Service\Analytics;
 
 class EntityUserLinkEntity extends \Beehive\Google\Model
 {
+    /**
+     * @var AccountRef
+     */
+    public $accountRef;
     protected $accountRefType = AccountRef::class;
     protected $accountRefDataType = '';
-    public $accountRef;
+    /**
+     * @var ProfileRef
+     */
+    public $profileRef;
     protected $profileRefType = ProfileRef::class;
     protected $profileRefDataType = '';
-    public $profileRef;
+    /**
+     * @var WebPropertyRef
+     */
+    public $webPropertyRef;
     protected $webPropertyRefType = WebPropertyRef::class;
     protected $webPropertyRefDataType = '';
-    public $webPropertyRef;
     /**
      * @param AccountRef
      */

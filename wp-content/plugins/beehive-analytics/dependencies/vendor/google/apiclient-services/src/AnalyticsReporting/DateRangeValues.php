@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class DateRangeValues extends \Beehive\Google\Collection
 {
     protected $collection_key = 'values';
+    /**
+     * @var PivotValueRegion[]
+     */
+    public $pivotValueRegions;
     protected $pivotValueRegionsType = PivotValueRegion::class;
     protected $pivotValueRegionsDataType = 'array';
-    public $pivotValueRegions;
     /**
      * @var string[]
      */

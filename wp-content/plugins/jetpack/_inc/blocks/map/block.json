@@ -64,5 +64,10 @@
             "default": true
         }
     },
-    "editorScript": "file:../editor.js"
+    "example": {
+        "attributes": {
+            "preview": true
+        }
+    },
+    "editorScript": "jetpack-blocks-editor"
 }

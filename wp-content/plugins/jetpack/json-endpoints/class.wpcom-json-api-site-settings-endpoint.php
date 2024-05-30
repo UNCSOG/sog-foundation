@@ -45,12 +45,15 @@ new WPCOM_JSON_API_Site_Settings_Endpoint(
 		),
 
 		'request_format'      => array(
+			'migration_source_site_domain'            => '(string) The source site URL, from the migration flow',
+			'in_site_migration_flow'                  => '(string) The migration flow the site is in',
 			'blogname'                                => '(string) Blog name',
 			'blogdescription'                         => '(string) Blog description',
 			'default_pingback_flag'                   => '(bool) Notify blogs linked from article?',
 			'default_ping_status'                     => '(bool) Allow link notifications from other blogs?',
 			'default_comment_status'                  => '(bool) Allow comments on new articles?',
 			'blog_public'                             => '(string) Site visibility; -1: private, 0: discourage search engines, 1: allow search engines',
+			'wpcom_data_sharing_opt_out'              => '(bool) Did the site opt out of sharing public content with third parties and research partners?',
 			'jetpack_sync_non_public_post_stati'      => '(bool) allow sync of post and pages with non-public posts stati',
 			'jetpack_relatedposts_enabled'            => '(bool) Enable related posts?',
 			'jetpack_relatedposts_show_context'       => '(bool) Show post\'s tags and category in related posts?',
@@ -78,7 +81,7 @@ new WPCOM_JSON_API_Site_Settings_Endpoint(
 			'moderation_notify'                       => '(bool) Email me when a comment is helf for moderation?',
 			'social_notifications_like'               => '(bool) Email me when someone likes my post?',
 			'social_notifications_reblog'             => '(bool) Email me when someone reblogs my post?',
-			'social_notifications_subscribe'          => '(bool) Email me when someone follows my blog?',
+			'social_notifications_subscribe'          => '(bool) Email me when someone subscribes to my blog?',
 			'comment_moderation'                      => '(bool) Moderate comments for manual approval?',
 			'comment_previously_approved'             => '(bool) Moderate comments unless author has a previously-approved comment?',
 			'comment_max_links'                       => '(int) Moderate comments that contain X or more links',
@@ -118,6 +121,10 @@ new WPCOM_JSON_API_Site_Settings_Endpoint(
 			'rss_use_excerpt'                         => '(bool) Whether the RSS feed will use post excerpts',
 			'launchpad_screen'                        => '(string) Whether or not launchpad is presented and what size it will be',
 			'sm_enabled'                              => '(bool) Whether the newsletter subscribe modal is enabled',
+			'jetpack_subscribe_overlay_enabled'       => '(bool) Whether the newsletter subscribe overlay is enabled',
+			'jetpack_subscriptions_subscribe_post_end_enabled' => '(bool) Whether the Subscribe block at the end of each post placement is enabled',
+			'jetpack_subscriptions_login_navigation_enabled' => '(bool) Whether the Subscriber Login block navigation placement is enabled',
+			'wpcom_ai_site_prompt'                    => '(string) User input in the AI site prompt',
 		),
 
 		'response_format'     => array(
@@ -203,7 +210,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 	 *
 	 * @param array $copy_dirs Array of files to be included in theme context.
 	 */
-	public function wpcom_restapi_copy_theme_plugin_actions( $copy_dirs ) {
+	public static function wpcom_restapi_copy_theme_plugin_actions( $copy_dirs ) {
 		$theme_name        = get_stylesheet();
 		$default_file_name = WP_CONTENT_DIR . "/mu-plugins/infinity/themes/{$theme_name}.php";
 
@@ -374,6 +381,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 						// new stuff starts here.
 						'instant_search_enabled'           => (bool) get_option( 'instant_search_enabled' ),
 						'blog_public'                      => (int) get_option( 'blog_public' ),
+						'wpcom_data_sharing_opt_out'       => (bool) get_option( 'wpcom_data_sharing_opt_out' ),
 						'jetpack_sync_non_public_post_stati' => (bool) Jetpack_Options::get_option( 'sync_non_public_post_stati' ),
 						'jetpack_relatedposts_allowed'     => (bool) $this->jetpack_relatedposts_supported(),
 						'jetpack_relatedposts_enabled'     => (bool) $jetpack_relatedposts_options['enabled'],
@@ -449,18 +457,29 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 						'wpcom_newsletter_categories'      => $newsletter_category_ids,
 						'wpcom_newsletter_categories_enabled' => (bool) get_option( 'wpcom_newsletter_categories_enabled' ),
 						'sm_enabled'                       => (bool) get_option( 'sm_enabled' ),
+						'jetpack_subscribe_overlay_enabled' => (bool) get_option( 'jetpack_subscribe_overlay_enabled' ),
+						'jetpack_subscriptions_subscribe_post_end_enabled' => (bool) get_option( 'jetpack_subscriptions_subscribe_post_end_enabled' ),
+						'jetpack_subscriptions_login_navigation_enabled' => (bool) get_option( 'jetpack_subscriptions_login_navigation_enabled' ),
 						'wpcom_gifting_subscription'       => (bool) get_option( 'wpcom_gifting_subscription', $this->get_wpcom_gifting_subscription_default() ),
 						'wpcom_reader_views_enabled'       => (bool) get_option( 'wpcom_reader_views_enabled', true ),
 						'wpcom_subscription_emails_use_excerpt' => $this->get_wpcom_subscription_emails_use_excerpt_option(),
+						'jetpack_subscriptions_reply_to'   => (string) $this->get_subscriptions_reply_to_option(),
 						'show_on_front'                    => (string) get_option( 'show_on_front' ),
 						'page_on_front'                    => (string) get_option( 'page_on_front' ),
 						'page_for_posts'                   => (string) get_option( 'page_for_posts' ),
 						'subscription_options'             => (array) get_option( 'subscription_options' ),
+						'jetpack_verbum_subscription_modal' => (bool) get_option( 'jetpack_verbum_subscription_modal', true ),
+						'enable_verbum_commenting'         => (bool) get_option( 'enable_verbum_commenting', true ),
+						'enable_blocks_comments'           => (bool) get_option( 'enable_blocks_comments', true ),
+						'highlander_comment_form_prompt'   => $this->get_highlander_comment_form_prompt_option(),
+						'jetpack_comment_form_color_scheme' => (string) get_option( 'jetpack_comment_form_color_scheme' ),
+						'in_site_migration_flow'           => (string) get_option( 'in_site_migration_flow', '' ),
+						'migration_source_site_domain'     => (string) get_option( 'migration_source_site_domain' ),
 					);
 
 					if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
-						$response[ $key ]['wpcom_publish_posts_with_markdown']    = (bool) WPCom_Markdown::is_posting_enabled();
-						$response[ $key ]['wpcom_publish_comments_with_markdown'] = (bool) WPCom_Markdown::is_commenting_enabled();
+						$response[ $key ]['wpcom_publish_posts_with_markdown']    = (bool) WPCom_Markdown::get_instance()->is_posting_enabled();
+						$response[ $key ]['wpcom_publish_comments_with_markdown'] = (bool) WPCom_Markdown::get_instance()->is_commenting_enabled();
 
 						// WPCOM-specific Infinite Scroll Settings.
 						if ( is_callable( array( 'The_Neverending_Home_Page', 'get_settings' ) ) ) {
@@ -533,7 +552,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					 * - 5 days before the monthly plan expiration.
 					 * This is to match the gifting banner logic.
 					 */
-					$days_of_warning          = false !== strpos( $purchase->product_slug, 'monthly' ) ? 5 : 54;
+					$days_of_warning          = str_contains( $purchase->product_slug, 'monthly' ) ? 5 : 54;
 					$seconds_until_expiration = strtotime( $purchase->expiry_date ) - time();
 					if ( $seconds_until_expiration >= $days_of_warning * DAY_IN_SECONDS ) {
 						return false;
@@ -572,8 +591,20 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 	 * Get GA tracking code.
 	 */
 	protected function get_google_analytics() {
-		$option_name = defined( 'IS_WPCOM' ) && IS_WPCOM ? 'wga' : 'jetpack_wga';
+		$option_name = $this->get_google_analytics_option_name();
+
 		return get_option( $option_name );
+	}
+
+	/**
+	 * Get GA tracking code option name.
+	 */
+	protected function get_google_analytics_option_name() {
+		/** This filter is documented in class.json-api-endpoints.php */
+		$is_jetpack  = true === apply_filters( 'is_jetpack_site', false, get_current_blog_id() );
+		$option_name = $is_jetpack ? 'jetpack_wga' : 'wga';
+
+		return $option_name;
 	}
 
 	/**
@@ -690,8 +721,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 						return new WP_Error( 'invalid_code', 'Invalid UA ID' );
 					}
 
-					$is_wpcom    = defined( 'IS_WPCOM' ) && IS_WPCOM;
-					$option_name = $is_wpcom ? 'wga' : 'jetpack_wga';
+					$option_name = $this->get_google_analytics_option_name();
 
 					$wga         = get_option( $option_name, array() );
 					$wga['code'] = $value['code']; // maintain compatibility with wp-google-analytics.
@@ -715,6 +745,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					/** This action is documented in modules/widgets/social-media-icons.php */
 					do_action( 'jetpack_bump_stats_extras', 'google-analytics', $enabled_or_disabled );
 
+					$is_wpcom = defined( 'IS_WPCOM' ) && IS_WPCOM;
 					if ( $is_wpcom ) {
 						$business_plugins = WPCOM_Business_Plugins::instance();
 						$business_plugins->activate_plugin( 'wp-google-analytics' );
@@ -735,6 +766,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 				case 'jetpack_portfolio':
 				case 'jetpack_comment_likes_enabled':
 				case 'wpcom_reader_views_enabled':
+				case 'jetpack_verbum_subscription_modal':
 					// settings are stored as 1|0.
 					$coerce_value = (int) $value;
 					if ( update_option( $key, $coerce_value ) ) {
@@ -813,7 +845,7 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 						break;
 					}
 
-					$allowed_keys   = array( 'invitation', 'comment_follow' );
+					$allowed_keys   = array( 'invitation', 'comment_follow', 'welcome' );
 					$filtered_value = array_filter(
 						$value,
 						function ( $key ) use ( $allowed_keys ) {
@@ -997,6 +1029,21 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					$updated[ $key ] = (bool) $value;
 					break;
 
+				case 'jetpack_subscriptions_reply_to':
+					require_once JETPACK__PLUGIN_DIR . 'modules/subscriptions/class-settings.php';
+					$to_set_value = Automattic\Jetpack\Modules\Subscriptions\Settings::is_valid_reply_to( $value )
+						? $value
+						: Automattic\Jetpack\Modules\Subscriptions\Settings::get_default_reply_to();
+
+					update_option( 'jetpack_subscriptions_reply_to', (string) $to_set_value );
+					$updated[ $key ] = (bool) $value;
+					break;
+				case 'jetpack_subscriptions_from_name':
+					$to_set_value = sanitize_text_field( $value );
+					update_option( 'jetpack_subscriptions_from_name', (string) $to_set_value );
+					$updated[ $key ] = (bool) $value;
+					break;
+
 				case 'instant_search_enabled':
 					update_option( 'instant_search_enabled', (bool) $value );
 					$updated[ $key ] = (bool) $value;
@@ -1067,6 +1114,21 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 					$updated[ $key ] = (int) (bool) $value;
 					break;
 
+				case 'jetpack_subscribe_overlay_enabled':
+					update_option( 'jetpack_subscribe_overlay_enabled', (int) (bool) $value );
+					$updated[ $key ] = (int) (bool) $value;
+					break;
+
+				case 'jetpack_subscriptions_subscribe_post_end_enabled':
+					update_option( 'jetpack_subscriptions_subscribe_post_end_enabled', (int) (bool) $value );
+					$updated[ $key ] = (int) (bool) $value;
+					break;
+
+				case 'jetpack_subscriptions_login_navigation_enabled':
+					update_option( 'jetpack_subscriptions_login_navigation_enabled', (int) (bool) $value );
+					$updated[ $key ] = (int) (bool) $value;
+					break;
+
 				case 'show_on_front':
 					if ( in_array( $value, array( 'page', 'posts' ), true ) && update_option( $key, $value ) ) {
 							$updated[ $key ] = $value;
@@ -1098,6 +1160,41 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 						$updated[ $key ] = $value;
 					}
 
+					break;
+
+				case 'in_site_migration_flow':
+					if ( empty( $value ) ) {
+						delete_option( 'in_site_migration_flow' );
+						break;
+					}
+
+					$migration_flow_whitelist = array(
+						'site-migration',
+						'migration-signup',
+					);
+
+					if ( ! in_array( $value, $migration_flow_whitelist, true ) ) {
+						break;
+					}
+
+					update_option( 'in_site_migration_flow', $value );
+					$updated[ $key ] = $value;
+					break;
+
+				case 'migration_source_site_domain':
+					// If we get an empty value, delete the option
+					if ( empty( $value ) ) {
+						delete_option( 'migration_source_site_domain' );
+						break;
+					}
+
+					// If we get a non-url value, don't update the option.
+					if ( wp_http_validate_url( $value ) === false ) {
+						break;
+					}
+
+					update_option( 'migration_source_site_domain', $value );
+					$updated[ $key ] = $value;
 					break;
 
 				default:
@@ -1202,6 +1299,21 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 	}
 
 	/**
+	 * Get the string value of the jetpack_subscriptions_reply_to option.
+	 * When the option is not set, it will retun 'no-reply'.
+	 *
+	 * @return string
+	 */
+	protected function get_subscriptions_reply_to_option() {
+		$reply_to = get_option( 'jetpack_subscriptions_reply_to', null );
+		if ( $reply_to === null ) {
+			require_once JETPACK__PLUGIN_DIR . 'modules/subscriptions/class-settings.php';
+			return Automattic\Jetpack\Modules\Subscriptions\Settings::get_default_reply_to();
+		}
+		return $reply_to;
+	}
+
+	/**
 	 * Check if the given value is a valid page ID for the current site.
 	 *
 	 * @param mixed $value The value to check.
@@ -1219,5 +1331,21 @@ class WPCOM_JSON_API_Site_Settings_Endpoint extends WPCOM_JSON_API_Endpoint {
 		}
 
 		return $valid_page_id;
+	}
+
+	/**
+	 * Get the value of the highlander_comment_form_prompt option.
+	 * When the option is not set, it will return the default value.
+	 *
+	 * @return string
+	 */
+	protected function get_highlander_comment_form_prompt_option() {
+		$highlander_comment_form_prompt_option = get_option( 'highlander_comment_form_prompt' );
+
+		if ( empty( $highlander_comment_form_prompt_option ) ) {
+			return (string) __( 'Leave a comment', 'jetpack' );
+		}
+
+		return (string) $highlander_comment_form_prompt_option;
 	}
 }

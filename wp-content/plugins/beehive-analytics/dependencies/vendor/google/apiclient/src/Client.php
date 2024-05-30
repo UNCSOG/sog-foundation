@@ -54,7 +54,7 @@ class Client
     const USER_AGENT_SUFFIX = "google-api-php-client/";
     const OAUTH2_REVOKE_URI = 'https://oauth2.googleapis.com/revoke';
     const OAUTH2_TOKEN_URI = 'https://oauth2.googleapis.com/token';
-    const OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth';
+    const OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
     const API_BASE_PATH = 'https://www.googleapis.com';
     /**
      * @var ?OAuth2 $auth
@@ -209,9 +209,10 @@ class Client
      * Helper wrapped around the OAuth 2.0 implementation.
      *
      * @param string $code code from accounts.google.com
+     * @param string $codeVerifier the code verifier used for PKCE (if applicable)
      * @return array access token
      */
-    public function fetchAccessTokenWithAuthCode($code)
+    public function fetchAccessTokenWithAuthCode($code, $codeVerifier = null)
     {
         if (\strlen($code) == 0) {
             throw new InvalidArgumentException("Invalid code");
@@ -219,6 +220,9 @@ class Client
         $auth = $this->getOAuth2Service();
         $auth->setCode($code);
         $auth->setRedirectUri($this->getRedirectUri());
+        if ($codeVerifier) {
+            $auth->setCodeVerifier($codeVerifier);
+        }
         $httpHandler = HttpHandlerFactory::build($this->getHttpClient());
         $creds = $auth->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
@@ -301,9 +305,10 @@ class Client
      * The authorization endpoint allows the user to first
      * authenticate, and then grant/deny the access request.
      * @param string|array $scope The scope is expressed as an array or list of space-delimited strings.
+     * @param array $queryParams Querystring params to add to the authorization URL.
      * @return string
      */
-    public function createAuthUrl($scope = null)
+    public function createAuthUrl($scope = null, array $queryParams = [])
     {
         if (empty($scope)) {
             $scope = $this->prepareScopes();
@@ -315,7 +320,7 @@ class Client
         $approvalPrompt = $this->config['prompt'] ? null : $this->config['approval_prompt'];
         // include_granted_scopes should be string "true", string "false", or null
         $includeGrantedScopes = $this->config['include_granted_scopes'] === null ? null : \var_export($this->config['include_granted_scopes'], \true);
-        $params = \array_filter(['access_type' => $this->config['access_type'], 'approval_prompt' => $approvalPrompt, 'hd' => $this->config['hd'], 'include_granted_scopes' => $includeGrantedScopes, 'login_hint' => $this->config['login_hint'], 'openid.realm' => $this->config['openid.realm'], 'prompt' => $this->config['prompt'], 'response_type' => 'code', 'scope' => $scope, 'state' => $this->config['state']]);
+        $params = \array_filter(['access_type' => $this->config['access_type'], 'approval_prompt' => $approvalPrompt, 'hd' => $this->config['hd'], 'include_granted_scopes' => $includeGrantedScopes, 'login_hint' => $this->config['login_hint'], 'openid.realm' => $this->config['openid.realm'], 'prompt' => $this->config['prompt'], 'redirect_uri' => $this->config['redirect_uri'], 'response_type' => 'code', 'scope' => $scope, 'state' => $this->config['state']]) + $queryParams;
         // If the list of scopes contains plus.login, add request_visible_actions
         // to auth URL.
         $rva = $this->config['request_visible_actions'];
@@ -959,7 +964,6 @@ class Client
         if (\defined('\\Beehive\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
             $guzzleVersion = ClientInterface::MAJOR_VERSION;
         } elseif (\defined('\\Beehive\GuzzleHttp\ClientInterface::VERSION')) {
-            // @phpstan-ignore-next-line
             $guzzleVersion = (int) \substr(ClientInterface::VERSION, 0, 1);
         }
         if (5 === $guzzleVersion) {

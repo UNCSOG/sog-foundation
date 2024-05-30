@@ -28,12 +28,18 @@ class EcommerceData extends \Beehive\Google\Collection
      * @var string
      */
     public $ecommerceType;
+    /**
+     * @var ProductData[]
+     */
+    public $products;
     protected $productsType = ProductData::class;
     protected $productsDataType = 'array';
-    public $products;
+    /**
+     * @var TransactionData
+     */
+    public $transaction;
     protected $transactionType = TransactionData::class;
     protected $transactionDataType = '';
-    public $transaction;
     /**
      * @param string
      */

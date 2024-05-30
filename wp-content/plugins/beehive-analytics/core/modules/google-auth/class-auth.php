@@ -115,6 +115,9 @@ class Auth extends Base {
 		// Offline access.
 		$this->client()->setAccessType( 'offline' );
 
+		// Always show consent screen.
+		$this->client()->setPrompt( 'consent' );
+
 		// Ask for Approval prompt.
 		$this->client()->setApprovalPrompt( 'force' );
 
@@ -231,6 +234,27 @@ class Auth extends Base {
 
 		// Override redirect url.
 		Helper::instance()->set_redirect_url( $url );
+
+		// Set new access token if existing one is expired.
+		if ( $this->client->isAccessTokenExpired() ) {
+			if ( empty( $this->client->getRefreshToken() ) ) {
+				// Logout so users will have to login again.
+				$this->logout();
+			} else {
+				// Fetch new access token using refresh token.
+				$token = $this->client->fetchAccessTokenWithRefreshToken( $this->client->getRefreshToken() );
+				// If a valid token found.
+				if ( isset( $token['access_token'], $token['refresh_token'] ) ) {
+					// We don't need scope. It may get blocked by WAFs.
+					if ( isset( $token['scope'] ) ) {
+						unset( $token['scope'] );
+					}
+
+					// Update it so Google will not make an additional HTTP request every time to get new token.
+					beehive_analytics()->settings->update( 'access_token', wp_json_encode( $token ), 'google_login' );
+				}
+			}
+		}
 
 		/**
 		 * Action hook to execute after setting up Google client using default credentials.

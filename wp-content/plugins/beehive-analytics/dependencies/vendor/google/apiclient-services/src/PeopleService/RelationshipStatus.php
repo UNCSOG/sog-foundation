@@ -23,9 +23,12 @@ class RelationshipStatus extends \Beehive\Google\Model
      * @var string
      */
     public $formattedValue;
+    /**
+     * @var FieldMetadata
+     */
+    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

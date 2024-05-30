@@ -1,15 +1,15 @@
 === Beehive Analytics - Google Analytics Dashboard ===
 Plugin Name: Beehive Analytics - Google Analytics Dashboard
-Version: 3.4.9
+Version: 3.4.12
 Plugin URI: https://wpmudev.com/project/beehive-analytics-pro/
 Tags: google analytics, website analytics, google analytics report, google analytics dashboard, google analytics tracking, google analytics WordPress plugin, google analytics WordPress plugin, statistics, add google analytics to WordPress
 Author URI: https://wpmudev.com/
 Author: WPMU DEV
 Contributors: WPMUDEV
 Requires at least: 5.2
-Tested up to: 6.3
-Requires PHP: 7.4.33
-Stable tag: 3.4.9
+Tested up to: 6.5
+Requires PHP: 7.4
+Stable tag: 3.4.12
 License: GPLv2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -114,6 +114,9 @@ Beehive is completely free and does not require a paid upgrade. If you're intere
 = What about GDPR and User Privacy? =
 Beehive includes tools that make it easy for you to comply with data protection regulations and keep your visitor's data safe. When using features like Google Display Advertising, be sure and follow privacy guidelines with cookie notices and updated terms of service.
 
+= How can I report security issues or bugs?
+We take plugin security incredibly seriously; if you have a bug or vulnerability to report, you can do so through the Patchstack Vulnerability Disclosure Program. It’s fast, easy, and you will be notified when the issue is fixed. [Report a vulnerability](https://patchstack.com/database/vdp/beehive-analytics).
+
 == Screenshots ==
 
 1. Beehive makes connecting Google Analytics super simple
@@ -124,6 +127,23 @@ Beehive includes tools that make it easy for you to comply with data protection 
 6. Give capabilities based on user role
 
 == Changelog ==
+
+= 3.4.12 ( 2024-04-17 ) =
+
+- Fix: Google API authentication is broken.
+
+= 3.4.11 ( 2024-01-15 ) =
+
+- Fix: Unable to connect with Google.
+
+= 3.4.10 ( 2023-12-20 ) =
+
+- Enhance: Update UI library.
+- Enhance: Update Google library.
+- Enhance: PHP 8.1,8.2 & 8.3 support.
+- Enhance: Update icons.
+- Enhance: Copy updates.
+- Fix: Blank highlights modal.
 
 = 3.4.9 ( 2023-09-08 ) =
 

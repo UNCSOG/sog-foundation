@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class EntityAdWordsLinks extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var EntityAdWordsLink[]
+     */
+    public $items;
     protected $itemsType = EntityAdWordsLink::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

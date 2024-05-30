@@ -20,35 +20,56 @@ namespace Beehive\Google\Service\AnalyticsData;
 class RunPivotReportRequest extends \Beehive\Google\Collection
 {
     protected $collection_key = 'pivots';
+    /**
+     * @var CohortSpec
+     */
+    public $cohortSpec;
     protected $cohortSpecType = CohortSpec::class;
     protected $cohortSpecDataType = '';
-    public $cohortSpec;
     /**
      * @var string
      */
     public $currencyCode;
+    /**
+     * @var DateRange[]
+     */
+    public $dateRanges;
     protected $dateRangesType = DateRange::class;
     protected $dateRangesDataType = 'array';
-    public $dateRanges;
+    /**
+     * @var FilterExpression
+     */
+    public $dimensionFilter;
     protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
-    public $dimensionFilter;
+    /**
+     * @var Dimension[]
+     */
+    public $dimensions;
     protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
-    public $dimensions;
     /**
      * @var bool
      */
     public $keepEmptyRows;
+    /**
+     * @var FilterExpression
+     */
+    public $metricFilter;
     protected $metricFilterType = FilterExpression::class;
     protected $metricFilterDataType = '';
-    public $metricFilter;
+    /**
+     * @var Metric[]
+     */
+    public $metrics;
     protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    public $metrics;
+    /**
+     * @var Pivot[]
+     */
+    public $pivots;
     protected $pivotsType = Pivot::class;
     protected $pivotsDataType = 'array';
-    public $pivots;
     /**
      * @var string
      */

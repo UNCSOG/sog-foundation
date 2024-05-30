@@ -24,9 +24,12 @@ class SegmentSequenceStep extends \Beehive\Google\Collection
      * @var string
      */
     public $matchType;
+    /**
+     * @var OrFiltersForSegment[]
+     */
+    public $orFiltersForSegment;
     protected $orFiltersForSegmentType = OrFiltersForSegment::class;
     protected $orFiltersForSegmentDataType = 'array';
-    public $orFiltersForSegment;
     /**
      * @param string
      */

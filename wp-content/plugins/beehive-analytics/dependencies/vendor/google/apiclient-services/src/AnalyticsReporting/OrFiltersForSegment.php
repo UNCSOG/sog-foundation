@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class OrFiltersForSegment extends \Beehive\Google\Collection
 {
     protected $collection_key = 'segmentFilterClauses';
+    /**
+     * @var SegmentFilterClause[]
+     */
+    public $segmentFilterClauses;
     protected $segmentFilterClausesType = SegmentFilterClause::class;
     protected $segmentFilterClausesDataType = 'array';
-    public $segmentFilterClauses;
     /**
      * @param SegmentFilterClause[]
      */

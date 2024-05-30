@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\Analytics;
 
 class Account extends \Beehive\Google\Model
 {
+    /**
+     * @var AccountChildLink
+     */
+    public $childLink;
     protected $childLinkType = AccountChildLink::class;
     protected $childLinkDataType = '';
-    public $childLink;
     /**
      * @var string
      */
@@ -38,9 +41,12 @@ class Account extends \Beehive\Google\Model
      * @var string
      */
     public $name;
+    /**
+     * @var AccountPermissions
+     */
+    public $permissions;
     protected $permissionsType = AccountPermissions::class;
     protected $permissionsDataType = '';
-    public $permissions;
     /**
      * @var string
      */

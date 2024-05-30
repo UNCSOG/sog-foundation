@@ -24,9 +24,12 @@ class GoogleAnalyticsAdminV1betaListPropertiesResponse extends \Beehive\Google\C
      * @var string
      */
     public $nextPageToken;
+    /**
+     * @var GoogleAnalyticsAdminV1betaProperty[]
+     */
+    public $properties;
     protected $propertiesType = GoogleAnalyticsAdminV1betaProperty::class;
     protected $propertiesDataType = 'array';
-    public $properties;
     /**
      * @param string
      */

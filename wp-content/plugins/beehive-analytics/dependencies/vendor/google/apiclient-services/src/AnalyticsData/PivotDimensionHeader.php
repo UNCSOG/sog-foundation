@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\AnalyticsData;
 class PivotDimensionHeader extends \Beehive\Google\Collection
 {
     protected $collection_key = 'dimensionValues';
+    /**
+     * @var DimensionValue[]
+     */
+    public $dimensionValues;
     protected $dimensionValuesType = DimensionValue::class;
     protected $dimensionValuesDataType = 'array';
-    public $dimensionValues;
     /**
      * @param DimensionValue[]
      */

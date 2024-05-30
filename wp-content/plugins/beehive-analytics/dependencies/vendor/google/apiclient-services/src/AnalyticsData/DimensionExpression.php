@@ -19,15 +19,24 @@ namespace Beehive\Google\Service\AnalyticsData;
 
 class DimensionExpression extends \Beehive\Google\Model
 {
+    /**
+     * @var ConcatenateExpression
+     */
+    public $concatenate;
     protected $concatenateType = ConcatenateExpression::class;
     protected $concatenateDataType = '';
-    public $concatenate;
+    /**
+     * @var CaseExpression
+     */
+    public $lowerCase;
     protected $lowerCaseType = CaseExpression::class;
     protected $lowerCaseDataType = '';
-    public $lowerCase;
+    /**
+     * @var CaseExpression
+     */
+    public $upperCase;
     protected $upperCaseType = CaseExpression::class;
     protected $upperCaseDataType = '';
-    public $upperCase;
     /**
      * @param ConcatenateExpression
      */

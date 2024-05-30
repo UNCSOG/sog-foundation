@@ -72,9 +72,12 @@ class Experiment extends \Beehive\Google\Collection
      * @var string
      */
     public $optimizationType;
+    /**
+     * @var ExperimentParentLink
+     */
+    public $parentLink;
     protected $parentLinkType = ExperimentParentLink::class;
     protected $parentLinkDataType = '';
-    public $parentLink;
     /**
      * @var string
      */
@@ -112,9 +115,12 @@ class Experiment extends \Beehive\Google\Collection
      * @var string
      */
     public $updated;
+    /**
+     * @var ExperimentVariations[]
+     */
+    public $variations;
     protected $variationsType = ExperimentVariations::class;
     protected $variationsDataType = 'array';
-    public $variations;
     /**
      * @var string
      */

@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest extends \Beehive\Google\Model
 {
+    /**
+     * @var GoogleAnalyticsAdminV1betaAccount
+     */
+    public $account;
     protected $accountType = GoogleAnalyticsAdminV1betaAccount::class;
     protected $accountDataType = '';
-    public $account;
     /**
      * @var string
      */

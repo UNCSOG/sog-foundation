@@ -22,12 +22,6 @@
 				</p>
 			</div>
 			<div class="sui-box-body"></div>
-			<image-tag
-				v-if="!$vars.whitelabel.hide_branding"
-				src="onboarding/finishing.png"
-				class="sui-image sui-image-center"
-				:alt="$i18n.label.finishing_setup"
-			/>
 		</div>
 	</div>
 </template>

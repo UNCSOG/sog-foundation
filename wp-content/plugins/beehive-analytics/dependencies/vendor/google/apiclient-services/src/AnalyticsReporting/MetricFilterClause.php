@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class MetricFilterClause extends \Beehive\Google\Collection
 {
     protected $collection_key = 'filters';
+    /**
+     * @var MetricFilter[]
+     */
+    public $filters;
     protected $filtersType = MetricFilter::class;
     protected $filtersDataType = 'array';
-    public $filters;
     /**
      * @var string
      */

@@ -28,9 +28,12 @@ class Activity extends \Beehive\Google\Collection
      * @var string
      */
     public $activityType;
+    /**
+     * @var ScreenviewData
+     */
+    public $appview;
     protected $appviewType = ScreenviewData::class;
     protected $appviewDataType = '';
-    public $appview;
     /**
      * @var string
      */
@@ -39,18 +42,30 @@ class Activity extends \Beehive\Google\Collection
      * @var string
      */
     public $channelGrouping;
+    /**
+     * @var CustomDimension[]
+     */
+    public $customDimension;
     protected $customDimensionType = CustomDimension::class;
     protected $customDimensionDataType = 'array';
-    public $customDimension;
+    /**
+     * @var EcommerceData
+     */
+    public $ecommerce;
     protected $ecommerceType = EcommerceData::class;
     protected $ecommerceDataType = '';
-    public $ecommerce;
+    /**
+     * @var EventData
+     */
+    public $event;
     protected $eventType = EventData::class;
     protected $eventDataType = '';
-    public $event;
+    /**
+     * @var GoalSetData
+     */
+    public $goals;
     protected $goalsType = GoalSetData::class;
     protected $goalsDataType = '';
-    public $goals;
     /**
      * @var string
      */
@@ -67,9 +82,12 @@ class Activity extends \Beehive\Google\Collection
      * @var string
      */
     public $medium;
+    /**
+     * @var PageviewData
+     */
+    public $pageview;
     protected $pageviewType = PageviewData::class;
     protected $pageviewDataType = '';
-    public $pageview;
     /**
      * @var string
      */

@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class CustomDataSources extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var CustomDataSource[]
+     */
+    public $items;
     protected $itemsType = CustomDataSource::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

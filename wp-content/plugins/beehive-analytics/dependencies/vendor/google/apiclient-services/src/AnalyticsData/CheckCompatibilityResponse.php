@@ -20,12 +20,18 @@ namespace Beehive\Google\Service\AnalyticsData;
 class CheckCompatibilityResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'metricCompatibilities';
+    /**
+     * @var DimensionCompatibility[]
+     */
+    public $dimensionCompatibilities;
     protected $dimensionCompatibilitiesType = DimensionCompatibility::class;
     protected $dimensionCompatibilitiesDataType = 'array';
-    public $dimensionCompatibilities;
+    /**
+     * @var MetricCompatibility[]
+     */
+    public $metricCompatibilities;
     protected $metricCompatibilitiesType = MetricCompatibility::class;
     protected $metricCompatibilitiesDataType = 'array';
-    public $metricCompatibilities;
     /**
      * @param DimensionCompatibility[]
      */

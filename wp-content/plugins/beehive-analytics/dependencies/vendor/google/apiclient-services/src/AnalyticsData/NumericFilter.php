@@ -23,9 +23,12 @@ class NumericFilter extends \Beehive\Google\Model
      * @var string
      */
     public $operation;
+    /**
+     * @var NumericValue
+     */
+    public $value;
     protected $valueType = NumericValue::class;
     protected $valueDataType = '';
-    public $value;
     /**
      * @param string
      */

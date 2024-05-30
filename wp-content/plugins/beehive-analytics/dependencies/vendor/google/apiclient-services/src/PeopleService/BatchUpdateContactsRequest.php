@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\PeopleService;
 class BatchUpdateContactsRequest extends \Beehive\Google\Collection
 {
     protected $collection_key = 'sources';
+    /**
+     * @var Person[]
+     */
+    public $contacts;
     protected $contactsType = Person::class;
     protected $contactsDataType = 'map';
-    public $contacts;
     /**
      * @var string
      */

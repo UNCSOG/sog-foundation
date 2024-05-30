@@ -40,9 +40,12 @@ class WebPropertySummary extends \Beehive\Google\Collection
      * @var string
      */
     public $name;
+    /**
+     * @var ProfileSummary[]
+     */
+    public $profiles;
     protected $profilesType = ProfileSummary::class;
     protected $profilesDataType = 'array';
-    public $profiles;
     /**
      * @var bool
      */

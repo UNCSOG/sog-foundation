@@ -32,19 +32,28 @@ class ReportData extends \Beehive\Google\Collection
      * @var bool
      */
     public $isDataGolden;
+    /**
+     * @var DateRangeValues[]
+     */
+    public $maximums;
     protected $maximumsType = DateRangeValues::class;
     protected $maximumsDataType = 'array';
-    public $maximums;
+    /**
+     * @var DateRangeValues[]
+     */
+    public $minimums;
     protected $minimumsType = DateRangeValues::class;
     protected $minimumsDataType = 'array';
-    public $minimums;
     /**
      * @var int
      */
     public $rowCount;
+    /**
+     * @var ReportRow[]
+     */
+    public $rows;
     protected $rowsType = ReportRow::class;
     protected $rowsDataType = 'array';
-    public $rows;
     /**
      * @var string[]
      */
@@ -53,9 +62,12 @@ class ReportData extends \Beehive\Google\Collection
      * @var string[]
      */
     public $samplingSpaceSizes;
+    /**
+     * @var DateRangeValues[]
+     */
+    public $totals;
     protected $totalsType = DateRangeValues::class;
     protected $totalsDataType = 'array';
-    public $totals;
     /**
      * @param string
      */

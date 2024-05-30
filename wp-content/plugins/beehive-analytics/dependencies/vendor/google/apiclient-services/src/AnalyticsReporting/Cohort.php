@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 
 class Cohort extends \Beehive\Google\Model
 {
+    /**
+     * @var DateRange
+     */
+    public $dateRange;
     protected $dateRangeType = DateRange::class;
     protected $dateRangeDataType = '';
-    public $dateRange;
     /**
      * @var string
      */

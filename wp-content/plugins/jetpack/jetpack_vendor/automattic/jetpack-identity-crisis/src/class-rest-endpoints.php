@@ -10,6 +10,7 @@ namespace Automattic\Jetpack\IdentityCrisis;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Rest_Authentication;
 use Jetpack_Options;
+use Jetpack_XMLRPC_Server;
 use WP_Error;
 use WP_REST_Server;
 
@@ -64,6 +65,17 @@ class REST_Endpoints {
 			)
 		);
 
+		// Fetch URL and secret for IDC check.
+		register_rest_route(
+			'jetpack/v4',
+			'/identity-crisis/idc-url-validation',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( static::class, 'validate_urls_and_set_secret' ),
+				'permission_callback' => array( static::class, 'url_secret_permission_check' ),
+			)
+		);
+
 		// Fetch URL verification secret.
 		register_rest_route(
 			'jetpack/v4',
@@ -72,6 +84,24 @@ class REST_Endpoints {
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( static::class, 'fetch_url_secret' ),
 				'permission_callback' => array( static::class, 'url_secret_permission_check' ),
+			)
+		);
+
+		// Fetch URL verification secret.
+		register_rest_route(
+			'jetpack/v4',
+			'/identity-crisis/compare-url-secret',
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => array( static::class, 'compare_url_secret' ),
+				'permission_callback' => array( static::class, 'compare_url_secret_permission_check' ),
+				'args'                => array(
+					'secret' => array(
+						'description' => __( 'URL secret to compare to the ones stored in the database.', 'jetpack-idc' ),
+						'type'        => 'string',
+						'required'    => true,
+					),
+				),
 			)
 		);
 	}
@@ -197,6 +227,20 @@ class REST_Endpoints {
 	}
 
 	/**
+	 * Endpoint for URL validation and creating a secret.
+	 *
+	 * @since 0.18.0
+	 *
+	 * @return array
+	 */
+	public static function validate_urls_and_set_secret() {
+		$xmlrpc_server = new Jetpack_XMLRPC_Server();
+		$result        = $xmlrpc_server->validate_urls_for_idc_mitigation();
+
+		return $result;
+	}
+
+	/**
 	 * Endpoint for fetching the existing secret.
 	 *
 	 * @return WP_Error|\WP_REST_Response
@@ -220,6 +264,31 @@ class REST_Endpoints {
 	}
 
 	/**
+	 * Endpoint for comparing the existing secret.
+	 *
+	 * @param \WP_REST_Request $request The request sent to the WP REST API.
+	 *
+	 * @return WP_Error|\WP_REST_Response
+	 */
+	public static function compare_url_secret( $request ) {
+		$match = false;
+
+		$storage = new URL_Secret();
+
+		if ( $storage->exists() ) {
+			$remote_secret = $request->get_param( 'secret' );
+			$match         = $remote_secret && hash_equals( $storage->get_secret(), $remote_secret );
+		}
+
+		return rest_ensure_response(
+			array(
+				'code'  => 'success',
+				'match' => $match,
+			)
+		);
+	}
+
+	/**
 	 * Verify url_secret create/fetch permissions (valid blog token authentication).
 	 *
 	 * @return true|WP_Error
@@ -232,5 +301,21 @@ class REST_Endpoints {
 				esc_html__( 'You do not have the correct user permissions to perform this action.', 'jetpack-idc' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
+	}
+
+	/**
+	 * The endpoint is only available on non-connected sites.
+	 * use `/identity-crisis/url-secret` for connected sites.
+	 *
+	 * @return true|WP_Error
+	 */
+	public static function compare_url_secret_permission_check() {
+		return ( new Connection_Manager() )->is_connected()
+			? new WP_Error(
+				'invalid_connection_status',
+				esc_html__( 'The endpoint is not available on connected sites.', 'jetpack-idc' ),
+				array( 'status' => 403 )
+			)
+			: true;
 	}
 }

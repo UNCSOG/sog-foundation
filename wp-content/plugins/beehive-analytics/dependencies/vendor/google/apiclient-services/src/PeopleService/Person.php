@@ -20,123 +20,228 @@ namespace Beehive\Google\Service\PeopleService;
 class Person extends \Beehive\Google\Collection
 {
     protected $collection_key = 'userDefined';
+    /**
+     * @var Address[]
+     */
+    public $addresses;
     protected $addressesType = Address::class;
     protected $addressesDataType = 'array';
-    public $addresses;
     /**
      * @var string
      */
     public $ageRange;
+    /**
+     * @var AgeRangeType[]
+     */
+    public $ageRanges;
     protected $ageRangesType = AgeRangeType::class;
     protected $ageRangesDataType = 'array';
-    public $ageRanges;
+    /**
+     * @var Biography[]
+     */
+    public $biographies;
     protected $biographiesType = Biography::class;
     protected $biographiesDataType = 'array';
-    public $biographies;
+    /**
+     * @var Birthday[]
+     */
+    public $birthdays;
     protected $birthdaysType = Birthday::class;
     protected $birthdaysDataType = 'array';
-    public $birthdays;
+    /**
+     * @var BraggingRights[]
+     */
+    public $braggingRights;
     protected $braggingRightsType = BraggingRights::class;
     protected $braggingRightsDataType = 'array';
-    public $braggingRights;
+    /**
+     * @var CalendarUrl[]
+     */
+    public $calendarUrls;
     protected $calendarUrlsType = CalendarUrl::class;
     protected $calendarUrlsDataType = 'array';
-    public $calendarUrls;
+    /**
+     * @var ClientData[]
+     */
+    public $clientData;
     protected $clientDataType = ClientData::class;
     protected $clientDataDataType = 'array';
-    public $clientData;
+    /**
+     * @var CoverPhoto[]
+     */
+    public $coverPhotos;
     protected $coverPhotosType = CoverPhoto::class;
     protected $coverPhotosDataType = 'array';
-    public $coverPhotos;
+    /**
+     * @var EmailAddress[]
+     */
+    public $emailAddresses;
     protected $emailAddressesType = EmailAddress::class;
     protected $emailAddressesDataType = 'array';
-    public $emailAddresses;
     /**
      * @var string
      */
     public $etag;
+    /**
+     * @var Event[]
+     */
+    public $events;
     protected $eventsType = Event::class;
     protected $eventsDataType = 'array';
-    public $events;
+    /**
+     * @var ExternalId[]
+     */
+    public $externalIds;
     protected $externalIdsType = ExternalId::class;
     protected $externalIdsDataType = 'array';
-    public $externalIds;
+    /**
+     * @var FileAs[]
+     */
+    public $fileAses;
     protected $fileAsesType = FileAs::class;
     protected $fileAsesDataType = 'array';
-    public $fileAses;
+    /**
+     * @var Gender[]
+     */
+    public $genders;
     protected $gendersType = Gender::class;
     protected $gendersDataType = 'array';
-    public $genders;
+    /**
+     * @var ImClient[]
+     */
+    public $imClients;
     protected $imClientsType = ImClient::class;
     protected $imClientsDataType = 'array';
-    public $imClients;
+    /**
+     * @var Interest[]
+     */
+    public $interests;
     protected $interestsType = Interest::class;
     protected $interestsDataType = 'array';
-    public $interests;
+    /**
+     * @var Locale[]
+     */
+    public $locales;
     protected $localesType = Locale::class;
     protected $localesDataType = 'array';
-    public $locales;
+    /**
+     * @var Location[]
+     */
+    public $locations;
     protected $locationsType = Location::class;
     protected $locationsDataType = 'array';
-    public $locations;
+    /**
+     * @var Membership[]
+     */
+    public $memberships;
     protected $membershipsType = Membership::class;
     protected $membershipsDataType = 'array';
-    public $memberships;
+    /**
+     * @var PersonMetadata
+     */
+    public $metadata;
     protected $metadataType = PersonMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
+    /**
+     * @var MiscKeyword[]
+     */
+    public $miscKeywords;
     protected $miscKeywordsType = MiscKeyword::class;
     protected $miscKeywordsDataType = 'array';
-    public $miscKeywords;
+    /**
+     * @var Name[]
+     */
+    public $names;
     protected $namesType = Name::class;
     protected $namesDataType = 'array';
-    public $names;
+    /**
+     * @var Nickname[]
+     */
+    public $nicknames;
     protected $nicknamesType = Nickname::class;
     protected $nicknamesDataType = 'array';
-    public $nicknames;
+    /**
+     * @var Occupation[]
+     */
+    public $occupations;
     protected $occupationsType = Occupation::class;
     protected $occupationsDataType = 'array';
-    public $occupations;
+    /**
+     * @var Organization[]
+     */
+    public $organizations;
     protected $organizationsType = Organization::class;
     protected $organizationsDataType = 'array';
-    public $organizations;
+    /**
+     * @var PhoneNumber[]
+     */
+    public $phoneNumbers;
     protected $phoneNumbersType = PhoneNumber::class;
     protected $phoneNumbersDataType = 'array';
-    public $phoneNumbers;
+    /**
+     * @var Photo[]
+     */
+    public $photos;
     protected $photosType = Photo::class;
     protected $photosDataType = 'array';
-    public $photos;
+    /**
+     * @var Relation[]
+     */
+    public $relations;
     protected $relationsType = Relation::class;
     protected $relationsDataType = 'array';
-    public $relations;
+    /**
+     * @var RelationshipInterest[]
+     */
+    public $relationshipInterests;
     protected $relationshipInterestsType = RelationshipInterest::class;
     protected $relationshipInterestsDataType = 'array';
-    public $relationshipInterests;
+    /**
+     * @var RelationshipStatus[]
+     */
+    public $relationshipStatuses;
     protected $relationshipStatusesType = RelationshipStatus::class;
     protected $relationshipStatusesDataType = 'array';
-    public $relationshipStatuses;
+    /**
+     * @var Residence[]
+     */
+    public $residences;
     protected $residencesType = Residence::class;
     protected $residencesDataType = 'array';
-    public $residences;
     /**
      * @var string
      */
     public $resourceName;
+    /**
+     * @var SipAddress[]
+     */
+    public $sipAddresses;
     protected $sipAddressesType = SipAddress::class;
     protected $sipAddressesDataType = 'array';
-    public $sipAddresses;
+    /**
+     * @var Skill[]
+     */
+    public $skills;
     protected $skillsType = Skill::class;
     protected $skillsDataType = 'array';
-    public $skills;
+    /**
+     * @var Tagline[]
+     */
+    public $taglines;
     protected $taglinesType = Tagline::class;
     protected $taglinesDataType = 'array';
-    public $taglines;
+    /**
+     * @var Url[]
+     */
+    public $urls;
     protected $urlsType = Url::class;
     protected $urlsDataType = 'array';
-    public $urls;
+    /**
+     * @var UserDefined[]
+     */
+    public $userDefined;
     protected $userDefinedType = UserDefined::class;
     protected $userDefinedDataType = 'array';
-    public $userDefined;
     /**
      * @param Address[]
      */

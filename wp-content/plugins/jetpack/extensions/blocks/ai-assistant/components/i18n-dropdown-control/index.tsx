@@ -1,7 +1,15 @@
 /*
  * External dependencies
  */
-import { MenuItem, MenuGroup, ToolbarDropdownMenu, DropdownMenu } from '@wordpress/components';
+import { useAnalytics } from '@automattic/jetpack-shared-extension-utils';
+import {
+	MenuItem,
+	MenuGroup,
+	ToolbarDropdownMenu,
+	DropdownMenu,
+	Button,
+	Tooltip,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Icon, chevronRight } from '@wordpress/icons';
 import { globe } from '@wordpress/icons';
@@ -31,14 +39,15 @@ export type LanguageProp = ( typeof LANGUAGE_LIST )[ number ];
 
 type LanguageDropdownControlProps = {
 	value?: LanguageProp;
-	onChange: ( value: string ) => void;
+	onChange: ( value: string, name?: string ) => void;
 	label?: string;
+	disabled?: boolean;
 };
 
 const defaultLanguageLocale =
 	window?.Jetpack_Editor_Initial_State?.siteLocale || navigator?.language;
 
-const defaultLabel = __( 'Translate', 'jetpack' );
+export const TRANSLATE_LABEL = __( 'Translate', 'jetpack' );
 
 export const defaultLanguage = ( defaultLanguageLocale?.split( '-' )[ 0 ] || 'en' ) as LanguageProp;
 
@@ -81,16 +90,6 @@ export const LANGUAGE_MAP = {
 	ko: {
 		label: __( 'Korean', 'jetpack' ),
 	},
-
-	id: {
-		label: __( 'Indonesian', 'jetpack' ),
-	},
-	tl: {
-		label: __( 'Filipino', 'jetpack' ),
-	},
-	vi: {
-		label: __( 'Vietnamese', 'jetpack' ),
-	},
 };
 
 export const I18nMenuGroup = ( {
@@ -109,7 +108,12 @@ export const I18nMenuGroup = ( {
 				return (
 					<MenuItem
 						key={ `key-${ language }` }
-						onClick={ () => onChange( language + ' (' + LANGUAGE_MAP[ language ].label + ')' ) }
+						onClick={ () =>
+							onChange(
+								language + ' (' + LANGUAGE_MAP[ language ].label + ')',
+								LANGUAGE_MAP[ language ].label
+							)
+						}
 						isSelected={ value === language }
 					>
 						{ LANGUAGE_MAP[ language ].label }
@@ -122,16 +126,32 @@ export const I18nMenuGroup = ( {
 
 export default function I18nDropdownControl( {
 	value = defaultLanguage,
-	label = defaultLabel,
+	label = TRANSLATE_LABEL,
 	onChange,
+	disabled = false,
 }: LanguageDropdownControlProps ) {
-	return (
+	const { tracks } = useAnalytics();
+
+	const toggleHandler = isOpen => {
+		if ( isOpen ) {
+			tracks.recordEvent( 'jetpack_ai_assistant_block_toolbar_menu_show', { tool: 'i18n' } );
+		}
+	};
+
+	return disabled ? (
+		<Tooltip text={ label }>
+			<Button disabled>
+				<Icon icon={ globe } />
+			</Button>
+		</Tooltip>
+	) : (
 		<ToolbarDropdownMenu
 			icon={ globe }
 			label={ label }
 			popoverProps={ {
 				variant: 'toolbar',
 			} }
+			onToggle={ toggleHandler }
 		>
 			{ () => <I18nMenuGroup value={ value } onChange={ onChange } /> }
 		</ToolbarDropdownMenu>
@@ -140,11 +160,10 @@ export default function I18nDropdownControl( {
 
 export function I18nMenuDropdown( {
 	value = defaultLanguage,
-	label = defaultLabel,
-	disabled = false,
+	label = TRANSLATE_LABEL,
 	onChange,
-}: Pick< LanguageDropdownControlProps, 'label' | 'onChange' | 'value' > & {
-	disabled?: boolean;
+	disabled = false,
+}: Pick< LanguageDropdownControlProps, 'label' | 'onChange' | 'value' | 'disabled' > & {
 	toggleProps?: Record< string, unknown >;
 } ) {
 	return (
@@ -152,7 +171,6 @@ export function I18nMenuDropdown( {
 			className="ai-assistant__i18n-dropdown"
 			icon={ globe }
 			label={ label }
-			disabled={ disabled }
 			toggleProps={ {
 				children: (
 					<>
@@ -160,12 +178,13 @@ export function I18nMenuDropdown( {
 						<Icon icon={ chevronRight } />
 					</>
 				),
+				disabled,
 			} }
 		>
 			{ ( { onClose } ) => (
 				<I18nMenuGroup
-					onChange={ newLanguage => {
-						onChange( newLanguage );
+					onChange={ ( ...args ) => {
+						onChange( ...args );
 						onClose();
 					} }
 					value={ value }

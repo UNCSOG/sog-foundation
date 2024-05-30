@@ -24,9 +24,12 @@ class RemarketingAudience extends \Beehive\Google\Collection
      * @var string
      */
     public $accountId;
+    /**
+     * @var RemarketingAudienceAudienceDefinition
+     */
+    public $audienceDefinition;
     protected $audienceDefinitionType = RemarketingAudienceAudienceDefinition::class;
     protected $audienceDefinitionDataType = '';
-    public $audienceDefinition;
     /**
      * @var string
      */
@@ -51,9 +54,12 @@ class RemarketingAudience extends \Beehive\Google\Collection
      * @var string
      */
     public $kind;
+    /**
+     * @var LinkedForeignAccount[]
+     */
+    public $linkedAdAccounts;
     protected $linkedAdAccountsType = LinkedForeignAccount::class;
     protected $linkedAdAccountsDataType = 'array';
-    public $linkedAdAccounts;
     /**
      * @var string[]
      */
@@ -62,9 +68,12 @@ class RemarketingAudience extends \Beehive\Google\Collection
      * @var string
      */
     public $name;
+    /**
+     * @var RemarketingAudienceStateBasedAudienceDefinition
+     */
+    public $stateBasedAudienceDefinition;
     protected $stateBasedAudienceDefinitionType = RemarketingAudienceStateBasedAudienceDefinition::class;
     protected $stateBasedAudienceDefinitionDataType = '';
-    public $stateBasedAudienceDefinition;
     /**
      * @var string
      */

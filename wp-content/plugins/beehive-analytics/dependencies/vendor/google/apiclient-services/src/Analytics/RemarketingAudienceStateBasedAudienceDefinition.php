@@ -19,12 +19,18 @@ namespace Beehive\Google\Service\Analytics;
 
 class RemarketingAudienceStateBasedAudienceDefinition extends \Beehive\Google\Model
 {
+    /**
+     * @var RemarketingAudienceStateBasedAudienceDefinitionExcludeConditions
+     */
+    public $excludeConditions;
     protected $excludeConditionsType = RemarketingAudienceStateBasedAudienceDefinitionExcludeConditions::class;
     protected $excludeConditionsDataType = '';
-    public $excludeConditions;
+    /**
+     * @var IncludeConditions
+     */
+    public $includeConditions;
     protected $includeConditionsType = IncludeConditions::class;
     protected $includeConditionsDataType = '';
-    public $includeConditions;
     /**
      * @param RemarketingAudienceStateBasedAudienceDefinitionExcludeConditions
      */

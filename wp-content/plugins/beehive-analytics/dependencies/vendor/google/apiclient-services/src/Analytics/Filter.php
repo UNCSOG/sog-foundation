@@ -23,40 +23,58 @@ class Filter extends \Beehive\Google\Model
      * @var string
      */
     public $accountId;
+    /**
+     * @var FilterAdvancedDetails
+     */
+    public $advancedDetails;
     protected $advancedDetailsType = FilterAdvancedDetails::class;
     protected $advancedDetailsDataType = '';
-    public $advancedDetails;
     /**
      * @var string
      */
     public $created;
+    /**
+     * @var FilterExpression
+     */
+    public $excludeDetails;
     protected $excludeDetailsType = FilterExpression::class;
     protected $excludeDetailsDataType = '';
-    public $excludeDetails;
     /**
      * @var string
      */
     public $id;
+    /**
+     * @var FilterExpression
+     */
+    public $includeDetails;
     protected $includeDetailsType = FilterExpression::class;
     protected $includeDetailsDataType = '';
-    public $includeDetails;
     /**
      * @var string
      */
     public $kind;
+    /**
+     * @var FilterLowercaseDetails
+     */
+    public $lowercaseDetails;
     protected $lowercaseDetailsType = FilterLowercaseDetails::class;
     protected $lowercaseDetailsDataType = '';
-    public $lowercaseDetails;
     /**
      * @var string
      */
     public $name;
+    /**
+     * @var FilterParentLink
+     */
+    public $parentLink;
     protected $parentLinkType = FilterParentLink::class;
     protected $parentLinkDataType = '';
-    public $parentLink;
+    /**
+     * @var FilterSearchAndReplaceDetails
+     */
+    public $searchAndReplaceDetails;
     protected $searchAndReplaceDetailsType = FilterSearchAndReplaceDetails::class;
     protected $searchAndReplaceDetailsDataType = '';
-    public $searchAndReplaceDetails;
     /**
      * @var string
      */
@@ -69,9 +87,12 @@ class Filter extends \Beehive\Google\Model
      * @var string
      */
     public $updated;
+    /**
+     * @var FilterUppercaseDetails
+     */
+    public $uppercaseDetails;
     protected $uppercaseDetailsType = FilterUppercaseDetails::class;
     protected $uppercaseDetailsDataType = '';
-    public $uppercaseDetails;
     /**
      * @param string
      */

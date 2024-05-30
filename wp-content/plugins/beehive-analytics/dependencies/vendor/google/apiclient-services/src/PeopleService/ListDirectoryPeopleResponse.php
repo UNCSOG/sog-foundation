@@ -28,9 +28,12 @@ class ListDirectoryPeopleResponse extends \Beehive\Google\Collection
      * @var string
      */
     public $nextSyncToken;
+    /**
+     * @var Person[]
+     */
+    public $people;
     protected $peopleType = Person::class;
     protected $peopleDataType = 'array';
-    public $people;
     /**
      * @param string
      */

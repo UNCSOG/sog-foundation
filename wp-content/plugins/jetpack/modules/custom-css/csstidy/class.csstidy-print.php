@@ -66,7 +66,7 @@ class csstidy_print { // phpcs:ignore
 	/**
 	 * Constructor
 	 *
-	 * @param array $css contains the class csstidy.
+	 * @param csstidy $css contains the class csstidy.
 	 * @access private
 	 * @version 1.0
 	 */
@@ -83,7 +83,7 @@ class csstidy_print { // phpcs:ignore
 	/**
 	 * Call constructor function.
 	 *
-	 * @param object $css - the CSS we're working with.
+	 * @param csstidy $css - the CSS we're working with.
 	 */
 	public function csstidy_print( &$css ) {
 		$this->__construct( $css );
@@ -208,7 +208,7 @@ class csstidy_print { // phpcs:ignore
 			$import_count = is_countable( $this->import ) ? count( $this->import ) : 0;
 			for ( $i = 0; $i < $import_count; $i++ ) {
 				$import_components = explode( ' ', $this->import[ $i ] );
-				if ( substr( $import_components[0], 0, 4 ) === 'url(' && substr( $import_components[0], -1, 1 ) === ')' ) {
+				if ( str_starts_with( $import_components[0], 'url(' ) && str_ends_with( $import_components[0], ')' ) ) {
 					$import_components[0] = '\'' . trim( substr( $import_components[0], 4, -1 ), "'\"" ) . '\'';
 					$this->import[ $i ]   = implode( ' ', $import_components );
 					$this->parser->log( 'Optimised @import : Removed "url("', 'Information' );
@@ -217,7 +217,7 @@ class csstidy_print { // phpcs:ignore
 			}
 		}
 		if ( ! empty( $this->namespace ) ) {
-			if ( substr( $this->namespace, 0, 4 ) === 'url(' && substr( $this->namespace, -1, 1 ) === ')' ) {
+			if ( str_starts_with( $this->namespace, 'url(' ) && str_ends_with( $this->namespace, ')' ) ) {
 				$this->namespace = '\'' . substr( $this->namespace, 4, -1 ) . '\'';
 				$this->parser->log( 'Optimised @namespace : Removed "url("', 'Information' );
 			}

@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class Uploads extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var Upload[]
+     */
+    public $items;
     protected $itemsType = Upload::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

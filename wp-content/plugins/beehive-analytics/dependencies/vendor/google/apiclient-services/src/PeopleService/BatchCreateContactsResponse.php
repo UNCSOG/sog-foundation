@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\PeopleService;
 class BatchCreateContactsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'createdPeople';
+    /**
+     * @var PersonResponse[]
+     */
+    public $createdPeople;
     protected $createdPeopleType = PersonResponse::class;
     protected $createdPeopleDataType = 'array';
-    public $createdPeople;
     /**
      * @param PersonResponse[]
      */

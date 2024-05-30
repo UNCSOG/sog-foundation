@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\Analytics;
 
 class ProfileFilterLink extends \Beehive\Google\Model
 {
+    /**
+     * @var FilterRef
+     */
+    public $filterRef;
     protected $filterRefType = FilterRef::class;
     protected $filterRefDataType = '';
-    public $filterRef;
     /**
      * @var string
      */
@@ -30,9 +33,12 @@ class ProfileFilterLink extends \Beehive\Google\Model
      * @var string
      */
     public $kind;
+    /**
+     * @var ProfileRef
+     */
+    public $profileRef;
     protected $profileRefType = ProfileRef::class;
     protected $profileRefDataType = '';
-    public $profileRef;
     /**
      * @var int
      */

@@ -27,9 +27,12 @@ class Profile extends \Beehive\Google\Model
      * @var bool
      */
     public $botFilteringEnabled;
+    /**
+     * @var ProfileChildLink
+     */
+    public $childLink;
     protected $childLinkType = ProfileChildLink::class;
     protected $childLinkDataType = '';
-    public $childLink;
     /**
      * @var string
      */
@@ -70,12 +73,18 @@ class Profile extends \Beehive\Google\Model
      * @var string
      */
     public $name;
+    /**
+     * @var ProfileParentLink
+     */
+    public $parentLink;
     protected $parentLinkType = ProfileParentLink::class;
     protected $parentLinkDataType = '';
-    public $parentLink;
+    /**
+     * @var ProfilePermissions
+     */
+    public $permissions;
     protected $permissionsType = ProfilePermissions::class;
     protected $permissionsDataType = '';
-    public $permissions;
     /**
      * @var string
      */

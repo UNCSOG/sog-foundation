@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaDataStream extends \Beehive\Google\Model
 {
+    /**
+     * @var GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData
+     */
+    public $androidAppStreamData;
     protected $androidAppStreamDataType = GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData::class;
     protected $androidAppStreamDataDataType = '';
-    public $androidAppStreamData;
     /**
      * @var string
      */
@@ -30,9 +33,12 @@ class GoogleAnalyticsAdminV1betaDataStream extends \Beehive\Google\Model
      * @var string
      */
     public $displayName;
+    /**
+     * @var GoogleAnalyticsAdminV1betaDataStreamIosAppStreamData
+     */
+    public $iosAppStreamData;
     protected $iosAppStreamDataType = GoogleAnalyticsAdminV1betaDataStreamIosAppStreamData::class;
     protected $iosAppStreamDataDataType = '';
-    public $iosAppStreamData;
     /**
      * @var string
      */
@@ -45,9 +51,12 @@ class GoogleAnalyticsAdminV1betaDataStream extends \Beehive\Google\Model
      * @var string
      */
     public $updateTime;
+    /**
+     * @var GoogleAnalyticsAdminV1betaDataStreamWebStreamData
+     */
+    public $webStreamData;
     protected $webStreamDataType = GoogleAnalyticsAdminV1betaDataStreamWebStreamData::class;
     protected $webStreamDataDataType = '';
-    public $webStreamData;
     /**
      * @param GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData
      */

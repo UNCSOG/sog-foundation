@@ -19,12 +19,18 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 
 class SegmentFilterClause extends \Beehive\Google\Model
 {
+    /**
+     * @var SegmentDimensionFilter
+     */
+    public $dimensionFilter;
     protected $dimensionFilterType = SegmentDimensionFilter::class;
     protected $dimensionFilterDataType = '';
-    public $dimensionFilter;
+    /**
+     * @var SegmentMetricFilter
+     */
+    public $metricFilter;
     protected $metricFilterType = SegmentMetricFilter::class;
     protected $metricFilterDataType = '';
-    public $metricFilter;
     /**
      * @var bool
      */

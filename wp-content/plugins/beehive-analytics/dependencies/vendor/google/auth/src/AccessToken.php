@@ -18,9 +18,9 @@
 namespace Beehive\Google\Auth;
 
 use DateTime;
-use Exception;
 use Beehive\Firebase\JWT\ExpiredException;
 use Beehive\Firebase\JWT\JWT;
+use Beehive\Firebase\JWT\Key;
 use Beehive\Firebase\JWT\SignatureInvalidException;
 use Beehive\Google\Auth\Cache\MemoryCacheItemPool;
 use Beehive\Google\Auth\HttpHandler\HttpClientCache;
@@ -29,7 +29,9 @@ use Beehive\GuzzleHttp\Psr7\Request;
 use Beehive\GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Beehive\phpseclib\Crypt\RSA;
-use Beehive\phpseclib\Math\BigInteger;
+use Beehive\phpseclib\Math\BigInteger as BigInteger2;
+use Beehive\phpseclib3\Crypt\PublicKeyLoader;
+use Beehive\phpseclib3\Math\BigInteger as BigInteger3;
 use Beehive\Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
 use Beehive\SimpleJWT\InvalidTokenException;
@@ -74,20 +76,22 @@ class AccessToken
      * accepted.  By default, the id token must have been issued to this OAuth2 client.
      *
      * @param string $token The JSON Web Token to be verified.
-     * @param array $options [optional] Configuration options.
-     * @param string $options.audience The indended recipient of the token.
-     * @param string $options.issuer The intended issuer of the token.
-     * @param string $options.cacheKey The cache key of the cached certs. Defaults to
+     * @param array<mixed> $options [optional] {
+     *     Configuration options.
+     *     @type string $audience The indended recipient of the token.
+     *     @type string $issuer The intended issuer of the token.
+     *     @type string $cacheKey The cache key of the cached certs. Defaults to
      *        the sha1 of $certsLocation if provided, otherwise is set to
      *        "federated_signon_certs_v3".
-     * @param string $options.certsLocation The location (remote or local) from which
+     *     @type string $certsLocation The location (remote or local) from which
      *        to retrieve certificates, if not cached. This value should only be
      *        provided in limited circumstances in which you are sure of the
      *        behavior.
-     * @param bool $options.throwException Whether the function should throw an
+     *     @type bool $throwException Whether the function should throw an
      *        exception if the verification fails. This is useful for
      *        determining the reason verification failed.
-     * @return array|bool the token payload, if successful, or false if not.
+     * }
+     * @return array<mixed>|false the token payload, if successful, or false if not.
      * @throws InvalidArgumentException If certs could not be retrieved from a local file.
      * @throws InvalidArgumentException If received certs are in an invalid format.
      * @throws InvalidArgumentException If the cert alg is not supported.
@@ -97,11 +101,11 @@ class AccessToken
      */
     public function verify($token, array $options = [])
     {
-        $audience = isset($options['audience']) ? $options['audience'] : null;
-        $issuer = isset($options['issuer']) ? $options['issuer'] : null;
-        $certsLocation = isset($options['certsLocation']) ? $options['certsLocation'] : self::FEDERATED_SIGNON_CERT_URL;
-        $cacheKey = isset($options['cacheKey']) ? $options['cacheKey'] : $this->getCacheKeyFromCertLocation($certsLocation);
-        $throwException = isset($options['throwException']) ? $options['throwException'] : \false;
+        $audience = $options['audience'] ?? null;
+        $issuer = $options['issuer'] ?? null;
+        $certsLocation = $options['certsLocation'] ?? self::FEDERATED_SIGNON_CERT_URL;
+        $cacheKey = $options['cacheKey'] ?? $this->getCacheKeyFromCertLocation($certsLocation);
+        $throwException = $options['throwException'] ?? \false;
         // for backwards compatibility
         // Check signature against each available cert.
         $certs = $this->getCerts($certsLocation, $cacheKey, $options);
@@ -115,16 +119,11 @@ class AccessToken
             }
             return $this->verifyEs256($token, $certs, $audience, $issuer);
         } catch (ExpiredException $e) {
-            // firebase/php-jwt 3+
-        } catch (\Beehive\ExpiredException $e) {
-            // firebase/php-jwt 2
+            // firebase/php-jwt 5+
         } catch (SignatureInvalidException $e) {
-            // firebase/php-jwt 3+
-        } catch (\Beehive\SignatureInvalidException $e) {
-            // firebase/php-jwt 2
+            // firebase/php-jwt 5+
         } catch (InvalidTokenException $e) {
             // simplejwt
-        } catch (DomainException $e) {
         } catch (InvalidArgumentException $e) {
         } catch (UnexpectedValueException $e) {
         }
@@ -137,7 +136,7 @@ class AccessToken
      * Identifies the expected algorithm to verify by looking at the "alg" key
      * of the provided certs.
      *
-     * @param array $certs Certificate array according to the JWK spec (see
+     * @param array<mixed> $certs Certificate array according to the JWK spec (see
      *                     https://tools.ietf.org/html/rfc7517).
      * @return string The expected algorithm, such as "ES256" or "RS256".
      */
@@ -159,13 +158,13 @@ class AccessToken
      * Verifies an ES256-signed JWT.
      *
      * @param string $token The JSON Web Token to be verified.
-     * @param array $certs Certificate array according to the JWK spec (see
+     * @param array<mixed> $certs Certificate array according to the JWK spec (see
      *        https://tools.ietf.org/html/rfc7517).
      * @param string|null $audience If set, returns false if the provided
      *        audience does not match the "aud" claim on the JWT.
      * @param string|null $issuer If set, returns false if the provided
      *        issuer does not match the "iss" claim on the JWT.
-     * @return array|bool the token payload, if successful, or false if not.
+     * @return array<mixed> the token payload, if successful, or false if not.
      */
     private function verifyEs256($token, array $certs, $audience = null, $issuer = null)
     {
@@ -177,8 +176,8 @@ class AccessToken
         // Validate the signature using the key set and ES256 algorithm.
         $jwt = $this->callSimpleJwtDecode([$token, $jwkset, 'ES256']);
         $payload = $jwt->getClaims();
-        if (isset($payload['aud'])) {
-            if ($audience && $payload['aud'] != $audience) {
+        if ($audience) {
+            if (!isset($payload['aud']) || $payload['aud'] != $audience) {
                 throw new UnexpectedValueException('Audience does not match');
             }
         }
@@ -193,13 +192,13 @@ class AccessToken
      * Verifies an RS256-signed JWT.
      *
      * @param string $token The JSON Web Token to be verified.
-     * @param array $certs Certificate array according to the JWK spec (see
+     * @param array<mixed> $certs Certificate array according to the JWK spec (see
      *        https://tools.ietf.org/html/rfc7517).
      * @param string|null $audience If set, returns false if the provided
      *        audience does not match the "aud" claim on the JWT.
      * @param string|null $issuer If set, returns false if the provided
      *        issuer does not match the "iss" claim on the JWT.
-     * @return array|bool the token payload, if successful, or false if not.
+     * @return array<mixed> the token payload, if successful, or false if not.
      */
     private function verifyRs256($token, array $certs, $audience = null, $issuer = null)
     {
@@ -212,14 +211,13 @@ class AccessToken
             if (empty($cert['n']) || empty($cert['e'])) {
                 throw new InvalidArgumentException('RSA certs expects "n" and "e" to be set');
             }
-            $rsa = new RSA();
-            $rsa->loadKey(['n' => new BigInteger($this->callJwtStatic('urlsafeB64Decode', [$cert['n']]), 256), 'e' => new BigInteger($this->callJwtStatic('urlsafeB64Decode', [$cert['e']]), 256)]);
+            $publicKey = $this->loadPhpsecPublicKey($cert['n'], $cert['e']);
             // create an array of key IDs to certs for the JWT library
-            $keys[$cert['kid']] = $rsa->getPublicKey();
+            $keys[$cert['kid']] = new Key($publicKey, 'RS256');
         }
-        $payload = $this->callJwtStatic('decode', [$token, $keys, ['RS256']]);
-        if (\property_exists($payload, 'aud')) {
-            if ($audience && $payload->aud != $audience) {
+        $payload = $this->callJwtStatic('decode', [$token, $keys]);
+        if ($audience) {
+            if (!\property_exists($payload, 'aud') || $payload->aud != $audience) {
                 throw new UnexpectedValueException('Audience does not match');
             }
         }
@@ -235,8 +233,8 @@ class AccessToken
      * Revoke an OAuth2 access token or refresh token. This method will revoke the current access
      * token, if a token isn't provided.
      *
-     * @param string|array $token The token (access token or a refresh token) that should be revoked.
-     * @param array $options [optional] Configuration options.
+     * @param string|array<mixed> $token The token (access token or a refresh token) that should be revoked.
+     * @param array<mixed> $options [optional] Configuration options.
      * @return bool Returns True if the revocation was successful, otherwise False.
      */
     public function revoke($token, array $options = [])
@@ -261,18 +259,17 @@ class AccessToken
      *
      * @param string $location The location from which to retrieve certs.
      * @param string $cacheKey The key under which to cache the retrieved certs.
-     * @param array $options [optional] Configuration options.
-     * @return array
+     * @param array<mixed> $options [optional] Configuration options.
+     * @return array<mixed>
      * @throws InvalidArgumentException If received certs are in an invalid format.
      */
     private function getCerts($location, $cacheKey, array $options = [])
     {
         $cacheItem = $this->cache->getItem($cacheKey);
         $certs = $cacheItem ? $cacheItem->get() : null;
-        $gotNewCerts = \false;
+        $expireTime = null;
         if (!$certs) {
-            $certs = $this->retrieveCertsFromLocation($location, $options);
-            $gotNewCerts = \true;
+            list($certs, $expireTime) = $this->retrieveCertsFromLocation($location, $options);
         }
         if (!isset($certs['keys'])) {
             if ($location !== self::IAP_CERT_URL) {
@@ -282,8 +279,8 @@ class AccessToken
         }
         // Push caching off until after verifying certs are in a valid format.
         // Don't want to cache bad data.
-        if ($gotNewCerts) {
-            $cacheItem->expiresAt(new DateTime('+1 hour'));
+        if ($expireTime) {
+            $cacheItem->expiresAt(new DateTime($expireTime));
             $cacheItem->set($certs);
             $this->cache->save($cacheItem);
         }
@@ -292,56 +289,73 @@ class AccessToken
     /**
      * Retrieve and cache a certificates file.
      *
-     * @param $url string location
-     * @param array $options [optional] Configuration options.
-     * @return array certificates
+     * @param string $url location
+     * @param array<mixed> $options [optional] Configuration options.
+     * @return array{array<mixed>, string}
      * @throws InvalidArgumentException If certs could not be retrieved from a local file.
      * @throws RuntimeException If certs could not be retrieved from a remote location.
      */
     private function retrieveCertsFromLocation($url, array $options = [])
     {
         // If we're retrieving a local file, just grab it.
+        $expireTime = '+1 hour';
         if (\strpos($url, 'http') !== 0) {
             if (!\file_exists($url)) {
                 throw new InvalidArgumentException(\sprintf('Failed to retrieve verification certificates from path: %s.', $url));
             }
-            return \json_decode(\file_get_contents($url), \true);
+            return [\json_decode((string) \file_get_contents($url), \true), $expireTime];
         }
         $httpHandler = $this->httpHandler;
         $response = $httpHandler(new Request('GET', $url), $options);
         if ($response->getStatusCode() == 200) {
-            return \json_decode((string) $response->getBody(), \true);
+            if ($cacheControl = $response->getHeaderLine('Cache-Control')) {
+                \array_map(function ($value) use(&$expireTime) {
+                    list($key, $value) = \explode('=', $value) + [null, null];
+                    if (\trim($key) == 'max-age') {
+                        $expireTime = '+' . $value . ' seconds';
+                    }
+                }, \explode(',', $cacheControl));
+            }
+            return [\json_decode((string) $response->getBody(), \true), $expireTime];
         }
         throw new RuntimeException(\sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
     }
+    /**
+     * @return void
+     */
     private function checkAndInitializePhpsec()
     {
-        // @codeCoverageIgnoreStart
-        if (!\class_exists('Beehive\\phpseclib\\Crypt\\RSA')) {
-            throw new RuntimeException('Please require phpseclib/phpseclib v2 to use this utility.');
+        if (!$this->checkAndInitializePhpsec2() && !$this->checkPhpsec3()) {
+            throw new RuntimeException('Please require phpseclib/phpseclib v2 or v3 to use this utility.');
         }
-        // @codeCoverageIgnoreEnd
-        $this->setPhpsecConstants();
     }
-    private function checkSimpleJwt()
+    private function loadPhpsecPublicKey(string $modulus, string $exponent) : string
     {
-        // @codeCoverageIgnoreStart
-        if (!\class_exists('Beehive\\SimpleJWT\\JWT')) {
-            throw new RuntimeException('Please require kelvinmo/simplejwt ^0.2 to use this utility.');
+        if (\class_exists(RSA::class) && \class_exists(BigInteger2::class)) {
+            $key = new RSA();
+            $key->loadKey(['n' => new BigInteger2($this->callJwtStatic('urlsafeB64Decode', [$modulus]), 256), 'e' => new BigInteger2($this->callJwtStatic('urlsafeB64Decode', [$exponent]), 256)]);
+            return $key->getPublicKey();
         }
-        // @codeCoverageIgnoreEnd
+        $key = PublicKeyLoader::load(['n' => new BigInteger3($this->callJwtStatic('urlsafeB64Decode', [$modulus]), 256), 'e' => new BigInteger3($this->callJwtStatic('urlsafeB64Decode', [$exponent]), 256)]);
+        return $key->toString('PKCS8');
     }
     /**
-     * phpseclib calls "phpinfo" by default, which requires special
-     * whitelisting in the AppEngine VM environment. This function
-     * sets constants to bypass the need for phpseclib to check phpinfo
-     *
-     * @see phpseclib/Math/BigInteger
-     * @see https://github.com/GoogleCloudPlatform/getting-started-php/issues/85
-     * @codeCoverageIgnore
+     * @return bool
      */
-    private function setPhpsecConstants()
+    private function checkAndInitializePhpsec2() : bool
     {
+        if (!\class_exists('Beehive\\phpseclib\\Crypt\\RSA')) {
+            return \false;
+        }
+        /**
+         * phpseclib calls "phpinfo" by default, which requires special
+         * whitelisting in the AppEngine VM environment. This function
+         * sets constants to bypass the need for phpseclib to check phpinfo
+         *
+         * @see phpseclib/Math/BigInteger
+         * @see https://github.com/GoogleCloudPlatform/getting-started-php/issues/85
+         * @codeCoverageIgnore
+         */
         if (\filter_var(\getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
             if (!\defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
                 \define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
@@ -350,28 +364,47 @@ class AccessToken
                 \define('CRYPT_RSA_MODE', RSA::MODE_OPENSSL);
             }
         }
+        return \true;
+    }
+    /**
+     * @return bool
+     */
+    private function checkPhpsec3() : bool
+    {
+        return \class_exists('Beehive\\phpseclib3\\Crypt\\RSA');
+    }
+    /**
+     * @return void
+     */
+    private function checkSimpleJwt()
+    {
+        // @codeCoverageIgnoreStart
+        if (!\class_exists(SimpleJwt::class)) {
+            throw new RuntimeException('Please require kelvinmo/simplejwt ^0.2 to use this utility.');
+        }
+        // @codeCoverageIgnoreEnd
     }
     /**
      * Provide a hook to mock calls to the JWT static methods.
      *
      * @param string $method
-     * @param array $args
+     * @param array<mixed> $args
      * @return mixed
      */
     protected function callJwtStatic($method, array $args = [])
     {
-        $class = 'Beehive\\Firebase\\JWT\\JWT';
-        return \call_user_func_array([$class, $method], $args);
+        return \call_user_func_array([JWT::class, $method], $args);
+        // @phpstan-ignore-line
     }
     /**
      * Provide a hook to mock calls to the JWT static methods.
      *
-     * @param array $args
+     * @param array<mixed> $args
      * @return mixed
      */
     protected function callSimpleJwtDecode(array $args = [])
     {
-        return \call_user_func_array(['SimpleJWT\\JWT', 'decode'], $args);
+        return \call_user_func_array([SimpleJwt::class, 'decode'], $args);
     }
     /**
      * Generate a cache key based on the cert location using sha1 with the

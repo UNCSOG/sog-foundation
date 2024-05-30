@@ -27,9 +27,12 @@ class UserDeletionRequest extends \Beehive\Google\Model
      * @var string
      */
     public $firebaseProjectId;
+    /**
+     * @var UserDeletionRequestId
+     */
+    public $id;
     protected $idType = UserDeletionRequestId::class;
     protected $idDataType = '';
-    public $id;
     /**
      * @var string
      */

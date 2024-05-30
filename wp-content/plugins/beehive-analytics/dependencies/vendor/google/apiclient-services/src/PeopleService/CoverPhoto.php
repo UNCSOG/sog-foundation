@@ -23,9 +23,12 @@ class CoverPhoto extends \Beehive\Google\Model
      * @var bool
      */
     public $default;
+    /**
+     * @var FieldMetadata
+     */
+    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

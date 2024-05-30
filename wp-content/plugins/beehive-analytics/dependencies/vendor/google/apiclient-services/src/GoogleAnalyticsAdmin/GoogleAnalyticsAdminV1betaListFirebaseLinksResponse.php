@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListFirebaseLinksResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'firebaseLinks';
+    /**
+     * @var GoogleAnalyticsAdminV1betaFirebaseLink[]
+     */
+    public $firebaseLinks;
     protected $firebaseLinksType = GoogleAnalyticsAdminV1betaFirebaseLink::class;
     protected $firebaseLinksDataType = 'array';
-    public $firebaseLinks;
     /**
      * @var string
      */

@@ -20,12 +20,18 @@ namespace Beehive\Google\Service\AnalyticsData;
 class Metadata extends \Beehive\Google\Collection
 {
     protected $collection_key = 'metrics';
+    /**
+     * @var DimensionMetadata[]
+     */
+    public $dimensions;
     protected $dimensionsType = DimensionMetadata::class;
     protected $dimensionsDataType = 'array';
-    public $dimensions;
+    /**
+     * @var MetricMetadata[]
+     */
+    public $metrics;
     protected $metricsType = MetricMetadata::class;
     protected $metricsDataType = 'array';
-    public $metrics;
     /**
      * @var string
      */

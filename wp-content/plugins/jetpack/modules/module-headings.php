@@ -16,11 +16,6 @@ function jetpack_get_module_i18n( $key ) {
 	static $modules;
 	if ( ! isset( $modules ) ) {
 		$modules = array(
-			'action-bar' => array(
-				'name' => _x( 'Action Bar (Experimental)', 'Module Name', 'jetpack' ),
-				'description' => _x( 'An easy to use way for visitors to follow, like, and comment on your site.', 'Module Description', 'jetpack' ),
-			),
-
 			'blaze' => array(
 				'name' => _x( 'Blaze', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Grow your audience by promoting your content across Tumblr and WordPress.com.', 'Module Description', 'jetpack' ),
@@ -61,11 +56,6 @@ function jetpack_get_module_i18n( $key ) {
 				'description' => _x( 'Adds options for CSS preprocessor use, disabling the theme\'s CSS, or custom image width.', 'Module Description', 'jetpack' ),
 			),
 
-			'enhanced-distribution' => array(
-				'name' => _x( 'Enhanced Distribution', 'Module Name', 'jetpack' ),
-				'description' => _x( 'Increase reach and traffic.', 'Module Description', 'jetpack' ),
-			),
-
 			'google-analytics' => array(
 				'name' => _x( 'Google Analytics', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Set up Google Analytics without touching a line of code.', 'Module Description', 'jetpack' ),
@@ -94,11 +84,6 @@ function jetpack_get_module_i18n( $key ) {
 			'latex' => array(
 				'name' => _x( 'Beautiful Math', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Use the LaTeX markup language to write mathematical equations and formulas', 'Module Description', 'jetpack' ),
-			),
-
-			'lazy-images' => array(
-				'name' => _x( 'Lazy Images', 'Module Name', 'jetpack' ),
-				'description' => _x( 'Improve your site\'s speed by only loading images visible on the screen. Modern browsers now support lazy loading, and WordPress itself bundles lazy loading features for images and videos. This feature will consequently be removed from Jetpack in November 2023.', 'Module Description', 'jetpack' ),
 			),
 
 			'likes' => array(
@@ -272,8 +257,13 @@ function jetpack_get_module_i18n_tag( $key ) {
 			// - modules/woocommerce-analytics.php
 			'Other' => _x( 'Other', 'Module Tag', 'jetpack' ),
 
+			// Modules with `Traffic` tag:
+			// - modules/blaze.php
+			// - modules/sitemaps.php
+			// - modules/wordads.php
+			'Traffic' => _x( 'Traffic', 'Module Tag', 'jetpack' ),
+
 			// Modules with `Social` tag:
-			// - modules/action-bar.php
 			// - modules/blaze.php
 			// - modules/comment-likes.php
 			// - modules/comments.php
@@ -288,12 +278,6 @@ function jetpack_get_module_i18n_tag( $key ) {
 			// - modules/widgets.php
 			'Social' => _x( 'Social', 'Module Tag', 'jetpack' ),
 
-			// Modules with `Traffic` tag:
-			// - modules/blaze.php
-			// - modules/sitemaps.php
-			// - modules/wordads.php
-			'Traffic' => _x( 'Traffic', 'Module Tag', 'jetpack' ),
-
 			// Modules with `Photos and Videos` tag:
 			// - modules/carousel.php
 			// - modules/photon-cdn.php
@@ -306,7 +290,6 @@ function jetpack_get_module_i18n_tag( $key ) {
 			// Modules with `Writing` tag:
 			// - modules/copy-post.php
 			// - modules/custom-content-types.php
-			// - modules/enhanced-distribution.php
 			// - modules/json-api.php
 			// - modules/latex.php
 			// - modules/markdown.php
@@ -318,7 +301,6 @@ function jetpack_get_module_i18n_tag( $key ) {
 			// - modules/custom-css.php
 			// - modules/gravatar-hovercards.php
 			// - modules/infinite-scroll.php
-			// - modules/lazy-images.php
 			// - modules/photon-cdn.php
 			// - modules/photon.php
 			// - modules/seo-tools.php
@@ -334,7 +316,6 @@ function jetpack_get_module_i18n_tag( $key ) {
 
 			// Modules with `Recommended` tag:
 			// - modules/google-fonts.php
-			// - modules/lazy-images.php
 			// - modules/monitor.php
 			// - modules/photon-cdn.php
 			// - modules/photon.php
@@ -389,24 +370,6 @@ function jetpack_get_module_i18n_tag( $key ) {
  */
 function jetpack_get_module_info( $key ) {
 	static $module_info = array (
-	  'action-bar' => 
-	  array (
-	    'name' => 'Action Bar (Experimental)',
-	    'description' => 'An easy to use way for visitors to follow, like, and comment on your site.',
-	    'sort' => '40',
-	    'recommendation_order' => '18',
-	    'introduced' => '11.4',
-	    'changed' => '',
-	    'deactivate' => '',
-	    'free' => '',
-	    'requires_connection' => 'Yes',
-	    'requires_user_connection' => '',
-	    'auto_activate' => 'No',
-	    'module_tags' => 'Social',
-	    'feature' => 'Engagement',
-	    'additional_search_queries' => 'adminbar, actionbar, comments, likes, follow, sharing',
-	    'plan_classes' => '',
-	  ),
 	  'blaze' => 
 	  array (
 	    'name' => 'Blaze',
@@ -440,7 +403,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Photos and Videos',
 	    'feature' => 'Appearance',
-	    'additional_search_queries' => 'gallery, carousel, diaporama, slideshow, images, lightbox, exif, metadata, image',
+	    'additional_search_queries' => 'gallery, carousel, diaporama, slideshow, images, lightbox, exif, metadata, image, creator',
 	    'plan_classes' => '',
 	  ),
 	  'comment-likes' => 
@@ -494,7 +457,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'Yes',
 	    'module_tags' => 'Other',
 	    'feature' => 'Writing',
-	    'additional_search_queries' => 'contact, form, grunion, feedback, submission, contact form, email, feedback, contact form plugin, custom form, custom form plugin, form builder, forms, form maker, survey, contact by jetpack, contact us, forms free',
+	    'additional_search_queries' => 'contact, form, grunion, feedback, submission, contact form, email, feedback, contact form plugin, custom form, custom form plugin, form builder, forms, form maker, survey, contact by jetpack, contact us, forms free, creator',
 	    'plan_classes' => '',
 	  ),
 	  'copy-post' => 
@@ -551,24 +514,6 @@ function jetpack_get_module_info( $key ) {
 	    'additional_search_queries' => 'css, customize, custom, style, editor, less, sass, preprocessor, font, mobile, appearance, theme, stylesheet',
 	    'plan_classes' => '',
 	  ),
-	  'enhanced-distribution' => 
-	  array (
-	    'name' => 'Enhanced Distribution',
-	    'description' => 'Increase reach and traffic.',
-	    'sort' => '5',
-	    'recommendation_order' => '',
-	    'introduced' => '1.2',
-	    'changed' => '',
-	    'deactivate' => '',
-	    'free' => '',
-	    'requires_connection' => 'Yes',
-	    'requires_user_connection' => '',
-	    'auto_activate' => 'Public',
-	    'module_tags' => 'Writing',
-	    'feature' => 'Engagement',
-	    'additional_search_queries' => 'google, seo, firehose, search, broadcast, broadcasting',
-	    'plan_classes' => '',
-	  ),
 	  'google-analytics' => 
 	  array (
 	    'name' => 'Google Analytics',
@@ -602,7 +547,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Fonts, Recommended',
 	    'feature' => 'Writing',
-	    'additional_search_queries' => 'fonts, webfonts, typography',
+	    'additional_search_queries' => 'fonts, webfonts, typography, creator',
 	    'plan_classes' => '',
 	  ),
 	  'gravatar-hovercards' => 
@@ -675,24 +620,6 @@ function jetpack_get_module_info( $key ) {
 	    'module_tags' => 'Writing',
 	    'feature' => 'Writing',
 	    'additional_search_queries' => 'latex, math, equation, equations, formula, code',
-	    'plan_classes' => '',
-	  ),
-	  'lazy-images' => 
-	  array (
-	    'name' => 'Lazy Images',
-	    'description' => 'Improve your site\'s speed by only loading images visible on the screen. Modern browsers now support lazy loading, and WordPress itself bundles lazy loading features for images and videos. This feature will consequently be removed from Jetpack in November 2023.',
-	    'sort' => '24',
-	    'recommendation_order' => '14',
-	    'introduced' => '5.6.0',
-	    'changed' => '',
-	    'deactivate' => '',
-	    'free' => '',
-	    'requires_connection' => 'No',
-	    'requires_user_connection' => '',
-	    'auto_activate' => 'No',
-	    'module_tags' => 'Appearance, Recommended',
-	    'feature' => 'Appearance',
-	    'additional_search_queries' => 'mobile, theme, fast images, fast image, image, lazy, lazy load, lazyload, images, lazy images, thumbnail, image lazy load, lazy loading, load, loading',
 	    'plan_classes' => '',
 	  ),
 	  'likes' => 
@@ -908,7 +835,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Recommended',
 	    'feature' => 'Engagement',
-	    'additional_search_queries' => 'related, jetpack related posts, related posts for wordpress, related posts, popular posts, popular, related content, related post, contextual, context, contextual related posts, related articles, similar posts, easy related posts, related page, simple related posts, free related posts, related thumbnails, similar, engagement, yet another related posts plugin',
+	    'additional_search_queries' => 'related, jetpack related posts, related posts for wordpress, related posts, popular posts, popular, related content, related post, contextual, context, contextual related posts, related articles, similar posts, easy related posts, related page, simple related posts, free related posts, related thumbnails, similar, engagement, yet another related posts plugin, creator',
 	    'plan_classes' => '',
 	  ),
 	  'search' => 
@@ -939,7 +866,7 @@ function jetpack_get_module_info( $key ) {
 	    'changed' => '',
 	    'deactivate' => '',
 	    'free' => '',
-	    'requires_connection' => 'Yes',
+	    'requires_connection' => 'No',
 	    'requires_user_connection' => 'No',
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Social, Appearance',
@@ -1070,7 +997,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Social',
 	    'feature' => 'Engagement',
-	    'additional_search_queries' => 'subscriptions, subscription, email, follow, followers, subscribers, signup, newsletter',
+	    'additional_search_queries' => 'subscriptions, subscription, email, follow, followers, subscribers, signup, newsletter, creator',
 	    'plan_classes' => '',
 	  ),
 	  'tiled-gallery' => 
@@ -1232,7 +1159,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Traffic, Appearance',
 	    'feature' => '',
-	    'additional_search_queries' => 'advertising, ad codes, ads',
+	    'additional_search_queries' => 'advertising, ad codes, ads, creator',
 	    'plan_classes' => 'premium, business, security, complete',
 	  ),
 	);

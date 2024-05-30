@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class Accounts extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var Account[]
+     */
+    public $items;
     protected $itemsType = Account::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

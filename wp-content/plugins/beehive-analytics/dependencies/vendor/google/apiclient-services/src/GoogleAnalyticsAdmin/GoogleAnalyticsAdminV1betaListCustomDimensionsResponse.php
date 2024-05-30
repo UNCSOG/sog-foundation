@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListCustomDimensionsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'customDimensions';
+    /**
+     * @var GoogleAnalyticsAdminV1betaCustomDimension[]
+     */
+    public $customDimensions;
     protected $customDimensionsType = GoogleAnalyticsAdminV1betaCustomDimension::class;
     protected $customDimensionsDataType = 'array';
-    public $customDimensions;
     /**
      * @var string
      */

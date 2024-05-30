@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 
 class Segment extends \Beehive\Google\Model
 {
+    /**
+     * @var DynamicSegment
+     */
+    public $dynamicSegment;
     protected $dynamicSegmentType = DynamicSegment::class;
     protected $dynamicSegmentDataType = '';
-    public $dynamicSegment;
     /**
      * @var string
      */

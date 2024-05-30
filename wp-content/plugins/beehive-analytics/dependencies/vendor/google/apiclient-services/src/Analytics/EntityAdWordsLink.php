@@ -20,12 +20,18 @@ namespace Beehive\Google\Service\Analytics;
 class EntityAdWordsLink extends \Beehive\Google\Collection
 {
     protected $collection_key = 'profileIds';
+    /**
+     * @var AdWordsAccount[]
+     */
+    public $adWordsAccounts;
     protected $adWordsAccountsType = AdWordsAccount::class;
     protected $adWordsAccountsDataType = 'array';
-    public $adWordsAccounts;
+    /**
+     * @var EntityAdWordsLinkEntity
+     */
+    public $entity;
     protected $entityType = EntityAdWordsLinkEntity::class;
     protected $entityDataType = '';
-    public $entity;
     /**
      * @var string
      */

@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\PeopleService;
 
 class ContactToCreate extends \Beehive\Google\Model
 {
+    /**
+     * @var Person
+     */
+    public $contactPerson;
     protected $contactPersonType = Person::class;
     protected $contactPersonDataType = '';
-    public $contactPerson;
     /**
      * @param Person
      */

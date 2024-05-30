@@ -5,14 +5,18 @@
  * @package automattic/jetpack
  */
 
-$item             = $context['item']; // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Defined by the caller. Let Phan handle it.
+'@phan-var-force Jetpack_Tiled_Gallery_Layout $this';
+'@phan-var-force array $context';
+
+$item             = $context['item'];
 $fuzzy_image_meta = $item->fuzzy_image_meta(); // See https://github.com/Automattic/jetpack/issues/2765 .
 if ( isset( $fuzzy_image_meta['keywords'] ) ) {
 	unset( $fuzzy_image_meta['keywords'] );
 }
 
 // Using JSON_HEX_AMP avoids breakage due to `esc_attr()` refusing to double-encode.
-$fuzzy_image_meta = wp_json_encode( array_map( 'strval', $fuzzy_image_meta ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
+$fuzzy_image_meta = wp_json_encode( map_deep( $fuzzy_image_meta, 'strval' ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
 
 ?>
 data-attachment-id="<?php echo esc_attr( $item->image->ID ); ?>"

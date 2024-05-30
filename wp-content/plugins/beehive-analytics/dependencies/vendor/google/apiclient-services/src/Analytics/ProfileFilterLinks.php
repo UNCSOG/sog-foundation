@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class ProfileFilterLinks extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var ProfileFilterLink[]
+     */
+    public $items;
     protected $itemsType = ProfileFilterLink::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

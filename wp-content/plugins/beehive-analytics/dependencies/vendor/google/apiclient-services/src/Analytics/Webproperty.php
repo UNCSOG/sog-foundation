@@ -23,9 +23,12 @@ class Webproperty extends \Beehive\Google\Model
      * @var string
      */
     public $accountId;
+    /**
+     * @var WebpropertyChildLink
+     */
+    public $childLink;
     protected $childLinkType = WebpropertyChildLink::class;
     protected $childLinkDataType = '';
-    public $childLink;
     /**
      * @var string
      */
@@ -66,12 +69,18 @@ class Webproperty extends \Beehive\Google\Model
      * @var string
      */
     public $name;
+    /**
+     * @var WebpropertyParentLink
+     */
+    public $parentLink;
     protected $parentLinkType = WebpropertyParentLink::class;
     protected $parentLinkDataType = '';
-    public $parentLink;
+    /**
+     * @var WebpropertyPermissions
+     */
+    public $permissions;
     protected $permissionsType = WebpropertyPermissions::class;
     protected $permissionsDataType = '';
-    public $permissions;
     /**
      * @var int
      */

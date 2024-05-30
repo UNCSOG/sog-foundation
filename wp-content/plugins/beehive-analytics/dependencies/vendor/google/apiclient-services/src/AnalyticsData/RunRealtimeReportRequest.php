@@ -20,12 +20,18 @@ namespace Beehive\Google\Service\AnalyticsData;
 class RunRealtimeReportRequest extends \Beehive\Google\Collection
 {
     protected $collection_key = 'orderBys';
+    /**
+     * @var FilterExpression
+     */
+    public $dimensionFilter;
     protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
-    public $dimensionFilter;
+    /**
+     * @var Dimension[]
+     */
+    public $dimensions;
     protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
-    public $dimensions;
     /**
      * @var string
      */
@@ -34,18 +40,30 @@ class RunRealtimeReportRequest extends \Beehive\Google\Collection
      * @var string[]
      */
     public $metricAggregations;
+    /**
+     * @var FilterExpression
+     */
+    public $metricFilter;
     protected $metricFilterType = FilterExpression::class;
     protected $metricFilterDataType = '';
-    public $metricFilter;
+    /**
+     * @var Metric[]
+     */
+    public $metrics;
     protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    public $metrics;
+    /**
+     * @var MinuteRange[]
+     */
+    public $minuteRanges;
     protected $minuteRangesType = MinuteRange::class;
     protected $minuteRangesDataType = 'array';
-    public $minuteRanges;
+    /**
+     * @var OrderBy[]
+     */
+    public $orderBys;
     protected $orderBysType = OrderBy::class;
     protected $orderBysDataType = 'array';
-    public $orderBys;
     /**
      * @var bool
      */

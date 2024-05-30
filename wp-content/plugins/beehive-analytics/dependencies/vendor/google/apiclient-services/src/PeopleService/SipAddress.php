@@ -23,9 +23,12 @@ class SipAddress extends \Beehive\Google\Model
      * @var string
      */
     public $formattedType;
+    /**
+     * @var FieldMetadata
+     */
+    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

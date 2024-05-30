@@ -19,30 +19,54 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource extends \Beehive\Google\Model
 {
+    /**
+     * @var GoogleAnalyticsAdminV1betaAccount
+     */
+    public $account;
     protected $accountType = GoogleAnalyticsAdminV1betaAccount::class;
     protected $accountDataType = '';
-    public $account;
+    /**
+     * @var GoogleAnalyticsAdminV1betaConversionEvent
+     */
+    public $conversionEvent;
     protected $conversionEventType = GoogleAnalyticsAdminV1betaConversionEvent::class;
     protected $conversionEventDataType = '';
-    public $conversionEvent;
+    /**
+     * @var GoogleAnalyticsAdminV1betaDataRetentionSettings
+     */
+    public $dataRetentionSettings;
     protected $dataRetentionSettingsType = GoogleAnalyticsAdminV1betaDataRetentionSettings::class;
     protected $dataRetentionSettingsDataType = '';
-    public $dataRetentionSettings;
+    /**
+     * @var GoogleAnalyticsAdminV1betaDataStream
+     */
+    public $dataStream;
     protected $dataStreamType = GoogleAnalyticsAdminV1betaDataStream::class;
     protected $dataStreamDataType = '';
-    public $dataStream;
+    /**
+     * @var GoogleAnalyticsAdminV1betaFirebaseLink
+     */
+    public $firebaseLink;
     protected $firebaseLinkType = GoogleAnalyticsAdminV1betaFirebaseLink::class;
     protected $firebaseLinkDataType = '';
-    public $firebaseLink;
+    /**
+     * @var GoogleAnalyticsAdminV1betaGoogleAdsLink
+     */
+    public $googleAdsLink;
     protected $googleAdsLinkType = GoogleAnalyticsAdminV1betaGoogleAdsLink::class;
     protected $googleAdsLinkDataType = '';
-    public $googleAdsLink;
+    /**
+     * @var GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
+     */
+    public $measurementProtocolSecret;
     protected $measurementProtocolSecretType = GoogleAnalyticsAdminV1betaMeasurementProtocolSecret::class;
     protected $measurementProtocolSecretDataType = '';
-    public $measurementProtocolSecret;
+    /**
+     * @var GoogleAnalyticsAdminV1betaProperty
+     */
+    public $property;
     protected $propertyType = GoogleAnalyticsAdminV1betaProperty::class;
     protected $propertyDataType = '';
-    public $property;
     /**
      * @param GoogleAnalyticsAdminV1betaAccount
      */

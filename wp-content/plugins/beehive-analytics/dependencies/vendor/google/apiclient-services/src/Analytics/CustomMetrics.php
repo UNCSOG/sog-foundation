@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class CustomMetrics extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var CustomMetric[]
+     */
+    public $items;
     protected $itemsType = CustomMetric::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

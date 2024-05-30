@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class RealtimeData extends \Beehive\Google\Collection
 {
     protected $collection_key = 'rows';
+    /**
+     * @var RealtimeDataColumnHeaders[]
+     */
+    public $columnHeaders;
     protected $columnHeadersType = RealtimeDataColumnHeaders::class;
     protected $columnHeadersDataType = 'array';
-    public $columnHeaders;
     /**
      * @var string
      */
@@ -31,12 +34,18 @@ class RealtimeData extends \Beehive\Google\Collection
      * @var string
      */
     public $kind;
+    /**
+     * @var RealtimeDataProfileInfo
+     */
+    public $profileInfo;
     protected $profileInfoType = RealtimeDataProfileInfo::class;
     protected $profileInfoDataType = '';
-    public $profileInfo;
+    /**
+     * @var RealtimeDataQuery
+     */
+    public $query;
     protected $queryType = RealtimeDataQuery::class;
     protected $queryDataType = '';
-    public $query;
     /**
      * @var string[]
      */

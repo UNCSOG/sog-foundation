@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class Filters extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
+    /**
+     * @var Filter[]
+     */
+    public $items;
     protected $itemsType = Filter::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

@@ -23,16 +23,22 @@ class PersonResponse extends \Beehive\Google\Model
      * @var int
      */
     public $httpStatusCode;
+    /**
+     * @var Person
+     */
+    public $person;
     protected $personType = Person::class;
     protected $personDataType = '';
-    public $person;
     /**
      * @var string
      */
     public $requestedResourceName;
+    /**
+     * @var Status
+     */
+    public $status;
     protected $statusType = Status::class;
     protected $statusDataType = '';
-    public $status;
     /**
      * @param int
      */

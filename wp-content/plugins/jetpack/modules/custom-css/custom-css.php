@@ -102,6 +102,8 @@ class Jetpack_Custom_CSS_Enhancements {
 
 	/**
 	 * Print the current Custom CSS. This is for linking instead of printing directly.
+	 *
+	 * @return never
 	 */
 	public static function print_linked_custom_css() {
 		header( 'Content-type: text/css' );
@@ -867,6 +869,7 @@ class Jetpack_Custom_CSS_Enhancements {
 	 */
 	public static function customize_value_custom_css( $css, $setting ) {
 		// Find the current preprocessor.
+		$preprocessor       = null;
 		$jetpack_custom_css = get_theme_mod( 'jetpack_custom_css', array() );
 		if ( isset( $jetpack_custom_css['preprocessor'] ) ) {
 			$preprocessor = $jetpack_custom_css['preprocessor'];

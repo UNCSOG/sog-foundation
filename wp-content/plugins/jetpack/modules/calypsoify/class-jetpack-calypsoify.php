@@ -5,6 +5,7 @@
  * @package automattic/jetpack
  */
 
+use Automattic\Jetpack\Calypsoify\Jetpack_Calypsoify as Calypsoify;
 use Automattic\Jetpack\Status;
 
 /**
@@ -180,22 +181,22 @@ class Jetpack_Calypsoify {
 		// Disabling WordPress.Security.NonceVerification.Recommended because this function fires within admin_init and this is only changing display.
 		$page = isset( $_SERVER['REQUEST_URI'] ) ? wp_basename( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) : '';
 
-		if ( false !== strpos( $page, 'post-new.php' ) && empty( $_GET['post_type'] ) ) {
+		if ( str_contains( $page, 'post-new.php' ) && empty( $_GET['post_type'] ) ) {
 			return true;
 		}
 
-		if ( false !== strpos( $page, 'post-new.php' ) && isset( $_GET['post_type'] ) && $this->is_post_type_gutenberg( sanitize_key( $_GET['post_type'] ) ) ) {
+		if ( str_contains( $page, 'post-new.php' ) && isset( $_GET['post_type'] ) && $this->is_post_type_gutenberg( sanitize_key( $_GET['post_type'] ) ) ) {
 			return true;
 		}
 
-		if ( false !== strpos( $page, 'post.php' ) ) {
+		if ( str_contains( $page, 'post.php' ) ) {
 			$post = get_post( isset( $_GET['post'] ) ? intval( $_GET['post'] ) : null );
 			if ( isset( $post ) && isset( $post->post_type ) && $this->is_post_type_gutenberg( $post->post_type ) ) {
 				return true;
 			}
 		}
 
-		if ( false !== strpos( $page, 'revision.php' ) ) {
+		if ( str_contains( $page, 'revision.php' ) ) {
 			$post   = get_post( isset( $_GET['revision'] ) ? intval( $_GET['revision'] ) : null );
 			$parent = get_post( $post->post_parent );
 			if ( isset( $parent ) && isset( $parent->post_type ) && $this->is_post_type_gutenberg( $parent->post_type ) ) {
@@ -208,4 +209,4 @@ class Jetpack_Calypsoify {
 	}
 }
 
-Jetpack_Calypsoify::get_instance();
+Calypsoify::get_instance();

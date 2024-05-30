@@ -99,7 +99,7 @@ abstract class Formatter extends Base {
 			);
 		}
 
-		return gmdate( 'H:i:s', $value );
+		return gmdate( 'H:i:s', floor( $value ) );
 	}
 
 	/**

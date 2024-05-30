@@ -20,19 +20,28 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class Pivot extends \Beehive\Google\Collection
 {
     protected $collection_key = 'metrics';
+    /**
+     * @var DimensionFilterClause[]
+     */
+    public $dimensionFilterClauses;
     protected $dimensionFilterClausesType = DimensionFilterClause::class;
     protected $dimensionFilterClausesDataType = 'array';
-    public $dimensionFilterClauses;
+    /**
+     * @var Dimension[]
+     */
+    public $dimensions;
     protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
-    public $dimensions;
     /**
      * @var int
      */
     public $maxGroupCount;
+    /**
+     * @var Metric[]
+     */
+    public $metrics;
     protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    public $metrics;
     /**
      * @var int
      */

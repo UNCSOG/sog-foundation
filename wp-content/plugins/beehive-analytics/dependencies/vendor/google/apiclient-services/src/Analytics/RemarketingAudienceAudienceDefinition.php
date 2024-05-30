@@ -19,9 +19,12 @@ namespace Beehive\Google\Service\Analytics;
 
 class RemarketingAudienceAudienceDefinition extends \Beehive\Google\Model
 {
+    /**
+     * @var IncludeConditions
+     */
+    public $includeConditions;
     protected $includeConditionsType = IncludeConditions::class;
     protected $includeConditionsDataType = '';
-    public $includeConditions;
     /**
      * @param IncludeConditions
      */

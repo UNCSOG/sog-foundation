@@ -20,18 +20,30 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class ReportRequest extends \Beehive\Google\Collection
 {
     protected $collection_key = 'segments';
+    /**
+     * @var CohortGroup
+     */
+    public $cohortGroup;
     protected $cohortGroupType = CohortGroup::class;
     protected $cohortGroupDataType = '';
-    public $cohortGroup;
+    /**
+     * @var DateRange[]
+     */
+    public $dateRanges;
     protected $dateRangesType = DateRange::class;
     protected $dateRangesDataType = 'array';
-    public $dateRanges;
+    /**
+     * @var DimensionFilterClause[]
+     */
+    public $dimensionFilterClauses;
     protected $dimensionFilterClausesType = DimensionFilterClause::class;
     protected $dimensionFilterClausesDataType = 'array';
-    public $dimensionFilterClauses;
+    /**
+     * @var Dimension[]
+     */
+    public $dimensions;
     protected $dimensionsType = Dimension::class;
     protected $dimensionsDataType = 'array';
-    public $dimensions;
     /**
      * @var string
      */
@@ -48,15 +60,24 @@ class ReportRequest extends \Beehive\Google\Collection
      * @var bool
      */
     public $includeEmptyRows;
+    /**
+     * @var MetricFilterClause[]
+     */
+    public $metricFilterClauses;
     protected $metricFilterClausesType = MetricFilterClause::class;
     protected $metricFilterClausesDataType = 'array';
-    public $metricFilterClauses;
+    /**
+     * @var Metric[]
+     */
+    public $metrics;
     protected $metricsType = Metric::class;
     protected $metricsDataType = 'array';
-    public $metrics;
+    /**
+     * @var OrderBy[]
+     */
+    public $orderBys;
     protected $orderBysType = OrderBy::class;
     protected $orderBysDataType = 'array';
-    public $orderBys;
     /**
      * @var int
      */
@@ -65,16 +86,22 @@ class ReportRequest extends \Beehive\Google\Collection
      * @var string
      */
     public $pageToken;
+    /**
+     * @var Pivot[]
+     */
+    public $pivots;
     protected $pivotsType = Pivot::class;
     protected $pivotsDataType = 'array';
-    public $pivots;
     /**
      * @var string
      */
     public $samplingLevel;
+    /**
+     * @var Segment[]
+     */
+    public $segments;
     protected $segmentsType = Segment::class;
     protected $segmentsDataType = 'array';
-    public $segments;
     /**
      * @var string
      */

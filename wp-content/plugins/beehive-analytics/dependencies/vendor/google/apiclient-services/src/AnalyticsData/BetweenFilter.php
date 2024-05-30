@@ -19,12 +19,18 @@ namespace Beehive\Google\Service\AnalyticsData;
 
 class BetweenFilter extends \Beehive\Google\Model
 {
+    /**
+     * @var NumericValue
+     */
+    public $fromValue;
     protected $fromValueType = NumericValue::class;
     protected $fromValueDataType = '';
-    public $fromValue;
+    /**
+     * @var NumericValue
+     */
+    public $toValue;
     protected $toValueType = NumericValue::class;
     protected $toValueDataType = '';
-    public $toValue;
     /**
      * @param NumericValue
      */

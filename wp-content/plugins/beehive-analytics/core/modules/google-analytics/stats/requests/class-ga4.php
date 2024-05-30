@@ -819,7 +819,7 @@ class GA4 extends Request {
 				} else {
 					$dimension_order_by = new DimensionOrderBy();
 					$dimension_order_by->setDimensionName( $field );
-					//$dimension_order_by->setOrderType( 'NUMERIC' );
+					// $dimension_order_by->setOrderType( 'NUMERIC' );
 					$order_by->setDimension( $dimension_order_by );
 					$order_by->setDesc( false );
 				}

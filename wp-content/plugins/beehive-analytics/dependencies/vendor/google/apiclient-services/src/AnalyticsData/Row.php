@@ -20,12 +20,18 @@ namespace Beehive\Google\Service\AnalyticsData;
 class Row extends \Beehive\Google\Collection
 {
     protected $collection_key = 'metricValues';
+    /**
+     * @var DimensionValue[]
+     */
+    public $dimensionValues;
     protected $dimensionValuesType = DimensionValue::class;
     protected $dimensionValuesDataType = 'array';
-    public $dimensionValues;
+    /**
+     * @var MetricValue[]
+     */
+    public $metricValues;
     protected $metricValuesType = MetricValue::class;
     protected $metricValuesDataType = 'array';
-    public $metricValues;
     /**
      * @param DimensionValue[]
      */

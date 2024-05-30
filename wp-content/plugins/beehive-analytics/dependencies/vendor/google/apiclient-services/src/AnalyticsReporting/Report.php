@@ -19,12 +19,18 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 
 class Report extends \Beehive\Google\Model
 {
+    /**
+     * @var ColumnHeader
+     */
+    public $columnHeader;
     protected $columnHeaderType = ColumnHeader::class;
     protected $columnHeaderDataType = '';
-    public $columnHeader;
+    /**
+     * @var ReportData
+     */
+    public $data;
     protected $dataType = ReportData::class;
     protected $dataDataType = '';
-    public $data;
     /**
      * @var string
      */

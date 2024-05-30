@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\AnalyticsData;
 class PivotHeader extends \Beehive\Google\Collection
 {
     protected $collection_key = 'pivotDimensionHeaders';
+    /**
+     * @var PivotDimensionHeader[]
+     */
+    public $pivotDimensionHeaders;
     protected $pivotDimensionHeadersType = PivotDimensionHeader::class;
     protected $pivotDimensionHeadersDataType = 'array';
-    public $pivotDimensionHeaders;
     /**
      * @var int
      */

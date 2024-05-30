@@ -19,22 +19,34 @@ namespace Beehive\Google\Service\AnalyticsData;
 
 class Filter extends \Beehive\Google\Model
 {
+    /**
+     * @var BetweenFilter
+     */
+    public $betweenFilter;
     protected $betweenFilterType = BetweenFilter::class;
     protected $betweenFilterDataType = '';
-    public $betweenFilter;
     /**
      * @var string
      */
     public $fieldName;
+    /**
+     * @var InListFilter
+     */
+    public $inListFilter;
     protected $inListFilterType = InListFilter::class;
     protected $inListFilterDataType = '';
-    public $inListFilter;
+    /**
+     * @var NumericFilter
+     */
+    public $numericFilter;
     protected $numericFilterType = NumericFilter::class;
     protected $numericFilterDataType = '';
-    public $numericFilter;
+    /**
+     * @var StringFilter
+     */
+    public $stringFilter;
     protected $stringFilterType = StringFilter::class;
     protected $stringFilterDataType = '';
-    public $stringFilter;
     /**
      * @param BetweenFilter
      */

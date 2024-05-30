@@ -32,9 +32,12 @@ class GoogleAnalyticsAdminV1betaAccountSummary extends \Beehive\Google\Collectio
      * @var string
      */
     public $name;
+    /**
+     * @var GoogleAnalyticsAdminV1betaPropertySummary[]
+     */
+    public $propertySummaries;
     protected $propertySummariesType = GoogleAnalyticsAdminV1betaPropertySummary::class;
     protected $propertySummariesDataType = 'array';
-    public $propertySummaries;
     /**
      * @param string
      */

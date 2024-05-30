@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\PeopleService;
 class ListConnectionsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'connections';
+    /**
+     * @var Person[]
+     */
+    public $connections;
     protected $connectionsType = Person::class;
     protected $connectionsDataType = 'array';
-    public $connections;
     /**
      * @var string
      */

@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\PeopleService;
 class GetPeopleResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'responses';
+    /**
+     * @var PersonResponse[]
+     */
+    public $responses;
     protected $responsesType = PersonResponse::class;
     protected $responsesDataType = 'array';
-    public $responses;
     /**
      * @param PersonResponse[]
      */

@@ -20,9 +20,12 @@ namespace Beehive\Google\Service\Analytics;
 class GaData extends \Beehive\Google\Collection
 {
     protected $collection_key = 'rows';
+    /**
+     * @var GaDataColumnHeaders[]
+     */
+    public $columnHeaders;
     protected $columnHeadersType = GaDataColumnHeaders::class;
     protected $columnHeadersDataType = 'array';
-    public $columnHeaders;
     /**
      * @var bool
      */
@@ -31,9 +34,12 @@ class GaData extends \Beehive\Google\Collection
      * @var string
      */
     public $dataLastRefreshed;
+    /**
+     * @var GaDataDataTable
+     */
+    public $dataTable;
     protected $dataTableType = GaDataDataTable::class;
     protected $dataTableDataType = '';
-    public $dataTable;
     /**
      * @var string
      */
@@ -54,12 +60,18 @@ class GaData extends \Beehive\Google\Collection
      * @var string
      */
     public $previousLink;
+    /**
+     * @var GaDataProfileInfo
+     */
+    public $profileInfo;
     protected $profileInfoType = GaDataProfileInfo::class;
     protected $profileInfoDataType = '';
-    public $profileInfo;
+    /**
+     * @var GaDataQuery
+     */
+    public $query;
     protected $queryType = GaDataQuery::class;
     protected $queryDataType = '';
-    public $query;
     /**
      * @var string[]
      */

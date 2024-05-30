@@ -214,6 +214,7 @@ class The_Neverending_Home_Page {
 			// Otherwise, if a widget area ID or array of IDs was provided in the footer_widgets parameter, check if any contains any widgets.
 			// It is safe to use `is_active_sidebar()` before the sidebar is registered as this function doesn't check for a sidebar's existence when determining if it contains any widgets.
 			if ( function_exists( 'infinite_scroll_has_footer_widgets' ) ) {
+				// @phan-suppress-next-line PhanUndeclaredFunction -- Checked above. See also https://github.com/phan/phan/issues/1204.
 				$settings['footer_widgets'] = (bool) infinite_scroll_has_footer_widgets();
 			} elseif ( is_array( $settings['footer_widgets'] ) ) {
 				$sidebar_ids                = $settings['footer_widgets'];
@@ -661,7 +662,7 @@ class The_Neverending_Home_Page {
 
 		// actual testing. As search query combines multiple keywords with AND, it's enough to check if any of the keywords is present in the title
 		$term = current( $search_terms );
-		if ( ! empty( $term ) && false !== strpos( $post->post_title, $term ) ) {
+		if ( ! empty( $term ) && str_contains( $post->post_title, $term ) ) {
 			return true;
 		}
 
@@ -1024,7 +1025,7 @@ class The_Neverending_Home_Page {
 			}
 
 			// Slashes everywhere we need them
-			if ( 0 !== strpos( $path, '/' ) ) {
+			if ( ! str_starts_with( $path, '/' ) ) {
 				$path = '/' . $path;
 			}
 
@@ -1152,7 +1153,7 @@ class The_Neverending_Home_Page {
 					// Jetpack block scripts should always be sent, even if they've been
 					// sent before. These scripts only run once on when loaded, they don't
 					// watch for new blocks being added.
-					if ( 0 === strpos( $script_name, 'jetpack-block-' ) ) {
+					if ( str_starts_with( $script_name, 'jetpack-block-' ) ) {
 						return true;
 					}
 
@@ -1162,7 +1163,6 @@ class The_Neverending_Home_Page {
 
 			// If new scripts are needed, extract relevant data from $wp_scripts
 			if ( ! empty( $new_scripts ) ) {
-				global $wp_version;
 				$results['scripts'] = array();
 
 				foreach ( $new_scripts as $handle ) {
@@ -1174,14 +1174,8 @@ class The_Neverending_Home_Page {
 						continue;
 					}
 
-					// Remove conditional once WordPress 6.3 is the minimum required version.
-					if ( version_compare( $wp_version, '6.3', '>=' ) ) {
-						$before_handle = $wp_scripts->get_inline_script_data( $handle, 'before' );
-						$after_handle  = $wp_scripts->get_inline_script_data( $handle, 'after' );
-					} else {
-						$before_handle = $wp_scripts->print_inline_script( $handle, 'before', false );
-						$after_handle  = $wp_scripts->print_inline_script( $handle, 'after', false );
-					}
+					$before_handle = $wp_scripts->get_inline_script_data( $handle, 'before' );
+					$after_handle  = $wp_scripts->get_inline_script_data( $handle, 'after' );
 
 					// Provide basic script data
 					$script_data = array(
@@ -1786,7 +1780,7 @@ class The_Neverending_Home_Page {
 	 */
 	public function filter_grunion_redirect_url( $url ) {
 		// Remove IS query args, if present
-		if ( false !== strpos( $url, 'infinity=scrolling' ) ) {
+		if ( str_contains( $url, 'infinity=scrolling' ) ) {
 			$url = remove_query_arg(
 				array(
 					'infinity',

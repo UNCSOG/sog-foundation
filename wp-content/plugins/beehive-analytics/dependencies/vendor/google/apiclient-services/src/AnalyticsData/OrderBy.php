@@ -23,15 +23,24 @@ class OrderBy extends \Beehive\Google\Model
      * @var bool
      */
     public $desc;
+    /**
+     * @var DimensionOrderBy
+     */
+    public $dimension;
     protected $dimensionType = DimensionOrderBy::class;
     protected $dimensionDataType = '';
-    public $dimension;
+    /**
+     * @var MetricOrderBy
+     */
+    public $metric;
     protected $metricType = MetricOrderBy::class;
     protected $metricDataType = '';
-    public $metric;
+    /**
+     * @var PivotOrderBy
+     */
+    public $pivot;
     protected $pivotType = PivotOrderBy::class;
     protected $pivotDataType = '';
-    public $pivot;
     /**
      * @param bool
      */
