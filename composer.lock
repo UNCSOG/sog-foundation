@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbd5127efc456e0d901dd4a59586915f",
+    "content-hash": "984c4730b43c957f48006587c94747b3",
     "packages": [
         {
             "name": "composer/installers",
@@ -150,6 +150,57 @@
                 }
             ],
             "time": "2022-08-20T06:45:11+00:00"
+        },
+        {
+            "name": "pantheon-systems/upstream-management",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheon-systems/upstream-management.git",
+                "reference": "581530f69775cfd32acf944506de81510a28deca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheon-systems/upstream-management/zipball/581530f69775cfd32acf944506de81510a28deca",
+                "reference": "581530f69775cfd32acf944506de81510a28deca",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.3"
+            },
+            "require-dev": {
+                "composer/composer": "^2.5",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.7",
+                "symfony/filesystem": "^5|^6",
+                "symfony/process": "^5|^6"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PantheonSystems\\UpstreamManagement\\Plugin\\UpstreamManagementPlugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "PantheonSystems\\UpstreamManagement\\": "src/",
+                    "PantheonSystems\\UpstreamManagement\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pantheon",
+                    "email": "cms-ecosystem@pantheon.io"
+                }
+            ],
+            "description": "Composer plugin that holds a series of scripts to manage upstreams in Pantheon",
+            "support": {
+                "issues": "https://github.com/pantheon-systems/upstream-management/issues",
+                "source": "https://github.com/pantheon-systems/upstream-management/tree/1.0.1"
+            },
+            "time": "2024-02-27T15:21:46+00:00"
         },
         {
             "name": "wpackagist-plugin/akismet",

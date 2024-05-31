@@ -3,7 +3,8 @@
     "config": {
         "vendor-dir": "vendor",
         "allow-plugins": {
-            "composer/installers": true
+            "composer/installers": true,
+            "pantheon-systems/upstream-management": true
         }
     },
     "repositories": [
@@ -26,7 +27,8 @@
         "wpackagist-plugin/show-hooks": "^0.4",
         "wpackagist-plugin/simply-show-hooks": "^1.2.1",
         "wpackagist-plugin/what-template-file-am-i-viewing": "^1.2",
-        "wpackagist-theme/twentytwentyfour": "^1.0"
+        "wpackagist-theme/twentytwentyfour": "^1.0",
+        "pantheon-systems/upstream-management": "^1.0"
     },
     "extra": {
         "installer-paths": {
