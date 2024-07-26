@@ -35,7 +35,8 @@ a .sr-only {
 
 		&:hover,
 		&:focus,
-		&:active {
+		&:active,
+		&:target {
 			text-decoration: underline;
 		}
 	}

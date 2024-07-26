@@ -8,7 +8,8 @@ footer#footer {
 
 		&:hover,
 		&:focus,
-		&:active {
+		&:active,
+		&:target {
 			color: $unc-hyperlink-blue;
 			text-decoration: none;
 		}

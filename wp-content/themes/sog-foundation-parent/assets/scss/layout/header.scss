@@ -4,9 +4,13 @@ header#headerMain {
 
 	a {
 		color: $white;
+		text-decoration: underline;
 
 		&:hover,
 		&:focus,
-		&:active {}
+		&:active,
+		&:target {
+			text-decoration: none;
+		}
 	}
 }
