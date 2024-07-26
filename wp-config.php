@@ -26,6 +26,17 @@ if (file_exists(dirname(__FILE__) . '/wp-config-pantheon.php') && isset($_ENV['P
 	require_once(dirname(__FILE__) . '/wp-config-local.php');
 
 /**
+ * DDev Local configuration information.
+ *
+ * If you are working in a local/desktop development environment and want to
+ * keep your config separate, we recommend using a 'wp-config-local.php' file,
+ * which you should also make sure you .gitignore.
+ */
+} elseif (file_exists(dirname(__FILE__) . '/wp-config-ddev.php') && !isset($_ENV['PANTHEON_ENVIRONMENT'])){
+	# IMPORTANT: ensure your local config does not include wp-settings.php
+	require_once(dirname(__FILE__) . '/wp-config-ddev.php');
+
+/**
  * This block will be executed if you are NOT running on Pantheon and have NO
  * wp-config-local.php. Insert alternate config here if necessary.
  *

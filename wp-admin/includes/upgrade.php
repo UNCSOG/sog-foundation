@@ -52,6 +52,21 @@ if ( ! function_exists( 'wp_install' ) ) :
 		wp_check_mysql_version();
 		wp_cache_flush();
 		make_db_current_silent();
+
+		/*
+		 * Ensure update checks are delayed after installation.
+		 *
+		 * This prevents users being presented with a maintenance mode screen
+		 * immediately after installation.
+		 */
+		wp_unschedule_hook( 'wp_version_check' );
+		wp_unschedule_hook( 'wp_update_plugins' );
+		wp_unschedule_hook( 'wp_update_themes' );
+
+		wp_schedule_event( time() + HOUR_IN_SECONDS, 'twicedaily', 'wp_version_check' );
+		wp_schedule_event( time() + ( 1.5 * HOUR_IN_SECONDS ), 'twicedaily', 'wp_update_plugins' );
+		wp_schedule_event( time() + ( 2 * HOUR_IN_SECONDS ), 'twicedaily', 'wp_update_themes' );
+
 		populate_options();
 		populate_roles();
 
@@ -147,7 +162,7 @@ if ( ! function_exists( 'wp_install_defaults' ) ) :
 	 *
 	 * @global wpdb       $wpdb         WordPress database abstraction object.
 	 * @global WP_Rewrite $wp_rewrite   WordPress rewrite component.
-	 * @global string     $table_prefix
+	 * @global string     $table_prefix The database table prefix.
 	 *
 	 * @param int $user_id User ID.
 	 */
@@ -841,6 +856,10 @@ function upgrade_all() {
 
 	if ( $wp_current_db_version < 56657 ) {
 		upgrade_640();
+	}
+
+	if ( $wp_current_db_version < 57155 ) {
+		upgrade_650();
 	}
 
 	maybe_disable_link_manager();
@@ -2350,6 +2369,35 @@ function upgrade_640() {
 }
 
 /**
+ * Executes changes made in WordPress 6.5.0.
+ *
+ * @ignore
+ * @since 6.5.0
+ *
+ * @global int  $wp_current_db_version The old (current) database version.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
+ */
+function upgrade_650() {
+	global $wp_current_db_version, $wpdb;
+
+	if ( $wp_current_db_version < 57155 ) {
+		$stylesheet = get_stylesheet();
+
+		// Set autoload=no for all themes except the current one.
+		$theme_mods_options = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT option_name FROM $wpdb->options WHERE autoload = 'yes' AND option_name != %s AND option_name LIKE %s",
+				"theme_mods_$stylesheet",
+				$wpdb->esc_like( 'theme_mods_' ) . '%'
+			)
+		);
+
+		$autoload = array_fill_keys( $theme_mods_options, 'no' );
+		wp_set_option_autoload_values( $autoload );
+	}
+}
+
+/**
  * Executes network-level upgrade routines.
  *
  * @since 3.0.0
@@ -2910,31 +2958,29 @@ function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.N
 					 */
 
 					// Extract type, name and columns from the definition.
-					// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
 					preg_match(
-						'/^'
-						.   '(?P<index_type>'             // 1) Type of the index.
-						.       'PRIMARY\s+KEY|(?:UNIQUE|FULLTEXT|SPATIAL)\s+(?:KEY|INDEX)|KEY|INDEX'
-						.   ')'
-						.   '\s+'                         // Followed by at least one white space character.
-						.   '(?:'                         // Name of the index. Optional if type is PRIMARY KEY.
-						.       '`?'                      // Name can be escaped with a backtick.
-						.           '(?P<index_name>'     // 2) Name of the index.
-						.               '(?:[0-9a-zA-Z$_-]|[\xC2-\xDF][\x80-\xBF])+'
-						.           ')'
-						.       '`?'                      // Name can be escaped with a backtick.
-						.       '\s+'                     // Followed by at least one white space character.
-						.   ')*'
-						.   '\('                          // Opening bracket for the columns.
-						.       '(?P<index_columns>'
-						.           '.+?'                 // 3) Column names, index prefixes, and orders.
-						.       ')'
-						.   '\)'                          // Closing bracket for the columns.
-						. '$/im',
+						'/^
+							(?P<index_type>             # 1) Type of the index.
+								PRIMARY\s+KEY|(?:UNIQUE|FULLTEXT|SPATIAL)\s+(?:KEY|INDEX)|KEY|INDEX
+							)
+							\s+                         # Followed by at least one white space character.
+							(?:                         # Name of the index. Optional if type is PRIMARY KEY.
+								`?                      # Name can be escaped with a backtick.
+									(?P<index_name>     # 2) Name of the index.
+										(?:[0-9a-zA-Z$_-]|[\xC2-\xDF][\x80-\xBF])+
+									)
+								`?                      # Name can be escaped with a backtick.
+								\s+                     # Followed by at least one white space character.
+							)*
+							\(                          # Opening bracket for the columns.
+								(?P<index_columns>
+									.+?                 # 3) Column names, index prefixes, and orders.
+								)
+							\)                          # Closing bracket for the columns.
+						$/imx',
 						$fld,
 						$index_matches
 					);
-					// phpcs:enable
 
 					// Uppercase the index type and normalize space characters.
 					$index_type = strtoupper( preg_replace( '/\s+/', ' ', trim( $index_matches['index_type'] ) ) );
@@ -2952,29 +2998,27 @@ function dbDelta( $queries = '', $execute = true ) { // phpcs:ignore WordPress.N
 					// Normalize columns.
 					foreach ( $index_columns as $id => &$index_column ) {
 						// Extract column name and number of indexed characters (sub_part).
-						// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
 						preg_match(
-							'/'
-							.   '`?'                      // Name can be escaped with a backtick.
-							.       '(?P<column_name>'    // 1) Name of the column.
-							.           '(?:[0-9a-zA-Z$_-]|[\xC2-\xDF][\x80-\xBF])+'
-							.       ')'
-							.   '`?'                      // Name can be escaped with a backtick.
-							.   '(?:'                     // Optional sub part.
-							.       '\s*'                 // Optional white space character between name and opening bracket.
-							.       '\('                  // Opening bracket for the sub part.
-							.           '\s*'             // Optional white space character after opening bracket.
-							.           '(?P<sub_part>'
-							.               '\d+'         // 2) Number of indexed characters.
-							.           ')'
-							.           '\s*'             // Optional white space character before closing bracket.
-							.       '\)'                  // Closing bracket for the sub part.
-							.   ')?'
-							. '/',
+							'/
+								`?                      # Name can be escaped with a backtick.
+									(?P<column_name>    # 1) Name of the column.
+										(?:[0-9a-zA-Z$_-]|[\xC2-\xDF][\x80-\xBF])+
+									)
+								`?                      # Name can be escaped with a backtick.
+								(?:                     # Optional sub part.
+									\s*                 # Optional white space character between name and opening bracket.
+									\(                  # Opening bracket for the sub part.
+										\s*             # Optional white space character after opening bracket.
+										(?P<sub_part>
+											\d+         # 2) Number of indexed characters.
+										)
+										\s*             # Optional white space character before closing bracket.
+									\)                  # Closing bracket for the sub part.
+								)?
+							/x',
 							$index_column,
 							$index_column_matches
 						);
-						// phpcs:enable
 
 						// Escape the column name with backticks.
 						$index_column = '`' . $index_column_matches['column_name'] . '`';

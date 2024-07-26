@@ -7,9 +7,9 @@
 }
 
 .block-library-query__pattern-selection-content .block-editor-block-patterns-list{
-  grid-gap:8px;
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
+  grid-gap:8px;
 }
 .block-library-query__pattern-selection-content .block-editor-block-patterns-list .block-editor-block-patterns-list__list-item{
   margin-bottom:0;
@@ -32,10 +32,11 @@
 }
 .block-library-query-pattern__selection-modal .block-library-query-pattern__selection-search{
   background:#fff;
-  margin-bottom:2px;
+  margin-bottom:-4px;
   padding:16px 0;
   position:sticky;
   top:0;
+  transform:translateY(-4px);
   z-index:2;
 }
 

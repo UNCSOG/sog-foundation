@@ -270,7 +270,7 @@ function relevanssi_search( $args ) {
 
 			$total_hits += count( $matches );
 
-			$idf = log( $doc_count + 1 / ( 1 + $df ) );
+			$idf = log( ( $doc_count + 1 ) / ( 1 + $df ) );
 			$idf = $idf * $idf; // Adjustment to increase the value of IDF.
 			if ( $idf < 1 ) {
 				$idf = 1;
@@ -460,10 +460,10 @@ function relevanssi_search( $args ) {
 				if ( ! is_wp_error( $post_object ) ) {
 					$hits[ intval( $i ) ]                  = $post_object;
 					$hits[ intval( $i ) ]->relevance_score = round( $weight, 2 );
-				}
 
-				if ( isset( $missing_terms[ $doc ] ) ) {
-					$hits[ intval( $i ) ]->missing_terms = $missing_terms[ $doc ];
+					if ( isset( $missing_terms[ $doc ] ) ) {
+						$hits[ intval( $i ) ]->missing_terms = $missing_terms[ $doc ];
+					}
 				}
 			}
 			++$i;
@@ -1058,27 +1058,27 @@ function relevanssi_compile_search_args( $query, $q ) {
 
 	$post_query = array();
 	if ( isset( $query->query_vars['p'] ) && $query->query_vars['p'] ) {
-		$post_query = array( 'in' => array( $query->query_vars['p'] ) );
+		$post_query['in'] = array( $query->query_vars['p'] );
 	}
 	if ( isset( $query->query_vars['page_id'] ) && $query->query_vars['page_id'] ) {
-		$post_query = array( 'in' => array( $query->query_vars['page_id'] ) );
+		$post_query['in'] = array( $query->query_vars['page_id'] );
 	}
 	if ( isset( $query->query_vars['post__in'] ) && is_array( $query->query_vars['post__in'] ) && ! empty( $query->query_vars['post__in'] ) ) {
-		$post_query = array( 'in' => $query->query_vars['post__in'] );
+		$post_query['in'] = $query->query_vars['post__in'];
 	}
 	if ( isset( $query->query_vars['post__not_in'] ) && is_array( $query->query_vars['post__not_in'] ) && ! empty( $query->query_vars['post__not_in'] ) ) {
-		$post_query = array( 'not in' => $query->query_vars['post__not_in'] );
+		$post_query['not in'] = $query->query_vars['post__not_in'];
 	}
 
 	$parent_query = array();
 	if ( isset( $query->query_vars['post_parent'] ) && '' !== $query->query_vars['post_parent'] ) {
-		$parent_query = array( 'parent in' => array( (int) $query->query_vars['post_parent'] ) );
+		$parent_query['parent in'] = array( (int) $query->query_vars['post_parent'] );
 	}
 	if ( isset( $query->query_vars['post_parent__in'] ) && is_array( $query->query_vars['post_parent__in'] ) && ! empty( $query->query_vars['post_parent__in'] ) ) {
-		$parent_query = array( 'parent in' => $query->query_vars['post_parent__in'] );
+		$parent_query['parent in'] = $query->query_vars['post_parent__in'];
 	}
 	if ( isset( $query->query_vars['post_parent__not_in'] ) && is_array( $query->query_vars['post_parent__not_in'] ) && ! empty( $query->query_vars['post_parent__not_in'] ) ) {
-		$parent_query = array( 'parent not in' => $query->query_vars['post_parent__not_in'] );
+		$parent_query['parent not in'] = $query->query_vars['post_parent__not_in'];
 	}
 
 	$expost = get_option( 'relevanssi_exclude_posts' );
@@ -1432,7 +1432,7 @@ function relevanssi_calculate_weight( $match_object, $idf, $post_type_weights, $
 		);
 
 		$post        = relevanssi_get_post( $match_object->doc );
-		$clean_query = str_replace( '"', '', $query );
+		$clean_query = relevanssi_remove_quotes( $query );
 		if ( ! is_wp_error( $post ) && relevanssi_mb_stristr( $post->post_title, $clean_query ) !== false ) {
 			$weight *= $exact_match_boost['title'];
 		}
@@ -1621,7 +1621,7 @@ function relevanssi_sort_results( &$hits, $orderby, $order, $meta_query ) {
 			 */
 			$order = apply_filters( 'relevanssi_order', $order );
 
-			if ( 'relevance' !== $orderby ) {
+			if ( 'relevance' !== $orderby || 'asc' === $order ) {
 				// Results are by default sorted by relevance, so no need to sort
 				// for that.
 				$orderby_array = array( $orderby => $order );
@@ -1977,7 +1977,7 @@ function relevanssi_post_date_throttle_join( $query_join ) {
 	if ( 'post_date' === get_option( 'relevanssi_default_orderby' ) &&
 		'on' === get_option( 'relevanssi_throttle', 'on' ) ) {
 		global $wpdb;
-		$query_join = ', ' . $wpdb->posts . ' AS p';
+		$query_join .= ', ' . $wpdb->posts . ' AS p';
 	}
 	return $query_join;
 }
