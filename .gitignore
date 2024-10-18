@@ -64,3 +64,17 @@ Thumbs.db
 ###############
 content/*
 vendor/*
+*.ai
+*.psd
+*.zip
+
+# Custom Theme Specific #
+#################
+.ddev
+development/*
+wp-content/ai1wm-backups/*
+wp-content/development/*
+wp-content/themes/development/*
+wp-content/themes/*/development/*
+.vscode/settings.json
+.vscode/development/*
