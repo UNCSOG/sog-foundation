@@ -1,0 +1,52 @@
+{% extends "base.twig" %}
+
+{% block body %}
+
+    <p>{{ __( 'This section allows you to import the settigns exported from another site. Please make sure that both source and target sites:' ) }}</p>
+    <p>
+        <label>
+            <input type="checkbox" data-bind="checked: importRequirements" value="same_theme_active"/>
+            {{ __( 'Have the same active theme.') }}
+        </label>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" data-bind="checked: importRequirements" value="same_plugins_active"/>
+            {{ __( 'Have the same active plugins that register widgets.') }}
+        </label>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" data-bind="checked: importRequirements" value="relevant_content_imported"/>
+            {{ __( 'Have the same post types, posts, taxonomies and terms referenced in menus or settings and that GUIDs have not been changed.' ) }}
+        </label>
+    </p>
+
+    <div class="toolset-advanced-setting">
+        <p>
+            {{ __( 'Upload a .zip file from your computer:') }}
+        </p>
+        <input type="file" id="toolset_advanced_export_import_file" data-bind="file: {data: importFileData, name: importFileName}" />
+    </div>
+
+
+    <p class="toolset-update-button-wrap">
+
+        <span class="toolset-alert toolset-alert-error"
+              style="float: left; margin-bottom: 5px;"
+              data-bind="html: importErrorMessage, visible: importErrorMessage().length > 0"
+        ></span>
+
+        <span style="float: left; margin-bottom: 5px; display: block; "
+              data-bind="html: importOutput"
+        ></span>
+
+        <button
+                type="submit" class="button button-primary form-submit submit"
+                data-bind="click: onImportClick, enablePrimary: isImportButtonEnabled"
+        >{{ __( 'Import' ) }}</button>
+
+        <span class="spinner" data-bind="style: { visibility: (isImportInProgress() ? 'visible' : 'hidden') }"></span>
+    </p>
+
+{% endblock %}
