@@ -1,0 +1,131 @@
+/* ----------------------------------------------------------------------------
+Theme settings integration styles
+
+@since 2.5
+---------------------------------------------------------------------------- */
+
+.dd-layouts-wrap .theme-settings-wrap {
+    /*copied from: .dd-layouts-where-used */
+    padding: 16px 16px;
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    font-size: 13px;
+}
+.dd-layouts-wrap .theme-settings-wrap-collapsed {
+    padding-bottom: 0;
+}
+
+.dd-layouts-wrap .theme-settings-title {
+    font-size: 14px;
+    margin: -6px -16px 0;
+    padding: 0 15px 10px;
+    border-bottom: 1px solid #dfdfdf;
+}
+.dd-layouts-wrap .theme-settings-toggle{
+    float: right;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    margin-top: -9px;
+    margin-right: -9px;
+    cursor: pointer;
+}
+.dd-layouts-wrap .theme-settings-toggle:focus {
+    outline: none;
+    -webkit-box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+    box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, .8);
+}
+
+
+.dd-layouts-wrap  .theme-settings-section-title {
+    font-size: 1.15em;
+    margin: 1em 0 .7em 0;
+}
+.dd-layouts-wrap .toolset-theme-settings-single-option-wrap {
+    margin: .7em 0;
+}
+.theme-settings-section + .theme-settings-section {
+    margin-top: 1.1em;
+}
+
+.theme-option-label:not(:empty) {
+    display:  inline-block;
+    min-width: 200px;
+}
+
+
+.theme-option-label + select,
+.theme-option-label + input,
+.theme-option-label + p.theme-option-info-text-wrap,
+.theme-option-label span {
+    margin-start: 5px;
+    -webkit-margin-start: 5px;
+    min-width: 200px;
+}
+.theme-option-label:empty + select,
+.theme-option-label:empty + p.theme-option-info-text-wrap,
+.theme-option-label:empty + input {
+    margin-start: 0;
+    -webkit-margin-start: 0;
+    min-width: 410px;
+}
+.theme-option-switch-container {
+    display:  inline-block;
+    vertical-align: top;
+    margin: .3em 0;
+    position:relative;
+}
+
+.theme-option-switch-label {
+    display:  block;
+}
+
+.theme-settings-option {
+    margin: 1em 0;
+}
+
+.toolset-theme-options-hint {
+    color: #CCC;
+    cursor: pointer;
+    vertical-align: 0.2em!important; /* Important for overwriting: [class^="icon-"]{} */
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.toolset-theme-options-hint:hover {
+    color: #348BB6;
+}
+
+.theme-settings-section-content{
+    clear:both;
+}
+
+.theme-settings-section-summary{
+    float:left;
+}
+
+.disabled-section{
+    color: #CCC;
+}
+
+.toolset-non-assigned-message {
+    padding: 0 10px 10px 20px;
+    background: #f6f6f6;
+    border-left: solid 3px #cdcdcd;
+    margin-top: 15px;
+}
+.theme-options-box-visibility-controls-wrap{padding-bottom: 4px;}
+
+.theme-options-color-picker-wrap{
+    display: inline-block;
+    position: relative;
+    left: 6px;
+    top: -6px;
+}
+.theme-settings-colorpicker-label{
+    display: inline-block;
+}
+.theme-option-switch-container .wp-picker-container{position:relative;top:10px;}
+.toolset-theme-settings-single-option-wrap{padding-bottom: 8px;}

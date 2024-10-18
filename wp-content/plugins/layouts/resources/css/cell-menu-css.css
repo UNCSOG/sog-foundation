@@ -1,0 +1,682 @@
+/** CSS to handle dropdown submenus in BS3 */
+.ddl-dropdown-submenu {
+	position: relative;
+}
+
+.ddl-dropdown-submenu > .ddl-dropdown-menu {
+	top: 0;
+	left: 100%;
+	margin-top: -6px;
+	margin-left: -1px;
+
+}
+
+.ddl-dropdown-submenu:hover > .ddl-dropdown-menu {
+	display: block;
+}
+
+
+
+.ddl-dropdown-submenu.pull-left {
+	float: none;
+}
+
+.ddl-dropdown-submenu.pull-left > .ddl-dropdown-menu {
+	left: -100%;
+	margin-left: 10px;
+}
+
+.ddl-dropdown-submenu-layouts {
+	position: relative;
+}
+
+.ddl-dropdown-submenu-layouts > a:after {
+	display: block;
+	content: " ";
+	float: right;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-left-color: #cccccc;
+	margin-top: 5px;
+	margin-right: -10px;
+}
+
+/* DDL Menu Cell*/
+.ddl-nav-wrap {
+	float: right;
+	margin-top: 40px;
+    margin-left:-1px;
+}
+
+.ddl-nav-wrap .ddl-nav,
+.ddl-nav-extra .ddl-nav-wrap {
+	margin: 0;
+}
+
+.ddl-nav-extra .ddl-nav-wrap {
+	float: left;
+	padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+	.ddl-dropdown-menu {
+		margin-left: 20px !important;
+	}
+}
+
+.caret {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 2px;
+	vertical-align: middle;
+	border-top: 4px solid;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent
+}
+
+.ddl-dropdown {
+	position: relative
+}
+
+.ddl-dropdown-toggle:focus {
+	outline: 0
+}
+
+.ddl-dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	display: none;
+	float: left;
+	min-width: 160px;
+	padding: 5px 0;
+	margin: 2px 0 0;
+	list-style: none;
+	font-size: 14px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, .15);
+	border-radius: 4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+	background-clip: padding-box
+}
+
+.ddl-dropdown-menu.pull-right {
+	right: 0;
+	left: auto
+}
+
+.ddl-dropdown-menu .divider {
+	height: 1px;
+	margin: 9px 0;
+	overflow: hidden;
+	background-color: #e5e5e5
+}
+
+.ddl-dropdown-menu > li > a {
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: 400;
+	line-height: 1.42857143;
+	color: #333;
+	white-space: nowrap
+}
+
+.ddl-dropdown-menu > li > a:hover, .ddl-dropdown-menu > li > a:focus {
+	text-decoration: none;
+	color: #262626;
+	background-color: #f5f5f5
+}
+
+.ddl-dropdown-menu > .active > a, .ddl-dropdown-menu > .active > a:hover, .ddl-dropdown-menu > .active > a:focus {
+	color: #fff;
+	text-decoration: none;
+	outline: 0;
+	background-color: #428bca
+}
+
+.ddl-dropdown-menu > .disabled > a, .ddl-dropdown-menu > .disabled > a:hover, .ddl-dropdown-menu > .disabled > a:focus {
+	color: #999
+}
+
+.ddl-dropdown-menu > .disabled > a:hover, .ddl-dropdown-menu > .disabled > a:focus {
+	text-decoration: none;
+	cursor: not-allowed
+}
+
+.open > .ddl-dropdown-menu {
+	display: block
+}
+
+.open > a {
+	outline: 0
+}
+
+.ddl-dropdown-menu-right {
+	left: auto;
+	right: 0
+}
+
+.ddl-dropdown-menu-left {
+	left: 0;
+	right: auto
+}
+
+.ddl-dropdown-header {
+	display: block;
+	padding: 3px 20px;
+	font-size: 12px;
+	line-height: 1.42857143;
+	color: #999
+}
+
+.ddl-dropdown-backdrop {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	z-index: 990
+}
+
+.pull-right > .ddl-dropdown-menu {
+	right: 0;
+	left: auto
+}
+
+.dropup .caret, .ddl-navbar-fixed-bottom .ddl-dropdown .caret {
+	border-top: 0;
+	border-bottom: 4px solid;
+	content: ""
+}
+
+.dropup .ddl-dropdown-menu, .ddl-navbar-fixed-bottom .ddl-dropdown .ddl-dropdown-menu {
+	top: auto;
+	bottom: 100%;
+	margin-bottom: 1px
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-right .ddl-dropdown-menu {
+		left: auto;
+		right: 0
+	}
+
+	.ddl-navbar-right .ddl-dropdown-menu-left {
+		left: 0;
+		right: auto
+	}
+
+}
+
+.ddl-nav {
+	margin-bottom: 0;
+	padding-left: 0;
+	list-style: none
+}
+
+.ddl-nav > li {
+	position: relative;
+	display: block
+}
+
+.ddl-nav > li > a {
+	position: relative;
+	display: block;
+	padding: 10px 15px
+}
+
+.ddl-nav > li > a:hover, .ddl-nav > li > a:focus {
+	text-decoration: none;
+	background-color: #eee
+}
+
+.ddl-nav > li.disabled > a {
+	color: #999
+}
+
+.ddl-nav > li.disabled > a:hover, .ddl-nav > li.disabled > a:focus {
+	color: #999;
+	text-decoration: none;
+	background-color: transparent;
+	cursor: not-allowed
+}
+
+.ddl-nav .open > a, .ddl-nav .open > a:hover, .ddl-nav .open > a:focus {
+	background-color: #eee;
+	border-color: #428bca
+}
+
+.ddl-nav .ddl-nav-divider {
+	height: 1px;
+	margin: 9px 0;
+	overflow: hidden;
+	background-color: #e5e5e5
+}
+
+.ddl-nav > li > a > img {
+	max-width: none
+}
+
+.ddl-nav-tabs {
+	border-bottom: 1px solid #ddd
+}
+
+.ddl-nav-tabs > li {
+	float: left;
+	margin-bottom: -1px
+}
+
+.ddl-nav-tabs > li > a {
+	margin-right: 2px;
+	line-height: 1.42857143;
+	border: 1px solid transparent;
+	border-radius: 4px 4px 0 0
+}
+
+.ddl-nav-tabs > li > a:hover {
+	border-color: #eee #eee #ddd
+}
+
+.ddl-nav-tabs > li.active > a, .ddl-nav-tabs > li.active > a:hover, .ddl-nav-tabs > li.active > a:focus {
+	color: #555;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+	cursor: default
+}
+
+.ddl-nav-tabs.ddl-nav-justified {
+	width: 100%;
+	border-bottom: 0
+}
+
+.ddl-nav-tabs.ddl-nav-justified > li {
+	float: none
+}
+
+.ddl-nav-tabs.ddl-nav-justified > li > a {
+	text-align: center;
+	margin-bottom: 5px
+}
+
+.ddl-nav-tabs.ddl-nav-justified > .ddl-dropdown .ddl-dropdown-menu {
+	top: auto;
+	left: auto
+}
+
+@media (min-width: 768px) {
+	.ddl-nav-tabs.ddl-nav-justified > li {
+		display: table-cell;
+		width: 1%
+	}
+
+	.ddl-nav-tabs.ddl-nav-justified > li > a {
+		margin-bottom: 0
+	}
+
+}
+
+.ddl-nav-tabs.ddl-nav-justified > li > a {
+	margin-right: 0;
+	border-radius: 4px
+}
+
+.ddl-nav-tabs.ddl-nav-justified > .active > a, .ddl-nav-tabs.ddl-nav-justified > .active > a:hover, .ddl-nav-tabs.ddl-nav-justified > .active > a:focus {
+	border: 1px solid #ddd
+}
+
+@media (min-width: 768px) {
+	.ddl-nav-tabs.ddl-nav-justified > li > a {
+		border-bottom: 1px solid #ddd;
+		border-radius: 4px 4px 0 0
+	}
+
+	.ddl-nav-tabs.ddl-nav-justified > .active > a, .ddl-nav-tabs.ddl-nav-justified > .active > a:hover, .ddl-nav-tabs.ddl-nav-justified > .active > a:focus {
+		border-bottom-color: #fff
+	}
+
+}
+
+.ddl-nav-pills > li {
+	float: left
+}
+
+.ddl-nav-pills > li > a {
+	border-radius: 4px
+}
+
+.ddl-nav-pills > li + li {
+	margin-left: 2px
+}
+
+.ddl-nav-pills > li.active > a, .ddl-nav-pills > li.active > a:hover, .ddl-nav-pills > li.active > a:focus {
+	color: #fff;
+	background-color: #428bca
+}
+
+nav.ddl-nav-stacked {
+	margin: 0 !important;
+	padding: 0 !important;
+	width: 100%;
+	border: 0;
+}
+
+.ddl-nav-stacked > li {
+	float: none !important;
+
+}
+
+.ddl-nav-stacked > li + li {
+	margin-top: 2px;
+	margin-left: 0
+}
+
+.ddl-nav-justified {
+	width: 100%
+}
+
+.ddl-nav-justified > li {
+	float: none
+}
+
+.ddl-nav-justified > li > a {
+	text-align: center;
+	margin-bottom: 5px
+}
+
+.ddl-nav-justified > .ddl-dropdown .ddl-dropdown-menu {
+	top: auto;
+	left: auto
+}
+
+@media (min-width: 768px) {
+	.ddl-nav-justified > li {
+		display: table-cell;
+		width: 1%
+	}
+
+	.ddl-nav-justified > li > a {
+		margin-bottom: 0
+	}
+
+}
+
+.ddl-nav-tabs-justified {
+	border-bottom: 0
+}
+
+.ddl-nav-tabs-justified > li > a {
+	margin-right: 0;
+	border-radius: 4px
+}
+
+.ddl-nav-tabs-justified > .active > a, .ddl-nav-tabs-justified > .active > a:hover, .ddl-nav-tabs-justified > .active > a:focus {
+	border: 1px solid #ddd
+}
+
+@media (min-width: 768px) {
+	.ddl-nav-tabs-justified > li > a {
+		border-bottom: 1px solid #ddd;
+		border-radius: 4px 4px 0 0
+	}
+
+	.ddl-nav-tabs-justified > .active > a, .ddl-nav-tabs-justified > .active > a:hover, .ddl-nav-tabs-justified > .active > a:focus {
+		border-bottom-color: #fff
+	}
+
+}
+
+.ddl-nav-tabs .ddl-dropdown-menu {
+	margin-top: -1px;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0
+}
+
+.ddl-navbar {
+	position: relative;
+	min-height: 50px;
+	margin-bottom: 20px;
+	border: 1px solid transparent
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar {
+		border-radius: 4px
+	}
+
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-header {
+		float: left
+	}
+
+}
+
+.ddl-navbar-collapse {
+	max-height: 100% !important;
+	/*overflow: auto !important;*/
+	padding-right: 15px;
+	padding-left: 15px;
+	border-top: 0px solid transparent;
+	-webkit-overflow-scrolling: touch;
+	margin-left: 40px !important;
+}
+
+.ddl-navbar-collapse.in {
+	overflow: auto
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-collapse {
+		width: auto;
+		border-top: 0;
+		box-shadow: none
+	}
+
+	.ddl-navbar-collapse.collapse {
+		display: block !important;
+		visibility: visible !important;
+		height: auto !important;
+		padding-bottom: 0;
+		overflow: visible !important
+	}
+
+	.ddl-navbar-collapse.in {
+		overflow: visible;
+	}
+
+	.ddl-navbar-fixed-top .ddl-navbar-collapse, .ddl-navbar-static-top .ddl-navbar-collapse, .ddl-navbar-fixed-bottom .ddl-navbar-collapse {
+		padding-left: 0;
+		padding-right: 0
+	}
+
+}
+
+.container > .ddl-navbar-header, .container-fluid > .ddl-navbar-header, .container > .ddl-navbar-collapse, .container-fluid > .ddl-navbar-collapse {
+	margin-right: -15px;
+	margin-left: -15px
+}
+
+@media (min-width: 768px) {
+	.container > .ddl-navbar-header, .container-fluid > .ddl-navbar-header, .container > .ddl-navbar-collapse, .container-fluid > .ddl-navbar-collapse {
+		margin-right: 0;
+		margin-left: 0
+	}
+}
+
+.ddl-navbar-static-top {
+	z-index: 1000;
+	border-width: 0 0 1px
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-static-top {
+		border-radius: 0
+	}
+}
+
+.ddl-navbar-toggle {
+	position: relative;
+	float: right;
+	margin-right: 5px;
+	padding: 9px 10px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	margin-left: 6px;
+	background-color: transparent;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px
+}
+
+@media (max-width: 750px) {
+    .ddl-navbar-toggle {
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+    }
+    .ddl-navbar-toggle.focus {
+        color: #333;
+        background-color: #d4d4d4;
+        border-color: #8c8c8c;
+    }
+
+    .ddl-icon-bar{background-color: #888;}
+}
+
+.ddl-navbar-toggle:focus {
+	outline: 0
+}
+
+.ddl-navbar-toggle .ddl-icon-bar {
+	display: block;
+	width: 22px;
+	height: 2px;
+	border-radius: 1px
+}
+
+.ddl-navbar-toggle .ddl-icon-bar + .ddl-icon-bar {
+	margin-top: 4px
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-toggle {
+		display: none
+	}
+
+}
+
+.ddl-navbar-nav {
+	margin: 7.5px -15px;
+}
+
+.ddl-navbar-nav > li > a {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	line-height: 20px
+}
+
+@media (max-width: 767px) {
+	.ddl-navbar-nav .open .ddl-dropdown-menu {
+		position: static;
+		float: none;
+		width: auto;
+		margin-top: 0;
+		background-color: transparent;
+		border: 0;
+		box-shadow: none
+	}
+
+	.ddl-navbar-nav .open .ddl-dropdown-menu > li > a, .ddl-navbar-nav .open .ddl-dropdown-menu .ddl-dropdown-header {
+		padding: 5px 15px 5px 25px
+	}
+
+	.ddl-navbar-nav .open .ddl-dropdown-menu > li > a {
+		line-height: 20px
+	}
+
+	.ddl-navbar-nav .open .ddl-dropdown-menu > li > a:hover, .ddl-navbar-nav .open .ddl-dropdown-menu > li > a:focus {
+		background-image: none
+	}
+
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-nav {
+		float: left;
+		margin: 0
+	}
+
+	.ddl-navbar-nav > li {
+		float: left
+	}
+
+	.ddl-navbar-nav > li > a {
+		padding-top: 15px;
+		padding-bottom: 15px
+	}
+
+	.ddl-navbar-nav.ddl-navbar-right:last-child {
+		margin-right: -15px
+	}
+
+}
+
+@media (min-width: 768px) {
+	.ddl-navbar-left {
+		float: left !important
+	}
+
+	.ddl-navbar-right {
+		float: right !important
+	}
+
+}
+
+
+.ddl-navbar-nav > li > .ddl-dropdown-menu {
+	margin-top: 0;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0
+}
+
+.ddl-navbar-default .ddl-navbar-toggle {
+	border-color: #ddd
+}
+
+.ddl-navbar-default .ddl-navbar-toggle:hover, .ddl-navbar-default .ddl-navbar-toggle:focus {
+	background-color: #ddd
+}
+
+.ddl-navbar-default .ddl-navbar-toggle .ddl-icon-bar {
+	background-color: #888
+}
+
+
+.ddl-navbar-default .ddl-navbar-nav > .open > a, .ddl-navbar-default .ddl-navbar-nav > .open > a:hover, .ddl-navbar-default .ddl-navbar-nav > .open > a:focus {
+	background-color: #e7e7e7;
+	color: #555
+}
+
+@media (max-width: 768px) {
+	.ddl-nav-wrap {
+		float: none !important;
+		width: 100%;
+		margin-top: 20px;
+	}
+
+	.ddl-navbar-collapse {
+		width: 100%;
+		margin: 0 !important;
+		padding: 0;
+	}
+}

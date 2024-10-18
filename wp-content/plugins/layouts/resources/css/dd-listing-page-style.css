@@ -1,0 +1,283 @@
+/*!
+	 * jQuery UI Tooltip 1.9.0
+	 * http://jqueryui.com
+	 *
+	 * Copyright 2012 jQuery Foundation and other contributors
+	 * Released under the MIT license.
+	 * http://jquery.org/license
+	 */
+.ui-tooltip {
+    padding:8px;
+    position:absolute;
+    z-index:10000000;
+    -o-box-shadow: 0 0 5px #aaa;
+    -moz-box-shadow: 0 0 5px #aaa;
+    -webkit-box-shadow: 0 0 5px #aaa;
+    box-shadow: 0 0 5px #aaa;
+    background:white;
+}
+/* Fades and background-images don't work well together in IE6, drop the image */
+* html .ui-tooltip {
+    background-image: none;
+}
+body .ui-tooltip { border-width:2px; }
+/* TOOLTIP END */
+
+
+
+
+/* TABLE GENERAL*/
+th.column-bulk-actions {
+    position: relative;
+}
+th.column-bulk-actions input {
+    margin: 0;
+}
+tr.ddl-groups-heading {
+    background: rgb(237, 237, 237);
+    font-weight: bold;
+}
+tr.ddl-groups-heading td {
+    line-height: 1.3em
+}
+td.not-used-yet {
+}
+table.dd-layouts-list .column-bulk-actions {
+    width: 2%;
+}
+table.dd-layouts-list .column-title {
+    padding-left: 0;
+    width: 27%;
+}
+table.dd-layouts-list .column-used-on {
+    /* padding-left: 12px; */
+    width: 56%;
+}
+
+table.dd-layouts-list .column-date {
+    width: 10%;
+}
+table.dd-layouts-list .column-id {
+    width: 5%;
+}
+
+/*headings*/
+tr.ddl-groups-heading td{position:relative;height:18px;}
+div.listing-heading-inner-wrap{position:relative;display:block;}
+input.select-all-layouts{position:absolute;top:3px;}
+.ddl-groups-heading .group-name{padding:0 0 0 5px;margin:0;position:absolute;left:15px;}
+.ddl-groups-heading .fa-caret-down, .ddl-groups-heading .fa-caret-up{font-size:24px;cursor:pointer;position:absolute;top:-5px;}
+
+/*links*/
+.strike{text-decoration:line-through;color:#0074a2;}
+.strike a:hover{text-decoration:line-through;color:lightgray;}
+a.views-list-sort i.icon-sort-by-attributes-alt{/*display:none;*/}
+.row-actions span a{cursor:pointer;}
+
+
+/*post types*/
+.wpv-views-listing-page .wpv-views-listing td ul {margin: 0;}
+.wpv-taglike-list li {
+    display: inline-block;
+    background: #e9e9e9;
+    /* float: left; */
+    margin: 5px 10px 5px 0;
+    padding: 2px 8px;
+    vertical-align: bottom;
+}
+
+/*OVERLAY*/
+/* ------- */
+/* Overlay */
+/* ------- */
+.loader-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    background: #000;
+    text-align: center;
+    opacity: .4;
+    width:100%;
+    height:100%;
+    float:left;
+}
+.loader-overlay-high-z {
+    z-index: 99999;
+}
+
+.preloader {
+    position:fixed;
+    z-index: 100;
+    top:50%;
+    left:50%;
+    /*display: inline-block;*/
+    margin: -32px 0 0 -32px;
+    width: 64px;
+    height: 64px;
+    background: url('../images/ajax-loader-overlay2.gif') center center no-repeat;
+}
+
+table.dd-layouts-list i.icon-sort{}
+
+table.dd-layouts-list tr td.toolset-admin-listing-col-title{min-width:200px;}
+tbody.listing-page-table-list td.column-title{min-width: 200px;}
+tbody.listing-page-table-list td.column-used-on{word-wrap: break-word;position: relative;}
+
+.sort-icon-active{color:#0074a2 !important;}
+.sort-icon-inactive{color:#ccc !important;}
+.ddl-get-all-item-posts-span{margin-left:10px;font-weight:bold;}
+.ddl-get-all-item-posts i{color:black;font-size:22px;position: relative;bottom:1px;}
+a.row-title, a.row-title:hover, a.row-title:focus{box-shadow: none;}
+.wpddl-remove-single-posts-buttons{padding:0 0 12px 0;}
+ul.individual-pages-list{margin-bottom: 2px;}
+.dd-message-container{position: fixed;
+    z-index: 9999999;
+    top: 12px;
+    left:9.1%;
+    width: 90.8%;}
+
+/* JQUERY UI TABS */
+/* Overlays */
+.ui-widget-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.ui-tabs {
+    position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+    padding: .2em;
+}
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: .2em 0 0;
+}
+.ui-tabs .ui-tabs-nav li {
+    list-style: none;
+    float: left;
+    position: relative;
+    top: 0;
+    margin: 1px .2em 0 0;
+    border-bottom-width: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: left;
+    padding: .5em 1em;
+    text-decoration: none;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: -1px;
+    padding-bottom: 1px;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
+.ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
+.ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+    cursor: text;
+}
+.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
+    cursor: pointer;
+}
+.ui-tabs .ui-tabs-panel {
+    display: block;
+    border-width: 0;
+    padding: 1em 1.4em;
+    border: 1px solid #dddddd;
+    background: #fff;
+}
+
+/* Component containers
+----------------------------------*/
+.ui-widget {
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: 1.1em;
+}
+.ui-widget .ui-widget {
+    font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: 1em;
+}
+.ui-widget-content {
+    color: #444444;
+    border: none;
+    background: none;
+}
+.ui-widget-content a {
+    color: #0073aa;
+}
+.ui-widget-header {
+    color: #444444;
+    font-weight: bold;
+    border: none;
+    background: none;
+}
+.ui-widget-header a {
+ color: #444444;
+}
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    border: 1px solid #dddddd;
+    background: #e5e5e5;
+    font-weight: bold;
+    color: #0073ea;
+}
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited {
+    color: #555;
+    text-decoration: none;
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    background: #fff;
+    font-weight: bold;
+    color: #ffffff;
+}
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited,
+.ui-state-focus a,
+.ui-state-focus a:hover,
+.ui-state-focus a:link,
+.ui-state-focus a:visited {
+    color: #000;
+    text-decoration: none;
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+    background: #ffffff;
+    font-weight: bold;
+    color: #ff0084;
+}
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited {
+    color: #000;
+    text-decoration: none;
+}
+/********* JQUERY.UI.TABS OVERRIDES *********/
+.individual-pages-wrap .ui-tabs .ui-tabs-nav{padding-bottom:0.9em}
+.tab-alert-icon{color: darkorange;
+    position: relative;
+    top: 2px;
+    right: 4px;}

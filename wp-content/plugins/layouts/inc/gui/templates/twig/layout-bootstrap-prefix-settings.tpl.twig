@@ -1,0 +1,27 @@
+<div id="toolset-bootstrap-column-width" class="wpv-setting-container js-wpv-setting-container">
+    <div class="wpv-setting">
+        <p>{{ __( 'Please select the default Boostrap column width for the entire site:', 'ddl-layouts') }}</p>
+        <table id="ddl-bootstrap-column-sizes-table" class="ddl-layout-settings-table js-ddl-bootstrap-column-sizes-table">
+            <thead>
+            <tr>
+                <th>{{ __( 'Size', 'ddl-layouts' ) }}</th>
+                <th>{{ __( 'Column size', 'ddl-layouts' ) }}</th>
+                <th>{{ __( 'For screen size', 'ddl-layouts' ) }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prefix, data in prefixes.items %}
+                <tr>
+                    <td><input {% if prefix == prefixes.column_prefix %} checked {% endif %} type="radio" value="{{prefix}}" name="{{prefixes.prefix_option_name}}"><label>{{ data.label }}</label></td>
+                    <td><span class="ddl-text">{{prefix}}*</span></td>
+                    <td><span class="ddl-text">{{ data.size }}</span></td>
+                </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+		<p>{{ __( 'Note: The options available depend on the version of Bootstrap chosen for this site.', 'ddl-layouts' ) }}</p>
+		<p>{{ __( 'If you have just changed the Bootstrap version, please reload the page before changing this setting.', 'ddl-layouts' ) }}</p>
+        <p><a href="{{ prefixes.help_link }}" alt="Help about Bootstrap column widths">{{ __( 'Help about Bootstrap column widths', 'ddl-layouts' ) }}  <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
+    </div>
+</div>

@@ -1,0 +1,372 @@
+{
+  "data": [
+	{
+      "name": "ocean_top_bar",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Top Bar",
+      "gui": {
+        "display_name": "Switch Top Bar",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Top Bar",
+            "value": 1
+          },
+	      {
+            "text": "Disable top Bar",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "ocean_top_bar_full_width",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Top Bar",
+      "gui": {
+        "display_name": "Top Bar Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Full Width",
+            "value": 1
+          },
+	      {
+            "text": "Normal Width",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "ocean_top_bar_social",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Top Bar",
+      "gui": {
+        "display_name": "Switch Top Bar Social",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Top Bar Social",
+            "value": 1
+          },
+	      {
+            "text": "Disable Top Bar Social",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "ocean_header_style",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Header General",
+      "gui": {
+        "display_name": "Header Style",
+        "type": "select",
+        "values": [
+          {
+            "text": "Minimal",
+            "value": "minimal"
+          },
+          {
+            "text": "Transparent",
+            "value": "transparent"
+          },
+          {
+            "text": "Top Menu",
+            "value": "top"
+          },
+          {
+            "text": "Full Screen",
+            "value": "full_screen"
+          },
+          {
+            "text": "Center",
+            "value": "center"
+          },
+          {
+            "text": "Medium",
+            "value": "medium"
+          },
+          {
+            "text": "Custom Header",
+            "value": "custom"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "ocean_header_height",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Header General",
+      "gui": {
+        "display_name": "Header Height (in px)",
+        "type": "text"
+      },
+      "default_value": ""
+    },
+	{
+      "name": "ocean_header_full_width",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Header General",
+      "gui": {
+        "display_name": "Header Full Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Full Width",
+            "value": 1
+          },
+		  {
+            "text": "Normal Width",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "ocean_has_header_border_bottom",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Header General",
+      "gui": {
+        "display_name": "Header Border Bottom",
+        "type": "select",
+        "values": [
+          {
+            "text": "Add Border Bottom",
+            "value": 1
+          },
+		  {
+            "text": "Remove Border Bottom",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "ocean_page_header_style",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+	    "single",
+        "archive"
+      ],
+      "group": "Header General",
+      "gui": {
+        "display_name": "Page Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Remove Page Title",
+            "value": "hidden"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "toolset_disable_featured_image",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Featured Image",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Featured Image",
+            "value": 1
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "toolset_disable_meta",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Meta (only posts)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Meta",
+            "value": 1
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "toolset_disable_title",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Title",
+            "value": 1
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "toolset_disable_sidebar",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "single",
+		"archive"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Sidebar",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Sidebar",
+            "value": 1
+          },
+          {
+            "text": "Enable Sidebar",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+	{
+      "name": "toolset_disable_archive_title",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+		"archive"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Archive Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Archive Title",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+	{
+      "name": "toolset_disable_pagination",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "archive"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Pagination",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Pagination",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_woocommerce_archive_toolbar",
+      "type": [
+        "toolset_info"
+      ],
+      "target": [
+        "archive"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "",
+        "type": "info",
+        "text": "<p>You can manage the <em>WooCommerce Archives toolbar</em> in the Theme Customizer options for <a href='%%CUSTOMIZER%%?autofocus[section]=ocean_woocommerce_archives' title='Theme Customizer' target='_blank'>WooCommerce Archives</a>.</p><p>There, you can disable the <em>Grid/List button</em>, the <em>Shop sort</em> and the <em>Shop result count</em>.</p>"
+      }
+    }
+  ]
+}

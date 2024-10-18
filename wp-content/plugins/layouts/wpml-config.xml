@@ -1,0 +1,16 @@
+<wpml-config>
+
+    <custom-types>
+        <custom-type translate="0">dd_layouts</custom-type>
+    </custom-types>
+    
+    <custom-fields>
+        <custom-field action="copy">_dd_layouts_settings</custom-field>
+        <custom-field action="copy">_layouts_template</custom-field>
+        <custom-field action="copy">_private_layouts_template_in_use</custom-field>
+        <custom-field action="copy">_private_layout_original_content</custom-field>
+    </custom-fields>    
+
+</wpml-config>
+
+

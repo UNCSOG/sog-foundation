@@ -1,0 +1,273 @@
+/* -------------------------------------------- */
+/* Presets list for the "Add new layouyt" popup */
+/* -------------------------------------------- */
+
+.presets-list .row-fluid:before,
+.presets-list .row-fluid:after {
+	display: table;
+	content: "";
+	line-height: 0;
+}
+
+.presets-list .row-fluid:after {
+	clear: both;
+}
+
+.presets-list .row-fluid {
+	margin: 5px 0 0 0;
+	padding: 0;
+	width: 100%;
+}
+
+.presets-list .row-fluid:first-child {
+	margin-top: 0;
+}
+
+.presets-list .row-fluid [class*="span-preset"] {
+	display: block;
+	float: left;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin-left: 2.12766%;
+	width: 100%;
+	height: 70px;
+	border-radius: 3px;
+	background-color: #0074a2;
+	color: #fff;
+	text-align: center;
+	line-height: 70px;
+}
+
+.presets-list .row-fluid .empty {
+	border: 1px dashed #ccc;
+	background: #fff;
+	color: #333;
+}
+
+.row-count-2:first-child {
+	margin-bottom: 1px;
+}
+
+.presets-list .row-count-2 [class*="span-preset"] {
+	height: 32px;
+	line-height: 32px;
+}
+
+.presets-list .row-count-3 [class*="span-preset"] {
+	height: 20px;
+	line-height: 20px;
+}
+
+.presets-list .row-fluid [class*="span-preset"]:first-child {
+	margin-left: 0;
+}
+
+.presets-list .row-fluid .controls-row [class*="span-preset"] + [class*="span-preset"] {
+	margin-left: 2.12766%;
+}
+
+.presets-list .row-fluid .span-preset12 {
+	width: 100%;
+}
+
+.presets-list .row-fluid .span-preset11 {
+	width: 91.4894%;
+}
+
+.presets-list .row-fluid .span-preset10 {
+	width: 82.9787%;
+}
+
+.presets-list .row-fluid .span-preset9 {
+	width: 74.4681%;
+}
+
+.presets-list .row-fluid .span-preset8 {
+	width: 65.9574%;
+}
+
+.presets-list .row-fluid .span-preset7 {
+	width: 57.4468%;
+}
+
+.presets-list .row-fluid .span-preset6 {
+	width: 48.9362%;
+}
+
+.presets-list .row-fluid .span-preset5 {
+	width: 40.4255%;
+}
+
+.presets-list .row-fluid .span-preset4 {
+	width: 31.9149%;
+}
+
+.presets-list .row-fluid .span-preset3 {
+	width: 23.4043%;
+}
+
+.presets-list .row-fluid .span-preset2 {
+	width: 14.8936%;
+}
+
+.presets-list .row-fluid .span-preset1 {
+	width: 6.38298%;
+}
+
+.presets-list {
+	overflow:hidden;
+}
+
+.presets-list li {
+	display: block;
+	float: left;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 10px;
+	width: 33.3333%;
+	cursor: pointer;
+}
+
+.presets-list .selected {
+	background: #ededed;
+}
+
+.presets-list li:hover .holder {
+	background: rgba(213, 78, 33, 0.85);
+}
+
+.presets-list .selected .holder,
+.presets-list .selected:hover .holder {
+	background-color: #d54e21;
+}
+
+.presets-list .row-fluid .preset-container,
+.presets-list li:hover .preset-container,
+.presets-list .selected:hover .preset-container {
+	background: transparent;
+}
+
+.presets-list li:first-child {
+	margin-top: 0;
+}
+
+/* Presets list for the "Add new layouyt" popup END */
+
+/* ------------- */
+/* Settings page */
+/* ------------- */
+
+.ddl-settings-wrap {
+	margin: 30px 0 0 0;
+	padding: 10px;
+	max-width: 920px;
+	background: #fff;
+}
+
+	.ddl-settings {
+		clear: both;
+		overflow: hidden;
+		margin: 30px 0 0 0;
+		padding: 0 0 10px 0;
+		border-bottom: 1px solid #ededed;
+		background: #fff;
+	}
+
+	.ddl-settings:first-child {
+		margin-top: 0;
+	}
+
+	.ddl-settings:last-child {
+		padding: 0;
+		border: none;
+	}
+
+		.ddl-settings-header {
+			float: left;
+			margin-right: 30px;
+			width: 300px;
+		}
+
+			.ddl-settings-header h3 {
+				margin-top: 15px;
+				color: #333;
+				font-weight: normal;
+				font-size: 20px;
+				line-height: 20px;
+			}
+
+		.ddl-settings-content {
+			float: left;
+			width: 570px;
+		}
+		.ddl-settings-content:before,
+		.ddl-settings-content:after {
+			display: table;
+			content: " ";
+		}
+
+		.ddl-settings-content:after {
+			clear: both;
+		}
+
+			.ddl-settings-content .buttons-wrap {
+				text-align: right;
+			}
+/* Settings page END*/
+
+
+.ddl-settings-videos {
+	width: 820px
+}
+
+	.ddl-settings-videos .videos-list {
+		overflow: hidden;
+		margin-bottom: 0;
+	}
+
+		.ddl-settings-videos .videos-list li {
+			position: relative;
+			float: left;
+			margin: 0 15px 15px 0;
+			padding: 15px;
+			width: 120px;
+			height: 90px;
+			border: 1px solid #ddd;
+			color: #333;
+			text-align: center;
+			font-size: 16px;
+			cursor: pointer;
+		}
+
+		.ddl-settings-videos .videos-list li:nth-child(5n) {
+			margin-right: 0;
+		}
+
+		.ddl-settings-videos .videos-list li:nth-child(5n+1) {
+			clear: left;
+		}
+
+		.ddl-settings-videos .videos-list a {
+			color: #333;
+			text-align: center;
+			text-decoration: none;
+			font-size: 16px;
+			cursor: pointer;
+		}
+
+		.ddl-settings-videos .videos-list .icon-play-circle {
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			margin-top: -18px;
+			margin-left: -18px;
+			font-size: 36px;
+			opacity: .5;
+		}
+		.ddl-settings-videos .videos-list li:hover .icon-play-circle {
+			opacity: 1;
+			color: #278ab7;
+		}

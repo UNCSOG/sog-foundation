@@ -1,0 +1,50 @@
+#site-header #site-header-inner #site-navigation-wrap #site-navigation .main-menu{
+    display:block!important;
+    position:relative;
+    border:none;
+    box-shadow:none;
+    font-size:inherit;
+    /*background: transparent;*/
+}
+#site-header #site-header-inner #site-navigation-wrap #site-navigation .main-menu :hover{
+    /*background: transparent;*/
+}
+
+#top-bar-wrap #top-bar #top-bar-inner .top-bar-menu.dropdown-menu {
+    position: inherit;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    float: inherit;
+    min-width: 160px;
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+    font-size: inherit;
+    text-align: left;
+    /*background-color: transparent;*/
+    border: 0px;
+    border: 0px;
+    border-radius: 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-background-clip: inherit;
+    background-clip: inherit;
+}
+#top-bar-wrap #top-bar #top-bar-inner .top-bar-menu.dropdown-menu :hover{
+    /*background: transparent;*/
+    color: inherit;
+}
+
+.checkbox input[type="checkbox"] {
+    display: inline-block;
+    position: static;
+    margin: .5em 0;
+}
+.container{
+    max-width:100%;
+}
+.oceanwp-hidden{
+    display: none;
+}

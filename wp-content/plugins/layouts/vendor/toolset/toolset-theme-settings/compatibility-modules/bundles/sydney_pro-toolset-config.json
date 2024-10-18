@@ -1,0 +1,237 @@
+{
+  "data": [
+    {
+      "name": "fullwidth_pages",
+      "type": [
+        "customizer"
+      ],
+      "aliases": [
+        "fullwidth_archives",
+        "swc_sidebar_products",
+        "swc_sidebar_archives"
+      ],
+      "target": [
+        "archive"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show the sidebar",
+        "type": "select",
+        "values": [
+          {
+            "text": "Yes",
+            "value": 0
+          },
+          {
+            "text": "No",
+            "value": 1
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "_sydney_page_disable_sidebar",
+      "type": [
+        "local"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show the sidebar",
+        "type": "select",
+        "values": [
+          {
+            "text": "Yes",
+            "value": 0
+          },
+          {
+            "text": "No",
+            "value": 1
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "_sydney_page_disable_title",
+      "type": [
+        "local"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show the title",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": 1
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "toolset_disable_featured_image",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show the featured image (if applicable)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Yes",
+            "value": "enable"
+          },
+          {
+            "text": "No",
+            "value": "disable"
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "hide_meta_single",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show post metadata (only when title is displayed)",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": 1
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "disable_single_post_nav",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show next/previous post navigation",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": 1
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "get_the_archive_title",
+      "type": [
+        "control_filters"
+      ],
+      "filter_method": "__return_empty_string",
+      "hook_priority": "99",
+      "target": [
+        "archive"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show Archive Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": 1
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "sydney_archive_post_nav_enable",
+      "type": [
+        "control_filters"
+      ],
+      "filter_method": "__return_false",
+      "hook_priority": "99",
+      "target": [
+        "archive"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show archive pagination controls",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": "1"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "swc_disable_single_breadcrumbs",
+      "type": [
+        "customizer"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show breadcrumbs on single product pages",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": 1
+          }
+        ],
+        "default_value": "toolset_use_theme_setting"
+      }
+    },
+    {
+      "name": "woocommerce_get_breadcrumb",
+      "type": [
+        "control_filters"
+      ],
+      "filter_method": "__return_empty_string",
+      "hook_priority": "99",
+      "target": [
+        "archive"
+      ],
+      "group": "Displaying elements",
+      "gui": {
+        "display_name": "Show breadcrumbs on product or product taxonomy archives",
+        "type": "select",
+        "values": [
+          {
+            "text": "No",
+            "value": "1"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    }
+  ]
+}

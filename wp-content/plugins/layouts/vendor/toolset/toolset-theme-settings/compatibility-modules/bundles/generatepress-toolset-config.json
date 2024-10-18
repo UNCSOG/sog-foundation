@@ -1,0 +1,722 @@
+{
+  "data": [
+    {
+      "name": "container_width",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Container",
+      "gui": {
+        "display_name": "Container Width (in px)",
+        "type": "text"
+      },
+      "default_value": ""
+    },
+    {
+      "name": "content_layout_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Container",
+      "gui": {
+        "display_name": "Content Layout",
+        "type": "select",
+        "values": [
+          {
+            "text": "Separate Containers",
+            "value": "separate-containers"
+          },
+          {
+            "text": "One Container",
+            "value": "one-container"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "_generate-full-width-content",
+      "type": [
+        "local"
+      ],
+      "group": "Page Builder Container",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "",
+        "type": "select",
+        "values": [
+          {
+            "text": "Full Width",
+            "value": "true"
+          },
+          {
+            "text": "Contained",
+            "value": "contained"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "header_layout_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Header",
+      "gui": {
+        "display_name": "Header Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Full",
+            "value": "fluid-header"
+          },
+          {
+            "text": "Contained",
+            "value": "contained-header"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "header_inner_width",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Header",
+      "gui": {
+        "display_name": "Inner Header Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Contained",
+            "value": "contained"
+          },
+          {
+            "text": "Full",
+            "value": "full-width"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "header_alignment_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Header",
+      "gui": {
+        "display_name": "Header Alignment",
+        "type": "select",
+        "values": [
+          {
+            "text": "Left",
+            "value": "left"
+          },
+          {
+            "text": "Center",
+            "value": "center"
+          },
+          {
+            "text": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "nav_layout_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Primary Navigation",
+      "gui": {
+        "display_name": "Navigation Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Full",
+            "value": "fluid-nav"
+          },
+          {
+            "text": "Contained",
+            "value": "contained-nav"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "nav_inner_width",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Primary Navigation",
+      "gui": {
+        "display_name": "Inner Navigation Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Contained",
+            "value": "contained"
+          },
+          {
+            "text": "Full",
+            "value": "full-width"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "nav_position_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Primary Navigation",
+      "gui": {
+        "display_name": "Navigation Location",
+        "type": "select",
+        "values": [
+          {
+            "text": "Below Header",
+            "value": "nav-below-header"
+          },
+          {
+            "text": "Above Header",
+            "value": "nav-above-header"
+          },
+          {
+            "text": "Float Right",
+            "value": "nav-float-right"
+          },
+          {
+            "text": "Float Left",
+            "value": "nav-float-left"
+          },
+          {
+            "text": "Left Sidebar",
+            "value": "nav-left-sidebar"
+          },
+          {
+            "text": "Right Sidebar",
+            "value": "nav-right-sidebar"
+          },
+          {
+            "text": "No Navigation",
+            "value": ""
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "nav_alignment_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Primary Navigation",
+      "gui": {
+        "display_name": "Navigation Alignment",
+        "type": "select",
+        "values": [
+          {
+            "text": "Left",
+            "value": "left"
+          },
+          {
+            "text": "Center",
+            "value": "center"
+          },
+          {
+            "text": "Right",
+            "value": "right"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "nav_dropdown_type",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Primary Navigation",
+      "gui": {
+        "display_name": "Navigation Dropdown",
+        "type": "select",
+        "values": [
+          {
+            "text": "Hover",
+            "value": "hover"
+          },
+          {
+            "text": "Click - Menu Item",
+            "value": "click"
+          },
+          {
+            "text": "Click - Arrow",
+            "value": "click-arrow"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "nav_search",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Primary Navigation",
+      "gui": {
+        "display_name": "Navigation Search",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": "enable"
+          },
+          {
+            "text": "Disable",
+            "value": "disable"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "_generate-sidebar-layout-meta",
+      "type": [
+        "local"
+      ],
+      "group": "Sidebar Layout",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "",
+        "type": "select",
+        "values": [
+          {
+            "text": "Content / Sidebar",
+            "value": "right-sidebar"
+          },
+          {
+            "text": "Sidebar / Content",
+            "value": "left-sidebar"
+          },
+          {
+            "text": "Content (no sidebars)",
+            "value": "no-sidebar"
+          },
+          {
+            "text": "Sidebar / Content / Sidebar",
+            "value": "both-sidebars"
+          },
+          {
+            "text": "Sidebar / Sidebar / Content",
+            "value": "both-left"
+          },
+          {
+            "text": "Content / Sidebar / Sidebar",
+            "value": "both-right"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "blog_layout_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "group": "Sidebar Layout",
+      "target": [
+        "archive"
+      ],
+      "gui": {
+        "display_name": "",
+        "type": "select",
+        "values": [
+          {
+            "text": "Content / Sidebar",
+            "value": "right-sidebar"
+          },
+          {
+            "text": "Sidebar / Content",
+            "value": "left-sidebar"
+          },
+          {
+            "text": "Content (no sidebars)",
+            "value": "no-sidebar"
+          },
+          {
+            "text": "Sidebar / Content / Sidebar",
+            "value": "both-sidebars"
+          },
+          {
+            "text": "Sidebar / Sidebar / Content",
+            "value": "both-left"
+          },
+          {
+            "text": "Content / Sidebar / Sidebar",
+            "value": "both-right"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "footer_layout_setting",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Footer",
+      "gui": {
+        "display_name": "Footer Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Full",
+            "value": "fluid-footer"
+          },
+          {
+            "text": "Contained",
+            "value": "contained-footer"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "footer_inner_width",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Footer",
+      "gui": {
+        "display_name": "Inner Footer Width",
+        "type": "select",
+        "values": [
+          {
+            "text": "Contained",
+            "value": "contained"
+          },
+          {
+            "text": "Full",
+            "value": "full-width"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "_generate-footer-widget-meta",
+      "type": [
+        "local"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Footer",
+      "gui": {
+        "display_name": "Footer Widgets",
+        "type": "select",
+        "values": [
+          {
+            "text": "0 Widgets",
+            "value": "0"
+          },
+          {
+            "text": "1 Widgets",
+            "value": "1"
+          },
+          {
+            "text": "2 Widgets",
+            "value": "2"
+          },
+          {
+            "text": "3 Widgets",
+            "value": "3"
+          },
+          {
+            "text": "4 Widgets",
+            "value": "4"
+          },
+          {
+            "text": "5 Widgets",
+            "value": "5"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+	{
+      "name": "footer_widget_setting",
+      "type": [
+        "global"
+      ],
+	  "global_key" : "generate_settings",
+      "target": [
+        "archive"
+      ],
+      "group": "Footer",
+      "gui": {
+        "display_name": "Footer Widgets",
+        "type": "select",
+        "values": [
+          {
+            "text": "0 Widgets",
+            "value": "0"
+          },
+          {
+            "text": "1 Widgets",
+            "value": "1"
+          },
+          {
+            "text": "2 Widgets",
+            "value": "2"
+          },
+          {
+            "text": "3 Widgets",
+            "value": "3"
+          },
+          {
+            "text": "4 Widgets",
+            "value": "4"
+          },
+          {
+            "text": "5 Widgets",
+            "value": "5"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "back_to_top",
+      "type": [
+        "global"
+      ],
+      "global_key" : "generate_settings",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "group": "Footer",
+      "gui": {
+        "display_name": "Back to Top Button",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": "enable"
+          },
+          {
+            "text": "Disable",
+            "value": ""
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "toolset_disable_title",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+        "archive"
+      ],
+      "gui": {
+        "display_name": "Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_pagination",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+        "archive"
+      ],
+      "gui": {
+        "display_name": "Pagination",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_featured_image",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Featured Image",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_post_meta_info",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+        "single"
+      ],
+      "target_include": [
+        "post"
+      ],
+      "gui": {
+        "display_name": "Post meta info (for posts and pages)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "_generate-disable-headline",
+      "type": [
+        "local"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Content Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": "true"
+          },{
+            "text": "Enable",
+            "value": ""
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+/**
+ * Add Divi Icon to Layouts Divi Cells
+ */
+.et-social-icon {
+	display: inline-block;
+}
+
+.et-social-icon span {
+	font-family: 'Open Sans', Arial, sans-serif;
+	display: inline-block;
+	font-size: 14px;
+	position: relative;
+	text-align: center;
+	transition: color 300ms ease 0s;
+	color: #666;
+	text-decoration: none;
+}
+
+.et-social-icon span:before {
+	font-family: 'ETmodules';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.et-social-facebook span.icon:before {content: '\e093';}
+.et-social-twitter span.icon:before {content: '\e094';}
+.et-social-google-plus span.icon:before {content: '\e096';}
+.et-social-rss span.icon:before {content: '\e09e';}
+.js-wpcf-colorbox-with-iframe{z-index:99999999;}
+
+#et-info-phone,
+#et-info-email,
+.et-cart-info span {
+	position: relative;
+	font-family: "ETmodules" !important;
+	font-weight: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	line-height: 1;
+	text-transform: none;
+	speak: none;
+}
+
+#et-info-phone:before {
+	position: relative;
+	top: 2px;
+	margin-right: 2px;
+	content: "\e090";
+}
+
+
+#et-info-email:before {
+	margin-right: 4px;
+	content: "\e076";
+}
+.ddl-element-action-panel-content ul.items{padding:0px!important;}

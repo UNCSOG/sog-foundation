@@ -1,0 +1,2372 @@
+/*
+	This file contains styles for the Layouts editor page ONLY.
+	Styles for forms, dialogs and general styles are in separate files:
+	* dd-general.css - general styles for Layouts pages
+	* dd-dialogs-general.css - general dialogs styles
+	* dd-dialogs.css - styles for specific dialogs
+	* dd-dialogs-forms.css - general styles for dialogs' forms
+*/
+
+/* ------- */
+/* Overlay */
+/* ------- */
+.noscroll { overflow: hidden; position:absolute; }
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    background: #000;
+    text-align: center;
+    opacity: .4;
+}
+.preloader {
+    position: absolute;
+    top: 50%;
+    display: inline-block;
+    margin: -32px 0 0 -32px;
+    width: 64px;
+    height: 64px;
+    background: url('../../../../resources/images/ajax-loader-overlay2.gif') center center no-repeat;
+}
+/* Overlay END */
+
+/* ------- */
+/* Tooltip */
+/* ------- */
+.layouts-tooltip {
+    position: absolute;
+    z-index: 999;
+    display: inline-block;
+    display: none;
+    padding: 3px 6px;
+    background: #000;
+    background: rgba(0,0,0,.8);
+    color: #fff;
+}
+
+.layouts-tooltip:after {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    height: 0;
+    border-width: 5px 5px 0 5px;
+    border-style: solid;
+    border-color: rgba(0,0,0,.8) transparent transparent transparent;
+    content: '';
+}
+/* Tooltip END */
+
+/* -------------------  */
+/* Layout editor header */
+/* -------------------- */
+
+.dd-message-container {
+    position: fixed;
+    top: 32px;
+    right: 0;
+    left: 160px;
+    z-index: 4;
+}
+
+@media only screen and (max-width: 900px) {
+    .dd-message-container {
+        left: 36px;
+    }
+}
+@media only screen and (max-width: 782px) {
+    .dd-message-container {
+        left: 0;
+    }
+}
+
+.dd-message-container .toolset-alert {
+    display: block;
+    margin: 0;
+    border-radius: 0;
+}
+
+.dd-layouts-wrap {
+    clear: both;
+    margin: 10px 0 0 0;
+    width: 920px;
+    float:left;
+    overflow: hidden;
+}
+
+.dd-layouts-lang-wrap {
+    clear: both;
+    padding: 10px 10px;
+    border: 1px solid #8CCEEA;
+    background-color: #fff;
+}
+
+.dd-layouts-lang-wrap-side {
+    position: absolute;
+    top: 0px;
+    left: 820px;
+    margin: 0px 25px;
+    width: 250px;
+}
+
+.dd-layouts-header {
+    margin: 0 0 6px 0;
+    float:left;
+    position:relative;
+    display:block;
+    width:100%;
+}
+.dd-layouts-header i {
+    margin: 0 0 0 10px;
+    color: #999;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.dd-layouts-header i:hover {
+    color: #278ab7;
+}
+
+.dd-layout-title,
+.dd-layouts-header .layout-title-input {
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 1px;
+    padding: 3px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 23px;
+}
+
+.dd-layout-title:empty {
+    width: 80px;
+    height: 37px;
+    vertical-align: bottom;
+}
+
+.dd-layout-title:empty:hover {
+    background: #fafafa;
+}
+
+.dd-layouts-header .layout-title-input {
+    padding: 1px 3px 2px 3px;
+}
+
+.dd-layout-title.hidden {
+    display: none;
+}
+
+.dd-layout-title:hover,
+.dd-layout-title:empty  {
+    border-color: #9FC3D8;
+}
+
+.dd-layout-slug-wrap {
+    margin-top: 5px;
+}
+
+.dd-layouts-header h2{padding:0 0 20px 0;}
+/*edit settings in header box */
+.dd-layouts-header .edit-layout-settings{font-size:18px;margin:0 0 0 6px;}
+
+#edit-slug-box label{vertical-align: top;}
+.edit-layout-slug{font-size: 13px;height: 22px;margin: 0;width: 16em;}
+#edit-slug-buttons-active{display:none; vertical-align: baseline;}
+
+/* edit buttons and view layout box in header */
+#edit-slug-buttons-active a.cancel{}
+.ddl-layout-assigned-to-many li{}
+.ddl-layout-assigned-to-many{}
+.ddl-layout-assigned-to-many ul{}
+.dd-layouts-header #edit-slug-box{display: inline-block;float:left;position:relative;}
+.dd-layouts-header #edit-slug-box{width:100%;}
+
+.trash-layout {
+    float: right;
+    font-size: 18px!important;
+    position: relative;
+}
+.trash-layout i {position: relative;
+    left: -4px;
+    bottom: 1px;
+    color:#666!important;
+}
+.trash-layout i:hover{}
+.trash-layout span{font-size:10px;position:relative;bottom:3px;}
+
+/* Layout editor header END */
+
+/* --------------------  */
+/* Layout editor wrapper */
+/* --------------------- */
+.layout-container {
+    position: relative;
+    z-index: 1;
+    padding: 16px;
+    border: 1px solid #dfdfdf;
+    background: #FFFFFF;
+    color: #414141;
+}
+.editor-toolbar-fixed .layout-container {
+    margin-top: 0px;
+}
+
+.layout-container * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* Add class to disable text selection while adding cells */
+
+.layout-container > *{
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+/* Layout editor wrapper END */
+
+/* ------------------------  */
+/* Layout where used wrapper */
+/* ------------------------- */
+.where-used-ui{display:none;}
+
+.dd-layouts-where-used {
+    padding: 16px 16px;
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    font-family: "Open Sans",sans-serif;
+    font-size: 13px;
+}
+
+.dd-layouts-where-used .apply-for-all {
+    vertical-align: middle;
+    cursor: pointer;
+    color: #278ab7;
+}
+
+.dd-layouts-where-used .icon-warning-sign {
+    color: #d54e21;
+    margin: 0 2px 0 5px;
+}
+li.post-type-li-in-where-used-list{color:#666;font-weight:bold;}
+li.padding-top{padding-top:10px;}
+.ddl-layout-assigned-to-many li.post-type{color:#666;font-weight:bold;padding-bottom:0;margin-bottom:0;}
+.show_all_wrap{float:right;}
+.where-used-title-wrap{width:100%;}
+
+.where-used-ui{position: relative;}
+.layout-content-assignment ul{margin-bottom: 0px;position:relative;}
+.layout-content-assignment ul li{padding-bottom: 0px;margin-bottom: 0px;position:relative;display:block;clear:both; height:3.3em;}
+.list-where-used-item{
+    position: relative;
+    padding:2px 0 4px 0;
+    margin:0px 0 0 0;
+    display:table-row;
+    float: left;
+    min-width:60px;
+    max-width:80%;
+}
+.list-where-used-item-controls{
+    padding:0px 0px 0px;
+    margin:0px 0px 0px;
+    font-size:0.8em;
+}
+.list-where-used-item-controls{display:none;}
+.list-where-used-item a, .list-where-used-item a:hover{text-decoration: none;}
+.has-to-be-batched{margin:2px 0 10px 0;height:30px;float:left;}
+.alert-icon-hide-post{display:table-cell;position:relative;left:10px;}
+
+.assignment-list-in-editor-wrap{display:block;width:100%;position:relative;}
+.layout-content-assignment-button-wrap{display:block;padding:0;position:relative;height:20px;right:0px;padding-bottom:12px;}
+.where-used-box-messages p{margin-bottom:0px;margin-top:10px;}
+#layout-content-assignment-button{position: absolute;top:0px;right:0px;}
+.where-used-title-wrap{font-weight:600;color:#666;margin-top:6px;padding-bottom:0px;}
+.layout-content-assignment-woo-message-wrap{width:70%;}
+.layout-content-assignment-woo-message-wrap p{margin-bottom: 0px;margin-top: 0px;}
+/* Layout where used wrapper END */
+
+/* ----------  */
+/* Breadcrumbs */
+/* ------------*/
+.dd-layouts-breadcrumbs {
+    float: left;
+    min-width: 780px;
+    width:100%;
+    font-size: 14px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    display:none;
+}
+
+.dd-layouts-breadcrumbs .active {
+    font-weight: bold;
+}
+.dd-layouts-breadcrumbs .layout-title {
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 1px;
+    padding: 3px;
+    /*	border: 1px solid transparent;
+        border-radius: 3px;*/
+    -ms-box-sizing: border-box;
+}
+.dd-layouts-breadcrumbs .layout-title:hover {
+    border-color: #9FC3D8;
+}
+/* override inline styles added  by JS script */
+.dd-layouts-breadcrumbs  .layout-title-input + .layout-title {
+    display: none!important;
+}
+
+.dd-layouts-breadcrumbs .separator {
+    /*color: #21759b;*/
+}
+
+.dd-layouts-breadcrumbs a {
+    text-decoration: none;
+
+}
+
+.dd-layouts-info {
+    float: right;
+    width: 30px;
+    text-align: right;
+    line-height: 28px;
+}
+
+.dd-layouts-info .icon-keyboard {
+    display: inline-block;
+    width: 30px;
+    color: #999;
+    vertical-align: middle;
+    font-size: 20px;
+    cursor: help;
+}
+.dd-layouts-info .icon-keyboard:hover {
+    color: #333;
+}
+/* Breadcrumbs END */
+
+/* ----------- */
+/* Grid system
+* ------------ */
+
+/* This section is for the grid system ONLY. No visual styles should be applied here */
+
+.row-container, .row-toolbar{
+    cursor: ns-resize;
+}
+.row-container.disabled, .row-container.disabled .row-toolbar{cursor: default;}
+.row-container:before,
+.row-container:after,
+.row:before,
+.row:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+.row-container:after,
+.row:after {
+    clear: both;
+}
+
+.row-fixed {
+    margin-left: -16px;
+}
+
+.cell {
+    float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-left: 16px;
+    min-height: 1px;
+    /*z-index: 2;*/
+}
+
+/* Cell containing nested elements */
+.row .container {
+    border-width: 0;
+}
+
+/* Cells inside fixed rows */
+.row-fixed .cell12 {
+    width: 776px;
+}
+.row-fixed .cell11 {
+    width: 710px;
+}
+.row-fixed .cell10 {
+    width: 644px;
+}
+.row-fixed .cell9 {
+    width: 578px;
+}
+.row-fixed .cell8 {
+    width: 512px;
+}
+.row-fixed .cell7 {
+    width: 446px;
+}
+.row-fixed .cell6 {
+    width: 380px;
+}
+.row-fixed .cell5 {
+    width: 314px;
+}
+.row-fixed .cell4 {
+    width: 248px;
+}
+.row-fixed .cell3 {
+    width: 182px;
+}
+.row-fixed .cell2 {
+    width: 116px;
+}
+.row-fixed .cell1 {
+    width: 50px;
+}
+
+.row-fluid {
+    width: 100%;
+}
+
+/* Cells inside fluid rows */
+.row-fluid .cell {
+    margin-left: 2.0618556701030926%;
+    width: 100%;
+}
+
+.row-fluid .cell:first-child {
+    margin-left: 0;
+}
+
+.row-fluid .cell12 {
+    width: 100%;
+}
+
+.row-fluid .cell11 {
+    width: 91.49484536082473%;
+}
+
+.row-fluid .cell10 {
+    width: 82.98969072164948%;
+}
+
+.row-fluid .cell9 {
+    width: 74.48453608247422%;
+}
+
+.row-fluid .cell8 {
+    width: 65.97938144329896%;
+}
+
+.row-fluid .cell7 {
+    width: 57.4742268041237%;
+}
+
+.row-fluid .cell6 {
+    width: 48.96907216494845%;
+}
+
+.row-fluid .cell5 {
+    width: 40.46391752577319%;
+}
+
+.row-fluid .cell4 {
+    width: 31.958762886597935%;
+}
+
+.row-fluid .cell3 {
+    width: 23.45360824742268%;
+}
+
+.row-fluid .cell2 {
+    width: 14.948453608247421%;
+}
+
+.row-fluid .cell1 {
+    width: 6.443298969072164%;
+}
+/* Grid system END */
+
+/* ----------- */
+/* Grid design */
+/* ----------- */
+
+/* Top level row container */
+.row-container {
+    /*border-bottom: 1px solid transparent;*/
+    box-shadow: 0 0 2px #ccc;
+    margin-top: 1px;
+    padding: 0px 3px 0px 3px;
+    display: block;
+    overflow: hidden;
+}
+
+.tabs-tab.row-container{box-shadow:none;}
+.tabs-tab .row-toolbar span.tab-title{color: #555;
+    cursor: default;
+    background-color: #eee;
+    border-bottom-color: transparent!important;
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid #ddd!important;
+    border-bottom: none!important;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    padding: 4px 6px;
+    margin-left:1px;
+}
+.row-toolbar span.tab-title:hover{outline-color: #eee;background-color: #ddd;}
+
+.accordion-panel.row-container{box-shadow:none;}
+.accordion-panel .row-toolbar span.tab-title{color: #555;
+    cursor: default;
+    background-color: #eee;
+    border-bottom-color: transparent!important;
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid #ddd!important;
+    border-bottom: none!important;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    padding: 4px 6px;
+    margin-left:1px;
+}
+.accordion-toolbar:hover{outline-color: #eee;background-color: #ddd;}
+.accordion-toolbar{background-color: #eee;border:1px solid #ddd!important; border-bottom:1px solid transparent!important;border-radius: 4px 4px 0 0;padding: 2px 4px;}
+
+
+
+/* NON BOOTSTRAP ROWS */
+.themesectionrow.row-container {
+    background-color: initial;
+}
+
+.theme-section-preview {
+    text-align: center;
+}
+
+/* END BT ROWS */
+
+/* generic cell styles */
+.cell {
+    position: relative;
+    min-height: 50px;
+    height: 50px;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+    background: #F7F7F7;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 10px;
+    line-height: 48px;
+    cursor: move;
+}
+
+.not-bootstrap-cell{cursor: inherit;}
+
+/* Empty cell */
+.placeholder {
+    border-style: dashed;
+    border-color: #FFB64C;
+    background: #fefefe;
+}
+
+.disabled-placeholder {
+    border-style: solid;
+    border-color: #bcbcbc;
+    background: #fefefe;
+}
+.icon-remove{
+    cursor:pointer;
+}
+.cell > .icon-remove,
+.cell > .icon-code,
+.cell > .icon-move,
+.cell > .edit-icon-additional { /* small edit icon next to the remove icon */
+    position: absolute;
+    top: 1px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.cell > .icon-code{font-size: 15px;}
+.cell > .icon-code:hover{color:#278ab7;}
+.cell > .icon-move {
+    left: 3px;
+    cursor: move;
+}
+
+.cell > .icon-remove {
+    right: 3px;
+}
+
+.cell .icon-remove:hover {
+    color: #d54e21;
+}
+
+.cell > .icon-pencil:hover {
+    color: #278ab7;
+}
+
+.cell > .edit-icon-additional {
+    right: 20px;
+}
+
+.cell > .icon-code {
+    right: 38px;
+}
+
+.cell > .edit-icon-additional {
+    /*display: none;*/
+}
+
+.enable-pencil-icon > .edit-icon-additional { /* Show pencil icon only when cell has content and cell is tall enough */
+    display: inline-block;
+}
+
+.cell1 > .edit-icon-additional, /* But if the cell is to narrow don't show the icon anyway */
+.cell2 > .edit-icon-additional {
+    display: none;
+}
+
+.placeholder .icon-plus,
+.cell > .edit-icon-main {
+    position: absolute;
+    top: 50%;
+    display: inline-block;
+    margin-top: -10px;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+}
+.placeholder .icon-plus:before,
+.cell > .edit-icon-main:before {
+    position: relative;
+    top: 50%;
+}
+
+.cell > .edit-icon-main { /* Main edit icon in the middle of the cell */
+    left: 50%;
+    display: inline-block;
+    margin-left: -20px; /* (width / 2) * -1 */
+    width: 40px;
+    color: #999;
+    font-size: 24px;
+}
+
+.cell1 > .edit-icon-main {
+    margin-left: -10px;
+    width: 20px;
+}
+
+.placeholder .icon-plus {
+    right: 4px;
+    left: 4px;
+    margin-top: -4px;
+    color: #ffb64c;
+}
+
+.layout-container .row .placeholder:hover {
+    border-style: solid;
+    border-color: #ffb64c;
+    background: #fefefe;
+    cursor: pointer;
+}
+
+/* Cell which has a nested row */
+.container {
+    height: auto;
+    border-width: 0;
+    background: none;
+    cursor: default;
+}
+
+/* Vertical separators displayed when dragging is not possible */
+.not-allowed-left,
+.not-allowed-right {
+    position: relative;
+}
+
+.not-allowed-left:after,
+.not-allowed-right:after {
+    position: absolute;
+    top: 0;
+    right: -5px;
+    bottom: 0;
+    width: 2px;
+    background: #b94a48;
+    content: "";
+    opacity: .6;
+}
+
+.not-allowed-right:after {
+    right: auto;
+    left: -5px;
+}
+
+/* Algn cell content horizontaly */
+.cell-content,
+.cell-width-info  {
+    display: inline-block;
+    float: none;
+    margin: 0;
+    width: 100%;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.cell-content .cell-name,
+.cell-content .cell-preview {
+    overflow: hidden;
+    margin: 2px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+.cell-content {
+    overflow: hidden;
+    max-height: 100%;
+    position: relative;
+}
+
+/* ------------ */
+/* Cell preview */
+/* ------------ */
+
+.cell-content .cell-preview {
+    padding: 5px;
+    text-align: left;
+    opacity: .5;
+    transition: opacity .15s ease-in-out;
+    max-width: 100%;
+}
+.cell-content  .preview-centered{text-align: center;}
+.cell-content .cell-preview:empty {
+    display: none;
+}
+.cell:hover > .cell-content > .cell-preview {
+    opacity: 1;
+}
+
+/* Reset WP styles */
+.cell-content .cell-preview h1,
+.cell-content .cell-preview h2,
+.cell-content .cell-preview h3,
+.cell-content .cell-preview h4,
+.cell-content .cell-preview h5,
+.cell-content .cell-preview h6,
+.cell-content .cell-preview div,
+.cell-content .cell-preview ul,
+.cell-content .cell-preview ol,
+.cell-content .cell-preview li,
+.cell-content .cell-preview p,
+.cell-content .cell-preview img,
+.cell-content .cell-preview table {
+    margin: 0 0 5px 0;
+    padding: 0;
+    white-space: normal;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.cell-content .cell-preview br {
+    display: block;
+    margin: 0;
+    line-height: 1px;
+    font-size: 1px;
+    content: " ";
+}
+
+.cell-content .cell-preview h1,
+.cell-content .cell-preview h2,
+.cell-content .cell-preview h3 {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.cell-content .cell-preview h1 {
+    font-size: 16px;
+}
+
+.cell-content .cell-preview h2 {
+    font-size: 15px;
+}
+
+.cell-content .cell-preview h3 {
+    font-size: 14px;
+}
+
+.cell-content .cell-preview ul,
+.cell-content .cell-preview ol {
+    list-style-position: inside;
+}
+
+.cell-content .cell-preview ul {
+    list-style-type: disc;
+}
+
+.cell-content .cell-preview ol {
+    list-style-type: decimal;
+}
+
+.cell-content .cell-preview li {
+    margin-bottom: 0;
+}
+
+.cell-content .cell-preview img {
+    max-width: 50%;
+    height: auto!important;
+}
+
+.cell-content table,
+.cell-content .element-placeholder {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+
+.cell-content table th,
+.cell-content table td {
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+.cell-content table th {
+    background: #ededed;
+}
+
+.cell-content tfoot td {
+    background: #fafafa;
+}
+
+.cell-content .cell-preview .element-placeholder {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    border-color: #dfdfdf;
+    background: #fff;
+    text-align: center;
+}
+
+.cell-content .element-placeholder i {
+    position: relative;
+    top: 50%;
+    margin-top: -24px;
+    color: #dfdfdf;
+    vertical-align: middle;
+    font-size: 48px;
+}
+
+.cell-content .video-placeholder {
+    max-width: 400px;
+    height: 300px;
+}
+
+/* WP editor align styles */
+.cell-content .cell-preview .alignleft,
+.cell-content .cell-preview .alignright {
+    display: inline;
+}
+
+.cell-content .cell-preview .alignleft {
+    float: left;
+    margin: 0 5px 5px 0;
+}
+
+.cell-content .cell-preview .alignright {
+    float: right;
+    margin: 0 0 5px 5px;
+}
+
+.cell-content .cell-preview .aligncenter {
+    display: block;
+    float: none;
+    margin: 0 auto 5px;
+}
+
+/* fade-out for tall, oversized cells */
+.cell-preview-fadeout .cell-preview, .content-template-preview .cell-preview {
+    height: 100%;
+    min-height:100px;
+}
+
+
+.cell-preview-fadeout .cell-preview:before {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 125px;
+
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,247,247,0)), color-stop(90%,rgba(247,247,247,1)), color-stop(100%,rgba(247,247,247,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(247,247,247,0) 0%, rgba(247,247,247,1) 80%, rgba(247,247,247,1) 100%); /* Chrome10+,Safari5.1+ */
+    background:    -moz-linear-gradient(top,  rgba(247,247,247,0) 0%, rgba(247,247,247,1) 80%, rgba(247,247,247,1) 100%); /* FF3.6+ */
+    background:     -ms-linear-gradient(top,  rgba(247,247,247,0) 0%, rgba(247,247,247,1) 80%, rgba(247,247,247,1) 100%); /* IE10+ */
+    background:      -o-linear-gradient(top,  rgba(247,247,247,0) 0%, rgba(247,247,247,1) 80%, rgba(247,247,247,1) 100%); /* Opera 11.10+ */
+    background:   linear-gradient(to bottom,  rgba(247,247,247,0) 0%, rgba(247,247,247,1) 80%, rgba(247,247,247,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#f7f7f7', GradientType=0);   /* IE6-9 */
+}
+
+.cell-preview-fadeout .cell-preview:after {
+    content: '[\02026]';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2px;
+    font-size: 1.2em;
+    line-height: 1.5;
+    font-weight: bold!important;
+    text-align: center;
+    background: #f7f7f7;
+}
+
+/* Cell preview END */
+
+.cell-content .cell-name {
+    font-weight: bold;
+}
+
+.cell-content .cell-type {
+    color: #999;
+}
+
+/* Adds spacing for the nested rows */
+.row .row-container {
+    /*margin: 0 0 15px 0;*/
+    /*border: 1px solid #ededed;*/
+    /*border-width: 1px 0;*/
+    padding: 0px 0px;
+}
+.row-container{
+    position:relative;
+}
+.row .row-container:last-child {
+    margin-bottom: 0;
+}
+
+/* .show-row-placeholder class is added for the .row-container when the plus button is hovered */
+.show-row-placeholder,
+.row .show-row-placeholder {
+    border-bottom: 1px dashed #2ea2cc;
+}
+
+/* Disable bordedrs for nested rows containers */
+.containers-toolbars-disabled .row .row-container {
+    border-color: transparent;
+}
+
+/* Row toolbar */
+.row-toolbar {
+    position:relative;
+    overflow: hidden;
+    /*padding: 10px 0;*/
+    text-align: left;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1;
+    /*cursor: default;*/
+}
+
+.row-toolbar > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Truncate row names */
+.row-toolbar .element-name {
+    overflow: hidden;
+    padding: 0 3px;
+    min-width: 20px;
+    max-width: 80%;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 20px;
+}
+
+.container > .row-toolbar .element-name {
+    font-weight: 600;
+}
+.container .element-name:first-child {
+    font-weight: 300;
+}
+
+.row-toolbar:hover .element-name:hover {
+    border-color: #9FC3D8;
+    cursor: text;
+}
+
+.row-toolbar .element-name:empty {
+    width: 40px;
+    height: 22px;
+}
+
+.row-toolbar .element-name:empty:hover {
+    background: #fafafa;
+}
+
+/* don't show the row-toolbar names in containers that are 1 cell wide. There's not enough room. */
+.cell1 .row-toolbar .element-name  {
+    visibility: hidden;
+}
+
+/* Edit row name */
+.row-toolbar .element-name-input {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 2px 3px;
+    height: 21px;
+    border-radius: 3px;
+    color: #868686;
+    font-size: 12px;
+}
+
+.cell2 .element-name-input {
+    max-width: 50px;
+}
+
+.cell3 .element-name-input {
+    max-width: 110px;
+}
+
+.row-toolbar [class^="icon-"] {
+    margin: 0 2px;
+    font-size: 14px;
+    opacity: .8;
+    cursor: pointer;
+}
+
+.row-toolbar [class^="icon-"]:hover {
+    color: #278ab7;
+    opacity: 1;
+}
+
+.row-toolbar .icon-remove:hover  {
+    color: #d54e21;
+}
+
+.row-toolbar .icon-move,
+.row-toolbar .icon-resize-vertical {
+    display: inline-block;
+    width: 20px;
+    position:relative;
+    color: #e55000;
+    text-align: center;
+    opacity: .6;
+    cursor: move;
+    font-size:14px;
+    top: -4px;
+    height: 20px;
+    z-index: 999999999999999999;
+}
+
+.row-toolbar .icon-resize-vertical:before{
+    z-index: 99999999999999999999;
+    position: relative;
+    top: 7px;
+}
+
+.container .row-toolbar > .icon-move{
+    top:0px;
+}
+.container .row-toolbar > .icon-move:before{
+    top:0px;
+}
+
+.row-toolbar .icon-resize-vertical {
+    cursor: ns-resize;
+}
+
+.row-toolbar .row-actions {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    left: 50%;
+    display: block;
+    visibility: visible;
+    color: #999;
+    text-align: right;
+}
+
+.row-toolbar .row-extra {
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
+    display: block;
+    visibility: visible;
+    text-align: right;
+}
+
+.row-toolbar .row-extra i{
+    position:relative;
+    font-size:15px;
+}
+
+.row-toolbar:hover > .row-actions {
+    display: block;
+}
+
+/* Hide row toolbar icons */
+.row-toolbar .row-actions,
+.row-toolbar .element-name:hover + .row-actions,
+.row-toolbar .element-name-input:hover + .element-name + .row-actions {
+    display: none;
+}
+
+/* Force row toolbar icons to show when they're hovered */
+.row-actions-hovered > .row-toolbar .row-actions {
+    display: block;
+}
+
+.row-toolbar .disabled,
+.row-toolbar .disabled:hover {
+    color: #ddd;
+    opacity: 1;
+    cursor: default;
+}
+
+/* add row button */
+.row-container .add-row {
+    margin: 5px 0;
+    text-align: right;
+    line-height: 1;
+}
+
+.row-container .add-row .add-row-button-fluid  {
+    color: #999;
+    margin-right: 0;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.row-container .add-row .add-row-button-fixed  {
+    color: #999;
+    margin-right: 0;
+}
+
+.row-container button:hover {
+    color: #111;
+}
+
+.row-container .add-row-menu-toggle {
+    margin-left: 0;
+    padding: 0;
+    width: 20px;
+    border-left: 1px solid #ddd;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    text-align: center;
+}
+
+.row .drop-failed {
+    background: #e55000;
+    box-shadow: 0 0 3px #9b7521;
+}
+
+
+/* Highlight the row when the row toolbar is hovered */
+.layout-container .is-hovered {
+    background: none;
+}
+
+/* Do not highlight the row while dragging */
+.is-dragged .is-hovered {
+    background: none;
+}
+/* Grid design END */
+
+.ddl-context-menu {
+    position: absolute;
+    z-index: 10000;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: default;
+}
+
+.ddl-context-menu-title {
+    margin: 0;
+    padding: 6px;
+    border-bottom: 1px solid #ededed;
+    font-weight: bold;
+}
+
+.ddl-context-menu ul {
+    margin: 0;
+    list-style: none;
+}
+
+.ddl-context-menu li {
+    margin: 0;
+    padding: 6px;
+    cursor:pointer;
+}
+
+.ddl-special-row-context-menu li:hover {
+    background: #ededed;
+}
+
+.ddl-context-menu li i {
+    display: inline-block;
+    margin-right: 5px;
+    width: 10px;
+    color: #999;
+}
+
+.ddl-context-menu li:hover i {
+    color: #666;
+}
+
+.ddl-context-menu .add-row {
+    width: 164px;
+    height: 20px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: #222;
+    text-align: center;
+    opacity: .6;
+}
+
+.ddl-context-menu .add-row:hover {
+    opacity: 1;
+}
+.ddl-context-menu .add-row-duplicate{
+    opacity:1;
+}
+.ddl-context-menu .add-row-duplicate:hover{background: #ededed;}
+.ddl-context-menu .disabled{cursor:default!important;opacity: .5;}
+
+.ddl-context-menu .row1 { background-image: url('../img/row1.png'); }
+.ddl-context-menu .row2 { background-image: url('../img/row2.png'); }
+.ddl-context-menu .row3 { background-image: url('../img/row3.png'); }
+.ddl-context-menu .row4 { background-image: url('../img/row4.png'); }
+.ddl-context-menu .row6 { background-image: url('../img/row6.png'); }
+.ddl-context-menu .row12 { background-image: url('../img/row12.png'); }
+
+/* --------- */
+/* jQuery UI */
+/* --------- */
+/* Resizable defaults from jquery ui*/
+.ui-widget-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.ui-resizable {
+    position: relative;
+}
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+}
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+.ui-resizable-n {
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+.ui-resizable-s {
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
+}
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 7px;
+    right: -5px;
+    top: 0;
+    height: 100%;
+}
+.ui-resizable-w {
+    cursor: w-resize;
+    width: 7px;
+    left: -5px;
+    top: 0;
+    height: 100%;
+}
+.ui-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+.ui-resizable-sw {
+    cursor: sw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: -5px;
+}
+.ui-resizable-nw {
+    cursor: nw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
+}
+.ui-resizable-ne {
+    cursor: ne-resize;
+    width: 9px;
+    height: 9px;
+    right: -5px;
+    top: -5px;
+}
+/* resizable defaults end*/
+.cell.ui-resizable .placeholder,
+.cell.ui-resizable .container,
+.cell.ui-resizable .box {
+    cursor: move;
+}
+
+/* border displayed when cells are being resized */
+.ui-resizable-helper {
+    border: 1px dashed #2175A5;
+}
+
+/* Display cell width alignet to center while resizing */
+.ui-resizable-helper .cell-width-info {
+    position: relative;
+    z-index: 1;
+    color: #000;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 48px;
+}
+
+/* Hide all the icons when cell is being resized */
+.ui-resizable-helper .icon-remove,
+.ui-resizable-helper .icon-move,
+.ui-resizable-helper .icon-pencil {
+    display: none;
+}
+
+/* Left and right cells handles */
+.ui-resizable .ui-resizable-handle {
+    position: absolute;
+    bottom: -5px;
+    z-index: 2;
+    width: 3px;
+    background: transparent;
+    cursor: col-resize;
+}
+.ui-resizable .ui-resizable-handle:hover {
+    background: #1e8cbe;
+    opacity: .5;
+}
+
+/* Right handles */
+.ui-resizable .ui-resizable-e {
+    right: -1px;
+}
+.container > .ui-resizable-e {
+    right: -4px;
+}
+
+/* Left handles */
+.ui-resizable .ui-resizable-w {
+    left: -1px;
+}
+.container > .ui-resizable-w {
+    left: -4px;
+}
+
+/* Custom dummy drop placeholder */
+.ui-custom-drop-placeholder {
+    position: absolute;
+    display: none;
+}
+
+/* Cells placeholders */
+.layout-container .ui-sortable-placeholder, /* default UI sortable placeholder */
+.layout-container .ui-resizable-placeholder, /* default UI resizable placeholder */
+.layout-container .ui-custom-resizable-placeholder, /* dummy resizable placeholder */
+.layout-container .ui-custom-sortable-placeholder, /* Custom placeholder for rows */
+.ui-custom-drop-placeholder /* dummy sortable placeholder */,
+.add-cell-placeholder, /* when the cell is added */
+.add-cell-first,
+.add-target-cell {
+    z-index: 2;
+    border: 1px dashed #fff;
+    background: transparent;
+    background: #FFB64C;
+    opacity: 100;
+}
+
+.layout-container .container .ui-custom-sortable-placeholder { /* Additional margin for the nested rows' placeholders */
+    margin-bottom: 15px; /* Equal to '.row .row-container' margin-bottom */
+}
+.layout-container .container .ui-custom-sortable-placeholder:last-child {
+    margin: 0;
+}
+
+.add-cell-first,
+.add-target-cell {
+    z-index: 3;
+    cursor: col-resize;
+}
+
+.add-target-cell {
+    border-color: #dfdfdf;
+    background: #fefefe;
+}
+
+/* Removes the left margin of the ui-sortable-placeholderr, if the ui-sortable-placeholderr is the direct sibling of the first cell in the fluid row. */
+.row-fluid .cell:first-child + .ui-sortable-placeholder {
+    margin-left: 0;
+}
+
+/* when a cell is being resized */
+.ui-resizable-resizing {
+    background: transparent;
+    opacity: .5;
+}
+/* hide cell details and nested row name */
+.ui-resizable-resizing .cell-content > .cell-name,
+.ui-resizable-resizing .cell-content > .cell-preview,
+.ui-resizable-resizing .cell-content > .cell-type,
+.ui-resizable-resizing .cell-content .element-name {
+    visibility: hidden;
+}
+
+.ui-resizable-resizing .cell-content,
+.ui-resizable-resizing .row-toolbar {
+    visibility: hidden;
+}
+
+/* when a cell is being dragged */
+.ui-sortable-helper {
+    opacity: .9;
+}
+
+/* Hide cell content and all the icons when cell is being dragged */
+.ui-sortable-helper .icon-pencil,
+.ui-sortable-helper .icon-remove,
+.ui-sortable-helper .icon-move {
+    display: none;
+}
+
+/* jQuery UI end */
+
+/* -------------- */
+/* Editor toolbar */
+/* -------------- */
+
+.editor-toolbar {
+    clear: both;
+    margin: 0;
+}
+
+.video-toolbar-visible .editor-toolbar,
+.editor-toolbar-fixed .editor-toolbar {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    padding: 15px 0;
+    border-bottom: 1px solid #ededed;
+    background: #f1f1f1;
+}
+
+.video-toolbar-visible.toolset-alert-active .editor-toolbar,
+.editor-toolbar-fixed.toolset-alert-active .editor-toolbar {
+    padding-top: 50px;
+    -webkit-transition: padding 50ms ease-out 50ms;
+    -moz-transition: padding 50ms ease-out 50ms;
+    -o-transition: padding 50ms ease-out 50ms;
+    transition: padding 50ms ease-out 50ms;
+}
+
+/* if wp toolbar is active and editor toolbar has fixed position */
+.wp-toolbar.editor-toolbar-fixed .editor-toolbar {
+    top: 32px; /* wp-toolbar height */
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    width: 898px;
+}
+.wp-toolbar.editor-toolbar-fixed .editor-toolbar-private {
+    top: 32px; /* wp-toolbar height */
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    padding: 10px;
+    margin-left: -126px;
+    width: 898px;
+}
+
+/* if video toolbar is expanded */
+.video-toolbar-visible .dd-message-container,
+.video-toolbar-visible .editor-toolbar {
+    top: 162px;
+}
+.video-toolbar-visible .dd-message-container,
+.wp-toolbar.video-toolbar-visible .editor-toolbar {
+    top: 194px; /* wp-toolbar height + video-toolbar  height */
+}
+
+.editor-toolbar:before,
+.editor-toolbar:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+.editor-toolbar-container:after,
+.editor-toolbar:after {
+    clear: both;
+}
+
+.editor-toolbar .save-button-wrap {
+    float: right;
+}
+
+.editor-toolbar .save-button-wrap,
+.editor-toolbar .undo-redo-wrap {
+    margin: 0;
+}
+.editor-toolbar, .editor-toolbar-private{position:relative;}
+.editor-toolbar .ajax-loader {
+    display: inline-block;
+    float: none;
+    margin: 0 10px;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.editor-toolbar .undo-redo-wrap .button {
+    margin: 0 1px 5px 0;
+}
+
+.ddl-layout-type-editor-wrap .is-parent{color:green;}
+.ddl-layout-type-editor-wrap .icon-home-parent{}
+
+/* Editor toolbar END */
+
+/* ---------------------- */
+/* Video notification bar */
+/* ---------------------- */
+
+.tutorial-video-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 160px;
+    z-index: 3;
+    padding: 20px;
+    min-height: 46px;
+    border-width: 0 0 1px 0;
+    background: #2ea2cc;
+    background: rgba(46, 162, 204, .85);
+    color: #fff;
+}
+@media only screen and (max-width: 900px) {
+    .tutorial-video-bar {
+        left: 36px;
+    }
+}
+@media only screen and (max-width: 782px) {
+    .tutorial-video-bar {
+        left: 0;
+    }
+}
+.wp-toolbar .tutorial-video-bar {
+    top: 32px;
+}
+
+.ddl-dialog .tutorial-video-bar {
+    position: relative;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.tutorial-video-bar .tutorial-video-bar-name,
+.tutorial-video-bar .tutorial-video-bar-content {
+    display: block;
+    float: left;
+}
+
+.tutorial-video-bar .tutorial-video-bar-name {
+    position: relative;
+    margin: 0 15px 0 0;
+    padding: 15px;
+    width: 120px;
+    height: 90px;
+    border: 1px solid #fff;
+    background: #ddd;
+    box-shadow: 0px 0px 20px -2px rgba(0,0,0,.25);
+    color: #333;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.tutorial-video-bar .icon-play-circle {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    margin-top: -18px;
+    margin-left: -18px;
+    color: #fff;
+    font-size: 36px;
+    opacity: .5;
+}
+.tutorial-video-bar .tutorial-video-bar-name:hover .icon-play-circle {
+    opacity: 1;
+    -webkit-transition: opacity 50ms ease-out 50ms;
+    -moz-transition: opacity 50ms ease-out 50ms;
+    -o-transition: opacity 50ms ease-out 50ms;
+    transition: opacity 50ms ease-out 50ms;
+}
+
+.tutorial-video-bar .tutorial-video-bar-content {
+    width: 645px;
+}
+@media only screen and (max-width: 1026px) {
+    .tutorial-video-bar .tutorial-video-bar-content {
+        width: 520px;
+    }
+}
+.ddl-dialog .tutorial-video-bar .tutorial-video-bar-content {
+    width: 461px;
+}
+.tutorial-video-bar .tutorial-video-bar-desc {
+    font-size: 18px;
+}
+
+.tutorial-video-bar p:first-child {
+    margin-top: 0;
+}
+
+.tutorial-video-bar button {
+    display: block;
+    float: right;
+}
+
+.tutorial-video-bar .icon-collapse {
+    position: absolute;
+    top: 20px;
+    right: 23px;
+    cursor: pointer;
+}
+
+.tutorial-video-bar .icon-remove,
+.tutorial-video-bar .icon-facetime-video {
+    display: none;
+    cursor: pointer;
+}
+
+.tutorial-video-bar .icon-facetime-video:hover {
+    color: #ddd;
+}
+
+.tutorial-video-bar .icon-remove:hover {
+    color: #d54e21;
+}
+
+.tutorial-video-bar.collapsed {
+    left: auto;
+    border-left-width: 1px;
+}
+
+.ddl-dialog .tutorial-video-bar.collapsed {
+    padding: 10px;
+    min-height: 0;
+    border: none;
+}
+
+.tutorial-video-bar.collapsed .tutorial-video-bar-name,
+.tutorial-video-bar.collapsed .tutorial-video-bar-content {
+    display: none;
+}
+
+.tutorial-video-bar.collapsed .icon-remove,
+.tutorial-video-bar.collapsed .icon-facetime-video {
+    display: block;
+}
+
+.tutorial-video-bar.collapsed .icon-remove {
+    display: block;
+    margin: 0 0 20px 0;
+}
+
+.ddl-dialog .tutorial-video-bar.collapsed .icon-facetime-video {
+    float: left;
+}
+
+.ddl-dialog .tutorial-video-bar.collapsed .icon-remove {
+    float: right;
+    margin: 0;
+}
+
+/* Video notification bar END */
+
+/* ----------- */
+/* WP Tooltips */
+/* ----------- */
+
+.ddl-tooltip ul {
+    margin: 1em 0; /* Same as <p> */
+    padding: 0 15px;
+}
+
+.ddl-tooltip li {
+    overflow: hidden;
+    margin-bottom: 10px;
+    line-height: 28px;
+}
+
+.ddl-tooltip .disabled {
+    color: #333;
+}
+
+.ddl-tooltip .desc {
+    display: inline-block;
+    margin-left: 10px;
+    line-height: 1.5;
+}
+
+
+.rmb-tooltip { }
+
+.rmb-tooltip .desc {
+    float: left;
+    max-width: 254px;
+}
+
+/*
+    License: Creative Commons (Attribution 3.0 United States)
+    By: FatCow Web Hosting - http://www.fatcow.com/
+*/
+.rmb-tooltip  .icon-rmb,
+.rmb-tooltip  .icon-lmb {
+    display: inline-block;
+    float: left;
+    width: 26px;
+    height: 26px;
+    background: url('../../../../resources/images/ico-rmb.png') center center no-repeat;
+    vertical-align: middle;
+}
+.rmb-tooltip  .icon-lmb {
+    background-image: url('../../../../resources/images/ico-lmb.png');
+}
+/* WP Tooltips END */
+
+/* ------------- */
+/* GRID DESIGNER */
+/* ------------- */
+
+.grid-designer-wrap {
+    position: relative;
+    float: left;
+    padding: 10px 0px 5px 10px;
+}
+
+.grid-info-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.grid-info-wrap .grid-info {
+    position: relative;
+    top: 50%;
+    display: block;
+    color: #999;
+    line-height: 0;
+}
+
+.grid-designer {
+    overflow: hidden;
+}
+
+.grid-designer ::-moz-selection,
+.grid-designer ::selection {
+    background: transparent;
+}
+
+.grid-designer .grid-row {
+    clear: both;
+    overflow: hidden;
+    width:530px;
+}
+
+.grid-designer .grid-cell {
+    float: left;
+    margin: 0 5px 5px 0;
+    width: 37px;
+    height: 25px;
+    border: 1px solid #ccc;
+    background: #ddd;
+}
+
+.grid-designer .grid-cell-2 {
+    width: 81px;
+}
+
+.grid-designer .grid-cell-3 {
+    width: 125px;;
+}
+
+.grid-designer .grid-cell-4 {
+    width: 169px;
+}
+
+.grid-designer .grid-cell-6 {
+    width: 257px;
+}
+
+.grid-designer .grid-cell-12 {
+    width: 521px;
+}
+
+.horizontal-slider {
+    margin: 0 0 0 21px;
+    width: 522px;
+    cursor: pointer;
+}
+
+.vertical-slider {
+    float: left;
+    margin: 9px 0 0 0;
+    height: 120px;
+    cursor: pointer;
+}
+
+.horizontal-slider .ui-slider-handle,
+.vertical-slider .ui-slider-handle{
+    cursor: pointer;
+}
+
+.js-fluid-views-grid-slider-horizontal {
+    margin-left: 0px !important;
+}
+
+.grid-designer-wrap-views {
+    padding-left: 0px !important;
+}
+
+
+/* ----------------- */
+/* Add cell overlay  */
+/* ----------------- */
+
+.add-cell-overlay,
+.add-cell-overlay-message {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    background: #000;
+    text-align: center;
+    opacity: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.add-cell-overlay-message {
+    z-index: 4;
+    background: #D3E056;
+    box-shadow: 0 0 2px #f8e8a0;
+    vertical-align: middle;
+    opacity: 1;
+    height: 19px !important;
+    overflow: hidden;
+
+}
+
+/* Add cell overlay END  */
+
+
+/*/// TEMP ///*/
+
+.ddl-colorbox-2-overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    color: #000000;
+    opacity: 0.3;
+}
+
+.ddl-colorbox-2 {
+    position: fixed;
+    top: 50px;
+    background: #D9D9D9 url('../../../../resources/images/ajax-loader.gif') no-repeat center;
+}
+
+.ddl-view-layout-icon {
+    font-size: 32px;
+    margin: 0px 5px;
+    vertical-align: middle;
+    color: #666;
+}
+
+.ajax-loader-bar {
+    width: 100%;
+    background: url('../../../../resources/images/ajax-loader-overlay.gif') center center no-repeat;
+}
+
+/* View selector in Views Content Grid cell */
+
+.ddl-view-select {
+    margin-bottom: 10px;
+}
+
+.views-grid-button {
+    margin-top: 20px !important;
+}
+
+/* OVERRIDES */
+
+a, a:hover{cursor:pointer;}
+
+/* CRED cell previews */
+
+.ddl-cred-title-preview {
+    width: 100%;
+    height: 22px;
+    background-color: #fff;
+    border: solid 1px #CCC;
+}
+
+.ddl-cred-body-preview {
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    border: solid 1px #CCC;
+}
+
+/*
+	This file contains styles for the Layouts editor page ONLY.
+	Styles for forms, dialogs and general styles are in separate files:
+	* dd-general.css - general styles for Layouts pages
+	* dd-dialogs-general.css - general dialogs styles
+	* dd-dialogs.css - styles for specific dialogs
+	* dd-dialogs-forms.css - general styles for dialogs' forms
+*/
+#ddl-error-page{
+    background: #fff;
+    color: #444;
+    font-family: "Open Sans", sans-serif;
+    margin: 2em auto;
+    padding: 1em 2em;
+    max-width: 700px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+}
+/* ********* EMBEDDED LAYOUTS ******************/
+.promo-message-create-dialog{
+    float: right;
+    position: absolute;
+    right: 20px;
+    bottom: 5px;
+}
+a.create-disabled-a, a.create-disabled-a:hover{cursor:default;}
+.item-body .item-insert-disabled{
+    cursor:default;
+    background:#e0e0e0;
+    color:graytext;
+    display: inline-block;
+    font-size: 1.35em;
+    padding: 0 25px;
+    line-height: 50px;
+    font-style: italic;
+    position: absolute;
+    bottom: 30px;
+    right: 17px;
+    outline: 0;
+}
+.ddl-special-row-context-menu .disabled{cursor:default!important;opacity: .5;}
+.item-body .item-insert-disabled .dashicons{
+    margin-left: 5px;
+    line-height: 55px;
+}
+
+/* CodeMirror instance in Visual Editor cell */
+#js-visual-editor-codemirror > .code-editor-toolbar > ul { height: 33px; }
+#js-visual-editor-codemirror .quicktags-toolbar { border: 1px solid #e5e5e5; }
+#js-visual-editor-codemirror .CodeMirror {   
+    border: 1px solid #e5e5e5;
+    border-top: none; 
+}
+#visual-editor-editor-switch-message .toolset-alert {
+    margin-top: 1px;
+}
+
+.ddl-visual-editor-editor-container .wp-editor-tabs {
+    position: relative;
+    z-index: 1000;
+}
+.ddl-visual-editor-editor-container .wp-editor-tabs .wp-switch-editor.active {
+    background: #f5f5f5;
+    color: #555;
+    border-bottom-color: #f5f5f5;
+}
+.ddl-visual-editor-editor-container .code-editor-toolbar  {
+    padding: 1px 0 0 0;
+    margin-top: 20px;
+    background: none;
+    border: transparent;
+}
+
+
+/* //// CELLS OVERLAY ////*/
+.ddl-elements-overlay{
+    position:absolute;
+    top:0px;
+    left:0px;
+    overflow:hidden;
+    background:rgba(39, 138, 183, 0.3);outline:1px solid #278ab7;
+}
+.ddl-elements-overlay-delete{background:rgba(213, 78, 33, 0.3);outline:1px solid #d54e21;}
+.ddl-elements-overlay-edit{background:rgba(39, 138, 183, 0.3);outline:1px solid #278ab7;}
+.clearfix {
+    overflow: hidden;
+    height: 100%
+}
+.ddl-cred-user-preview, .ddl-cred-relationship-preview{text-align:center;}
+
+/* OVERRIDES */
+input[name="ddl-layout-autogenerate_username"]{margin-left:35px;}
+
+.row-not-render-message{display:none;}
+.row-not-render-message > p{margin-top:0;margin-bottom:0;}
+
+div.missing-cell-alert{margin-top:0px!important;min-height:48px;height:inherit;overflow: hidden;}
+.ddl-info-box{margin-top:0px!important;}
+div#visual-editor-editor-container{padding:0px 0px 44px 10px;}
+.visual-editor-views-shortcode-notification{padding-top:0px;padding-bottom:2px;margin-top:0px;}
+/* /////// IMG BOX /////////////////*/
+.img-rounded {
+    border-radius: .3rem;
+}
+
+.img-thumbnail {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    padding: .25rem;
+    line-height: 1.5;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: .25rem;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+.all_changes_saved{display:none;color:rgb(150,150,150);font-size:13px;position:relative;float:right;right:5px;top:7px;}
+.cell-extra-info{font-size:10px;text-align: center;opacity:.5!important;}
+.new_layout_alert_border{
+    border-color: #f05a28 !important;
+    -webkit-box-shadow: 0px 0px 3px #f05a28 !important;
+    -moz-box-shadow: 0px 0px 3px #f05a28 !important;
+    box-shadow: 0px 0px 3px #f05a28 !important;
+}
+#change_layout_name_message {
+    text-align: right;
+    display: none;
+    font-size: 10px;
+    height: 0px;
+    color: #f05a28;
+    position:relative;
+    bottom:24px;
+}
+
+.default_container_padding_label{
+    width: auto !important;
+    font-size: 12px !important;
+    font-weight: normal !important;
+    color: #444 !important;
+    margin-top: 10px !important;
+}
+
+/************* CRED OVERRIDES *****************************/
+.ddl-dialog-header, .ddl-dialog-footer{z-index:1;}
+.ddl-dialog-content, .js-popup-tabs,.ddl-dialog-content-main, .ddl-form, #visual-editor-editor-container,
+.js-visual-editor-tinymce, .js-default-dialog-content{  position: relative;z-index:999;}
+.ddl-form .cred-popup-box{z-index:9999999999999999999999999999999;top:-30px;left:-145px;padding:0px 10px;}
+.ddl-form .cred-popup-box select, .ddl-form .cred-popup-box input {max-width:300px;}
+.ddl-form .cred-popup-box .cred-help-link { position: absolute;  top: 8px; right: 308px;}
+.ddl-form .wpv-ct-inline-edit .cred-popup-box{left: -30px; top: -120px;}
+.ddl-form .cred-popup-box .cred-buttons-holder{padding-bottom:10px;}
+.icon-cred-logo{color:#555;}
+#visual-editor-editor-container .icon-cred-logo{color:#888;}
+.float-left{float:left;}
+
+/************* WIDGET AREA CELL OVERRIDES ******************/
+
+.no-style-dialog-footer{ background-color: transparent !important; border:none !important; }
+.save-new-sidebar-buttons input{ float:right; }
+.js-create-the-new-sidebar{ margin-right: 5px !important; }
+.toolset-being-updated {box-shadow: 0 0 10px 2px #7ad03a; border-color: #7ad03a; }
+.js-widget-area-select-el{ float: left !important; margin-left: 10px !important; }
+.ddl-popup-tab-float{float:left;}
+.ddl-form label{text-align: right;}
+.ddl-form fieldset label, .ddl-form .fields-group label {text-align: left;}
+
+/************************* DIALOGS OVERRIDES *************************************/
+label.label-tag{}
+label.label-tag-id{position:relative;top:20px;}
+label.label-tag-classes{position:relative;top:20px;}
+.ddl-form > li{padding-bottom:6px;}
+#ddl-tab-edit ul.ddl-form li:first-child{padding-top:10px;}
+input#ddl-tab-edit-disabled{margin-left:2px;}
+.width-70{float:none!important;display:inline!important;}
+.ddl-form-panel label{width:156px;}
+.ddl-form-panel input[type="text"]{float:left;}
+.ddl-dialog-content .dialog-alert{display:inline-block;}
+.ddl-dialog-content span.dialog-alert i.fa-exclamation-triangle{font-size:48px;}
+.ddl-dialog-content span.dialog-alert-child-cell i.fa-exclamation-triangle{font-size:70px;}
+.ddl-dialog-content span.dialog-content{display: inline-block;  width: 80%;  padding-left: 12px;}
+div.display-inline{ display: inline-block; padding-left:3px;}
+div.display-inline p:first-child{margin-top:0px;}
+#ddl-accordion-edit .css-styling-controls{margin-top:0px;border-top:0px;}
+.cell-content .cell-preview .ddl-menu-preview img{padding-top:16px;}
+.cell-cred-cell .cell-preview p:first-child{margin-top:-8px;}
+
+/*********************** Private layout toolbar overrides *************************/
+.toolbar_for_private_layout {
+    width: 85%;
+    float:left;
+    margin-top: 0px !important;
+    margin-left: 5px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #dfdfdf;
+}
+.undo_redo_private{
+    position: relative;
+    float: left;
+}
+.editor-toolbar-private {
+
+}
+div.pl_title {
+    font-size: 13px;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 6px;
+    width: 370px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+.fields-group label p{float:left;margin-top:0;padding-top:0;}
+.cell-preview-desc{text-align: center;}
+.private-layout-buttons {
+    display: block;
+    margin-top: 90px;
+}
+
+.changes_saved_indicator {
+    background-color: #e0fde7 !important;
+}
+
+/*********************** TinyMCE fixes *************************/
+/*
+ * TinyMce 4.3.x shipped by WordPress has a small visual issue with tooltips and 
+ * floatpanels when displayed in modals as it calculates its positions based on the 
+ * distante to the page header, hence rendering them offscreen.
+ *
+ * This is fixed in 4.4.x and we might want to remove this when WordPress upgrades, maybe.
+ * 
+ * https://github.com/tinymce/tinymce/issues/2742
+ */
+
+.mce-tooltip,
+.mce-notification {
+    position: fixed !important;
+}
+.mce-panel.mce-floatpanel.mce-menu, 
+.mce-panel.mce-floatpanel.mce-popover {
+    position: fixed !important;
+}
+.mce-fullscreen #wpadminbar, .mce-fullscreen #wp-content-wrap .mce-wp-dfw {
+    display: none;
+}
+/******************************** MAIN Elements Overrides *******************************/
+.ddl-editor-wrap{margin-top:0px;}
+h1.ddl-editor-title{padding-top:0px;padding-bottom:8px;}
+#edit-slug-box{padding:0px;margin-top:3px;}
+#titlediv{display:block;position:relative;float:left;width:88%;}
+#iconwrap{float:left;width:12%;}
+#layouts-icon-text{display:none;}
+.layouts-icon{cursor:pointer;}
+.wp-pointer-content .fa-external-link{position:relative;top: 1px;left:3px;font-size:12px;}
+.layouts-title-meta-info{padding-top:12px;}
+
+.notice_without_margine{
+    margin: 0px !important;
+}
+.ddl-video-private-container{display:block;float:left;position:relative;overflow: hidden; width:820px;}
+
+p.ddl_error_message_padding {
+    padding-top: 8px;
+    margin: 0px;
+}
+/**** Cell info tooltip ****/
+.js-layouts-info-tooltip .wp-pointer-content{
+    border: 1px solid #999 !important;
+    left: -30px;
+}
+.wp-toolset-pointer.js-layouts-info-tooltip .wp-pointer-arrow{
+    border-top-color: #999 !important;
+    left: -5px;
+}
+.wp-toolset-pointer.js-layouts-info-tooltip .wp-pointer-buttons {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: -10px;
+    overflow: visible;
+}
+
+.ddl-js-element-type-row,
+.ddl-js-element-type-tabs,
+.ddl-js-element-type-accordion,
+.ddl-js-element-type-panel,
+.ddl-js-element-type-tab,
+.ddl-js-element-type-container
+{
+    float: right;
+    margin-right: 35px !important;
+    padding-top: 4px;
+    z-index: 9999999999;
+}
+a.ddl-js-close-tooltip {
+    display: block;
+    float: right;
+    margin-right: 5px;
+    font-weight: bold;
+    color: #000;
+}
+.wp-core-ui button.button.ddl-js-info-tooltip-button{display:none;}
+
+span.cell-extra{
+    display: inline;
+    position: absolute;
+    top: 1px;
+    right: 38px;
+    cursor:pointer;
+}
+span.cell-extra i{position:relative;font-size:15px;cursor:pointer;}
+span.cell-extra i:hover{color:#278ab7;}
+span.cell-extra i:before{cursor:pointer;}
+.wp-core-ui .button.ddl-bootstrap-base-button{display:none;}
+.ddl-bootstrap-base-button{min-width:124px;position:relative;top:0px;}
+#js-ddl-bootstrap-base-button-text{position: relative;right: 0px;top: 0px;}
+.ddl-bootstrap-base-button .icon-bootstrap-original-logo{color:#563d7c;font-size:22px;position: relative; bottom:0px;left:0px;vertical-align: sub;}
+.ddl-layout-settings-table thead th{text-align: left;}
+.ddl-layout-settings-table th, .ddl-layout-settings-table td{padding:4px 24px 6px 0px;}
+.ddl-layout-settings-table td:nth-child(1), .ddl-layout-settings-table td:nth-child(2){font-weight: bold;}
+.ddl-dialogs-container button.button.cancel{float:left;}
+.ddl-bootstrap-dialog-settings .ui-dialog-buttonset{width:100%;}
+.ddl-bootstrap-dialog-settings .bs-settings-apply{float:right;}
+.ddl-bootstrap-dialog-settings .ddl-dialog-content{overflow:visible;}
+.ddl-bootstrap-dialog-settings .ddl-dialog-content{padding-top:0px;}
+.ddl-bootstrap-dialog-settings i.fa.fa-external-link{font-size: 14px;position: relative;top: 2px;left: 3px;}
+
+/* Adjust position for buttons inside layout storage dialog */
+.ddl-layouts-storage-dialog .ui-dialog-buttonset{width:100%;}
+.ddl-layouts-storage-dialog .layout-storage-apply{float:right;}
+.ddl-layouts-storage-dialog .ddl-json-object-textarea{
+    width:100%;
+    font-size:11px;
+}
+.ddl-layouts-storage-dialog .notice.notice-warning{
+    margin: 10px 0px 0px 0px;
+    padding: 10px;
+}
+.ddl-layouts-storage-dialog .notice.notice-error{
+    margin: 10px 0px 0px 0px;
+    padding: 10px;
+}
+
+/* Forcing correct padding and height for chosen selector to avoid overlap with other elements */
+#ddl_tab_classes_chosen ul.chosen-choices li.search-choice {padding-top: 3px !important;}
+#ddl_panel_classes_chosen .chosen-drop ul.chosen-results{ max-height: 100px !important; }
+#ddl_tab_classes_chosen .chosen-drop ul.chosen-results{ max-height: 100px !important; }
+
+/* Styling for paragraph with option to disable showing cell description */
+div.ddl-show-cell-details-option-wrap{
+    padding: 2px;
+    background: #f7f7f7;
+    border: 1px solid #efeeee;
+}
+.desc-big{font-size:12px!important;padding-top:8px;}
+div.ddl-cred-dialog-message{max-width:520px;line-height: 1.3;margin-top: 20px !important;}
+ul.ddl-form li.js-ct-editor-wrapper div.cred-popup-box{left:10px!important}
+
+.toolset_page_dd_layouts_edit .mce-menu {
+    z-index: 99999 !important;
+}
+
+.ddl-only-header-pointer .wp-pointer-content {
+    padding: 0px !important;
+}
+.ddl-only-header-pointer .wp-pointer-content h3 {
+    margin: 0 0 0px !important;
+}
+/* Force Toolset icons in insert buttons in the right position (middle) */
+.button-secondary .ont-icon-18,
+.button-secondary .icon-picture {
+    vertical-align: -0.09em;
+    margin: 0 4px 0 -4px;
+}
+.rtl .button-secondary .ont-icon-18,
+.rtl .button-secondary .icon-picture {
+    margin: 0 -4px 0 4px;
+}

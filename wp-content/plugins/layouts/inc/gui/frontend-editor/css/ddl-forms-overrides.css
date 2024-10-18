@@ -1,0 +1,750 @@
+/* Include margin and padding in the width calculation of .ddl-dialog input and .ddl-dialog textarea. */
+.ddl-dialog input,
+.ddl-dialog textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.ddl-dialog input[type="text"],
+.ddl-dialog input[type="password"],
+.ddl-dialog input[type="checkbox"],
+.ddl-dialog input[type="color"],
+.ddl-dialog input[type="date"],
+.ddl-dialog input[type="datetime"],
+.ddl-dialog input[type="datetime-local"],
+.ddl-dialog input[type="email"],
+.ddl-dialog input[type="month"],
+.ddl-dialog input[type="number"],
+.ddl-dialog input[type="search"],
+.ddl-dialog input[type="radio"],
+.ddl-dialog input[type="tel"],
+.ddl-dialog input[type="text"],
+.ddl-dialog input[type="time"],
+.ddl-dialog input[type="url"],
+.ddl-dialog input[type="week"],
+.ddl-dialog select,
+.ddl-dialog textarea {
+    border: 1px solid #ddd;
+    -webkit-box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
+    box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
+    background-color: #fff;
+    color: #32373c;
+    outline: none;
+    -webkit-transition: 0.05s border-color ease-in-out;
+    transition: 0.05s border-color ease-in-out;
+    max-height:29px;
+}
+.ddl-dialog textarea {max-height: inherit;}
+
+.ddl-dialog input[type="text"]:focus,
+.ddl-dialog input[type="password"]:focus,
+.ddl-dialog input[type="color"]:focus,
+.ddl-dialog input[type="date"]:focus,
+.ddl-dialog input[type="datetime"]:focus,
+.ddl-dialog input[type="datetime-local"]:focus,
+.ddl-dialog input[type="email"]:focus,
+.ddl-dialog input[type="month"]:focus,
+.ddl-dialog input[type="number"]:focus,
+.ddl-dialog input[type="search"]:focus,
+.ddl-dialog input[type="tel"]:focus,
+.ddl-dialog input[type="text"]:focus,
+.ddl-dialog input[type="time"]:focus,
+.ddl-dialog input[type="url"]:focus,
+.ddl-dialog input[type="week"]:focus,
+.ddl-dialog input[type="checkbox"]:focus,
+.ddl-dialog input[type="radio"]:focus,
+.ddl-dialog select:focus,
+.ddl-dialog textarea:focus {
+    /*border-color: #5b9dd9;
+    -webkit-box-shadow: 0 0 2px rgba( 30, 140, 190, 0.8 );
+    box-shadow: 0 0 2px rgba( 30, 140, 190, 0.8 );*/
+}
+
+/* rtl:ignore */
+.ddl-dialog input[type="email"],
+.ddl-dialog input[type="url"] {
+    direction: ltr;
+}
+
+/* Vertically align the number .ddl-dialog selector with the .ddl-dialog input. */
+.ddl-dialog input[type="number"] {
+    height: 28px;
+    line-height: 1;
+    margin-right: auto;
+}
+
+.ddl-dialog input[type="checkbox"],
+.ddl-dialog input[type="radio"] {
+    border: 1px solid #b4b9be;
+    background: #fff;
+    color: #555;
+    clear: none;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 0;
+    height: 16px;
+    margin: -4px 4px 0 0;
+    outline: 0;
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle;
+    width: 16px;
+    min-width: 16px;
+    -webkit-appearance: none;
+    -webkit-box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.1 );
+    box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.1 );
+    -webkit-transition: .05s border-color ease-in-out;
+    transition: .05s border-color ease-in-out;
+}
+
+.ddl-dialog input[type="radio"]:checked + label:before {
+    color: #82878c;
+}
+
+.wp-core-ui.ddl-dialog input[type="reset"]:hover,
+.wp-core-ui.ddl-dialog input[type="reset"]:active {
+    color: #00a0d2;
+}
+
+td > .ddl-dialog input[type="checkbox"],
+.wp-admin p .ddl-dialog input[type="checkbox"],
+.wp-admin p .ddl-dialog input[type="radio"] {
+    margin-top: 0;
+}
+
+.wp-admin p label .ddl-dialog input[type="checkbox"] {
+    margin-top: -4px;
+}
+
+.wp-admin p label .ddl-dialog input[type="radio"] {
+    margin-top: -2px;
+}
+
+.ddl-dialog input[type="radio"] {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    margin-right: 4px;
+    line-height: 10px;
+}
+
+.ddl-dialog input[type="checkbox"]:checked:before,
+.ddl-dialog input[type="radio"]:checked:before {
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    font: normal 21px/1 dashicons;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ddl-dialog input[type="checkbox"]:checked:before {
+    content: "\f147";
+    margin: -3px 0 0 -4px;
+    color: #1e8cbe;
+}
+
+.ddl-dialog input[type="radio"]:checked:before {
+    content: "\2022";
+    text-indent: -9999px;
+    -webkit-border-radius: 50px;
+    border-radius: 50px;
+    font-size: 24px;
+    width: 6px;
+    height: 6px;
+    margin: 4px;
+    line-height: 16px;
+    background-color: #1e8cbe;
+}
+
+@-moz-document url-prefix() {
+    .ddl-dialog input[type="checkbox"],
+    .ddl-dialog input[type="radio"],
+    .form-table .ddl-dialog input.tog {
+        margin-bottom: -1px;
+    }
+}
+
+/* Search */
+.ddl-dialog input[type="search"] {
+    -webkit-appearance: textfield;
+}
+
+.ddl-dialog input[type="search"]::-webkit-search-decoration {
+    display: none;
+}
+
+.ie8 .ddl-dialog input[type="password"] {
+    font-family: sans-serif;
+}
+
+.ddl-dialog textarea,
+.ddl-dialog input,
+.ddl-dialog select,
+button {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.ddl-dialog textarea,
+.ddl-dialog input,
+.ddl-dialog select {
+    font-size: 14px;
+    padding: 3px 5px;
+    -webkit-border-radius: 0;
+    border-radius: 0; /* Reset mobile webkit's default element styling */
+}
+
+.ddl-dialog textarea {
+    overflow: auto;
+    padding: 2px 6px;
+    line-height: 1.4;
+    resize: vertical;
+}
+
+.wp-admin .ddl-dialog input[type="file"] {
+    padding: 3px 0;
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
+}
+
+.ddl-dialog input,
+.ddl-dialog select {
+    margin: 1px;
+    padding: 3px 5px;
+}
+
+.ddl-dialog input.code {
+    padding-top: 6px;
+}
+
+.ddl-dialog textarea.code {
+    line-height: 1.4;
+    padding: 4px 6px 1px 6px;
+}
+
+.ddl-dialog input.readonly,
+.ddl-dialog input[readonly],
+.ddl-dialog textarea.readonly,
+.ddl-dialog textarea[readonly] {
+    background-color: #eee;
+}
+
+::-webkit-.ddl-dialog input-placeholder {
+    color: #72777c;
+}
+
+::-moz-placeholder {
+    color: #72777c;
+    opacity: 1;
+}
+
+:-ms-.ddl-dialog input-placeholder {
+    color: #72777c;
+}
+
+.form-invalid .ddl-dialog input, .form-invalid .ddl-dialog input:focus,
+.form-invalid .ddl-dialog select, .form-invalid .ddl-dialog select:focus {
+    border-color: #dc3232 !important;
+    -webkit-box-shadow: 0 0 2px rgba( 204, 0, 0, 0.8 );
+    box-shadow: 0 0 2px rgba( 204, 0, 0, 0.8 );
+}
+
+.form-table .form-required.form-invalid td:after {
+    content: "\f534";
+    font: normal 20px/1 dashicons;
+    color: #dc3232;
+    margin-left: -25px;
+    vertical-align: middle;
+}
+
+/* Adjust error indicator for password layout */
+.form-table .form-required.user-pass1-wrap.form-invalid td:after {
+    content: '';
+}
+
+.form-table .form-required.user-pass1-wrap.form-invalid .password-.ddl-dialog input-wrapper:after {
+    content: '\f534';
+    font: normal 20px/1 dashicons;
+    color: #dc3232;
+    margin: 0 6px 0 -29px;
+    vertical-align: middle;
+}
+
+.form-.ddl-dialog input-tip {
+    color: #666;
+}
+
+.ddl-dialog input:disabled,
+.ddl-dialog input.disabled,
+.ddl-dialog select:disabled,
+.ddl-dialog select.disabled,
+.ddl-dialog textarea:disabled,
+.ddl-dialog textarea.disabled {
+    background: rgba( 255, 255, 255, 0.5 );
+    border-color: rgba( 222, 222, 222, 0.75 );
+    -webkit-box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.04 );
+    box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.04 );
+    color: rgba( 51, 51, 51, 0.5 );
+}
+
+.ddl-dialog input[type="file"]:disabled,
+.ddl-dialog input[type="file"].disabled,
+.ddl-dialog input[type="range"]:disabled,
+.ddl-dialog input[type="range"].disabled {
+    background: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    cursor: default;
+}
+
+.ddl-dialog input[type="checkbox"]:disabled,
+.ddl-dialog input[type="checkbox"].disabled,
+.ddl-dialog input[type="radio"]:disabled,
+.ddl-dialog input[type="radio"].disabled,
+.ddl-dialog input[type="checkbox"]:disabled:checked:before,
+.ddl-dialog input[type="checkbox"].disabled:checked:before,
+.ddl-dialog input[type="radio"]:disabled:checked:before,
+.ddl-dialog input[type="radio"].disabled:checked:before {
+    opacity: 0.7;
+}
+
+/*------------------------------------------------------------------------------
+  2.0 - Forms
+------------------------------------------------------------------------------*/
+
+
+.wp-admin .ddl-dialog select {
+    padding: 2px;
+    line-height: 28px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+.wp-admin .button-cancel {
+    padding: 0 5px;
+    line-height: 2;
+}
+
+.meta-box-sortables .ddl-dialog select {
+    max-width: 100%;
+}
+
+.wp-admin .ddl-dialog select[multiple] {
+    height: auto;
+}
+
+.submit {
+    padding: 1.5em 0;
+    margin: 5px 0;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border: none;
+}
+
+form p.submit a.cancel:hover {
+    text-decoration: none;
+}
+
+p.submit {
+    text-align: left;
+    max-width: 100%;
+    margin-top: 20px;
+    padding-top: 10px;
+}
+
+.textright p.submit {
+    border: none;
+    text-align: right;
+}
+
+table.form-table + p.submit,
+table.form-table + .ddl-dialog input + p.submit,
+table.form-table + .ddl-dialog input + .ddl-dialog input + p.submit {
+    border-top: none;
+    padding-top: 0;
+}
+
+#minor-publishing-actions .ddl-dialog input,
+#major-publishing-actions .ddl-dialog input,
+#minor-publishing-actions .preview {
+    text-align: center;
+}
+
+.ddl-dialog textarea.all-options,
+.ddl-dialog input.all-options {
+    width: 250px;
+}
+
+.ddl-dialog input.large-text,
+.ddl-dialog textarea.large-text {
+    width: 99%;
+}
+
+.regular-text {
+    width: 25em;
+}
+
+.ddl-dialog input.small-text {
+    width: 50px;
+    padding: 1px 6px;
+}
+
+.ddl-dialog input[type="number"].small-text {
+    width: 65px;
+}
+
+.ddl-dialog input.tiny-text {
+    width: 35px;
+}
+
+.ddl-dialog input[type="number"].tiny-text {
+    width: 45px;
+}
+
+
+/* =Media Queries
+-------------------------------------------------------------- */
+
+@media screen and ( max-width: 782px ) {
+    /* Input Elements */
+    .ddl-dialog textarea {
+        -webkit-appearance: none;
+    }
+
+    .ddl-dialog input[type="text"],
+    .ddl-dialog input[type="email"],
+    .ddl-dialog input[type="search"],
+    .ddl-dialog input[type="password"],
+    .ddl-dialog input[type="number"] {
+        -webkit-appearance: none;
+        padding: 6px 10px;
+    }
+
+    .ddl-dialog input[type="number"] {
+        height: 40px;
+    }
+
+    .ddl-dialog input.code {
+        padding-bottom: 5px;
+        padding-top: 10px;
+    }
+
+    .ddl-dialog input[type="checkbox"],
+    .widefat th .ddl-dialog input[type="checkbox"],
+    .widefat thead td .ddl-dialog input[type="checkbox"],
+    .widefat tfoot td .ddl-dialog input[type="checkbox"] {
+        -webkit-appearance: none;
+        padding: 10px;
+    }
+
+    .widefat th .ddl-dialog input[type="checkbox"],
+    .widefat thead td .ddl-dialog input[type="checkbox"],
+    .widefat tfoot td .ddl-dialog input[type="checkbox"] {
+        margin-bottom: 8px;
+    }
+
+    .ddl-dialog input[type="checkbox"]:checked:before,
+    .widefat th .ddl-dialog input[type="checkbox"]:before,
+    .widefat thead td .ddl-dialog input[type="checkbox"]:before,
+    .widefat tfoot td .ddl-dialog input[type="checkbox"]:before {
+        font: normal 30px/1 dashicons;
+        margin: -3px -5px;
+    }
+
+    .ddl-dialog input[type="radio"],
+    .ddl-dialog input[type="checkbox"] {
+        height: 25px;
+        width: 25px;
+    }
+
+    .wp-admin p .ddl-dialog input[type="checkbox"],
+    .wp-admin p .ddl-dialog input[type="radio"] {
+        margin-top: -3px;
+    }
+
+    .ddl-dialog input[type="radio"]:checked:before {
+        vertical-align: middle;
+        width: 9px;
+        height: 9px;
+        margin: 7px;
+        line-height: 16px;
+    }
+
+    .wp-upload-form .ddl-dialog input[type="submit"] {
+        margin-top: 10px;
+    }
+
+    #wpbody .ddl-dialog select {
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .wp-admin .button-cancel {
+        padding: 0;
+        font-size: 14px;
+    }
+
+    #adduser .form-field .ddl-dialog input,
+    #createuser .form-field .ddl-dialog input {
+        width: 100%;
+    }
+
+    .form-table {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .form-table th,
+    .form-table td,
+    .label-responsive {
+        display: block;
+        width: auto;
+        vertical-align: middle;
+    }
+
+    .label-responsive {
+        margin: 0.5em 0;
+    }
+
+    .export-filters li {
+        margin-bottom: 0;
+    }
+
+    .form-table .color-palette td {
+        display: table-cell;
+        width: 15px;
+    }
+
+    .form-table table.color-palette {
+        margin-right: 10px;
+    }
+
+    .ddl-dialog textarea,
+    .ddl-dialog input {
+        font-size: 16px;
+    }
+
+    .form-table td .ddl-dialog input[type="text"],
+    .form-table td .ddl-dialog input[type="email"],
+    .form-table td .ddl-dialog input[type="password"],
+    .form-table td .ddl-dialog select,
+    .form-table td .ddl-dialog textarea,
+    .form-table span.description,
+    #profile-page .form-table .ddl-dialog textarea {
+        width: 100%;
+        font-size: 16px;
+        line-height: 1.5;
+        padding: 7px 10px;
+        display: block;
+        max-width: none;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .form-table .form-required.form-invalid td:after {
+        float: right;
+        margin: -30px 3px 0 0;
+    }
+
+    #wpbody .form-table td .ddl-dialog select {
+        height: 40px;
+    }
+
+    .ddl-dialog input[type="text"].small-text,
+    .ddl-dialog input[type="search"].small-text,
+    .ddl-dialog input[type="password"].small-text,
+    .ddl-dialog input[type="number"].small-text,
+    .ddl-dialog input[type="number"].small-text,
+    .form-table .ddl-dialog input[type="text"].small-text {
+        width: auto;
+        max-width: 55px;
+        display: inline;
+        padding: 3px 6px;
+        margin: 0 3px;
+    }
+
+    #pass-strength-result {
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 8px;
+    }
+
+    p.search-box {
+        float: none;
+        position: absolute;
+        bottom: 0;
+        width: 98%;
+        height: 90px;
+        margin-bottom: 20px;
+    }
+
+    p.search-box .ddl-dialog input[name="s"] {
+        height: auto;
+        float: none;
+        width: 100%;
+        margin-bottom: 10px;
+        vertical-align: middle;
+        -webkit-appearance: none;
+    }
+
+    p.search-box .ddl-dialog input[type="submit"] {
+        margin-bottom: 10px;
+    }
+
+    .form-table span.description {
+        display: inline;
+        padding: 4px 0 0;
+        line-height: 1.4em;
+        font-size: 14px;
+    }
+
+    .form-table th {
+        padding-top: 10px;
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .form-table td {
+        margin-bottom: 0;
+        padding-bottom: 6px;
+        padding-top: 4px;
+        padding-left: 0;
+    }
+
+    .form-table.permalink-structure td code {
+        margin-left: 32px;
+    }
+
+    .form-table.permalink-structure td .ddl-dialog input[type="text"] {
+        margin-left: 32px;
+        margin-top: 4px;
+        width: 96%;
+    }
+
+    .form-table .ddl-dialog input.regular-text {
+        width: 100%;
+    }
+
+    .form-table label {
+        font-size: 14px;
+    }
+
+    .form-table fieldset label {
+        display: block;
+    }
+
+    #utc-time,
+    #local-time {
+        display: block;
+        float: none;
+        margin-top: 0.5em;
+    }
+
+    .form-field #domain {
+        max-width: none;
+    }
+
+    /* New Password */
+    .wp-pwd {
+        position: relative;
+    }
+
+    .wp-pwd [type="text"],
+    .wp-pwd [type="password"] {
+        padding-right: 40px;
+    }
+
+    .wp-pwd button.button {
+        background: transparent;
+        border: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        line-height: 2;
+        margin: 0;
+        padding: 5px 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .wp-pwd button.button:hover,
+    .wp-pwd button.button:focus,
+    .wp-pwd button.button:active {
+        background: transparent;
+    }
+
+    .wp-pwd .button .text {
+        display: none;
+    }
+
+    .options-general-php .ddl-dialog input[type="text"].small-text {
+        max-width: 60px;
+        margin: 0;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .form-field .ddl-dialog input[type="text"],
+    .form-field .ddl-dialog input[type="email"],
+    .form-field .ddl-dialog input[type="password"],
+    .form-field .ddl-dialog select,
+    .form-field .ddl-dialog textarea {
+        width: 99%;
+    }
+
+    .form-wrap .form-field {
+        padding:0;
+    }
+
+    /* users */
+    #profile-page .form-table .ddl-dialog textarea {
+        max-width: 400px;
+        width: auto;
+    }
+}
+/*** TOOLSET STARTER ****/
+.ddl-dialog .toolset_select2-container--default .toolset_select2-search--inline .toolset_select2-search__field{max-height:20px;}
+label.ddl-button-group{max-width:130px;}
+label.ddl-button-group:first-child{}
+.ddl-dialog label{color:#888;}
+
+.ddl-dialog button.button{
+    text-decoration: none;
+    vertical-align: top;
+    display: inline-block;
+    font-size: 13px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc;
+    -webkit-appearance: none;
+}
+.ddl-dialog button.button-primary{
+    color: #fff;
+    background: #0073aa;
+    border-color: #0073aa #006799 #006799;
+    -webkit-box-shadow: 0 1px 0 #006799;
+    box-shadow: 0 1px 0 #006799;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+}
+.ddl-dialog button.button-primary:hover{
+    color: #fff;
+    background: #0085ba;
+    border-color: #0073aa #006799 #006799;
+    -webkit-box-shadow: 0 1px 0 #006799;
+    box-shadow: 0 1px 0 #006799;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+}
