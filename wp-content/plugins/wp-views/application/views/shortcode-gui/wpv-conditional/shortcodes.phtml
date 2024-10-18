@@ -1,0 +1,30 @@
+<?php
+/**
+ * Template for registering shortcodes in the wpv-conditional shortcode dialog
+ *
+ * @since 2.7.3
+ */
+?>
+<script type="text/html" id="tmpl-wpv-shortcode-attribute-wpv-conditional-shortcodes">
+	<p><?php
+		/* translators: Description of the conditional output shortcode GUI dialog section to list and register custom shortcodes to use inside conditions */
+		echo __( 'The following shortcodes can be used inside the conditions. Use the form below to register new shortcodes.', 'wpv-views' );
+	?></p>
+	<div class="js-wpv-add-item-settings-wrapper">
+		<ul class="wpv-taglike-list js-wpv-add-item-settings-list js-wpv-custom-shortcode-list">
+			<# _.each( data.fields, function( fieldData, fieldKey ) { #>
+			<li class="js-{{{fieldKey}}}-item">
+				<span class="">[{{{fieldKey}}}]</span>
+			</li>
+			<# }); #>
+		</ul>
+		<form class="js-wpv-add-item-settings-form js-wpv-custom-inner-shortcodes-form-add">
+			<input type="text" placeholder="<?php echo esc_attr( __( 'Shortcode name', 'wpv-views' ) ); ?>" class="js-wpv-add-item-settings-form-newname js-wpv-custom-inner-shortcode-newname" autocomplete="off" />
+			<button class="button button-secondary js-wpv-add-item-settings-form-button js-wpv-custom-inner-shortcodes-add" type="button" disabled="disabled"><i class="icon-plus fa fa-plus"></i> <?php echo __( 'Add', 'wpv-views' ); ?>'</button>
+			<span class="toolset-alert toolset-alert-error hidden js-wpv-cs-error js-wpv-permanent-alert-error"><?php echo __( 'Only letters, numbers, underscores and dashes', 'wpv-views' ); ?></span>
+			<span class="toolset-alert toolset-alert-info hidden js-wpv-cs-dup js-wpv-permanent-alert-error"><?php echo __( 'That shortcode already exists', 'wpv-views' ); ?></span>
+			<span class="toolset-alert toolset-alert-info hidden js-wpv-cs-ajaxfail js-wpv-permanent-alert-error"><?php echo __( 'An error ocurred', 'wpv-views' ); ?></span>
+		</form>
+	</div>
+	<?php wp_nonce_field( 'wpv_custom_conditional_extra_settings', 'wpv_custom_conditional_extra_settings' ); ?>
+</script>

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Template for the MCE view for the wpv-post-body shortcodes.
+ *
+ * @since 2.7
+ */
+?>
+<script type="text/html" id="tmpl-toolset-shortcode-wpv-post-body-mce-banner">
+	<div class="toolset-views-shortcode-mce-view toolset-shortcode-mce-view"
+		data-tag="{{ data.tag }}"
+		data-keymap="{{ data.keymap }}"
+		<#
+		_.each( data.attributes, function( value, key, list ) {
+			#>
+			data-{{ key }}="{{ value }}"
+			<#
+		});
+		#>
+		contenteditable="false">
+		<i class="ont-icon-block-classic-mce-view icon-views-logo ont-icon-36 ont-color-orange"></i>
+		<span class="toolset-shortcode-mce-view-header">
+		<?php
+		/* translators: Label of the editor placeholder when using a shortcode to render a Content Template */
+		echo __( 'Content Template', 'wpv-views' );
+		?>
+		</span>
+		<# if ( 'None' == data.attributes.view_template ) {
+			#>
+			<?php
+			/* translators: Label of the editor placeholder when using a shortcode to render the current post content */
+			echo __( 'Current post body', 'wpv-views' );
+			?>
+			<#
+		} else if ( _.has( WPViews.dataCache.templates, data.attributes.view_template ) ) {
+			#>
+			{{ WPViews.dataCache.templates[ data.attributes.view_template ].title }}
+			<#
+		} else { #>
+			{{ data.attributes.view_template }}
+		<# } #>
+	</div>
+</script>

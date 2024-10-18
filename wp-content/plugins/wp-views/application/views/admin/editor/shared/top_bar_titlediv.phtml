@@ -1,0 +1,62 @@
+<?php
+/**
+ * Template for the top bar title container.
+ *
+ * @var \WP_Post $view
+ * @var array $data
+ *
+ * @since 2.7
+ */
+
+$context = isset( $context ) ? $context : array();
+
+$view = toolset_getarr( $context, 'view', null );
+
+if ( null === $view ) {
+	return;
+}
+
+$title_label = toolset_getnest( $context, array( 'data', 'title_label' ) );
+$save_button_label = toolset_getnest( $context, array( 'data', 'save_button_label' ) );
+$extra_buttons = toolset_getnest( $context, array( 'data', 'extra_buttons' ) );
+?>
+<div id="titlediv" class="js-wpv-settings-title-and-desc">
+	<h1 class="wp-heading-inline">
+		<?php echo esc_html( $title_label ); ?>
+	</h1>
+	<div id="titlewrap" class="js-wpv-titlewrap">
+		<span id="title-alt">
+			<?php echo esc_html( $view->post_title ); ?><i class="fa fa-pencil"></i>
+		</span>
+		<label class="screen-reader-text js-title-reader" id="title-prompt-text" for="title"><?php echo esc_html( __( 'Enter title here', 'wpv-views' ) ); ?></label>
+		<input id="title" class="wpv-title js-title" type="text" name="post_title" size="30" value="<?php echo esc_attr( $view->post_title ); ?>" id="title" autocomplete="off" style="display:none">
+		<input type="hidden"
+			class="js-wpv-title-update"
+			data-nonce="<?php echo wp_create_nonce( 'wpv_view_title_nonce' ); ?>"
+			data-success="<?php
+			/* translators: Message when successfully saving a View or WordPress Archive title */
+			echo esc_attr( __( 'Title updated', 'wpv-views' ) );
+			?>"
+			data-unsaved="<?php
+			/* translators: Message when failing to save a View or WordPress Archive title */
+			echo esc_attr( __( 'Title not saved', 'wpv-views' ) );
+			?>"
+			/>
+		<button class="button-secondary button js-wpv-view-save-all" disabled="disabled">
+			<?php echo esc_html( $save_button_label ); ?>
+		</button>
+		<?php
+			if ( isset( $extra_buttons ) && is_array( $extra_buttons ) ) {
+				echo implode( $extra_buttons );
+			}
+		?>
+		<span id="js-wpv-top-bar-spinner" class="spinner ajax-loader js-wpv-top-bar-spinner"></span>
+	</div>
+	<?php
+	$in_iframe = '';
+	if ( toolset_getget( 'in-iframe-for-layout', false ) ) {
+		$in_iframe = 'yes';
+	}
+	?>
+	<input type="hidden" class="js-wpv-display-in-iframe" value="<?php echo esc_attr( $in_iframe ); ?>" />
+</div>

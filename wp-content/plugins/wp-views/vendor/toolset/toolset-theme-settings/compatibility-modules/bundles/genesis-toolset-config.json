@@ -1,0 +1,271 @@
+{
+  "data": [
+    {
+      "name": "_genesis_layout",
+      "type": [
+        "local"
+      ],
+      "target": [
+        "single"
+      ],
+      "group": "Layout",
+      "gui": {
+        "display_name": "",
+        "type": "select",
+        "values": [
+          {
+            "text": "Content, Primary Sidebar",
+            "value": "content-sidebar"
+          },
+          {
+            "text": "Primary Sidebar, Content",
+            "value": "sidebar-content"
+          },
+          {
+            "text": "Content, Primary Sidebar, Secondary Sidebar",
+            "value": "content-sidebar-sidebar"
+          },
+          {
+            "text": "Secondary Sidebar, Primary Sidebar, Content",
+            "value": "sidebar-sidebar-content"
+          },
+          {
+            "text": "Secondary Sidebar, Content, Primary Sidebar",
+            "value": "sidebar-content-sidebar"
+          },
+          {
+            "text": "Full Width Content",
+            "value": "full-width-content"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "site_layout",
+      "type": [
+        "global"
+      ],
+      "global_key" : "genesis-settings",
+      "target": [
+        "archive"
+      ],
+      "group": "Archive Layout",
+      "gui": {
+        "display_name": "",
+        "type": "select",
+        "values": [
+          {
+            "text": "Content, Primary Sidebar",
+            "value": "content-sidebar"
+          },
+          {
+            "text": "Primary Sidebar, Content",
+            "value": "sidebar-content"
+          },
+          {
+            "text": "Content, Primary Sidebar, Secondary Sidebar",
+            "value": "content-sidebar-sidebar"
+          },
+          {
+            "text": "Secondary Sidebar, Primary Sidebar, Content",
+            "value": "sidebar-sidebar-content"
+          },
+          {
+            "text": "Secondary Sidebar, Content, Primary Sidebar",
+            "value": "sidebar-content-sidebar"
+          },
+          {
+            "text": "Full Width Content",
+            "value": "full-width-content"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+  {
+      "name": "breadcrumb_single",
+      "type": [
+        "global"
+      ],
+      "global_key" : "genesis-settings",
+      "target": [
+        "single"
+      ],
+      "target_exclude": [
+        "page"
+      ],
+      "group": "Breadcrumbs",
+      "gui": {
+        "display_name": "Breadcrumbs for Posts",
+        "type": "select",
+        "values": [
+          {
+            "text": "Show Breadcrumbs",
+            "value": 1
+          },
+          {
+            "text": "Hide Breadcrumbs",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+  {
+      "name": "breadcrumb_page",
+      "type": [
+        "global"
+      ],
+      "global_key" : "genesis-settings",
+      "target": [
+        "single"
+      ],
+      "target_include": [
+        "page"
+      ],
+      "group": "Breadcrumbs",
+      "gui": {
+        "display_name": "Breadcrumbs for Pages",
+        "type": "select",
+        "values": [
+          {
+            "text": "Show Breadcrumbs",
+            "value": 1
+          },
+          {
+            "text": "Hide Breadcrumbs",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+  {
+      "name": "breadcrumb_archive",
+      "type": [
+        "global"
+      ],
+      "global_key" : "genesis-settings",
+      "target": [
+        "archive"
+      ],
+      "group": "Breadcrumbs",
+      "gui": {
+        "display_name": "Breadcrumbs for Archives",
+        "type": "select",
+        "values": [
+          {
+            "text": "Show Breadcrumbs",
+            "value": 1
+          },
+          {
+            "text": "Hide Breadcrumbs",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "toolset_disable_title",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+      "single"
+      ],
+      "gui": {
+        "display_name": "Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_meta_before_content",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+      "single"
+      ],
+      "gui": {
+        "display_name": "Post Meta Before Content",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_meta_after_content",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+      "single"
+      ],
+      "gui": {
+        "display_name": "Post Meta After Content",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    },
+    {
+      "name": "toolset_disable_pagination",
+      "type": [
+        "toolset_custom"
+      ],
+      "group": "Disable Elements",
+      "target": [
+        "archive"
+      ],
+      "gui": {
+        "display_name": "Pagination",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable",
+            "value": 1
+          },
+          {
+            "text": "Enable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": 0
+    }
+  ]
+}

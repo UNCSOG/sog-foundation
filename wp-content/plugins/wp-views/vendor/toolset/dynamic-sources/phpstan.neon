@@ -1,0 +1,66 @@
+parameters:
+	level: 5
+	treatPhpDocTypesAsCertain: false
+	bootstrapFiles:
+		- tests/phpstan/bootstrap.php
+		- tests/phpstan/stubs/TC.stub
+		- tests/phpstan/stubs/Views.stub
+
+	paths:
+		- server
+
+	excludePaths:
+		- server/Composer/BundleBuild.php
+		- server/Composer/Common.php
+		- server/Composer/PostInstallCmd.php
+		- server/Composer/PostPackageUpdate.php
+		- server/Scripts/Composer.php
+
+	parallel:
+		processTimeout: 300.0
+
+	ignoreErrors:
+		# Own
+		-
+			message: '#Cannot access property \$label on string#'
+			path: server/Sources/PostTaxonomies.php
+		-
+			message: '#Cannot access property \$name on string#'
+			path: server/Sources/PostTaxonomies.php
+		-
+			message: '#Parameter \#2 \$array of function implode expects array<string>, array<int<0, max>, int\|string\|WP_Term> given#'
+			path: server/Sources/PostTaxonomiesRich.php
+		- '#Constant TOOLSET_DYNAMIC_SOURCES_REMOTE_CONFIG_FILES_CDN not found#'
+		# Toolset Common API
+		- '#Function toolset_getget not found#'
+		- '#Function toolset_getnest not found#'
+		- '#Function toolset_get_relationships not found#'
+		- '#Function toolset_get_relationship not found#'
+		- '#Function toolset_get_related_posts not found#'
+		- '#Function toolset_get_related_post not found#'
+		- '#Constant OTGS\\Toolset\\Common\\PublicAPI\\ElementDomain\\POSTS not found#'
+		- '#Constant OTGS\\Toolset\\Common\\PublicAPI\\CustomFieldGroupPurpose\\FOR_REPEATING_FIELD_GROUP not found#'
+		# Types API
+		- '#Function toolset_get_field_groups not found#'
+		- '#Function toolset_get_field_group not found#'
+		- '#Function types_render_field not found#'
+		# WP API
+		- '#Constant WP_PLUGIN_DIR not found#'
+		- '#^Function apply_filters(_ref_array)? invoked with [34567] parameters, 2 required\.$#'
+		# Known issues pending a solution
+		-
+			message: '#Method Toolset\\DynamicSources\\PostProvider::get_label\(\) invoked with 1 parameter, 0 required#'
+			path: server/DynamicSources.php
+			#https://onthegosystems.myjetbrains.com/youtrack/issue/ds-46
+		-
+			message: '#Cannot call method get_slug\(\) on null#'
+			path: server/ToolsetSources/CustomFieldService.php
+			#https://onthegosystems.myjetbrains.com/youtrack/issue/ds-45
+		-
+			message: '#Method Toolset\\DynamicSources\\PostProviders\\CustomPostFactory::create_custom_post\(\) invoked with 2 parameters, 0-1 required#'
+			path: server/PostProviders/PostProviders.php
+			#https://onthegosystems.myjetbrains.com/youtrack/issue/ds-48
+		-
+			message: '#Negated boolean expression is always true#'
+			path: server/Integrations/ThirdParty/ConfigurationCDNUpdater.php
+			#ticket link

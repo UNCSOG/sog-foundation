@@ -1,0 +1,517 @@
+# Copyright (C) 2019 
+# This file is distributed under the same license as the Toolset Blocks plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Toolset Blocks 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/toolset-blocks\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2019-02-15T17:23:34+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.1.0\n"
+"X-Domain: toolset-blocks\n"
+
+#. Plugin Name of the plugin
+msgid "Toolset Blocks"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/toolset-blocks/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Useful blocks from the Toolset team."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "OnTheGoSystems"
+msgstr ""
+
+#. translators: placeholders are numbers used in a star rating system: 1 of 3 stars.
+#: server/Block/I18n.php:48
+#: public_src/block/star-rating/components/star-rating.js:171
+msgid "%1$s of %2$s stars"
+msgstr ""
+
+#: server/Block/PublicLoader.php:68
+#: public_src/block/countdown/index.js:159
+#: public_src/block/progress/index.js:117
+msgid "Toolset"
+msgstr ""
+
+#: server/DynamicSources/DynamicSources.php:195
+#: server/DynamicSources/DynamicSources.php:217
+msgid "The selected dynamic source was not found."
+msgstr ""
+
+#: server/DynamicSources/PostProviders/IdentityPost.php:42
+msgid "Current post"
+msgstr ""
+
+#: server/DynamicSources/Sources/AuthorID.php:21
+msgid "Author ID"
+msgstr ""
+
+#: server/DynamicSources/Sources/AuthorName.php:21
+msgid "Author Name"
+msgstr ""
+
+#: server/DynamicSources/Sources/CommentsNumber.php:21
+msgid "Comments Number"
+msgstr ""
+
+#: server/DynamicSources/Sources/CommentsStatus.php:21
+msgid "Comments Status"
+msgstr ""
+
+#: server/DynamicSources/Sources/MediaFeaturedImageData.php:21
+msgid "Featured Image Data"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostDate.php:21
+msgid "Post Date"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostDateGMT.php:21
+msgid "Post Date GMT"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostDateModified.php:21
+msgid "Post Modified Date"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostDateModifiedGMT.php:21
+msgid "Post Modified Date GMT"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostExcerpt.php:21
+msgid "Post Excerpt"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostFields.php:23
+msgid "Post Fields"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostID.php:21
+msgid "Post ID"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostName.php:21
+msgid "Post Name"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostStatus.php:21
+msgid "Post Status"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostTitle.php:21
+msgid "Post Title"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostType.php:21
+msgid "Post Type"
+msgstr ""
+
+#: server/DynamicSources/Sources/PostURL.php:21
+msgid "Post URL"
+msgstr ""
+
+#: server/DynamicSources/Sources/SiteTagline.php:21
+msgid "Site Tagline"
+msgstr ""
+
+#: server/DynamicSources/ToolsetSources/RelatedPostProvider.php:69
+msgid "%s in the %s relationship"
+msgstr ""
+
+#: server/DynamicSources/ToolsetSources/RelationshipService.php:21
+msgid "Parent"
+msgstr ""
+
+#: server/DynamicSources/ToolsetSources/RelationshipService.php:22
+msgid "Child"
+msgstr ""
+
+#: public_src/block/audio/edit.js:113
+#: public_src/block/image/control/source-selection.js:206
+#: public_src/block/video/edit.js:267
+msgid "Do you want to use a Dynamic Source?"
+msgstr ""
+
+#: public_src/block/audio/edit.js:126
+#: public_src/block/image/control/source-selection.js:219
+#: public_src/block/video/edit.js:280
+msgid "Yes"
+msgstr ""
+
+#: public_src/block/audio/edit.js:141
+#: public_src/block/image/control/source-selection.js:234
+#: public_src/block/video/edit.js:295
+msgid "No"
+msgstr ""
+
+#: public_src/block/audio/index.js:19
+msgid "TB Audio"
+msgstr ""
+
+#: public_src/block/audio/index.js:21
+msgid "Audio Block supporting Dynamic Fields"
+msgstr ""
+
+#: public_src/block/audio/index.js:33
+msgid "audio"
+msgstr ""
+
+#: public_src/block/button/attributes.js:20
+msgid "Click me!"
+msgstr ""
+
+#. translators: TB is the prefix of the plugin (Toolset Blocks)
+#: public_src/block/button/index.js:26
+msgid "TB Button"
+msgstr ""
+
+#: public_src/block/button/index.js:28
+msgid "Displays a fully configurable button within your content"
+msgstr ""
+
+#: public_src/block/button/index.js:34
+msgid "button"
+msgstr ""
+
+#: public_src/block/button/index.js:35
+#: public_src/block/heading/index.js:97
+msgid "toolset"
+msgstr ""
+
+#: public_src/block/button/index.js:36
+#: public_src/block/heading/index.js:98
+msgid "blocks"
+msgstr ""
+
+#: public_src/block/countdown/index.js:69
+msgid "Days"
+msgstr ""
+
+#: public_src/block/countdown/index.js:73
+msgid "Hours"
+msgstr ""
+
+#: public_src/block/countdown/index.js:77
+msgid "Minutes"
+msgstr ""
+
+#: public_src/block/countdown/index.js:81
+msgid "Seconds"
+msgstr ""
+
+#: public_src/block/countdown/index.js:152
+msgid "TB Countdown"
+msgstr ""
+
+#: public_src/block/countdown/index.js:157
+msgid "countdown"
+msgstr ""
+
+#: public_src/block/countdown/index.js:158
+msgid "Blocks"
+msgstr ""
+
+#. translators: %s: heading level e.g: "1", "2", "3"
+#: public_src/block/heading/HeadingToolbar.js:15
+msgid "Heading %d"
+msgstr ""
+
+#: public_src/block/heading/index.js:91
+msgid "TB Heading"
+msgstr ""
+
+#: public_src/block/heading/index.js:96
+msgid "heading"
+msgstr ""
+
+#: public_src/block/image/component/frame/none/edit.js:44
+#: public_src/block/image/component/frame/polaroid/edit.js:36
+#: public_src/block/image/component/frame/shadow-1/edit.js:49
+msgid "Write a caption…"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:79
+msgid "Link To"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:82
+#: public_src/block/image/index.js:24
+#: public_src/block/video/control/preload.js:32
+msgid "None"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:83
+msgid "Media File"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:84
+msgid "Attachment Page"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:85
+msgid "Custom URL"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:95
+#: public_src/control/lightbox/component.js:38
+msgid "Lightbox Group. You can add multiple images to the same  group to let the user click through the images."
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:104
+msgid "Link URL"
+msgstr ""
+
+#: public_src/block/image/control/link-destination.js:111
+msgid "Open in New Tab"
+msgstr ""
+
+#: public_src/block/image/control/source-selection.js:158
+#: public_src/block/image/control/source-selection.js:174
+msgid "Edit image"
+msgstr ""
+
+#: public_src/block/image/index.js:30
+msgid "Polaroid"
+msgstr ""
+
+#: public_src/block/image/index.js:36
+msgid "Shadow 1"
+msgstr ""
+
+#: public_src/block/image/index.js:42
+msgid "TB Image"
+msgstr ""
+
+#: public_src/block/image/index.js:44
+msgid "Image Block supporting Dynamic Fields"
+msgstr ""
+
+#: public_src/block/image/index.js:54
+msgid "photo"
+msgstr ""
+
+#: public_src/block/media/control/start-end.js:70
+msgid "Start at"
+msgstr ""
+
+#: public_src/block/media/control/start-end.js:80
+msgid "End at"
+msgstr ""
+
+#: public_src/block/media/control/start-end.js:92
+msgid "Video length: %s seconds"
+msgstr ""
+
+#: public_src/block/media/control/start-end.js:99
+msgid "Disabled because \"Loop\" is active."
+msgstr ""
+
+#: public_src/block/media/control/width-height.js:63
+#: public_src/block/media/control/width-height.js:86
+msgid "Height"
+msgstr ""
+
+#: public_src/block/media/control/width-height.js:77
+msgid "Width"
+msgstr ""
+
+#: public_src/block/media/control/width-height.js:97
+msgid "Source resolution: %s x %s px"
+msgstr ""
+
+#: public_src/block/progress/index.js:110
+msgid "TB Progress Indicator"
+msgstr ""
+
+#: public_src/block/progress/index.js:115
+msgid "progress"
+msgstr ""
+
+#: public_src/block/progress/index.js:116
+msgid "indicator"
+msgstr ""
+
+#. translators: TB is the prefix of the plugin (Toolset Blocks)
+#: public_src/block/star-rating/index.js:25
+msgid "TB Star Rating"
+msgstr ""
+
+#: public_src/block/star-rating/index.js:27
+msgid "Displays a fully configurable star rating within your content."
+msgstr ""
+
+#: public_src/block/video/control/post-image.js:56
+msgid "Poster Image"
+msgstr ""
+
+#: public_src/block/video/control/post-image.js:59
+#: public_src/block/video/control/post-image.js:69
+msgid "Select Poster Image"
+msgstr ""
+
+#: public_src/block/video/control/post-image.js:70
+msgid "Replace image"
+msgstr ""
+
+#: public_src/block/video/control/post-image.js:76
+msgid "Remove Poster Image"
+msgstr ""
+
+#: public_src/block/video/control/preload.js:26
+msgid "Preload"
+msgstr ""
+
+#: public_src/block/video/control/preload.js:30
+msgid "Video"
+msgstr ""
+
+#: public_src/block/video/control/preload.js:31
+msgid "Metadata"
+msgstr ""
+
+#: public_src/block/video/edit.js:137
+msgid "Edit video"
+msgstr ""
+
+#: public_src/block/video/edit.js:153
+msgid "Video Settings"
+msgstr ""
+
+#: public_src/block/video/edit.js:199
+msgid "Style"
+msgstr ""
+
+#: public_src/block/video/index.js:19
+msgid "TB Video"
+msgstr ""
+
+#: public_src/block/video/index.js:21
+msgid "Video Block supporting Dynamic Fields"
+msgstr ""
+
+#: public_src/block/video/index.js:30
+msgid "movie"
+msgstr ""
+
+#: public_src/control/border/component.js:180
+msgid "Border"
+msgstr ""
+
+#: public_src/control/border-radius/component.js:89
+msgid "Border Radius"
+msgstr ""
+
+#: public_src/control/box-shadow/component.js:59
+msgid "Horizontal"
+msgstr ""
+
+#: public_src/control/box-shadow/component.js:60
+msgid "Vertical"
+msgstr ""
+
+#: public_src/control/box-shadow/component.js:61
+msgid "Blur"
+msgstr ""
+
+#: public_src/control/box-shadow/component.js:62
+msgid "Spread"
+msgstr ""
+
+#: public_src/control/box-shadow/component.js:72
+msgid "Box Shadow"
+msgstr ""
+
+#: public_src/control/cdn-loader/index.js:63
+msgid "Load CDN resource"
+msgstr ""
+
+#: public_src/control/color-picker/component.js:30
+msgid "Click to choose a color"
+msgstr ""
+
+#. translators: placeholder is an error message.
+#: public_src/control/dynamic-sources/utils/fetchData.js:50
+msgid "Something went wrong while fetching the dynamic content from the selected source, with message: \"%s\"."
+msgstr ""
+
+#. translators: placeholder is an error message.
+#: public_src/control/dynamic-sources/utils/fetchData.js:69
+msgid "Something went wrong while trying to update the sources cache, with message: \"%s\". Please reload the page and try again."
+msgstr ""
+
+#. translators: CDNJS allows to find CSS or JS assets
+#: public_src/control/icon-selector/index.js:193
+msgid "Search external resources in CDNJS: FontAwesome, Ionicons ..."
+msgstr ""
+
+#. translators: there is a list of icons user can filter.
+#: public_src/control/icon-selector/index.js:203
+msgid "Filter icon list"
+msgstr ""
+
+#: public_src/control/icon-selector/index.js:211
+msgid "No icons found, try Expert mode"
+msgstr ""
+
+#. translators: some extra settings are displayed in the 'Expert settings' section
+#: public_src/control/icon-selector/index.js:217
+msgid "Expert settings"
+msgstr ""
+
+#: public_src/control/icon-selector/index.js:225
+msgid "CSS file URL"
+msgstr ""
+
+#: public_src/control/icon-selector/index.js:229
+msgid "Font Family name"
+msgstr ""
+
+#: public_src/control/icon-selector/index.js:236
+msgid "Filled star font code"
+msgstr ""
+
+#. translators: it is a tooltip that explains that the user could select a different icon when clicking on it (button)
+#: public_src/control/icon-selector/index.js:273
+msgid "Select a different icon"
+msgstr ""
+
+#: public_src/control/icon-selector/index.js:291
+msgid "Search an icon"
+msgstr ""
+
+#: public_src/control/lightbox/component.js:35
+msgid "Open in Lightbox"
+msgstr ""
+
+#: public_src/control/number/component.js:101
+msgid "Number"
+msgstr ""
+
+#: public_src/control/padding-margin/index.js:103
+msgid "margin"
+msgstr ""
+
+#: public_src/control/padding-margin/index.js:106
+msgid "padding"
+msgstr ""
+
+#: public_src/control/padding-margin/index.js:139
+msgid "Margin and padding"
+msgstr ""
+
+#: public_src/control/rotate/component.js:31
+msgid "Rotate"
+msgstr ""
+
+#: public_src/control/_multiply/component.js:49
+msgid "Multiply"
+msgstr ""

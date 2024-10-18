@@ -1,0 +1,41 @@
+parameters:
+	level: 5
+	bootstrapFiles:
+		- tests/phpstan/bootstrap.php
+		- tests/phpstan/stubs/DS.stub
+		- tests/phpstan/stubs/TCES.stub
+		- tests/phpstan/stubs/ToolsetBlocks.stub
+
+	scanFiles:
+		- toolset-blocks.php
+
+	paths:
+		- server
+
+	excludes_analyse:
+		- server/*__test__*
+
+	parallel:
+		processTimeout: 300.0
+
+	ignoreErrors:
+		# Own
+		-
+			message: '#Ternary operator condition is always true#'
+			path: server/bootstrap.php
+		-
+			message: '#Negated boolean expression is always true#'
+			path: server/Block/PublicLoader.php
+		-
+			message: '#If condition is always false#'
+			path: server/Block/PublicLoader.php
+		-
+			message: '#Else branch is unreachable because ternary operator condition is always true#'
+			path: server/Block/Image/CustomSize.php
+		-
+			message: '#Unreachable statement - code above always terminates#'
+			path: server/Block/I18n.php
+		- '#PHPDoc tag \@param has invalid value \(\$event\)#'
+		# Toolset API
+		- '#Property ToolsetBlocks\\DicLoader\:\:\$dic has unknown class Auryn\\Injector as its type#'
+		- '#Return typehint of method ToolsetBlocks\\DicLoader\:\:get_dic\(\) has invalid type Auryn\\Injector#'

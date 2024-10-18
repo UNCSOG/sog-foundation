@@ -1,0 +1,448 @@
+{
+  "data": [
+    {
+      "name": "top_bar",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Top Bar",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Top Bar",
+            "value": 1
+          },
+          {
+            "text": "Disable Top Bar",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "enable_header",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Site Header",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": 1
+          },
+          {
+            "text": "Disable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "enable_page_header",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Page Header",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": 1
+          },
+          {
+            "text": "Disable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "wpex_has_breadcrumbs",
+      "type": [
+        "control_filters"
+      ],
+      "filter_method": "__return_false",
+      "group":" Disable Elements",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Breadcrumbs",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": 0
+          },
+          {
+            "text": "Disable",
+            "value": 1
+          }
+        ]
+      },
+      "trigger_value": 1,
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "callout",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Footer Call To Action",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Call To Action Block",
+            "value": 1
+          },
+          {
+            "text": "Disable Call To Action Block",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "footer_widgets",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Footer Widgets",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": 1
+          },
+          {
+            "text": "Disable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "footer_bottom",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Footer Botom (Copyright)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": 1
+          },
+          {
+            "text": "Disable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "content_layout",
+      "type": [
+        "customizer"
+      ],
+      "group": "General Layout",
+      "note": "Tested up to here, working fine; note that layout does nto apply to CT and WPA for products",
+      "target": [
+        "archive",
+        "single"
+      ],
+      "gui": {
+        "display_name": "Layout",
+        "type": "select",
+        "values": [
+          {
+            "text": "Right Sidebar",
+            "value": "right-sidebar"
+          },
+          {
+            "text": "Left Sidebar",
+            "value": "left-sidebar"
+          },
+          {
+            "text": "Full Width",
+            "value": "full-width"
+          },
+          {
+            "text": "Full Screen",
+            "value": "full-screen"
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "cpt_single_block_media_enabled",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Featured Image (for post types supporting it)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Featured Image",
+            "value": 1
+          },
+          {
+            "text": "Disable Featured Image",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "cpt_single_block_title_enabled",
+      "note_one": "posts and pages should use an alias here, they all can be controled the same way",
+      "note_two": "same applies to all other meta elements: media, social share, comments, etc",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Post Title",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Title",
+            "value": 1
+          },
+          {
+            "text": "Disable Title",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "cpt_single_block_meta_enabled",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Post Meta (date, author, taxonomies, comments)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Post Meta",
+            "value": 1
+          },
+          {
+            "text": "Disable Post Meta",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "cpt_single_block_share_enabled",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Social Share",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Share Buttons",
+            "value": 1
+          },
+          {
+            "text": "Disable Share Buttons",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "cpt_single_block_author_bio_enabled",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Author Box (only for posts)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Author Box",
+            "value": 1
+          },
+          {
+            "text": "Disable Author Box",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "cpt_single_block_related_posts_enabled",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Related Posts (only for posts)",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Related Posts",
+            "value": 1
+          },
+          {
+            "text": "Disable Related Posts",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "cpt_single_block_comments_enabled",
+      "type": [
+        "customizer"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Comments",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable Comments",
+            "value": 1
+          },
+          {
+            "text": "Disable Comments",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "next_prev",
+      "type": [
+        "customizer"
+      ],
+      "aliases": [
+        "woo_next_prev"
+      ],
+      "group": "Post Elements",
+      "target": [
+        "single"
+      ],
+      "gui": {
+        "display_name": "Next/Previous Posts Navigation",
+        "type": "select",
+        "values": [
+          {
+            "text": "Enable",
+            "value": 1
+          },
+          {
+            "text": "Disable",
+            "value": 0
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    },
+    {
+      "name": "toolset_disable_archive_pagination",
+      "type": [
+        "toolset_custom"
+      ],
+      "target": [
+        "archive"
+      ],
+      "group": "Disable Elements",
+      "gui": {
+        "display_name": "Pagination",
+        "type": "select",
+        "values": [
+          {
+            "text": "Disable Pagination",
+            "value": 1
+          }
+        ]
+      },
+      "default_value": "toolset_use_theme_setting"
+    }
+  ]
+}

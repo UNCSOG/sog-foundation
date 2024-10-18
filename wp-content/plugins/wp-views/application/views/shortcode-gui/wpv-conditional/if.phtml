@@ -1,0 +1,48 @@
+<?php
+/**
+ * Template for the wpv-conditional if attribute
+ *
+ * @since 2.7.3
+ */
+?>
+<script type="text/html" id="tmpl-wpv-shortcode-attribute-wpv-conditional-if">
+	<div class="js-wpv-conditionals-set-with-gui">
+		<table id="js-wpv-conditionals" class="wpv-conditionals" data-field-name="wpv-conditional">
+			<thead>
+				<tr>
+					<th style="width:50%"><?php
+						/* translators: Title of the place to set fields to compare against in the conditional output shortcode GUI dialog table to set conditions */
+						echo esc_html__( 'Field', 'wpv-views' );
+					?></th>
+					<th style="width:15%"><?php
+						/* translators: Title of the place to set the compatison method in the conditional output shortcode GUI dialog table to set conditions */
+						echo esc_html__( 'Comparison', 'wpv-views' );
+					?></th>
+					<th style="width:20%"><?php
+						/* translators: Title of the place to set the value to compare against in the conditional output shortcode GUI dialog table to set conditions */
+						echo esc_html__( 'Value', 'wpv-views' );
+					?></th>
+					<th style="width:10%"></th>
+					<th style="width:4%"></th>
+				</tr>
+			</thead>
+			<tbody class="js-wpv-views-conditional-body"></tbody>
+		</table>
+	</div>
+	<div class="js-wpv-conditionals-set-manual" style="display:none">
+		<textarea id="wpv-conditional-custom-expressions" class="js-shortcode-gui-field large-text" data-placeholder="" placeholder="" data-type="textarea"></textarea>
+	</div>
+	<p style="overflow:hidden;">
+		<?php
+		echo sprintf(
+			'<a href="#" class="js-wpv-shortcode-expression-switcher">%s</a>',
+			/* translators: Label of the switcher to set conditions manually in the conditional output shortcode GUI dialog table to set conditions */
+			esc_html( __( 'Edit conditions manually', 'wpv-views' ) )
+		);
+		echo sprintf(
+			'<button class="button js-wpv-views-conditional-add-term" style="float:right">%s</button>',
+			/* translators: Label of the button to add a new condition in the conditional output shortcode GUI dialog table to set conditions */
+			esc_html( __( 'Add another condition', 'wpv-views' ) )
+		); ?>
+	</p>
+</script>

@@ -1,0 +1,60 @@
+<?php
+/**
+ * Template for the top bar save form actions container.
+ * 
+ * @var \WP_Post $view
+ * @var array $data
+ *
+ * @since 2.7
+ */
+
+$context = isset( $context ) ? $context : array();
+
+$view = toolset_getarr( $context, 'view', null );
+
+if ( null === $view ) {
+	return;
+}
+
+$trash_redirect = toolset_getnest( $context, array( 'data', 'trash_redirect' ) );
+$page_creation_trigger = toolset_getnest( $context, array( 'data', 'page_creation_trigger' ) );
+?>
+<div id="save-form-actions">
+	<label>
+		<?php
+		/* translators: Label for the slug input for a View or WordPress Archive */
+		echo esc_html( __( 'Slug:', 'wpv-views' ) );
+		?>
+		<input id="wpv-slug" class="regular-text js-wpv-slug" type="text" value="<?php echo esc_attr( $view->post_name ); ?>" />
+		<input type="hidden"
+			class="js-wpv-slug-update"
+			data-nonce="<?php echo wp_create_nonce( 'wpv_view_change_post_name' ); ?>"
+			/>
+	</label>
+	<?php
+	$add_trash_button = apply_filters( 'wpv_filter_wpv_admin_add_editor_trash_button', true );
+	if ( $add_trash_button ) {
+		?>
+		<a href="#" class="submit-trash js-wpv-change-view-status"
+				data-statusto="trash"
+				data-success="<?php
+				/* translators: Message when successfully trashing a View or WordPress Archive */
+				echo esc_attr( __( 'Moved to trash', 'wpv-views' ) );
+				?>"
+				data-unsaved="<?php
+				/* translators: Message when failing to trash a View or WordPress Archive */
+				echo esc_attr( __( 'Not moved to trash', 'wpv-views' ) );
+				?>"
+				data-redirect="<?php echo esc_html( $trash_redirect ); ?>"
+				data-nonce="<?php echo wp_create_nonce( 'wpv_view_change_status' ); ?>">
+			<?php
+			/* translators: Label for the link to trash a View or WordPress Archive */
+			echo esc_html( __( 'Move to trash', 'wpv-views' ) );
+			?>
+		</a>
+
+	<?php
+	}
+	?>
+	<?php echo $page_creation_trigger; ?>
+</div>
