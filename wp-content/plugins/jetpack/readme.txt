@@ -1,8 +1,8 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
-Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, arsihasi, azaozz, barry, batmoo, beaulebens, bindlegirl, biskobe, bjorsch, blobaugh, brbrr, brileyhooper, cainm, cena, cfinke, cgastrell, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, daniloercoli, davoraltman, delawski, designsimply, dkmyta, dllh, drawmyface, dsmart, jwidavid, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, joen, jblz, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lhkowalski, lschuyler, macmanx, martinremy, matt, mattwiebe, matveb, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, miguelxavierpenha, mikeyarce, mkaz, nancythanki, nickmomrik, njweller, nunyvega, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, renatoagds, retrofox, richardmtl, richardmuscat, robertbpugh, roccotripaldi, ryancowles, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, thehenridev, tmoorewp, tyxla, Viper007Bond, westi, williamvianas, wpkaren, yoavf, zinigor
+Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, arsihasi, azaozz, barry, batmoo, beaulebens, bindlegirl, biskobe, bjorsch, blobaugh, brbrr, brileyhooper, cainm, cena, cfinke, cgastrell, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, daniloercoli, davoraltman, delawski, designsimply, dkmyta, dllh, drawmyface, dsmart, dun2mis, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, joen, jblz, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lhkowalski, lschuyler, macmanx, martinremy, matt, mattwiebe, matveb, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, miguelxavierpenha, mikeyarce, mkaz, nancythanki, nickmomrik, njweller, nunyvega, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, renatoagds, retrofox, richardmtl, richardmuscat, robertbpugh, roccotripaldi, ryancowles, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, thehenridev, tmoorewp, tyxla, Viper007Bond, westi, williamvianas, wpkaren, yoavf, zinigor
 Tags: Security, backup, malware, scan, performance
-Stable tag: 13.6.1
-Requires at least: 6.4
+Stable tag: 13.9.1
+Requires at least: 6.5
 Requires PHP: 7.0
 Tested up to: 6.6
 License: GPLv2 or later
@@ -326,33 +326,42 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 
 
 == Changelog ==
-### 13.6.1 - 2024-10-14
+### 13.9.1 - 2024-10-14
 #### Security:
 - Contact Form: ensure that submitted forms can only be accessed by logged in users allowed to view form submissions.
 
-### 13.6 - 2024-07-02
+### 13.9 - 2024-10-01
+#### Major Enhancements
+- Jetpack plugin: Remove the 'WordPress.com Toolbar' module.
+
 #### Enhancements
-- AI Assistant: Hide input when user types on extended block.
-- Goodreads Block: provide support for additional profile URLs.
-- Newsletter: Add ability to manage the newsletter byline appearance.
-- Newsletter: Adding a new toggle to control the newsletter author line.
-- Newsletter: Email replies can become comments on your blog.
-- Social: Add Threads preview to Social Previews.
-- Tiled Gallery: Increase accessibility of Tiled Gallery carousel images.
+- Blocks: Transition from an option to a module to improve caching.
+- Jetpack AI: Add AI SEO title optimization.
+- Jetpack Stats: Do not check for capabilities if the user is not signed in when deciding whether to show the admin bar widget.
+- My Jetpack: Visual update to the GlobalNotice component for better mobile presentation.
+- Performance: Set the concatenated CSS to off by default. The era where this was helpful is passing.
+- SSO: Remove legacy codebase in favor of the newer SSO codebase introduced in Jetpack 13.5.
 
 #### Improved compatibility
-- Block Editor: Ensure that no Jetpack features are displayed in the site editor's sidebar when not necessary.
-- General: indicate compatibility with the upcoming version of WordPress - 6.6.
-- Offline Mode: do not display Jetpack's outbound SSL notice when in Offline mode.
+- Dashboard: Disable portfolio toggle if theme supports portfolio for specific environments.
 
 #### Bug fixes
-- AI Assistant: Disable extensions when AI Assistant block is hidden.
-- External Media: Do not display External Media options in the Caption edit field.
-- External media: Ensure connect URL has the correct blog ID and verification values.
-- Like block: Fix editor styling.
-- Publicize: Fix a race condition with refreshing the active social connections.
-- Slideshow: Ensure whole block is selectable in the editor.
-- User Content Link Tracking: Check domain before redirecting to subscribe.wordpress.com.
+- Ai Assistant: Do not show Jetpack AI excerpt UI outside of correct context.
+- AI Assistant: Fix Write Brief highlight position on spelling mistake following ignored special word.
+- AI Assistant: Remove autofocus on extended blocks while previewing.
+- AI Content Lens: Fix the feature of the AI Content Lens is gone.
+- Blocks: Prevent Memberships blocks from being registered when the site is not connected to Jetpack.
+- Dashboard: Display the yearly Stats plan in the Jetpack dashboard immediately after you've purchased the plan.
+- Help Center: Fix the icon color when previewing color scheme.
+- Hosting Configuration: Make the menu title under the settings the same as the destination.
+- Jetpack REST API: Fix missing requirement in admin-menu endpoint.
+- Shortcode: Fix the YouTube URL embedding failure due to the trailing question mark of the ID.
+- Shortcode: Fix the YouTube URL for the private videos.
+- Shortcode: Fix the YouTube URL for the `/embed` type.
+- Sidebar: Show correct product name for "VaultPress Backup".
+- Social: Fix social previews button sometimes not fitting all the text.
+- Subscriptions: Fix added slashes in the Follow Blog widget.
+- WooCommerce Analytics: Check whether a constant is defined before attempting to use it, for compatibility with WooCommerce <8.4.0.
 
 --------
 

@@ -85,7 +85,6 @@ class Atomic_Admin_Menu extends Admin_Menu {
 
 		// Not needed outside of wp-admin.
 		if ( ! $this->is_api_request ) {
-			$this->add_browse_sites_link();
 			$this->add_site_card_menu();
 			$this->add_new_site_link();
 		}
@@ -137,11 +136,6 @@ class Atomic_Admin_Menu extends Admin_Menu {
 			// The 'Subscribers' menu exists in the Jetpack menu for Classic wp-admin interface, so only add it for non-wp-admin interfaces.
 			// // @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal -- Core should ideally document null for no-callback arg. https://core.trac.wordpress.org/ticket/52539.
 			add_submenu_page( 'users.php', esc_attr__( 'Subscribers', 'jetpack-masterbar' ), __( 'Subscribers', 'jetpack-masterbar' ), 'list_users', 'https://wordpress.com/subscribers/' . $this->domain, null );
-
-			// When the interface is not set to wp-admin, we replace the Profile submenu.
-			remove_submenu_page( 'users.php', 'profile.php' );
-			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal -- Core should ideally document null for no-callback arg. https://core.trac.wordpress.org/ticket/52539.
-			add_submenu_page( 'users.php', esc_attr__( 'My Profile', 'jetpack-masterbar' ), __( 'My Profile', 'jetpack-masterbar' ), 'read', 'https://wordpress.com/me/', null );
 		}
 
 		// Users who can't 'list_users' will see "Profile" menu & "Profile > Account Settings" as submenu.
@@ -192,21 +186,6 @@ class Atomic_Admin_Menu extends Admin_Menu {
 		$submenus_to_update = array( 'plugin-install.php' => $plugins_slug );
 
 		$this->update_submenus( 'plugins.php', $submenus_to_update );
-	}
-
-	/**
-	 * Adds the site switcher link if user has more than one site.
-	 */
-	public function add_browse_sites_link() {
-		$site_count = get_user_option( 'wpcom_site_count' );
-		if ( ! $site_count || $site_count < 2 ) {
-			return;
-		}
-
-		// Add the menu item.
-		// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal -- Core should ideally document null for no-callback arg. https://core.trac.wordpress.org/ticket/52539.
-		add_menu_page( __( 'site-switcher', 'jetpack-masterbar' ), __( 'Browse sites', 'jetpack-masterbar' ), 'read', 'https://wordpress.com/sites', null, 'dashicons-arrow-left-alt2', 0 );
-		add_filter( 'add_menu_classes', array( $this, 'set_browse_sites_link_class' ) );
 	}
 
 	/**
@@ -444,8 +423,16 @@ class Atomic_Admin_Menu extends Admin_Menu {
 			);
 		}
 
-		// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal -- Core should ideally document null for no-callback arg. https://core.trac.wordpress.org/ticket/52539.
-		add_submenu_page( 'options-general.php', esc_attr__( 'Hosting Configuration', 'jetpack-masterbar' ), __( 'Hosting Configuration', 'jetpack-masterbar' ), 'manage_options', 'https://wordpress.com/hosting-config/' . $this->domain, null, 11 );
+		$has_feature_atomic = function_exists( 'wpcom_site_has_feature' ) && wpcom_site_has_feature( \WPCOM_Features::ATOMIC );
+		add_submenu_page(
+			'options-general.php',
+			$has_feature_atomic ? esc_attr__( 'Server Settings', 'jetpack-masterbar' ) : esc_attr__( 'Hosting Features', 'jetpack-masterbar' ),
+			$has_feature_atomic ? __( 'Server Settings', 'jetpack-masterbar' ) : __( 'Hosting Features', 'jetpack-masterbar' ),
+			'manage_options',
+			$has_feature_atomic ? 'https://wordpress.com/hosting-config/' . $this->domain : 'https://wordpress.com/hosting-features/' . $this->domain,
+			null, // @phan-suppress-current-line PhanTypeMismatchArgumentProbablyReal -- Core should ideally document null for no-callback arg. https://core.trac.wordpress.org/ticket/52539.
+			11
+		);
 
 		// Page Optimize is active by default on all Atomic sites and registers a Settings > Performance submenu which
 		// would conflict with our own Settings > Performance that links to Calypso, so we hide it it since the Calypso

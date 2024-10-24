@@ -251,7 +251,7 @@ function stats_admin_menu() {
 	} else {
 		// Enable the new Odyssey Stats experience.
 		$stats_dashboard = new Stats_Dashboard();
-		$hook            = Admin_Menu::add_menu( __( 'Stats', 'jetpack' ), __( 'Stats', 'jetpack' ), 'view_stats', 'stats', array( $stats_dashboard, 'render' ) );
+		$hook            = Admin_Menu::add_menu( __( 'Stats', 'jetpack' ), __( 'Stats', 'jetpack' ), 'view_stats', 'stats', array( $stats_dashboard, 'render' ), 1 );
 		add_action( "load-$hook", array( $stats_dashboard, 'admin_init' ) );
 	}
 }
@@ -1032,6 +1032,11 @@ function stats_hide_smile_css() {
  * @return void
  */
 function stats_admin_bar_head() {
+	// Let's not show the stats admin bar to users who are not logged in.
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
 	if ( ! Stats_Options::get_option( 'admin_bar' ) ) {
 		return;
 	}
@@ -1811,14 +1816,17 @@ function jetpack_stats_post_table_cell( $column, $post_id ) {
 				esc_html__( 'No stats', 'jetpack' )
 			);
 		} else {
-			$stats_post_url = 'wp-admin' === get_option( 'wpcom_admin_interface' )
-			? admin_url( sprintf( 'admin.php?page=stats#!/stats/post/%d/%d', $post_id, Jetpack_Options::get_option( 'id', 0 ) ) )
-			: Redirect::get_url(
-				'calypso-stats-post',
-				array(
-					'path' => $post_id,
-				)
-			);
+			// Link to the wp-admin stats page.
+			$stats_post_url = admin_url( sprintf( 'admin.php?page=stats#!/stats/post/%d/%d', $post_id, Jetpack_Options::get_option( 'id', 0 ) ) );
+			// Unless the user is on a Default style WOA site, in which case link to Calypso.
+			if ( ( new Host() )->is_woa_site() && Stats_Options::get_option( 'enable_odyssey_stats' ) && 'wp-admin' !== get_option( 'wpcom_admin_interface' ) ) {
+				$stats_post_url = Redirect::get_url(
+					'calypso-stats-post',
+					array(
+						'path' => $post_id,
+					)
+				);
+			}
 
 			printf(
 				'<a href="%s" title="%s" class="dashicons dashicons-chart-bar" target="_blank"></a>',
