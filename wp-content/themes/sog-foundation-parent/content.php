@@ -8,108 +8,108 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
 		<?php
-			if ( is_sticky() ) :
-		?>
+            if (is_sticky()) :
+                ?>
 			<hgroup>
 				<h2 class="entry-title">
-					<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'sog-foundation-parent' ), the_title_attribute( array( 'echo' => false ) ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
+					<a href="<?php the_permalink(); ?>" title="<?php printf(esc_attr__('Permalink to %s', 'sog-foundation-parent'), the_title_attribute([ 'echo' => false ])); ?>" rel="bookmark"><?php the_title(); ?></a>
 				</h2>
-				<h3 class="entry-format"><?php esc_html_e( 'Featured', 'sog-foundation-parent' ); ?></h3>
+				<h3 class="entry-format"><?php esc_html_e('Featured', 'sog-foundation-parent'); ?></h3>
 			</hgroup>
 		<?php
-			else :
-		?>
+            else :
+                ?>
 			<h2 class="entry-title">
-				<a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'sog-foundation-parent' ), the_title_attribute( array( 'echo' => false ) ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
+				<a href="<?php the_permalink(); ?>" title="<?php printf(esc_attr__('Permalink to %s', 'sog-foundation-parent'), the_title_attribute([ 'echo' => false ])); ?>" rel="bookmark"><?php the_title(); ?></a>
 			</h2>
 		<?php
-			endif;
+            endif;
 
-			if ( 'post' === get_post_type() ) :
-		?>
+if ('post' === get_post_type()) :
+    ?>
 			<div class="entry-meta">
-				<?php sog_master_article_posted_on(); ?>
+				<?php sog_foundation_parent_article_posted_on(); ?>
 			</div><!-- /.entry-meta -->
 		<?php
-			endif;
-		?>
+endif;
+?>
 	</header><!-- /.entry-header -->
 
 	<?php
-		if ( is_search() ) : // Only display Excerpts for Search.
-	?>
+if (is_search()) : // Only display Excerpts for Search.
+    ?>
 		<div class="entry-summary">
 			<?php the_excerpt(); ?>
 		</div><!-- /.entry-summary -->
 	<?php
-		else :
-	?>
+else :
+    ?>
 		<div class="entry-content">
-			<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'sog-foundation-parent' ) ); ?>
-			<?php wp_link_pages( array( 'before' => '<div class="page-link"><span>' . __( 'Pages:', 'sog-foundation-parent' ) . '</span>', 'after' => '</div>' ) ); ?>
+			<?php the_content(__('Continue reading <span class="meta-nav">&rarr;</span>', 'sog-foundation-parent')); ?>
+			<?php wp_link_pages([ 'before' => '<div class="page-link"><span>' . __('Pages:', 'sog-foundation-parent') . '</span>', 'after' => '</div>' ]); ?>
 		</div><!-- /.entry-content -->
 	<?php
-		endif;
-	?>
+endif;
+?>
 
 	<footer class="entry-meta">
 		<?php
-			$show_sep = false;
-			if ( 'post' === get_post_type() ) : // Hide category and tag text for pages on Search.
+        $show_sep = false;
+if ('post' === get_post_type()) : // Hide category and tag text for pages on Search.
 
-				/* translators: used between list items, there is a space after the comma */
-				$categories_list = get_the_category_list( __( ', ', 'sog-foundation-parent' ) );
-				if ( $categories_list ) :
-			?>
+    /* translators: used between list items, there is a space after the comma */
+    $categories_list = get_the_category_list(__(', ', 'sog-foundation-parent'));
+    if ($categories_list) :
+        ?>
 					<span class="cat-links">
 						<?php
-							printf( __( '<span class="%1$s">Posted in</span> %2$s', 'sog-foundation-parent' ), 'entry-utility-prep entry-utility-prep-cat-links', $categories_list );
-							$show_sep = true;
-						?>
+                        printf(__('<span class="%1$s">Posted in</span> %2$s', 'sog-foundation-parent'), 'entry-utility-prep entry-utility-prep-cat-links', $categories_list);
+        $show_sep = true;
+        ?>
 					</span>
 			<?php
-				endif;
+    endif;
 
-				/* translators: used between list items, there is a space after the comma */
-				$tags_list = get_the_tag_list( '', __( ', ', 'sog-foundation-parent' ) );
-				if ( $tags_list ) :
-					if ( $show_sep ) :
-			?>
+    /* translators: used between list items, there is a space after the comma */
+    $tags_list = get_the_tag_list('', __(', ', 'sog-foundation-parent'));
+    if ($tags_list) :
+        if ($show_sep) :
+            ?>
 					<span class="sep"> | </span>
 				<?php
-					endif;
-				?>
+        endif;
+        ?>
 					<span class="tag-links">
 						<?php
-							printf( __( '<span class="%1$s">Tagged</span> %2$s', 'sog-foundation-parent' ), 'entry-utility-prep entry-utility-prep-tag-links', $tags_list );
-							$show_sep = true;
-						?>
+                    printf(__('<span class="%1$s">Tagged</span> %2$s', 'sog-foundation-parent'), 'entry-utility-prep entry-utility-prep-tag-links', $tags_list);
+        $show_sep = true;
+        ?>
 					</span>
 				<?php
-				endif;
-			endif;
+    endif;
+endif;
 
-			if ( comments_open() ) :
-				if ( $show_sep ) :
-		?>
+if (comments_open()) :
+    if ($show_sep) :
+        ?>
 				<span class="sep"> | </span>
 			<?php
-				endif;
-			?>
+    endif;
+    ?>
 			<span class="comments-link">
 				<?php
-					printf(
-						esc_html__( 'Leave a comment', 'sog-foundation-parent' ),
-						get_the_title()
-					);
-				?>
+            printf(
+                esc_html__('Leave a comment', 'sog-foundation-parent'),
+                get_the_title()
+            );
+    ?>
 			</span>
 		<?php
-			endif;
-		?>
+endif;
+?>
 
-		<a href="<?php the_permalink(); ?>" class="btn btn-secondary"><?php esc_html_e( 'more', 'sog-foundation-parent' ); ?></a>
+		<a href="<?php the_permalink(); ?>" class="btn btn-secondary"><?php esc_html_e('more', 'sog-foundation-parent'); ?></a>
 
-		<?php edit_post_link( __( 'Edit', 'sog-foundation-parent' ), '<span class="edit-link">', '</span>' ); ?>
+		<?php edit_post_link(__('Edit', 'sog-foundation-parent'), '<span class="edit-link">', '</span>'); ?>
 	</footer><!-- /.entry-meta -->
 </article><!-- /#post-<?php the_ID(); ?> -->
