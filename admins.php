@@ -5,5 +5,6 @@ $sog_admins = [
     'goroski',
     'lalice',
     'chancef',
-    'leo1'
+    'leo1',
+    'cisarano'
 ];
