@@ -1,6 +1,8 @@
 <?php
-function wpsax_filter_option( $value, $option_name ) {
-    $defaults = array(
+
+function wpsax_filter_option($value, $option_name)
+{
+    $defaults = [
         /**
          * Type of SAML connection bridge to use.
          *
@@ -18,39 +20,39 @@ function wpsax_filter_option( $value, $option_name ) {
          *
          * @param array
          */
-        'internal_config'        => array(
+        'internal_config'        => [
             // Validation of SAML responses is required.
             'strict'       => true,
-            'debug'        => defined( 'WP_DEBUG' ) && WP_DEBUG ? true : false,
+            'debug'        => defined('WP_DEBUG') && WP_DEBUG ? true : false,
             'baseurl'      => home_url(),
-            'sp'           => array(
+            'sp'           => [
                 'entityId' => $_ENV['PANTHEON_SITE_NAME'] . '.' . $_ENV['PANTHEON_ENVIRONMENT'],
-                'assertionConsumerService' => array(
+                'assertionConsumerService' => [
                     'url'  => wp_login_url(),
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-                ),
-            ),
-            'idp'          => array(
+                ],
+            ],
+            'idp'          => [
                 // Required: Set based on provider's supplied value.
                 'entityId' => 'https://sso.sog.unc.edu/simplesaml/saml2/idp/metadata.php',
-                'singleSignOnService' => array(
+                'singleSignOnService' => [
                     // Required: Set based on provider's supplied value.
                     'url'  => 'https://sso.sog.unc.edu/simplesaml/saml2/idp/SSOService.php',
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                ),
-                'singleLogoutService' => array(
+                ],
+                'singleLogoutService' => [
                     // Required: Set based on provider's supplied value.
                     'url'  => 'https://sso.sog.unc.edu/user/logout?ReturnTo=/logout-complete',
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                ),
+                ],
                 // Required: Contents of the IDP's public x509 certificate.
                 // Use file_get_contents() to load certificate contents into scope.
                 'x509cert' => '',
                 // Optional: Instead of using the x509 cert, you can specify the fingerprint and algorithm.
                 'certFingerprint' => '11:e1:09:4e:e3:7c:5e:56:1d:9a:10:1a:e4:ec:c0:c5:df:28:cf:c7',
                 'certFingerprintAlgorithm' => '',
-            ),
-        ),
+            ],
+        ],
         /**
          * Path to SimpleSAMLphp autoloader.
          *
@@ -61,7 +63,7 @@ function wpsax_filter_option( $value, $option_name ) {
          *
          * @param string
          */
-        'simplesamlphp_autoload' => dirname( __FILE__ ) . '/simplesamlphp/lib/_autoload.php',
+        'simplesamlphp_autoload' => dirname(__FILE__) . '/simplesamlphp/lib/_autoload.php',
         /**
          * Authentication source to pass to SimpleSAMLphp
          *
@@ -133,10 +135,10 @@ function wpsax_filter_option( $value, $option_name ) {
          *
          * @param string
          */
-        'default_role'           => get_option( 'default_role' ),
-    );
-    $value = isset( $defaults[ $option_name ] ) ? $defaults[ $option_name ] : $value;
+        'default_role'           => get_option('default_role'),
+    ];
+    $value = isset($defaults[ $option_name ]) ? $defaults[ $option_name ] : $value;
     return $value;
 }
 
-add_filter( 'wp_saml_auth_option', 'wpsax_filter_option', 10, 2 );
+add_filter('wp_saml_auth_option', 'wpsax_filter_option', 10, 2);
