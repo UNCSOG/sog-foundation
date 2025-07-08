@@ -20,11 +20,11 @@ class Plugin
                     require_once(__DIR__ . '/../env/pantheon-live.php');
                     break;
                 case 'test':
-                    add_action('init', [$this, 'enable_local_admin']);
+                    add_action('init', [$this, 'disable_local_admin']);
                     require_once(__DIR__ . '/../env/pantheon-test.php');
                     break;
                 default:
-                    add_action('init', [$this, 'enable_local_admin']);
+                    add_action('init', [$this, 'disable_local_admin']);
                     require_once(__DIR__ . '/../env/pantheon-dev.php');
                     break;
             }
