@@ -1,0 +1,19 @@
+parameters:
+    level: 5
+    paths:
+        - wp-content/themes/sog-foundation-parent
+        - wp-content/plugins/sog_explore_sql
+        - wp-content/plugins/sog_settings
+        - wp-content/plugins/sog-api
+        - wp-content/plugins/sog-attachment-redirect
+        - wp-content/plugins/sog-saml-conf
+        - wp-content/plugins/sog-user-import
+        - wp-content/plugins/unc-cookie-banner
+        - wp-content/plugins/unc-utility-bar
+    excludePaths:
+        - vendor/*
+        - wp-admin/*
+        - wp-includes/*
+        - node_modules/*
+        - wp-content/themes/sog-foundation-parent/development/*
+        - wp-content/themes/sog-foundation-parent/node_modules/*
