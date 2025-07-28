@@ -1,0 +1,981 @@
+.days-of-week {
+    margin-left: 5px;
+}
+
+.days-of-week li {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 30px;;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 26px !important;
+    text-align: center;
+    height: 16px;
+    color: rgb(68, 68, 68);
+    float: left;
+}
+
+.days-of-week li.selected {
+    color: #fff;
+    background-color: #425F9A;
+    border-color: #585858;
+}
+
+#weekly, #monthly {
+    height: 20px;
+    margin-left: 5px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.timepicker {
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#times {
+    margin-top: 5px;
+    width: 766px;
+}
+
+#times input {
+    margin-top: 10px;
+    margin-left: 0;
+    float: left;
+    width: 88px;
+
+}
+
+#times input.error {
+    border-color: red !important;
+}
+
+.subscribe {
+
+}
+
+.subscribe .button-container {
+    float: left;
+    width: 150px;
+}
+
+.subscribe .text-container {
+    float: left;
+    width: auto;
+}
+
+.subscribe .text-container p {
+    margin: 0;
+    color: #425F9A;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.subscribe .text-container p a {
+    color: #425F9A;
+    text-decoration: underline;
+}
+
+.save {
+    padding-left: 5px;
+    padding-top: 5px;
+    width: auto;
+}
+
+.ui-timepicker-wrapper {
+    width: 86px;
+}
+
+.easing-spinner {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: inline-block;
+
+    margin-top: 7px;
+    margin-left: -25px;
+
+    float: left;
+}
+
+.double-bounce1, .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+.wpae-save-button svg {
+    margin-top: 7px;
+    margin-left: -215px;
+    display: inline-block;
+    position: relative;
+}
+
+@-webkit-keyframes sk-bounce {
+    0%, 100% {
+        -webkit-transform: scale(0.0)
+    }
+    50% {
+        -webkit-transform: scale(1.0)
+    }
+}
+
+@keyframes sk-bounce {
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+    50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+#weekly li.error, #monthly li.error {
+    border-color: red;
+}
+
+.chosen-single {
+    margin-bottom: 0 !important;
+}
+
+.chosen-container.chosen-with-drop .chosen-drop {
+    margin-top: -3px;
+}
+
+.wpallexport-plugin .ui-timepicker-wrapper {
+    z-index: 99999999;
+}
+
+.wpallexport-scheduling-dialog h4 {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #40acad;
+    text-decoration: none;
+}
+
+.manual-scheduling {
+    margin-left: 26px;
+}
+.chosen-container .chosen-results {
+
+    margin: 0 4px 4px 0 !important;
+}
+
+.unable-to-connect {
+    color: #f2b03d;
+}
+
+.wpai-license,
+.wpai-no-license {
+    display: flex;
+}
+
+.connection-icon img {
+    width: 16px;
+}
+
+.wpallexport-plugin .wp_all_import_scheduling_help
+{
+    padding: 15px;
+    background: #fff;
+    font-size: 12px;
+    /*max-height: 600px;*/
+    overflow: auto;
+}
+.wpallexport-plugin .wp_all_import_scheduling_help p
+{
+    font-size: 12px;
+    padding-left: 11px;
+}
+.wpallexport-plugin .wp_all_import_scheduling_help ul
+{
+    list-style: inside;
+    padding-left: 12px;
+}
+.wpallexport-plugin .wp_all_import_scheduling_help h2
+{
+    margin: 0;
+}
+.wpallexport-plugin .wp_all_import_scheduling_help h3
+{
+    color: #40acad;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 5px 0;
+}
+
+.wpallexport-plugin .wp-all-import-scheduling-help .title
+{
+    font-weight: bold;
+    padding: 12px 8px;
+    color: #464646;
+    background: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.wpallexport-plugin .wp-all-import-scheduling-help
+{
+    position: fixed;
+    top: 8%;
+    width: 515px;
+    z-index: 999999;
+    border: 1px solid #ccc;
+    display: none;
+    margin-bottom: 20px;
+    padding: 0 !important;
+}
+
+.wpallexport-plugin .wp_all_import_help_tab{
+    display: none;
+    padding-bottom: 15px;
+}
+
+.wpallexport-plugin .days-of-week {
+    margin-left: 5px;
+    width: 720px;
+}
+
+.wpallexport-plugin .days-of-week li {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 30px;;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 28px;
+    text-align: center;
+    height: 16px;
+    color: rgb(68,68,68);
+    float: left;
+}
+
+.wpallexport-plugin .days-of-week li.selected {
+    color: #fff;
+    background-color: #425F9A;
+    border-color: #585858;
+}
+
+.wpallexport-plugin #weekly, .wpallexport-plugin #monthly {
+    height: 40px;
+}
+
+.wpallexport-plugin .timepicker {
+    width: 90px;
+    padding: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 5px;
+    margin-right: 10px;
+    height: 38px !important;
+}
+
+.wpallexport-plugin #times {
+    margin-top: 5px;
+    width: 790px;
+}
+
+.wpallexport-plugin #times input {
+    margin-top: 9px;
+    margin-left: 0;
+    float: left;
+    font-size: 14px !important;
+}
+
+.wpallexport-plugin #times input.error {
+    border-color: red !important;
+}
+
+.wpallexport-plugin .subscribe .button-container {
+    float: left;
+    width: 150px;
+}
+
+.wpallexport-plugin .subscribe .text-container {
+    float: left;
+    width: auto;
+    position: absolute;
+    left: 165px;
+    top: 2px;
+}
+
+.wpallexport-plugin .subscribe .text-container p {
+    margin: 0;
+    color: #425F9A !important;
+    font-size: 14px !important;
+    font-weight: bold;
+    background: none !important;
+    padding-left: inherit !important;
+    line-height: normal !important;
+    margin-top: 5px;
+}
+
+.wpallexport-plugin .subscribe .text-container p.wpai-first-line {
+    margin-top:2px;
+}
+
+.wpallexport-plugin .subscribe .text-container p.wpai-second-line {
+    margin-top:5px;
+}
+
+.wpallexport-plugin .subscribe .text-container p a {
+    color: #425F9A;
+    text-decoration: underline;
+}
+
+.wpallexport-plugin .save {
+    padding-left: 5px;
+    padding-top: 5px;
+    width: auto;
+}
+
+.wpallexport-plugin .ui-timepicker-wrapper {
+    width: 98px;
+}
+
+.wpallexport-plugin .loader {
+    width: 20px;
+    aspect-ratio: 1;
+    --_c:no-repeat radial-gradient(farthest-side,#40acad 92%,#0000);
+    background:
+            var(--_c) top,
+            var(--_c) left,
+            var(--_c) right,
+            var(--_c) bottom;
+    background-size: 5px 5px;
+    animation: l7 1s infinite;
+    z-index: 2;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
+
+.wpallexport-plugin .activate-button-group #activate-license:disabled {
+    background-color: #fff !important;
+    color: #444 !important;
+    cursor: not-allowed;
+    opacity: 0.9;
+    border: 1px solid #ccc !important;
+}
+
+
+.wpallexport-plugin .easing-spinner {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    margin: 0;
+    display: none;
+}
+
+.wpallexport-plugin .double-bounce1, .wpallexport-plugin .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.wpallexport-plugin .double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+.wpallexport-plugin .wpae-save-button svg {
+    margin-top: 7px;
+    margin-left: -15px;
+    position: relative;
+    display: none;
+}
+
+.wpallexport-plugin .wpai-save-scheduling-button svg {
+    position: absolute;
+    top: 13px;
+    left: 20px;
+    display: inline-block;
+}
+
+@-webkit-keyframes sk-bounce {
+    0%, 100% {
+        -webkit-transform: scale(0.0)
+    }
+    50% {
+        -webkit-transform: scale(1.0)
+    }
+}
+
+@keyframes sk-bounce {
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+    50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+.wpallexport-plugin .tiered-pricing-options .register-site-group {
+    display: flex;
+    flex-direction: row;
+    gap: 23px;
+}
+
+.wpallexport-plugin #add-subscription-field {
+    display: none;
+    width: 400px;
+    height: 40px;
+}
+
+.wpallexport-plugin #find-subscription-link {
+
+}
+
+.wpallexport-plugin #find-subscription-link a {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    padding-left: 10px;
+}
+
+.wpallexport-plugin #weekly li.error, .wpallexport-plugin #monthly li.error {
+    border-color: red;
+}
+
+.wpallexport-plugin .chosen-single {
+    margin-bottom: 0 !important;
+}
+
+.wpallexport-plugin .chosen-container.chosen-with-drop .chosen-drop {
+    margin-top: -3px;
+}
+
+.wpallexport-plugin .wpallimport-preview-content h4{
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-left: 0;
+    color: #40acad;
+    text-decoration: none;
+}
+
+.wpallexport-plugin #scheduling-form h4 {
+    display: inline-block;;
+}
+
+.wpallexport-plugin .manual-scheduling {
+    margin-left: 26px;
+}
+
+.wpallexport-plugin .scheduling_interval_type {
+    width:90px;
+    padding: 10px !important;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    color: #777;
+    position: relative;
+    top: 0;
+    height: auto !important;
+}
+
+.wpallexport-plugin .scheduling_interval_duration {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    color: #777;
+    width: 56px;
+    padding: 10px;
+    height: auto !important;
+}
+
+.wpallimport-large-button.scheduling-cancel-button,
+.wpallimport-large-button.scheduling-save-button,
+.wpallimport-large-button.button-subscribe {
+
+    box-shadow: none !important;
+}
+
+.wpallimport-preview-title.scheduling-preview-title {
+
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.wpallexport-plugin .chosen-container-active.chosen-with-drop .chosen-single {
+    height: 41px;
+    line-height: 38px;
+    font-size: 14px;
+    background: none;
+    box-shadow: none;
+    color: #555 !important;
+    border: 1px solid #ccc;
+}
+
+.wpallexport-plugin .chosen-container-single .chosen-single {
+    height: 41px;
+    line-height: 38px;
+    font-size: 14px;
+    box-shadow: none;
+    color: #555 !important;
+    background: none !important;
+    border: 1px solid #ccc;
+    padding: 0 0 0 12px;
+}
+
+.wpallexport-plugin .chosen-container-single .chosen-single div {
+    top: 9px;
+}
+
+.wpallimport-section.scheduling h4{
+    font-size: 14px;
+}
+
+.wpallexport-plugin .subscribe-button-text {
+    text-shadow: none !important;
+}
+
+.wpallexport-plugin .wpai-save-scheduling-button {
+    background: #46ba69 !important;
+    padding: 20px 30px 20px 30px !important;
+    color: #fff !important;
+    border: none !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    border-radius: 10px !important;
+    -moz-border-radius: 10px !important;
+    -khtml-border-radius: 10px !important;
+    -webkit-border-radius: 10px !important;
+    font-size: 14px !important;
+    display: inline-block !important;
+    text-shadow: none !important;
+    width: 265px;
+    height: 56px !important;
+    position: relative;
+    box-shadow: none !important;
+}
+
+.wpallexport-plugin .wpallimport-section.scheduling .manual-scheduling-label {
+    margin-bottom: -12px !important;
+}
+
+.wpallexport-plugin .options .wpallimport-section.scheduling .manual-scheduling-label {
+    margin-bottom: -15px !important;
+}
+
+.wpallexport-plugin .options .wpallimport-section.scheduling label {
+    margin-top: 4px !important;
+}
+
+.wpallexport-plugin .wpallimport-step-5 .wpallimport-section.scheduling .text-container p,
+.wpallexport-plugin .options .wpallimport-section.scheduling .text-container p {
+    min-height: inherit;
+    margin-top: 3px;
+}
+
+.wpallexport-plugin .scheduling .chosen-search input {
+
+    margin: 1px 0 !important;
+    padding: 4px 20px 4px 5px !important;
+    width: 100% !important;
+    height: auto !important;
+    outline: 0 !important;
+    border: 1px solid #aaa !important;
+    font-size: 1em !important;
+    font-family: sans-serif !important;
+    line-height: normal !important;
+    border-radius: 0 !important;
+}
+
+.wpallexport-plugin #wp-all-import-scheduling-help-inner p {
+
+    background: none !important;
+    font-size: 12px;
+    color: #444;
+    line-height: 18px;
+}
+
+.wpallexport-plugin .wpallimport-scheduling-dialog .run-this-export-using-cronjobs {
+    margin-top: 0 !important;
+}
+
+.wpallexport-plugin .wpallimport-scheduling-dialog #times {
+    width: 760px;
+}
+
+.wpallexport-plugin .wpallimport-step-5 .wpallimport-section .wpallimport-collapsed-content .manual-scheduling p {
+    background-image: none;
+    line-height: normal;
+    padding-left: inherit;
+    min-height: inherit;
+}
+
+.wpallimport-button-small-blue .save-text.wpai-iunderstand {
+    left: 20px !important;
+}
+
+.wpallexport-plugin .scheduling-disabled {
+    color: #555;
+    text-decoration: none;
+    cursor: default;
+}
+
+.wpallexport-plugin #scheduling-subscribe-group {
+    border: 1px solid #ecebe7;
+    border-radius: 3px;
+    padding: 20px;
+    max-width: 685px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans .plans-include {
+    position:relative;
+    top: -12px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans .plans-include ul {
+    list-style: none;
+    padding: 0 15px 0 15px;
+    margin: 0;
+    font-size: 12px;
+
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans .plans-include ul li {
+    position: relative;
+    padding-left: 25px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans .plans-include ul li::before {
+    content: '';
+    display: inline-block;
+    background: url('../img/circle-check-blue.svg') no-repeat center center;
+    background-size: contain;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.wpallexport-plugin .tiered-pricing-options .subscribe-heading {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    padding: 0;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans label {
+    width: 240px;
+    font-size: 11px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #fff;
+}
+.wpallexport-plugin .tiered-pricing-options .pricing-plans label span.description {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans label span.price {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans label span.term {
+    right: 0;
+    position: relative;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans label:hover {
+    color: #2271b1;
+    cursor: pointer;
+}
+
+.wpallexport-plugin .tiered-pricing-options .pricing-plans label.checked  {
+    border: 1px solid #2271b1;
+    color: #2271b1;
+}
+
+.wpallexport-plugin .tiered-pricing-options h3 {
+    background:none;
+    color: #464646;
+    padding:5px;
+    border:unset;
+    margin-top:20px;
+    font-size: 13px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .blue {
+    color: #2271b1;
+}
+
+.wpallexport-plugin .tiered-pricing-options h3::before {
+    all:unset;
+    content: unset;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .checkout-trust-group {
+    display:flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-end;
+    padding-bottom: 12px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .checkout-trust-group .trusted-by {
+    position:relative;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .checkout-trust-group .trusted-by::before {
+    display: inline-block;
+    background: url('../img/trust-handshake-shield.svg') no-repeat center center;
+    height: 40px;
+    width: 40px;
+    content: '';
+    background-size: contain;
+    position:absolute;
+    top: -40px;
+    left: 65px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .checkout-trust-group .money-back-guarantee {
+    position:relative;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .checkout-trust-group .money-back-guarantee::before {
+    display: inline-block;
+    background: url('../img/guarantee.svg') no-repeat center center;
+    height: 40px;
+    width: 40px;
+    content: '';
+    background-size: contain;
+    position:absolute;
+    top: -40px;
+    left: 70px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .subscribe-button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .activate-button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container .activate-license-entry-group {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 5px;
+}
+
+.wpallexport-plugin .tiered-pricing-options #scheduling-button-and-text-container .activate-button-group button {
+    box-shadow: none;
+    border: none;
+    border-radius: 3px;
+    vertical-align:bottom !important;
+    height: 40px;
+    line-height: 39px;
+    padding: 0 36px;
+    font-size: 14px;
+    background-color: #425f9a;
+    color: #fff;
+    width: 260px;
+    margin-top:unset;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container button.activate-license:hover {
+    cursor: pointer;
+}
+
+.wpallexport-plugin .tiered-pricing-options #scheduling-button-and-text-container button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 18px;
+    margin-top:unset;
+}
+
+.wpallexport-plugin .tiered-pricing-options #scheduling-button-and-text-container button.subscribe {
+    box-shadow: none;
+    border: none;
+    border-radius: 3px;
+    vertical-align:bottom !important;
+    height: 40px;
+    line-height: 39px;
+    padding: 0 36px;
+    font-size: 14px;
+    background-color: #425f9a;
+    color: #fff;
+    width: 260px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container button.subscribe:hover {
+    cursor: pointer;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container span.already-licensed {
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container span.already-licensed:hover {
+    text-decoration: underline;
+}
+
+.wpallexport-plugin .tiered-pricing-options .button-and-text-container button span.note {
+    font-size: 10px;
+    font-weight: 100;
+    margin-top: 3px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-container {
+    flex: 1;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-divs {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-section {
+    cursor: pointer;
+    display: flex;
+    align-items: left;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-answer {
+    display: none;
+    padding-left: 25px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-section.collapsed-header.closed h4 {
+    background: url('../img/circle-chevron-down-blue.svg') no-repeat 0 0;
+    background-size: 18px;
+    padding-left: 25px;
+    margin-top:5px;
+    margin-bottom:5px;
+    color: #464646;
+    font-size: 12px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .faq-section.collapsed-header h4 {
+    background: url('../img/circle-chevron-up-blue.svg') no-repeat 0 0;
+    background-size: 18px;
+    padding-left: 25px;
+    margin-top:5px;
+    margin-bottom:5px;
+    color: #464646;
+    position:relative;
+    font-size: 12px;
+}
+
+.wpallexport-plugin .tiered-pricing-options .hidden {
+    display: none;
+}
+
+.wpallexport-plugin .active-sites-limit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999999;
+}
+
+.wpallexport-plugin .active-sites-limit-modal {
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 550px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    margin: 0 auto;
+}
+
+.wpallexport-plugin .active-sites-limit-modal h2 {
+    margin: 0 0 10px;
+}
+
+.wpallexport-plugin .active-sites-limit-modal p {
+    font-size: 14px;
+    margin: 0 0 20px;
+}
+
+.wpallexport-plugin .active-sites-limit-modal button {
+    box-shadow: none;
+    border: none;
+    border-radius: 3px;
+    vertical-align:bottom !important;
+    height: 40px;
+    line-height: 39px;
+    padding: 0 36px;
+    font-size: 14px;
+    background-color: #425f9a;
+    color: #fff;
+    width: 260px;
+}
+
+.wpallexport-plugin .active-sites-limit-modal button.close-limit-modal {
+    background-color: #f44336;
+}
+
+.wpallexport-plugin .active-sites-limit-modal button:hover {
+    opacity: 0.9;
+}
+
+.wpallexport-plugin .active-sites-limit-modal .tiered-pricing-options {
+    position: relative;
+    margin: 0 auto;
+}

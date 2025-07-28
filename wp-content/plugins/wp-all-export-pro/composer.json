@@ -1,0 +1,30 @@
+{
+    "name": "soflyy/wp-all-export-pro",
+    "description": "Export any post type to a CSV or XML file. Edit the exported data, and then re-import it later using WP All Import.",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "autoload": {
+        "psr-4": {
+            "Soflyy\\WpAllExportPro\\": "src/"
+        }
+    },
+    "keywords": ["wordpress", "plugin", "export", "wp all export"],
+    "homepage": "https://www.wpallimport.com",
+    "authors": [
+        {
+            "name": "WP All Import",
+            "homepage": "https://www.wpallimport.com/"
+        }
+    ],
+    "support": {
+        "issues": "https://www.wpallimport.com/support"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.29"
+    }
+}
