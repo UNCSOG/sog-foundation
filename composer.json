@@ -14,26 +14,25 @@
         }
     ],
     "require": {
-        "wpackagist-plugin/akismet": "^5.3.1",
-        "wpackagist-plugin/beehive-analytics": "^3.4.11",
-        "wpackagist-plugin/better-search-replace": "^1.4.5",
+        "wpackagist-plugin/akismet": "^5.5",
+        "wpackagist-plugin/beehive-analytics": "^3.4.17",
+        "wpackagist-plugin/better-search-replace": "^1.4.10",
         "wpackagist-plugin/co-authors-plus":"3.6.2",
         "wpackagist-plugin/codepress-admin-columns":"4.7.7",
-        "wpackagist-plugin/jetpack": "^13.2-a.5",
+        "wpackagist-plugin/jetpack": "^13.9.1",
         "wpackagist-plugin/php-compatibility-checker":"1.6.3",
-        "wpackagist-plugin/redirection": "^5.4.2",
+        "wpackagist-plugin/redirection": "^5.5.2",
         "wpackagist-plugin/relevanssi":"4.23.1",
-        "wpackagist-plugin/show-hooks": "^0.4",
         "wpackagist-plugin/what-template-file-am-i-viewing": "^1.2",
-        "wpackagist-plugin/wordpress-importer": "^0.8.2",
+        "wpackagist-plugin/wordpress-seo":"25.5",
         "wpackagist-plugin/wp-ban":"1.69.1",
         "wpackagist-plugin/wp-mail-smtp": "^3.11.1",
         "wpackagist-plugin/wp-native-php-sessions":"1.4.3",
-        "wpackagist-plugin/wp-reroute-email": "^1.5.0",
-        "wpackagist-plugin/wp-saml-auth": "^2.1.4",
+        "wpackagist-plugin/wp-reroute-email": "^1.5.2",
+        "wpackagist-plugin/wp-saml-auth": "^2.2.0",
         "wpackagist-plugin/wp-serverinfo": "^1.66",
-        "wpackagist-theme/twentytwentyfour": "^1.0",
-        "pantheon-systems/upstream-management": "^1.0"
+        "wpackagist-theme/twentytwentyfive": "^1.2",
+        "pantheon-systems/upstream-management": "^1.0.1"
     },
     "extra": {
         "installer-paths": {
