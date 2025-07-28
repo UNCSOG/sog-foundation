@@ -478,9 +478,22 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
             $minute = '00';
             $seconds = '00';
         } else {
-            $year = date('Y');
-            list($hour, $minute) = explode(':', $timeOrYear);
-            $seconds = '00';
+			/* 
+			 * 
+			 * We must ensure that the month and day are not in the future as it's possible the date is from last year.
+			 * For Unix timestamps they don't include year for dates which are less than 6 months old and that could be
+			 * from last year. Actual future dates will include the year instead of the time and be handled above instead.
+			 *  
+			 */
+	        list($hour, $minute) = explode(':', $timeOrYear);
+	        $seconds = '00';
+	        $currentTime = new DateTime(); //current time
+	        $inputTime = new DateTime(date('Y').'-'. $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $seconds); //time with input hours and minutes
+	        $year = $currentTime->format('Y');
+	        //if input time is in future, consider it as from last year
+	        if($inputTime > $currentTime) {
+		        $year = $year - 1;
+	        }
         }
         $dateTime = DateTime::createFromFormat('Y-M-j-G:i:s', "{$year}-{$month}-{$day}-{$hour}:{$minute}:{$seconds}");
 

@@ -3,7 +3,313 @@
  */
 (function($){$(function () {
 
-    if ( ! $('body.wpallimport-plugin').length) return; // do not execute any code if we are not on plugin page
+	if ( ! $('body.wpallimport-plugin').length) return; // do not execute any code if we are not on plugin page
+
+	$('.wp_all_import_send_to_codebox').on('click', async function () {
+
+		var isCodeBoxActive = $('input[name="is_wp_codebox_active"]').val();
+
+		if (isCodeBoxActive === '0') {
+
+			$('.cross-sale-notice.codebox').slideDown();
+		} else {
+
+			var code = $('#wp_all_import_code').val();
+			
+			await wp_all_import_save_functions();
+
+			$('.wp_all_import_functions_preloader').show();
+			
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wpai_send_to_codebox',
+					security: wp_all_import_security,
+					code: code
+				},
+				dataType: 'json',
+				success: function (response) {
+					$('#functions_editor_container').fadeOut(300, function () {
+						const self = $(this);
+						self.html(response.html).fadeIn(300);
+						
+						setTimeout(function () {
+							self.fadeOut(400);
+						}, 3000);
+					});
+					
+					$('#wpai_function_editor_buttons').fadeOut(400);
+					$('.wpai_go_to_codebox').fadeIn(400);
+				},
+				error: function () {
+					alert('An error occurred while sending to CodeBox.');
+				},
+				complete: function () {
+					$('.wp_all_import_functions_preloader').hide();
+				}
+			});
+		}
+	});
+
+	$('.wp_all_import_revert_functions').on('click', function () {
+		if (confirm('Are you sure you want to revert to the previous functions file?')) {
+
+			$('.wp_all_import_functions_preloader').show();
+
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wpai_send_to_codebox',
+					security: wp_all_import_security,
+					codeboxaction: 'revert'
+				},
+				dataType: 'json',
+				success: function (response) {
+					alert(response.html);
+					location.reload();
+				},
+				error: function () {
+					alert('An error occurred while reverting the functions file.');
+				},
+				complete: function () {
+					$('.wp_all_import_functions_preloader').hide();
+				}
+			});
+		}
+	});
+	
+	function overlayDivOverInput($input, divId) {
+		const $localInput = $($input);
+
+		// Get the name of the input/textarea
+		const inputName = $input.attr('name');
+
+		// Check if element is a textarea
+		const isTextarea = $input.is('textarea');
+
+		// Configure width value
+		const width = isTextarea ? '55%' : '100%';
+
+		// Apply position:relative to the parent of the input/textarea
+		$localInput.parent().css({position: 'relative'});
+
+		// Create the overlay div
+		const $div = $('<div/>', {
+			id: divId,
+			'data-input-name': inputName,
+			css: {position: 'absolute', top: 0, left: 0, 'z-index':-99},
+			height:$localInput.outerHeight(),
+			width: width
+		});
+
+		$div.insertAfter($input);
+
+		// Returning the jQuery object
+		return $div;
+	}
+
+	// Global declaration of $wpAllImportDrag and $wpAllImportOriginalColor so we can use them on dynamic elements.
+	var $wpAllImportDrag = null;
+	var $wpAllImportOriginalColor = '';
+
+	function wpaiMakeDroppable(){
+		let $targets = $('input, textarea');
+
+		$targets.on('click', function (e) {
+			if (!$wpAllImportDrag) return;
+
+			let oldValue = $(this).val();
+			let newValue = $wpAllImportDrag.data('xpath');
+			$(this).val(oldValue + newValue);
+
+			$wpAllImportDrag.css('color', $wpAllImportOriginalColor).css('font-weight', 'bold');
+			$wpAllImportDrag = null;
+		}).droppable({
+			drop: function (event, ui) {
+				let oldValue = $(this).val();
+				let newValue = ui.draggable.data('xpath') || '';
+				$(this).val(oldValue + newValue);
+			},
+			greedy: true,
+			tolerance: 'touch',
+			disabled: false
+		});
+
+	}
+
+	function wpaiMakeDroppableTinyMce() {
+
+		// Ensure tinymce is defined before use.
+		if (typeof tinymce === 'undefined') {
+			return;
+		}
+
+		// Get tinymce instance
+		var ed = tinymce.get('content');
+
+		// Function to get current iframe bounds.
+		function getIframeBounds() {
+			var tinymceIframe = $('#content_ifr');
+			if (tinymceIframe.length === 0) {
+				return null;
+			}
+			var iframeOffset = tinymceIframe.offset();
+			return {
+				top: iframeOffset.top - $(window).scrollTop(),
+				left: iframeOffset.left - $(window).scrollLeft(),
+				bottom: iframeOffset.top + tinymceIframe.height() - $(window).scrollTop(),
+				right: iframeOffset.left + tinymceIframe.width() - $(window).scrollLeft()
+			};
+		}
+
+		// Initial drop area coordinates.
+		var dropArea = getIframeBounds();
+		if (!dropArea) {
+			return;
+		}
+
+		// Apply draggable to elements.
+		$(".ui-draggable").draggable({
+			helper: function () {
+				return $('<div>').text($(this).data('xpath'));
+			},
+			start: function (event, ui) {
+				// Create a duplicate node as a proxy
+				proxy = ui.helper.clone().appendTo('body');
+			},
+			drag: function (event, ui) {
+				// Recalculate drop area for iframe.
+				dropArea = getIframeBounds();
+
+				// Check if draggable is over the tinymce, update proxy to follow cursor and hide the helper
+				if (
+					event.clientX >= dropArea.left &&
+					event.clientX <= dropArea.right &&
+					event.clientY >= dropArea.top &&
+					event.clientY <= dropArea.bottom
+				) {
+					proxy.css({ top: event.pageY, left: event.pageX });
+					ui.helper.hide();
+				} else {
+					proxy.css({ top: 'auto', left: 'auto' });
+					ui.helper.show();
+				}
+			},
+			stop: function (event, ui) {
+				// Recalculate drop area for iframe.
+				dropArea = getIframeBounds();
+
+				// Append to tinymce content if it was dropped on tinymce
+				if (
+					event.clientX >= dropArea.left &&
+					event.clientX <= dropArea.right &&
+					event.clientY >= dropArea.top &&
+					event.clientY <= dropArea.bottom
+				) {
+					ed.setContent(
+						ed.getContent() + $(this).data('xpath')
+					);
+				}
+				// Clean up proxy and show the helper again
+				proxy.remove();
+				ui.helper.show();
+			},
+		});
+
+		ed.on('click', function (e) {
+			if (!$wpAllImportDrag) return;
+
+			let oldValue = ed.getContent();
+			let newValue = $wpAllImportDrag.data('xpath') || '';
+
+			ed.setContent(oldValue + newValue);
+
+			$wpAllImportDrag.css('color', $wpAllImportOriginalColor).css('font-weight', 'bold');
+			$wpAllImportDrag = null;
+		});
+	}
+
+	function wpaiMakeDroppableSingle($parent) {
+
+		if($parent.hasClass('dragging')){
+			return;
+		}
+
+		$parent.on('click', 'input, textarea', function (e) {
+			if (!$wpAllImportDrag) return;
+
+			let oldValue = $(this).val();
+			let newValue = $wpAllImportDrag.data('xpath') || '';
+			$(this).val(oldValue + newValue);
+
+			$wpAllImportDrag.css('color', $wpAllImportOriginalColor).css('font-weight', 'bold');
+			$wpAllImportDrag = null;
+		});
+
+		let $targets = $parent.find('input, textarea');
+		let divCounter = 0; // counter to generate unique ids for divs
+
+		$targets.each(function() {
+			let $input = $(this);
+			let divId = 'droppableDiv' + divCounter++; // generate a unique id based on the counter
+
+			let $div = overlayDivOverInput($input, divId);
+
+			// Apply jQuery UI droppable to the div
+			$div.droppable({
+				drop: function (event, ui) {
+					let inputName = $(this).data('input-name');
+					// Select only the closest sibling input/textarea with provided name
+					let $inputOrTextarea = $(this).siblings("input[name='" + inputName + "'], textarea[name='" + inputName + "']").first();
+					let oldValue = $inputOrTextarea.val();
+					let newValue = ui.draggable.data('xpath') || '';
+					$inputOrTextarea.val(oldValue + newValue);
+				}
+			});
+		});
+
+	}
+
+	function wpaiObserveFieldAddition()
+	{
+
+		// Make drag and drop work for dynamically added elements.
+		// Select the node that will be observed for child addition
+		let wpaiXmlTargetNode = document.querySelector('.wpallimport-layout');
+
+		if(!wpaiXmlTargetNode){
+			return;
+		}
+
+		// Options for the observer (which mutations to observe)
+		let wpaiXmlConfig = {childList: true, subtree: true};
+
+		// Callback function to execute when mutations are observed
+		let wpaiXmlCallback = function (mutationsList) {
+			for (let mutation of mutationsList) {
+				if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+					mutation.addedNodes.forEach((node) => {
+						if (node.nodeType === Node.ELEMENT_NODE) {
+
+								wpaiMakeDroppableSingle($(node));
+								wpaiMakeDroppableTinyMce();
+
+						}
+					});
+				}
+			}
+		};
+
+		// Create an observer instance linked to the callback function
+		let wpaiXmlObserver = new MutationObserver(wpaiXmlCallback);
+
+		// Start observing the target node for configured mutations
+		wpaiXmlObserver.observe(wpaiXmlTargetNode, wpaiXmlConfig);
+	}
+
+	wpaiObserveFieldAddition();
 
     function wpai_set_custom_select_image() {
         // The class name to add to the element.
@@ -262,10 +568,10 @@
 		        $('input[name=custom_type]').val(selectedData.selectedData.value);
 		        $('#custom_type_selector').find('.dd-selected').css({'color':'#555'});
 
-				var is_import_denied = $('.wpallimport-upgrade-notice[rel='+ selectedData.selectedData.value +']').length;
+				var is_import_denied = $('.wpallimport-upgrade-notice[rel="'+ selectedData.selectedData.value +'"]').length;
 
 				if (is_import_denied){
-					$('.wpallimport-upgrade-notice[rel='+ selectedData.selectedData.value +']').slideDown();
+					$('.wpallimport-upgrade-notice[rel="'+ selectedData.selectedData.value +'"]').slideDown();
 					$('.wpallimport-submit-buttons').hide();
 				} else {
 					$('.wpallimport-submit-buttons').slideDown();
@@ -358,6 +664,11 @@
 			$('input[name=taxonomy_type]').val(selectedData.selectedData.value);
 		}
 	});
+	
+	$('#taxonomy_to_import li').each(function() {
+        var toolTipText = $(this).find('.dd-option-value').val();
+        $(this).attr('title', toolTipText);
+    });
 
 	// enter-submit form on step 1
 	$('.wpallimport-step-1').each(function(){
@@ -552,10 +863,10 @@
 
 		        $('input[name=custom_type]').val(selectedData.selectedData.value);
 
-				var is_import_denied = $('.wpallimport-upgrade-notice[rel='+ selectedData.selectedData.value +']').length;
+				var is_import_denied = $('.wpallimport-upgrade-notice[rel="'+ selectedData.selectedData.value +'"]').length;
 
 				if (is_import_denied){
-					$('.wpallimport-upgrade-notice[rel='+ selectedData.selectedData.value +']').slideDown();
+					$('.wpallimport-upgrade-notice[rel="'+ selectedData.selectedData.value +'"]').slideDown();
 				}
 
 				if ($('.wpallimport-upload-resource-step-two:visible').length && ! is_import_denied) {
@@ -708,6 +1019,11 @@
 			$('input[name^=auto_generate]').val('1');
 			$(this).parents('form:first').submit();
 		});
+
+		$('a.create-filters-step').on('click', function(){
+			$('input[name^=go_to_create_filters]').val('1');
+			$(this).parents('form:first').submit();
+		});
 	});
 	//[/End Step 1]
 
@@ -766,66 +1082,7 @@
 		if (action.init) {
 			this.data('initialized', true);
 		}
-		if (action.dragable) { // drag & drop
-			var _w; var _dbl = 0;
-			var $drag = $('__drag'); $drag.length || ($drag = $('<input type="text" id="__drag" readonly="readonly" />'));
-
-			$drag.css({
-				position: 'absolute',
-				background: 'transparent',
-				top: -50,
-				left: 0,
-				margin: 0,
-				border: 'none',
-				lineHeight: 1,
-				opacity: 0,
-				cursor: 'pointer',
-				borderRadius: 0,
-				zIndex:99
-			}).appendTo(document.body).mousedown(function (e) {
-				if (_dbl) return;
-				var _x = e.pageX - $drag.offset().left;
-				var _y = e.pageY - $drag.offset().top;
-				if (_x < 4 || _y < 4 || $drag.width() - _x < 0 || $drag.height() - _y < 0) {
-					return;
-				}
-				$drag.width($(document.body).width() - $drag.offset().left - 5).css('opacity', 1);
-				$drag.select();
-				_dbl = true; setTimeout(function () {_dbl = false;}, 400);
-			}).mouseup(function () {
-				$drag.css('opacity', 0).css('width', _w);
-				$drag.trigger('blur');
-			}).dblclick(function(){
-				if (dblclickbuf.selected) {
-					$('.xml-element[title*="/'+dblclickbuf.value.replace('{','').replace('}','')+'"]').removeClass('selected');
-
-					if ($(this).val() == dblclickbuf.value) {
-						dblclickbuf.value = '';
-						dblclickbuf.selected = false;
-					} else {
-						dblclickbuf.selected = true;
-						dblclickbuf.value = $(this).val();
-						$('.xml-element[title*="/'+$(this).val().replace('{','').replace('}','')+'"]').addClass('selected');
-					}
-				} else {
-					dblclickbuf.selected = true;
-					dblclickbuf.value = $(this).val();
-					$('.xml-element[title*="/'+$(this).val().replace('{','').replace('}','')+'"]').addClass('selected');
-				}
-			});
-
-			$('input, textarea').not('#__drag').on('focus', insertxpath );
-
-			$(document).mousemove(function () {
-				if (parseInt($drag.css('opacity')) != 0) {
-					setTimeout(function () {
-						$drag.css('opacity', 0);
-					}, 50);
-					setTimeout(function () {
-						$drag.css('width', _w);
-					}, 500);
-				}
-			});
+		if (action.dragable) {
 
 			this.find('.xml-tag.opening > .xml-tag-name, .xml-attr-name, .csv-tag.opening > .csv-tag-name, .ui-menu-item').each(function () {
 				var $this = $(this);
@@ -837,17 +1094,40 @@
 				else
 					xpath = '{' + ($this.parent().parent().attr('title').replace(/^\/[^\/]+\/?/, '') || '.') + '}';
 
-				$this.mouseover(function (e) {
-					$drag.val(xpath).offset({left: $this.offset().left - 2, top: $this.offset().top - 2}).width(_w = $this.width()).height($this.height() + 4);
-				});
-			}).eq(0).mouseover();
+				$this.data('xpath', xpath).on('dblclick', function(e) {
+					$wpAllImportDrag = $(this);
+					$wpAllImportOriginalColor = $wpAllImportDrag.css('color');
+					$wpAllImportDrag.css('color', '#46ba69').css('font-weight','900');
+				}).draggable({
+					helper: function() {
+						return $('<div>').text($(this).data('xpath')).css({
+							'padding': '5px',
+							'border-radius': '5px'
+						});
+					},
+					cursor: 'pointer',
+					iframeFix:true
+				}).css('cursor', 'pointer');
+			});
+
+			wpaiMakeDroppable();
 		}
+
 		return this;
 	};
 
 	// template form: preview button
 	$('form.wpallimport-template').each(function () {
 		var $form = $(this);
+
+		// The form should not submit when Enter is pressed.
+		$form.on('keypress', function (event) { 
+			var keycode = (event.keyCode ? event.keyCode : event.which); 
+			
+			if (keycode === 13 && event.target.tagName !== 'TEXTAREA') { 
+				event.preventDefault(); 
+			} 
+		});
 
 		var $detected_cf = new Array();
 
@@ -1166,7 +1446,7 @@
 
 		// Taxonnomies
 		$form.find('#show_hidden_ctx').on('click', function(){
-			$(this).parents('table:first').find('tr.private_ctx').toggle();
+			$form.find('tr.private_ctx').toggle();
 		});
 
 		// Test & Preview images
@@ -1372,8 +1652,10 @@
             // download images hosted elsewhere
             if ($(this).val() == 'yes'){
                 $('.search_through_the_media_library_logic').show();
+				$('.download_images').show();
             } else {
                 $('.search_through_the_media_library_logic').hide();
+				$('.download_images').hide();
             }
 		});
 
@@ -1386,8 +1668,10 @@
 			// download images hosted elsewhere
 			if ($(this).val() == 'yes'){
 				$('.search_through_the_media_library_logic').slideDown();
+				$('.download_images').slideDown();
 			} else {
 				$('.search_through_the_media_library_logic').slideUp();
+				$('.download_images').slideUp();
 			}
 		});
 
@@ -1775,7 +2059,7 @@
 			$tag.find('.navigation a').on('click', function () {
 				tagno += '#prev' == $(this).attr('href') ? -1 : 1;
 				$tag.addClass('loading').css('opacity', 0.7);
-				$.post($tagURL, {tagno: tagno, import_action: import_action, security: wp_all_import_security}, function (data) {
+				$.post($tagURL, {tagno: tagno, import_action: import_action, xpath: $('input[name="xpath"]').val(), security: wp_all_import_security}, function (data) {
 					var $indicator = $('<span />').insertBefore($tag);
 					$tag.replaceWith(data.html);
 					fix_tag_position();
@@ -1787,7 +2071,17 @@
 				}, 'json');
 				return false;
 			});
-			$tag.find('input[name="tagno"]').on('change', function () {
+			$tag.find('input[name="tagno"]').on('change keypress', function (event) {
+
+				// Check if the key pressed is enter, if not exit the function unless a
+				// 'change' event triggered it.
+				if(event.type === "keypress") {
+					var keycode = (event.keyCode ? event.keyCode : event.which);
+					if(keycode != '13'){
+						return;
+					}
+				}
+
 				tagno = (parseInt($(this).val()) > parseInt($tag.find('.pmxi_count').html())) ? $tag.find('.pmxi_count').html() : ( (parseInt($(this).val())) ? $(this).val() : 1 );
 				$(this).val(tagno);
 				$tag.addClass('loading').css('opacity', 0.7);
@@ -1800,7 +2094,7 @@
 						$('#variations_xpath').data('checkedValue', '').trigger('change');
 					}
 				}, 'json');
-				return false;
+
 			});
 		});
 		return this;
@@ -1906,27 +2200,44 @@
 			$(this).next('label').attr({'for':$(this).next('label').attr('for') + '_' + count});
 			$(this).next('label').next('div').addClass($(this).next('label').next('div').attr('rel') + '_' + count);
 		});
-		$clone.insertBefore($template).css('display', 'none').removeClass('template').fadeIn().find('input.switcher').trigger('change');
+		$clone.insertBefore($template).css('display', 'none').removeClass('template').droppable({
+			drop: function (event, ui) {
+				let input = $(this).find("input.xpath_field:first");
+				let oldValue = input.val();
+				let newValue = ui.draggable.data('xpath') || '';
+				input.val(oldValue + newValue);
+			},
+			greedy:true
+		}).fadeIn().find('input.switcher').trigger('change');
 		let sortable = $(this).parents('.ui-sortable:first');
 		if (sortable.length){
 			$(this).parents('td:first').find('.hierarhy-output').val(window.JSON.stringify(sortable.pmxi_nestedSortable('toArray', {startDepthCount: 0})));
 	    	if ($(this).parents('td:first').find('input:first').val() == '') $(this).parents('td:first').find('.hierarhy-output').val('');
 	    }
-		$('.widefat').on('focus', insertxpath );
+		//$('.widefat').on('focus', insertxpath );
 	});
 
-	$('.add-new-cat').on('click', function(){
+	$(document).on('click', '.add-new-cat', function(){
 		var $template = $(this).parents('td:first').find('ul.tax_hierarchical_logic').children('li.template');
 		var $number = $(this).parents('td:first').find('ul.tax_hierarchical_logic').children('li').length - 1;
 		var $cloneName = $template.find('input.assign_term').attr('name').replace('NUMBER', $number);
 		$clone = $template.clone(true);
 		$clone.find('input[name^=tax_hierarchical_assing]').attr('name', $cloneName);
-		$clone.insertBefore($template).css('display', 'none').removeClass('template').fadeIn().find('input.switcher').trigger('change');
+		$clone.insertBefore($template).css('display', 'none').removeClass('template').droppable({
+			drop: function (event, ui) {
+				let input = $(this).find("input.hierarchical_xpath_field:first");
+				let oldValue = input.val();
+				let newValue = ui.draggable.data('xpath');
+				input.val(oldValue + newValue);
+			}
+		}).fadeIn().find('input.switcher').trigger('change');
 	});
 
 	$('ol.sortable').each(function(){
 		if ( ! $(this).children('li').not('.template').length ) $(this).next('.add-new-ico').trigger('click');
 	});
+
+	$('.tagno').trigger('change');
 
 	$('form.wpallimport-template.edit').each(function() {
 
@@ -2036,7 +2347,7 @@
 		});
 	});
 
-	$('.add-new-entry').on('click', function(){
+	$(document).on('click', '.add-new-entry', function(){
 		var $template = $(this).parents('table').first().children('tbody').children('tr.template');
 		$number = $(this).parents('table').first().children('tbody').children('tr').length - 2;
 		$clone = $template.clone(true);
@@ -2268,16 +2579,16 @@
 			}
 		});
 	}
-
-    $('.wp_all_import_save_functions').on('click', function(){
-    	var request = {
+	
+	function wp_all_import_save_functions(){
+		var request = {
 			action: 'save_import_functions',
 			data: editor.codemirror.getValue(),
 			security: wp_all_import_security
-	    };
-	    $('.wp_all_import_functions_preloader').show();
-	    $('.wp_all_import_saving_status').removeClass('error updated').html('');
-		$.ajax({
+		};
+		$('.wp_all_import_functions_preloader').show();
+		$('.wp_all_import_saving_status').removeClass('error updated').html('');
+		return $.ajax({
 			type: 'POST',
 			url: ajaxurl + ((typeof import_id != "undefined") ? '?id=' + import_id : ''),
 			data: request,
@@ -2299,6 +2610,12 @@
 			},
 			dataType: "json"
 		});
+	}
+
+    $('.wp_all_import_save_functions').on('click', function(){
+		$('.cross-sale-notice.codebox').slideUp();
+		
+    	wp_all_import_save_functions();
     });
 
     $('.wp_all_import_ajax_deletion').on('click', function(e){
@@ -2551,13 +2868,14 @@
 
 			$('.tag').css('margin-top', '0');
 
-	        if (position_top > offset_top){
+			if (position_top > offset_top){
 				$('.tag').css({'top': position_top - offset_top});
-	        } else {
+				$('.wpallimport-xml').css({'max-height': ($(window).height() - 220) + 'px' });
+			} else {
 				$('.tag').css({'top': '0' });
 				$('.wpallimport-xml').css({'max-height': ($(window).height() - 220) + 'px' });
-	        }
-	    }
+			}
+		}
 	}
 
 	fix_tag_position();

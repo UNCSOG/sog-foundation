@@ -232,7 +232,7 @@ final class XmlImportTemplateScanner
    *
    * @param XmlImportReaderInterface $input
    * @param bool $insideLang
-   * @return XmlImportToken
+   * @return XmlImportToken|array
    */
   private function scanXPath($input, $insideLang = true)
   {
@@ -270,7 +270,7 @@ final class XmlImportTemplateScanner
    * Scans name
    *
    * @param XmlImportReaderInterface $input
-   * @return XmlImportToken
+   * @return XmlImportToken|array
    */
   private function scanName(XmlImportReaderInterface $input)
   {
@@ -323,7 +323,7 @@ final class XmlImportTemplateScanner
    * Scans string literal
    *
    * @param XmlImportReaderInterface $input
-   * @return XmlImportToken
+   * @return XmlImportToken|array
    */
   private function scanString(XmlImportReaderInterface $input)
   {
@@ -356,7 +356,7 @@ final class XmlImportTemplateScanner
    * Scans number
    *
    * @param XmlImportReaderInterface $input
-   * @return XmlImportToken
+   * @return XmlImportToken|array
    */
   private function scanNumber(XmlImportReaderInterface $input)
   {

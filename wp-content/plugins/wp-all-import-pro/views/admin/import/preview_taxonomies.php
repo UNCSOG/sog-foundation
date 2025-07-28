@@ -3,7 +3,7 @@
 	<div class="title">
 		<div class="navigation">
 			<?php if ($tagno > 1): ?><a href="#prev" class="previous_element">&nbsp;</a><?php else: ?><span class="previous_element">&nbsp;</span><?php endif ?>
-			<?php printf(__('<strong><input type="text" value="%s" name="tagno" class="tagno"/></strong><span class="out_of"> of <strong class="pmxi_count">%s</strong></span>', 'wp_all_import_plugin'), $tagno, PMXI_Plugin::$session->count); ?>
+			<?php printf(__('<strong><input type="text" value="%s" name="tagno" class="tagno"/></strong><span class="out_of"> of <strong class="pmxi_count">%s</strong></span>', 'wp-all-import-pro'), $tagno, PMXI_Plugin::$session->count); ?>
 			<?php if ($tagno < PMXI_Plugin::$session->count): ?><a href="#next" class="next_element">&nbsp;</a><?php else: ?><span class="next_element">&nbsp;</span><?php endif ?>
 		</div>
 	</div>
@@ -13,7 +13,7 @@
 			<?php $this->error() ?>
 		<?php endif ?>
 
-		<h3><?php _e('Test Taxonomies Hierarchy', 'wp_all_import_plugin'); ?></h3>
+		<h3><?php _e('Test Taxonomies Hierarchy', 'wp-all-import-pro'); ?></h3>
 
 		<?php
 		if ( ! empty($tax_hierarchical) ):

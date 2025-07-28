@@ -5,10 +5,10 @@
 	<div class="wpallimport-header">
 		<div class="wpallimport-logo"></div>
 		<div class="wpallimport-title">
-			<h2><?php _e('Review Import File', 'wp_all_import_plugin'); ?></h2>
+			<h2><?php _e('Review Import File', 'wp-all-import-pro'); ?></h2>
 		</div>
 		<div class="wpallimport-links">
-			<a href="http://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp_all_import_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp_all_import_plugin'); ?></a>
+			<a href="https://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp-all-import-pro'); ?></a> | <a href="https://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp-all-import-pro'); ?></a>
 		</div>
 	</div>
 	<div class="clear"></div>
@@ -17,17 +17,17 @@
 		case 'taxonomies':
 			$custom_type = new stdClass();
 			$custom_type->labels = new stdClass();
-			$custom_type->labels->singular_name = empty($tx->labels->singular_name) ? __('Taxonomy Term', 'wp_all_import_plugin') : $tx->labels->singular_name;
-			$custom_type->labels->name = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp_all_import_plugin') : $tx->labels->name;
+			$custom_type->labels->singular_name = empty($tx->labels->singular_name) ? __('Taxonomy Term', 'wp-all-import-pro') : $tx->labels->singular_name;
+			$custom_type->labels->name = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp-all-import-pro') : $tx->labels->name;
 			break;
         case 'comments':
             $custom_type = new stdClass();
             $custom_type->labels = new stdClass();
-            $custom_type->labels->singular_name = __('Comments', 'wp_all_import_plugin');
-            $custom_type->labels->name = __('Comment', 'wp_all_import_plugin');
+            $custom_type->labels->singular_name = __('Comments', 'wp-all-import-pro');
+            $custom_type->labels->name = __('Comment', 'wp-all-import-pro');
             break;
 		default:
-			$custom_type = get_post_type_object( PMXI_Plugin::$session->custom_type );
+			$custom_type = wp_all_import_custom_type( PMXI_Plugin::$session->custom_type );
 			break;
 	}
     if (empty($custom_type) && PMXI_Plugin::$session->custom_type) {
@@ -42,7 +42,7 @@
 				<?php $this->error() ?>
 			<?php endif ?>
 		</div>
-		<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e('Continue to Step 3', 'wp_all_import_plugin'); ?>" style="position:absolute; top:45px; right:10px;"/>
+		<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e('Continue to Setup Import', 'wp-all-import-pro'); ?>" style="position:absolute; top:45px; right:10px;"/>
 	</div>
 
 	<div class="wpallimport-content-section wpallimport-elements-preloader">
@@ -55,7 +55,7 @@
 			<tr>
 				<?php if ( ! $is_csv): ?>
 				<td class="left" style="width: 25%; min-width: unset; border-right: 1px solid #ddd;">
-					<h3 class="txt_center"><?php _e('What element are you looking for?', 'wp_all_import_plugin'); ?></h3>
+					<h3 class="txt_center"><?php _e('What element are you looking for?', 'wp-all-import-pro'); ?></h3>
 					<?php
 					if ( ! empty($elements_cloud) and ! $is_csv ){
 						foreach ($elements_cloud as $tag => $count){
@@ -84,7 +84,7 @@
 									</p>
 									<input type="text" id="goto_element" value="1"/>
 									<span class="wpallimport-elements-information">
-										<?php printf(__('of <span class="wpallimport-elements-count-info">%s</span>','wp_all_import_plugin'), PMXI_Plugin::$session->count);?>
+										<?php printf(__('of <span class="wpallimport-elements-count-info">%s</span>','wp-all-import-pro'), PMXI_Plugin::$session->count);?>
 									</span>
 
 								</td>
@@ -102,10 +102,10 @@
 
 								<div class="wpallimport-set-csv-delimiter">
 									<label>
-										<?php _e("Set delimiter for CSV fields:", "pmxi_plugin"); ?>
+										<?php _e("Set delimiter for CSV fields:", 'wp-all-import-pro'); ?>
 									</label>
 									<input type="text" name="delimiter" value="<?php echo $is_csv;?>"/>
-									<input type="button" name="apply_delimiter" class="rad4" value="<?php _e('Apply', 'wp_all_import_plugin'); ?>"/>
+									<input type="button" name="apply_delimiter" class="rad4" value="<?php _e('Apply', 'wp-all-import-pro'); ?>"/>
 								</div>
 
 							<?php else: ?>
@@ -123,16 +123,16 @@
 					<div class="import_information">
 						<?php if (PMXI_Plugin::$session->wizard_type == 'new') :?>
 						<h3>
-							<?php printf(__('Each <span>&lt;<span class="root_element">%s</span>&gt;</span> element will be imported into a <span>New %s</span>'), PMXI_Plugin::$session->source['root_element'], $custom_type->labels->singular_name); ?>
+							<?php printf(__('Each <span>&lt;<span class="root_element">%s</span>&gt;</span> element will be imported into a <span>New %s</span>', 'wp-all-import-pro'), PMXI_Plugin::$session->source['root_element'], $custom_type->labels->singular_name); ?>
 						</h3>
 						<?php else: ?>
 						<h3>
-							<?php printf(__('Data in <span>&lt;<span class="root_element">%s</span>&gt;</span> elements will be imported to <span>%s</span>'), PMXI_Plugin::$session->source['root_element'], $custom_type->labels->name); ?>
+							<?php printf(__('Data in <span>&lt;<span class="root_element">%s</span>&gt;</span> elements will be imported to <span>%s</span>', 'wp-all-import-pro'), PMXI_Plugin::$session->source['root_element'], $custom_type->labels->name); ?>
 						</h3>
 						<?php endif; ?>
 
 						<h3 class="wp_all_import_warning">
-							<?php _e('This doesn\'t look right, try manually selecting a different root element on the left.'); ?>
+							<?php _e('This doesn\'t look right, try manually selecting a different root element on the left.', 'wp-all-import-pro'); ?>
 						</h3>
 
 					</div>
@@ -146,12 +146,12 @@
 	<hr>
 
 	<p class="wpallimport-submit-buttons" style="text-align:center;">
-		<a href="<?php echo esc_url(add_query_arg('action', 'index', $this->baseUrl)); ?>" class="back rad3"><?php _e('Back to Step 1','wp_all_import_plugin');?></a>
+		<a href="<?php echo esc_url(add_query_arg('action', 'index', $this->baseUrl)); ?>" class="back rad3"><?php _e('Back to Data Source','wp-all-import-pro');?></a>
 		&nbsp;
 		<input type="hidden" name="is_submitted" value="1" />
 		<?php wp_nonce_field('choose-elements', '_wpnonce_choose-elements') ?>
-		<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e('Continue to Step 3', 'wp_all_import_plugin'); ?>" />
+		<input type="submit" class="button button-primary button-hero wpallimport-large-button" value="<?php _e('Continue to Setup Import', 'wp-all-import-pro'); ?>" />
 	</p>
-	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp_all_import_plugin'); ?> <span></span></a>
+	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp-all-import-pro'); ?> <span></span></a>
 
 </form>

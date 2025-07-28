@@ -4866,8 +4866,8 @@ define('WPAI_PCLZIP_CB_POST_DELETE', 78008);
 		{
 			$v_result=1;
 
-			// ----- Look if function exists
-			if ((!function_exists("get_magic_quotes_runtime")) || (!function_exists("set_magic_quotes_runtime"))) {
+			// ----- Look if function exists or if functions are deprecated/removed in running PHP version.
+			if (version_compare(PHP_VERSION, '7.4.0', '>=') || (!function_exists("get_magic_quotes_runtime")) || (!function_exists("set_magic_quotes_runtime"))) {
 				return $v_result;
 			}
 

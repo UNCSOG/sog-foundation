@@ -17,4 +17,7 @@ function pmxi_pmxi_before_xml_import( $import_id ) {
             update_option('_wp_all_import_functions_hash_' . $import_id, $functions_hash, false);
         }
     }
+
+	// Attachment special handling.
+	\Wpai\WordPress\AttachmentHandler::before_xml_import($import_id);
 }

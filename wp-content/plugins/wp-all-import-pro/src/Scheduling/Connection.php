@@ -18,7 +18,7 @@ class Connection
            $this->getApiUrl('connection'),
            array(
                'method' => 'GET',
-               'body' => \json_encode(array(get_site_url()))
+               'body' => \json_encode(array(get_site_url('/wp-load.php')))
            )
        );
 

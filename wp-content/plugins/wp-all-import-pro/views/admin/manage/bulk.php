@@ -1,4 +1,4 @@
-<h2><?php _e('Bulk Delete Imports', 'wp_all_import_plugin');?></h2>
+<h2><?php _e('Bulk Delete Imports', 'wp-all-import-pro');?></h2>
 
 <form method="post">
 	<input type="hidden" name="action" value="bulk" />
@@ -7,19 +7,19 @@
 		<input type="hidden" name="items[]" value="<?php echo esc_attr($id) ?>" />
 	<?php endforeach ?>
 	
-	<p><?php printf(__('Are you sure you want to delete <strong>%s</strong> selected %s?', 'wp_all_import_plugin'), $items->count(), _n('import', 'imports', $items->count(), 'wp_all_import_plugin')) ?></p>
+	<p><?php printf(__('Are you sure you want to delete <strong>%s</strong> selected %s?', 'wp-all-import-pro'), $items->count(), _n('import', 'imports', $items->count(), 'wp-all-import-pro')) ?></p>
 	<div class="input">
-		<input type="checkbox" id="is_delete_posts" name="is_delete_posts" class="switcher"/> <label for="is_delete_posts"><?php _e('Delete associated posts as well','wp_all_import_plugin');?> </label>
+		<input type="checkbox" id="is_delete_posts" name="is_delete_posts" class="switcher"/> <label for="is_delete_posts"><?php _e('Delete associated posts as well','wp-all-import-pro');?> </label>
 		<div class="switcher-target-is_delete_posts" style="padding: 5px 17px;">
 			<div class="input">
 				<input type="hidden" name="is_delete_images" value="no"/>
 				<input type="checkbox" id="is_delete_images" name="is_delete_images" value="yes" />
-				<label for="is_delete_images"><?php _e('Delete associated images from media gallery', 'wp_all_import_plugin') ?></label>			
+				<label for="is_delete_images"><?php _e('Delete associated images from media gallery', 'wp-all-import-pro') ?></label>			
 			</div>
 			<div class="input">
 				<input type="hidden" name="is_delete_attachments" value="no"/>
 				<input type="checkbox" id="is_delete_attachments" name="is_delete_attachments" value="yes" />
-				<label for="is_delete_attachments"><?php _e('Delete associated files from media gallery', 'wp_all_import_plugin') ?></label>			
+				<label for="is_delete_attachments"><?php _e('Delete associated files from media gallery', 'wp-all-import-pro') ?></label>			
 			</div>
 		</div>
 		<?php foreach($items->convertRecords() as $item) : ?>

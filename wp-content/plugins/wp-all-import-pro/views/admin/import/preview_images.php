@@ -3,7 +3,7 @@
 	<div class="title">
 		<div class="navigation">			
 			<?php if ($tagno > 1): ?><a href="#prev" class="previous_element">&nbsp;</a><?php else: ?><span class="previous_element">&nbsp;</span><?php endif ?>
-			<?php printf(__('<strong><input type="text" value="%s" name="tagno" class="tagno"/></strong><span class="out_of"> of <strong class="pmxi_count">%s</strong></span>', 'wp_all_import_plugin'), $tagno, PMXI_Plugin::$session->count); ?>
+			<?php printf(__('<strong><input type="text" value="%s" name="tagno" class="tagno"/></strong><span class="out_of"> of <strong class="pmxi_count">%s</strong></span>', 'wp-all-import-pro'), $tagno, PMXI_Plugin::$session->count); ?>
 			<?php if ($tagno < PMXI_Plugin::$session->count): ?><a href="#next" class="next_element">&nbsp;</a><?php else: ?><span class="next_element">&nbsp;</span><?php endif ?>			
 		</div>
 	</div>
@@ -14,16 +14,16 @@
 			<?php $this->error() ?>
 		<?php endif ?>
 
-		<h3><?php _e('Test Images', 'wp_all_import_plugin'); ?></h3>	
+		<h3><?php _e('Test Images', 'wp-all-import-pro'); ?></h3>	
 
 		<?php 
 
 		if ( ! empty($featured_images) ){		
 
 			?>
-			<p><?php _e('Click to test that your images are able to be accessed by WP All Import.', 'wp_all_import_plugin'); ?></p>
+			<p><?php _e('Click to test that your images are able to be accessed by WP All Import.', 'wp-all-import-pro'); ?></p>
 
-			<a class="test_images" href="javascript:void(0);" style="margin-left:0;" rel="<?php echo $post[$get['slug'] . 'download_images']; ?>"><?php _e('Run Test', 'wp_all_import_plugin'); ?></a>
+			<a class="test_images" href="javascript:void(0);" style="margin-left:0;" rel="<?php echo $post[$get['slug'] . 'download_images']; ?>"><?php _e('Run Test', 'wp-all-import-pro'); ?></a>
 					
 			<?php			
 
@@ -57,12 +57,12 @@
 
 					?>
 					<div class="test_progress">
-						<div class="img_preloader"><?php _e('Retrieving images...'); ?></div>
+						<div class="img_preloader"><?php _e('Retrieving images...', 'wp-all-import-pro'); ?></div>
 						<div class="img_success"></div>
 						<div class="img_failed"></div>
 					</div>
-					<h4><?php _e('WP All Import will import images from the following file paths:', 'wp_all_import_plugin'); ?></h4>
-					<p><?php _e('Please ensure the images exists at these file paths', 'wp_all_import_plugin'); ?></p>
+					<h4><?php _e('WP All Import will import images from the following file paths:', 'wp-all-import-pro'); ?></h4>
+					<p><?php _e('Please ensure the images exists at these file paths', 'wp-all-import-pro'); ?></p>
 					<ul class="images_list">
 						<?php foreach ($imgs as $img) :
 							$img = wp_all_import_filter_html_kses($img);
@@ -72,7 +72,7 @@
 						
 						<?php endforeach; ?> 					
 					</ul>
-					<h4><?php _e('Here are the above URLs, in &lt;img&gt; tags. '); ?></h4>
+					<h4><?php _e('Here are the above URLs, in &lt;img&gt; tags. ', 'wp-all-import-pro'); ?></h4>
 					
 					<?php 
 					foreach ($imgs as $img) {
@@ -93,12 +93,12 @@
 
 					?>
 					<div class="test_progress">
-						<div class="img_preloader"><?php _e('Searching images...'); ?></div>
+						<div class="img_preloader"><?php _e('Searching images...', 'wp-all-import-pro'); ?></div>
 						<div class="img_success"></div>
 						<div class="img_failed"></div>
 					</div>
-					<h4><?php _e('WP All Import will import images from the media library', 'wp_all_import_plugin'); ?></h4>
-					<p><?php _e('Please ensure the images exists at media library', 'wp_all_import_plugin'); ?></p>
+					<h4><?php _e('WP All Import will import images from the media library', 'wp-all-import-pro'); ?></h4>
+					<p><?php _e('Please ensure the images exists at media library', 'wp-all-import-pro'); ?></p>
 					<ul class="images_list">
 						<?php foreach ($imgs as $img) : ?>
 
@@ -117,7 +117,7 @@
 						
 						<?php endforeach; ?> 					
 					</ul>
-					<h4><?php _e('Here are the above URLs, in &lt;img&gt; tags. '); ?></h4>
+					<h4><?php _e('Here are the above URLs, in &lt;img&gt; tags. ', 'wp-all-import-pro'); ?></h4>
 					
 					<?php 
 					foreach ($imgs as $img) 
@@ -145,12 +145,12 @@
 					
 					?>
 						<div class="test_progress">
-							<div class="img_preloader"><?php _e('Download in progress...'); ?></div>
+							<div class="img_preloader"><?php _e('Download in progress...', 'wp-all-import-pro'); ?></div>
 							<div class="img_success"></div>
 							<div class="img_failed"></div>
 						</div>
-						<h4><?php _e('WP All Import will attempt to import images from the following URLs:'); ?></h4>
-						<p><?php _e('Please check the URLs to ensure they point to valid images'); ?></p>
+						<h4><?php _e('WP All Import will attempt to import images from the following URLs:', 'wp-all-import-pro'); ?></h4>
+						<p><?php _e('Please check the URLs to ensure they point to valid images', 'wp-all-import-pro'); ?></p>
 						<ul class="images_list">
 							<?php foreach ($imgs as $img):
 								$img = wp_all_import_filter_html_kses($img);
@@ -160,7 +160,7 @@
 							
 							<?php endforeach; ?>					
 						</ul>
-						<h4><?php _e('Here are the above URLs, in &lt;img&gt; tags. '); ?></h4>
+						<h4><?php _e('Here are the above URLs, in &lt;img&gt; tags. ', 'wp-all-import-pro'); ?></h4>
 						<?php foreach ($imgs as $img) :
 					        $img = wp_all_import_filter_html_kses($img);
 
@@ -178,7 +178,7 @@
 		else
 		{
 			?>
-			<p><?php _e('Images not found for current record.', 'wp_all_import_plugin'); ?></p>
+			<p><?php _e('Images not found for current record.', 'wp-all-import-pro'); ?></p>
 			<?php
 		}
 		?>

@@ -2,11 +2,11 @@
 function pmxi_wp_ajax_auto_detect_cf(){
 
     if ( ! check_ajax_referer( 'wp_all_import_secure', 'security', false )){
-        exit( json_encode(array('result' => array(), 'msg' => __('Security check', 'wp_all_import_plugin'))) );
+        exit( json_encode(array('result' => array(), 'msg' => __('Security check', 'wp-all-import-pro'))) );
     }
 
     if ( ! current_user_can( PMXI_Plugin::$capabilities ) ){
-        exit( json_encode(array('result' => array(), 'msg' => __('Security check', 'wp_all_import_plugin'))) );
+        exit( json_encode(array('result' => array(), 'msg' => __('Security check', 'wp-all-import-pro'))) );
     }
 
     $input = new PMXI_Input();
@@ -116,23 +116,23 @@ function pmxi_wp_ajax_auto_detect_cf(){
             case 'taxonomies':
                 $custom_type = new stdClass();
                 $custom_type->labels = new stdClass();
-                $custom_type->labels->singular_name = __('Taxonomy Term', 'wp_all_import_plugin');
+                $custom_type->labels->singular_name = __('Taxonomy Term', 'wp-all-import-pro');
                 break;
             case 'comments':
                 $custom_type = new stdClass();
                 $custom_type->labels = new stdClass();
-                $custom_type->labels->singular_name = __('Comment', 'wp_all_import_plugin');
+                $custom_type->labels->singular_name = __('Comment', 'wp-all-import-pro');
                 break;
             default:
-                $custom_type = get_post_type_object( $post_type );
+                $custom_type = wp_all_import_custom_type( $post_type );
                 break;
         }
-        $msg = sprintf(__('No Custom Fields are present in your database for %s', 'wp_all_import_plugin'), $custom_type->labels->name);
+        $msg = sprintf(__('No Custom Fields are present in your database for %s', 'wp-all-import-pro'), $custom_type->labels->name);
     }
     elseif (count($result) === 1)
-        $msg = sprintf(__('%s field was automatically detected.', 'wp_all_import_plugin'), count($result));
+        $msg = sprintf(__('%s field was automatically detected.', 'wp-all-import-pro'), count($result));
     else{
-        $msg = sprintf(__('%s fields were automatically detected.', 'wp_all_import_plugin'), count($result));
+        $msg = sprintf(__('%s fields were automatically detected.', 'wp-all-import-pro'), count($result));
     }
 
     exit( json_encode(array('result' => $result, 'msg' => $msg)) );

@@ -58,8 +58,8 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 			'base' => add_query_arg('pagenum', '%#%', $this->baseUrl),
 			'add_args' => array('page' => 'pmxi-admin-manage'),
 			'format' => '',
-			'prev_text' => __('&laquo;', 'wp_all_import_plugin'),
-			'next_text' => __('&raquo;', 'wp_all_import_plugin'),
+			'prev_text' => __('&laquo;', 'wp-all-import-pro'),
+			'next_text' => __('&raquo;', 'wp-all-import-pro'),
 			'total' => ceil($list->total() / $perPage),
 			'current' => $pagenum,
 		));
@@ -73,6 +73,10 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 	* delete all posts, media, files, and whatever value was in the 'Unique ID' field
 	*/
 	public function delete_and_edit() {
+		if( ! wp_verify_nonce( ($_REQUEST['_wpnonce_delete-and-edit'] ?? ''), 'delete-and-edit') )
+		{
+			die( __('Security check', 'wp-all-import-pro') );
+		}
 		$get = $this->input->get(array(
 			'id' => '',
 		));
@@ -155,7 +159,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 	public function get_template(){
 		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_template' ) ) {
-		    die( __('Security check', 'wp_all_import_plugin') );
+		    die( __('Security check', 'wp-all-import-pro') );
 		} else {
 
 			$id = $this->input->get('id');
@@ -198,7 +202,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_bundle' ) ) {
-		    die( __('Security check', 'wp_all_import_plugin') );
+		    die( __('Security check', 'wp-all-import-pro') );
 		} else {
 
 			$uploads  = wp_upload_dir();
@@ -277,7 +281,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 			file_put_contents($bundle_dir . $template, json_encode($template_data));
 
-			$readme = __("The other two files in this zip are the export file containing all of your data and the import template for WP All Import. \n\nTo import this data, create a new import with WP All Import and upload this zip file.", "wp_all_export_plugin");
+			$readme = __("The other two files in this zip are the export file containing all of your data and the import template for WP All Import. \n\nTo import this data, create a new import with WP All Import and upload this zip file.", "wp-all-import-pro");
 
 			file_put_contents($bundle_dir . 'readme.txt', $readme);
 
@@ -313,7 +317,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-cancel_import' ) ) {
-		    die( __('Security check', 'wp_all_import_plugin') );
+		    die( __('Security check', 'wp-all-import-pro') );
 		} else {
 
 			$id = $this->input->get('id');
@@ -332,7 +336,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 				'canceled_on' => date('Y-m-d H:i:s')
 			))->update();
 
-			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Import canceled', 'wp_all_import_plugin')), $this->baseUrl))); die();
+			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Import canceled', 'wp-all-import-pro')), $this->baseUrl))); die();
 		}
 	}
 
@@ -473,7 +477,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 						$item->set(array(
 							'registered_on' => date('Y-m-d H:i:s')
 						))->update();
-						$this->errors->add('root-element-validation', __('No matching elements found for Root element and XPath expression specified', 'wp_all_import_plugin'));
+						$this->errors->add('root-element-validation', __('No matching elements found for Root element and XPath expression specified', 'wp-all-import-pro'));
 					}
 				}
 			}
@@ -533,7 +537,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_feed' ) ) {
-		    die( __('Security check', 'wp_all_import_plugin') );
+		    die( __('Security check', 'wp-all-import-pro') );
 		} else {
 
 			$import_id = $this->input->get('id');
@@ -561,7 +565,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 			}
 			else
 			{
-				wp_redirect(esc_url_raw(add_query_arg(array('pmxi_nt' => urlencode(__('File does not exist.', 'wp_all_import_plugin'))), $this->baseUrl))); die();
+				wp_redirect(esc_url_raw(add_query_arg(array('pmxi_nt' => urlencode(__('File does not exist.', 'wp-all-import-pro'))), $this->baseUrl))); die();
 			}
 		}
 	}
@@ -585,7 +589,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 			$is_delete_posts = $this->input->post('is_delete_posts', false);
 
 			if ( ! $is_delete_import and ! $is_delete_posts ){
-				wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Nothing to delete.', 'wp_all_import_plugin')), $this->baseUrl))); die();
+				wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Nothing to delete.', 'wp-all-import-pro')), $this->baseUrl))); die();
 			}
 
 			do_action('pmxi_before_import_delete', $item, $is_delete_posts);
@@ -599,15 +603,15 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 
 			if ( $is_delete_import and ! $is_delete_posts )
 			{
-				$redirect_msg = __('Import deleted', 'wp_all_import_plugin');
+				$redirect_msg = __('Import deleted', 'wp-all-import-pro');
 			}
 			elseif( ! $is_delete_import and $is_delete_posts)
 			{
-				$redirect_msg = __('All associated posts deleted.', 'wp_all_import_plugin');
+				$redirect_msg = __('All associated posts deleted.', 'wp-all-import-pro');
 			}
 			elseif( $is_delete_import and $is_delete_posts)
 			{
-				$redirect_msg = __('Import and all associated posts deleted.', 'wp_all_import_plugin');
+				$redirect_msg = __('Import and all associated posts deleted.', 'wp-all-import-pro');
 			}
 
 			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode($redirect_msg), $this->baseUrl))); die();
@@ -647,7 +651,7 @@ class PMXI_Admin_Manage extends PMXI_Controller_Admin {
 				$scheduling->deleteScheduleIfExists($item->id);
 			}
 
-			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(__('%d %s deleted', 'wp_all_import_plugin'), $items->count(), _n('import', 'imports', $items->count(), 'wp_all_import_plugin'))), $this->baseUrl))); die();
+			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(__('%d %s deleted', 'wp-all-import-pro'), $items->count(), _n('import', 'imports', $items->count(), 'wp-all-import-pro'))), $this->baseUrl))); die();
 		}
 
 		$this->render();

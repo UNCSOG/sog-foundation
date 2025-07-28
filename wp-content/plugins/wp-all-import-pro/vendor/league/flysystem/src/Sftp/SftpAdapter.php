@@ -66,6 +66,18 @@ class SftpAdapter extends AbstractFtpAdapter
      */
     private $passphrase;
 
+	private $stream;
+	private $stream_filename;
+
+	public function __destruct(){
+		if(is_resource($this->stream)){
+			fclose($this->stream);
+		}
+		if(!is_null($this->stream_filename) && file_exists($this->stream_filename) && is_writable($this->stream_filename)){
+			unlink($this->stream_filename);
+		}
+	}
+
     /**
      * Prefix a path.
      *
@@ -383,7 +395,7 @@ class SftpAdapter extends AbstractFtpAdapter
      */
     protected function normalizeListingObject($path, array $object)
     {
-        $permissions = $this->normalizePermissions($object['permissions']);
+        $permissions = isset($object['permissions']) ? $this->normalizePermissions($object['permissions']) : '0777';
         $type = isset($object['type']) && ($object['type'] === 2) ?  'dir' : 'file';
 
         $timestamp = $object['mtime'];
@@ -474,16 +486,25 @@ class SftpAdapter extends AbstractFtpAdapter
      */
     public function readStream($path)
     {
-        $stream = tmpfile();
+		// Ensure wp_tempnam is available before calling it. 
+	    // It's only loaded in wp-admin by default. 
+	    if ( ! function_exists( 'wp_tempnam' ) ) {
+		    require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	    }
+		$this->stream_filename = wp_tempnam();
+        $this->stream = fopen($this->stream_filename, 'w+b');
         $connection = $this->getConnection();
 
-        if ($connection->get($path, $stream) === false) {
-            fclose($stream);
+        if ($connection->get($path, $this->stream) === false) {
+            fclose($this->stream);
+			@unlink($this->stream_filename);
             return false;
         }
 
-        rewind($stream);
-
+        rewind($this->stream);
+		
+		$stream = $this->stream;
+		
         return compact('stream', 'path');
     }
 
@@ -555,7 +576,7 @@ class SftpAdapter extends AbstractFtpAdapter
 
         $result = Util::map($info, $this->statMap);
         $result['type'] = $info['type'] === NET_SFTP_TYPE_DIRECTORY ? 'dir' : 'file';
-        $result['visibility'] = $info['permissions'] & $this->permPublic ? 'public' : 'private';
+        $result['visibility'] = isset($info['permissions']) && $info['permissions'] & $this->permPublic ? 'public' : 'private';
 
         return $result;
     }

@@ -56,30 +56,38 @@ namespace phpseclib\Crypt;
  * @author  Jim Wigginton <terrafrost@php.net>
  * @access  public
  */
-class AES extends Base
+class AES extends Rijndael
 {
     /**
-     * Sets the key length
+     * Dummy function
      *
-     * Valid key lengths are 128, 192, and 256.  If the length is less than 128, it will be rounded up to
-     * 128.  If the length is greater than 128 and invalid, it will be rounded down to the closest valid amount.
+     * Since \phpseclib\Crypt\AES extends \phpseclib\Crypt\Rijndael, this function is, technically, available, but it doesn't do anything.
      *
-     * @see \phpseclib\Crypt\Rijndael:setKeyLength()
+     * @see \phpseclib\Crypt\Rijndael::setBlockLength()
      * @access public
      * @param int $length
      */
-    public function setKeyLength($length)
+    function setBlockLength($length)
+    {
+        return;
+    }
+
+    /**
+     * Turns key lengths, be they valid or invalid, to valid key lengths
+     *
+     * @param int $length
+     * @access private
+     * @return int
+     */
+    protected function calculateNewKeyLength($length)
     {
         switch (true) {
             case $length <= 128:
-                $length = 128;
-                break;
+                return 128;
             case $length <= 192:
-                $length = 192;
-                break;
+                return 192;
             default:
-                $length = 256;
+                return 256;
         }
-        parent::setKeyLength($length);
     }
 }

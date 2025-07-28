@@ -106,7 +106,13 @@ class XmlImportTemplateCodeGenerator
         $import_id = $input->get('import_id');
     }
     if ( ! $filename or ! @is_writable($filename)) {
-      $filename = @tempnam(XmlImportConfig::getInstance()->getCacheDirectory(), 'xim_id_'. $import_id);
+	    // Ensure wp_tempnam is available before calling it.
+	    // It's only loaded in wp-admin by default.
+	    if ( ! function_exists( 'wp_tempnam' ) ) {
+		    require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	    }
+
+		$filename = wp_tempnam('xim_id_'. $import_id);
     }
 	if ( ! $filename or ! @is_writable($filename) ){
       $uploads  = wp_upload_dir();

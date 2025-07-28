@@ -1,8 +1,8 @@
 <h4>
 	<?php if ($import->friendly_name): ?>
-		<em><?php printf(__('%s - ID: %s Import History', 'wp_all_import_plugin'), $import->friendly_name, $import->id); ?></em>
+		<em><?php printf(__('%s - ID: %s Import History', 'wp-all-import-pro'), $import->friendly_name, $import->id); ?></em>
 		<?php else: ?>
-		<em><?php printf(__('%s - ID: %s Import History', 'wp_all_import_plugin'), $import->name, $import->id); ?></em>
+		<em><?php printf(__('%s - ID: %s Import History', 'wp-all-import-pro'), $import->name, $import->id); ?></em>
 	<?php endif ?>	
 </h4>
 
@@ -13,17 +13,17 @@
 <?php
 // define the columns to display, the syntax is 'internal name' => 'display name'
 $columns = array(
-	'id'			=> __('ID', 'wp_all_import_plugin'),
-	'date'			=> __('Date', 'wp_all_import_plugin'),
-	'time_run'		=> __('Run Time', 'wp_all_import_plugin'),	
-	'type'			=> __('Type', 'wp_all_import_plugin'),
-	'summary'		=> __('Summary', 'wp_all_import_plugin'),	
+	'id'			=> __('ID', 'wp-all-import-pro'),
+	'date'			=> __('Date', 'wp-all-import-pro'),
+	'time_run'		=> __('Run Time', 'wp-all-import-pro'),	
+	'type'			=> __('Type', 'wp-all-import-pro'),
+	'summary'		=> __('Summary', 'wp-all-import-pro'),	
 	'download'		=> '',
 );
 ?>
 
 <?php if ( $import->triggered ): ?>
-	<p> <strong><?php _e('Scheduling Status', 'wp_all_import_plugin'); ?>:</strong> <?php _e('triggered'); ?> <?php if ($import->processing) _e('and processing', 'wp_all_import_plugin'); ?>...</p>
+	<p> <strong><?php _e('Scheduling Status', 'wp-all-import-pro'); ?>:</strong> <?php _e('triggered', 'wp-all-import-pro'); ?> <?php if ($import->processing) _e('and processing', 'wp-all-import-pro'); ?>...</p>
 <?php endif; ?>
 
 <form method="post" id="import-list" action="<?php echo esc_url(remove_query_arg('pmxi_nt')) ?>">
@@ -33,16 +33,16 @@ $columns = array(
 	<div class="tablenav">
 		<div class="alignleft actions">
 			<select name="bulk-action">
-				<option value="" selected="selected"><?php _e('Bulk Actions', 'wp_all_import_plugin') ?></option>
-				<option value="delete"><?php _e('Delete', 'wp_all_import_plugin') ?></option>
+				<option value="" selected="selected"><?php _e('Bulk Actions', 'wp-all-import-pro') ?></option>
+				<option value="delete"><?php _e('Delete', 'wp-all-import-pro') ?></option>
 			</select>
-			<input type="submit" value="<?php esc_attr_e('Apply', 'wp_all_import_plugin') ?>" name="doaction" id="doaction" class="button-secondary action" />
+			<input type="submit" value="<?php esc_attr_e('Apply', 'wp-all-import-pro') ?>" name="doaction" id="doaction" class="button-secondary action" />
 		</div>
 
 		<?php if ($page_links): ?>
 			<div class="tablenav-pages">
 				<?php echo $page_links_html = sprintf(
-					'<span class="displaying-num">' . __('Displaying %s&#8211;%s of %s', 'wp_all_import_plugin') . '</span>%s',
+					'<span class="displaying-num">' . __('Displaying %s&#8211;%s of %s', 'wp-all-import-pro') . '</span>%s',
 					number_format_i18n(($pagenum - 1) * $perPage + 1),
 					number_format_i18n(min($pagenum * $perPage, $list->total())),
 					number_format_i18n($list->total()),
@@ -89,7 +89,7 @@ $columns = array(
 		<tbody id="the-pmxi-admin-import-list" class="list:pmxi-admin-imports">
 		<?php if ($list->isEmpty()): ?>
 			<tr>
-				<td colspan="<?php echo count($columns) + 1 ?>"><?php _e('No previous history found.', 'wp_all_import_plugin') ?></td>
+				<td colspan="<?php echo count($columns) + 1 ?>"><?php _e('No previous history found.', 'wp-all-import-pro') ?></td>
 			</tr>
 		<?php else: ?>
 			<?php
@@ -142,19 +142,19 @@ $columns = array(
 									<?php
 									switch ($item['type']) {
 										case 'manual':
-											_e('manual run', 'wp_all_import_plugin');
+											_e('manual run', 'wp-all-import-pro');
 											break;
 										case 'continue':
-											_e('continue run', 'wp_all_import_plugin');
+											_e('continue run', 'wp-all-import-pro');
 											break;
 										case 'processing':
-											_e('cron processing', 'wp_all_import_plugin');
+											_e('cron processing', 'wp-all-import-pro');
 											break;
 										case 'trigger':
-											_e('triggered by cron', 'wp_all_import_plugin');
+											_e('triggered by cron', 'wp-all-import-pro');
 											break;
 										case 'cli':
-											_e('cli', 'wp_all_import_plugin');
+											_e('cli', 'wp-all-import-pro');
 											break;
 										default:
 											# code...
@@ -173,11 +173,11 @@ $columns = array(
 										$log_file = wp_all_import_secure_file( $wp_uploads['basedir'] . DIRECTORY_SEPARATOR . PMXI_Plugin::LOGS_DIRECTORY, $item['id'], false, false ) . DIRECTORY_SEPARATOR . $item['id'] . '.html';
 										if (file_exists($log_file)){
 											?>											
-											<a href="<?php echo esc_url(add_query_arg(array('id' => $import->id, 'action' => 'log', 'history_id' => $item['id'], '_wpnonce' => wp_create_nonce( '_wpnonce-download_log' )), $this->baseUrl)); ?>"><?php _e('Download Log', 'wp_all_import_plugin'); ?></a>
+											<a href="<?php echo esc_url(add_query_arg(array('id' => $import->id, 'action' => 'log', 'history_id' => $item['id'], '_wpnonce' => wp_create_nonce( '_wpnonce-download_log' )), $this->baseUrl)); ?>"><?php _e('Download Log', 'wp-all-import-pro'); ?></a>
 											<?php
 										} 
 										else { 
-											_e('Log Unavailable', 'wp_all_import_plugin'); 
+											_e('Log Unavailable', 'wp-all-import-pro'); 
 										}										
 									} 
 									else { 
@@ -210,17 +210,17 @@ $columns = array(
 
 		<div class="alignleft actions">
 			<select name="bulk-action2">
-				<option value="" selected="selected"><?php _e('Bulk Actions', 'wp_all_import_plugin') ?></option>
+				<option value="" selected="selected"><?php _e('Bulk Actions', 'wp-all-import-pro') ?></option>
 				<?php if ( empty($type) or 'trash' != $type): ?>
-					<option value="delete"><?php _e('Delete', 'wp_all_import_plugin') ?></option>
+					<option value="delete"><?php _e('Delete', 'wp-all-import-pro') ?></option>
 				<?php else: ?>
-					<option value="restore"><?php _e('Restore', 'wp_all_import_plugin')?></option>
-					<option value="delete"><?php _e('Delete Permanently', 'wp_all_import_plugin')?></option>
+					<option value="restore"><?php _e('Restore', 'wp-all-import-pro')?></option>
+					<option value="delete"><?php _e('Delete Permanently', 'wp-all-import-pro')?></option>
 				<?php endif ?>
 			</select>
-			<input type="submit" value="<?php esc_attr_e('Apply', 'wp_all_import_plugin') ?>" name="doaction2" id="doaction2" class="button-secondary action" />
+			<input type="submit" value="<?php esc_attr_e('Apply', 'wp-all-import-pro') ?>" name="doaction2" id="doaction2" class="button-secondary action" />
 		</div>
 	</div>
 	<div class="clear"></div>
-	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp_all_import_plugin'); ?> <span></span></a>
+	<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp-all-import-pro'); ?> <span></span></a>
 </form>

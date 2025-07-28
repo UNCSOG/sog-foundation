@@ -94,8 +94,8 @@ CREATE TABLE {$table_prefix}files (
 CREATE TABLE {$table_prefix}images (
 	id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,	
 	attachment_id BIGINT(20) UNSIGNED NOT NULL,
-	image_url TEXT NOT NULL DEFAULT '',
-	image_filename TEXT NOT NULL DEFAULT '',	
+	image_url TEXT,
+	image_filename TEXT,	
 	PRIMARY KEY  (id)
 ) $charset_collate;
 CREATE TABLE {$table_prefix}history (
@@ -113,5 +113,17 @@ CREATE TABLE {$table_prefix}hash (
 	import_id SMALLINT(5) UNSIGNED NOT NULL,
 	post_type VARCHAR(32) NOT NULL DEFAULT '',
 	PRIMARY KEY  (hash)
+) $charset_collate;
+CREATE TABLE {$table_prefix}geocoding (
+    id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+    address TEXT NULL,
+    latitude DECIMAL(18, 15) NULL,
+    longitude DECIMAL(18, 15) NULL,
+    raw_data TEXT,
+    provider VARCHAR(50) NOT NULL DEFAULT 'google_maps',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_address (address(255)),
+    INDEX idx_coordinates (latitude, longitude),
+    PRIMARY KEY (id)
 ) $charset_collate;
 SCHEMA;

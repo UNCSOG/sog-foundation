@@ -16,6 +16,7 @@ use Prewk\XmlStringStreamer\StreamInterface;
 /**
  * The unique node parser starts at a given element name and flushes when its corresponding closing tag is found
  */
+#[\AllowDynamicProperties]
 class UniqueNode implements ParserInterface
 {
     /**

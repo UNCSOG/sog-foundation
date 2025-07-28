@@ -16,17 +16,21 @@ class LicensingManager
     /**
      * @param $licenseKey
      * @param $productName
-     * @return bool
+     * @return array
      */
     public function checkLicense($licenseKey, $productName)
     {
-
+		// Short-circuit check if recently validated.
+		if ( get_transient( 'wpai_wpae_scheduling_license_verified' ) ) {
+			return ['success' => true];
+		}
         if ($productName !== false) {
             // data to send in our API request
             $api_params = array(
                 'edd_action' => 'activate_license',
                 'license' => \PMXI_Plugin::decode($licenseKey),
-                'item_name' => urlencode($productName) // the name of our product in EDD
+                'item_name' => urlencode($productName),
+                'url' => home_url()
             );
 
             // Call the custom API.
@@ -43,18 +47,20 @@ class LicensingManager
 
             // make sure the response came back okay
             if (is_wp_error($response)){
-                return false;
+                return ['success' => false];
             }
 
             $responseData = \json_decode($response['body'], true);
 
-            if(is_null($responseData)) {
-                return false;
+            if(is_null($responseData) || empty($responseData['success'])) {
+                return $responseData ?? ['success' => false];
             } else {
-                return $responseData['success'];
+				// Set transient so we only recheck successful licenses once every ten minutes.
+	            set_transient('wpai_wpae_scheduling_license_verified', true, 600);
+                return $responseData;
             }
         } else {
-            return false;
+            return ['success' => false];
         }
     }
 
@@ -73,7 +79,7 @@ class LicensingManager
     public function getInfoApiUrl()
     {
         $options = $this->getOptions();
-        return $options['info_api_url'];
+        return $options['info_api_url_new'].'/check_license';
     }
 
     /**

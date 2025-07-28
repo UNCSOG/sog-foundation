@@ -101,12 +101,11 @@ function wpai_wp_enqueue_code_editor( $args ) {
 			$headers = wp_remote_retrieve_headers( $response );
 			$content_type = (!empty($headers['content-type'])) ? explode('/', $headers['content-type']) : false;
 			if (!empty($content_type[1])){
-				if (preg_match('%jpeg%i', $content_type[1])) return 'jpeg';
-				if (preg_match('%jpg%i', $content_type[1])) return 'jpg';
-				if (preg_match('%png%i', $content_type[1])) return 'png';
-				if (preg_match('%gif%i', $content_type[1])) return 'gif';
-				if (preg_match('%svg%i', $content_type[1])) return 'svg';
-				if (preg_match('%webp%i', $content_type[1])) return 'webp';
+                $extensions = wp_all_import_supported_image_extensions();
+                $extensions = explode("|", $extensions);
+                foreach ($extensions as $extension) {
+                    if (preg_match('%' . $extension . '%i', $content_type[1])) return $extension;
+                }
                 if (preg_match('%pdf%i', $content_type[1])) return 'pdf';
 				return ($content_type[1] == "unknown") ? "" : $content_type[1];
 			}
@@ -283,6 +282,9 @@ function wpai_wp_enqueue_code_editor( $args ) {
             if (defined('IMAGETYPE_WEBP')) {
                 $supported_image_types[] = IMAGETYPE_WEBP;
             }
+			if(defined('IMAGETYPE_AVIF')) {
+				$supported_image_types[] = IMAGETYPE_AVIF;
+			}
             return $supported_image_types;
         }
     }
@@ -345,52 +347,52 @@ function wpai_wp_enqueue_code_editor( $args ) {
 						if (empty($custom_type)){
 							$custom_type = new stdClass();
 							$custom_type->labels = new stdClass();
-							$custom_type->labels->name = __('Taxonomy Terms', 'wp_all_import_plugin');
-							$custom_type->labels->singular_name = __('Taxonomy Term', 'wp_all_import_plugin');
+							$custom_type->labels->name = __('Taxonomy Terms', 'wp-all-import-pro');
+							$custom_type->labels->singular_name = __('Taxonomy Term', 'wp-all-import-pro');
 						}
 						break;
 					case 'comments':
 						$custom_type = new stdClass();
 						$custom_type->labels = new stdClass();
-						$custom_type->labels->name = __('Comments', 'wp_all_import_plugin');
-						$custom_type->labels->singular_name = __('Comment', 'wp_all_import_plugin');
+						$custom_type->labels->name = __('Comments', 'wp-all-import-pro');
+						$custom_type->labels->singular_name = __('Comment', 'wp-all-import-pro');
 						break;
 					case 'woo_reviews':
 						$custom_type = new stdClass();
 						$custom_type->labels = new stdClass();
-						$custom_type->labels->name = __('Reviews', 'wp_all_import_plugin');
-						$custom_type->labels->singular_name = __('Review', 'wp_all_import_plugin');
+						$custom_type->labels->name = __('Reviews', 'wp-all-import-pro');
+						$custom_type->labels->singular_name = __('Review', 'wp-all-import-pro');
 						break;
 					default:
-						$custom_type = get_post_type_object( $options['custom_type'] );
+						$custom_type = wp_all_import_custom_type( $options['custom_type'] );
 						break;
 				}
 
 	            if ($options['delete_missing_logic'] == 'all' && $options['delete_missing_action'] == 'keep' && !empty($options['is_change_post_status_of_removed'])) {
 		            if( !empty($options['is_send_removed_to_trash']) ) {
-			            $notice = sprintf( __( '<span class="important-warning">Warning</span>: Any %s not in your import file will be sent to the trash, even those not created by this import.' ), $custom_type->labels->name);
+			            $notice = sprintf( __( '<span class="important-warning">Warning</span>: Any %s not in your import file will be sent to the trash, even those not created by this import.', 'wp-all-import-pro'), $custom_type->labels->name);
 		            }else{
-			            $notice = sprintf( __( '<span class="important-warning">Warning</span>: Any %s not in your import file will be marked as %s, even those not created by this import.' ), $custom_type->labels->name, $options['status_of_removed'] );
+			            $notice = sprintf( __( '<span class="important-warning">Warning</span>: Any %s not in your import file will be marked as %s, even those not created by this import.', 'wp-all-import-pro'), $custom_type->labels->name, $options['status_of_removed'] );
 		            }
 	            }
                 if ($options['delete_missing_logic'] == 'import' && $options['delete_missing_action'] == 'keep' && !empty($options['is_send_removed_to_trash'])) {
-                    $notice = sprintf(__('<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be sent to the trash.'), $custom_type->labels->name);
+                    $notice = sprintf(__('<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be sent to the trash.', 'wp-all-import-pro'), $custom_type->labels->name);
                 }
                 if ($options['delete_missing_logic'] == 'import' && $options['delete_missing_action'] == 'keep' && !empty($options['is_change_post_status_of_removed'])) {
                 	if( !empty($options['is_send_removed_to_trash']) ) {
-		                $notice = sprintf( __( '<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be sent to the trash.' ), $custom_type->labels->name);
+		                $notice = sprintf( __( '<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be sent to the trash.', 'wp-all-import-pro'), $custom_type->labels->name);
 	                }else{
-		                $notice = sprintf( __( '<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be marked as %s.' ), $custom_type->labels->name, $options['status_of_removed'] );
+		                $notice = sprintf( __( '<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be marked as %s.', 'wp-all-import-pro'), $custom_type->labels->name, $options['status_of_removed'] );
 	                }
                 }
                 if ($options['delete_missing_logic'] == 'import' && $options['delete_missing_action'] == 'remove') {
-                    $notice = sprintf(__('<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be <b>permanently deleted</b>.'), $custom_type->labels->name);
+                    $notice = sprintf(__('<span class="important-warning">Warning</span>: %s created by this import and no longer present in the import file will be <b>permanently deleted</b>.', 'wp-all-import-pro'), $custom_type->labels->name);
                 }
                 if ($options['delete_missing_logic'] == 'all' && $options['delete_missing_action'] == 'keep' && !empty($options['is_send_removed_to_trash'])) {
-                    $notice = sprintf(__('<span class="important-warning">Warning</span>: Any %s not in your import file will be sent to the trash when this import runs. This includes %s that weren\'t created by this import.'), $custom_type->labels->name, $custom_type->labels->name);
+                    $notice = sprintf(__('<span class="important-warning">Warning</span>: Any %s not in your import file will be sent to the trash when this import runs. This includes %s that weren\'t created by this import.', 'wp-all-import-pro'), $custom_type->labels->name, $custom_type->labels->name);
                 }
                 if ($options['delete_missing_logic'] == 'all' && $options['delete_missing_action'] == 'remove') {
-                    $notice = sprintf(__('<span class="important-warning">Warning</span>: Any %s not in your import file will be <b>permanently deleted</b>, even those not created by this import.'), $custom_type->labels->name);
+                    $notice = sprintf(__('<span class="important-warning">Warning</span>: Any %s not in your import file will be <b>permanently deleted</b>, even those not created by this import.', 'wp-all-import-pro'), $custom_type->labels->name);
                 }
             }
             return $notice;
@@ -406,53 +408,53 @@ function wpai_wp_enqueue_code_editor( $args ) {
                     }
                     $custom_type = new stdClass();
                     $custom_type->name = $post_type;
-                    $custom_type->label = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp_all_import_plugin') : $tx->labels->name;
+                    $custom_type->label = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp-all-import-pro') : $tx->labels->name;
                     $custom_type->labels = new stdClass();
-                    $custom_type->labels->name = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp_all_import_plugin') : $tx->labels->name;
-                    $custom_type->labels->singular_name = empty($tx->labels->singular_name) ? __('Taxonomy Term', 'wp_all_import_plugin') : $tx->labels->singular_name;
+                    $custom_type->labels->name = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp-all-import-pro') : $tx->labels->name;
+                    $custom_type->labels->singular_name = empty($tx->labels->singular_name) ? __('Taxonomy Term', 'wp-all-import-pro') : $tx->labels->singular_name;
                     break;
                 case 'comments':
                     $custom_type = new stdClass();
                     $custom_type->name = $post_type;
-                    $custom_type->label = __('Comments', 'wp_all_import_plugin');
+                    $custom_type->label = __('Comments', 'wp-all-import-pro');
                     $custom_type->labels = new stdClass();
-                    $custom_type->labels->name = __('Comments', 'wp_all_import_plugin');
-                    $custom_type->labels->singular_name = __('Comment', 'wp_all_import_plugin');
+                    $custom_type->labels->name = __('Comments', 'wp-all-import-pro');
+                    $custom_type->labels->singular_name = __('Comment', 'wp-all-import-pro');
                     break;
                 case 'woo_reviews':
                     $custom_type = new stdClass();
                     $custom_type->name = $post_type;
-                    $custom_type->label = __('WooCommerce Reviews', 'wp_all_import_plugin');
+                    $custom_type->label = __('WooCommerce Reviews', 'wp-all-import-pro');
                     $custom_type->labels = new stdClass();
-                    $custom_type->labels->name = __('WooCommerce Reviews', 'wp_all_import_plugin');
-                    $custom_type->labels->singular_name = __('Review', 'wp_all_import_plugin');
+                    $custom_type->labels->name = __('WooCommerce Reviews', 'wp-all-import-pro');
+                    $custom_type->labels->singular_name = __('Review', 'wp-all-import-pro');
                     break;
                 case 'import_users':
                     $custom_type = new stdClass();
                     $custom_type->name = $post_type;
-                    $custom_type->label = __('Users', 'wp_all_import_plugin');
+                    $custom_type->label = __('Users', 'wp-all-import-pro');
                     $custom_type->labels = new stdClass();
-                    $custom_type->labels->name = __('Users', 'wp_all_import_plugin');
-                    $custom_type->labels->singular_name = __('User', 'wp_all_import_plugin');
+                    $custom_type->labels->name = __('Users', 'wp-all-import-pro');
+                    $custom_type->labels->singular_name = __('User', 'wp-all-import-pro');
                     break;
                 case 'gf_entries':
                     $custom_type = new stdClass();
                     $custom_type->name = $post_type;
-                    $custom_type->label = __('Gravity Forms Entry', 'wp_all_import_plugin');
+                    $custom_type->label = __('Gravity Forms Entry', 'wp-all-import-pro');
                     $custom_type->labels = new stdClass();
-                    $custom_type->labels->name = __('Gravity Forms Entry', 'wp_all_import_plugin');
-                    $custom_type->labels->singular_name = __('Gravity Forms Entry', 'wp_all_import_plugin');
+                    $custom_type->labels->name = __('Gravity Forms Entry', 'wp-all-import-pro');
+                    $custom_type->labels->singular_name = __('Gravity Forms Entry', 'wp-all-import-pro');
                     break;
                 case 'shop_customer':
                     $custom_type = new stdClass();
                     $custom_type->name = $post_type;
-                    $custom_type->label = __('WooCommerce Customers', 'wp_all_import_plugin');
+                    $custom_type->label = __('WooCommerce Customers', 'wp-all-import-pro');
                     $custom_type->labels = new stdClass();
-                    $custom_type->labels->name = __('WooCommerce Customers', 'wp_all_import_plugin');
-                    $custom_type->labels->singular_name = __('WooCommerce Customer', 'wp_all_import_plugin');
+                    $custom_type->labels->name = __('WooCommerce Customers', 'wp-all-import-pro');
+                    $custom_type->labels->singular_name = __('WooCommerce Customer', 'wp-all-import-pro');
                     break;
                 default:
-                    $custom_type = get_post_type_object( $post_type );
+                    $custom_type = wp_all_import_custom_type( $post_type );
                     break;
             }
             return $custom_type;
@@ -482,3 +484,115 @@ function wpai_wp_enqueue_code_editor( $args ) {
             return (int) apply_filters( 'wp_all_import_get_product_id_by_sku', $id, $sku );
         }
     }
+
+    if (!function_exists('wp_all_import_supported_image_extensions')) {
+        function wp_all_import_supported_image_extensions() {
+            $types = ['svg']; //
+            $mime_types = get_allowed_mime_types();
+            if ( ! empty($mime_types) ) {
+                foreach ($mime_types as $ext => $mime_type) {
+                    if (strpos($mime_type, 'image/') !== FALSE) {
+                        $types[] = $ext;
+                    }
+                }
+            }
+            return implode("|", apply_filters('pmxi_supported_image_extensions', $types));
+        }
+    }
+
+if (!function_exists('pmxi_encode_parenthesis')) {
+	function pmxi_encode_parenthesis($input) {
+		return strtr($input, [
+			'(' => '&lpar;',
+			')' => '&rpar;',
+			'[' => '&lsqb;',
+			']' => '&rsqb;'
+		]);
+	}
+}
+
+if (!function_exists('pmxi_decode_parenthesis')) {
+	function pmxi_decode_parenthesis($input) {
+		return strtr($input, [
+			'&lpar;' => '(',
+			'&rpar;' => ')',
+			'&lsqb;' => '[',
+			'&rsqb;' => ']'
+		]);
+	}
+}
+
+if (!function_exists('pmxi_encode_parenthesis_within_strings')) {
+	function pmxi_encode_parenthesis_within_strings(string $code): string {
+		$tokens = token_get_all($code);
+		$result = '';
+
+		foreach ($tokens as $token) {
+			if (is_array($token) && $token[0] === T_CONSTANT_ENCAPSED_STRING) {
+				$token[1] = pmxi_encode_parenthesis($token[1]);
+			}
+			$result .= is_array($token) ? $token[1] : $token;
+		}
+
+		return $result;
+	}
+}
+
+if (!function_exists('pmxi_decode_parenthesis_within_strings')) {
+	function pmxi_decode_parenthesis_within_strings(string $code): string {
+		$tokens = token_get_all($code);
+		$result = '';
+
+		foreach ($tokens as $token) {
+			if (is_array($token) && $token[0] === T_CONSTANT_ENCAPSED_STRING) {
+				$token[1] = pmxi_decode_parenthesis($token[1]);
+			}
+			$result .= is_array($token) ? $token[1] : $token;
+		}
+
+		return $result;
+	}
+}
+
+if(!function_exists('pmxi_truncate_term_slug')){
+	function pmxi_truncate_term_slug($string, $limit = 200) {
+		// Function to check if the string is URL-encoded.
+		$is_url_encoded = (urldecode($string) !== $string);
+
+		// Function to truncate URL-encoded strings.
+		if ($is_url_encoded) {
+			$decoded = rawurldecode($string);
+			$encoded_string = '';
+			$encoded_length = 0;
+
+			for ($i = 0; $i < mb_strlen($decoded); $i++) {
+				$char = mb_substr($decoded, $i, 1);
+				$encoded_char = rawurlencode($char);
+
+				if (($encoded_length + strlen($encoded_char)) > $limit) {
+					break;
+				}
+
+				$encoded_string .= $encoded_char;
+				$encoded_length += strlen($encoded_char);
+			}
+
+			return $encoded_string;
+		} else {
+			// If not URL-encoded, simply truncate the string.
+			return mb_substr($string, 0, $limit);
+		}
+	}
+}
+
+if(!function_exists('pmxi_maybe_unserialize'))
+{
+	function pmxi_maybe_unserialize($value)
+	{
+		if(is_serialized($value)){
+			$value = @unserialize(trim($value), ['allowed_classes' => false]);
+		}
+
+		return $value;
+	}
+}

@@ -3,11 +3,11 @@
 function pmxi_wp_ajax_wp_all_import_api(){
 
     if ( ! check_ajax_referer( 'wp_all_import_secure', 'security', false )){
-        exit( json_encode(array('html' => __('Security check', 'wp_all_import_plugin'))) );
+        exit( json_encode(array('html' => __('Security check', 'wp-all-import-pro'))) );
     }
 
     if ( ! current_user_can( PMXI_Plugin::$capabilities ) ){
-        exit( json_encode(array('html' => __('Security check', 'wp_all_import_plugin'))) );
+        exit( json_encode(array('html' => __('Security check', 'wp-all-import-pro'))) );
     }
 
     $container = new \Wpai\Di\WpaiDi(array());

@@ -31,7 +31,7 @@ function pmxi_pmxi_after_xml_import( $import_id, $import )
         delete_option('wp_all_import_taxonomies_hierarchy_' . $import_id);
     }
     if ( ! in_array($import->options['custom_type'], array('taxonomies', 'import_users', 'shop_customer', 'comments', 'woo_reviews')) ) {
-        $custom_type = get_post_type_object( $import->options['custom_type'] );
+        $custom_type = wp_all_import_custom_type( $import->options['custom_type'] );
         if ( ! empty($custom_type) && $custom_type->hierarchical ){
             $parent_posts = get_option('wp_all_import_posts_hierarchy_' . $import_id);
             if (!empty($parent_posts)){
@@ -88,7 +88,11 @@ function pmxi_pmxi_after_xml_import( $import_id, $import )
     }
 
     // Add removed action during import.
+	// This entire section is most likely unnecessary, but it will require a bit of testing to be certain we don't break something.
     add_action( 'transition_post_status', '_update_term_count_on_transition_post_status', 10, 3 );
-    add_action( 'transition_post_status', '_update_posts_count_on_transition_post_status', 10, 3 );
+	// This action's function is only available on multisite and throws an error in PHP8.2+
+	if ( is_multisite() ) {
+        add_action( 'transition_post_status', '_update_posts_count_on_transition_post_status', 10, 3 );
+	}
     add_action( 'post_updated', 'wp_save_post_revision', 10, 1 );
 }

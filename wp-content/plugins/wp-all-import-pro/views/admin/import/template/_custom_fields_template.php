@@ -4,7 +4,7 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 <div class="wpallimport-collapsed closed wpallimport-section wpallimport-custom-fields">
 	<div class="wpallimport-content-section">
 		<div class="wpallimport-collapsed-header">
-			<h3><?php _e('Custom Fields','wp_all_import_plugin');?></h3>
+			<h3><?php _e('Custom Fields','wp-all-import-pro');?></h3>
 		</div>
 		<div class="wpallimport-collapsed-content" style="padding: 0;">
 			<div class="wpallimport-collapsed-content-inner">
@@ -14,21 +14,21 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 				<?php if (empty($post['custom_name'])): ?>
 				<div class="input cf_welcome">
 					<?php if ( ! empty($meta_keys) ):?>
-						<h1 style="font-size:23px; color:#40acad;"><?php printf(__('Your website is using Custom Fields to store data for %s.', 'wp_all_import_plugin'), $custom_type->labels->name); ?></h1>
-						<a class="autodetect_cf auto_detect_cf" href="javascript:void(0);" rel="auto_detect_cf"><?php _e('See Detected Fields', 'wp_all_import_plugin'); ?></a>
+						<h1 style="font-size:23px; color:#40acad;"><?php printf(__('Your website is using Custom Fields to store data for %s.', 'wp-all-import-pro'), $custom_type->labels->name); ?></h1>
+						<a class="autodetect_cf auto_detect_cf" href="javascript:void(0);" rel="auto_detect_cf"><?php _e('See Detected Fields', 'wp-all-import-pro'); ?></a>
 					<?php else: ?>
-						<h1 style="font-size:23px; color:#40acad;"><?php printf(__('No Custom Fields are present in your database for %s.', 'wp_all_import_plugin'), $custom_type->labels->name); ?></h1>
-						<p class="wpallimport-note"><?php printf(__('Manually create a %s, and fill out each field you want to import data to. WP All Import will then display these fields as available for import below.', 'wp_all_import_plugin'), $custom_type->labels->singular_name); ?></p>
+						<h1 style="font-size:23px; color:#40acad;"><?php printf(__('No Custom Fields are present in your database for %s.', 'wp-all-import-pro'), $custom_type->labels->name); ?></h1>
+						<p class="wpallimport-note"><?php printf(__('Manually create a %s, and fill out each field you want to import data to. WP All Import will then display these fields as available for import below.', 'wp-all-import-pro'), $custom_type->labels->singular_name); ?></p>
 					<?php endif;?>
-					<a href="javascript:void(0);" class="wpallimport-dismiss-cf-welcome"><?php _e('Hide Notice', 'wp_all_import_plugin'); ?></a>
+					<a href="javascript:void(0);" class="wpallimport-dismiss-cf-welcome"><?php _e('Hide Notice', 'wp-all-import-pro'); ?></a>
 				</div>
 				<div class="input cf_detect_result" style="display:none;">
 					<h1 style="font-size:23px; color:#40acad;">
 						<span class="cf_detected"></span>
-						<a class="autodetect_cf clear_detected_cf" href="javascript:void(0);" rel="clear_detected_cf"><?php _e('Clear All Fields', 'wp_all_import_plugin'); ?></a>
+						<a class="autodetect_cf clear_detected_cf" href="javascript:void(0);" rel="clear_detected_cf"><?php _e('Clear All Fields', 'wp-all-import-pro'); ?></a>
 					</h1>
-					<p class="wpallimport-note"><?php printf(__('If not all fields were detected, manually create a %s, and fill out each field you want to import data to. Then create a new import, and WP All Import will display these fields as available for import below.', 'wp_all_import_plugin'), $custom_type->labels->singular_name); ?></p>
-					<a href="javascript:void(0);" class="wpallimport-dismiss-cf-welcome"><?php _e('Hide Notice', 'wp_all_import_plugin'); ?></a>
+					<p class="wpallimport-note"><?php printf(__('If not all fields were detected, manually create a %s, and fill out each field you want to import data to. Then create a new import, and WP All Import will display these fields as available for import below.', 'wp-all-import-pro'), $custom_type->labels->singular_name); ?></p>
+					<a href="javascript:void(0);" class="wpallimport-dismiss-cf-welcome"><?php _e('Hide Notice', 'wp-all-import-pro'); ?></a>
 				</div>
 				<?php endif; ?>
 				<table class="form-table wpallimport-custom-fields-list" style="max-width:none;">
@@ -38,8 +38,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 							<table class="form-table custom-params" style="max-width:none; border:none;">
 								<thead>
 									<tr>
-										<td style="padding-bottom:10px;"><?php _e('Name', 'wp_all_import_plugin') ?></td>
-										<td style="padding-bottom:10px;"><?php _e('Value', 'wp_all_import_plugin') ?></td>
+										<td style="padding-bottom:10px;"><?php _e('Name', 'wp-all-import-pro') ?></td>
+										<td style="padding-bottom:10px;"><?php _e('Value', 'wp-all-import-pro') ?></td>
 									</tr>
 								</thead>
 								<tbody>
@@ -54,15 +54,15 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 												<td class="action">
 													<div class="custom_type" rel="default">
 														<textarea name="custom_value[]" class="widefat" <?php echo ( ! empty($post['custom_format'][$i]) ) ? 'style="display:none;"' : ''; ?>><?php echo esc_html($post['custom_value'][$i]) ?></textarea>
-														<a class="specify_cf pmxi_cf_pointer" rel="serialized_<?php echo $i; ?>" href="javascript:void(0);" <?php echo ( empty($post['custom_format'][$i]) ) ? 'style="display:none;"' : ''; ?>><?php _e('Click to specify', 'wp_all_import_plugin'); ?></a>
+														<a class="specify_cf pmxi_cf_pointer" rel="serialized_<?php echo $i; ?>" href="javascript:void(0);" <?php echo ( empty($post['custom_format'][$i]) ) ? 'style="display:none;"' : ''; ?>><?php _e('Click to specify', 'wp-all-import-pro'); ?></a>
 														<div class="input wpallimport-custom-fields-actions">
-															<a href="javascript:void(0);" class="wpallimport-cf-options"><?php _e('Field Options...', 'wp_all_import_plugin'); ?></a>
+															<a href="javascript:void(0);" class="wpallimport-cf-options"><?php _e('Field Options...', 'wp-all-import-pro'); ?></a>
 															<ul id="wpallimport-cf-menu-<?php echo $i;?>" class="wpallimport-cf-menu">
 																<li class="<?php echo ( ! empty($post['custom_format'][$i]) ) ? 'active' : ''; ?>">
-																	<a href="javascript:void(0);" class="set_serialize"><?php _e('Serialized', 'wp_all_import_plugin'); ?></a>
+																	<a href="javascript:void(0);" class="set_serialize"><?php _e('Serialized', 'wp-all-import-pro'); ?></a>
 																</li>
 																<li class="<?php echo ( ! empty($custom_mapping_rules) ) ? 'active' : ''; ?>">
-																	<a href="javascript:void(0);" class="set_mapping pmxi_cf_mapping" rel="cf_mapping_<?php echo $i; ?>"><?php _e('Mapping', 'wp_all_import_plugin'); ?></a>
+																	<a href="javascript:void(0);" class="set_mapping pmxi_cf_mapping" rel="cf_mapping_<?php echo $i; ?>"><?php _e('Mapping', 'wp-all-import-pro'); ?></a>
 																</li>
 															</ul>
 														</div>
@@ -72,8 +72,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 															<table cellpadding="0" cellspacing="5" class="cf-form-table" rel="serialized_<?php echo $i; ?>">
 																<thead>
 																	<tr>
-																		<td><?php _e('Key', 'wp_all_import_plugin') ?></td>
-																		<td><?php _e('Value', 'wp_all_import_plugin') ?></td>
+																		<td><?php _e('Key', 'wp-all-import-pro') ?></td>
+																		<td><?php _e('Value', 'wp-all-import-pro') ?></td>
 																		<td>&nbsp;</td>
 																	</tr>
 																</thead>
@@ -143,18 +143,18 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 																	</tr>
 																	<tr>
 																		<td colspan="3">
-																			<a href="javascript:void(0);" title="<?php _e('Add Custom Field', 'wp_all_import_plugin')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp_all_import_plugin') ?></a>
+																			<a href="javascript:void(0);" title="<?php _e('Add Custom Field', 'wp-all-import-pro')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp-all-import-pro') ?></a>
 																		</td>
 																	</tr>
 																	<tr>
 																		<td>
 																			<div class="wrap" style="position:relative;">
-																				<a class="save_popup auto_detect_sf" href="javascript:void(0);"><?php _e('Auto-Detect', 'wp_all_import_plugin'); ?></a>
+																				<a class="save_popup auto_detect_sf" href="javascript:void(0);"><?php _e('Auto-Detect', 'wp-all-import-pro'); ?></a>
 																			</div>
 																		</td>
 																		<td colspan="2">
 																			<div class="wrap" style="position:relative;">
-																				<a class="save_popup save_sf" href="javascript:void(0);"><?php _e('Save', 'wp_all_import_plugin'); ?></a>
+																				<a class="save_popup save_sf" href="javascript:void(0);"><?php _e('Save', 'wp-all-import-pro'); ?></a>
 																			</div>
 																		</td>
 																	</tr>
@@ -169,8 +169,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 															<table cellpadding="0" cellspacing="5" class="cf-form-table" rel="cf_mapping_<?php echo $i; ?>">
 																<thead>
 																	<tr>
-																		<td><?php _e('In Your File', 'wp_all_import_plugin') ?></td>
-																		<td><?php _e('Translated To', 'wp_all_import_plugin') ?></td>
+																		<td><?php _e('In Your File', 'wp-all-import-pro') ?></td>
+																		<td><?php _e('Translated To', 'wp-all-import-pro') ?></td>
 																		<td>&nbsp;</td>
 																	</tr>
 																</thead>
@@ -232,13 +232,13 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 																	</tr>
 																	<tr>
 																		<td colspan="3">
-																			<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp_all_import_plugin')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp_all_import_plugin') ?></a>
+																			<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp-all-import-pro')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp-all-import-pro') ?></a>
 																		</td>
 																	</tr>
 																	<tr>
 																		<td colspan="3">
 																			<div class="wrap" style="position:relative;">
-																				<a class="save_popup save_mr" href="javascript:void(0);"><?php _e('Save Rules', 'wp_all_import_plugin'); ?></a>
+																				<a class="save_popup save_mr" href="javascript:void(0);"><?php _e('Save Rules', 'wp-all-import-pro'); ?></a>
 																			</div>
 																		</td>
 																	</tr>
@@ -263,15 +263,15 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 											<td class="action">
 												<div class="custom_type" rel="default">
 													<textarea name="custom_value[]" class="widefat"></textarea>
-													<a class="specify_cf pmxi_cf_pointer" rel="serialized_0" href="javascript:void(0);" style="display:none;"><?php _e('Click to specify', 'wp_all_import_plugin'); ?></a>
+													<a class="specify_cf pmxi_cf_pointer" rel="serialized_0" href="javascript:void(0);" style="display:none;"><?php _e('Click to specify', 'wp-all-import-pro'); ?></a>
 													<div class="input wpallimport-custom-fields-actions">
-														<a href="javascript:void(0);" class="wpallimport-cf-options"><?php _e('Field Options...', 'wp_all_import_plugin'); ?></a>
+														<a href="javascript:void(0);" class="wpallimport-cf-options"><?php _e('Field Options...', 'wp-all-import-pro'); ?></a>
 														<ul id="wpallimport-cf-menu-0" class="wpallimport-cf-menu">
 															<li>
-																<a href="javascript:void(0);" class="set_serialize"><?php _e('Serialized', 'wp_all_import_plugin'); ?></a>
+																<a href="javascript:void(0);" class="set_serialize"><?php _e('Serialized', 'wp-all-import-pro'); ?></a>
 															</li>
 															<li>
-																<a href="javascript:void(0);" class="set_mapping pmxi_cf_mapping" rel="cf_mapping_0"><?php _e('Mapping', 'wp_all_import_plugin'); ?></a>
+																<a href="javascript:void(0);" class="set_mapping pmxi_cf_mapping" rel="cf_mapping_0"><?php _e('Mapping', 'wp-all-import-pro'); ?></a>
 															</li>
 														</ul>
 													</div>
@@ -281,8 +281,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 														<table cellpadding="0" cellspacing="5" class="cf-form-table" rel="serialized_0">
 															<thead>
 																<tr>
-																	<td><?php _e('Key', 'wp_all_import_plugin') ?></td>
-																	<td><?php _e('Value', 'wp_all_import_plugin') ?></td>
+																	<td><?php _e('Key', 'wp-all-import-pro') ?></td>
+																	<td><?php _e('Value', 'wp-all-import-pro') ?></td>
 																	<td>&nbsp;</td>
 																</tr>
 															</thead>
@@ -311,18 +311,18 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 																</tr>
 																<tr>
 																	<td colspan="3">
-																		<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp_all_import_plugin')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp_all_import_plugin') ?></a>
+																		<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp-all-import-pro')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp-all-import-pro') ?></a>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
 																		<div class="wrap" style="position:relative;">
-																			<a class="save_popup auto_detect_sf" href="javascript:void(0);"><?php _e('Auto-Detect', 'wp_all_import_plugin'); ?></a>
+																			<a class="save_popup auto_detect_sf" href="javascript:void(0);"><?php _e('Auto-Detect', 'wp-all-import-pro'); ?></a>
 																		</div>
 																	</td>
 																	<td colspan="2">
 																		<div class="wrap" style="position:relative;">
-																			<a class="save_popup save_sf" href="javascript:void(0);"><?php _e('Save', 'wp_all_import_plugin'); ?></a>
+																			<a class="save_popup save_sf" href="javascript:void(0);"><?php _e('Save', 'wp-all-import-pro'); ?></a>
 																		</div>
 																	</td>
 																</tr>
@@ -337,8 +337,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 														<table cellpadding="0" cellspacing="5" class="cf-form-table" rel="cf_mapping_0">
 															<thead>
 																<tr>
-																	<td><?php _e('In Your File', 'wp_all_import_plugin') ?></td>
-																	<td><?php _e('Translated To', 'wp_all_import_plugin') ?></td>
+																	<td><?php _e('In Your File', 'wp-all-import-pro') ?></td>
+																	<td><?php _e('Translated To', 'wp-all-import-pro') ?></td>
 																	<td>&nbsp;</td>
 																</tr>
 															</thead>
@@ -367,13 +367,13 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 																</tr>
 																<tr>
 																	<td colspan="3">
-																		<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp_all_import_plugin')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp_all_import_plugin') ?></a>
+																		<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp-all-import-pro')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp-all-import-pro') ?></a>
 																	</td>
 																</tr>
 																<tr>
 																	<td colspan="3">
 																		<div class="wrap" style="position:relative;">
-																			<a class="save_popup save_mr" href="javascript:void(0);"><?php _e('Save Rules', 'wp_all_import_plugin'); ?></a>
+																			<a class="save_popup save_mr" href="javascript:void(0);"><?php _e('Save Rules', 'wp-all-import-pro'); ?></a>
 																		</div>
 																	</td>
 																</tr>
@@ -397,15 +397,15 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 										<td class="action">
 											<div class="custom_type" rel="default">
 												<textarea name="custom_value[]" class="widefat"></textarea>
-												<a class="specify_cf pmxi_cf_pointer" href="javascript:void(0);" style="display:none;"><?php _e('Click to specify', 'wp_all_import_plugin'); ?></a>
+												<a class="specify_cf pmxi_cf_pointer" href="javascript:void(0);" style="display:none;"><?php _e('Click to specify', 'wp-all-import-pro'); ?></a>
 												<div class="input wpallimport-custom-fields-actions">
-													<a href="javascript:void(0);" class="wpallimport-cf-options"><?php _e('Field Options...', 'wp_all_import_plugin'); ?></a>
+													<a href="javascript:void(0);" class="wpallimport-cf-options"><?php _e('Field Options...', 'wp-all-import-pro'); ?></a>
 													<ul class="wpallimport-cf-menu">
 														<li>
-															<a href="javascript:void(0);" class="set_serialize"><?php _e('Serialized', 'wp_all_import_plugin'); ?></a>
+															<a href="javascript:void(0);" class="set_serialize"><?php _e('Serialized', 'wp-all-import-pro'); ?></a>
 														</li>
 														<li>
-															<a href="javascript:void(0);" class="set_mapping pmxi_cf_mapping"><?php _e('Mapping', 'wp_all_import_plugin'); ?></a>
+															<a href="javascript:void(0);" class="set_mapping pmxi_cf_mapping"><?php _e('Mapping', 'wp-all-import-pro'); ?></a>
 														</li>
 													</ul>
 												</div>
@@ -415,8 +415,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 													<table cellpadding="0" cellspacing="5" class="cf-form-table">
 														<thead>
 															<tr>
-																<td><?php _e('Key', 'wp_all_import_plugin') ?></td>
-																<td><?php _e('Value', 'wp_all_import_plugin') ?></td>
+																<td><?php _e('Key', 'wp-all-import-pro') ?></td>
+																<td><?php _e('Value', 'wp-all-import-pro') ?></td>
 																<td>&nbsp;</td>
 															</tr>
 														</thead>
@@ -445,18 +445,18 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 															</tr>
 															<tr>
 																<td colspan="3">
-																	<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp_all_import_plugin'); ?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp_all_import_plugin') ?></a>
+																	<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp-all-import-pro'); ?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp-all-import-pro') ?></a>
 																</td>
 															</tr>
 															<tr>
 																<td>
 																	<div class="wrap" style="position:relative;">
-																		<a class="save_popup auto_detect_sf" href="javascript:void(0);"><?php _e('Auto-Detect', 'wp_all_import_plugin'); ?></a>
+																		<a class="save_popup auto_detect_sf" href="javascript:void(0);"><?php _e('Auto-Detect', 'wp-all-import-pro'); ?></a>
 																	</div>
 																</td>
 																<td colspan="2">
 																	<div class="wrap" style="position:relative;">
-																		<a class="save_popup save_sf" href="javascript:void(0);"><?php _e('Save', 'wp_all_import_plugin'); ?></a>
+																		<a class="save_popup save_sf" href="javascript:void(0);"><?php _e('Save', 'wp-all-import-pro'); ?></a>
 																	</div>
 																</td>
 															</tr>
@@ -471,8 +471,8 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 													<table cellpadding="0" cellspacing="5" class="cf-form-table">
 														<thead>
 															<tr>
-																<td><?php _e('In Your File', 'wp_all_import_plugin') ?></td>
-																<td><?php _e('Translated To', 'wp_all_import_plugin') ?></td>
+																<td><?php _e('In Your File', 'wp-all-import-pro') ?></td>
+																<td><?php _e('Translated To', 'wp-all-import-pro') ?></td>
 																<td>&nbsp;</td>
 															</tr>
 														</thead>
@@ -501,13 +501,13 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 															</tr>
 															<tr>
 																<td colspan="3">
-																	<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp_all_import_plugin')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp_all_import_plugin') ?></a>
+																	<a href="javascript:void(0);" title="<?php _e('Add Another', 'wp-all-import-pro')?>" class="action add-new-key add-new-entry"><?php _e('Add Another', 'wp-all-import-pro') ?></a>
 																</td>
 															</tr>
 															<tr>
 																<td colspan="3">
 																	<div class="wrap" style="position:relative;">
-																		<a class="save_popup save_mr" href="javascript:void(0);"><?php _e('Save Rules', 'wp_all_import_plugin'); ?></a>
+																		<a class="save_popup save_mr" href="javascript:void(0);"><?php _e('Save Rules', 'wp-all-import-pro'); ?></a>
 																	</div>
 																</td>
 															</tr>
@@ -523,7 +523,7 @@ $custom_type = wp_all_import_custom_type_labels($post_type);
 										</td>
 									</tr>
 									<tr>
-										<td colspan="2"><a href="javascript:void(0);" title="<?php _e('Add Custom Field', 'wp_all_import_plugin')?>" class="action add-new-custom add-new-entry"><?php _e('Add Custom Field', 'wp_all_import_plugin') ?></a></td>
+										<td colspan="2"><a href="javascript:void(0);" title="<?php _e('Add Custom Field', 'wp-all-import-pro')?>" class="action add-new-custom add-new-entry"><?php _e('Add Custom Field', 'wp-all-import-pro') ?></a></td>
 									</tr>
 								</tbody>
 							</table>

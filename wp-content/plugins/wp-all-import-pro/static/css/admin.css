@@ -1192,6 +1192,7 @@ body.wpallimport-plugin {
 }
 .wpallimport-plugin input[type="radio"]{
 	margin-left: 4px;
+	margin-top: -3px;
 }
 
 .wpallimport-plugin .wpallimport-wrapper{
@@ -2931,7 +2932,7 @@ body.wpallimport-plugin {
 	overflow: hidden;
 }
 .wpallimport-plugin form.edit{
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 .wpallimport-plugin .switcher-target-is_keep_former_posts{
 	padding-left: 25px;
@@ -3175,6 +3176,10 @@ body.wpallimport-plugin {
 	}
 	.wpallimport-plugin #import_finished #download_log{
 		background: url('../img/ui_4.0/view_log.png') no-repeat 2px 0px;
+		padding-left: 25px;
+	}
+	.wpallimport-plugin #import_finished #re_run_import{
+		background: url('../img/ui_4.0/import_history.png') no-repeat 2px 0px;
 		padding-left: 25px;
 	}
 	.wpallimport-plugin #import_finished #import_history{
@@ -4163,4 +4168,118 @@ body.rtl.wpallimport-plugin .show_hints
 	/*.wpallimport-plugin .wpallimport-notify-wrapper .error-headers h4{
 		font-size: 16px;
 	}*/
+}
+.wpallimport-plugin .custom-error-notice{
+	background-color: #fff;
+	border: 1px solid #c3c4c7;
+	border-left: 4px solid #d63638;
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	color: #3c434a;
+	font-size: 13px;
+	line-height: 1.4em;
+	padding: 12px;
+	margin: 15px 0px 15px 0px;
+	display: inline-block;
+	width: -webkit-fill-available;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox{
+	background-color: #122031;
+	color: #fff;
+	padding:20px;
+	font-family: 'Inter';
+	display:none;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox .codebox-inner{
+	display: flex;
+	position:relative;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox .codebox-inner .codebox-left{
+	flex: 1; 
+	padding-right: 20px;
+	min-width: 310px;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox .codebox-inner .codebox-right{
+	flex: 1;
+	padding-left: 20px;
+	border-left: 1px solid #ddd;
+	display: flex;
+	flex-direction: column;
+	padding-top: 42px;
+	
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox .codebox-inner .codebox-image-container{
+	display: flex;align-items: center;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox .codebox-inner img{
+	width: 60px; height: 60px; border-radius: 50%; margin-right: 15px;
+}
+
+.wpallimport-plugin .wpallimport-collapsed-content-inner .cross-sale-notice.codebox{
+	margin:0;
+	border:1px solid lightgray;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox h1{
+	margin: 0;
+	color: #fff;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox p{
+	font-size: 16px !important;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox .codebox-button-container{
+	position: absolute;
+	bottom: -5px;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox a {
+	background-color: #859eff;
+	color: #000;
+	padding: 10px 20px;
+	text-decoration: none;
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 270px;
+	position: relative;
+	font-weight: 600;
+	margin-bottom: 20px;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox a span {
+	font-size: 16px !important;
+	display: inline-flex;
+	align-items: center;
+	position: relative;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox a:hover{
+	cursor: pointer;
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox a:hover span::after {
+	transform: translateX(5px);
+}
+
+.wpallimport-plugin .cross-sale-notice.codebox a span::after {
+	mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M502.6%20278.6c12.5-12.5%2012.5-32.8%200-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3%200s-12.5%2032.8%200%2045.3L402.7%20224%2032%20224c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032l370.7%200-73.4%2073.4c-12.5%2012.5-12.5%2032.8%200%2045.3s32.8%2012.5%2045.3%200l128-128z%22%2F%3E%3C%2Fsvg%3E');
+	content: '';
+	background-color: #000;
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: 100%;
+	width: 14px;
+	height: 10px;
+	display: inline-block;
+	margin-left: 10px;
+	transition: transform 0.3s ease;
+	position: relative;
 }

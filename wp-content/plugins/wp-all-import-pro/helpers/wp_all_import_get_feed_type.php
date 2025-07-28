@@ -14,7 +14,13 @@ if ( ! function_exists('wp_all_import_get_feed_type')){
 
 		}
 
-		$headers = @get_headers($url, 1);
+		$header_context = stream_context_create([
+			'http' => [
+				'timeout' => 10
+			]
+		]);
+
+		$headers = @get_headers($url, 1, $header_context);
 
         if (empty($headers)){
             $response = wp_remote_get($url);
@@ -49,6 +55,9 @@ if ( ! function_exists('wp_all_import_get_feed_type')){
 	   		}
 	   		if ( ! empty($headers['Content-Disposition'])){
 	   			foreach ($extensions as $ext) {
+					if(is_array($headers['Content-Disposition'])){
+						$headers['Content-Disposition'] = array_pop($headers['Content-Disposition']);
+					}
 					if (strpos($headers['Content-Disposition'], $ext) !== false) {
 						$type = $ext;
 	   					break;

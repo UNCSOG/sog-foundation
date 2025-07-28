@@ -66,7 +66,7 @@ class PMXI_SQLParser{
 
 					if ( $headers ){
 			 			
-			 			foreach ($headers_matches[0] as $key => $found_headers) { 				
+			 			foreach ($headers_matches[0] as $hdr_key => $found_headers) {
 			 				$hdrs = explode(',', rtrim(ltrim(trim(rtrim(trim($found_headers), 'VALUES')),'('),')'));  				
 			 				if ( ! empty($hdrs) ){
 			 					foreach ($hdrs as $header) {
@@ -78,7 +78,7 @@ class PMXI_SQLParser{
 			 			$values = preg_match_all("%\([^`].*\)\s*[,|;]{1}%Uis", $insert, $values_matches);
 
 			 			if ( $values ){ 				
-			 				foreach ($values_matches[0] as $key => $value) {
+			 				foreach ($values_matches[0] as $val_key => $value) {
 			 					$insertData = array();
 			 					$vals = explode(',', rtrim(ltrim(trim(rtrim(rtrim(trim($value), ','),';')),'('),')'));		 					
 			 					if ( ! empty($vals) ){

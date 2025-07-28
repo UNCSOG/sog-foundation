@@ -2,6 +2,6 @@
      style="position: relative; ">
     <div class="save-text"
          style="display: block; position:absolute; left: 60px; top:6px; user-select: none; ">
-            <?php _e('Confirm & Run Import', PMXI_Plugin::LANGUAGE_DOMAIN); ?>
+            <?php _e('Confirm & Run Import', 'wp-all-import-pro'); ?>
     </div>
 </div>

@@ -127,7 +127,7 @@ class XmlImportTemplateParser
   /**
    * Parses statement
    *
-   * @return XmlImportAstText
+   * @return XmlImportAstText|XmlImportAstWith|XmlImportAstForeach|XmlImportAstPrint|XmlImportAstIf
    */
   private function parseStatement()
   {
@@ -181,7 +181,7 @@ class XmlImportTemplateParser
   /**
    * Parses expression
    *
-   * @return XmlImportAstXPath
+   * @return XmlImportAstXPath|XmlImportAstFunction|XmlImportAstMath|XmlImportAstSpintax|XmlImportAstString|XmlImportAstInteger|XmlImportAstFloat
    */
   private function parseExpression()
   {
@@ -261,7 +261,7 @@ class XmlImportTemplateParser
   /**
    * Parses function
    *
-   * @return XmlImportAstFunction
+   * @return XmlImportAstFunction|XmlImportAstMath
    */
   private function parseMath()
   {
@@ -297,7 +297,7 @@ class XmlImportTemplateParser
   /**
    * Parses function
    *
-   * @return XmlImportSpintaxFunction
+   * @return XmlImportSpintaxFunction|XmlImportAstSpintax
    */
   private function parseSpintax()
   {

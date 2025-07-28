@@ -10,8 +10,6 @@
  *
  * PHP version 5
  *
- * @category  Crypt
- * @package   EC
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2015 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -20,7 +18,6 @@
 
 namespace phpseclib3\Crypt\EC\Formats\Keys;
 
-use ParagonIE\ConstantTime\Base64;
 use phpseclib3\Common\Functions\Strings;
 use phpseclib3\Crypt\EC\BaseCurves\Base as BaseCurve;
 use phpseclib3\Crypt\EC\BaseCurves\Montgomery as MontgomeryCurve;
@@ -33,9 +30,7 @@ use phpseclib3\Math\BigInteger;
 /**
  * XML Formatted EC Key Handler
  *
- * @package EC
  * @author  Jim Wigginton <terrafrost@php.net>
- * @access  public
  */
 abstract class XML
 {
@@ -58,7 +53,6 @@ abstract class XML
     /**
      * Break a public or private key down into its constituent components
      *
-     * @access public
      * @param string $key
      * @param string $password optional
      * @return array
@@ -120,7 +114,7 @@ abstract class XML
      * @param bool $decode optional
      * @return \DOMNodeList
      */
-    private static function query($xpath, $name, $error = null, $decode = true)
+    private static function query(\DOMXPath $xpath, $name, $error = null, $decode = true)
     {
         $query = '/';
         $names = explode('/', $name);
@@ -170,14 +164,14 @@ abstract class XML
      */
     private static function decodeValue($value)
     {
-        return Base64::decode(str_replace(["\r", "\n", ' ', "\t"], '', $value));
+        return Strings::base64_decode(str_replace(["\r", "\n", ' ', "\t"], '', $value));
     }
 
     /**
      * Extract points from an XML document
      *
      * @param \DOMXPath $xpath
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
+     * @param BaseCurve $curve
      * @return object[]
      */
     private static function extractPointRFC4050(\DOMXPath $xpath, BaseCurve $curve)
@@ -205,7 +199,7 @@ abstract class XML
      * on the curve parameters
      *
      * @param \DomXPath $xpath
-     * @return \phpseclib3\Crypt\EC\BaseCurves\Base|false
+     * @return BaseCurve|false
      */
     private static function loadCurveByParam(\DOMXPath $xpath)
     {
@@ -285,7 +279,7 @@ abstract class XML
      * on the curve parameters
      *
      * @param \DomXPath $xpath
-     * @return \phpseclib3\Crypt\EC\BaseCurves\Base|false
+     * @return BaseCurve|false
      */
     private static function loadCurveByParamRFC4050(\DOMXPath $xpath)
     {
@@ -372,7 +366,7 @@ abstract class XML
     /**
      * Convert a public key to the appropriate format
      *
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
+     * @param BaseCurve $curve
      * @param \phpseclib3\Math\Common\FiniteField\Integer[] $publicKey
      * @param array $options optional
      * @return string
@@ -406,14 +400,14 @@ abstract class XML
 
         return '<' . $pre . 'ECDSAKeyValue xmlns' . $post . '="http://www.w3.org/2009/xmldsig11#">' . "\r\n" .
                self::encodeXMLParameters($curve, $pre, $options) . "\r\n" .
-               '<' . $pre . 'PublicKey>' . Base64::encode($publicKey) . '</' . $pre . 'PublicKey>' . "\r\n" .
+               '<' . $pre . 'PublicKey>' . Strings::base64_encode($publicKey) . '</' . $pre . 'PublicKey>' . "\r\n" .
                '</' . $pre . 'ECDSAKeyValue>';
     }
 
     /**
      * Encode Parameters
      *
-     * @param \phpseclib3\Crypt\EC\BaseCurves\Base $curve
+     * @param BaseCurve $curve
      * @param string $pre
      * @param array $options optional
      * @return string|false
@@ -471,7 +465,7 @@ abstract class XML
             switch ($temp['fieldID']['fieldType']) {
                 case 'prime-field':
                     $xml .= '<' . $pre . 'Prime>' . "\r\n" .
-                           '<' . $pre . 'P>' . Base64::encode($temp['fieldID']['parameters']->toBytes()) . '</' . $pre . 'P>' . "\r\n" .
+                           '<' . $pre . 'P>' . Strings::base64_encode($temp['fieldID']['parameters']->toBytes()) . '</' . $pre . 'P>' . "\r\n" .
                            '</' . $pre . 'Prime>' . "\r\n" ;
                     break;
                 default:
@@ -479,11 +473,11 @@ abstract class XML
             }
             $xml .= '</' . $pre . 'FieldID>' . "\r\n" .
                    '<' . $pre . 'Curve>' . "\r\n" .
-                   '<' . $pre . 'A>' . Base64::encode($temp['curve']['a']) . '</' . $pre . 'A>' . "\r\n" .
-                   '<' . $pre . 'B>' . Base64::encode($temp['curve']['b']) . '</' . $pre . 'B>' . "\r\n" .
+                   '<' . $pre . 'A>' . Strings::base64_encode($temp['curve']['a']) . '</' . $pre . 'A>' . "\r\n" .
+                   '<' . $pre . 'B>' . Strings::base64_encode($temp['curve']['b']) . '</' . $pre . 'B>' . "\r\n" .
                    '</' . $pre . 'Curve>' . "\r\n" .
-                   '<' . $pre . 'Base>' . Base64::encode($temp['base']) . '</' . $pre . 'Base>' . "\r\n" .
-                   '<' . $pre . 'Order>' . Base64::encode($temp['order']) . '</' . $pre . 'Order>' . "\r\n" .
+                   '<' . $pre . 'Base>' . Strings::base64_encode($temp['base']) . '</' . $pre . 'Base>' . "\r\n" .
+                   '<' . $pre . 'Order>' . Strings::base64_encode($temp['order']) . '</' . $pre . 'Order>' . "\r\n" .
                    '</' . $pre . 'ECParameters>';
             return $xml;
         }

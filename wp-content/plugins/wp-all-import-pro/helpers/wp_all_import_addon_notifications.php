@@ -118,7 +118,7 @@ if ( ! function_exists('wp_all_import_addon_notifications') ){
 					<div class="updated notice is-dismissible wpallimport-dismissible" rel="acf_addon"><p>
 						<?php 
 							printf(
-								__('Make imports easier with the <strong>Advanced Custom Fields Add-On</strong> for WP All Import: <a href="%s" target="_blank">Read More</a>', 'wp_all_import_plugin'),
+								__('Make imports easier with the <strong>Advanced Custom Fields Add-On</strong> for WP All Import: <a href="%s" target="_blank">Read More</a>', 'wp-all-import-pro'),
 								'http://www.wpallimport.com/advanced-custom-fields/'
 							);
 						?>
@@ -134,11 +134,11 @@ if ( ! function_exists('wp_all_import_addon_notifications') ){
 					<!--div class="wpallimport-wrapper updated notice is-dismissible wpallimport-dismissible" rel="wp_all_export" style="margin: 10px 0; padding: 12px 0;">
 						<div class="wpallimport-notify-wrapper">
 							<div class="found_records speedup" style="margin-top: 20px;">
-								<h3 style="font-size:26px;"><?php _e('WP All Export', 'wp_all_import_plugin');?></h3>
-								<h4><?php _e("Export anything in WordPress to CSV, XML, or Excel.", "wp_all_import_plugin"); ?></h4>
+								<h3 style="font-size:26px;"><?php _e('WP All Export', 'wp-all-import-pro');?></h3>
+								<h4><?php _e("Export anything in WordPress to CSV, XML, or Excel.", "wp-all-import-pro"); ?></h4>
 							</div>		
 						</div>		
-						<a class="button button-primary button-hero wpallimport-large-button wpallimport-wpae-notify-read-more" href="http://www.wpallimport.com/export" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>		
+						<a class="button button-primary button-hero wpallimport-large-button wpallimport-wpae-notify-read-more" href="http://www.wpallimport.com/export" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>		
 					</div-->
 					<?php
 				}				
@@ -151,7 +151,7 @@ if ( ! function_exists('wp_all_import_addon_notifications') ){
 						?>
 						<div class="updated notice is-dismissible wpallimport-dismissible" rel="<?php echo sanitize_key($addon['title']); ?>"><p>
 							<?php printf(
-									__('Make imports easier with the <strong>free %s Add-On</strong> for WP All Import: <a href="%s" target="_blank">Get Add-On</a>', 'wp_all_import_plugin'),
+									__('Make imports easier with the <strong>free %s Add-On</strong> for WP All Import: <a href="%s" target="_blank">Get Add-On</a>', 'wp-all-import-pro'),
 									$addon['title'],
 									$addon['url']
 								  );

@@ -21,7 +21,7 @@ function renderButton($buttonText, $isWizard, $continue = false, $saveOnly = fal
             }
             ?>
              style="display: block; position:absolute; <?php echo "left: $left"."px;" ?> top:0; user-select: none;">
-            <?php _e($buttonText, PMXI_Plugin::LANGUAGE_DOMAIN); ?>
+            <?php _e($buttonText, 'wp-all-import-pro'); ?>
         </div>
     </div>
     <?php

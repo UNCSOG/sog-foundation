@@ -17,12 +17,12 @@ if ( ! function_exists( 'wp_all_import_get_import_post_type' ) ) {
     
         // If this is an existing import load the custom post type from the array
         if ( ! empty($import_options) )	{
-            $import_options_arr = unserialize($import_options['options']);
+            $import_options_arr = \pmxi_maybe_unserialize($import_options['options']);
             $custom_type = $import_options_arr['custom_type'];
         } else {
             // If this is a new import get the custom post type data from the current session
-            $import_options = $wpdb->get_row( $wpdb->prepare("SELECT option_name, option_value FROM $wpdb->options WHERE option_name = %s", '_wpallimport_session_' . $import_id . '_'), ARRAY_A );				
-            $import_options_arr = empty($import_options) ? array() : unserialize($import_options['option_value']);
+	        $handler = new \PMXI_Handler();
+	        $import_options_arr = $handler->get_session_data();
             $custom_type = empty($import_options_arr['custom_type']) ? '' : $import_options_arr['custom_type'];		
         }
         return $custom_type;

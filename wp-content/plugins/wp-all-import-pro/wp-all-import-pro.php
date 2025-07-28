@@ -3,8 +3,8 @@
 Plugin Name: WP All Import Pro
 Plugin URI: http://www.wpallimport.com/
 Description: The most powerful solution for importing XML and CSV files to WordPress. Import to Posts, Pages, and Custom Post Types. Support for imports that run on a schedule, ability to update existing imports, and much more.
-Version: 4.8.0
-Requires PHP: 7.2.5
+Version: 4.11.3
+Requires PHP: 7.4
 Author: Soflyy
 */
 
@@ -16,7 +16,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 
     include_once __DIR__.'/src/WordPress/AdminNotice.php';
     include_once __DIR__.'/src/WordPress/AdminErrorNotice.php';
-    $notice = new \Wpai\WordPress\AdminErrorNotice(__('Please de-activate and remove the free version of WP All Import before activating the paid version.', 'wp_all_import_plugin'));
+    $notice = new \Wpai\WordPress\AdminErrorNotice(__('Please de-activate and remove the free version of WP All Import before activating the paid version.', 'wp-all-import-pro'));
     $notice->render();
 
     deactivate_plugins( str_replace('\\', '/', dirname(__FILE__)) . '/wp-all-import-pro.php' );
@@ -26,7 +26,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
     /**
      *
      */
-    define('PMXI_VERSION', '4.8.0');
+    define('PMXI_VERSION', '4.11.3');
 
     /**
      *
@@ -152,7 +152,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
         /**
          * @var string
          */
-        public static $capabilities = 'manage_options';
+        public static $capabilities = 'setup_network';
 
         /**
          * @var string
@@ -189,7 +189,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
         /**
          *  Language domain key.
          */
-        const LANGUAGE_DOMAIN = 'wp_all_import_plugin';
+        const LANGUAGE_DOMAIN = 'wp-all-import-pro';
 
         /**
          * @var null
@@ -228,7 +228,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 
 			if(is_null(self::$hasActiveSchedulingLicense)) {
 				$scheduling = \Wpai\Scheduling\Scheduling::create();
-				$hasActiveSchedulingLicense = $scheduling->checkLicense();
+				$hasActiveSchedulingLicense = $scheduling->checkLicense()['success'] ?? false;
 				self::$hasActiveSchedulingLicense = $hasActiveSchedulingLicense;
 			}
 
@@ -308,6 +308,12 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 		 * @param string $pluginFilePath Plugin main file
 		 */
 		protected function __construct() {
+		    if(defined('WPAI_WPAE_ALLOW_INSECURE_MULTISITE') && 1 === WPAI_WPAE_ALLOW_INSECURE_MULTISITE){
+				self::$capabilities = 'manage_options';
+		    }
+
+		    require_once self::ROOT_DIR . '/addon-api/autoload.php';
+
 		    // Load libraries only on admin dashboard or cron import.
 		    if (!$this->isAdminDashboardOrCronImport()) {
 		        return;
@@ -334,7 +340,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
             }
 
 			$this->options = array_intersect_key($current_options, $options_default) + $options_default;
-			$this->options = array_intersect_key($options_default, array_flip(array('info_api_url'))) + $this->options; // make sure hidden options apply upon plugin reactivation
+			$this->options = array_intersect_key($options_default, array_flip(array('info_api_url', 'info_api_url_new'))) + $this->options; // make sure hidden options apply upon plugin reactivation
 			if ('' == $this->options['cron_job_key']) {
                 $this->options['cron_job_key'] = wp_all_import_url_title(wp_all_import_rand_char(12));
             }
@@ -346,6 +352,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
             update_option('PMGI_Plugin_Options', $this->options, false);
 
 			register_activation_hook(self::FILE, array($this, 'activation'));
+			register_deactivation_hook(self::FILE, ['Wpai\WordPress\RegenerateImages', 'plugin_deactivation']);
 
 			// Register action handlers.
 			if (is_dir(self::ROOT_DIR . '/actions')) foreach (PMXI_Helper::safe_glob(self::ROOT_DIR . '/actions/*.php', PMXI_Helper::GLOB_RECURSE | PMXI_Helper::GLOB_PATH) as $filePath) {
@@ -718,6 +725,8 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 		 * pre-dispatching logic for admin page controllers
 		 */
 		public function adminInit() {
+            
+			\Wpai\Ads\AdManager::init();
 
 			self::$session = new PMXI_Handler();
 
@@ -735,7 +744,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				if (method_exists($controllerName, $actionName)) {
 
 					@ini_set("max_input_time", PMXI_Plugin::getInstance()->getOption('max_input_time'));
-					@ini_set("max_execution_time", PMXI_Plugin::getInstance()->getOption('max_execution_time'));
+					@ini_set("max_execution_time", str_replace('-1','0',PMXI_Plugin::getInstance()->getOption('max_execution_time')));
 
 					if ( ! get_current_user_id() or ! current_user_can( self::$capabilities )) {
 					    // This nonce is not valid.
@@ -758,6 +767,9 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 						if ( ! $controller instanceof PMXI_Controller_Admin) {
 							throw new Exception("Administration page `$page` matches to a wrong controller type.");
 						}
+
+						$reviewsUI = new \Wpai\Reviews\ReviewsUI();
+						add_action('admin_notices', [$reviewsUI, 'render']);
 
 						if ($this->_admin_current_screen->is_ajax) { // ajax request
 							$controller->$action();
@@ -948,8 +960,17 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
          * @return string
          */
         public static function encode($value){
-            $salt = defined('AUTH_SALT') ? AUTH_SALT : wp_salt();
-			return base64_encode(md5($salt) . $value . md5(md5($salt)));
+            $salt = md5(defined('AUTH_SALT') ? AUTH_SALT : wp_salt());
+            // This new salt storage is to avoid the problems encountered
+            // when the AUTH_SALT value changes on a site.
+            $new_salt = get_option('wpai_config_version', false);
+            if($new_salt){
+                $salt = $new_salt;
+            }else{
+                // Save the salt for later use.
+                update_option('wpai_config_version', $salt, false);
+            }
+			return base64_encode($salt . $value . md5($salt));
 		}
 
         /**
@@ -957,8 +978,12 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
          * @return mixed
          */
         public static function decode($encoded){
-            $salt = defined('AUTH_SALT') ? AUTH_SALT : wp_salt();
-			return preg_match('/^[a-f0-9]{32}$/', $encoded) ? $encoded : str_replace(array(md5($salt), md5(md5($salt))), '', base64_decode($encoded));
+            $salt = md5(defined('AUTH_SALT') ? AUTH_SALT : wp_salt());
+	        $new_salt = get_option('wpai_config_version', false);
+	        if($new_salt){
+		        $salt = $new_salt;
+	        }
+			return preg_match('/^[a-f0-9]{32}$/', $encoded) ? $encoded : str_replace(array($salt, md5($salt)), '', base64_decode($encoded));
 		}
 
 		/**
@@ -1028,7 +1053,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 							foreach ($imports_list as $import_entry) {
 								$import_id = $import_entry->id;
 								$import = $pmxi_import->getById($import_id);
-								$import_options = maybe_unserialize($import->options);
+								$import_options = \pmxi_maybe_unserialize($import->options);
 								$import_type = $import_options['custom_type'];
 								if ( in_array($import_type, array('import_users', 'shop_customer')) ) {
                                     $user_imports[] = $import_id;
@@ -1098,7 +1123,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				foreach ($imports_list as $import_entry) {
 					$import_id = $import_entry->id;
 					$import = $pmxi_import->getById($import_id);
-					$import_options = maybe_unserialize($import->options);
+					$import_options = \pmxi_maybe_unserialize($import->options);
 					$import_type = $import_options['custom_type'];
 					if ( in_array($import_type, array('import_users', 'shop_customer')) ) {
                         $user_imports[] = $import_id;
@@ -1153,7 +1178,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 		 * @return void
 		 */
 		public function load_plugin_textdomain() {
-			load_plugin_textdomain( 'wp_all_import_plugin', false, dirname( plugin_basename( __FILE__ ) ) . "/i18n/languages" );
+			load_plugin_textdomain( 'wp-all-import-pro', false, dirname( plugin_basename( __FILE__ ) ) . "/i18n/languages" );
 		}
 
         /**
@@ -1165,12 +1190,12 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 			$uploads = wp_upload_dir();
 
 			if ( ! is_dir($uploads['basedir'] . DIRECTORY_SEPARATOR . self::LOGS_DIRECTORY) or ! is_writable($uploads['basedir'] . DIRECTORY_SEPARATOR . self::LOGS_DIRECTORY)) {
-                $this->showNoticeAndDisablePlugin(sprintf(__('Uploads folder %s must be writable', 'wp_all_import_plugin'), $uploads['basedir'] . DIRECTORY_SEPARATOR . self::LOGS_DIRECTORY));
+                $this->showNoticeAndDisablePlugin(sprintf(__('Uploads folder %s must be writable', 'wp-all-import-pro'), $uploads['basedir'] . DIRECTORY_SEPARATOR . self::LOGS_DIRECTORY));
                 return false;
 			}
 
 			if ( ! is_dir($uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_IMPORT_UPLOADS_BASE_DIRECTORY) or ! is_writable($uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_IMPORT_UPLOADS_BASE_DIRECTORY)) {
-                $this->showNoticeAndDisablePlugin(sprintf(__('Uploads folder %s must be writable', 'wp_all_import_plugin'), $uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_IMPORT_UPLOADS_BASE_DIRECTORY));
+                $this->showNoticeAndDisablePlugin(sprintf(__('Uploads folder %s must be writable', 'wp-all-import-pro'), $uploads['basedir'] . DIRECTORY_SEPARATOR . WP_ALL_IMPORT_UPLOADS_BASE_DIRECTORY));
                 return false;
 			}
 
@@ -1196,7 +1221,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 						$wpdb->query('DELETE FROM ' . $post->getTable() . ' WHERE post_id NOT IN (SELECT ID FROM ' . $wpdb->posts .') AND post_id NOT IN ( SELECT ID FROM ' . $wpdb->users . ') AND post_id NOT IN ( SELECT term_taxonomy_id FROM ' . $wpdb->term_taxonomy . ') AND post_id NOT IN ( SELECT comment_ID FROM ' . $wpdb->comments . ')');
 		            }
 		            switch_to_blog($old_blog);
-		            return;
+		            return false;
 		        }
 		    }
 
@@ -1246,10 +1271,10 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				foreach ($fields_to_alter as $field) {
 					switch ($field) {
 						case 'image_url':
-							$wpdb->query("ALTER TABLE {$table} ADD `image_url` TEXT NOT NULL DEFAULT '';");
+							$wpdb->query("ALTER TABLE {$table} ADD `image_url` TEXT;");
 							break;
 						case 'image_filename':
-							$wpdb->query("ALTER TABLE {$table} ADD `image_filename` TEXT NOT NULL DEFAULT '';");
+							$wpdb->query("ALTER TABLE {$table} ADD `image_filename` TEXT;");
 							break;
 						default:
 							# code...
@@ -1345,7 +1370,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 					?>
 					<div class="error"><p>
 						<?php printf(
-								__('<b>%s Plugin</b>: Current sql user %s doesn\'t have ALTER privileges', 'wp_all_import_plugin'),
+								__('<b>%s Plugin</b>: Current sql user %s doesn\'t have ALTER privileges', 'wp-all-import-pro'),
 								self::getInstance()->getName(), DB_USER
 						) ?>
 					</p></div>
@@ -1478,6 +1503,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				'is_update_post_type' => 1,
 				'is_update_post_format' => 1,
 				'update_categories_logic' => 'full_update',
+                'do_not_create_terms' => 0,
 				'taxonomies_list' => array(),
 				'taxonomies_only_list' => array(),
 				'taxonomies_except_list' => array(),
@@ -1492,6 +1518,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				'is_keep_imgs' => 0,
 				'is_delete_imgs' => 0,
 				'do_not_remove_images' => 1,
+                'preload_images' => 0,
 
 				'is_update_custom_fields' => 1,
 				'update_custom_fields_logic' => 'full_update',
@@ -1551,6 +1578,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 				'gallery_featured_delim' => ',',
                 'filters_output' => '',
 				'is_featured' => 1,
+				'allow_delay_image_resize' => 0,
 				'is_featured_xpath' => '',
 				'set_image_meta_title' => 0,
 				'set_image_meta_caption' => 0,
@@ -1646,6 +1674,31 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
 			);
 		}
 
+        public static function getCurrentImportOptions(){
+	        $import    = new \PMXI_Import_Record();
+	        $input     = new \PMXI_Input();
+	        $import_id = $input->get( 'id' ) ?? $input->get( 'import_id' );
+
+	        // Get import ID from CLI arguments.
+	        if ( empty( $import_id ) && \PMXI_Plugin::getInstance()->isCli() ) {
+		        $import_id = wp_all_import_get_import_id();
+	        }
+
+	        if ( ! empty( $import_id ) ) {
+		        $import->getById( $import_id );
+	        }
+
+	        $session    = new \PMXI_Handler();
+
+            if ( ! $import->isEmpty() ) {
+		        $options = $import->options;
+	        } else {
+		        $options = $session->options;
+	        }
+
+	        return $options;
+        }
+
 		/*
 		 * Convert csv to xml
 		 */
@@ -1717,7 +1770,7 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
             // retrieve our license key from the DB
             $wp_all_import_options = get_option('PMXI_Plugin_Options');
             // setup the updater
-            $updater = new PMXI_Updater( $wp_all_import_options['info_api_url'], __FILE__, array(
+            $updater = new PMXI_Updater( $wp_all_import_options['info_api_url_new'], __FILE__, array(
                     'version' 	=> PMXI_VERSION,		// current version number
                     'license' 	=> (!empty($wp_all_import_options['licenses']['PMXI_Plugin'])) ? PMXI_Plugin::decode($wp_all_import_options['licenses']['PMXI_Plugin']) : false, // license key (used get_option above to retrieve from DB)
                     'item_name' => PMXI_Plugin::getEddName(), 	// name of this plugin
@@ -1727,6 +1780,8 @@ if ( is_plugin_active('wp-all-import/plugin.php') ){
         }
 	}
 
-	add_action( 'admin_init', 'wp_all_import_pro_updater', 0 );
+	add_action( 'plugins_loaded', 'wp_all_import_pro_updater', 0 );
 
 }
+
+\Wpai\WordPress\RegenerateImages::setup();

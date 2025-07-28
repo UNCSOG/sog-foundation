@@ -27,7 +27,7 @@ class PMXI_FTPFetcher {
     	$files = $ftp->copy();
 
         if (empty($files)) {
-            throw new Exception(__('Uploaded file is empty', PMXI_Plugin::LANGUAGE_DOMAIN));
+            throw new Exception(__('Uploaded file is empty', 'wp-all-import-pro'));
         }
         return $files;
     }

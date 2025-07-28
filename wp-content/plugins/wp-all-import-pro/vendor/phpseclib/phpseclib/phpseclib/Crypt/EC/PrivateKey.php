@@ -3,8 +3,6 @@
 /**
  * EC Private Key
  *
- * @category  Crypt
- * @package   EC
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2015 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -29,11 +27,9 @@ use phpseclib3\Math\BigInteger;
 /**
  * EC Private Key
  *
- * @package EC
  * @author  Jim Wigginton <terrafrost@php.net>
- * @access  public
  */
-class PrivateKey extends EC implements Common\PrivateKey
+final class PrivateKey extends EC implements Common\PrivateKey
 {
     use Common\Traits\PasswordProtected;
 
@@ -47,6 +43,11 @@ class PrivateKey extends EC implements Common\PrivateKey
      * @var object
      */
     protected $dA;
+
+    /**
+     * @var string
+     */
+    protected $secret;
 
     /**
      * Multiplies an encoded point by the private key
@@ -85,7 +86,6 @@ class PrivateKey extends EC implements Common\PrivateKey
      * Create a signature
      *
      * @see self::verify()
-     * @access public
      * @param string $message
      * @return mixed
      */
@@ -117,7 +117,7 @@ class PrivateKey extends EC implements Common\PrivateKey
             $curve = $this->curve;
             $hash = new Hash($curve::HASH);
 
-            $secret = substr($hash->hash($this->dA->secret), $curve::SIZE);
+            $secret = substr($hash->hash($this->secret), $curve::SIZE);
 
             if ($curve instanceof Ed25519) {
                 $dom = !isset($this->context) ? '' :
@@ -150,7 +150,7 @@ class PrivateKey extends EC implements Common\PrivateKey
             // we use specified curves to avoid issues with OpenSSL possibly not supporting a given named curve;
             // doing this may mean some curve-specific optimizations can't be used but idk if OpenSSL even
             // has curve-specific optimizations
-            $result = openssl_sign($message, $signature, $this->toString('PKCS8', ['namedCurve' => false]), $this->hash->getHash());
+            $result = openssl_sign($message, $signature, $this->withPassword()->toString('PKCS8', ['namedCurve' => false]), $this->hash->getHash());
 
             if ($result) {
                 if ($shortFormat == 'ASN1') {
@@ -159,7 +159,7 @@ class PrivateKey extends EC implements Common\PrivateKey
 
                 extract(ASN1Signature::load($signature));
 
-                return $shortFormat == 'SSH2' ? $format::save($r, $s, $this->getCurve()) : $format::save($r, $s);
+                return $this->formatSignature($r, $s);
             }
         }
 
@@ -208,7 +208,7 @@ class PrivateKey extends EC implements Common\PrivateKey
         list(, $s) = $temp->divide($this->q);
         */
 
-        return $shortFormat == 'SSH2' ? $format::save($r, $s, $this->getCurve()) : $format::save($r, $s);
+        return $this->formatSignature($r, $s);
     }
 
     /**
@@ -222,14 +222,13 @@ class PrivateKey extends EC implements Common\PrivateKey
     {
         $type = self::validatePlugin('Keys', $type, 'savePrivateKey');
 
-        return $type::savePrivateKey($this->dA, $this->curve, $this->QA, $this->password, $options);
+        return $type::savePrivateKey($this->dA, $this->curve, $this->QA, $this->secret, $this->password, $options);
     }
 
     /**
      * Returns the public key
      *
      * @see self::getPrivateKey()
-     * @access public
      * @return mixed
      */
     public function getPublicKey()
@@ -253,5 +252,29 @@ class PrivateKey extends EC implements Common\PrivateKey
             $key = $key->withContext($this->context);
         }
         return $key;
+    }
+
+    /**
+     * Returns a signature in the appropriate format
+     *
+     * @return string
+     */
+    private function formatSignature(BigInteger $r, BigInteger $s)
+    {
+        $format = $this->sigFormat;
+
+        $temp = new \ReflectionMethod($format, 'save');
+        $paramCount = $temp->getNumberOfRequiredParameters();
+
+        // @codingStandardsIgnoreStart
+        switch ($paramCount) {
+            case 2: return $format::save($r, $s);
+            case 3: return $format::save($r, $s, $this->getCurve());
+            case 4: return $format::save($r, $s, $this->getCurve(), $this->getLength());
+        }
+        // @codingStandardsIgnoreEnd
+
+        // presumably the only way you could get to this is if you were using a custom plugin
+        throw new UnsupportedOperationException("$format::save() has $paramCount parameters - the only valid parameter counts are 2 or 3");
     }
 }

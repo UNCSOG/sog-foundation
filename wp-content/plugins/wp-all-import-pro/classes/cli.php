@@ -54,10 +54,10 @@ class PMXI_Cli {
                 $import->getById($import_id);
 
                 if ($import->isEmpty()) {
-                    WP_CLI::error(__('Import not found.', PMXI_Plugin::LANGUAGE_DOMAIN));
+                    WP_CLI::error(__('Import not found.', 'wp-all-import-pro'));
                 }
 	            if (($import->triggered || $import->executing) && !array_key_exists('force-run', $assoc_args)) {
-		            WP_CLI::error(__('Import already running.', PMXI_Plugin::LANGUAGE_DOMAIN));
+		            WP_CLI::error(__('Import already running.', 'wp-all-import-pro'));
 	            }
                 $import->set([
                     'triggered' => 1,
@@ -117,15 +117,15 @@ class PMXI_Cli {
                     ]
                 ];
                 WP_CLI\Utils\format_items( 'table', $items, [ 'Created', 'Updated', 'Skipped', 'Deleted', 'Changed Missing', 'Count' ] );
-                WP_CLI::success( sprintf(__('Import completed. [ time: %s ]', PMXI_Plugin::LANGUAGE_DOMAIN), human_time_diff($start, $end)));
+                WP_CLI::success( sprintf(__('Import completed. [ time: %s ]', 'wp-all-import-pro'), human_time_diff($start, $end)));
 
                 $custom_type = wp_all_import_custom_type_labels($import->options['custom_type'], $import->options['taxonomy_type']);
-                $log_msg = sprintf(__("%d %s created %d updated %d skipped", "wp_all_import_plugin"), $import->created, ( ($import->created == 1) ? $custom_type->labels->singular_name : $custom_type->labels->name ), $import->updated, $import->skipped);
+                $log_msg = sprintf(__("%d %s created %d updated %d skipped", "wp-all-import-pro"), $import->created, ( ($import->created == 1) ? $custom_type->labels->singular_name : $custom_type->labels->name ), $import->updated, $import->skipped);
                 if ($import->options['is_delete_missing']) {
                     if (empty($this->options['delete_missing_action']) || $this->options['delete_missing_action'] != 'remove') {
-                        $log_msg = sprintf(__("%d %s created %d updated %d changed missing %d skipped", "wp_all_import_plugin"), $import->created, ( ($import->created == 1) ? $custom_type->labels->singular_name : $custom_type->labels->name ), $import->updated, $import->changed_missing, $import->skipped);
+                        $log_msg = sprintf(__("%d %s created %d updated %d changed missing %d skipped", "wp-all-import-pro"), $import->created, ( ($import->created == 1) ? $custom_type->labels->singular_name : $custom_type->labels->name ), $import->updated, $import->changed_missing, $import->skipped);
                     } else {
-                        $log_msg = sprintf(__("%d %s created %d updated %d deleted %d skipped", "wp_all_import_plugin"), $import->created, ( ($import->created == 1) ? $custom_type->labels->singular_name : $custom_type->labels->name ), $import->updated, $import->deleted, $import->skipped);
+                        $log_msg = sprintf(__("%d %s created %d updated %d deleted %d skipped", "wp-all-import-pro"), $import->created, ( ($import->created == 1) ? $custom_type->labels->singular_name : $custom_type->labels->name ), $import->updated, $import->deleted, $import->skipped);
                     }
                 }
                 $history_log->set([

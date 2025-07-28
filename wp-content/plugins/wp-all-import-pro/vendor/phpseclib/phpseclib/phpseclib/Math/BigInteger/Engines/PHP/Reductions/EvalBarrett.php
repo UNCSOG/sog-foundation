@@ -5,8 +5,6 @@
  *
  * PHP version 5 and 7
  *
- * @category  Math
- * @package   BigInteger
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2017 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -21,9 +19,7 @@ use phpseclib3\Math\BigInteger\Engines\PHP\Base;
 /**
  * PHP Dynamic Barrett Modular Exponentiation Engine
  *
- * @package PHP
  * @author  Jim Wigginton <terrafrost@php.net>
- * @access  public
  */
 abstract class EvalBarrett extends Base
 {
@@ -68,7 +64,7 @@ abstract class EvalBarrett extends Base
                 $lhs->value = $x;
                 $rhs = new ' . $class . '();
                 $rhs->value = [' .
-                implode(',', array_map('self::float2string', $m->value)) . '];
+                implode(',', array_map(self::class . '::float2string', $m->value)) . '];
                 list(, $temp) = $lhs->divide($rhs);
                 return $temp->value;
             ';
@@ -76,6 +72,14 @@ abstract class EvalBarrett extends Base
             self::$custom_reduction = $func;
             //self::$custom_reduction = \Closure::bind($func, $m, $class);
             return $func;
+        }
+
+        $correctionNeeded = false;
+        if ($m_length & 1) {
+            $correctionNeeded = true;
+            $m = clone $m;
+            array_unshift($m->value, 0);
+            $m_length++;
         }
 
         $lhs = new $class();
@@ -103,13 +107,17 @@ abstract class EvalBarrett extends Base
 
         $cutoff = count($m) + (count($m) >> 1);
 
-        $code = '
+        $code = $correctionNeeded ?
+            'array_unshift($n, 0);' :
+            '';
+
+        $code .= '
             if (count($n) > ' . (2 * count($m)) . ') {
                 $lhs = new ' . $class . '();
                 $rhs = new ' . $class . '();
                 $lhs->value = $n;
                 $rhs->value = [' .
-                implode(',', array_map('self::float2string', $m)) . '];
+                implode(',', array_map(self::class . '::float2string', $m)) . '];
                 list(, $temp) = $lhs->divide($rhs);
                 return $temp->value;
             }
@@ -144,6 +152,10 @@ abstract class EvalBarrett extends Base
         $subcode .= '$temp = $temp2;';
 
         $code .= self::generateInlineCompare($m, 'temp', $subcode);
+
+        if ($correctionNeeded) {
+            $code .= 'array_shift($temp);';
+        }
 
         $code .= 'return $temp;';
 

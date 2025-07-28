@@ -14,6 +14,9 @@ if ( ! function_exists('wp_all_import_get_gz')){
 		$tmpname = wp_unique_filename($targetDir, (strlen(basename($filename)) < 30) ? basename($filename) : time() );	
 		$localPath = $targetDir  .'/'. urldecode(sanitize_file_name($tmpname));
 
+		// Ensure we don't have a .php extension as it's often blocked on hosts in the uploads folder.
+		$localPath = str_replace('.php','.tmp', $localPath);
+
 		$fp = @fopen($localPath, 'w');			
 	    $file = @gzopen($filename, 'rb', $use_include_path);
 

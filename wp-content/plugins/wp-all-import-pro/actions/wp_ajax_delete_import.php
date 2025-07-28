@@ -2,11 +2,11 @@
 function pmxi_wp_ajax_delete_import(){
 
 	if ( ! check_ajax_referer( 'wp_all_import_secure', 'security', false )){
-		exit( json_encode(array('result' => false, 'msg' => __('Security check', 'wp_all_import_plugin'))) );
+		exit( json_encode(array('result' => false, 'msg' => __('Security check', 'wp-all-import-pro'))) );
 	}
 
 	if ( ! current_user_can( PMXI_Plugin::$capabilities ) ){
-		exit( json_encode(array('result' => false, 'msg' => __('Security check', 'wp_all_import_plugin'))) );
+		exit( json_encode(array('result' => false, 'msg' => __('Security check', 'wp-all-import-pro'))) );
 	}
 
 	$input = new PMXI_Input();
@@ -35,23 +35,23 @@ function pmxi_wp_ajax_delete_import(){
 				case 'taxonomies':
 					$tx = get_taxonomy($import['options']['taxonomy_type']);
 					$custom_type = new stdClass();
-					$custom_type->label = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp_all_import_plugin') : $tx->labels->name;
+					$custom_type->label = empty($tx->labels->name) ? __('Taxonomy Terms', 'wp-all-import-pro') : $tx->labels->name;
 					break;
 				case 'import_users':
 					$custom_type = new stdClass();
-					$custom_type->label = __('Users', 'wp_all_import_plugin');
+					$custom_type->label = __('Users', 'wp-all-import-pro');
 					break;
                 case 'woo_reviews':
                 case 'comments':
                     $custom_type = new stdClass();
-                    $custom_type->label = __('Comments', 'wp_all_import_plugin');
+                    $custom_type->label = __('Comments', 'wp-all-import-pro');
                     break;
 				case 'shop_customer':
 					$custom_type = new stdClass();
-					$custom_type->label = __('Customers', 'wp_all_import_plugin');
+					$custom_type->label = __('Customers', 'wp-all-import-pro');
 					break;
 				default:
-					$custom_type = get_post_type_object( $import['options']['custom_type'] );
+					$custom_type = wp_all_import_custom_type( $import['options']['custom_type'] );
 					break;
 			}
 			$cpt_name = ( ! empty($custom_type)) ? strtolower($custom_type->label) : '';
@@ -61,13 +61,13 @@ function pmxi_wp_ajax_delete_import(){
 	}
 
 	if ( $params['is_delete_import'] and ! $params['is_delete_posts'] ) {
-		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Import deleted', 'wp_all_import_plugin')), $params['base_url']));
+		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Import deleted', 'wp-all-import-pro')), $params['base_url']));
 	} elseif( ! $params['is_delete_import'] and $params['is_delete_posts']) {
-		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(__('All associated %s deleted.', 'wp_all_import_plugin'), $cpt_name)), $params['base_url']));
+		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(__('All associated %s deleted.', 'wp-all-import-pro'), $cpt_name)), $params['base_url']));
 	} elseif( $params['is_delete_import'] and $params['is_delete_posts']) {
-		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(__('Import and all associated %s deleted.', 'wp_all_import_plugin'), $cpt_name)), $params['base_url']));
+		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(sprintf(__('Import and all associated %s deleted.', 'wp-all-import-pro'), $cpt_name)), $params['base_url']));
 	} else {
-		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Nothing to delete.', 'wp_all_import_plugin')), $params['base_url']));
+		$response['redirect'] = esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('Nothing to delete.', 'wp-all-import-pro')), $params['base_url']));
 		exit( json_encode( $response ));
 	}
 
@@ -75,6 +75,7 @@ function pmxi_wp_ajax_delete_import(){
 		foreach ($params['import_ids'] as $key => $id) {
 			$import = new PMXI_Import_Record();
 			$import->getById($id);
+
 			if ( ! $import->isEmpty() ) {
 				if ((int) $post['iteration'] === 1) {
 					$import->set(array(
@@ -86,7 +87,7 @@ function pmxi_wp_ajax_delete_import(){
 				$is_all_records_deleted = $import->deletePostsAjax( ! $params['is_delete_posts'], $params['is_delete_images'], $params['is_delete_attachments'] );
 
 				$response['result'] = (empty($params['import_ids'][$key + 1])) ? $is_all_records_deleted : false;
-				$response['msg']    = sprintf(__('Import #%d - %d records deleted', 'wp_all_import_plugin'), $import->id, $import->deleted);
+				$response['msg']    = sprintf(__('Import #%d - %d records deleted', 'wp-all-import-pro'), $import->id, $import->deleted);
 
 				if ( $is_all_records_deleted === true )
 				{

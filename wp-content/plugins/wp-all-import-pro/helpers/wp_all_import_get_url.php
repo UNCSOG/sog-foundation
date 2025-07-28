@@ -19,9 +19,12 @@ if (!function_exists('wp_all_import_get_url')) {
 
         $localPath = $targetDir . '/' . urldecode(sanitize_file_name($tmpname)) . ((!$type) ? '.tmp' : '');
 
+		// Ensure we don't have a .php extension as it's often blocked on hosts in the uploads folder.
+		$localPath = str_replace('.php','.tmp', $localPath);
+
         $is_valid = FALSE;
 
-        $is_curl_download_only = apply_filters('wp_all_import_curl_download_only', false, $filePath);
+        $is_curl_download_only = apply_filters('wp_all_import_curl_download_only', true, $filePath);
 
         if ( ! $is_curl_download_only ){
 
@@ -39,7 +42,7 @@ if (!function_exists('wp_all_import_get_url')) {
                         $type = 'csv';
                     } // if it's a 1st chunk, then chunk <? symbols to detect XML file
                     $first_chunk = FALSE;
-                    @fwrite($fp, $chunk);
+		                 @fwrite($fp, $chunk);
                 }
                 @fclose($file);
                 @fclose($fp);
@@ -83,7 +86,7 @@ if (!function_exists('wp_all_import_get_url')) {
 
             $request = get_file_curl($filePath, $localPath);
 
-            if ( ! is_wp_error($request) ) {
+            if ( ! is_wp_error($request) && false !== $request ) {
 
                 if ( ! $type ) {
                     if ($contentEncoding == 'gzip') {

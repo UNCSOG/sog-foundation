@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" viewBox="0 0 36 36">
+  <!-- Circle with stroke only -->
+  <circle cx="18" cy="18" r="16" fill="none" stroke="#2271b1" stroke-width="2" />
+  
+  <!-- Down-facing chevron centered within the circle -->
+  <polyline points="12,16 18,22 24,16" fill="none" stroke="#2271b1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -34,7 +34,7 @@ function wp_all_import_get_image_from_gallery($image_name, $targetDir = FALSE, $
         foreach ($attachment_metas as $attachment_meta) {
             $attch = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->posts . " WHERE ID = %d;", $attachment_meta->post_id));
             if (!empty($attch)) {
-                $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by meta key _wp_attached_file equals to `%s`...', 'wp_all_import_plugin'), $attch->ID, trim($image_name)));
+                $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by meta key _wp_attached_file equals to `%s`...', 'wp-all-import-pro'), $attch->ID, trim($image_name)));
                 break;
             }
         }
@@ -47,7 +47,7 @@ function wp_all_import_get_image_from_gallery($image_name, $targetDir = FALSE, $
             foreach ($attachment_metas as $attachment_meta) {
                 $attch = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->posts . " WHERE ID = %d;", $attachment_meta->post_id));
                 if (!empty($attch)) {
-                    $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by meta key _wp_attached_file equals to `%s`...', 'wp_all_import_plugin'), $attch->ID, sanitize_file_name($image_name)));
+                    $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by meta key _wp_attached_file equals to `%s`...', 'wp-all-import-pro'), $attch->ID, sanitize_file_name($image_name)));
                     break;
                 }
             }
@@ -58,7 +58,7 @@ function wp_all_import_get_image_from_gallery($image_name, $targetDir = FALSE, $
         // Search attachment by file name with extension.
         $attch = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->posts . " WHERE (post_title = %s OR post_name = %s) AND post_type = %s", $image_name, sanitize_title($image_name), "attachment") . " AND post_mime_type LIKE 'image%';");
         if (!empty($attch)) {
-            $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by post_title or post_name equals to `%s`...', 'wp_all_import_plugin'), $attch->ID, $image_name));
+            $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by post_title or post_name equals to `%s`...', 'wp-all-import-pro'), $attch->ID, $image_name));
         }
     }
 
@@ -72,7 +72,7 @@ function wp_all_import_get_image_from_gallery($image_name, $targetDir = FALSE, $
                 $img_title = $img_meta['title'];
                 $attch = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . $wpdb->posts . " WHERE post_title = %s AND post_type = %s AND post_mime_type LIKE %s;", $img_title, "attachment", "image%"));
                 if (!empty($attch)){
-                    $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by post_title equals to `%s`...', 'wp_all_import_plugin'), $attch->ID, $img_title));
+                    $logger and call_user_func($logger, sprintf(__('- Found existing image with ID `%s` by post_title equals to `%s`...', 'wp-all-import-pro'), $attch->ID, $img_title));
                 }
             }
         }

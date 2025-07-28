@@ -1,32 +1,32 @@
-<?php 
+<?php
 
 function pmxi_admin_notices() {
 
-	// compare woocommerce add-on version	
-	if ( class_exists( 'PMWI_Plugin' ) and ( defined('PMWI_VERSION') and version_compare(PMWI_VERSION, '2.1.3 RC5') < 0 and PMWI_EDITION == 'paid' or defined('PMWI_FREE_VERSION') and version_compare(PMWI_FREE_VERSION, '1.2.1') <= 0 and PMWI_EDITION == 'free') ) {
+	// compare woocommerce add-on version
+	if ( class_exists( 'PMWI_Plugin' ) and ( defined('PMWI_VERSION') and version_compare(PMWI_VERSION, '4.0.0-beta-1.1') < 0 and PMWI_EDITION == 'paid' or defined('PMWI_FREE_VERSION') and version_compare(PMWI_FREE_VERSION, '1.2.1') <= 0 and PMWI_EDITION == 'free') ) {
 		?>
 		<div class="error"><p>
 			<?php printf(
-					__('<b>%s Plugin</b>: Please update your WP All Import WooCommerce add-on to the latest version', 'wp_all_import_plugin'),
+					__('<b>%s Plugin</b>: Please update your WP All Import WooCommerce add-on to the latest version (4.0.0+)', 'wp-all-import-pro'),
 					PMWI_Plugin::getInstance()->getName()
 			) ?>
 		</p></div>
 		<?php
-			
+/*
 		if (defined('PMWI_EDITION') and PMWI_EDITION == 'paid')
 		{
 			deactivate_plugins( PMWI_ROOT_DIR . '/wpai-woocommerce-add-on.php');
 		}
 		else
-		{	
-			if (defined('PMWI_FREE_ROOT_DIR')){ 
-				deactivate_plugins( PMWI_FREE_ROOT_DIR . '/plugin.php');		
+		{
+			if (defined('PMWI_FREE_ROOT_DIR')){
+				deactivate_plugins( PMWI_FREE_ROOT_DIR . '/plugin.php');
 			}
 			else{
-				deactivate_plugins( PMWI_ROOT_DIR . '/plugin.php');		
+				deactivate_plugins( PMWI_ROOT_DIR . '/plugin.php');
 			}
-		}
-		
+		}*/
+
 	}
 
 	// compare ACF add-on
@@ -34,16 +34,16 @@ function pmxi_admin_notices() {
 		?>
 		<div class="error"><p>
 			<?php printf(
-					__('<b>%s Plugin</b>: Please update your WP All Import ACF add-on to the latest version', 'wp_all_import_plugin'),
+					__('<b>%s Plugin</b>: Please update your WP All Import ACF add-on to the latest version', 'wp-all-import-pro'),
 					PMAI_Plugin::getInstance()->getName()
 			) ?>
 		</p></div>
 		<?php
-			
+
 		if (defined('PMAI_EDITION') and PMAI_EDITION == 'paid')
 		{
 			deactivate_plugins( PMAI_ROOT_DIR . '/wpai-acf-add-on.php');
-		}				
+		}
 	}
 
 	// compare Linkcloak add-on
@@ -51,16 +51,16 @@ function pmxi_admin_notices() {
 		?>
 		<div class="error"><p>
 			<?php printf(
-					__('<b>%s Plugin</b>: Please update your WP All Import Linkcloak add-on to the latest version', 'wp_all_import_plugin'),
+					__('<b>%s Plugin</b>: Please update your WP All Import Linkcloak add-on to the latest version', 'wp-all-import-pro'),
 					PMLCA_Plugin::getInstance()->getName()
 			) ?>
 		</p></div>
 		<?php
-			
+
 		if (defined('PMLCA_EDITION') and PMLCA_EDITION == 'paid')
 		{
 			deactivate_plugins( PMLCA_ROOT_DIR . '/wpai-linkcloak-add-on.php');
-		}				
+		}
 	}
 
 	// compare User add-on
@@ -68,16 +68,16 @@ function pmxi_admin_notices() {
 		?>
 		<div class="error"><p>
 			<?php printf(
-					__('<b>%s Plugin</b>: Please update your WP All Import User add-on to the latest version', 'wp_all_import_plugin'),
+					__('<b>%s Plugin</b>: Please update your WP All Import User add-on to the latest version', 'wp-all-import-pro'),
 					PMUI_Plugin::getInstance()->getName()
 			) ?>
 		</p></div>
 		<?php
-			
+
 		if (defined('PMUI_EDITION') and PMUI_EDITION == 'paid')
 		{
 			deactivate_plugins( PMUI_ROOT_DIR . '/wpai-user-add-on.php');
-		}				
+		}
 	}
 
 	// compare WPML add-on
@@ -85,17 +85,17 @@ function pmxi_admin_notices() {
 		?>
 		<div class="error"><p>
 			<?php printf(
-					__('<b>%s Plugin</b>: The WPML Add-On Plugin is no longer compatible with this version of WP All Import - please contact support@wpallimport.com and we will supply the latest version of WP All Import that is compatible with the WPML Add-On.', 'wp_all_import_plugin'),
+					__('<b>%s Plugin</b>: The WPML Add-On Plugin is no longer compatible with this version of WP All Import - please contact support@wpallimport.com and we will supply the latest version of WP All Import that is compatible with the WPML Add-On.', 'wp-all-import-pro'),
 					PMLI_Plugin::getInstance()->getName()
 			) ?>
 		</p></div>
 		<?php
-			
+
 		if (defined('PMLI_EDITION') and PMLI_EDITION == 'paid')
 		{
 			deactivate_plugins( PMLI_ROOT_DIR . '/plugin.php');
-		}				
-	}	
+		}
+	}
 
 	$input = new PMXI_Input();
 	$messages = $input->get('pmxi_nt', array());
@@ -105,19 +105,19 @@ function pmxi_admin_notices() {
 			in_array((string)$type, array('updated', 'error')) or $type = 'updated';
 			?>
 			<div class="<?php echo $type ?>"><p><?php echo $m ?></p></div>
-			<?php 
+			<?php
 		}
-	}	
+	}
 	$warnings = $input->get('warnings', array());
 	if ($warnings) {
 		is_array($warnings) or $warnings = explode(',', $warnings);
-		foreach ($warnings as $code) {			
+		foreach ($warnings as $code) {
 			switch ($code) {
 				case 1:
-					$m = __('<strong>Warning:</strong> your title is blank.', 'wp_all_import_plugin');
+					$m = __('<strong>Warning:</strong> your title is blank.', 'wp-all-import-pro');
 					break;
 				case 2:
-					$m = __('<strong>Warning:</strong> your content is blank.', 'wp_all_import_plugin');
+					$m = __('<strong>Warning:</strong> your content is blank.', 'wp-all-import-pro');
 					break;
 				default:
 					$m = false;
@@ -126,9 +126,9 @@ function pmxi_admin_notices() {
 			if ($m):
 			?>
 			<div class="error"><p><?php echo $m ?></p></div>
-			<?php 
+			<?php
 			endif;
 		}
-	}	
-	wp_all_import_addon_notifications();	
+	}
+	wp_all_import_addon_notifications();
 }

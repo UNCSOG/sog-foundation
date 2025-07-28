@@ -11,17 +11,18 @@ function pmxi_admin_menu() {
 	if (current_user_can(PMXI_Plugin::$capabilities)) { // admin management options
 		
 		$wpai_menu = array(
-			array('pmxi-admin-import',  __('New Import', 'wp_all_import_plugin')),
-			array('pmxi-admin-manage' ,  __('Manage Imports', 'wp_all_import_plugin')),
-			array('pmxi-admin-settings',  __('Settings', 'wp_all_import_plugin')),
-			//array('pmxi-admin-license',  __('Licenses', 'wp_all_import_plugin')),
-			array('pmxi-admin-history',  __('History', 'wp_all_import_plugin'))
-			/*array('pmxi-admin-addons',  __('Add-ons', 'wp_all_import_plugin')), */			
+			array('pmxi-admin-import',  __('New Import', 'wp-all-import-pro')),
+			array('pmxi-admin-manage' ,  __('Manage Imports', 'wp-all-import-pro')),
+			array('pmxi-admin-settings',  __('Settings', 'wp-all-import-pro')),
+			//array('pmxi-admin-license',  __('Licenses', 'wp-all-import-pro')),
+			array('pmxi-admin-partners',  __('Partner Discounts', 'wp-all-import-pro')),	
+			array('pmxi-admin-history',  __('History', 'wp-all-import-pro'))
+			/*array('pmxi-admin-addons',  __('Add-ons', 'wp-all-import-pro')), */			
 		);
 
 		$wpai_menu = apply_filters('pmxi_admin_menu', $wpai_menu);		
 
-		add_menu_page(__('WP All Import', 'wp_all_import_plugin'), __('All Import', 'wp_all_import_plugin'), PMXI_Plugin::$capabilities, 'pmxi-admin-home', array(PMXI_Plugin::getInstance(), 'adminDispatcher'), 'data:image/svg+xml;base64,' . $icon_base64, 112);
+		add_menu_page(__('WP All Import', 'wp-all-import-pro'), __('All Import', 'wp-all-import-pro'), PMXI_Plugin::$capabilities, 'pmxi-admin-home', array(PMXI_Plugin::getInstance(), 'adminDispatcher'), 'data:image/svg+xml;base64,' . $icon_base64, 112);
 		// workaround to rename 1st option to `Home`
 		$submenu['pmxi-admin-home'] = array();
 

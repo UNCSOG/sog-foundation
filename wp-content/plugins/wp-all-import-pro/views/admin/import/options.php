@@ -15,10 +15,10 @@
 		<div class="wpallimport-header">
 			<div class="wpallimport-logo"></div>
 			<div class="wpallimport-title">
-				<h2><?php _e('Import Settings', 'wp_all_import_plugin'); ?></h2>
+				<h2><?php _e('Import Settings', 'wp-all-import-pro'); ?></h2>
 			</div>
 			<div class="wpallimport-links">
-				<a href="http://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp_all_import_plugin'); ?></a> | <a href="http://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp_all_import_plugin'); ?></a>
+				<a href="https://www.wpallimport.com/support/" target="_blank"><?php _e('Support', 'wp-all-import-pro'); ?></a> | <a href="https://www.wpallimport.com/documentation/" target="_blank"><?php _e('Documentation', 'wp-all-import-pro'); ?></a>
 			</div>
 		</div>
 		<div class="clear"></div>
@@ -57,15 +57,15 @@
 					<div class="wpallimport-notify-wrapper">
 						<div class="error-headers exclamation">
 							<?php if (isset($is_404) && $is_404 && $update_previous->type == 'url'): ?>
-							<h3><?php _e('This URL no longer returns an import file', 'wp_all_import_plugin');?></h3>
-							<h4 style="font-size:18px;"><?php _e("You must provide a URL that returns a valid import file.", "wp_all_import_plugin"); ?></h4>
+							<h3><?php _e('This URL no longer returns an import file', 'wp-all-import-pro');?></h3>
+							<h4 style="font-size:18px;"><?php _e("You must provide a URL that returns a valid import file.", "wp-all-import-pro"); ?></h4>
 							<?php else: ?>
-							<h3><?php _e('There\'s a problem with your import file', 'wp_all_import_plugin');?></h3>
-							<h4 style="font-size:18px;"><?php _e("It has changed and is not compatible with this import template.", "wp_all_import_plugin"); ?></h4>
+							<h3><?php _e('There\'s a problem with your import file', 'wp-all-import-pro');?></h3>
+							<h4 style="font-size:18px;"><?php _e("It has changed and is not compatible with this import template.", "wp-all-import-pro"); ?></h4>
 							<?php endif;?>
 						</div>
 					</div>
-					<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="http://www.wpallimport.com/documentation/troubleshooting/problems-with-import-files/#invalid" target="_blank"><?php _e('Read More', 'wp_all_import_plugin');?></a>
+					<a class="button button-primary button-hero wpallimport-large-button wpallimport-notify-read-more" href="https://www.wpallimport.com/documentation/problems-with-import-files/" target="_blank"><?php _e('Read More', 'wp-all-import-pro');?></a>
 				</div>
 
 				<form class="<?php echo ! $isWizard ? 'edit' : 'options' ?>" method="post" enctype="multipart/form-data" autocomplete="off" <?php echo ! $isWizard ? 'style="overflow:visible;"' : '' ?> id="wpai-submit-confirm-form">
@@ -97,27 +97,50 @@
                             if(!isset($import)) {
                                 $import = $update_previous;
                             }
-                            include( 'options/scheduling/_scheduling_ui.php' );
+                            ?>
+                        <div class="wpallimport-collapsed closed wpallimport-section scheduling">
+                            <div class="wpallimport-content-section">
+                                <div class="wpallimport-collapsed-header <?php if(!$import->canBeScheduled()) { ?> disabled<?php } ?>"
+									<?php if(!$import->canBeScheduled()) { ?> title="<?php _e("To run this import on a schedule you must use the 'Download from URL' or 'Use existing file' options on the Data Source screen.", 'wp-all-import-pro');?>" <?php }?>>
+                                    <h3 id="scheduling-title"><?php _e('Scheduling Options','wp-all-import-pro');?>
+										<?php if(!$import->canBeScheduled()) { ?>
+                                            <a href="#help" class="wpallimport-help" style="position: relative; top: -2px; margin-left: 0; width: 20px; height: 20px;"  title="<?php _e("To run this import on a schedule you must use the 'Download from URL' or 'Use existing file' option on the Import Settings page.", 'wp-all-import-pro');?>">?</a>
+										<?php } ?>
+                                    </h3>
+                                </div>
+                                <div class="wpallimport-collapsed-content" style="padding: 0;">
+                                    <div class="wpallimport-collapsed-content-inner">
 
+                        <?php
+                            include( 'options/scheduling/_scheduling_ui.php' );
+                        ?>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
 							if ( in_array('settings', $visible_sections)) include( 'options/_settings_template.php' );
 
 							?>
                         <?php if ( $import->type !== 'upload' ): ?>
                         <div style="color: #425F9A; font-size: 14px; font-weight: bold; margin: 0 0 15px; line-height: 25px; text-align: center;">
                             <div id="no-subscription" style="display: none;">
-                                <?php _e("Looks like you're trying out Automatic Scheduling!", 'wp_all_import_plugin');?><br/>
-                                <?php _e("Your Automatic Scheduling settings won't be saved without a subscription.", 'wp_all_import_plugin');?>
+                                <?php _e("Looks like you're trying out Automatic Scheduling!", 'wp-all-import-pro');?><br/>
+                                <?php _e("Your Automatic Scheduling settings won't be saved without a subscription.", 'wp-all-import-pro');?>
                             </div>
                         </div>
+
                         <?php endif; ?>
                         <input type="hidden" id="scheduling_import_id" value="<?php echo $import->id; ?>" />
+
                         <?php
 							include( 'options/_buttons_template.php' );
 						?>
 					</div>
 
 				</form>
-				<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp_all_import_plugin'); ?> <span></span></a>
+				<a href="http://soflyy.com/" target="_blank" class="wpallimport-created-by"><?php _e('Created by', 'wp-all-import-pro'); ?> <span></span></a>
 
 			</td>
 			<td class="right template-sidebar ">
@@ -132,34 +155,34 @@
 
 <div id="record_matching_pointer" style="display:none;">
 
-	<h3><?php _e("Record Matching", "pmxi_plugin");?></h3>
+	<h3><?php _e("Record Matching", 'wp-all-import-pro');?></h3>
 
 	<p>
-		<b><?php _e("Record Matching is how WP All Import matches records in this import file with posts that already exist in WordPress.","pmxi_plugin");?></b>
+		<b><?php _e("Record Matching is how WP All Import matches records in this import file with posts that already exist in WordPress.", 'wp-all-import-pro');?></b>
 	</p>
 
 	<p>
-		<?php _e("Record Matching is most commonly used to tell WP All Import how to match up records in this import file with posts WP All Import has already created on your site, so that if this import file is updated with new data, WP All Import can update your posts accordingly.","pmxi_plugin");?>
-	</p>
-
-	<hr />
-
-	<p><?php _e("AUTOMATIC RECORD MATCHING","pmxi_plugin");?></p>
-
-	<p>
-		<?php _e("Automatic Record Matching allows WP All Import to update records that were imported or updated during the last run of this same import.","pmxi_plugin");?>
-	</p>
-
-	<p>
-		<?php _e("Your unique key must be UNIQUE for each record in your feed. Make sure you get it right - you can't change it later. You'll have to re-create your import.","pmxi_plugin");?>
+		<?php _e("Record Matching is most commonly used to tell WP All Import how to match up records in this import file with posts WP All Import has already created on your site, so that if this import file is updated with new data, WP All Import can update your posts accordingly.", 'wp-all-import-pro');?>
 	</p>
 
 	<hr />
 
-	<p><?php _e("MANUAL RECORD MATCHING", "pmxi_plugin");?></p>
+	<p><?php _e("AUTOMATIC RECORD MATCHING",'wp-all-import-pro');?></p>
 
 	<p>
-		<?php _e("Manual record matching allows WP All Import to update any records, even records that were not imported with WP All Import, or are part of a different import.","pmxi_plugin");?>
+		<?php _e("Automatic Record Matching allows WP All Import to update records that were imported or updated during the last run of this same import.",'wp-all-import-pro');?>
+	</p>
+
+	<p>
+		<?php _e("Your unique key must be UNIQUE for each record in your feed. Make sure you get it right - you can't change it later. You'll have to re-create your import.",'wp-all-import-pro');?>
+	</p>
+
+	<hr />
+
+	<p><?php _e("MANUAL RECORD MATCHING", 'wp-all-import-pro');?></p>
+
+	<p>
+		<?php _e("Manual record matching allows WP All Import to update any records, even records that were not imported with WP All Import, or are part of a different import.",'wp-all-import-pro');?>
 	</p>
 
 </div>

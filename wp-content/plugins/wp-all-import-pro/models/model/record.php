@@ -30,7 +30,7 @@ class PMXI_Model_Record extends PMXI_Model {
 		if (is_array($result)) {
 			foreach ($result as $k => $v) {
 				if (is_serialized($v)) {
-					$result[$k] = unserialize($v);
+					$result[$k] = \pmxi_maybe_unserialize($v);
 				}
 			}
 			$this->exchangeArray($result);

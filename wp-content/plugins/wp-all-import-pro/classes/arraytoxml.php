@@ -39,6 +39,10 @@ class PMXI_ArrayToXML
 
                 if ($key && is_numeric($key[0])) $key = 'v' . $key;
 
+				// Skip empty keys to avoid issues in PHP 8+ and keep the output equivalent to older WPAI versions.
+		        if(empty($key))
+					continue;
+
 	            // if there is another array found recursively call this function
 	            if (is_array($value) or is_object($value))
 	            {
@@ -52,7 +56,9 @@ class PMXI_ArrayToXML
 					$filter_non_ascii_chars = apply_filters('wp_all_import_csv_to_xml_remove_non_ascii_characters', true);
 
 					// Add single node.
-					$value = htmlspecialchars(($filter_non_ascii_chars ? preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value) : $value));
+		            if(! is_null($value)) {
+			            $value = htmlspecialchars( ( $filter_non_ascii_chars ? preg_replace( '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $value ) : $value ) );
+		            }
 
 					$xml->addChild($key, $value);
 

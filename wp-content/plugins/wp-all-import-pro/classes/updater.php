@@ -53,7 +53,19 @@ if( ! class_exists('PMXI_Updater') ) {
             add_action( 'after_plugin_row_' . $this->name, array( $this, 'show_update_notification' ), 11, 2 );
             add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
             add_filter( 'plugin_auto_update_setting_html', array( $this, 'plugin_auto_update_setting_html' ), 10, 3 );
+	        add_action( 'in_plugin_update_message-'.$this->name, [$this, 'custom_update_note'], 10, 2);
         }
+
+	    public function custom_update_note( $data, $response ){
+
+		    // Only show a custom note if one was included in the update data.
+		    if ( is_object($response) && !empty($response->custom_update_note) && !empty($response->update_note_version)){
+			    // Ensure that this version is the same or older than the note's target version.
+			    if( version_compare($this->version, $response->update_note_version, '<=')) {
+				    echo wp_kses( $response->custom_update_note, 'post' );
+			    }
+		    }
+	    }
 
         /**
          * Hide the 'Enable auto-updates' link.
@@ -81,7 +93,7 @@ if( ! class_exists('PMXI_Updater') ) {
             if ( $file == $this->name ) {
                 $plugin = preg_replace("%\\/%", "", str_replace(basename($file), '', $file));
                 $row_meta = array(
-                    'changelog'    => '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin='. $plugin .'&section=changelog&TB_iframe=true&width=600&height=800' ) . '" class="thickbox open-plugin-details-modal" title="' . esc_attr( __( 'View WP All Import Pro Changelog', 'wp_all_import_plugin' ) ) . '">' . __( 'Changelog', 'wp_all_import_plugin' ) . '</a>',
+                    'changelog'    => '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin='. $plugin .'&section=changelog&TB_iframe=true&width=600&height=800' ) . '" class="thickbox open-plugin-details-modal" title="' . esc_attr( __( 'View WP All Import Pro Changelog', 'wp-all-import-pro' ) ) . '">' . __( 'Changelog', 'wp-all-import-pro' ) . '</a>',
                 );
 
                 return array_merge( $links, $row_meta );
@@ -280,7 +292,7 @@ if( ! class_exists('PMXI_Updater') ) {
                 $changelog_link = self_admin_url('plugin-install.php?tab=plugin-information&plugin='. $this->slug .'&section=changelog&TB_iframe=true&width=772&height=412');
                 if (!empty($version_info->php_version) && version_compare( $this->php_version, $version_info->php_version, '<')) {
                     $new_version = "<span class=\"wp-all-import-pro-new-version-notice\">" . sprintf(
-                        __('WP All Import '. $version_info->new_version .' requires PHP %1s or greater, you are using PHP %2s. Please contact your host and tell them to update your server to at least PHP %1s.', 'wp_all_import_plugin'),
+                        __('WP All Import '. $version_info->new_version .' requires PHP %1s or greater, you are using PHP %2s. Please contact your host and tell them to update your server to at least PHP %1s.', 'wp-all-import-pro'),
                         $version_info->php_version,
                         $this->php_version,
                         $version_info->php_version
@@ -288,17 +300,17 @@ if( ! class_exists('PMXI_Updater') ) {
                 } elseif ( empty( $version_info->download_link ) ) {
                     if ($shiny_updates) $update_msg_classes .= ' post-shiny-updates';
                     $new_version = "<span class=\"wp-all-import-pro-new-version-notice\">" . sprintf(
-                        __( 'A new version of WP All Import Pro is available. <strong>A valid license is required to enable updates - enter your license key on the <a href="%1$s">Licenses</a> page.</strong>', 'wp_all_import_plugin' ),
+                        __( 'A new version of WP All Import Pro is available. <strong>A valid license is required to enable updates - enter your license key on the <a href="%1$s">Licenses</a> page.</strong>', 'wp-all-import-pro' ),
                         esc_url(admin_url('admin.php?page=pmxi-admin-settings'))
                     ) . "</span>";
                     $new_version .= "<span class=\"wp-all-import-pro-licence-error-notice\">" . sprintf(
-                        __( 'If you don\'t have a license, please see <a href="%1$s" target="_blank">details & pricing</a>. If you do have a license, you can access it at the <a href="%2$s" target="_blank">customer portal</a>.', 'wp_all_import_plugin'),
+                        __( 'If you don\'t have a license, please see <a href="%1$s" target="_blank">details & pricing</a>. If you do have a license, you can access it at the <a href="%2$s" target="_blank">customer portal</a>.', 'wp-all-import-pro'),
                         esc_url( 'http://www.wpallimport.com/order-now/' ),
                         esc_url( 'http://www.wpallimport.com/portal/' )
                     ) . "</span>";
                 } else {
                     $new_version = "<span class=\"wp-all-import-pro-new-version-notice\">" . sprintf(
-                        __( 'There is a new version of WP All Import Pro available. <a target="_blank" class="thickbox" href="%1$s">View version %2$s details</a> or <a href="%3$s" class="update-link">update now</a>.', 'wp_all_import_plugin' ),
+                        __( 'There is a new version of WP All Import Pro available. <a target="_blank" class="thickbox" href="%1$s">View version %2$s details</a> or <a href="%3$s" class="update-link">update now</a>.', 'wp-all-import-pro' ),
                         esc_url( $changelog_link ),
                         esc_html( $version_info->new_version ),
                         esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) )
@@ -316,12 +328,15 @@ if( ! class_exists('PMXI_Updater') ) {
             // If something went wrong with retrieving the columns, default to 3 for colspan.
             $colspan = ! is_countable( $columns ) ? 3 : count( $columns );
 
+            // The 'in_plugin_update_message-' hook actions are performed to match default updater behavior and to allow
+            // custom messages to be shown as provided by the update service.
             ?>
             <tr class="plugin-update-tr <?php echo $active; ?> wp-all-import-pro-custom">
                 <td colspan="<?php echo $colspan;?>" class="plugin-update colspanchange">
                     <div class="update-message <?php echo $update_msg_classes; ?>">
                         <p>
                             <?php echo $new_version; ?>
+                            <?php do_action('in_plugin_update_message-'.$this->name, [], $version_info);?>
                         </p>
                     </div>
                 </td>
@@ -438,7 +453,8 @@ if( ! class_exists('PMXI_Updater') ) {
          *
          * @param array   $args
          * @param string  $url
-         * @return object $array
+         *
+         * @return array|object
          */
         function http_request_args( $args, $url ) {
 
@@ -469,7 +485,7 @@ if( ! class_exists('PMXI_Updater') ) {
             $data = array_merge( $this->api_data, $_data );
 
             if ( $data['slug'] != $this->slug )
-                return;
+                return false;
 
 //            if ( empty( $data['license'] ) )
 //                return;
@@ -492,7 +508,8 @@ if( ! class_exists('PMXI_Updater') ) {
                 'signature'  => defined('WPALLIMPORT_SIGNATURE') ? WPALLIMPORT_SIGNATURE : ''
             );
 
-            $request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => true, 'body' => $api_params ) );
+
+            $request = wp_remote_get( esc_url_raw(add_query_arg($api_params, $this->api_url.'check_version/?')), array( 'timeout' => 15, 'sslverify' => true ) );
 
             if ( ! is_wp_error( $request ) ) {
                 $request = json_decode( wp_remote_retrieve_body( $request ) );

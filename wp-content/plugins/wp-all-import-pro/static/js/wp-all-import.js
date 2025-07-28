@@ -20,6 +20,8 @@
 
 	    var ths = $(this);
 
+		$(this).parent('div:first').hide();
+
 		$.ajax({
 			type: 'POST',
 			url: ajaxurl,

@@ -9,12 +9,13 @@ function wp_all_import_sanitize_filename($filename) {
         $sanitized = substr($filename, 0, -(strlen($ext)+1));
         $sanitized = str_replace(".", "willbedots", $sanitized);
         $sanitized = str_replace("_", "willbetrimmed", $sanitized);
-		$sanitized = sanitize_file_name($sanitized);
+		$sanitized = sanitize_file_name($sanitized . '.' . $ext);
         $sanitized = str_replace("willbetrimmed", "_", $sanitized);
         $sanitized = str_replace("willbedots", ".", $sanitized);
 		// Replace dots inside filename
 		//$sanitized = str_replace('.','-', $sanitized);
-		return $sanitized . '.' . $ext;
+		
+		return $sanitized;
 	}
 	return $filename;
 }

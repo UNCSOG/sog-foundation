@@ -17,9 +17,9 @@ class RemoteFilesystem {
 	private $rel_type;
 	private $default_port = false;
 	private $error_stack = [];
-	private $type;
+	private $type = '';
 	private $contents;
-	private $orig_type = false;
+	private $orig_type = '';
 	private $allow_hidden_files_folders;
 	// Should match list in classes/upload.php#56 - xml|gzip|zip|csv|tsv|gz|json|txt|dat|psv|sql|xls|xlsx
 	private $allowed_file_extensions = ['xml','gzip','zip','csv','tsv','gz','json','txt','dat','psv','sql','xls','xlsx'];
@@ -103,7 +103,7 @@ class RemoteFilesystem {
 	private function buildFilesystem( $type ) {
 
 		$this->type = $type;
-		if( $this->orig_type === false )
+		if( $this->orig_type === '' )
 			$this->orig_type = $type;
 
 		try {
@@ -111,6 +111,9 @@ class RemoteFilesystem {
 			switch ( $type ) {
 
 				case 'ftp':
+					if(!defined('FTP_BINARY')){
+						throw new Exception('PHP FTP support is not enabled on your site. FTP connections will fail.');
+					}
 					$this->filesystem = new Filesystem( new FtpAdapter( $this->options ) );
 					break;
 				case 'sftp':
@@ -118,7 +121,7 @@ class RemoteFilesystem {
 					break;
 			}
 
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			$this->error = $e->getMessage();
 
 		}
@@ -133,7 +136,7 @@ class RemoteFilesystem {
 			// Filter the contents.
 			$this->filter_contents();
 
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 
 			$this->error = $e->getMessage();
 
@@ -210,8 +213,8 @@ class RemoteFilesystem {
 
 				} elseif ( $this->orig_type === $this->type && empty( $this->options['privateKey'] ) ) {
 
-					$this->type         = ( $this->type === 'sftp' ) ? 'ftp' : 'sftp';
-					$this->default_port = ( $this->type === 'sftp' ) ? [ 22, 2222 ] : [ 21 ];
+					$this->type         = $this->type === 'sftp' ? 'ftp' : 'sftp';
+					$this->default_port = $this->type === 'sftp' ? [ 22, 2222 ] : [ 21 ];
 
 					$this->error_stack[] = $this->error;
 					$this->error         = false;
@@ -247,7 +250,7 @@ class RemoteFilesystem {
 			if ( $result ) {
 				return [ $destination . '/' . basename( $this->options['dir'] ) ];
 			}
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			$this->error = $e->getMessage();
 
 
@@ -272,7 +275,7 @@ class RemoteFilesystem {
 					if ( ( is_file( $filename ) ) && ( 0 !== filesize( $filename ) ) ) {
 						return [ $filename ];
 					}
-				} catch ( \Exception $e ) {
+				} catch ( \Throwable $e ) {
 					$this->error = $e->getMessage();
 
 					return false;
@@ -354,15 +357,16 @@ class RemoteFilesystem {
 
 					case ( 'oldest' ):
 
+						// Filter out any non files and filter by file type.
+						$contents = array_filter( $contents, function ( $var ) {
+							return ( isset( $var['type'] ) && $var['type'] == 'file' && isset( $var['extension'] ) && ( $var['extension'] == $this->rel_type || empty( $this->rel_type ) ) );
+						} );
+
 						// Sort by timestamp newest to oldest.
 						uasort( $contents, function ( $a, $b ) {
 							return $b['timestamp'] - $a['timestamp'];
 						} );
 
-						// Filter out any non files and filter by file type.
-						$contents = array_filter( $contents, function ( $var ) {
-							return ( isset( $var['type'] ) && $var['type'] == 'file' && isset( $var['extension'] ) && ( $var['extension'] == $this->rel_type || empty( $this->rel_type ) ) );
-						} );
 
 						$file = array_pop( $contents );
 
@@ -371,14 +375,14 @@ class RemoteFilesystem {
 
 					case ( 'newest' ):
 
-						// Sort by timestamp oldest to newest.
-						uasort( $contents, function ( $a, $b ) {
-							return $a['timestamp'] - $b['timestamp'];
-						} );
-
 						// Filter out any non files and filter by file type.
 						$contents = array_filter( $contents, function ( $var ) {
 							return ( isset( $var['type'] ) && $var['type'] == 'file' && isset( $var['extension'] ) && ( $var['extension'] == $this->rel_type || empty( $this->rel_type ) ) );
+						} );
+
+						// Sort by timestamp oldest to newest.
+						uasort( $contents, function ( $a, $b ) {
+							return $a['timestamp'] - $b['timestamp'];
 						} );
 
 						$file = array_pop( $contents );
@@ -393,7 +397,7 @@ class RemoteFilesystem {
 						break;
 				}
 			}
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			$this->error = $e->getMessage();
 
 		}

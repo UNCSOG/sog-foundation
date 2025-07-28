@@ -97,7 +97,7 @@ class SchedulingController
             if ( ! empty($response) and is_array($response)){
                 if($response == array(
                     'status'     => 200,
-                    'message'    => sprintf(__('Import #%s complete', 'wp_all_import_plugin'),$importId)
+                    'message'    => sprintf(__('Import #%s complete', 'wp-all-import-pro'),$importId)
                 )) {
                     return new JsonResponse(array('Import #' . $importId . ' complete'), 201);
                 } else {

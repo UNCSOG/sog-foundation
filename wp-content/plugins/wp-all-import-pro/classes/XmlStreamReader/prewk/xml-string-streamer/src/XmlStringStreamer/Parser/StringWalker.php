@@ -132,7 +132,7 @@ class StringWalker implements ParserInterface
             $data = substr($this->chunk, 0, $offset);
 
             // Shave from chunk
-            $this->chunk = substr($this->chunk, $offset + strlen($captured));
+            $this->chunk = substr($this->chunk, (int)$offset + strlen($captured));
 
             return array($captured, $data . $captured);
         }
@@ -235,7 +235,7 @@ class StringWalker implements ParserInterface
                 }                
 
                 // Update depth
-                $this->depth += $depth;
+                $this->depth += (int)$depth;
 
                 $flush = false;
 

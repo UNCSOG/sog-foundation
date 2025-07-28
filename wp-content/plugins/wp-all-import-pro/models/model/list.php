@@ -58,7 +58,7 @@ class PMXI_Model_List extends PMXI_Model {
 	 * @return PMXI_Model_List
 	 */
 	public function getBy($field = NULL, $value = NULL, $orderBy = NULL, $page = NULL, $perPage = NULL, $groupBy = NULL) {
-		if (is_array($field) or is_null($field)) { // when associative array is submitted, do not expect second paramter to be $value, but act as if there is no $value parameter at all
+		if (is_array($field) or is_null($field)) { // when associative array is submitted, do not expect second parameter to be $value, but act as if there is no $value parameter at all
 			$groupBy = $perPage; $perPage = $page; $page = $orderBy; $orderBy = $value; $value = NULL;
 		}
 		! is_null($perPage) or $perPage = 20; // set default value for page length
@@ -84,7 +84,7 @@ class PMXI_Model_List extends PMXI_Model {
 			foreach ($result as $i => $row) {
 				foreach ($row as $k => $v) {
 					if (is_serialized($v)) {
-						$result[$i][$k] = unserialize($v);
+						$result[$i][$k] = \pmxi_maybe_unserialize($v);
 					}
 				}
 			}

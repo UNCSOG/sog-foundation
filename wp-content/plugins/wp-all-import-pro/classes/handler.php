@@ -66,13 +66,31 @@ class PMXI_Handler extends PMXI_Session {
 	 * @access public
 	 * @return array
 	 */
-	public function get_session_data() {
-		// return (array) get_option( '_wpallimport_session_' . $this->_import_id . '_', array() );
-		global $wpdb;
+	public function get_session_data()
+	{
+		$session = get_option('_wpallimport_session_' . $this->_import_id . '_', []);
+		$delete_option = false;
 
-		$session = $wpdb->get_row( $wpdb->prepare("SELECT option_name, option_value FROM $wpdb->options WHERE option_name = %s", '_wpallimport_session_' . $this->_import_id . '_'), ARRAY_A );				
+		if( false === $session ){
+			$delete_option = true;
+		}
 
-		return empty($session) ? array() : unserialize($session['option_value']);
+		if( !empty($session) && !is_array($session) ) {
+			$session_clear = \maybe_unserialize( base64_decode( $session ) );
+			if($session === $session_clear){
+				$delete_option = true;
+			}else{
+				$session = $session_clear;
+			}
+		}
+
+		if($delete_option){
+			delete_option('_wpallimport_session_' . $this->_import_id . '_');
+			delete_option('_wpallimport_session_expires_' . $this->_import_id . '_');
+			$session = [];
+		}
+
+		return $session;
 	}
 
     /**
@@ -92,12 +110,13 @@ class PMXI_Handler extends PMXI_Session {
 			wp_cache_delete( $session_option, 'options' );
 			wp_cache_delete( $session_expiry_option, 'options' );
 
-	    	if ( false === get_option( $session_option ) ) {
-	    		add_option( $session_option, $this->_data, '', 'no' );
-		    	add_option( $session_expiry_option, $this->_session_expiration, '', 'no' );
-	    	} else {
-		    	update_option( $session_option, $this->_data, false );
-	    	}
+		    if ( false === get_option( $session_option ) )
+		    {
+			    add_option( $session_option, base64_encode(serialize($this->_data)), '', 'no' );
+			    add_option( $session_expiry_option, $this->_session_expiration, '', 'no' );
+		    } else {
+			    update_option( $session_option, base64_encode(serialize($this->_data)) );
+		    }
 	    }	    
     }
 

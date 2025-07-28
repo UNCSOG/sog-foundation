@@ -39,8 +39,117 @@ namespace phpseclib\Net;
 
 use phpseclib\Crypt\RSA;
 
-class SFTP extends \phpseclib3\Net\SFTP
+/**
+ * Pure-PHP implementation of SFTP.
+ *
+ * @package SFTP
+ * @method void disableStatCache()
+ * @method void enableStatCache()
+ * @method void clearStatCache()
+ * @method void enablePathCanonicalization()
+ * @method void disablePathCanonicalization()
+ * @method void enableArbitraryLengthPackets()
+ * @method void disableArbitraryLengthPackets()
+ * @method string|false pwd()
+ * @method string|false realpath(string $path)
+ * @method bool chdir(string $dir)
+ * @method string[]|false nlist(string $dir = '.', bool $recursive = false)
+ * @method mixed[]|false rawlist(string $dir = '.', bool $recursive = false)
+ * @method void setListOrder(mixed ...$args)
+ * @method mixed[]|false stat(string $filename)
+ * @method mixed[]|false lstat(string $filename)
+ * @method bool truncate(string $filename, int $new_size)
+ * @method bool touch(string $filename, int $time = null, int $atime = null)
+ * @method bool chown(string $filename, int|string $uid, bool $recursive = false)
+ * @method bool chgrp(string $filename, int|string $gid, bool $recursive = false)
+ * @method bool chmod(int $mode, string $filename, bool $recursive = false)
+ * @method mixed readlink(string $link)
+ * @method bool symlink(string $target, string $link)
+ * @method bool mkdir(string $dir, int $mode = -1, bool $recursive = false)
+ * @method bool rmdir(string $dir)
+ * @method bool put(string $remote_file, string $data, int $mode = SFTP::SOURCE_STRING, int $start = -1, int $local_start = -1, ?callable $progressCallback = null)
+ * @method string|bool get(string $remote_file, string $local_file = false, int $offset = 0, int $length = -1, ?callable $progressCallback = null)
+ * @method bool delete(string $path, bool $recursive = true)
+ * @method bool file_exists(string $path)
+ * @method bool is_dir(string $path)
+ * @method bool is_file(string $path)
+ * @method bool is_link(string $path)
+ * @method bool is_readable(string $path)
+ * @method bool is_writable(string $path)
+ * @method bool is_writeable(string $path)
+ * @method int|float|false fileatime(string $path)
+ * @method int|float|false filemtime(string $path)
+ * @method int|false fileperms(string $path)
+ * @method int|false fileowner(string $path)
+ * @method int|false filegroup(string $path)
+ * @method int|float|false filesize(string $path)
+ * @method string|false filetype(string $path)
+ * @method bool rename(string $oldname, string $newname)
+ * @method string[]|string getSFTPLog()
+ * @method string[] getSFTPErrors()
+ * @method string getLastSFTPError()
+ * @method mixed[]|false getSupportedVersions()
+ * @method int|false getNegotiatedVersion()
+ * @method void setPreferredVersion(int $version)
+ * @method void enableDatePreservation()
+ * @method void disableDatePreservation()
+ * @author  Jim Wigginton <terrafrost@php.net>
+ * @access  public
+ */
+class SFTP
 {
+    /**#@+
+     * @access public
+     * @see \phpseclib\Net\SFTP::put()
+    */
+    /**
+     * Reads data from a local file.
+     */
+    const SOURCE_LOCAL_FILE = 1;
+    /**
+     * Reads data from a string.
+     */
+    // this value isn't really used anymore but i'm keeping it reserved for historical reasons
+    const SOURCE_STRING = 2;
+    /**
+     * Reads data from callback:
+     * function callback($length) returns string to proceed, null for EOF
+     */
+    const SOURCE_CALLBACK = 16;
+    /**
+     * Resumes an upload
+     */
+    const RESUME = 4;
+    /**
+     * Append a local file to an already existing remote file
+     */
+    const RESUME_START = 8;
+    /**#@-*/
+
+    /**
+     * The SFTP object
+     *
+     * @var \phpseclib3\File\SFTP
+     * @access private
+     */
+    private $sftp = null;
+
+    /**
+     * Default Constructor.
+     *
+     * Connects to an SFTP server
+     *
+     * @param string $host
+     * @param int $port
+     * @param int $timeout
+     * @return \phpseclib\Net\SFTP
+     * @access public
+     */
+    function __construct($host, $port = 22, $timeout = 10)
+    {
+        $this->sftp = new \phpseclib3\Net\SFTP($host, $port, $timeout);
+    }
+
     /**
      * Login
      *
@@ -63,7 +172,12 @@ class SFTP extends \phpseclib3\Net\SFTP
             }
         }
 
-        return parent::login($username, ...$args);
+        try {
+            return $this->sftp->login($username, ...$args);
+        } catch (\Exception $e) {
+            user_error($e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -77,7 +191,7 @@ class SFTP extends \phpseclib3\Net\SFTP
      */
     protected function parseAttributes(&$response)
     {
-        $r = parent::parseAttributes($response);
+        $r = $this->sftp->parseAttributes($response);
         if (isset($r['mode'])) {
             $r['permissions'] = $r['mode'];
         }
@@ -107,7 +221,7 @@ class SFTP extends \phpseclib3\Net\SFTP
      */
     public function setListOrder(...$args)
     {
-        $this->sortOptions = [];
+        $sortOptions = [];
         if (empty($args)) {
             return;
         }
@@ -116,11 +230,9 @@ class SFTP extends \phpseclib3\Net\SFTP
             if ($args[$i] == 'permissions') {
                 $args[$i] = 'mode';
             }
-            $this->sortOptions[$args[$i]] = $args[$i + 1];
+            $sortOptions[$args[$i]] = $args[$i + 1];
         }
-        if (!count($this->sortOptions)) {
-            $this->sortOptions = ['bogus' => true];
-        }
+        $this->sftp->setListOrder(...$args);
     }
 
     /**
@@ -134,6 +246,31 @@ class SFTP extends \phpseclib3\Net\SFTP
      */
     public function size($filename)
     {
-        return $this->filesize($filename);
+        return $this->sftp->filesize($filename);
+    }
+
+    /**
+     * Returns a public key object
+     *
+     * @access public
+     * @return SFTP|false
+     */
+    public function getSFTPObject()
+    {
+        return $this->sftp;
+    }
+
+    /**
+     *  __call() magic method
+     *
+     * @access public
+     */
+    public function __call($name, $args)
+    {
+        try {
+            return $this->sftp->$name(...$args);
+        } catch (\Exception $e) {
+            user_error($e->getMessage());
+        }
     }
 }

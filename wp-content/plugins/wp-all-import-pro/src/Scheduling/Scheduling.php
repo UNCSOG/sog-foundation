@@ -70,14 +70,14 @@ class Scheduling
     }
 
     /**
-     * @return bool
+     * @return array
      */
     public function checkLicense()
     {
         $options = \PMXI_Plugin::getInstance()->getOption();
 
         if (empty($options['scheduling_license'])) {
-            return false;
+            return ['success' => false];
         }
 
         return $this->licensingManager->checkLicense($options['scheduling_license'], \PMXI_Plugin::getSchedulingName());
@@ -89,7 +89,7 @@ class Scheduling
     public function checkConnection()
     {
 		// Only check connection if a valid license is set.
-        return $this->checkLicense() && $this->schedulingApi->checkConnection();
+        return !empty($this->checkLicense()['success']) && $this->schedulingApi->checkConnection();
     }
 
     /**
@@ -99,7 +99,7 @@ class Scheduling
     public function deleteScheduleIfExists($id)
     {
 
-        if (!$this->checkLicense()) {
+        if (empty($this->checkLicense()['success'])) {
             return true;
         }
 
@@ -117,7 +117,7 @@ class Scheduling
     public function handleScheduling($id, $post)
     {
 
-        if (!$this->checkLicense()) {
+        if (empty($this->checkLicense()['success'])) {
             return false;
         }
 

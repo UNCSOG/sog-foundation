@@ -63,7 +63,7 @@ class FtpbrowserController {
 		}
 
 		if( empty($contents['data']) ){
-			return $this->sendRes('No data returned from the (S)FTP server. The root path is probably required. Enter it in the path field like \'/root/path/here\'. The filename is optional when selecting on Step 1.', 400, 'text');
+			return $this->sendRes('No data returned from the (S)FTP server. The root path is probably required. Enter it in the path field like \'/root/path/here\'. The filename is optional when selecting on the Data Source screen.', 400, 'text');
 		}
 
 		// Check if port changed and send new port if needed.

@@ -31,7 +31,7 @@ class LicenseActivator
             );
 
             // Call the custom API.
-            $response = wp_remote_get(esc_url_raw(add_query_arg($api_params, $options['info_api_url'])), array('timeout' => 15, 'sslverify' => true));
+            $response = wp_remote_get(esc_url_raw(add_query_arg($api_params, $options['info_api_url_new'].'/check_license')), array('timeout' => 15, 'sslverify' => true));
 
             // make sure the response came back okay
             if (is_wp_error($response))
@@ -69,16 +69,20 @@ class LicenseActivator
                 $api_params = array(
                     'edd_action' => 'check_license',
                     'license' => PMXI_Plugin::decode($options[$licenseField]),
-                    'item_name' => urlencode($productName)
+                    'item_name' => urlencode($productName),
+                    'url' => home_url()
                 );
 
                 // Call the custom API.
-                $response = wp_remote_get(esc_url_raw(add_query_arg($api_params, $options['info_api_url'])), array('timeout' => 15, 'sslverify' => true));
+                $response = wp_remote_get(esc_url_raw(add_query_arg($api_params, $options['info_api_url_new'].'/check_license')), array('timeout' => 15, 'sslverify' => true));
 
                 if (is_wp_error($response))
                     return false;
 
                 $license_data = json_decode(wp_remote_retrieve_body($response));
+				if('scheduling_license' == $licenseField){
+					update_option('wpai_wpae_scheduling_license_site_limit', $license_data->license_limit ?? 0);
+				}
 
                 return $license_data->license;
 

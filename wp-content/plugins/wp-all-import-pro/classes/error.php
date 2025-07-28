@@ -26,13 +26,13 @@ class PMXI_Error{
             $error['message'] = str_replace('  ', ' ', $error['message']);
             echo "[[ERROR]]";
             if($error['message'] == '') {
-                $error['message'] = __('An unknown error occurred', 'wp_all_import_plugin');
+                $error['message'] = __('An unknown error occurred', 'wp-all-import-pro');
             }
-            $this->terminate(json_encode(array('error' => '<span class="error">'.$error['message'].' of the Functions Editor'.'</span>', 'line' => $error['line'], 'title' => __('PHP Error','wp_all_import_plugin'))));
+            $this->terminate(json_encode(array('error' => '<span class="error">'.$error['message'].' of the Functions Editor'.'</span>', 'line' => $error['line'], 'title' => __('PHP Error','wp-all-import-pro'))));
         } else if(strpos($error['file'], 'XMLWriter.php') !== false ) {
             if(strpos($error['message'],'syntax error, unexpected') !== false) {
                 echo "[[ERROR]]";
-                $this->terminate(json_encode(array('error'=>__('You probably forgot to close a quote', 'wp_all_import_plugin'),'title' => __('PHP Error','wp_all_import_plugin'))));
+                $this->terminate(json_encode(array('error'=>__('You probably forgot to close a quote', 'wp-all-import-pro'),'title' => __('PHP Error','wp-all-import-pro'))));
             }
         }
     }

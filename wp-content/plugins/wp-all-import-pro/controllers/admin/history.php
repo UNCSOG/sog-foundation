@@ -28,7 +28,7 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 		$get['id'] = absint($get['id']);
 		extract($get);
 		if (empty($id)){
-			wp_redirect(esc_url_raw(add_query_arg(array('page' => 'pmxi-admin-manage', 'pmxi_nt' => urlencode(__('Import is not specified.', 'wp_all_import_plugin'))), $this->baseUrl))); die();
+			wp_redirect(esc_url_raw(add_query_arg(array('page' => 'pmxi-admin-manage', 'pmxi_nt' => urlencode(__('Import is not specified.', 'wp-all-import-pro'))), $this->baseUrl))); die();
 		}
 		$this->data += $get;
 
@@ -54,8 +54,8 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 		$this->data['page_links'] = paginate_links(array(
 			'base' => add_query_arg(array('id' => $id, 'pagenum' => '%#%'), $this->baseUrl),
 			'format' => '',
-			'prev_text' => __('&laquo;', 'wp_all_import_plugin'),
-			'next_text' => __('&raquo;', 'wp_all_import_plugin'),
+			'prev_text' => __('&laquo;', 'wp-all-import-pro'),
+			'next_text' => __('&raquo;', 'wp-all-import-pro'),
 			'total' => ceil($list->total() / $perPage),
 			'current' => $pagenum,
 		));
@@ -71,7 +71,7 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 
 		$nonce = (!empty($_REQUEST['_wpnonce'])) ? $_REQUEST['_wpnonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, '_wpnonce-download_log' ) ) {
-		    die( __('Security check', 'wp_all_import_plugin') );
+		    die( __('Security check', 'wp-all-import-pro') );
 		} else {
 
 			$id = $this->input->get('history_id');
@@ -89,7 +89,7 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 			else
 			{
 
-				wp_redirect(esc_url_raw(add_query_arg(array('id' => $import_id, 'pmxi_nt' => urlencode(__('Log file does not exist.', 'wp_all_import_plugin'))), $this->baseUrl))); die();
+				wp_redirect(esc_url_raw(add_query_arg(array('id' => $import_id, 'pmxi_nt' => urlencode(__('Log file does not exist.', 'wp-all-import-pro'))), $this->baseUrl))); die();
 			}
 		}
 	}
@@ -99,7 +99,7 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 	 */
 	public function delete() {
 
-		if ( ! get_current_user_id() or ! current_user_can( PMXI_Plugin::$capabilities )) {
+		if ( ! get_current_user_id() or ! current_user_can( PMXI_Plugin::$capabilities ) || ! wp_verify_nonce( ($_REQUEST['_wpnonce_delete-history'] ?? ''), 'delete-history' ) ) {
 		    // This nonce is not valid.
 		    die( 'Security check' );
 		} else {
@@ -109,7 +109,7 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 				wp_redirectesc_url_raw(($this->baseUrl)); die();
 			}
 			$item->delete();
-			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('History deleted', 'wp_all_import_plugin')), $this->baseUrl))); die();
+			wp_redirect(esc_url_raw(add_query_arg('pmxi_nt', urlencode(__('History deleted', 'wp-all-import-pro')), $this->baseUrl))); die();
 		}
 
 	}
@@ -136,7 +136,7 @@ class PMXI_Admin_History extends PMXI_Controller_Admin {
 
 		$id = $this->input->get('id');
 
-		wp_redirect(esc_url_raw(add_query_arg(array('id' => $id, 'pmxi_nt' => urlencode(sprintf(__('%d %s deleted', 'wp_all_import_plugin'), $items->count(), _n('history', 'histories', $items->count(), 'wp_all_import_plugin')))), $this->baseUrl))); die();
+		wp_redirect(esc_url_raw(add_query_arg(array('id' => $id, 'pmxi_nt' => urlencode(sprintf(__('%d %s deleted', 'wp-all-import-pro'), $items->count(), _n('history', 'histories', $items->count(), 'wp-all-import-pro')))), $this->baseUrl))); die();
 
 	}
 }

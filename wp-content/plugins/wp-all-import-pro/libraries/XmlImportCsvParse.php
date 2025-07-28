@@ -324,7 +324,7 @@ class PMXI_CsvParser
      * each cell in the dataset.
      *
      * @access public
-     * @return void
+     * @return bool
      * @see walkColumn(), walkRow(), fillColumn(), fillRow(), fillCell()
      */
     public function walkGrid($callback)
@@ -429,7 +429,7 @@ class PMXI_CsvParser
      *    the array gets ignored if it does not match the length of rows
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function fillColumn($column, $values = null)
     {
@@ -595,7 +595,7 @@ class PMXI_CsvParser
      * @param mixed $y the column to fetch
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function hasCell($x, $y)
     {
@@ -845,7 +845,7 @@ class PMXI_CsvParser
                 return $in_str;
             }
             else
-                return utf8_encode($in_str);
+                return mb_convert_encoding( $in_str, 'UTF-8', 'ISO-8859-1' );
 
         }
 
@@ -936,6 +936,9 @@ class PMXI_CsvParser
     }
 
     function toXML( $fixBrokenSymbols = false ){
+        // Temporarily suppress deprecation warnings.
+        $currentErrorReporting = error_reporting();
+        error_reporting($currentErrorReporting & ~E_DEPRECATED);
 
         $c = 0;
         $d = ( "" != $this->delimiter ) ? $this->delimiter : $this->settings['delimiter'];
@@ -954,6 +957,10 @@ class PMXI_CsvParser
         }
 
         if ($is_html) return;
+
+        // TODO: replace when PHP 9 releases
+        $originalAutoDetectLineEndings = @ini_get('auto_detect_line_endings'); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+        @ini_set('auto_detect_line_endings', true); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
         $res = fopen($this->_filename, 'rb');
 
@@ -988,9 +995,8 @@ class PMXI_CsvParser
             }
             $empty_columns = 0;
             foreach ($keys as $key) {
-                if (preg_replace("%\s%", "", $key) == '') $empty_columns++;
+                if (empty($key) || preg_replace("%\s%", "", $key) == '') $empty_columns++;
             }
-            // Skip empty lines.
             if ($empty_columns == count($keys)) continue;
 
             if ($c == 0) {
@@ -1059,6 +1065,12 @@ class PMXI_CsvParser
         fclose($res);
         $xmlWriter->endElement();
         $xmlWriter->flush(TRUE);
+
+        // TODO: replace when PHP 9 releases
+        @ini_set('auto_detect_line_endings', $originalAutoDetectLineEndings); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+        // Restore original error reporting level.
+        error_reporting($currentErrorReporting);
 
         return TRUE;
     }

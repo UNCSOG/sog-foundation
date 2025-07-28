@@ -33,48 +33,32 @@
 		}
 	});
 
-	// help scheduling template
-	$('.help_scheduling').on('click', function(){
+	window.handleHelpSchedulingClick = function() {
+		$('input[name="scheduling_enable"][value="1"]').prop('checked', true).trigger('change');
+	}
 
-		$('.wp-all-import-scheduling-help').css('left', ($( document ).width()/2) - 255 ).show();
-		$('#wp-all-import-scheduling-help-inner').css('max-height', $( window ).height()-150).show();
-		$('.wpallimport-overlay').show();
-		return false;
-	});
-
-	var saveSubscription = false;
-
-	$('#add-subscription').on('click', function(){
-		$('#add-subscription-field').show();
-		$('#add-subscription-field').animate({width:'400px'}, 225);
-		$('#add-subscription-field').animate({left:'0'}, 225);
-		$('#subscribe-button .button-subscribe').css('background-color','#46ba69');
-		$('.text-container p').fadeOut();
-
-		setTimeout(function () {
-			$('#find-subscription-link').show();
-			$('#find-subscription-link').animate({left: '410px'}, 300, 'swing');
-		}, 225);
-		$('.subscribe-button-text').html('Activate');
-		saveSubscription = true;
-		return false;
-	});
-
-	$('.wp_all_import_scheduling_help').find('h3').on('click', function(){
-		var $action = $(this).find('span').html();
-		$('.wp_all_import_scheduling_help').find('h3').each(function(){
-			$(this).find('span').html("+");
+	function fetchSchedulingConnectionIcon() {
+		$.ajax({
+			type: "POST",
+			url: ajaxurl,
+			data: {
+				action: 'wpai_get_scheduling_connection_icon',
+				security: wp_all_import_security
+			},
+			dataType: "json",
+			success: function (response) {
+				let schedulingIcon = $('#scheduling-connection-icon');
+				if (response.data.html) {
+					schedulingIcon.html(response.data.html);
+				} else {
+					$('.unable-to-connect').html('Refresh page to see the current Scheduling connection status.');
+				}
+			},
+			error: function (xhr, status, error) {
+				$('.unable-to-connect').html('Refresh page to see the current Scheduling connection status.');
+			}
 		});
-		if ( $action == "+" ) {
-			$('.wp_all_import_help_tab').slideUp();
-			$('.wp_all_import_help_tab[rel=' + $(this).attr('id') + ']').slideDown();
-			$(this).find('span').html("-");
-		}
-		else{
-			$('.wp_all_import_help_tab[rel=' + $(this).attr('id') + ']').slideUp();
-			$(this).find('span').html("+");
-		}
-	});
+	}
 
 	function openSchedulingAccordeonIfClosed() {
 		if ($('.wpallimport-file-options').hasClass('closed')) {
@@ -82,6 +66,73 @@
 			$('#scheduling-title').trigger('click');
 		}
 	}
+
+	$(document).on('click', '.scheduling-subscribe-link', function () {
+		openSchedulingSubscribeDialog(this)
+	});
+
+	window.openSchedulingSubscribeDialog = function(element) {
+		// Display overlay and loader initially
+		$('.wpallimport-overlay').show();
+		$('.wpallimport-loader').show();
+
+		var $self = $(element);
+
+		$.ajax({
+			type: "POST",
+			url: ajaxurl,
+			context: element,
+			data: {
+				action: 'wpai_scheduling_subscribe_dialog_content',
+				security: wp_all_import_security
+			},
+			success: function (data) {
+				$('.wpallimport-loader').hide();
+				$(this).pointer({
+					content: '<div id="scheduling-popup">' + data + '</div>',
+					position: {
+						edge: 'right',
+						align: 'center'
+					},
+					pointerWidth: 815,
+					show: function () {
+						var $leftOffset = ($(window).width() - 715) / 2;
+						var $topOffset = $(document).scrollTop() + 100;
+
+						var $pointer = $('.wp-pointer').last();
+						$pointer.css({'position': 'absolute', 'top': $topOffset + 'px', 'left': $leftOffset + 'px'});
+
+						$pointer.find('a.close').remove();
+						$pointer.find('.wp-pointer-buttons').append('<button class="close-pointer button button-primary button-hero wpallimport-large-button scheduling-cancel-button" style="float: right; background: #F1F1F1; text-shadow: 0 0 black; color: #777; margin-right: 10px;">Close</button>');
+
+						$("#subscribe").unbind('click').on('click', function (event) {
+							schedulingSubscribeHandler(event)
+							$(".close-pointer").trigger('click');
+						});
+
+						// Close scheduling dialog
+						$(".close-pointer, .wpallimport-overlay").unbind('click').on('click', function () {
+							$self.pointer('close');
+							if ($self.pointer) {
+							$self.pointer('close');
+							$self.pointer('destroy');
+							}
+						})
+
+						$('#scheduling-subscribe-group').css('border', 'none').css('margin', 'auto');
+					},
+					close: function () {
+						// Hide overlay on closing pointer dialog
+						$('.wpallimport-overlay').hide();
+					}
+				}).pointer('open');
+			},
+			error: function () {
+				alert('There was an issue retrieving the scheduling subscribe content.');
+				$('.wpallimport-loader').hide();
+			}
+		});
+	};
 
     window.openSchedulingDialog = function(itemId, element, preloaderSrc) {
         $('.wpallimport-overlay').show();
@@ -137,11 +188,11 @@
                                 return false;
                             }
 
-                            var formValid = pmxeValidateSchedulingForm();
+                            var formValid = pmxiValidateSchedulingForm();
 
                             if (formValid.isValid) {
 
-                                var formData = $('#scheduling-form').serializeArray();
+                                var formData = $('#scheduling-form :input').serializeArray();
                                 formData.push({name: 'security', value: wp_all_import_security});
                                 formData.push({name: 'action', value: 'save_import_scheduling'});
                                 formData.push({name: 'element_id', value: itemId});
@@ -262,7 +313,7 @@
 		};
 	};
 
-	$('#weekly li').on('click', function () {
+	$(document).on('click', '#weekly li', function () {
 
 		$('#weekly li').removeClass('error');
 
@@ -283,7 +334,7 @@
 
 	});
 
-	$('#monthly li').on('click', function () {
+	$(document).on('click', '#monthly li', function () {
 
 		$('#monthly li').removeClass('error');
 		$(this).parent().parent().find('.days-of-week li').removeClass('selected');
@@ -292,7 +343,7 @@
 		$('#monthly_days').val($(this).data('day'));
 	});
 
-	$('input[name="scheduling_run_on"]').on('change', function () {
+	$(document).on('change', 'input[name="scheduling_run_on"]', function () {
 		var val = $('input[name="scheduling_run_on"]:checked').val();
 		if (val == "weekly") {
 
@@ -333,11 +384,11 @@
 		}
 	};
 
-	$('.timepicker').on('changeTime', onTimeSelected);
+	$(document).on('changeTime', '.timepicker', onTimeSelected);
 
 	$('#timezone').chosen({width: '320px'});
 
-	$('.wpai-import-complete-save-button').on('click', function (e) {
+	$(document).on('click', '.wpai-import-complete-save-button', function (e) {
 
 		if($('.wpai-save-button').hasClass('disabled')) {
 			return false;
@@ -374,64 +425,256 @@
 		});
 	});
 
-	$('#subscribe-button').on('click', function(){
+	$(document).on('click', '#activate-license', function (e) {
+		e.preventDefault();
 
-		if(saveSubscription) {
-			$('#subscribe-button .easing-spinner').show();
-			var license = $('#add-subscription-field').val();
+		let license = $('#add-subscription-field').val();
+
+		if (license) {
+			$('.activate-button-group .loader').show();
+			$('#activate-license').prop('disabled', true);
+
 			$.ajax({
 				url:ajaxurl+'?action=wp_all_import_api&q=schedulingLicense/saveSchedulingLicense&security=' + wp_all_import_security,
-				type:"POST",
+				type: "POST",
 				data: {
 					license: license
 				},
-				dataType:"json",
-				success: function(response){
+				dataType: "json",
+				success: function (response) {
+					$('#activate-license .activate-license').css('background-color', '#425f9a');
 
-					$('#subscribe-button .button-subscribe').css('background-color','#425f9a');
-					if(response.success) {
+					if (response.success) {
 						hasActiveLicense = true;
-						$('.wpai-save-button').removeClass('disabled');
-						$('#subscribe-button .easing-spinner').hide();
+						$('#scheduling-subscribe-group').hide();
+						$('.activate-button-group .loader').hide();
+						$('#activate-license').prop('disabled', false);
+						$('#scheduling-schedule-input').show();
 						$('#subscribe-button svg.success').show();
 						$('#subscribe-button svg.success').fadeOut(3000, function () {
 							$('.subscribe').hide({queue: false});
 							$('#subscribe-filler').show({queue: false});
 						});
 
-						$('.wpai-no-license').hide();
-						$('.wpai-license').show();
-                        $('#scheduling_has_license').val('1');
+						$('.save-changes').removeClass('disabled');
+						window.pmxiHasSchedulingSubscription = true;
+
 					} else {
-						$('#subscribe-button .easing-spinner').hide();
-						$('#subscribe-button svg.error').show();
-						$('.subscribe-button-text').html('Subscribe');
-						$('#subscribe-button svg.error').fadeOut(3000, function () {
-							$('#subscribe-button svg.error').hide({queue: false});
+						$subscriptionField = $('#add-subscription-field');
+						$subscriptionField.val('');
+						$subscriptionField.css('border-color', 'red');
+						$('.activate-button-group .loader').hide();
+						$('#activate-license').prop('disabled', false);
+						let licenseResponse = response.license || 'invalid';
 
-						});
+						// Check for "active sites limit reached" error
+						if (licenseResponse === 'active sites limit reached') {
+							openActiveSitesLimitModal(response); // Open additional modal
+						} else {
+							// Create dynamic overlay for license error message.
+							let $overlay = $('<div class="license-overlay"></div>');
+							$overlay.html('<span style="">License error:</span><span style="margin-left:5px;font-weight:500;">'+licenseResponse+'</span>');
 
-						$('#add-subscription').html('Invalid license, try again?');
-						$('.text-container p').fadeIn();
 
-						$('#find-subscription-link').animate({width: 'toggle'}, 300, 'swing');
+							$subscriptionField.parent().css('position', 'relative');
+							$subscriptionField.after($overlay);
 
-						setTimeout(function () {
-							$('#add-subscription-field').animate({width:'140px'}, 225);
-							$('#add-subscription-field').animate({left:'-161px'}, 225);
-						}, 300);
+							$overlay.css({
+								position: 'absolute',
+								top: $subscriptionField.position().top + 'px',
+								left: $subscriptionField.position().left + 'px',
+								width: $subscriptionField.outerWidth() - 20,
+								height: $subscriptionField.outerHeight(),
+								background: 'rgba(255, 255, 255, 0.9)',
+								color: $subscriptionField.css('color'),
+								fontSize: 14 + 'px',
+								fontFamily: $subscriptionField.css('font-family'),
+								fontStyle: $subscriptionField.css('font-style'),
+								lineHeight: $subscriptionField.css('line-height'),
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'start',
+								padding: '0 10px',
+								border: '1px solid red',
+								borderRadius: '4px',
+								pointerEvents: 'none',
+								zIndex: 9999999,
+							});
 
-						$('#add-subscription-field').val('');
-
-						$('#subscribe-button-text').html('Subscribe');
-						saveSubscription = false;
+							// Remove the overlay after 2.5 seconds.
+							setTimeout(() => {
+								$overlay.fadeOut(300, function () {
+									$(this).remove();
+								});
+							}, 2500);
+						}
 					}
 				}
 			});
 
 			return false;
+		} else {
+			$('#add-subscription-field').css('border-color', 'red');
 		}
 	});
+
+	/**
+	 * Check settings page for Scheduling license limit reached
+	 */
+
+	// Ensure this is the correct page for the plugin
+	if ($('body').hasClass('wpallimport-plugin') && window.location.search.includes('page=pmxi-admin-settings')) {
+
+		// Check if the license error div exists
+		let $licenseStatus = $('.license-status.inline.error');
+		let siteLimit = $('input[name="scheduling_license_limit"]').val(); // Fetch value of the hidden input
+
+		// Ensure both the error div exists and contains "active sites limit reached"
+		if ($licenseStatus.length && $licenseStatus.text().trim() === 'active sites limit reached' && siteLimit) {
+
+			// Trigger the modal with the limit value
+			openActiveSitesLimitModal({
+				license_limit: parseInt(siteLimit, 10),
+			});
+		}
+	}
+
+	/**
+	 * Function to display modal when active sites limit reached
+	 */
+	function openActiveSitesLimitModal(response) {
+		let license_limit = response.license_limit;
+
+		$('.active-sites-limit-modal-overlay').show();
+		$('.active-sites-limit-modal').show();
+
+		$('[id^="limit-"]').each(function () {
+			const limitValue = parseInt($(this).attr('id').replace('limit-', ''), 10);
+
+			if (license_limit >= limitValue) {
+				$(this).hide();
+			} else {
+				$(this).show();
+			}
+		});
+		
+		// Center modal dynamically in case of resizing
+		centerModal('.active-sites-limit-modal');
+
+		// Add click event handlers
+		$('.active-sites-limit-modal-overlay').on('click', function () {
+			$('.active-sites-limit-modal-overlay').hide();
+		});
+
+		// Close the modal if clicking on the overlay
+		$('.active-sites-limit-modal-overlay').on('click', function () {
+			$('.active-sites-limit-modal-overlay').hide();
+		});
+
+		// Prevent closing the modal when clicking inside the modal itself
+		$('.active-sites-limit-modal').on('click', function (e) {
+			if (!$(e.target).is('#subscribe-upgrade')) {
+				e.stopPropagation();
+			}
+		});
+
+		$('.manage-license-button').on('click', function () {
+			window.open('https://www.wpallimport.com/licenses', '_blank'); // Redirect to license management
+		});
+	}
+
+	/**
+	 * Function to dynamically center a modal on screen
+	 */
+	function centerModal(selector) {
+		const $modal = $(selector);
+		const windowWidth = $(window).width();
+		const windowHeight = $(window).height();
+
+		$modal.css({
+			position: 'fixed',
+			top: (windowHeight - $modal.outerHeight()) / 2 + 'px',
+			left: (windowWidth - $modal.outerWidth()) / 2 + 'px'
+		});
+	}
+
+	$(document).on('click', '#subscribe-upgrade', function(event){
+		schedulingSubscribeHandler(event, 'input[name="upgrade_pricing_plan"]:checked', 'upgrade');
+	});
+
+	$(document).on('click', '#scheduling-already-licensed', function (event) {
+		$('#subscribe-button-group').hide();
+		$('#checkout-trust-group').hide();
+		$('#register-site-group').removeClass('hidden');
+		$('#add-subscription-field').show();
+		$('.text-container p').fadeOut();
+		event.stopPropagation();
+
+	});
+
+	$(document).on('click', '#scheduling-subscribe-group', function (event) {
+		if (!$(event.target).is('button, input, a') && !$('#register-site-group').hasClass('hidden')) {
+			$('#subscribe-button-group').show();
+			$('#checkout-trust-group').show();
+			$('#register-site-group').addClass('hidden');
+			$('#add-subscription-field').hide().css('border-color', '');
+			$('.text-container p').fadeIn();
+		}
+	});
+
+	window.schedulingSubscribeHandler = function (event, target = 'input[name="pricing_plan"]:checked', type = 'subscribe') {
+		let selectedPlan = $(target).val();
+		let url = '';
+
+		switch (selectedPlan) {
+			case 'single_site':
+				if(type === 'subscribe') {
+					url = 'https://www.wpallimport.com/scheduling/1-site';
+				}
+				break;
+			case 'three_sites':
+				if(type === 'subscribe') {
+					url = 'https://www.wpallimport.com/scheduling/3-sites';
+				}else{
+					url = 'https://www.wpallimport.com/scheduling/upgrade-3-sites';
+				}
+				break;
+			case 'ten_sites':
+				if(type === 'subscribe') {
+					url = 'https://www.wpallimport.com/scheduling/10-sites';
+				}else{
+					url = 'https://www.wpallimport.com/scheduling/upgrade-10-sites';
+				}
+				break;
+			case 'unlimited_sites':
+				if(type === 'subscribe') {
+					url = 'https://www.wpallimport.com/scheduling/unlimited-sites';
+				}else{
+					url = 'https://www.wpallimport.com/scheduling/upgrade-unlimited-sites';
+				}
+				break;
+			default:
+				break;
+		}
+
+		if (url) {
+			$('#scheduling-already-licensed').trigger('click');
+			window.open(url, '_blank');
+			event.stopPropagation();
+		}
+	};
+
+	$(document).on('click', '#subscribe', function(event){
+		schedulingSubscribeHandler(event)
+	});
+
+	$(document).on('change', '.wpallimport-plugin .tiered-pricing-options .pricing-plans input[type="radio"]', function() {
+		$('input[name="' + $(this).attr('name') + '"]').closest('label').removeClass('checked');
+		if ($(this).is(':checked')) {
+			$(this).closest('label').addClass('checked');
+		}
+	});
+
 
 	function get_delete_missing_notice_type() {
 		let $is_delete_missing = $('input#is_delete_missing');
@@ -628,5 +871,36 @@
 			submit_import_settings($this);
 		}
     });
+
+	window.toggleSection = function (faqId) {
+		$('.wpallimport-plugin .tiered-pricing-options .faq-answer').each(function () {
+			if ($(this).attr('id') !== faqId) {
+				$(this).slideUp();
+			}
+		});
+
+		$('.wpallimport-plugin .tiered-pricing-options .faq-section').each(function () {
+			if ($(this).next('.faq-answer').attr('id') !== faqId) {
+				$(this).removeClass('open')
+					.addClass('closed')
+					.attr('aria-expanded', 'false');
+			}
+		});
+
+		const $faq = $('#' + faqId);
+		const $section = $faq.prev('.faq-section');
+
+		if ($faq.is(':hidden')) {
+			$faq.slideDown();
+			$section.removeClass('closed')
+				.addClass('open')
+				.attr('aria-expanded', 'true');
+		} else {
+			$faq.slideUp();
+			$section.removeClass('open')
+				.addClass('closed')
+				.attr('aria-expanded', 'false');
+		}
+	}
 
 });})(jQuery);
