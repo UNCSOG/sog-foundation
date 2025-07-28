@@ -42,15 +42,15 @@ __webpack_require__.d(__webpack_exports__, {
   privateApis: () => (/* reexport */ privateApis)
 });
 
-;// CONCATENATED MODULE: external ["wp","commands"]
+;// external ["wp","commands"]
 const external_wp_commands_namespaceObject = window["wp"]["commands"];
-;// CONCATENATED MODULE: external ["wp","i18n"]
+;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// CONCATENATED MODULE: external ["wp","primitives"]
+;// external ["wp","primitives"]
 const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
-;// CONCATENATED MODULE: external "ReactJSXRuntime"
+;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/plus.js
+;// ./node_modules/@wordpress/icons/build-module/library/plus.js
 /**
  * WordPress dependencies
  */
@@ -65,39 +65,114 @@ const plus = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 });
 /* harmony default export */ const library_plus = (plus);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/admin-navigation-commands.js
+;// external ["wp","url"]
+const external_wp_url_namespaceObject = window["wp"]["url"];
+;// external ["wp","coreData"]
+const external_wp_coreData_namespaceObject = window["wp"]["coreData"];
+;// external ["wp","data"]
+const external_wp_data_namespaceObject = window["wp"]["data"];
+;// external ["wp","element"]
+const external_wp_element_namespaceObject = window["wp"]["element"];
+;// external ["wp","notices"]
+const external_wp_notices_namespaceObject = window["wp"]["notices"];
+;// external ["wp","router"]
+const external_wp_router_namespaceObject = window["wp"]["router"];
+;// external ["wp","privateApis"]
+const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// ./node_modules/@wordpress/core-commands/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/core-commands');
+
+;// ./node_modules/@wordpress/core-commands/build-module/admin-navigation-commands.js
 /**
  * WordPress dependencies
  */
 
 
 
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+const {
+  useHistory
+} = unlock(external_wp_router_namespaceObject.privateApis);
+const getAddNewPageCommand = () => function useAddNewPageCommand() {
+  const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
+  const history = useHistory();
+  const isBlockBasedTheme = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme;
+  }, []);
+  const {
+    saveEntityRecord
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
+  const {
+    createErrorNotice
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const createPageEntity = (0,external_wp_element_namespaceObject.useCallback)(async ({
+    close
+  }) => {
+    try {
+      const page = await saveEntityRecord('postType', 'page', {
+        status: 'draft'
+      }, {
+        throwOnError: true
+      });
+      if (page?.id) {
+        history.navigate(`/page/${page.id}?canvas=edit`);
+      }
+    } catch (error) {
+      const errorMessage = error.message && error.code !== 'unknown_error' ? error.message : (0,external_wp_i18n_namespaceObject.__)('An error occurred while creating the item.');
+      createErrorNotice(errorMessage, {
+        type: 'snackbar'
+      });
+    } finally {
+      close();
+    }
+  }, [createErrorNotice, history, saveEntityRecord]);
+  const commands = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    const addNewPage = isSiteEditor && isBlockBasedTheme ? createPageEntity : () => document.location.href = 'post-new.php?post_type=page';
+    return [{
+      name: 'core/add-new-page',
+      label: (0,external_wp_i18n_namespaceObject.__)('Add new page'),
+      icon: library_plus,
+      callback: addNewPage
+    }];
+  }, [createPageEntity, isSiteEditor, isBlockBasedTheme]);
+  return {
+    isLoading: false,
+    commands
+  };
+};
 function useAdminNavigationCommands() {
   (0,external_wp_commands_namespaceObject.useCommand)({
     name: 'core/add-new-post',
     label: (0,external_wp_i18n_namespaceObject.__)('Add new post'),
     icon: library_plus,
     callback: () => {
-      document.location.href = 'post-new.php';
+      document.location.assign('post-new.php');
     }
   });
-  (0,external_wp_commands_namespaceObject.useCommand)({
+  (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/add-new-page',
-    label: (0,external_wp_i18n_namespaceObject.__)('Add new page'),
-    icon: library_plus,
-    callback: () => {
-      document.location.href = 'post-new.php?post_type=page';
-    }
+    hook: getAddNewPageCommand()
   });
 }
 
-;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: external ["wp","data"]
-const external_wp_data_namespaceObject = window["wp"]["data"];
-;// CONCATENATED MODULE: external ["wp","coreData"]
-const external_wp_coreData_namespaceObject = window["wp"]["coreData"];
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/post.js
+;// ./node_modules/@wordpress/icons/build-module/library/post.js
 /**
  * WordPress dependencies
  */
@@ -112,11 +187,10 @@ const post = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 });
 /* harmony default export */ const library_post = (post);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/page.js
+;// ./node_modules/@wordpress/icons/build-module/library/page.js
 /**
  * WordPress dependencies
  */
-
 
 
 const page = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_primitives_namespaceObject.SVG, {
@@ -130,7 +204,7 @@ const page = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(exte
 });
 /* harmony default export */ const library_page = (page);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/layout.js
+;// ./node_modules/@wordpress/icons/build-module/library/layout.js
 /**
  * WordPress dependencies
  */
@@ -145,7 +219,7 @@ const layout = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 });
 /* harmony default export */ const library_layout = (layout);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/symbol-filled.js
+;// ./node_modules/@wordpress/icons/build-module/library/symbol-filled.js
 /**
  * WordPress dependencies
  */
@@ -160,7 +234,7 @@ const symbolFilled = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.js
 });
 /* harmony default export */ const symbol_filled = (symbolFilled);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/navigation.js
+;// ./node_modules/@wordpress/icons/build-module/library/navigation.js
 /**
  * WordPress dependencies
  */
@@ -175,7 +249,7 @@ const navigation = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)
 });
 /* harmony default export */ const library_navigation = (navigation);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/styles.js
+;// ./node_modules/@wordpress/icons/build-module/library/styles.js
 /**
  * WordPress dependencies
  */
@@ -185,12 +259,14 @@ const styles = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M12 4c-4.4 0-8 3.6-8 8v.1c0 4.1 3.2 7.5 7.2 7.9h.8c4.4 0 8-3.6 8-8s-3.6-8-8-8zm0 15V5c3.9 0 7 3.1 7 7s-3.1 7-7 7z"
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-1.5 0a6.5 6.5 0 0 1-6.5 6.5v-13a6.5 6.5 0 0 1 6.5 6.5Z"
   })
 });
 /* harmony default export */ const library_styles = (styles);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/symbol.js
+;// ./node_modules/@wordpress/icons/build-module/library/symbol.js
 /**
  * WordPress dependencies
  */
@@ -205,35 +281,11 @@ const symbol = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
 });
 /* harmony default export */ const library_symbol = (symbol);
 
-;// CONCATENATED MODULE: external ["wp","router"]
-const external_wp_router_namespaceObject = window["wp"]["router"];
-;// CONCATENATED MODULE: external ["wp","url"]
-const external_wp_url_namespaceObject = window["wp"]["url"];
-;// CONCATENATED MODULE: external ["wp","compose"]
+;// external ["wp","compose"]
 const external_wp_compose_namespaceObject = window["wp"]["compose"];
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/hooks.js
-/**
- * WordPress dependencies
- */
-
-
-function useIsBlockBasedTheme() {
-  return (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme, []);
-}
-
-;// CONCATENATED MODULE: external ["wp","privateApis"]
-const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/lock-unlock.js
-/**
- * WordPress dependencies
- */
-
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/core-commands');
-
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/utils/order-entity-records-by-search.js
+;// external ["wp","htmlEntities"]
+const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
+;// ./node_modules/@wordpress/core-commands/build-module/utils/order-entity-records-by-search.js
 function orderEntityRecordsBySearch(records = [], search = '') {
   if (!Array.isArray(records) || !records.length) {
     return [];
@@ -254,10 +306,11 @@ function orderEntityRecordsBySearch(records = [], search = '') {
   return priority.concat(nonPriority);
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/site-editor-navigation-commands.js
+;// ./node_modules/@wordpress/core-commands/build-module/site-editor-navigation-commands.js
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -273,9 +326,8 @@ function orderEntityRecordsBySearch(records = [], search = '') {
  */
 
 
-
 const {
-  useHistory
+  useHistory: site_editor_navigation_commands_useHistory
 } = unlock(external_wp_router_namespaceObject.privateApis);
 const icons = {
   post: library_post,
@@ -295,8 +347,19 @@ function useDebouncedValue(value) {
 const getNavigationCommandLoaderPerPostType = postType => function useNavigationCommandLoader({
   search
 }) {
-  const history = useHistory();
-  const isBlockBasedTheme = useIsBlockBasedTheme();
+  const history = site_editor_navigation_commands_useHistory();
+  const {
+    isBlockBasedTheme,
+    canCreateTemplate
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'postType',
+        name: 'wp_template'
+      })
+    };
+  }, []);
   const delayedSearch = useDebouncedValue(search);
   const {
     records,
@@ -323,10 +386,10 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
       const command = {
         name: postType + '-' + record.id,
         searchLabel: record.title?.rendered + ' ' + record.id,
-        label: record.title?.rendered ? record.title?.rendered : (0,external_wp_i18n_namespaceObject.__)('(no title)'),
+        label: record.title?.rendered ? (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(record.title?.rendered) : (0,external_wp_i18n_namespaceObject.__)('(no title)'),
         icon: icons[postType]
       };
-      if (postType === 'post' || postType === 'page' && !isBlockBasedTheme) {
+      if (!canCreateTemplate || postType === 'post' || postType === 'page' && !isBlockBasedTheme) {
         return {
           ...command,
           callback: ({
@@ -348,22 +411,19 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
         callback: ({
           close
         }) => {
-          const args = {
-            postType,
-            postId: record.id,
-            canvas: 'edit'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate(`/${postType}/${record.id}?canvas=edit`);
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: `/${postType}/${record.id}`,
+              canvas: 'edit'
+            });
           }
           close();
         }
       };
     });
-  }, [records, isBlockBasedTheme, history]);
+  }, [canCreateTemplate, records, isBlockBasedTheme, history]);
   return {
     commands,
     isLoading
@@ -372,8 +432,19 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
 const getNavigationCommandLoaderPerTemplate = templateType => function useNavigationCommandLoader({
   search
 }) {
-  const history = useHistory();
-  const isBlockBasedTheme = useIsBlockBasedTheme();
+  const history = site_editor_navigation_commands_useHistory();
+  const {
+    isBlockBasedTheme,
+    canCreateTemplate
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'postType',
+        name: templateType
+      })
+    };
+  }, []);
   const {
     records,
     isLoading
@@ -399,7 +470,7 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
     return orderEntityRecordsBySearch(records, search).slice(0, 10);
   }, [records, search]);
   const commands = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!isBlockBasedTheme && !templateType === 'wp_template_part') {
+    if (!canCreateTemplate || !isBlockBasedTheme && !templateType === 'wp_template_part') {
       return [];
     }
     const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
@@ -413,16 +484,13 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
         callback: ({
           close
         }) => {
-          const args = {
-            postType: templateType,
-            postId: record.id,
-            canvas: 'edit'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate(`/${templateType}/${record.id}?canvas=edit`);
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: `/${templateType}/${record.id}`,
+              canvas: 'edit'
+            });
           }
           close();
         }
@@ -436,38 +504,41 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'wp_template_part',
-            categoryId: 'all-parts'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/pattern?postType=wp_template_part&categoryId=all-parts');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/pattern',
+              postType: 'wp_template_part',
+              categoryId: 'all-parts'
+            });
           }
           close();
         }
       });
     }
     return result;
-  }, [isBlockBasedTheme, orderedRecords, history]);
+  }, [canCreateTemplate, isBlockBasedTheme, orderedRecords, history]);
   return {
     commands,
     isLoading
   };
 };
-const usePageNavigationCommandLoader = getNavigationCommandLoaderPerPostType('page');
-const usePostNavigationCommandLoader = getNavigationCommandLoaderPerPostType('post');
-const useTemplateNavigationCommandLoader = getNavigationCommandLoaderPerTemplate('wp_template');
-const useTemplatePartNavigationCommandLoader = getNavigationCommandLoaderPerTemplate('wp_template_part');
-function useSiteEditorBasicNavigationCommands() {
-  const history = useHistory();
+const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNavigationCommands() {
+  const history = site_editor_navigation_commands_useHistory();
   const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
-  const canCreateTemplate = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return select(external_wp_coreData_namespaceObject.store).canUser('create', 'templates');
+  const {
+    isBlockBasedTheme,
+    canCreateTemplate
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    return {
+      isBlockBasedTheme: select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.is_block_theme,
+      canCreateTemplate: select(external_wp_coreData_namespaceObject.store).canUser('create', {
+        kind: 'postType',
+        name: 'wp_template'
+      })
+    };
   }, []);
-  const isBlockBasedTheme = useIsBlockBasedTheme();
   const commands = (0,external_wp_element_namespaceObject.useMemo)(() => {
     const result = [];
     if (canCreateTemplate && isBlockBasedTheme) {
@@ -478,14 +549,12 @@ function useSiteEditorBasicNavigationCommands() {
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'wp_navigation'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/navigation');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/navigation'
+            });
           }
           close();
         }
@@ -497,14 +566,12 @@ function useSiteEditorBasicNavigationCommands() {
         callback: ({
           close
         }) => {
-          const args = {
-            path: '/wp_global_styles'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/styles');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/styles'
+            });
           }
           close();
         }
@@ -516,14 +583,12 @@ function useSiteEditorBasicNavigationCommands() {
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'page'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/page');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/page'
+            });
           }
           close();
         }
@@ -535,14 +600,12 @@ function useSiteEditorBasicNavigationCommands() {
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'wp_template'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/template');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/template'
+            });
           }
           close();
         }
@@ -556,14 +619,12 @@ function useSiteEditorBasicNavigationCommands() {
         close
       }) => {
         if (canCreateTemplate) {
-          const args = {
-            postType: 'wp_block'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/pattern');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/pattern'
+            });
           }
           close();
         } else {
@@ -578,32 +639,32 @@ function useSiteEditorBasicNavigationCommands() {
     commands,
     isLoading: false
   };
-}
+};
 function useSiteEditorNavigationCommands() {
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-pages',
-    hook: usePageNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerPostType('page')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-posts',
-    hook: usePostNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerPostType('post')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-templates',
-    hook: useTemplateNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerTemplate('wp_template')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/navigate-template-parts',
-    hook: useTemplatePartNavigationCommandLoader
+    hook: getNavigationCommandLoaderPerTemplate('wp_template_part')
   });
   (0,external_wp_commands_namespaceObject.useCommandLoader)({
     name: 'core/edit-site/basic-navigation',
-    hook: useSiteEditorBasicNavigationCommands,
+    hook: getSiteEditorBasicNavigationCommands(),
     context: 'site-editor'
   });
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/private-apis.js
+;// ./node_modules/@wordpress/core-commands/build-module/private-apis.js
 /**
  * Internal dependencies
  */
@@ -619,7 +680,7 @@ lock(privateApis, {
   useCommands
 });
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/core-commands/build-module/index.js
+;// ./node_modules/@wordpress/core-commands/build-module/index.js
 
 
 (window.wp = window.wp || {}).coreCommands = __webpack_exports__;

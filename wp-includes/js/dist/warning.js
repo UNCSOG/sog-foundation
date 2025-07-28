@@ -29,16 +29,14 @@ __webpack_require__.d(__webpack_exports__, {
   "default": () => (/* binding */ warning)
 });
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/warning/build-module/utils.js
+;// ./node_modules/@wordpress/warning/build-module/utils.js
 /**
  * Object map tracking messages which have been logged, for use in ensuring a
  * message is only logged once.
- *
- * @type {Set<string>}
  */
 const logged = new Set();
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/warning/build-module/index.js
+;// ./node_modules/@wordpress/warning/build-module/index.js
 /**
  * Internal dependencies
  */
@@ -51,7 +49,7 @@ function isDev() {
 /**
  * Shows a warning with `message` if environment is not `production`.
  *
- * @param {string} message Message to show in the warning.
+ * @param message Message to show in the warning.
  *
  * @example
  * ```js
