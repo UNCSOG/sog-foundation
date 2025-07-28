@@ -27,16 +27,8 @@ class GoogleAnalyticsAdminV1betaChangeHistoryChange extends \Beehive\Google\Mode
      * @var string
      */
     public $resource;
-    /**
-     * @var GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource
-     */
-    public $resourceAfterChange;
     protected $resourceAfterChangeType = GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class;
     protected $resourceAfterChangeDataType = '';
-    /**
-     * @var GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource
-     */
-    public $resourceBeforeChange;
     protected $resourceBeforeChangeType = GoogleAnalyticsAdminV1betaChangeHistoryChangeChangeHistoryResource::class;
     protected $resourceBeforeChangeDataType = '';
     /**

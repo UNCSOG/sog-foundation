@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class Profiles extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var Profile[]
-     */
-    public $items;
     protected $itemsType = Profile::class;
     protected $itemsDataType = 'array';
     /**

@@ -56,10 +56,6 @@ class CustomMetric extends \Beehive\Google\Model
      * @var string
      */
     public $name;
-    /**
-     * @var CustomMetricParentLink
-     */
-    public $parentLink;
     protected $parentLinkType = CustomMetricParentLink::class;
     protected $parentLinkDataType = '';
     /**

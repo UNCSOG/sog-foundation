@@ -240,7 +240,7 @@ class WPSEO_Meta {
 	 */
 	public static function init() {
 		foreach ( self::$social_networks as $option => $network ) {
-			if ( WPSEO_Options::get( $option, false ) === true ) {
+			if ( WPSEO_Options::get( $option, false, [ 'wpseo_social' ] ) === true ) {
 				foreach ( self::$social_fields as $box => $type ) {
 					self::$meta_fields['social'][ $network . '-' . $box ] = [
 						'type'          => $type,
@@ -964,7 +964,7 @@ class WPSEO_Meta {
 		/**
 		 * The indexable repository.
 		 *
-		 * @var Indexable_Repository
+		 * @var Indexable_Repository $repository
 		 */
 		$repository = YoastSEO()->classes->get( Indexable_Repository::class );
 
@@ -1008,16 +1008,15 @@ class WPSEO_Meta {
 	 * @return array The post types.
 	 */
 	public static function post_types_for_ids( $post_ids ) {
-
-		/**
-		 * The indexable repository.
-		 *
-		 * @var Indexable_Repository
-		 */
-		$repository = YoastSEO()->classes->get( Indexable_Repository::class );
-
 		// Check if post ids is not empty.
 		if ( ! empty( $post_ids ) ) {
+			/**
+			 * The indexable repository.
+			 *
+			 * @var Indexable_Repository $repository
+			 */
+			$repository = YoastSEO()->classes->get( Indexable_Repository::class );
+
 			// Get the post subtypes for the posts that share the keyword.
 			$post_types = $repository->query()
 				->select( 'object_sub_type' )

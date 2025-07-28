@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class Experiments extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var Experiment[]
-     */
-    public $items;
     protected $itemsType = Experiment::class;
     protected $itemsDataType = 'array';
     /**

@@ -13,6 +13,8 @@ new WPCOM_JSON_API_GET_Site_Endpoint(
 		'path_labels'                          => array(
 			'$site' => '(int|string) Site ID or domain',
 		),
+		'rest_route'                           => '/site',
+		'rest_min_jp_version'                  => '14.5-a.2',
 		'allow_jetpack_site_auth'              => true,
 
 		'allow_fallback_to_jetpack_blog_token' => true,
@@ -40,6 +42,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 	 */
 	public static $site_format = array(
 		'ID'                          => '(int) Site ID',
+		'slug'                        => '(string) Slug of site',
 		'name'                        => '(string) Title of site',
 		'description'                 => '(string) Tagline or description of site',
 		'URL'                         => '(string) Full URL to the site',
@@ -204,12 +207,13 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'videopress_storage_used',
 		'is_difm_lite_in_progress',
 		'site_intent',
-		'site_goals',
+		'site_partner_bundle',
 		'onboarding_segment',
 		'site_vertical_id',
 		'blogging_prompts_settings',
 		'launchpad_screen',
 		'launchpad_checklist_tasks_statuses',
+		'migration_source_site_domain',
 		'wpcom_production_blog_id',
 		'wpcom_staging_blog_ids',
 		'can_blaze',
@@ -226,6 +230,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 	 * @var array $jetpack_response_field_additions
 	 */
 	protected static $jetpack_response_field_additions = array(
+		'slug',
 		'subscribers_count',
 		'site_migration',
 		'site_owner',
@@ -460,6 +465,9 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		switch ( $key ) {
 			case 'ID':
 				$response[ $key ] = $this->site->blog_id;
+				break;
+			case 'slug':
+				$response[ $key ] = $this->site->get_slug();
 				break;
 			case 'name':
 				$response[ $key ] = $this->site->get_name();
@@ -878,6 +886,9 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 				case 'site_intent':
 					$options[ $key ] = $site->get_site_intent();
 					break;
+				case 'site_partner_bundle':
+					$options[ $key ] = $site->get_site_partner_bundle();
+					break;
 				case 'site_goals':
 					$options[ $key ] = $site->get_site_goals();
 					break;
@@ -897,6 +908,9 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 					break;
 				case 'launchpad_checklist_tasks_statuses':
 					$options[ $key ] = $site->get_launchpad_checklist_tasks_statuses();
+					break;
+				case 'migration_source_site_domain':
+					$options[ $key ] = $site->get_migration_source_site_domain();
 					break;
 				case 'wpcom_production_blog_id':
 					$options[ $key ] = $site->get_wpcom_production_blog_id();

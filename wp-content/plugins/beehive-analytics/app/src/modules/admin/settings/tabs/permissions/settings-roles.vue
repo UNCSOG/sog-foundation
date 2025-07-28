@@ -1,44 +1,6 @@
 <template>
 	<div class="sui-form-field">
 		<label
-			v-if="isMultisite()"
-			for="beehive-settings-permissions-user-role-network-administrator"
-			class="sui-checkbox sui-checkbox-stacked"
-		>
-			<input
-				type="checkbox"
-				id="beehive-settings-permissions-user-role-network-administrator"
-				aria-labelledby="beehive-settings-permissions-user-role-network-administrator-label"
-				checked
-				disabled
-			/>
-			<span aria-hidden="true"></span>
-			<span
-				id="beehive-settings-permissions-user-role-network-administrator-label"
-			>
-				{{ $i18n.label.network_administrator }}
-			</span>
-		</label>
-		<label
-			for="beehive-settings-permissions-user-role-administrator"
-			class="sui-checkbox sui-checkbox-stacked"
-		>
-			<input
-				type="checkbox"
-				id="beehive-settings-permissions-user-role-administrator"
-				aria-labelledby="beehive-settings-permissions-user-role-administrator-label"
-				checked
-				disabled
-			/>
-			<span aria-hidden="true"></span>
-			<span
-				id="beehive-settings-permissions-user-role-administrator-label"
-			>
-				{{ $i18n.label.administrator }}
-			</span>
-		</label>
-
-		<label
 			v-for="(title, role) in roles"
 			:key="role"
 			:for="`beehive-settings-permissions-user-role-${role}`"
@@ -50,7 +12,7 @@
 				:id="`beehive-settings-permissions-user-role-${role}`"
 				:aria-labelledby="`beehive-settings-permissions-user-role-${role}-label`"
 				:value="role"
-				:disabled="shouldDisable"
+				:disabled="shouldDisable(role)"
 			/>
 			<span aria-hidden="true"></span>
 			<span :id="`beehive-settings-permissions-user-role-${role}-label`">
@@ -86,7 +48,8 @@ export default {
 				this.setOption('settings_roles', 'permissions', value)
 			},
 		},
-
+	},
+	methods: {
 		/**
 		 * Check if we need to disable the settings.
 		 *
@@ -97,10 +60,12 @@ export default {
 		 *
 		 * @returns {boolean}
 		 */
-		shouldDisable() {
+		shouldDisable(role) {
 			return (
-				this.isNetwork() &&
-				this.getOption('overwrite_settings_cap', 'permissions')
+				(this.inNetworkAdmin() && role === 'super_admin') ||
+				(this.inSubsiteAdmin() && role === 'administrator') ||
+				(this.isNetwork() &&
+					this.getOption('overwrite_settings_cap', 'permissions'))
 			)
 		},
 	},

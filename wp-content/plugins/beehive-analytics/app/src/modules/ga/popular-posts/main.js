@@ -23,7 +23,6 @@
 		retry: 0, // No. of retries.
 		restUrl: beehiveVars.rest.base, // Rest base URL.
 		restNonce: beehiveVars.rest.nonce, // Rest nonce.
-		statsType: beehiveModuleVars.stats_type, // Stats type (ua ga4).
 		loaderContainer: $('#beehive-popular-widget-loading'), // Content container.
 
 		/**
@@ -68,7 +67,7 @@
 
 			// Only if loader found.
 			if (this.loaderContainer.length > 0 && this.canGetStats) {
-				let restBase = this.restUrl + (this.statsType === 'ua' ? 'v1/' : 'v2/')
+				let restBase = this.restUrl + 'v1/'
 				// Send ajax request.
 				$.get(restBase + 'stats/popular').done(function (response) {
 					// If response data is found.

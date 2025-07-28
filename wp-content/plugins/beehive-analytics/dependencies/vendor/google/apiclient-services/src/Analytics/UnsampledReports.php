@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class UnsampledReports extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var UnsampledReport[]
-     */
-    public $items;
     protected $itemsType = UnsampledReport::class;
     protected $itemsDataType = 'array';
     /**

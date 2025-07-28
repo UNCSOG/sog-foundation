@@ -19,10 +19,6 @@ namespace Beehive\Google\Service\PeopleService;
 
 class CreateContactGroupRequest extends \Beehive\Google\Model
 {
-    /**
-     * @var ContactGroup
-     */
-    public $contactGroup;
     protected $contactGroupType = ContactGroup::class;
     protected $contactGroupDataType = '';
     /**

@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class GoalEventDetails extends \Beehive\Google\Collection
 {
     protected $collection_key = 'eventConditions';
-    /**
-     * @var GoalEventDetailsEventConditions[]
-     */
-    public $eventConditions;
     protected $eventConditionsType = GoalEventDetailsEventConditions::class;
     protected $eventConditionsDataType = 'array';
     /**

@@ -47,6 +47,9 @@ class Free extends Base {
 		// Disable giveaway notice.
 		add_action( 'wpmudev_notices_disabled_notices', array( $this, 'disable_giveaway' ), 10, 2 );
 
+		// Initialize Cross Sell module.
+		add_action( 'init', array( $this, 'init_cross_sell' ) );
+
 		/**
 		 * Action hook to trigger after initializing all free features.
 		 *
@@ -111,6 +114,44 @@ class Free extends Base {
 		}
 
 		return $notices;
+	}
+
+	/**
+	 * Setup and load the Cross Sell module.
+	 *
+	 * @since 3.4.17
+	 *
+	 * @return void
+	 */
+	public function init_cross_sell() {
+		// Cross Sell file.
+		$cross_sell_file = BEEHIVE_DIR . '/core/external/plugins-cross-sell-page/plugin-cross-sell.php';
+
+		// Load Cross Sell module.
+		if ( ! file_exists( $cross_sell_file ) ) {
+			return;
+		}
+
+		static $cross_sell = null;
+
+		if ( ! is_null( $cross_sell ) ) {
+			return;
+		}
+
+		if ( ! class_exists( '\WPMUDEV\Modules\Plugin_Cross_Sell' ) ) {
+			// Load Cross Sell module.
+			include_once $cross_sell_file;
+		}
+
+		$submenu_params = array(
+			'slug'        => 'beehive-analytics',
+			'parent_slug' => 'beehive',
+			'capability'  => 'manage_options',
+			'menu_slug'   => 'beehive_cross_sell',
+			'position'    => 6,
+		);
+
+		$cross_sell = new \WPMUDEV\Modules\Plugin_Cross_Sell( $submenu_params );
 	}
 
 	/**

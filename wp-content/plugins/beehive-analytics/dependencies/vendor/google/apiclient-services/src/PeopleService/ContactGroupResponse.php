@@ -19,20 +19,12 @@ namespace Beehive\Google\Service\PeopleService;
 
 class ContactGroupResponse extends \Beehive\Google\Model
 {
-    /**
-     * @var ContactGroup
-     */
-    public $contactGroup;
     protected $contactGroupType = ContactGroup::class;
     protected $contactGroupDataType = '';
     /**
      * @var string
      */
     public $requestedResourceName;
-    /**
-     * @var Status
-     */
-    public $status;
     protected $statusType = Status::class;
     protected $statusDataType = '';
     /**

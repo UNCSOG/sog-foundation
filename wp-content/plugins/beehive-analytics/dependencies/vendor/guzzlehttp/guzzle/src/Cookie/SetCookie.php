@@ -42,13 +42,7 @@ class SetCookie
             } else {
                 foreach (\array_keys(self::$defaults) as $search) {
                     if (!\strcasecmp($search, $key)) {
-                        if ($search === 'Max-Age') {
-                            if (\is_numeric($value)) {
-                                $data[$search] = (int) $value;
-                            }
-                        } else {
-                            $data[$search] = $value;
-                        }
+                        $data[$search] = $value;
                         continue 2;
                     }
                 }
@@ -62,38 +56,12 @@ class SetCookie
      */
     public function __construct(array $data = [])
     {
-        $this->data = self::$defaults;
-        if (isset($data['Name'])) {
-            $this->setName($data['Name']);
+        /** @var array|null $replaced will be null in case of replace error */
+        $replaced = \array_replace(self::$defaults, $data);
+        if ($replaced === null) {
+            throw new \InvalidArgumentException('Unable to replace the default values for the Cookie.');
         }
-        if (isset($data['Value'])) {
-            $this->setValue($data['Value']);
-        }
-        if (isset($data['Domain'])) {
-            $this->setDomain($data['Domain']);
-        }
-        if (isset($data['Path'])) {
-            $this->setPath($data['Path']);
-        }
-        if (isset($data['Max-Age'])) {
-            $this->setMaxAge($data['Max-Age']);
-        }
-        if (isset($data['Expires'])) {
-            $this->setExpires($data['Expires']);
-        }
-        if (isset($data['Secure'])) {
-            $this->setSecure($data['Secure']);
-        }
-        if (isset($data['Discard'])) {
-            $this->setDiscard($data['Discard']);
-        }
-        if (isset($data['HttpOnly'])) {
-            $this->setHttpOnly($data['HttpOnly']);
-        }
-        // Set the remaining values that don't have extra validation logic
-        foreach (\array_diff(\array_keys($data), \array_keys(self::$defaults)) as $key) {
-            $this->data[$key] = $data[$key];
-        }
+        $this->data = $replaced;
         // Extract the Expires value and turn it into a UNIX timestamp if needed
         if (!$this->getExpires() && $this->getMaxAge()) {
             // Calculate the Expires date
@@ -354,7 +322,7 @@ class SetCookie
             return \true;
         }
         // Remove the leading '.' as per spec in RFC 6265.
-        // https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3
+        // https://tools.ietf.org/html/rfc6265#section-5.2.3
         $cookieDomain = \ltrim(\strtolower($cookieDomain), '.');
         $domain = \strtolower($domain);
         // Domain not set or exact match.
@@ -362,7 +330,7 @@ class SetCookie
             return \true;
         }
         // Matching the subdomain according to RFC 6265.
-        // https://datatracker.ietf.org/doc/html/rfc6265#section-5.1.3
+        // https://tools.ietf.org/html/rfc6265#section-5.1.3
         if (\filter_var($domain, \FILTER_VALIDATE_IP)) {
             return \false;
         }

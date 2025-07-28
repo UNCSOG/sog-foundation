@@ -147,8 +147,7 @@ class Tracking extends Base {
 	 *
 	 * Both network tracking code and single site tracking
 	 * code will be rendered if multisite.
-	 * To support GA4, we need to render both universal analytics
-	 * and measurement IDs.
+	 * To support GA4, we need to render measurement IDs.
 	 *
 	 * @param array $items Tracking data.
 	 *

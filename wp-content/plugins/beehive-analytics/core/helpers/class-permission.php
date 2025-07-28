@@ -321,27 +321,17 @@ class Permission {
 	 * Roles are taken from wp_roles(). So any custom roles registered
 	 * with WP will also included.
 	 *
-	 * @param bool $include_admin Should include admin.
-	 * @param bool $network       Network flag.
-	 *
 	 * @since 3.2.0
 	 * @since 3.3.7 Added network param.
 	 *
 	 * @return array $roles Roles array.
 	 */
-	public static function get_roles( $include_admin = true, $network = false ) {
+	public static function get_roles() {
 		// Get all available roles.
 		$roles = wp_roles()->get_names();
 
-		// Admins can manage the settings, so he should have all access.
-		if ( ! $include_admin ) {
-			unset( $roles['administrator'] );
-		} elseif ( $network && General::is_networkwide() ) {
-			// Add network admin.
-			$roles = array_merge(
-				array( 'super_admin' => __( 'Network Administrator', 'ga_trans' ) ),
-				$roles
-			);
+		if ( is_network_admin() ) {
+			$roles = array( 'super_admin' => __( 'Network Administrator', 'ga_trans' ) ) + $roles;
 		}
 
 		/**

@@ -30,9 +30,9 @@ class Locale {
 	 *
 	 * This data will be available only in post stats scripts.
 	 *
+	 * @return array
 	 * @since 3.2.4
 	 *
-	 * @return array
 	 */
 	public static function post() {
 		return array(
@@ -72,9 +72,9 @@ class Locale {
 	 *
 	 * This data will be available only in dashboard widget script.
 	 *
+	 * @return array
 	 * @since 3.2.4
 	 *
-	 * @return array
 	 */
 	public static function dashboard_widget() {
 		return array(
@@ -130,9 +130,9 @@ class Locale {
 	/**
 	 * Get the localise vars specific to the GA admin pages.
 	 *
+	 * @return array
 	 * @since 3.2.4
 	 *
-	 * @return array
 	 */
 	public static function admin() {
 		return array(
@@ -163,6 +163,8 @@ class Locale {
 					__( 'Whoops, looks like that\'s an invalid measurement ID. Double check you have your <a href="%s" target="_blank">Analytics 4 measurement ID</a> and try again.', 'ga_trans' ),
 					'https://support.google.com/analytics/answer/9539598?hl=en'
 				),
+				'invalid_propery_id'            => __( 'Please select a valid property.', 'ga_trans' ),
+				'invalid_stream_id'             => __( 'Please select a valid stream.', 'ga_trans' ),
 				/* translators: %s: Google API error message. */
 				'api_error'                     => __( 'Google API error: %s', 'ga_trans' ),
 				/* translators: %s: Link to doc. */
@@ -188,7 +190,6 @@ class Locale {
 				'ip_anonymization_force_network' => __( 'Whole network tracking', 'ga_trans' ),
 				'ip_anonymization_force_subsite' => __( 'Force on sub-sites tracking', 'ga_trans' ),
 				'prosites_settings'              => __( 'Pro Site Permissions', 'ga_trans' ),
-				'analytics_profile'              => __( 'Universal Analytics Profile', 'ga_trans' ),
 				'analytics_4_profile'            => __( 'Analytics 4 Profile', 'ga_trans' ),
 				'use_different_measurement'      => __( 'Use a different measurement ID', 'ga_trans' ),
 				'network_measurement_id'         => __( 'Network Measurement ID', 'ga_trans' ),
@@ -208,7 +209,6 @@ class Locale {
 				'ip_anonymization'         => __( 'When enabled, visitor IP address will be <a href="%s" target="_blank">anonymized</a>.', 'ga_trans' ),
 				'prosites_settings'        => __( 'We see you have Pro Sites active. Choose which levels you want to access analytics.', 'ga_trans' ),
 				'account'                  => __( 'Connect and authenticate your Google Analytics account to view analytics data on Beehive\'s Dashboard. If you only want to connect your site to Google Analytics without displaying the analytics data on Beehive\'s dashboard, add the Measurement ID in the corresponding field.', 'ga_trans' ),
-				'analytics_profile'        => __( 'Authenticate with Google to connect your Universal Analytics profile and begin feeding analytics to your WordPress Dashboard.', 'ga_trans' ),
 				'analytics_4_profile'      => __( 'Authenticate with Google to connect your Google Analytics 4 profile and begin feeding analytics to your WordPress Dashboard.', 'ga_trans' ),
 				// translators: %s Google account setup link.
 				'account_not_here'         => sprintf( __( 'Site not here? Try logging into another <a href="%s">Google account</a>', 'ga_trans' ), Template::accounts_url() ),
@@ -226,9 +226,9 @@ class Locale {
 	 *
 	 * This data will be available only in statistics pages script.
 	 *
+	 * @return array
 	 * @since 3.3.7
 	 *
-	 * @return array
 	 */
 	public static function statistics() {
 		return array(

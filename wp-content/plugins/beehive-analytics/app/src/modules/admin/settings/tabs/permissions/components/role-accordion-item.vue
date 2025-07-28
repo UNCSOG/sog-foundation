@@ -16,7 +16,7 @@
 						type="checkbox"
 						:id="`beehive-settings-permissions-roles-${role}`"
 						:value="role"
-						:disabled="overwrite"
+						:disabled="overwrite || shouldDisable"
 						@change="roleStatusChange"
 					/>
 					<span aria-hidden="true" class="sui-toggle-slider"></span>
@@ -122,6 +122,14 @@ export default {
 			return this.enabledRoles.includes(this.role)
 		},
 
+		shouldDisable() {
+			if (this.inNetworkAdmin() && this.role === 'super_admin') {
+				return true
+			} else if (this.inSubsiteAdmin() && this.role === 'administrator') {
+				return true
+			}
+			return false
+		},
 		/**
 		 * Set the accordion class based on the role.
 		 *
@@ -132,7 +140,8 @@ export default {
 		accordionClass() {
 			return {
 				'sui-accordion-item--open': this.open,
-				'sui-accordion-item--disabled': !this.enabled || this.overwrite,
+				'sui-accordion-item--disabled':
+					!this.enabled || this.overwrite || this.shouldDisable,
 			}
 		},
 	},

@@ -53,6 +53,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param BatchRunPivotReportsRequest $postBody
      * @param array $optParams Optional parameters.
      * @return BatchRunPivotReportsResponse
+     * @throws \Google\Service\Exception
      */
     public function batchRunPivotReports($property, BatchRunPivotReportsRequest $postBody, $optParams = [])
     {
@@ -73,6 +74,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param BatchRunReportsRequest $postBody
      * @param array $optParams Optional parameters.
      * @return BatchRunReportsResponse
+     * @throws \Google\Service\Exception
      */
     public function batchRunReports($property, BatchRunReportsRequest $postBody, $optParams = [])
     {
@@ -98,6 +100,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param CheckCompatibilityRequest $postBody
      * @param array $optParams Optional parameters.
      * @return CheckCompatibilityResponse
+     * @throws \Google\Service\Exception
      */
     public function checkCompatibility($property, CheckCompatibilityRequest $postBody, $optParams = [])
     {
@@ -125,6 +128,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * this special mode, this method will not return custom dimensions and metrics.
      * @param array $optParams Optional parameters.
      * @return Metadata
+     * @throws \Google\Service\Exception
      */
     public function getMetadata($name, $optParams = [])
     {
@@ -148,6 +152,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param RunPivotReportRequest $postBody
      * @param array $optParams Optional parameters.
      * @return RunPivotReportResponse
+     * @throws \Google\Service\Exception
      */
     public function runPivotReport($property, RunPivotReportRequest $postBody, $optParams = [])
     {
@@ -172,6 +177,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param RunRealtimeReportRequest $postBody
      * @param array $optParams Optional parameters.
      * @return RunRealtimeReportResponse
+     * @throws \Google\Service\Exception
      */
     public function runRealtimeReport($property, RunRealtimeReportRequest $postBody, $optParams = [])
     {
@@ -199,6 +205,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param RunReportRequest $postBody
      * @param array $optParams Optional parameters.
      * @return RunReportResponse
+     * @throws \Google\Service\Exception
      */
     public function runReport($property, RunReportRequest $postBody, $optParams = [])
     {

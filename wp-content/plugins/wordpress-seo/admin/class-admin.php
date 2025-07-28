@@ -5,7 +5,6 @@
  * @package WPSEO\Admin
  */
 
-use Yoast\WP\SEO\Conditionals\New_Dashboard_Ui_Conditional;
 use Yoast\WP\SEO\Integrations\Settings_Integration;
 
 /**
@@ -44,15 +43,11 @@ class WPSEO_Admin {
 			WPSEO_Options::maybe_set_multisite_defaults( false );
 		}
 
-		if ( WPSEO_Options::get( 'stripcategorybase' ) === true ) {
-			add_action( 'created_category', [ $this, 'schedule_rewrite_flush' ] );
-			add_action( 'edited_category', [ $this, 'schedule_rewrite_flush' ] );
-			add_action( 'delete_category', [ $this, 'schedule_rewrite_flush' ] );
-		}
+		add_action( 'created_category', [ $this, 'schedule_rewrite_flush' ] );
+		add_action( 'edited_category', [ $this, 'schedule_rewrite_flush' ] );
+		add_action( 'delete_category', [ $this, 'schedule_rewrite_flush' ] );
 
-		if ( WPSEO_Options::get( 'disable-attachment' ) === true ) {
-			add_filter( 'wpseo_accessible_post_types', [ 'WPSEO_Post_Type', 'filter_attachment_post_type' ] );
-		}
+		add_filter( 'wpseo_accessible_post_types', [ 'WPSEO_Post_Type', 'filter_attachment_post_type' ] );
 
 		add_filter( 'plugin_action_links_' . WPSEO_BASENAME, [ $this, 'add_action_link' ], 10, 2 );
 		add_filter( 'network_admin_plugin_action_links_' . WPSEO_BASENAME, [ $this, 'add_action_link' ], 10, 2 );
@@ -71,12 +66,6 @@ class WPSEO_Admin {
 
 		WPSEO_Sitemaps_Cache::register_clear_on_option_update( 'wpseo' );
 		WPSEO_Sitemaps_Cache::register_clear_on_option_update( 'home' );
-
-		if ( YoastSEO()->helpers->current_page->is_yoast_seo_page() ) {
-			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-		}
-
-		$this->set_upsell_notice();
 
 		$this->initialize_cornerstone_content();
 
@@ -120,6 +109,10 @@ class WPSEO_Admin {
 	 * @return void
 	 */
 	public function schedule_rewrite_flush() {
+		if ( WPSEO_Options::get( 'stripcategorybase' ) !== true ) {
+			return;
+		}
+
 		// Bail if this is a multisite installation and the site has been switched.
 		if ( is_multisite() && ms_is_switched() ) {
 			return;
@@ -140,15 +133,13 @@ class WPSEO_Admin {
 	/**
 	 * Register assets needed on admin pages.
 	 *
+	 * @deprecated 25.5
+	 * @codeCoverageIgnore
+	 *
 	 * @return void
 	 */
 	public function enqueue_assets() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: We are not processing form data.
-		$page = isset( $_GET['page'] ) && is_string( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
-		if ( $page === 'wpseo_licenses' ) {
-			$asset_manager = new WPSEO_Admin_Asset_Manager();
-			$asset_manager->enqueue_style( 'extensions' );
-		}
+		_deprecated_function( __METHOD__, 'Yoast SEO 25.5' );
 	}
 
 	/**
@@ -242,7 +233,7 @@ class WPSEO_Admin {
 			$configuration_title = ( ! $first_time_configuration_notice_helper->should_show_alternate_message() ) ? 'first-time configuration' : 'SEO configuration';
 			/* translators: CTA to finish the first time configuration. %s: Either first-time SEO configuration or SEO configuration. */
 			$message  = sprintf( __( 'Finish your %s', 'wordpress-seo' ), $configuration_title );
-			$ftc_page = ( ( new New_Dashboard_Ui_Conditional() )->is_met() ) ? 'admin.php?page=wpseo_dashboard#/first-time-configuration' : 'admin.php?page=wpseo_dashboard#top#first-time-configuration';
+			$ftc_page = 'admin.php?page=wpseo_dashboard#/first-time-configuration';
 			$ftc_link = '<a href="' . esc_url( admin_url( $ftc_page ) ) . '" target="_blank">' . $message . '</a>';
 			array_unshift( $links, $ftc_link );
 		}
@@ -366,17 +357,6 @@ class WPSEO_Admin {
 			],
 			YoastSEO()->helpers->wincher->get_admin_global_links()
 		);
-	}
-
-	/**
-	 * Sets the upsell notice.
-	 *
-	 * @return void
-	 */
-	protected function set_upsell_notice() {
-		$upsell = new WPSEO_Product_Upsell_Notice();
-		$upsell->dismiss_notice_listener();
-		$upsell->initialize();
 	}
 
 	/**

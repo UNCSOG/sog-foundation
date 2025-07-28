@@ -45,6 +45,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionResponse
+     * @throws \Google\Service\Exception
      */
     public function acknowledgeUserDataCollection($property, GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest $postBody, $optParams = [])
     {
@@ -59,6 +60,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaProperty $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaProperty
+     * @throws \Google\Service\Exception
      */
     public function create(GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
     {
@@ -79,6 +81,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * Format: properties/{property_id} Example: "properties/1000"
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaProperty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -93,6 +96,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * properties/{property_id} Example: "properties/1000"
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaProperty
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -109,6 +113,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * "properties/1000/dataRetentionSettings"
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaDataRetentionSettings
+     * @throws \Google\Service\Exception
      */
     public function getDataRetentionSettings($name, $optParams = [])
     {
@@ -148,6 +153,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * Properties in the results. Properties can be inspected to determine whether
      * they are deleted or not.
      * @return GoogleAnalyticsAdminV1betaListPropertiesResponse
+     * @throws \Google\Service\Exception
      */
     public function listProperties($optParams = [])
     {
@@ -168,6 +174,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * will not be updated. To replace the entire entity, use one path with the
      * string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaProperty
+     * @throws \Google\Service\Exception
      */
     public function patch($name, GoogleAnalyticsAdminV1betaProperty $postBody, $optParams = [])
     {
@@ -199,6 +206,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaRunAccessReportRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaRunAccessReportResponse
+     * @throws \Google\Service\Exception
      */
     public function runAccessReport($entity, GoogleAnalyticsAdminV1betaRunAccessReportRequest $postBody, $optParams = [])
     {
@@ -220,6 +228,7 @@ class Properties extends \Beehive\Google\Service\Resource
      * will not be updated. To replace the entire entity, use one path with the
      * string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaDataRetentionSettings
+     * @throws \Google\Service\Exception
      */
     public function updateDataRetentionSettings($name, GoogleAnalyticsAdminV1betaDataRetentionSettings $postBody, $optParams = [])
     {

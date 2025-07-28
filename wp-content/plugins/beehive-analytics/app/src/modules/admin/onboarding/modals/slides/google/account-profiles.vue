@@ -3,12 +3,7 @@
 		class="beehive-box-border-bottom beehive-onboarding-google-stream-section"
 	>
 		<!-- Show streams dropdown -->
-		<streams
-			id="beehive-onboarding-google-stream-id"
-			parent-element="beehive-onboarding-setup-account"
-			:label="$i18n.label.choose_stream"
-			:show-desc="false"
-		/>
+		<streams/>
 		<div v-if="showAutoTrack" class="sui-form-field">
 			<label
 				for="beehive-onboarding-google-auto-track"
@@ -36,7 +31,8 @@
 </template>
 
 <script>
-import Streams from './../../../../../ga/admin/tabs/account/fields/streams'
+
+import Streams from '@/modules/ga/admin/tabs/account/fields/streams.vue'
 
 export default {
 	name: 'SlideGoogleAccount',

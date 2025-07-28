@@ -425,6 +425,17 @@ class REST_Controller {
 				'permission_callback' => array( $this, 'can_user_view_general_stats_callback' ),
 			)
 		);
+
+		// Get Location stats.
+		register_rest_route(
+			static::$namespace,
+			sprintf( '/sites/%d/stats/location-views/(?P<geo_mode>country|region|city)', Jetpack_Options::get_option( 'id' ) ),
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_location_stats' ),
+				'permission_callback' => array( $this, 'can_user_view_general_stats_callback' ),
+			)
+		);
 	}
 
 	/**
@@ -483,6 +494,9 @@ class REST_Controller {
 
 			case 'top-posts':
 				return $this->wpcom_stats->get_top_posts( $req->get_params() );
+
+			case 'archives':
+				return $this->wpcom_stats->get_archives( $req->get_params() );
 
 			case 'publicize':
 				return $this->wpcom_stats->get_publicize_followers( $req->get_params() );
@@ -604,11 +618,19 @@ class REST_Controller {
 			return $post;
 		}
 
-		// It shouldn't be a problem because only title and ID are exposed.
+		// The endpoint should be as compatible as possible with `/sites/$site_id/posts/$post_id`.
+		// The reason we are not forwarding the request is that `/sites/$site_id/posts/$post_id` might require user tokens for private posts/sites, which is not possible for users without a WordPress.com account.
+		// 'like_count' is not included in the response because it's available through another endpoint `/sites/$site_id/posts/$post_id/likes`.
 		return array(
-			'ID'    => $post->ID,
-			'title' => $post->post_title,
-			'URL'   => get_permalink( $post->ID ),
+			'ID'             => $post->ID,
+			'site_ID'        => Jetpack_Options::get_option( 'id' ),
+			'title'          => $post->post_title,
+			'URL'            => get_permalink( $post->ID ),
+			'type'           => $post->post_type,
+			'status'         => $post->post_status,
+			'discussion'     => array( 'comment_count' => intval( $post->comment_count ) ),
+			'date'           => $post->post_date,
+			'post_thumbnail' => array( 'URL' => get_the_post_thumbnail_url( $post->ID ) ),
 		);
 	}
 
@@ -702,7 +724,8 @@ class REST_Controller {
 			'v2',
 			array( 'timeout' => 5 ),
 			null,
-			'wpcom'
+			'wpcom',
+			false
 		);
 	}
 
@@ -966,6 +989,20 @@ class REST_Controller {
 	}
 
 	/**
+	 * Get Location stats.
+	 *
+	 * @param WP_REST_Request $req The request object.
+	 * @return array
+	 */
+	public function get_location_stats( $req ) {
+		$params   = $req->get_params();
+		$geo_mode = $params['geo_mode'];
+		unset( $params['geo_mode'] );
+
+		return $this->wpcom_stats->get_views_by_location( $geo_mode, $params );
+	}
+
+	/**
 	 * Dismiss or delay stats notices.
 	 *
 	 * @param WP_REST_Request $req The request object.
@@ -1178,7 +1215,12 @@ class REST_Controller {
 				$this->filter_and_build_query_string(
 					$req->get_query_params()
 				)
-			)
+			),
+			'v1.1',
+			array( 'timeout' => 10 ),
+			null,
+			'rest',
+			false
 		);
 	}
 

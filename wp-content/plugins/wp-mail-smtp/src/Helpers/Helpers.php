@@ -31,7 +31,10 @@ class Helpers {
 				'mailgun',
 				'postmark',
 				'sparkpost',
+				'elasticemail',
 				'smtp2go',
+				'mailjet',
+				'mailersend',
 			],
 			true
 		);

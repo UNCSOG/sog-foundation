@@ -24,10 +24,6 @@ class BatchRunPivotReportsResponse extends \Beehive\Google\Collection
      * @var string
      */
     public $kind;
-    /**
-     * @var RunPivotReportResponse[]
-     */
-    public $pivotReports;
     protected $pivotReportsType = RunPivotReportResponse::class;
     protected $pivotReportsDataType = 'array';
     /**

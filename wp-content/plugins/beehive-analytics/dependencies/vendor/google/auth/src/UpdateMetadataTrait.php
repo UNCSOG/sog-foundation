@@ -44,7 +44,7 @@ trait UpdateMetadataTrait
      * @param callable $httpHandler callback which delivers psr7 request
      * @return array<mixed> updated metadata hashmap
      */
-    public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
+    public function updateMetadata($metadata, $authUri = null, ?callable $httpHandler = null)
     {
         if (isset($metadata[self::AUTH_METADATA_KEY])) {
             // Auth metadata has already been set

@@ -19,10 +19,6 @@ namespace Beehive\Google\Service\PeopleService;
 
 class BatchUpdateContactsResponse extends \Beehive\Google\Model
 {
-    /**
-     * @var PersonResponse[]
-     */
-    public $updateResult;
     protected $updateResultType = PersonResponse::class;
     protected $updateResultDataType = 'map';
     /**

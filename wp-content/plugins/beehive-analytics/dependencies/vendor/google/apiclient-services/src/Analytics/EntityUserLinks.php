@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class EntityUserLinks extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var EntityUserLink[]
-     */
-    public $items;
     protected $itemsType = EntityUserLink::class;
     protected $itemsDataType = 'array';
     /**

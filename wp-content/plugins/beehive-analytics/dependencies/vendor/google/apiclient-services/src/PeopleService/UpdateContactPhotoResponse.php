@@ -19,10 +19,6 @@ namespace Beehive\Google\Service\PeopleService;
 
 class UpdateContactPhotoResponse extends \Beehive\Google\Model
 {
-    /**
-     * @var Person
-     */
-    public $person;
     protected $personType = Person::class;
     protected $personDataType = '';
     /**

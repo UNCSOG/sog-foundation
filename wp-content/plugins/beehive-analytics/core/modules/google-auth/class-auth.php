@@ -15,11 +15,18 @@ namespace Beehive\Core\Modules\Google_Auth;
 defined( 'WPINC' ) || die;
 
 use Beehive\Google\Client;
+use Beehive\Monolog\Logger;
 use Beehive\Core\Helpers\Cache;
 use Beehive\Core\Helpers\General;
+use Beehive\GuzzleHttp\Middleware;
+use Beehive\GuzzleHttp\HandlerStack;
 use Beehive\Core\Helpers\Permission;
 use Beehive\Core\Utils\Abstracts\Base;
+use Beehive\GuzzleHttp\MessageFormatter;
 use Beehive\Google\Service\PeopleService;
+use Beehive\Monolog\Formatter\LineFormatter;
+use Beehive\Psr\Http\Message\RequestInterface;
+use Beehive\Monolog\Handler\RotatingFileHandler;
 
 /**
  * Class Auth
@@ -75,6 +82,10 @@ class Auth extends Base {
 		if ( $new || ! $this->client instanceof Client ) {
 			// Set new instance.
 			$this->client = new Client();
+			// Check if the plugin is in dev mode.
+			if ( defined( 'BEEHIVE_DEV_MODE' ) && BEEHIVE_DEV_MODE ) {
+				$this->setup_dev_mode();
+			}
 
 			// Set our application name.
 			$this->client->setApplicationName( General::plugin_name() );
@@ -355,8 +366,6 @@ class Auth extends Base {
 			beehive_analytics()->settings->update( 'auto_track_ga4', '', 'misc', $network );
 		}
 
-		// Delete profiles and streams from cache.
-		Cache::delete_transient( 'google_profiles_v3313', $network );
 		Cache::delete_transient( 'google_streams_v3400', $network );
 
 		// Refresh caches.
@@ -394,7 +403,7 @@ class Auth extends Base {
 		// Prepare for the random selection.
 		foreach ( $client_ids as $key => $client_id ) {
 			if ( isset( $default_creds[ $client_id ]['weight'] ) ) {
-				for ( $i = 0; $i < $default_creds[ $client_id ]['weight']; $i ++ ) {
+				for ( $i = 0; $i < $default_creds[ $client_id ]['weight']; $i++ ) {
 					$keys[] = $key;
 				}
 			}
@@ -417,5 +426,69 @@ class Auth extends Base {
 		 * @since 3.2.7
 		 */
 		return apply_filters( 'beehive_google_auth_get_random_creds', $credentials );
+	}
+
+	/**
+	 * Sets up the development mode for the application.
+	 *
+	 * This method configures the HTTP client with optional features such as:
+	 * - Proxy settings.
+	 * - Mock API server middleware for testing.
+	 * - API call logging middleware for debugging.
+	 *
+	 * Development mode configurations:
+	 * - Proxy settings: Defined via the `BEEHIVE_PROXY_URL` constant.
+	 * - Mock server: Defined via the `BEEHIVE_MOCK_HOST` constant.
+	 * - API logging: Enabled via the `BEEHIVE_DEBUG_API` constant. Logs are stored in
+	 *   the `wp-content/uploads/beehive/api-calls.log` file.
+	 *
+	 * Middleware:
+	 * - Modifies the request URI for mock server testing.
+	 * - Logs HTTP requests with a timestamp and request details.
+	 *
+	 * @return void
+	 */
+	public function setup_dev_mode(): void {
+		$config = array();
+
+		if ( defined( 'BEEHIVE_PROXY_URL' ) && BEEHIVE_PROXY_URL ) {
+			$config['proxy']  = BEEHIVE_PROXY_URL;
+			$config['verify'] = false;
+		}
+
+		$handler_stack = HandlerStack::create();
+
+		// Setup mock API server middleware if defined.
+		if ( defined( 'BEEHIVE_MOCK_HOST' ) && BEEHIVE_MOCK_HOST ) {
+			$mock_base_uri = Middleware::mapRequest(
+				function ( RequestInterface $request ) {
+					return $request->withUri(
+						$request->getUri()
+						->withHost( wp_parse_url( BEEHIVE_MOCK_HOST, PHP_URL_HOST ) )
+						->withPort( wp_parse_url( BEEHIVE_MOCK_HOST, PHP_URL_PORT ) )
+						->withScheme( wp_parse_url( BEEHIVE_MOCK_HOST, PHP_URL_SCHEME ) )
+					);
+				}
+			);
+			$handler_stack->push( $mock_base_uri );
+		}
+
+		// Setup API call logging middleware if debugging is enabled.
+		if ( defined( 'BEEHIVE_DEBUG_API' ) && BEEHIVE_DEBUG_API ) {
+			$stream = new RotatingFileHandler( WP_CONTENT_DIR . '/uploads/beehive/api-calls.log' );
+			$stream->setFormatter( new LineFormatter( '%message%' . PHP_EOL, 'd-m-Y h:i' ) );
+
+			$logger = new Logger( 'api-logger' );
+			$logger->pushHandler( $stream );
+
+			$request_logger = Middleware::log( $logger, new MessageFormatter( '{method} {target}' ) );
+			$handler_stack->push( $request_logger );
+		}
+
+		$config['handler'] = $handler_stack;
+
+		// Configure and set the HTTP client.
+		$http_client = new \Beehive\GuzzleHttp\Client( $config );
+		$this->client->setHttpClient( $http_client );
 	}
 }

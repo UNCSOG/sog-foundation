@@ -1,15 +1,14 @@
 <template>
 	<div class="google-account-selector">
-		<streams
-			id="beehive-settings-google-stream-id"
-			:label="$i18n.label.choose_stream"
-			:show-desc="isConnected"
-		/>
-		<!-- When there is no profiles found -->
-		<sui-notice v-if="emptyStreams" type="error">
-			<p v-html="$i18n.notice.no_streams"></p>
+		<streams @validate="validateStream" />
+		<sui-notice v-if="error.property || error.stream" type="error">
+			<p v-if="error.stream" v-html="$i18n.notice.invalid_stream_id"></p>
+			<p
+				v-if="error.property"
+				v-html="$i18n.notice.invalid_propery_id"
+			></p>
 		</sui-notice>
-		<sui-notice v-else-if="showLimitNotice" type="info">
+		<sui-notice v-if="showLimitNotice" type="info">
 			<p v-html="$i18n.notice.limit_notice"></p>
 		</sui-notice>
 		<div v-if="showAutoTrack" class="sui-form-field">
@@ -47,7 +46,14 @@ export default {
 	name: 'StreamsConnected',
 
 	components: { Profiles, Streams, SuiNotice },
-
+	data() {
+		return {
+			error: {
+				property: false,
+				stream: false,
+			},
+		}
+	},
 	computed: {
 		/**
 		 * Computed model object to get auto measurement ID.
@@ -90,17 +96,6 @@ export default {
 		},
 
 		/**
-		 * Check if Google stream list is empty.
-		 *
-		 * @since 3.4.0
-		 *
-		 * @returns {boolean}
-		 */
-		emptyStreams() {
-			return this.$store.state.helpers.google.streams.length <= 0
-		},
-
-		/**
 		 * Check if account limit notice should be visible.
 		 *
 		 * @since 3.4.8
@@ -109,6 +104,31 @@ export default {
 		 */
 		showLimitNotice() {
 			return this.$store.state.helpers.google.show_limit_notice
+		},
+	},
+	methods: {
+		/**
+		 * Validate the Google Analytics stream selection.
+		 *
+		 * @since 3.4.16
+		 */
+		validateStream() {
+			const account = this.getOption('account', 'google')
+			const property = this.getOption('property', 'google')
+			const stream = this.getOption('stream', 'google')
+
+			this.error.property = false
+			this.error.stream = false
+
+			if (account && (!property || !stream)) {
+				if (!property) {
+					this.error.property = true
+				} else {
+					this.error.stream = true
+				}
+			}
+
+			this.$emit('validate', account && property && stream)
 		},
 	},
 }

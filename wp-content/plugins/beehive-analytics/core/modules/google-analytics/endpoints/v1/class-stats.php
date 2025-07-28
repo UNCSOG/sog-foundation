@@ -1,12 +1,12 @@
 <?php
 /**
- * Stats functionality REST endpoint.
+ * GA4 Stats functionality REST endpoint.
  *
  * @link       http://wpmudev.com
- * @since      3.2.0
+ * @since      3.4.0
  *
  * @author     Joel James <joel@incsub.com>
- * @package    Beehive\Core\Modules\Google_Analytics\Endpoints
+ * @package    Beehive\Core\Modules\Google_Analytics\Endpoints\V1
  */
 
 namespace Beehive\Core\Modules\Google_Analytics\Endpoints\V1;
@@ -14,17 +14,11 @@ namespace Beehive\Core\Modules\Google_Analytics\Endpoints\V1;
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
 
-use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
-use Beehive\Core\Utils\Abstracts\Endpoint;
 use Beehive\Core\Modules\Google_Analytics;
+use Beehive\Core\Utils\Abstracts\Endpoint;
 
-/**
- * Class Stats
- *
- * @package Beehive\Core\Modules\Google_Analytics\Endpoints\V1
- */
 class Stats extends Endpoint {
 
 	/**
@@ -41,7 +35,7 @@ class Stats extends Endpoint {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @var Google_Analytics\Stats\UA|Google_Analytics\Stats\GA4 $stats
+	 * @var Google_Analytics\Stats\GA4|null $stats
 	 */
 	protected $stats;
 
@@ -52,9 +46,8 @@ class Stats extends Endpoint {
 	 */
 	protected function __construct() {
 		// Stats instance.
-		$this->stats = Google_Analytics\Stats\UA::instance();
-
 		parent::__construct();
+		$this->stats = Google_Analytics\Stats\GA4::instance();
 	}
 
 	/**
@@ -63,9 +56,8 @@ class Stats extends Endpoint {
 	 * All custom routes for the stats functionality should be registered
 	 * here using register_rest_route() function.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return void
+	 * @since 3.2.4
 	 */
 	public function register_routes() {
 		// Route to get post stats.
@@ -74,7 +66,7 @@ class Stats extends Endpoint {
 			$this->endpoint . '/post/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'post' ),
 					'permission_callback' => array( $this, 'analytics_permission' ),
 					'args'                => array(
@@ -95,25 +87,13 @@ class Stats extends Endpoint {
 			$this->endpoint . '/summary/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'summary' ),
 					'permission_callback' => array( $this, 'analytics_permission' ),
 					'args'                => array(
-						'to'      => array(
-							'required'          => true,
-							'validate_callback' => array( $this, 'validate_param' ),
-							'description'       => __( 'The end date in YYYY-MM-DD format.', 'ga_trans' ),
-						),
-						'from'    => array(
-							'required'          => true,
-							'validate_callback' => array( $this, 'validate_param' ),
-							'description'       => __( 'The start date in YYYY-MM-DD format.', 'ga_trans' ),
-						),
-						'network' => array(
-							'required'    => false,
-							'type'        => 'boolean',
-							'description' => __( 'The network flag.', 'ga_trans' ),
-						),
+						'to'      => $this->get_date_arg(),
+						'from'    => $this->get_date_arg(),
+						'network' => $this->get_network_arg(),
 					),
 				),
 			)
@@ -125,25 +105,13 @@ class Stats extends Endpoint {
 			$this->endpoint . '/dashboard/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'dashboard' ),
 					'permission_callback' => array( $this, 'analytics_permission' ),
 					'args'                => array(
-						'to'      => array(
-							'required'          => true,
-							'validate_callback' => array( $this, 'validate_param' ),
-							'description'       => __( 'The end date in YYYY-MM-DD format.', 'ga_trans' ),
-						),
-						'from'    => array(
-							'required'          => true,
-							'validate_callback' => array( $this, 'validate_param' ),
-							'description'       => __( 'The start date in YYYY-MM-DD format.', 'ga_trans' ),
-						),
-						'network' => array(
-							'required'    => false,
-							'type'        => 'boolean',
-							'description' => __( 'The network flag.', 'ga_trans' ),
-						),
+						'to'      => $this->get_date_arg(),
+						'from'    => $this->get_date_arg(),
+						'network' => $this->get_network_arg(),
 					),
 				),
 			)
@@ -155,25 +123,13 @@ class Stats extends Endpoint {
 			$this->endpoint . '/statistics/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'statistics_page' ),
 					'permission_callback' => array( $this, 'analytics_permission' ),
 					'args'                => array(
-						'to'      => array(
-							'required'          => true,
-							'validate_callback' => array( $this, 'validate_param' ),
-							'description'       => __( 'The end date in YYYY-MM-DD format.', 'ga_trans' ),
-						),
-						'from'    => array(
-							'required'          => true,
-							'validate_callback' => array( $this, 'validate_param' ),
-							'description'       => __( 'The start date in YYYY-MM-DD format.', 'ga_trans' ),
-						),
-						'network' => array(
-							'required'    => false,
-							'type'        => 'boolean',
-							'description' => __( 'The network flag.', 'ga_trans' ),
-						),
+						'to'      => $this->get_date_arg(),
+						'from'    => $this->get_date_arg(),
+						'network' => $this->get_network_arg(),
 					),
 				),
 			)
@@ -185,7 +141,7 @@ class Stats extends Endpoint {
 			$this->endpoint . '/popular/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'popular_posts' ),
 					'permission_callback' => array( $this, 'public_permission' ),
 					'args'                => array(
@@ -205,7 +161,7 @@ class Stats extends Endpoint {
 			$this->endpoint . '/api-status/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'api_status' ),
 					'permission_callback' => array( $this, 'analytics_permission' ),
 					'args'                => array(
@@ -214,11 +170,7 @@ class Stats extends Endpoint {
 							'type'        => 'boolean',
 							'description' => __( 'Should force skip cache.', 'ga_trans' ),
 						),
-						'network' => array(
-							'required'    => false,
-							'type'        => 'boolean',
-							'description' => __( 'The network flag.', 'ga_trans' ),
-						),
+						'network' => $this->get_network_arg(),
 					),
 				),
 			)
@@ -230,15 +182,11 @@ class Stats extends Endpoint {
 			$this->endpoint . '/realtime/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => 'GET',
 					'callback'            => array( $this, 'realtime_stats' ),
 					'permission_callback' => array( $this, 'analytics_permission' ),
 					'args'                => array(
-						'network' => array(
-							'required'    => false,
-							'type'        => 'boolean',
-							'description' => __( 'The network flag.', 'ga_trans' ),
-						),
+						'network' => $this->get_network_arg(),
 					),
 				),
 			)
@@ -248,11 +196,10 @@ class Stats extends Endpoint {
 	/**
 	 * Get the post stats data from cache or API.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function post( $request ) {
 		// Get the post id.
@@ -290,11 +237,10 @@ class Stats extends Endpoint {
 	/**
 	 * Get the dashboard summary data.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function summary( $request ) {
 		// Get the required params.
@@ -330,11 +276,10 @@ class Stats extends Endpoint {
 	/**
 	 * Get the statistics dashboard widget data.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function dashboard( $request ) {
 		// Get the required params.
@@ -370,11 +315,10 @@ class Stats extends Endpoint {
 	/**
 	 * Get the statistics page data.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function statistics_page( $request ) {
 		// Get the required params.
@@ -416,11 +360,10 @@ class Stats extends Endpoint {
 	 * pages API response, you will get less no. of items after the
 	 * emission of other sites.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function popular_posts( $request ) {
 		// Get the total count of items required.
@@ -439,11 +382,10 @@ class Stats extends Endpoint {
 	/**
 	 * Get the statistics page data.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function realtime_stats( $request ) {
 		// Get the required params.
@@ -468,12 +410,11 @@ class Stats extends Endpoint {
 	 * is working by checking stats for current day.
 	 * NOTE: DO NOT overuse this API as this make one Google API request always.
 	 *
-	 * @since 3.2.2
-	 * @since 3.2.4 Moved to API route.
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.2
+	 * @since 3.2.4 Moved to API route.
 	 */
 	public function api_status( $request ) {
 		// Network flag.
@@ -516,12 +457,11 @@ class Stats extends Endpoint {
 	/**
 	 * Send error message response from exception class.
 	 *
-	 * @since 3.2.4
-	 *
-	 * @param array|string                              $stats     Stats data.
+	 * @param array|string                              $stats Stats data.
 	 * @param \Exception|\Google_Service_Exception|bool $exception Exception object.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function get_stats_response( $stats, $exception ) {
 		// Send success response.
@@ -535,6 +475,32 @@ class Stats extends Endpoint {
 			array(
 				'error' => __( 'Couldn\'t fetch data. Please try again later.', 'ga_trans' ),
 			)
+		);
+	}
+
+	/**
+	 * Get date argument.
+	 *
+	 * @return array
+	 */
+	public function get_date_arg(): array {
+		return array(
+			'required'          => true,
+			'validate_callback' => array( $this, 'validate_param' ),
+			'description'       => __( 'The date in YYYY-MM-DD format.', 'ga_trans' ),
+		);
+	}
+
+	/**
+	 * Get network argument.
+	 *
+	 * @return array
+	 */
+	public function get_network_arg(): array {
+		return array(
+			'required'    => false,
+			'type'        => 'boolean',
+			'description' => __( 'The network flag.', 'ga_trans' ),
 		);
 	}
 }

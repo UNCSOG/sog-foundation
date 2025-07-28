@@ -19,16 +19,8 @@ namespace Beehive\Google\Service\PeopleService;
 
 class Birthday extends \Beehive\Google\Model
 {
-    /**
-     * @var Date
-     */
-    public $date;
     protected $dateType = Date::class;
     protected $dateDataType = '';
-    /**
-     * @var FieldMetadata
-     */
-    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**

@@ -6,7 +6,7 @@
 
 			<!-- API status notice -->
 			<sui-notice v-if="getApiErrorMessage" type="error">
-				<p>{{ sprintf( $i18n.notice.api_error, getApiErrorMessage ) }}</p>
+				<p>{{ sprintf($i18n.notice.api_error, getApiErrorMessage) }}</p>
 			</sui-notice>
 
 			<!-- Account setup notice -->
@@ -32,7 +32,10 @@
 				</div>
 				<div class="sui-box-settings-col-2">
 					<!-- Profile/View selection -->
-					<streams-connected v-if="isConnected" />
+					<streams-connected
+						v-if="isConnected"
+						@validate="streamValidation"
+					/>
 					<streams-disconnected v-else />
 				</div>
 			</div>
@@ -57,29 +60,13 @@
 				</div>
 				<div class="sui-box-settings-col-2">
 					<!-- Show automatic measurement id -->
-					<measurement-automatic v-if="showAutoMeasurement"/>
+					<measurement-automatic v-if="showAutoMeasurement" />
 					<!-- Show manual measurement id -->
 					<measurement-manual
 						:error="error.measurement"
 						@validation="measurementValidation"
 						v-else
 					/>
-				</div>
-			</div>
-
-			<div class="sui-box-settings-slim-row">
-				<div class="sui-box-settings-col-1">
-					<span class="sui-settings-label">
-						{{ $i18n.label.analytics_profile }}
-					</span>
-					<span class="sui-description">
-						{{ $i18n.desc.analytics_profile }}
-					</span>
-				</div>
-				<div class="sui-box-settings-col-2">
-					<!-- Profile/View selection -->
-					<profiles-connected v-if="isConnected" />
-					<profiles-disconnected v-else />
 				</div>
 			</div>
 		</div>
@@ -127,12 +114,13 @@ export default {
 			},
 			valid: {
 				measurement: true,
+				stream: true,
 			},
 		}
 	},
 
 	computed: {
-		/**Eh
+		/**
 		 * Check if Google account is connected.
 		 *
 		 * @since 3.3.0
@@ -155,7 +143,12 @@ export default {
 			let autoMeasurement = this.getOption('auto_track_ga4', 'google')
 			let autoMeasurementId = this.getOption('auto_track_ga4', 'misc')
 
-			return stream && autoMeasurement && autoMeasurementId && this.isConnected
+			return (
+				stream &&
+				autoMeasurement &&
+				autoMeasurementId &&
+				this.isConnected
+			)
 		},
 
 		/**
@@ -182,38 +175,48 @@ export default {
 
 	methods: {
 		/**
+		 * Handles the stream validation process.
+		 *
+		 * @param {boolean} valid Validation result.
+		 *
+		 * @since 3.4.16
+		 */
+		streamValidation(valid) {
+			this.valid.stream = valid
+		},
+
+		/**
 		 * On tracking code validation process.
 		 *
 		 * @param {object} data Validation data.
 		 *
 		 * @since 3.3.3
 		 */
-		measurementValidation(data) {
-			this.valid.measurement = data.valid
-
-			if (data.valid) {
-				this.error.measurement = false
-			}
+		measurementValidation({ valid }) {
+			this.valid.measurement = valid
+			this.error.measurement = !valid
 		},
 
 		/**
 		 * Save settings values using API.
 		 *
-		 * @param {string} tab Current tab.
 		 *
 		 * @since 3.2.4
 		 */
-		formSubmit(tab) {
-			if (this.valid.measurement) {
-				this.error = {
-					measurement: false,
-				}
-
-				// Save settings.
-				this.$emit('submit')
-			} else {
-				this.error.measurement = !this.valid.measurement
+		formSubmit() {
+			// Check if the measurement is valid
+			if (!this.valid.measurement) {
+				this.error.measurement = true
+				return
 			}
+
+			if (!this.valid.stream) {
+				return
+			}
+
+			// Emit events to trigger form submission and refresh completion
+			this.$emit('submit')
+			this.$emit('statsRefreshCompleted')
 		},
 	},
 }

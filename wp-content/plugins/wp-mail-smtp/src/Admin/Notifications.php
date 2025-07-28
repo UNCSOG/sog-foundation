@@ -4,7 +4,6 @@ namespace WPMailSMTP\Admin;
 
 use WPMailSMTP\Helpers\Helpers;
 use WPMailSMTP\Options;
-use WPMailSMTP\Tasks\Tasks;
 use WPMailSMTP\WP;
 
 /**
@@ -21,7 +20,7 @@ class Notifications {
 	 *
 	 * @var string
 	 */
-	const SOURCE_URL = 'https://plugin.wpmailsmtp.com/wp-content/notifications.json';
+	const SOURCE_URL = 'https://wpmailsmtpapi.com/feeds/v1/notifications';
 
 	/**
 	 * The WP option key for storing the notification options.
@@ -60,8 +59,19 @@ class Notifications {
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		add_action( 'wp_mail_smtp_admin_pages_before_content', [ $this, 'output' ] );
-		add_action( 'wp_mail_smtp_admin_notifications_update', [ $this, 'update' ] );
 		add_action( 'wp_ajax_wp_mail_smtp_notification_dismiss', [ $this, 'dismiss' ] );
+	}
+
+	/**
+	 * Check if notifications are enabled.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @return bool
+	 */
+	public function is_enabled() {
+
+		return ! Options::init()->get( 'general', 'am_notifications_hidden' );
 	}
 
 	/**
@@ -77,7 +87,7 @@ class Notifications {
 
 		if (
 			current_user_can( wp_mail_smtp()->get_capability_manage_options() ) &&
-			! Options::init()->get( 'general', 'am_notifications_hidden' )
+			$this->is_enabled()
 		) {
 			$access = true;
 		}
@@ -121,8 +131,10 @@ class Notifications {
 	 */
 	protected function fetch_feed() {
 
+		$feed_url = self::SOURCE_URL . '/' . wp_mail_smtp()->get_license_type();
+
 		$response = wp_remote_get(
-			self::SOURCE_URL,
+			$feed_url,
 			[
 				'user-agent' => Helpers::get_default_user_agent(),
 			]
@@ -243,20 +255,6 @@ class Notifications {
 		}
 
 		$option = $this->get_option();
-
-		// Update notifications a recurring task.
-		if ( Tasks::is_scheduled( 'wp_mail_smtp_admin_notifications_update' ) === false ) {
-
-			wp_mail_smtp()->get_tasks()
-				->create( 'wp_mail_smtp_admin_notifications_update' )
-				->recurring(
-					strtotime( '+1 minute' ),
-					$this->get_notification_update_task_interval()
-				)
-				->params()
-				->register();
-		}
-
 		$events = ! empty( $option['events'] ) ? $this->verify_active( $option['events'] ) : [];
 		$feed   = ! empty( $option['feed'] ) ? $this->verify_active( $option['feed'] ) : [];
 
@@ -270,7 +268,7 @@ class Notifications {
 	 *
 	 * @return int
 	 */
-	private function get_notification_update_task_interval() {
+	public function get_notification_update_task_interval() {
 
 		/**
 		 * Filters the interval for the notifications update task.
@@ -339,8 +337,14 @@ class Notifications {
 	 */
 	public function update() {
 
-		$feed   = $this->fetch_feed();
 		$option = $this->get_option();
+
+		// Bail if feed was updated less than an interval ago.
+		if ( time() - (int) $option['update'] < $this->get_notification_update_task_interval() ) {
+			return;
+		}
+
+		$feed = $this->fetch_feed();
 
 		update_option(
 			self::OPTION_KEY,

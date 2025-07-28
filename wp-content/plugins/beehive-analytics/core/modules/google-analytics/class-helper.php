@@ -31,9 +31,8 @@ class Helper extends Base {
 	 * Use `beehive_google_analytics_post_types` filter to add support
 	 * for another custom post type.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return array
+	 * @since 3.2.0
 	 */
 	public function post_types() {
 		// Post types to show.
@@ -49,9 +48,9 @@ class Helper extends Base {
 		 *
 		 * Use this filter to show stats data in a custom post type edit screen.
 		 *
-		 * @since 3.2.0
-		 *
 		 * @param array $post_types Post types.
+		 *
+		 * @since 3.2.0
 		 */
 		return apply_filters( 'beehive_google_analytics_post_types', $post_types );
 	}
@@ -62,15 +61,13 @@ class Helper extends Base {
 	 * If current site is not logged in, we can access the stats
 	 * data using network creds. Only in multisite.
 	 *
-	 * @since 3.2.0
-	 *
-	 * @param bool            $network   Network flag.
+	 * @param bool           $network Network flag.
 	 * @param \Exception|bool $exception Exception if any.
-	 * @param string          $type      Type (ga4 or ua).
 	 *
 	 * @return bool
+	 * @since 3.2.0
 	 */
-	public function can_get_stats( $network = false, &$exception = false, $type = false ) {
+	public function can_get_stats( $network = false, &$exception = false ) {
 		$show_exception = true;
 
 		// Get current source.
@@ -82,18 +79,18 @@ class Helper extends Base {
 		// Try to get the logged in status.
 		$can = Auth_Helper::instance()->is_logged_in( $network );
 
-		if ( $can && $type ) {
+		if ( $can ) {
 			$show_exception = false;
 			// One account should be selected.
-			$can = $this->is_account_selected( $network, $type );
+			$can = $this->is_account_selected( $network );
 		}
 
 		/**
 		 * Filter hook to modify the stats cap flag.
 		 *
-		 * @since 3.2.0
-		 *
 		 * @param bool $can Can get stats.
+		 *
+		 * @since 3.2.0
 		 */
 		$can = apply_filters( 'beehive_google_can_get_stats', $can );
 
@@ -111,24 +108,17 @@ class Helper extends Base {
 	 * A stream or profile should be selected for analytics requests.
 	 * This will always be false if not logged in.
 	 *
-	 * @since 3.2.0
-	 *
-	 * @param bool   $network Network flag.
-	 * @param string $type    Type (ga4 or ua).
+	 * @param bool $network Network flag.
 	 *
 	 * @return bool
+	 * @since 3.2.0
 	 */
-	public function is_account_selected( $network = false, $type = 'ga4' ) {
+	public function is_account_selected( $network = false ) {
 		// Decide login source.
 		$network = $this->login_source( $network ) === 'network';
 
-		if ( 'ga4' === $type ) {
-			// Selected stream.
-			$account = beehive_analytics()->settings->get( 'stream', 'google', $network );
-		} else {
-			// Selected profile.
-			$account = beehive_analytics()->settings->get( 'account_id', 'google', $network );
-		}
+		// Selected stream.
+		$account = beehive_analytics()->settings->get( 'stream', 'google', $network );
 
 		return ! empty( $account );
 	}
@@ -142,11 +132,10 @@ class Helper extends Base {
 	 * we can use network admin's login to get stats for the subsite.
 	 * But subsite admins can see only their site's stats.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @param bool $network Network flag.
 	 *
 	 * @return string
+	 * @since 3.2.0
 	 */
 	public function login_source( $network = false ) {
 		// Default source is single site.
@@ -176,9 +165,9 @@ class Helper extends Base {
 		/**
 		 * Filter the login source for analytics report.
 		 *
-		 * @since 3.2.0
-		 *
 		 * @param string $source Source (network or single).
+		 *
+		 * @since 3.2.0
 		 */
 		return apply_filters( 'beehive_google_analytics_login_source', $source );
 	}
@@ -186,10 +175,10 @@ class Helper extends Base {
 	/**
 	 * Check if current page is Google Analytics admin page.
 	 *
-	 * @since 3.3.0
+	 * @return bool
 	 * @since 3.3.5 Changed method name.
 	 *
-	 * @return bool
+	 * @since 3.3.0
 	 */
 	public static function is_ga_admin() {
 		// Get current screen id.
@@ -205,15 +194,14 @@ class Helper extends Base {
 	/**
 	 * Get the previous date data from the current period.
 	 *
-	 * @since 3.2.7 Moved to helper.
-	 *
-	 * @since 3.2.0
-	 *
-	 * @param string $from   From date.
-	 * @param string $to     To date.
+	 * @param string $from From date.
+	 * @param string $to To date.
 	 * @param string $format Date format.
 	 *
 	 * @return array
+	 * @since 3.2.7 Moved to helper.
+	 *
+	 * @since 3.2.0
 	 */
 	public static function get_previous_period( $from, $to, $format = 'Y-m-d' ) {
 		try {
@@ -248,11 +236,10 @@ class Helper extends Base {
 	/**
 	 * Get the all statistics page url.
 	 *
-	 * @since 3.3.0
-	 *
 	 * @param bool $network Network flag.
 	 *
 	 * @return string
+	 * @since 3.3.0
 	 */
 	public static function statistics_url( $network = false ) {
 		// Get base url.
@@ -283,11 +270,11 @@ class Helper extends Base {
 		/**
 		 * Filter to modify GA statistics url
 		 *
+		 * @param bool $network Network flag.
+		 *
+		 * @param string $url Statistics url.
+		 *
 		 * @since 3.3.0
-		 *
-		 * @param bool   $network Network flag.
-		 *
-		 * @param string $url     Statistics url.
 		 */
 		return apply_filters( 'beehive_ga_statistics_url', $url, $network );
 	}
@@ -295,12 +282,11 @@ class Helper extends Base {
 	/**
 	 * Get the GA settings url.
 	 *
-	 * @since 3.3.0
-	 *
-	 * @param string $tab     Tab.
+	 * @param string $tab Tab.
 	 * @param bool   $network Network flag.
 	 *
 	 * @return string
+	 * @since 3.3.0
 	 */
 	public static function settings_url( $tab = 'account', $network = false ) {
 		// Get base url.
@@ -320,11 +306,11 @@ class Helper extends Base {
 		/**
 		 * Filter to modify main url used to build GA settings url
 		 *
+		 * @param bool $network Network flag.
+		 *
+		 * @param string $url Settings URL.
+		 *
 		 * @since 3.3.0
-		 *
-		 * @param bool   $network Network flag.
-		 *
-		 * @param string $url     Settings URL.
 		 */
 		return apply_filters( 'beehive_ga_settings_url', $url, $network );
 	}
@@ -332,30 +318,29 @@ class Helper extends Base {
 	/**
 	 * Log API error to the db.
 	 *
-	 * @since 3.4.0
-	 *
-	 * @param int    $code    Error code.
+	 * @param int    $code Error code.
 	 * @param string $message Error message.
 	 * @param bool   $network Network flag.
 	 *
 	 * @return void
+	 * @since 3.4.0
 	 */
 	public static function log_error( $code, $message, $network = false ) {
 		$error = array(
 			'code'    => $code,
-			'type'    => beehive_analytics()->settings->get( 'statistics_type', 'google', $network ),
+			'type'    => 'ga4',
 			'message' => '',
 		);
 
 		/**
 		 * Filter to modify main url used to build GA settings url
 		 *
-		 * @since 3.4.0
-		 *
-		 * @param array  $error   Error data.
-		 * @param int    $code    Error code.
+		 * @param array $error Error data.
+		 * @param int $code Error code.
 		 * @param string $message Error message.
-		 * @param bool   $network Network flag.
+		 * @param bool $network Network flag.
+		 *
+		 * @since 3.4.0
 		 */
 		$error = apply_filters( 'beehive_ga_log_error', $error, $code, $message, $network );
 

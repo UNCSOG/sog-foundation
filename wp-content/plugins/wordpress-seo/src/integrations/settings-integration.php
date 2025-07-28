@@ -93,6 +93,7 @@ class Settings_Integration implements Integration_Interface {
 			'deny_ccbot_crawling',
 			'deny_google_extended_crawling',
 			'deny_gptbot_crawling',
+			'enable_llms_txt',
 		],
 	];
 
@@ -445,6 +446,7 @@ class Settings_Integration implements Integration_Interface {
 			'taxonomies'                     => $transformed_taxonomies,
 			'fallbacks'                      => $this->get_fallbacks(),
 			'showNewContentTypeNotification' => $show_new_content_type_notification,
+			'currentPromotions'              => \YoastSEO()->classes->get( Promotion_Manager::class )->get_current_promotions(),
 		];
 	}
 
@@ -488,7 +490,6 @@ class Settings_Integration implements Integration_Interface {
 			'isLocalSeoActive'              => \defined( 'WPSEO_LOCAL_FILE' ),
 			'isNewsSeoActive'               => \defined( 'WPSEO_NEWS_FILE' ),
 			'isWooCommerceSEOActive'        => $woocommerce_seo_active,
-			'promotions'                    => \YoastSEO()->classes->get( Promotion_Manager::class )->get_current_promotions(),
 			'siteUrl'                       => \get_bloginfo( 'url' ),
 			'siteTitle'                     => \get_bloginfo( 'name' ),
 			'sitemapUrl'                    => WPSEO_Sitemaps_Router::get_base_url( 'sitemap_index.xml' ),
@@ -516,6 +517,7 @@ class Settings_Integration implements Integration_Interface {
 			'upsellSettings'                => $this->get_upsell_settings(),
 			'siteRepresentsPerson'          => $this->get_site_represents_person( $settings ),
 			'siteBasicsPolicies'            => $this->get_site_basics_policies( $settings ),
+			'llmsTxtUrl'                    => \home_url( 'llms.txt' ),
 		];
 	}
 
@@ -571,7 +573,7 @@ class Settings_Integration implements Integration_Interface {
 	 * @param int    $policy   The policy id to check.
 	 * @param string $key      The option key name.
 	 *
-	 * @return array<int,string> The policy data.
+	 * @return array<int, string> The policy data.
 	 */
 	private function maybe_add_policy( $policies, $policy, $key ) {
 		$policy_array = [
@@ -971,7 +973,7 @@ class Settings_Integration implements Integration_Interface {
 			$route = \substr( $route, 1 );
 		}
 
-		return \rawurlencode( $route );
+		return $route;
 	}
 
 	/**

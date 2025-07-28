@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\AnalyticsData;
 class V1betaAudienceRow extends \Beehive\Google\Collection
 {
     protected $collection_key = 'dimensionValues';
-    /**
-     * @var V1betaAudienceDimensionValue[]
-     */
-    public $dimensionValues;
     protected $dimensionValuesType = V1betaAudienceDimensionValue::class;
     protected $dimensionValuesDataType = 'array';
     /**

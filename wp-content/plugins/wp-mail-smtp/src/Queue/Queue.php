@@ -239,6 +239,9 @@ class Queue {
 		// Cleanup any attachments.
 		$this->cleanup_attachments();
 
+		// Stop injecting the original initiator state.
+		remove_filter( 'wp_mail_smtp_wp_mail_initiator_set_initiator', [ $this, 'apply_initiator_state' ] );
+
 		// Stop applying PHPMailer state.
 		remove_action( 'phpmailer_init', [ $this, 'apply_mailer_state' ], PHP_INT_MAX );
 
@@ -299,7 +302,7 @@ class Queue {
 	 *
 	 * @return int Email count.
 	 */
-	public function count_processed_emails( DateTime $since_datetime = null ) {
+	public function count_processed_emails( ?DateTime $since_datetime = null ) {
 
 		if ( ! $this->is_valid_db() ) {
 			return 0;

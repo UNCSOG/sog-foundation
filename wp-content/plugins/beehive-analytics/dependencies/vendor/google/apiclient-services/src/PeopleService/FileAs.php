@@ -19,10 +19,6 @@ namespace Beehive\Google\Service\PeopleService;
 
 class FileAs extends \Beehive\Google\Model
 {
-    /**
-     * @var FieldMetadata
-     */
-    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**

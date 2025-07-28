@@ -499,6 +499,11 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 
 		$response['akismet'] = is_plugin_active( 'akismet/akismet.php' );
 
+		require_once JETPACK__PLUGIN_DIR . '/modules/memberships/class-jetpack-memberships.php';
+		if ( class_exists( 'Jetpack_Memberships' ) ) {
+			$response['newsletter_has_active_plan'] = count( Jetpack_Memberships::get_all_newsletter_plan_ids( false ) ) > 0;
+		}
+
 		return rest_ensure_response( $response );
 	}
 
@@ -633,6 +638,11 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 				// The module was not toggled.
 				if ( ! $updated ) {
 					$not_updated[ $option ] = $error;
+				}
+
+				if ( $updated ) {
+					// Return the module state.
+					$response[ $option ] = $value;
 				}
 
 				// Remove module from list so we don't go through it again.
@@ -952,7 +962,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 					require_once JETPACK__PLUGIN_DIR . 'modules/subscriptions/class-settings.php';
 					$sub_value = Automattic\Jetpack\Modules\Subscriptions\Settings::is_valid_reply_to( $value )
 						? $value
-						: Automattic\Jetpack\Modules\Subscriptions\Settings::get_default_reply_to();
+						: Automattic\Jetpack\Modules\Subscriptions\Settings::$default_reply_to;
 
 						$updated = (string) get_option( $option ) !== (string) $sub_value ? update_option( $option, $sub_value ) : true;
 					break;
@@ -966,6 +976,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 				case 'stc_enabled':
 				case 'sm_enabled':
 				case 'jetpack_subscribe_overlay_enabled':
+				case 'jetpack_subscribe_floating_button_enabled':
 				case 'wpcom_newsletter_categories_enabled':
 				case 'wpcom_featured_image_in_email':
 				case 'jetpack_gravatar_in_email':
@@ -1008,7 +1019,13 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 							$value = wp_kses(
 								$value,
 								array(
-									'a' => array(
+									'ul'     => array(),
+									'li'     => array(),
+									'p'      => array(),
+									'strong' => array(),
+									'ol'     => array(),
+									'em'     => array(),
+									'a'      => array(
 										'href' => array(),
 									),
 								)

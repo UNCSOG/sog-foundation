@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\PeopleService;
 class SearchResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'results';
-    /**
-     * @var SearchResult[]
-     */
-    public $results;
     protected $resultsType = SearchResult::class;
     protected $resultsDataType = 'array';
     /**

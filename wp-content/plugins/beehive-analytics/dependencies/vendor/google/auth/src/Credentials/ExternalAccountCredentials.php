@@ -23,20 +23,26 @@ use Beehive\Google\Auth\CredentialSource\UrlSource;
 use Beehive\Google\Auth\ExternalAccountCredentialSourceInterface;
 use Beehive\Google\Auth\FetchAuthTokenInterface;
 use Beehive\Google\Auth\GetQuotaProjectInterface;
+use Beehive\Google\Auth\GetUniverseDomainInterface;
 use Beehive\Google\Auth\HttpHandler\HttpClientCache;
 use Beehive\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Beehive\Google\Auth\OAuth2;
+use Beehive\Google\Auth\ProjectIdProviderInterface;
 use Beehive\Google\Auth\UpdateMetadataInterface;
 use Beehive\Google\Auth\UpdateMetadataTrait;
 use Beehive\GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
-class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetadataInterface, GetQuotaProjectInterface
+class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetadataInterface, GetQuotaProjectInterface, GetUniverseDomainInterface, ProjectIdProviderInterface
 {
     use UpdateMetadataTrait;
     private const EXTERNAL_ACCOUNT_TYPE = 'external_account';
+    private const CLOUD_RESOURCE_MANAGER_URL = 'https://cloudresourcemanager.UNIVERSE_DOMAIN/v1/projects/%s';
     private OAuth2 $auth;
     private ?string $quotaProject;
     private ?string $serviceAccountImpersonationUrl;
+    private ?string $workforcePoolUserProject;
+    private ?string $projectId;
+    private string $universeDomain;
     /**
      * @param string|string[] $scope   The scope of the access request, expressed either as an array
      *                                 or as a space-delimited string.
@@ -66,7 +72,12 @@ class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetad
             $this->serviceAccountImpersonationUrl = $jsonKey['service_account_impersonation_url'];
         }
         $this->quotaProject = $jsonKey['quota_project_id'] ?? null;
-        $this->auth = new OAuth2(['tokenCredentialUri' => $jsonKey['token_url'], 'audience' => $jsonKey['audience'], 'scope' => $scope, 'subjectTokenType' => $jsonKey['subject_token_type'], 'subjectTokenFetcher' => self::buildCredentialSource($jsonKey)]);
+        $this->workforcePoolUserProject = $jsonKey['workforce_pool_user_project'] ?? null;
+        $this->universeDomain = $jsonKey['universe_domain'] ?? GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
+        $this->auth = new OAuth2(['tokenCredentialUri' => $jsonKey['token_url'], 'audience' => $jsonKey['audience'], 'scope' => $scope, 'subjectTokenType' => $jsonKey['subject_token_type'], 'subjectTokenFetcher' => self::buildCredentialSource($jsonKey), 'additionalOptions' => $this->workforcePoolUserProject ? ['userProject' => $this->workforcePoolUserProject] : []]);
+        if (!$this->isWorkforcePool() && $this->workforcePoolUserProject) {
+            throw new InvalidArgumentException('workforce_pool_user_project should not be set for non-workforce pool credentials.');
+        }
     }
     /**
      * @param array<mixed> $jsonKey
@@ -114,12 +125,12 @@ class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetad
      *     @type int $expires_at
      * }
      */
-    private function getImpersonatedAccessToken(string $stsToken, callable $httpHandler = null) : array
+    private function getImpersonatedAccessToken(string $stsToken, ?callable $httpHandler = null) : array
     {
         if (!isset($this->serviceAccountImpersonationUrl)) {
             throw new InvalidArgumentException('service_account_impersonation_url must be set in JSON credentials.');
         }
-        $request = new Request('POST', $this->serviceAccountImpersonationUrl, ['Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $stsToken], (string) \json_encode(['lifetime' => \sprintf('%ss', OAuth2::DEFAULT_EXPIRY_SECONDS), 'scope' => $this->auth->getScope()]));
+        $request = new Request('POST', $this->serviceAccountImpersonationUrl, ['Content-Type' => 'application/json', 'Authorization' => 'Bearer ' . $stsToken], (string) \json_encode(['lifetime' => \sprintf('%ss', OAuth2::DEFAULT_EXPIRY_SECONDS), 'scope' => \explode(' ', $this->auth->getScope())]));
         if (\is_null($httpHandler)) {
             $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
@@ -140,7 +151,7 @@ class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetad
      *     @type string $token_type (identity pool only)
      * }
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         $stsToken = $this->auth->fetchAuthToken($httpHandler);
         if (isset($this->serviceAccountImpersonationUrl)) {
@@ -164,5 +175,55 @@ class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetad
     public function getQuotaProject()
     {
         return $this->quotaProject;
+    }
+    /**
+     * Get the universe domain used for this API request
+     *
+     * @return string
+     */
+    public function getUniverseDomain() : string
+    {
+        return $this->universeDomain;
+    }
+    /**
+     * Get the project ID.
+     *
+     * @param callable $httpHandler Callback which delivers psr7 request
+     * @param string $accessToken The access token to use to sign the blob. If
+     *        provided, saves a call to the metadata server for a new access
+     *        token. **Defaults to** `null`.
+     * @return string|null
+     */
+    public function getProjectId(?callable $httpHandler = null, ?string $accessToken = null)
+    {
+        if (isset($this->projectId)) {
+            return $this->projectId;
+        }
+        $projectNumber = $this->getProjectNumber() ?: $this->workforcePoolUserProject;
+        if (!$projectNumber) {
+            return null;
+        }
+        if (\is_null($httpHandler)) {
+            $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
+        }
+        $url = \str_replace('UNIVERSE_DOMAIN', $this->getUniverseDomain(), \sprintf(self::CLOUD_RESOURCE_MANAGER_URL, $projectNumber));
+        if (\is_null($accessToken)) {
+            $accessToken = $this->fetchAuthToken($httpHandler)['access_token'];
+        }
+        $request = new Request('GET', $url, ['authorization' => 'Bearer ' . $accessToken]);
+        $response = $httpHandler($request);
+        $body = \json_decode((string) $response->getBody(), \true);
+        return $this->projectId = $body['projectId'];
+    }
+    private function getProjectNumber() : ?string
+    {
+        $parts = \explode('/', $this->auth->getAudience());
+        $i = \array_search('projects', $parts);
+        return $parts[$i + 1] ?? null;
+    }
+    private function isWorkforcePool() : bool
+    {
+        $regex = '#//iam\\.googleapis\\.com/locations/[^/]+/workforcePools/#';
+        return \preg_match($regex, $this->auth->getAudience()) === 1;
     }
 }

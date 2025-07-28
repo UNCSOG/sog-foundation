@@ -23,10 +23,6 @@ class GoogleAnalyticsAdminV1betaAccessNumericFilter extends \Beehive\Google\Mode
      * @var string
      */
     public $operation;
-    /**
-     * @var GoogleAnalyticsAdminV1betaNumericValue
-     */
-    public $value;
     protected $valueType = GoogleAnalyticsAdminV1betaNumericValue::class;
     protected $valueDataType = '';
     /**

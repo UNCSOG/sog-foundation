@@ -36,10 +36,6 @@ class AccountSummary extends \Beehive\Google\Collection
      * @var bool
      */
     public $starred;
-    /**
-     * @var WebPropertySummary[]
-     */
-    public $webProperties;
     protected $webPropertiesType = WebPropertySummary::class;
     protected $webPropertiesDataType = 'array';
     /**

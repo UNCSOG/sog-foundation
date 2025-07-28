@@ -52,7 +52,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * The Metabox post.
 	 *
-	 * @var WP_Post
+	 * @var WP_Post|null
 	 */
 	protected $post = null;
 
@@ -82,8 +82,8 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		$this->editor = new WPSEO_Metabox_Editor();
 		$this->editor->register_hooks();
 
-		$this->social_is_enabled            = WPSEO_Options::get( 'opengraph', false ) || WPSEO_Options::get( 'twitter', false );
-		$this->is_advanced_metadata_enabled = WPSEO_Capability_Utils::current_user_can( 'wpseo_edit_advanced_metadata' ) || WPSEO_Options::get( 'disableadvanced_meta' ) === false;
+		$this->social_is_enabled            = WPSEO_Options::get( 'opengraph', false, [ 'wpseo_social' ] ) || WPSEO_Options::get( 'twitter', false, [ 'wpseo_social' ] );
+		$this->is_advanced_metadata_enabled = WPSEO_Capability_Utils::current_user_can( 'wpseo_edit_advanced_metadata' ) || WPSEO_Options::get( 'disableadvanced_meta', null, [ 'wpseo' ] ) === false;
 
 		$this->seo_analysis                = new WPSEO_Metabox_Analysis_SEO();
 		$this->readability_analysis        = new WPSEO_Metabox_Analysis_Readability();
@@ -275,7 +275,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Passes variables to js for use with the post-scraper.
 	 *
-	 * @return array<string,string|array<string|int|bool>|bool|int>
+	 * @return array<string, string|array<string|int|bool>|bool|int>
 	 */
 	public function get_metabox_script_data() {
 		$permalink = $this->get_permalink();
@@ -810,17 +810,12 @@ class WPSEO_Metabox extends WPSEO_Meta {
 
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 
-		$is_editor = self::is_post_overview( $pagenow ) || self::is_post_edit( $pagenow );
-
 		if ( self::is_post_overview( $pagenow ) ) {
-			$asset_manager->enqueue_style( 'edit-page' );
-			$asset_manager->enqueue_script( 'edit-page' );
-
 			return;
 		}
 
 		/* Filter 'wpseo_always_register_metaboxes_on_admin' documented in wpseo-main.php */
-		if ( ( $is_editor === false && apply_filters( 'wpseo_always_register_metaboxes_on_admin', false ) === false ) || $this->display_metabox() === false ) {
+		if ( ( self::is_post_edit( $pagenow ) === false && apply_filters( 'wpseo_always_register_metaboxes_on_admin', false ) === false ) || $this->display_metabox() === false ) {
 			return;
 		}
 
@@ -901,7 +896,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		/**
 		 * The website information repository.
 		 *
-		 * @var $repo Website_Information_Repository
+		 * @var Website_Information_Repository $repo
 		 */
 		$repo             = YoastSEO()->classes->get( Website_Information_Repository::class );
 		$site_information = $repo->get_post_site_information();

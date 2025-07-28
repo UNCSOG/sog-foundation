@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class McfDataRows extends \Beehive\Google\Collection
 {
     protected $collection_key = 'conversionPathValue';
-    /**
-     * @var McfDataRowsConversionPathValue[]
-     */
-    public $conversionPathValue;
     protected $conversionPathValueType = McfDataRowsConversionPathValue::class;
     protected $conversionPathValueDataType = 'array';
     /**

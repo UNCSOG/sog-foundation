@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class RemarketingAudiences extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var RemarketingAudience[]
-     */
-    public $items;
     protected $itemsType = RemarketingAudience::class;
     protected $itemsDataType = 'array';
     /**

@@ -137,14 +137,6 @@ class Data extends Google_API {
 				// Update the settings.
 				beehive_analytics()->settings->update_group( $google_login, 'google_login', $network );
 
-				/**
-				 * Action hook to execute after fetching Google profiles list.
-				 *
-				 * @since 3.2.0
-				 *
-				 * @param array $user User data.
-				 */
-				do_action( 'beehive_after_google_user_fetch', $user );
 			} catch ( Google_Exception $e ) {
 				$user = array();
 

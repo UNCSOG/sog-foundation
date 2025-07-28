@@ -38,6 +38,7 @@ import AuthForm from './google/auth-form'
 import SuiNotice from '@/components/sui/sui-notice'
 import AccountDetails from './google/account-details'
 import BoxHeader from '@/components/elements/box-header'
+import { resetAccountPageUrl } from '@/helpers/utils'
 
 export default {
 	name: 'GoogleAccount',
@@ -117,6 +118,7 @@ export default {
 				this.$root.$emit('showTopNotice', {
 					message: this.$i18n.notice.auth_success,
 				})
+				resetAccountPageUrl()
 			} else if ('error' === authSuccess) {
 				// Show error notice.
 				this.$root.$emit('showTopNotice', {

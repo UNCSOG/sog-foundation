@@ -23,16 +23,8 @@ class SegmentFilter extends \Beehive\Google\Model
      * @var bool
      */
     public $not;
-    /**
-     * @var SequenceSegment
-     */
-    public $sequenceSegment;
     protected $sequenceSegmentType = SequenceSegment::class;
     protected $sequenceSegmentDataType = '';
-    /**
-     * @var SimpleSegment
-     */
-    public $simpleSegment;
     protected $simpleSegmentType = SimpleSegment::class;
     protected $simpleSegmentDataType = '';
     /**

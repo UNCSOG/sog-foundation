@@ -42,7 +42,7 @@ class UrlSource implements ExternalAccountCredentialSourceInterface
      *                                      when format is "json".
      * @param array<string, string|string[]> $headers Request headers to send in with the request to the URL.
      */
-    public function __construct(string $url, string $format = null, string $subjectTokenFieldName = null, array $headers = null)
+    public function __construct(string $url, ?string $format = null, ?string $subjectTokenFieldName = null, ?array $headers = null)
     {
         $this->url = $url;
         if ($format === 'json' && \is_null($subjectTokenFieldName)) {
@@ -52,7 +52,7 @@ class UrlSource implements ExternalAccountCredentialSourceInterface
         $this->subjectTokenFieldName = $subjectTokenFieldName;
         $this->headers = $headers;
     }
-    public function fetchSubjectToken(callable $httpHandler = null) : string
+    public function fetchSubjectToken(?callable $httpHandler = null) : string
     {
         if (\is_null($httpHandler)) {
             $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());

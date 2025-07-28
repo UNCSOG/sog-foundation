@@ -149,7 +149,7 @@ abstract class CredentialsLoader implements GetUniverseDomainInterface, FetchAut
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      * @return \GuzzleHttp\Client
      */
-    public static function makeHttpClient(FetchAuthTokenInterface $fetcher, array $httpClientOptions = [], callable $httpHandler = null, callable $tokenCallback = null)
+    public static function makeHttpClient(FetchAuthTokenInterface $fetcher, array $httpClientOptions = [], ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $middleware = new Middleware\AuthTokenMiddleware($fetcher, $httpHandler, $tokenCallback);
         $stack = \Beehive\GuzzleHttp\HandlerStack::create();

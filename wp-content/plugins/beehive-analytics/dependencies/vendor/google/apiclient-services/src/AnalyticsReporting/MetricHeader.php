@@ -20,16 +20,8 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class MetricHeader extends \Beehive\Google\Collection
 {
     protected $collection_key = 'pivotHeaders';
-    /**
-     * @var MetricHeaderEntry[]
-     */
-    public $metricHeaderEntries;
     protected $metricHeaderEntriesType = MetricHeaderEntry::class;
     protected $metricHeaderEntriesDataType = 'array';
-    /**
-     * @var PivotHeader[]
-     */
-    public $pivotHeaders;
     protected $pivotHeadersType = PivotHeader::class;
     protected $pivotHeadersDataType = 'array';
     /**

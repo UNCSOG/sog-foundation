@@ -89,9 +89,9 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      */
     private $jwtAccessCredentials;
     /**
-     * @var string|null
+     * @var string
      */
-    private ?string $universeDomain;
+    private string $universeDomain;
     /**
      * Create a new ServiceAccountCredentials.
      *
@@ -132,7 +132,7 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
         }
         $this->auth = new OAuth2(['audience' => self::TOKEN_CREDENTIAL_URI, 'issuer' => $jsonKey['client_email'], 'scope' => $scope, 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'sub' => $sub, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI, 'additionalClaims' => $additionalClaims]);
         $this->projectId = $jsonKey['project_id'] ?? null;
-        $this->universeDomain = $jsonKey['universe_domain'] ?? null;
+        $this->universeDomain = $jsonKey['universe_domain'] ?? self::DEFAULT_UNIVERSE_DOMAIN;
     }
     /**
      * When called, the ServiceAccountCredentials will use an instance of
@@ -158,7 +158,7 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      *     @type string $token_type
      * }
      */
-    public function fetchAuthToken(callable $httpHandler = null)
+    public function fetchAuthToken(?callable $httpHandler = null)
     {
         if ($this->useSelfSignedJwt()) {
             $jwtCreds = $this->createJwtAccessCredentials();
@@ -199,7 +199,7 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      * @param callable $httpHandler Not used by this credentials type.
      * @return string|null
      */
-    public function getProjectId(callable $httpHandler = null)
+    public function getProjectId(?callable $httpHandler = null)
     {
         return $this->projectId;
     }
@@ -211,7 +211,7 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      * @param callable $httpHandler callback which delivers psr7 request
      * @return array<mixed> updated metadata hashmap
      */
-    public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
+    public function updateMetadata($metadata, $authUri = null, ?callable $httpHandler = null)
     {
         // scope exists. use oauth implementation
         if (!$this->useSelfSignedJwt()) {
@@ -259,7 +259,7 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      * @param callable $httpHandler Not used by this credentials type.
      * @return string
      */
-    public function getClientName(callable $httpHandler = null)
+    public function getClientName(?callable $httpHandler = null)
     {
         return $this->auth->getIssuer();
     }
@@ -279,9 +279,6 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      */
     public function getUniverseDomain() : string
     {
-        if (null === $this->universeDomain) {
-            return self::DEFAULT_UNIVERSE_DOMAIN;
-        }
         return $this->universeDomain;
     }
     /**
@@ -289,12 +286,25 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      */
     private function useSelfSignedJwt()
     {
+        // When a sub is supplied, the user is using domain-wide delegation, which not available
+        // with self-signed JWTs
+        if (null !== $this->auth->getSub()) {
+            // If we are outside the GDU, we can't use domain-wide delegation
+            if ($this->getUniverseDomain() !== self::DEFAULT_UNIVERSE_DOMAIN) {
+                throw new \LogicException(\sprintf('Service Account subject is configured for the credential. Domain-wide ' . 'delegation is not supported in universes other than %s.', self::DEFAULT_UNIVERSE_DOMAIN));
+            }
+            return \false;
+        }
         // If claims are set, this call is for "id_tokens"
         if ($this->auth->getAdditionalClaims()) {
             return \false;
         }
         // When true, ServiceAccountCredentials will always use JwtAccess for access tokens
         if ($this->useJwtAccessWithScope) {
+            return \true;
+        }
+        // If the universe domain is outside the GDU, use JwtAccess for access tokens
+        if ($this->getUniverseDomain() !== self::DEFAULT_UNIVERSE_DOMAIN) {
             return \true;
         }
         return \is_null($this->auth->getScope());

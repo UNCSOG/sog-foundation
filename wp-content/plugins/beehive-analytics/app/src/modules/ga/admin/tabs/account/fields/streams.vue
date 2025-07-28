@@ -1,127 +1,90 @@
 <template>
 	<div class="sui-form-field">
-		<label v-if="label" :for="id" class="sui-label">{{ label }}</label>
-		<sui-select2
-			:id="id"
-			:options="getStreamsOptions"
-			:placeholder="getPlaceholder"
-			:disabled="isEmpty"
-			:parent-element="parentElement"
-			v-model="stream"
+		<!-- Account Selector -->
+		<BaseSelector
+			:label="$i18n.label.choose_ga_account"
+			:placeholder="$i18n.placeholder.account_id"
+			endpoint="accounts"
+			@change="handleAccountSelect"
 		/>
-		<span v-if="showDesc" class="sui-description" v-html="$i18n.desc.account_not_here"></span>
+
+		<!-- Property Selector -->
+		<BaseSelector
+			:label="$i18n.label.choose_ga_property"
+			:placeholder="$i18n.placeholder.property_id"
+			endpoint="properties"
+			parent-key="account"
+			:parent-value="selectedAccount"
+			@change="handlePropertySelect"
+		/>
+
+		<!-- Stream Selector -->
+		<BaseSelector
+			:label="$i18n.label.choose_stream"
+			:placeholder="$i18n.placeholder.stream_id"
+			endpoint="streams"
+			parent-key="property"
+			:parent-value="selectedProperty"
+			@change="handleStreamSelect"
+		/>
 	</div>
 </template>
 
 <script>
-import SuiSelect2 from '@/components/sui/sui-select2'
+import BaseSelector from '@/modules/ga/admin/tabs/account/fields/base-selector.vue'
 
 export default {
-	name: 'Streams',
+	components: { BaseSelector },
 
-	components: { SuiSelect2 },
-
-	props: {
-		id: {
-			type: String,
-			required: true,
-		},
-		label: {
-			type: String,
-			required: false,
-		},
-		showDesc: {
-			type: Boolean,
-			default: true,
-		},
-		parentElement: {
-			type: String,
-			default: '',
-		},
+	data() {
+		return {
+			selectedAccount: null,
+			selectedProperty: null,
+		}
 	},
 
-	computed: {
-		/**
-		 * Get the selected stream.
-		 *
-		 * @since 3.2.0
-		 *
-		 * @returns {string}
-		 */
-		stream: {
-			get() {
-				return this.getOption('stream', 'google', 0)
-			},
-			set(value) {
-				this.setOption('stream', 'google', value)
-			},
+	methods: {
+		handleAccountSelect({ id, text }) {
+			this.selectedAccount = id
+			this.selectedProperty = null // Reset dependent selector
+			this.updateOptions('account', id, text)
+			this.resetOptions(['property', 'stream'])
+			this.$emit('validate')
 		},
 
-		/**
-		 * Get the formatted stream data for the select2 options.
-		 *
-		 * @since 3.4.0
-		 *
-		 * @return {[]}
-		 */
-		getStreamsOptions() {
-			let options = [{
-				id: 0,
-				text: '- None -',
-			}]
-
-			// Loop and format property data.
-			this.getStreams.forEach((item) => {
-				options.push({
-					id: item.name,
-					text:
-						item.url +
-						' (' +
-						item.title +
-						')',
-				})
-			})
-
-			return options
+		handlePropertySelect({ id, text }) {
+			this.selectedProperty = id
+			this.updateOptions('property', id, text)
+			this.resetOptions(['stream'])
+			this.$emit('validate')
 		},
 
-		/**
-		 * Get the placeholder text based on the stream data.
-		 *
-		 * If there is no streams found, show that message in placeholder.
-		 *
-		 * @since 3.4.0
-		 *
-		 * @return {string}
-		 */
-		getPlaceholder() {
-			if (this.isEmpty) {
-				return this.$i18n.placeholder.no_website
+		handleStreamSelect({ id, text, measurement, url }) {
+			this.updateOptions('stream', id, text)
+			const currentUrl = window.location.origin
+			const normalizeUrl = (url) =>
+				url.replace(/^(http:\/\/|https:\/\/)/, '').replace(/\/$/, '')
+
+			if (normalizeUrl(currentUrl) === normalizeUrl(url)) {
+				this.setOption('auto_track_ga4', 'misc', measurement)
 			} else {
-				return this.$i18n.placeholder.select_website
+				this.setOption('auto_track_ga4', 'misc', '')
 			}
+
+			this.$store.dispatch('helpers/updateCanGetStats', !!id)
+			this.$emit('validate')
 		},
 
-		/**
-		 * Check if the stream list is empty.
-		 *
-		 * @since 3.4.0
-		 *
-		 * @return {boolean}
-		 */
-		isEmpty() {
-			return this.getStreams.length <= 0
+		updateOptions(type, id, text) {
+			this.setOption(type, 'google', id)
+			this.setOption(type, 'misc', { id, text })
 		},
 
-		/**
-		 * Get streams from the Vuex state.
-		 *
-		 * @since 3.4.0
-		 *
-		 * @return {Object}
-		 */
-		getStreams() {
-			return this.$store.state.helpers.google.streams
+		resetOptions(types) {
+			types.forEach((type) => {
+				this.setOption(type, 'google', '')
+				this.setOption(type, 'misc', false)
+			})
 		},
 	},
 }

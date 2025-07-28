@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\PeopleService;
 class BatchCreateContactsRequest extends \Beehive\Google\Collection
 {
     protected $collection_key = 'sources';
-    /**
-     * @var ContactToCreate[]
-     */
-    public $contacts;
     protected $contactsType = ContactToCreate::class;
     protected $contactsDataType = 'array';
     /**

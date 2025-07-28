@@ -66,8 +66,8 @@ if (!class_exists('Google_Task_Runner', false) && !interface_exists('Google_Task
 if (!class_exists('Google_Utils_UriTemplate', false) && !interface_exists('Google_Utils_UriTemplate', false) && !trait_exists('Google_Utils_UriTemplate', false)) {
     spl_autoload_call('Beehive\Google_Utils_UriTemplate');
 }
-if (!class_exists('ComposerAutoloaderInitd92fe6c9e81365c473cbb248c72d8bd1', false) && !interface_exists('ComposerAutoloaderInitd92fe6c9e81365c473cbb248c72d8bd1', false) && !trait_exists('ComposerAutoloaderInitd92fe6c9e81365c473cbb248c72d8bd1', false)) {
-    spl_autoload_call('Beehive\ComposerAutoloaderInitd92fe6c9e81365c473cbb248c72d8bd1');
+if (!class_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false) && !interface_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false) && !trait_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false)) {
+    spl_autoload_call('Beehive\ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d');
 }
 
 // Exposed functions. For more information see:
@@ -75,11 +75,6 @@ if (!class_exists('ComposerAutoloaderInitd92fe6c9e81365c473cbb248c72d8bd1', fals
 if (!function_exists('oauth2client_php_autoload')) {
     function oauth2client_php_autoload() {
         return \Beehive\oauth2client_php_autoload(...func_get_args());
-    }
-}
-if (!function_exists('composerRequired92fe6c9e81365c473cbb248c72d8bd1')) {
-    function composerRequired92fe6c9e81365c473cbb248c72d8bd1() {
-        return \Beehive\composerRequired92fe6c9e81365c473cbb248c72d8bd1(...func_get_args());
     }
 }
 if (!function_exists('zend_monitor_custom_event')) {

@@ -19,7 +19,7 @@ defined( 'WPINC' ) || die;
  *
  * @package Beehive\Core\Modules\Google_Analytics\Stats
  */
-class GA4 extends UA {
+class GA4 extends Stats {
 
 	/**
 	 * Statistics type.
@@ -32,30 +32,30 @@ class GA4 extends UA {
 	/**
 	 * Generate custom cache key for the data.
 	 *
-	 * @since 3.4.0
-	 *
-	 * @param string      $from    Start date.
-	 * @param string      $to      End date.
-	 * @param string      $type    Stats type (stats, dashboard, front).
-	 * @param bool        $network Network flag.
+	 * @param string $from Start date.
+	 * @param string $to End date.
+	 * @param string $type Stats type (stats, dashboard, front).
+	 * @param bool $network Network flag.
 	 * @param bool|string $account Account.
 	 *
 	 * @return string
+	 * @since 3.4.0
+	 *
 	 */
 	protected function cache_key( $from, $to, $type = 'stats', $network = false, $account = false ) {
 		if ( empty( $account ) ) {
 			$account = beehive_analytics()->settings->get( 'stream', 'google', $network, '' );
 		}
 
-		return parent::cache_key( $from, $to, $type . '_ga4', $network, $account );
+		return parent::cache_key( $from, $to, $type . '_' . $this->type, $network, $account );
 	}
 
 	/**
 	 * Get the request instance for the class.
 	 *
+	 * @return Requests\GA4
 	 * @since 3.4.0
 	 *
-	 * @return Requests\GA4
 	 */
 	public function request() {
 		return Requests\GA4::instance();
@@ -64,9 +64,9 @@ class GA4 extends UA {
 	/**
 	 * Get the processor instance for the class.
 	 *
+	 * @return Processors\GA4
 	 * @since 3.4.0
 	 *
-	 * @return Processors\GA4
 	 */
 	public function processor() {
 		return Processors\GA4::instance();
@@ -75,9 +75,9 @@ class GA4 extends UA {
 	/**
 	 * Get the formatter instance for the class.
 	 *
+	 * @return Formatters\GA4
 	 * @since 3.4.0
 	 *
-	 * @return Formatters\GA4
 	 */
 	public function formatter() {
 		return Formatters\GA4::instance();

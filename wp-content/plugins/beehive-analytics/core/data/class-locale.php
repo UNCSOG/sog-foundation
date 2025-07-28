@@ -320,11 +320,16 @@ class Locale {
 			'label'       => array(
 				'connect_google'          => __( 'Connect with Google', 'ga_trans' ),
 				'choose_account'          => __( 'Choose your view (profile)', 'ga_trans' ),
-				'choose_stream'           => __( 'Choose your stream (profile)', 'ga_trans' ),
+				'choose_ga_account'       => __( 'Choose your account', 'ga_trans' ),
+				'choose_ga_property'      => __( 'Choose your property', 'ga_trans' ),
+				'choose_stream'           => __( 'Choose your stream', 'ga_trans' ),
 				'auto_detect_measurement' => __( 'Automatically detect Measurement ID', 'ga_trans' ),
 				'add_measurement_id'      => __( 'Add Measurement ID', 'ga_trans' ),
 			),
 			'placeholder' => array(
+				'account_id'     => __( 'Select Account to load properties', 'ga_trans' ),
+				'property_id'    => __( 'Select Property to load streams', 'ga_trans' ),
+				'stream_id'      => __( 'Select Stream', 'ga_trans' ),
 				'no_website'     => __( 'No website information', 'ga_trans' ),
 				'select_website' => __( 'Select a website', 'ga_trans' ),
 			),
@@ -390,7 +395,6 @@ class Locale {
 				'item_inactive'     => __( 'Inactive', 'ga_trans' ),
 				'gtm_variables'     => __( 'Variables', 'ga_trans' ),
 				'ga4'               => __( 'Google Analytics 4', 'ga_trans' ),
-				'ua'                => __( 'Universal Analytics', 'ga_trans' ),
 			),
 			'button' => array(
 				'finish_setup' => __( 'Finish Setup', 'ga_trans' ),
@@ -400,7 +404,7 @@ class Locale {
 			'desc'   => array(
 				'statistics_box' => __( 'View your websites full analytics report with Sessions, Users Pageviews, Average time and Bounce Rate.', 'ga_trans' ),
 				'gtm_box'        => __( 'Set up Google Tag Manager on your website and assign predefined and customizable variables to the data layer.', 'ga_trans' ),
-				'ga_box'         => __( 'Monitor Google Analytics 4 and Universal Analytics status.', 'ga_trans' ),
+				'ga_box'         => __( 'Monitor Google Analytics 4 status.', 'ga_trans' ),
 			),
 			'notice' => array(
 				'auth_required'         => __( 'You need to authenticate with your Google account to automatically get the tracking ID for this website and enable access to statistics, or you can add the tracking ID manually.', 'ga_trans' ),

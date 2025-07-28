@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\AnalyticsData;
 class FilterExpressionList extends \Beehive\Google\Collection
 {
     protected $collection_key = 'expressions';
-    /**
-     * @var FilterExpression[]
-     */
-    public $expressions;
     protected $expressionsType = FilterExpression::class;
     protected $expressionsDataType = 'array';
     /**

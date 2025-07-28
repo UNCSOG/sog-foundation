@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListGoogleAdsLinksResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'googleAdsLinks';
-    /**
-     * @var GoogleAnalyticsAdminV1betaGoogleAdsLink[]
-     */
-    public $googleAdsLinks;
     protected $googleAdsLinksType = GoogleAnalyticsAdminV1betaGoogleAdsLink::class;
     protected $googleAdsLinksDataType = 'array';
     /**

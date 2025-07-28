@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\PeopleService;
 class BatchGetContactGroupsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'responses';
-    /**
-     * @var ContactGroupResponse[]
-     */
-    public $responses;
     protected $responsesType = ContactGroupResponse::class;
     protected $responsesDataType = 'array';
     /**

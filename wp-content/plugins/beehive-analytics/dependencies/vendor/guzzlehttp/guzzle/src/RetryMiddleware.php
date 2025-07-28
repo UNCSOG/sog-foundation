@@ -49,7 +49,7 @@ class RetryMiddleware
      */
     public static function exponentialDelay(int $retries) : int
     {
-        return (int) 2 ** ($retries - 1) * 1000;
+        return (int) \pow(2, $retries - 1) * 1000;
     }
     public function __invoke(RequestInterface $request, array $options) : PromiseInterface
     {
@@ -85,7 +85,7 @@ class RetryMiddleware
     }
     private function doRetry(RequestInterface $request, array $options, ResponseInterface $response = null) : PromiseInterface
     {
-        $options['delay'] = ($this->delay)(++$options['retries'], $response, $request);
+        $options['delay'] = ($this->delay)(++$options['retries'], $response);
         return $this($request, $options);
     }
 }

@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListAccountsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'accounts';
-    /**
-     * @var GoogleAnalyticsAdminV1betaAccount[]
-     */
-    public $accounts;
     protected $accountsType = GoogleAnalyticsAdminV1betaAccount::class;
     protected $accountsDataType = 'array';
     /**

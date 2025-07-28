@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class GaDataDataTableRows extends \Beehive\Google\Collection
 {
     protected $collection_key = 'c';
-    /**
-     * @var GaDataDataTableRowsC[]
-     */
-    public $c;
     protected $cType = GaDataDataTableRowsC::class;
     protected $cDataType = 'array';
     /**

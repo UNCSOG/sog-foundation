@@ -50,6 +50,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * accounts/{account} Example: "accounts/100"
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -64,6 +65,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * accounts/{account} Example: "accounts/100"
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaAccount
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -80,6 +82,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * "accounts/1000/dataSharingSettings"
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaDataSharingSettings
+     * @throws \Google\Service\Exception
      */
     public function getDataSharingSettings($name, $optParams = [])
     {
@@ -107,6 +110,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * Accounts in the results. Accounts can be inspected to determine whether they
      * are deleted or not.
      * @return GoogleAnalyticsAdminV1betaListAccountsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccounts($optParams = [])
     {
@@ -127,6 +131,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * fields will not be updated. To replace the entire entity, use one path with
      * the string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaAccount
+     * @throws \Google\Service\Exception
      */
     public function patch($name, GoogleAnalyticsAdminV1betaAccount $postBody, $optParams = [])
     {
@@ -140,6 +145,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse
+     * @throws \Google\Service\Exception
      */
     public function provisionAccountTicket(GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest $postBody, $optParams = [])
     {
@@ -171,6 +177,7 @@ class Accounts extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaRunAccessReportRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaRunAccessReportResponse
+     * @throws \Google\Service\Exception
      */
     public function runAccessReport($entity, GoogleAnalyticsAdminV1betaRunAccessReportRequest $postBody, $optParams = [])
     {
@@ -183,10 +190,11 @@ class Accounts extends \Beehive\Google\Service\Resource
      * specified set of filters. (accounts.searchChangeHistoryEvents)
      *
      * @param string $account Required. The account resource for which to return
-     * change history resources.
+     * change history resources. Format: accounts/{account} Example: "accounts/100"
      * @param GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsResponse
+     * @throws \Google\Service\Exception
      */
     public function searchChangeHistoryEvents($account, GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest $postBody, $optParams = [])
     {

@@ -28,16 +28,16 @@ use Beehive\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Beehive\GuzzleHttp\Psr7\Request;
 use Beehive\GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
-use Beehive\phpseclib\Crypt\RSA;
-use Beehive\phpseclib\Math\BigInteger as BigInteger2;
 use Beehive\phpseclib3\Crypt\PublicKeyLoader;
-use Beehive\phpseclib3\Math\BigInteger as BigInteger3;
+use Beehive\phpseclib3\Crypt\RSA;
+use Beehive\phpseclib3\Math\BigInteger;
 use Beehive\Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
 use Beehive\SimpleJWT\InvalidTokenException;
 use Beehive\SimpleJWT\JWT as SimpleJWT;
 use Beehive\SimpleJWT\Keys\KeyFactory;
 use Beehive\SimpleJWT\Keys\KeySet;
+use TypeError;
 use UnexpectedValueException;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions.
@@ -64,7 +64,7 @@ class AccessToken
      * @param callable $httpHandler [optional] An HTTP Handler to deliver PSR-7 requests.
      * @param CacheItemPoolInterface $cache [optional] A PSR-6 compatible cache implementation.
      */
-    public function __construct(callable $httpHandler = null, CacheItemPoolInterface $cache = null)
+    public function __construct(?callable $httpHandler = null, ?CacheItemPoolInterface $cache = null)
     {
         $this->httpHandler = $httpHandler ?: HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         $this->cache = $cache ?: new MemoryCacheItemPool();
@@ -325,53 +325,22 @@ class AccessToken
      */
     private function checkAndInitializePhpsec()
     {
-        if (!$this->checkAndInitializePhpsec2() && !$this->checkPhpsec3()) {
-            throw new RuntimeException('Please require phpseclib/phpseclib v2 or v3 to use this utility.');
+        if (!\class_exists(RSA::class)) {
+            throw new RuntimeException('Please require phpseclib/phpseclib v3 to use this utility.');
         }
     }
+    /**
+     * @return string
+     * @throws TypeError If the key cannot be initialized to a string.
+     */
     private function loadPhpsecPublicKey(string $modulus, string $exponent) : string
     {
-        if (\class_exists(RSA::class) && \class_exists(BigInteger2::class)) {
-            $key = new RSA();
-            $key->loadKey(['n' => new BigInteger2($this->callJwtStatic('urlsafeB64Decode', [$modulus]), 256), 'e' => new BigInteger2($this->callJwtStatic('urlsafeB64Decode', [$exponent]), 256)]);
-            return $key->getPublicKey();
+        $key = PublicKeyLoader::load(['n' => new BigInteger($this->callJwtStatic('urlsafeB64Decode', [$modulus]), 256), 'e' => new BigInteger($this->callJwtStatic('urlsafeB64Decode', [$exponent]), 256)]);
+        $formattedPublicKey = $key->toString('PKCS8');
+        if (!\is_string($formattedPublicKey)) {
+            throw new TypeError('Failed to initialize the key');
         }
-        $key = PublicKeyLoader::load(['n' => new BigInteger3($this->callJwtStatic('urlsafeB64Decode', [$modulus]), 256), 'e' => new BigInteger3($this->callJwtStatic('urlsafeB64Decode', [$exponent]), 256)]);
-        return $key->toString('PKCS8');
-    }
-    /**
-     * @return bool
-     */
-    private function checkAndInitializePhpsec2() : bool
-    {
-        if (!\class_exists('Beehive\\phpseclib\\Crypt\\RSA')) {
-            return \false;
-        }
-        /**
-         * phpseclib calls "phpinfo" by default, which requires special
-         * whitelisting in the AppEngine VM environment. This function
-         * sets constants to bypass the need for phpseclib to check phpinfo
-         *
-         * @see phpseclib/Math/BigInteger
-         * @see https://github.com/GoogleCloudPlatform/getting-started-php/issues/85
-         * @codeCoverageIgnore
-         */
-        if (\filter_var(\getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
-            if (!\defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
-                \define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
-            }
-            if (!\defined('CRYPT_RSA_MODE')) {
-                \define('CRYPT_RSA_MODE', RSA::MODE_OPENSSL);
-            }
-        }
-        return \true;
-    }
-    /**
-     * @return bool
-     */
-    private function checkPhpsec3() : bool
-    {
-        return \class_exists('Beehive\\phpseclib3\\Crypt\\RSA');
+        return $formattedPublicKey;
     }
     /**
      * @return void

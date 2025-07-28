@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class GoalSetData extends \Beehive\Google\Collection
 {
     protected $collection_key = 'goals';
-    /**
-     * @var GoalData[]
-     */
-    public $goals;
     protected $goalsType = GoalData::class;
     protected $goalsDataType = 'array';
     /**

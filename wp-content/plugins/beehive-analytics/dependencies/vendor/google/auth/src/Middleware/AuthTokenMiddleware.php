@@ -58,7 +58,7 @@ class AuthTokenMiddleware
      * @param callable $httpHandler (optional) callback which delivers psr7 request
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      */
-    public function __construct(FetchAuthTokenInterface $fetcher, callable $httpHandler = null, callable $tokenCallback = null)
+    public function __construct(FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $this->fetcher = $fetcher;
         $this->httpHandler = $httpHandler;
@@ -113,7 +113,7 @@ class AuthTokenMiddleware
     {
         if (!$this->fetcher instanceof UpdateMetadataInterface || $this->fetcher instanceof FetchAuthTokenCache && !$this->fetcher->getFetcher() instanceof UpdateMetadataInterface) {
             $token = $this->fetcher->fetchAuthToken();
-            $request = $request->withHeader('authorization', 'Bearer ' . ($token['access_token'] ?? $token['id_token']));
+            $request = $request->withHeader('authorization', 'Bearer ' . ($token['access_token'] ?? $token['id_token'] ?? ''));
         } else {
             $headers = $this->fetcher->updateMetadata($request->getHeaders(), null, $this->httpHandler);
             $request = Utils::modifyRequest($request, ['set_headers' => $headers]);

@@ -23,10 +23,6 @@ class Residence extends \Beehive\Google\Model
      * @var bool
      */
     public $current;
-    /**
-     * @var FieldMetadata
-     */
-    public $metadata;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**

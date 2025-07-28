@@ -44,7 +44,7 @@ class AwsNativeSource implements ExternalAccountCredentialSourceInterface
      * @param string|null $imdsv2SessionTokenUrl Presence of this URL enforces the auth libraries to fetch a Session
      *                                           Token from AWS. This field is required for EC2 instances using IMDSv2.
      */
-    public function __construct(string $audience, string $regionalCredVerificationUrl, string $regionUrl = null, string $securityCredentialsUrl = null, string $imdsv2SessionTokenUrl = null)
+    public function __construct(string $audience, string $regionalCredVerificationUrl, ?string $regionUrl = null, ?string $securityCredentialsUrl = null, ?string $imdsv2SessionTokenUrl = null)
     {
         $this->audience = $audience;
         $this->regionalCredVerificationUrl = $regionalCredVerificationUrl;
@@ -52,7 +52,7 @@ class AwsNativeSource implements ExternalAccountCredentialSourceInterface
         $this->securityCredentialsUrl = $securityCredentialsUrl;
         $this->imdsv2SessionTokenUrl = $imdsv2SessionTokenUrl;
     }
-    public function fetchSubjectToken(callable $httpHandler = null) : string
+    public function fetchSubjectToken(?callable $httpHandler = null) : string
     {
         if (\is_null($httpHandler)) {
             $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
@@ -106,8 +106,8 @@ class AwsNativeSource implements ExternalAccountCredentialSourceInterface
     {
         $service = 'sts';
         # Create a date for headers and the credential string in ISO-8601 format
-        $amzdate = \date('Ymd\\THis\\Z');
-        $datestamp = \date('Ymd');
+        $amzdate = \gmdate('Ymd\\THis\\Z');
+        $datestamp = \gmdate('Ymd');
         # Date w/o time, used in credential scope
         # Create the canonical headers and signed headers. Header names
         # must be trimmed and lowercase, and sorted in code point order from

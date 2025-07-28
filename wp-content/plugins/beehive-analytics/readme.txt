@@ -1,107 +1,194 @@
-=== Beehive Analytics - Google Analytics Dashboard ===
+===Beehive: Google Analytics Dashboard & Visitor Stats===
 Plugin Name: Beehive Analytics - Google Analytics Dashboard
-Version: 3.4.12
+Version: 3.4.17
 Plugin URI: https://wpmudev.com/project/beehive-analytics-pro/
-Tags: google analytics, website analytics, google analytics report, google analytics dashboard, google analytics tracking, google analytics WordPress plugin, google analytics WordPress plugin, statistics, add google analytics to WordPress
+Tags: google analytics, google analytics dashboard, google tag manager, wordpress analytics, website Analytics
 Author URI: https://wpmudev.com/
 Author: WPMU DEV
 Contributors: WPMUDEV
-Requires at least: 5.2
-Tested up to: 6.5
+Requires at least: 6.4
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.4.12
+Stable tag: 3.4.17
 License: GPLv2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 
-Google Analytics Dashboard, simple analytics tracking code setup, free site statistics & customizable Google Analytics reports
-
+View visitor stats and track user behavior from within WordPress. A Google Analytics plugin with dashboard reports and Google Tag Manager support.
 == Description ==
 
-**Trying to find out how to add Google Analytics to WordPress or where to put the Google Analytics code? Beehive adds a customizable Google Analytics dashboard to WordPress so you can track user behavior right from both single and Multisite WordPress installations.**
+The smart, privacy-friendly way to add Google Analytics to WordPress. Track visitor stats, monitor display ads, and view your traffic dashboard, all from your WP admin.
 
-Fill your WordPress dashboard with valuable visitor data with just a click. Install, connect and create dashboards for your users.
+Beehive brings your Google Analytics data right into your WordPress dashboard. No fuss, no confusing setup, just real-time stats and smart reports that actually make sense.
 
-### Add Analytics Information Reports Including:
-* Analytics Overview - Users and Page Views for the current day, yesterday, 7 days, 30 days, 90 days or year.
-* Session Report - Number of interactions with your website that take place within a given time frame.
-* User Report - The total number of users for the requested time period.
-* Pageview Report - Lets you know when a page containing your tracking code is visited.
-* Pages/Sessions Report - Average number of pages visited on your website per session.
-* Average Time on Page Report - See how long visitors stay on your site.
-* Bounce Rate Report - Lean how many people leave after just visiting one page on your website.
-* Top Countries Report - See what part of the world your visitors are coming from.
-* Most Visited Page Report - Know what pages are being visited and how long your guests are staying
-* Trends Report - Watch for trends and improve content based on user behavior
-* Referrals Report - See where most of your traffic is coming from so you can focus your efforts
-* Medium Report - Get an idea if your traffic is direct, email, referrals, social or organic
-* Search Engines Report - Know what browsers your users are visiting from so you can perform better tests for your site.
-* Social Networks - Learn what social networks push the most traffic back to your site.
+Whether you're running a single site or managing a massive multisite network, Beehive gives you the insights you need to optimize traffic, track user behavior, and understand your audience, all in one place.
+
+-   Want even more firepower? [Upgrade to Beehive Pro](https://wpmudev.com/project/beehive-analytics-pro/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme-above-the-fold&utm_content=beehive-analytics-pro) for advanced features like white label site analytics and automated client reporting + access to the full suite of WPMU DEV plugins and site management tools.
+
+### TL;DR: Beehive’s Key Features at a Glance:
+-   GA4 Integration: Connect Google Analytics 4 seamlessly.
+    
+-   Multisite-Ready: Track subsites with a single setup.
+    
+-   Google Tag Manager Support: Track how users interact with your site.
+    
+-   User-Role-Based Access Control: Restrict analytics access as needed.
+    
+-   Real-Time Reporting: Get instant insights into site traffic.
+    
+-   Customizable Reports: View the metrics that matter most.
+    
+-   Visual Data Insights: Graphs and trend analysis for easy tracking.
+    
+-   Top Content Tracking: See your best-performing pages instantly.
+    
+-   Visitor Geo Insights: View traffic sources on a world map.
+    
+-   Ad & Referral Tracking: Monitor Display Ads and referral links.
+    
+-   Privacy-Focused: Anonymize user IPs for GDPR compliance.
+    
+-   One-Click Setup Wizard: Get started quickly with guided setup.
+
+## Why Beehive?
+
+Beehive isn’t just another Google Analytics plugin. It’s your all-in-one website analytics dashboard built for WordPress: designed for devs and data nerds who want deep insights, fast.
+
+### GA4 Integration
+
+**Connect Google Analytics 4 in minutes.**  
+No code, no manual scripts. Just a guided setup wizard that makes it simple to link your GA4 property. Stay up-to-date with Google’s latest analytics standard and future-proof your tracking setup.
+
+### Analytics Dashboard in WordPress
+
+**Your traffic data, where you need it.**   
+Access key site metrics like sessions, pageviews, bounce rate, traffic sources, and user behavior, directly inside your WP admin. No more switching tabs or logging into external tools.
+
+### Display Advertising & Referral Tracking
+
+**Measure the impact of your Google Display Ads.**  
+Track ad clicks, impressions, and referral traffic so you know exactly what’s driving results and where to double down. Perfect for marketers and publishers who want clarity on ROI.
+
+### Google Tag Manager Support
+
+**Advanced tracking, made simple.**  
+Easily connect GTM to set up event tracking, measure conversions, and monitor deeper user interactions, all without touching your theme files. Ideal for developers and power users who want total flexibility.
+
+### Multisite-Ready
+
+**One setup. Unlimited subsites.**  
+Beehive was built with WordPress Multisite in mind. Add analytics to every site in your network from a single dashboard, no need to configure them one by one.
+
+### Role-Based Access Control
+
+**Only the right people see the right data.**   
+Set detailed permissions by user role so editors, authors, and clients only see the analytics relevant to them. Great for agencies, collaborators, and client-facing sites.
+
+### Real-Time Visitor Tracking
+
+**Live insights at your fingertips.**  
+Want to see who’s on your site right now, where they came from, and what they’re doing? Beehive’s real-time dashboard gives you a live pulse of your website activity.
+
+### Top Content & Geo Insights
+
+**Know what works, and where it’s working.**  
+Quickly spot your most popular pages, posts, and referral links. Plus, view interactive world maps showing where your visitors are coming from geographically.
+
+### Privacy-Friendly by Default
+
+**Built for GDPR-conscious site owners.**  
+Beehive gives you the option to anonymize IP addresses, helping you stay compliant with privacy regulations without losing access to core traffic insights.
+
+### What Users Are Saying About Beehive:
+★★★★★
+Easy to set up and lets you track an entire site including admin pages and subdomains. The graphs and stats make it easy to track the visits, bounce rate, sessions, and referrers of your pages and posts. – [WPLeaders](https://wpleaders.com/google-analytics-wordpress-plugins/)
+
+★★★★★
+There are many GA plugins out there. If you are looking for one that has a modern interface, a dashboard widget and lots of features and a really nice support team, look no further! – [Mistergeko](https://wordpress.org/support/users/mistergeko/)
+
+★★★★★
+I’ve tried a bunch of different Google Analytics plugins for WordPress, but this one is by far my favorite. It’s incredibly straightforward to use, and the dashboard is user-friendly. – [Hatisenang](https://profiles.wordpress.org/hatisenang/)
+
+### A Note from Beehive
+
+Hey there! I’m Beehive, your go-to analytics dashboard for WordPress. With just a few clicks, I help you track user behavior, generate custom reports, and deliver valuable insights, right from your WordPress admin.
+
+I’m proud to be part of the WPMU DEV family: a superhero team of powerful plugins and site management tools. If you haven’t already met them, here are some of my closest allies:
+
+-   [Smush](https://wordpress.org/plugins/wp-smushit/): Image compression & optimization
+    
+-   [Forminator](https://wordpress.org/plugins/forminator/) – Forms, polls, quizzes & surveys
+    
+-   [Hummingbird](https://wordpress.org/plugins/hummingbird-performance/) – Page speed & performance booster
+    
+-   [Hustle](https://wordpress.org/plugins/wordpress-popup/) – Pop-ups, slide-ins & email opt-ins
+    
+-   [Defender](https://wordpress.org/plugins/defender-security/) – Security, monitoring & hack protection
+    
+-   [SmartCrawl](https://wordpress.org/plugins/smartcrawl-seo/) – SEO checker, analyzer & optimizer
+    
+
+You’ll also love the WPMU DEV Blog—it’s packed with some of the best WordPress tutorials around.
+
+Thanks for checking out Beehive! I can’t wait to help you grow your site with real, actionable insights.
+
+-   Beehive
+    
+
+### Beehive Analytics: Use Cases
+
+-   You’re a developer managing client sites and want a central analytics hub.  
+      
+    
+-   You want to track display ads and referrals without extra code.  
+      
+    
+-   You need to share traffic data with clients (without giving them access to GA directly).  
+      
+    
+-   You're running a multisite network and need to track everything from one place.  
+      
+    
+-   You're tired of opening 17 browser tabs just to see which post is getting the most traffic.
+    
+
+### Installation: Here’s How To Get Started
+
+Getting started is easy with Beehive’s guided setup wizard. No API key hunting. No guesswork. Just connect, click, and see your stats.
+
+1.  Install the plugin from the WordPress Plugin Directory or upload it manually.  
+      
+    
+2.  Activate the plugin through the 'Plugins' menu in WordPress.  
+      
+    
+3.  Launch the setup wizard and connect your Google Analytics 4 property.  
+      
+    
+4.  Optionally connect Google Tag Manager for even deeper tracking.  
+      
+    
+5.  Sit back and watch the insights roll in.
+    
+
+Need more help? Check out the full docs on [wpmudev.com](https://wpmudev.com/project/beehive-analytics-pro/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme-installation&utm_content=wpmudev_com).
 
 ### Learn The Ropes With These Hands-On Beehive Analytics Tutorials
 
-- [How To Get The Most Out Of Using Beehive](https://wpmudev.com/blog/get-the-most-out-of-beehive/)
+-   [How To Get The Most Out Of Using Beehive](https://wpmudev.com/blog/get-the-most-out-of-beehive/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme-learn-the-ropes&utm_content=how_to_get_the_most)
+    
+-   [How to Increase Website Traffic: Direct, Search, Referral, and Social](https://wpmudev.com/blog/increase-website-traffic/)
+    
 
-### Add the Best in Google Analytics
-Originally released premium-only in 2009, Beehive has consistently ranked in the top 10 WPMU DEV premium plugins for total downloads and active installs. To celebrate 10-years of analytics we are making one of the best Google Analytics WordPress Plugins on the market free for everyone. Give website analytics free to all your clients!
+### About Us
 
-###  Beehive Quick and Easy Setup for Smart Data-Driven Decisions
-Set up with Beehive is as easy as connecting your Google profile and verifying your site. No more hunting through code files or manually adding tracking links. Beehive makes it easy to get valuable statistics for bloggers, small business websites, eCommerce sites, enterprise networks and more.
+At WPMU DEV, we’re dedicated to helping WordPress users build faster, smarter, more secure websites with our suite of powerful plugins, site tools, and expert support.
 
-###  Google Tag Manager Integration
-With Beehive's integrated Google Tag Manager feature, you can easily activate the feature on your site and start tracking and managing your tags using the Tag Manager interface.
+Join our community of developers, designers, and site owners at [wpmudev.com](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=wpmu_dev_link), your all-in-one destination for WordPress success.
 
-### Includes Display Advertising
-Googles Display Advertising is built right into Beehive. Google Display Advertising lets you add additional tracking options like Remarketing with Google Analytics, Google Display Network Impression Reporting, and upgraded demographic and interest reports with just a click.
+Want to sharpen your skills and stay on top of the latest tips and trends? The [WPMU DEV Blog](https://wpmudev.com/blog/) is your go-to source for top-tier tutorials, updates, and insights.
 
-### Security, GDPR and Tracking Privacy
-Beehive takes your user's privacy seriously. Toggle IP Anonymization to anonymize your visitor IPs, stop demographic reports, protect user IDs and more.
-
-### Roles and Capabilities Manager
-Customize your reports based on user role with a click. Beehive lets you set capabilities and hide traffic data based on user permissions. Set what users have access to report customization settings.
-
-### The Easiest Analytics for Multisite Networks
-Activate analytics for every site across an entire Multisite network with one tracking code. Pick and choose what sites have access. Beehive grabs all the information and makes user tracking, statistics reporting, and site management simple.
-
-### The Information You Need in One Place
-Beehive puts your Google Analytics overview, stats, and graphs right in your WordPress dashboard. Save time and get a better picture of the most important content on your sites.
-
-If you’re running a business website or eCommerce store Beehive provides information you need to convert more leads into sales and increase your bottom line.
-
-It’s a one of a kind WordPress analytics dashboard plugin that makes it easier to grow the traffic on your site, for free!
-
-Beehive is built with ease-of-use in mind: it makes WordPress analytics easier to set up and manage. Connect with just one click. If you're looking to fully optimize your WordPress sites, [you should get a WPMU DEV Membership](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=you_should_get_wpmudev_membership#trial).
-
-Our Membership gives you access to Beehive and our entire superhero suite of tools including Smush Pro image optimization, Hummingbird Pro for speed and performance, Defender security, all our premium WordPress plugins, and 24/7 WordPress support.
-
-[It’s an incredible deal, and you can find out more here](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=its-an-incredible-deal-and-you-can-find-out-more-here#trial).
-
-Take the next step with a [WPMU DEV Membership](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=wpmudev_membership#trial).
-
-### What Do Other Companies Say About Beehive?
-
-★★★★★
-> Easy to set up and lets you track an entire site including admin pages and subdomains. The graphs and stats make it easy to track the visits, bounce rate, sessions, and referrers of your pages and posts. – [WPLeaders](https://wpleaders.com/google-analytics-wordpress-plugins/)
-
-
-### A Note From Beehive
-Hey! This is Beehive, your trusted analytics dashboard and reporting for WordPress. I’m part of the WPMU DEV team, a superhero-suite of WordPress plugins, services, and support. Here are some of our other free plugins:
-
-- [Smush](https://wordpress.org/plugins/wp-smushit/) - Image Compression and Optimization
-- [Forminator](https://wordpress.org/plugins/forminator/) – Form, Quiz, Poll and Survey Builder
-- [Hummingbird](https://wordpress.org/plugins/hummingbird-performance/) - Page Speed Optimization
-- [Hustle](https://wordpress.org/plugins/wordpress-popup/) - Pop-ups, Slide-ins and Email Opt-ins
-- [Defender](https://wordpress.org/plugins/defender-security/) - Security, Monitoring and Hack Protection
-- [SmartCrawl](https://wordpress.org/plugins/smartcrawl-seo/) - SEO Checker, Analyzer, and Optimizer
-
-And if you need ALL our Pro plugins, services, AND 24/7 WordPress support, get WPMU DEV membership! You can try it free for 7 days: [wpmudev.com](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=link_wpmudev#trial)
-
-My superhero friends run the WPMU DEV Blog, your source for the very best WordPress tutorials. If you need to be in the know about WordPress, check it out.
-
-Thanks for looking at Beehive, and I look forward to helping you grow your site with the very best analytics and statistics.
-
-*Enjoy, The Beehive*
-
+And hey, thanks for [using our free plugins](https://profiles.wordpress.org/wpmudev/#content-plugins)! We’ve loved building them for you, and we’re excited to see what you create with them.
 
 == Frequently Asked Questions ==
 
@@ -109,24 +196,72 @@ Thanks for looking at Beehive, and I look forward to helping you grow your site 
 Beehive is well documented and open to everyone. [Click here to visit the Beehive documentation](https://wpmudev.com/docs/wpmu-dev-plugins/beehive/)
 
 = Is Beehive really free or are there hidden premium features? =
-Beehive is completely free and does not require a paid upgrade. If you're interested in security, performance, automated client and developer reports, live chat support and more [checkout WPMU DEV](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=checkout_wpmu_dev#trial).
+Beehive is completely free and does not require a paid upgrade. If you’re interested in security, performance, automated client and developer reports, live chat support and more  [checkout WPMU DEV](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=checkout_wpmu_dev#trial).
 
 = What about GDPR and User Privacy? =
-Beehive includes tools that make it easy for you to comply with data protection regulations and keep your visitor's data safe. When using features like Google Display Advertising, be sure and follow privacy guidelines with cookie notices and updated terms of service.
+Beehive includes tools that make it easy for you to comply with data protection regulations and keep your visitor’s data safe. You can enable IP anonymization and configure privacy options to help meet GDPR requirements.
 
-= How can I report security issues or bugs?
-We take plugin security incredibly seriously; if you have a bug or vulnerability to report, you can do so through the Patchstack Vulnerability Disclosure Program. It’s fast, easy, and you will be notified when the issue is fixed. [Report a vulnerability](https://patchstack.com/database/vdp/beehive-analytics).
+= Can I use Beehive with Google Analytics 4 (GA4)? =
+Absolutely. Beehive fully supports GA4 and makes it easy to connect your account in just a few clicks.
+
+= Does this plugin support Google Tag Manager? =  
+Yes! You can integrate Google Tag Manager to track events, conversions, and advanced user interactions.
+
+= Is Beehive multisite-compatible? = 
+100%. Beehive works great on WordPress Multisite and lets you manage analytics across your entire network from one dashboard.
+
+= Will this plugin slow down my site? = 
+Nope. Beehive is lightweight and optimized for performance. Plus, it doesn't load unnecessary scripts on the frontend.
+
+= Can I control who sees the analytics dashboard? = 
+Yes! You can restrict access based on WordPress user roles so only the right people see your traffic data.
+
+= What kind of data can I track? =  
+Traffic, bounce rate, sessions, user locations, referral sources, top-performing pages, display ad clicks, and more.
+
+Ready to get your site stats straight from the source?
+Download Beehive and bring Google Analytics to your WordPress dashboard.
 
 == Screenshots ==
 
-1. Beehive makes connecting Google Analytics super simple
-2. Customize your dashboard view with all the statistics you need
-3. Know what channels are sending you the most traffic
-4. See what locations you should be targeting and what pages are performing best
-5. Compare stats over specific time frames
-6. Give capabilities based on user role
+1. Google Analytics on Your WordPress Site
+2. See Best Performing Mediums
+3. See Top Countries and Top Pages Insights
+4. Grant Permission Based on User Roles
+5. Google Tag Manager
+6. Analytics Data
 
 == Changelog ==
+
+= 3.4.17 (2025-04-25) =
+
+- Enhance: Compatibility with WordPress 6.8
+- Enhance: Add a new menu item to help you discover other free plugins by WPMU DEV and more
+
+= 3.4.16 (2024-02-24) =
+
+- Enhance: Improved compatibility with PHP 8.1 and PHP 8.2.
+- Enhance: Updated API Dimensions & Metrics to current standards.
+- Fix: Resolved PHP warnings (undefined array keys) on the Statistics page when viewing "Today".
+- Fix: Corrected the Beehive TypeError in the console on the post/page editor page.
+- Fix: Fixed the Measurement ID saving issue when an analytics account is not connected.
+
+= 3.4.15 (2024-12-16) =
+
+- New: Introduced pagination API calls to reduce server load.
+- Enhance: Added dynamic page size handling for GA4 data retrieval.
+- Enhance: Refined caching logic to address incorrect statistics in the previous version.
+- Enhance: Ensured compatibility with PHP 8.
+
+= 3.4.14 (2024-12-09 ) =
+
+- Enhance: Added background processing for Google Analytics streams.
+- Fix: Resolved Google Search Console integration issue.
+- Fix: Addressed permissions issue in Multisite environments.
+
+= 3.4.13 ( 2024-11-26 ) =
+
+- Fix: Deprecated get_class() without arguments in PHP 8.3.
 
 = 3.4.12 ( 2024-04-17 ) =
 
@@ -379,12 +514,3 @@ We take plugin security incredibly seriously; if you have a bug or vulnerability
 
 
 [Changelog for previous versions](https://wpmudev.com/project/beehive-analytics-pro/#view-changelog).
-
-== About Us ==
-WPMU DEV is a premium supplier of quality WordPress plugins, services and support. Join us here:
-[https://wpmudev.com/](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=wpmu_dev_link)
-
-Don't forget to stay up to date on everything WordPress from the Internet's number one resource:
-[WPMU DEV Blog](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=wpmu_dev_blog_link)
-
-Hey, one more thing... we hope you enjoy our [free offerings](http://profiles.wordpress.org/WPMUDEV/) as much as we've loved making them for you!

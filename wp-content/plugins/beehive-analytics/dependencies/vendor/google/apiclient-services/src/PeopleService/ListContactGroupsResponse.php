@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\PeopleService;
 class ListContactGroupsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'contactGroups';
-    /**
-     * @var ContactGroup[]
-     */
-    public $contactGroups;
     protected $contactGroupsType = ContactGroup::class;
     protected $contactGroupsDataType = 'array';
     /**

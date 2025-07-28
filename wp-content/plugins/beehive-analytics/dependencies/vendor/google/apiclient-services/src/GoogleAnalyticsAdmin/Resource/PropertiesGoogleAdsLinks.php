@@ -37,6 +37,7 @@ class PropertiesGoogleAdsLinks extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaGoogleAdsLink $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaGoogleAdsLink
+     * @throws \Google\Service\Exception
      */
     public function create($parent, GoogleAnalyticsAdminV1betaGoogleAdsLink $postBody, $optParams = [])
     {
@@ -51,6 +52,7 @@ class PropertiesGoogleAdsLinks extends \Beehive\Google\Service\Resource
      * properties/1234/googleAdsLinks/5678
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -73,6 +75,7 @@ class PropertiesGoogleAdsLinks extends \Beehive\Google\Service\Resource
      * paginating, all other parameters provided to `ListGoogleAdsLinks` must match
      * the call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListGoogleAdsLinksResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesGoogleAdsLinks($parent, $optParams = [])
     {
@@ -94,6 +97,7 @@ class PropertiesGoogleAdsLinks extends \Beehive\Google\Service\Resource
      * will not be updated. To replace the entire entity, use one path with the
      * string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaGoogleAdsLink
+     * @throws \Google\Service\Exception
      */
     public function patch($name, GoogleAnalyticsAdminV1betaGoogleAdsLink $postBody, $optParams = [])
     {

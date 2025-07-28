@@ -10,6 +10,7 @@
 namespace Automattic\Jetpack\Extensions\Story;
 
 use Automattic\Jetpack\Blocks;
+use Automattic\Jetpack\Connection\Connection_Assets;
 use Jetpack;
 use Jetpack_Gutenberg;
 use Jetpack_PostImages;
@@ -64,12 +65,19 @@ function enrich_media_files( $media_files ) {
 	return array_filter(
 		array_map(
 			function ( $media_file ) {
+				if ( ! is_array( $media_file ) || ! isset( $media_file['type'] ) ) {
+					return null;
+				}
 				if ( 'image' === $media_file['type'] ) {
 					return enrich_image_meta( $media_file );
 				}
 				// VideoPress videos can sometimes have type 'file', and mime 'video/videopress' or 'video/mp4'.
 				// Let's fix `type` for those.
-				if ( 'file' === $media_file['type'] && str_starts_with( $media_file['mime'], 'video' ) ) {
+				if (
+					'file' === $media_file['type']
+					&& isset( $media_file['mime'] )
+					&& str_starts_with( $media_file['mime'], 'video' )
+				) {
 					$media_file['type'] = 'video';
 				}
 				if ( 'video' !== $media_file['type'] ) { // we only support images and videos at this point.
@@ -442,6 +450,11 @@ function render_block( $attributes ) {
 	// Let's use a counter to have a different id for each story rendered in the same context.
 	static $story_block_counter = 0;
 
+	if ( 0 === $story_block_counter ) {
+		// @todo Fix the webpack tree shaking so the block's view.js no longer depends on jetpack-connection, then remove this.
+		Connection_Assets::register_assets();
+	}
+
 	Jetpack_Gutenberg::load_assets_as_required( __DIR__ );
 
 	$media_files              = isset( $attributes['mediaFiles'] ) ? enrich_media_files( $attributes['mediaFiles'] ) : array();
@@ -453,6 +466,9 @@ function render_block( $attributes ) {
 			'slides' => $media_files,
 		)
 	);
+
+	/* translators: Placehodlder if the Story block can't find a post title to use. */
+	$story_title = in_the_loop() ? get_the_title() : __( 'Story', 'jetpack' );
 
 	return sprintf(
 		'<div class="%1$s" data-id="%2$s" data-settings="%3$s">
@@ -487,7 +503,7 @@ function render_block( $attributes ) {
 		__( 'Play story in new tab', 'jetpack' ),
 		__( 'Site icon', 'jetpack' ),
 		esc_attr( get_blavatar_or_site_icon_url( 80, includes_url( 'images/w-logo-blue.png' ) ) ),
-		esc_html( get_the_title() ),
+		esc_html( $story_title ),
 		render_static_slide( $media_files ),
 		render_top_right_icon( $settings ),
 		render_pagination( $settings )

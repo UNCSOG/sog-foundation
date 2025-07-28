@@ -4,8 +4,9 @@ if(!class_exists('WP_List_Table')){
    require_once( dirname(__FILE__) . '/class-wp-list-table.php' );
 }
 
-
 class DBLogList extends WP_List_Table {
+    public $message;
+
     function __construct(){
         global $status, $page;
 
@@ -24,7 +25,7 @@ class DBLogList extends WP_List_Table {
     function column_subject($item){
         $page = sanitize_text_field(filter_input(INPUT_GET, 'page'));
         $actions = array(
-            'view'      => sprintf('<a href="?page=%s&tab=details&action=%s&logid=%s">' . esc_attr__('View Message', 'wp_reroute_email') . '</a>', esc_attr($page),'view', esc_attr($item->id))
+            'view'      => sprintf('<a href="?page=%s&tab=details&action=%s&logid=%s">' . esc_attr__('View Message', 'wp-reroute-email') . '</a>', esc_attr($page),'view', esc_attr($item->id))
         );
 
         return sprintf('%1$s %2$s', wp_kses_post($item->subject), $this->row_actions($actions));
@@ -37,9 +38,9 @@ class DBLogList extends WP_List_Table {
     function get_columns(){
         $columns = array(
             'id' => 'ID',
-            'subject'     => esc_attr__('Subject', 'wp_reroute_email'),
-            'recipients_to'    => esc_attr__('Sent To', 'wp_reroute_email'),
-            'sent_on'  => esc_attr__('Sent On', 'wp_reroute_email')
+            'subject'     => esc_attr__('Subject', 'wp-reroute-email'),
+            'recipients_to'    => esc_attr__('Sent To', 'wp-reroute-email'),
+            'sent_on'  => esc_attr__('Sent On', 'wp-reroute-email')
         );
 
         return $columns;
@@ -55,18 +56,74 @@ class DBLogList extends WP_List_Table {
 
     function get_bulk_actions() {
         $actions = array(
-            'delete_all_messages'    => esc_attr__('Delete All Messages', 'wp_reroute_email')
+            'delete_messages_1'    => esc_attr__('Delete Messages Older Than 1 Day', 'wp-reroute-email'),
+            'delete_messages_7'    => esc_attr__('Delete Messages Older Than 7 Days', 'wp-reroute-email'),
+            'delete_messages_15'    => esc_attr__('Delete Messages Older Than 15 Days', 'wp-reroute-email'),
+            'delete_messages_30'    => esc_attr__('Delete Messages Older Than 30 Days', 'wp-reroute-email'),
+            'delete_all_messages'    => esc_attr__('Delete All Messages', 'wp-reroute-email'),
         );
 
         return $actions;
     }
 
     function process_bulk_action() {
+        global $wpdb;
         if( 'delete_all_messages' === $this->current_action() ) {
-            global $wpdb;
             $wpdb->query("DELETE FROM {$wpdb->prefix}wpre_emails");
+            $this->message = esc_attr__('Messages have been deleted', 'wp-reroute-email');
+        }
+        else if(in_array($this->current_action(), ['delete_messages_1', 'delete_messages_7', 'delete_messages_15', 'delete_messages_30'])){
+            $days = (int)substr(strrchr($this->current_action(), '_'), 1);
+
+            if($days) {
+                $wpdb->query("DELETE FROM {$wpdb->prefix}wpre_emails WHERE  sent_on < NOW() - INTERVAL " . $days . " DAY");
+            }
+            $this->message = esc_attr__('Messages have been deleted', 'wp-reroute-email');
         }
     }
+
+    function bulk_actions( $which = '' ) {
+        if ( is_null( $this->_actions ) ) {
+            $this->_actions = $this->get_bulk_actions();
+            $this->_actions = apply_filters( "bulk_actions-{$this->screen->id}", $this->_actions );
+            $two = '';
+        } else {
+            $two = '2';
+        }
+
+        if ( empty( $this->_actions ) ) {
+            return;
+        }
+
+        echo '<label for="bulk-action-selector-' . esc_attr( $which ) . '" class="screen-reader-text">' .
+            /* translators: Hidden accessibility text. */
+            __( 'Select bulk action' ) .
+        '</label>';
+        echo '<select name="action' . $two . '" id="bulk-action-selector-' . esc_attr( $which ) . "\">\n";
+        echo '<option value="-1">' . __( 'Bulk actions' ) . "</option>\n";
+
+        foreach ( $this->_actions as $key => $value ) {
+            if ( is_array( $value ) ) {
+                echo "\t" . '<optgroup label="' . esc_attr( $key ) . '">' . "\n";
+
+                foreach ( $value as $name => $title ) {
+                    $class = ( 'edit' === $name ) ? ' class="hide-if-no-js"' : '';
+
+                    echo "\t\t" . '<option value="' . esc_attr( $name ) . '"' . $class . '>' . $title . "</option>\n";
+                }
+                echo "\t" . "</optgroup>\n";
+            } else {
+                $class = ( 'edit' === $key ) ? ' class="hide-if-no-js"' : '';
+
+                echo "\t" . '<option value="' . esc_attr( $key ) . '"' . $class . '>' . $value . "</option>\n";
+            }
+        }
+
+        echo "</select>\n";
+
+        submit_button( __( 'Apply' ), 'action', 'wpre_bulk_action', false, array( 'id' => "dobulkaction$two" ) );
+        echo "\n";
+	}
 
     function prepare_items() {
         global $wpdb;
@@ -87,7 +144,7 @@ class DBLogList extends WP_List_Table {
         $paged = sanitize_text_field(filter_input(INPUT_GET, 'paged', FILTER_VALIDATE_INT));
 
         $orderby = !empty($orderby) && in_array($orderby, ['sent_on']) ? esc_sql($orderby) : 'sent_on';
-        $order = !empty($order) && in_array($order, ['ASC', 'DESC']) ? esc_sql($order) : 'DESC';
+        $order = !empty($order) && in_array($order, ['asc', 'desc']) ? esc_sql($order) : 'DESC';
 
         if(!empty($orderby) & !empty($order)){
             $query.= ' ORDER BY ' . $orderby . ' ' . $order;

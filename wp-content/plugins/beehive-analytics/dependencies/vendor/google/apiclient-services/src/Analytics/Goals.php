@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class Goals extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var Goal[]
-     */
-    public $items;
     protected $itemsType = Goal::class;
     protected $itemsDataType = 'array';
     /**

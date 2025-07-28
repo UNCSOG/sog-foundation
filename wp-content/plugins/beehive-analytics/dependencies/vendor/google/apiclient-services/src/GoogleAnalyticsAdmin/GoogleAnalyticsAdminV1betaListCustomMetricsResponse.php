@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1betaListCustomMetricsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'customMetrics';
-    /**
-     * @var GoogleAnalyticsAdminV1betaCustomMetric[]
-     */
-    public $customMetrics;
     protected $customMetricsType = GoogleAnalyticsAdminV1betaCustomMetric::class;
     protected $customMetricsDataType = 'array';
     /**

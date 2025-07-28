@@ -49,16 +49,19 @@ abstract class Widget extends WP_Widget {
 	 * Updates the values of the widget. Uses the serialization class
 	 * to sanitize the information before saving it.
 	 *
-	 * @param array $new Values to be sanitized and saved.
+	 * @param array $new_data Values to be sanitized and saved.
 	 * @param array $old Values that were originally saved.
 	 *
 	 * @since 3.2.0
 	 *
 	 * @return array|void
 	 */
-	public function update( $new, $old ) {
+	public function update( $new_data, $old ) {
 		// Update each values.
-		foreach ( $new as $key => $value ) {
+		foreach ( $new_data as $key => $value ) {
+			if ( ! is_string( $value ) ) {
+				continue;
+			}
 			$old[ $key ] = wp_strip_all_tags( stripslashes( $value ) );
 		}
 

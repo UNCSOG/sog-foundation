@@ -416,6 +416,7 @@ class Elementor implements Integration_Interface {
 			'isPost'                    => true,
 			'isBlockEditor'             => WP_Screen::get()->is_block_editor(),
 			'isElementorEditor'         => true,
+			'isAlwaysIntroductionV2'    => $this->is_elementor_version_compatible_with_introduction_v2(),
 			'postStatus'                => \get_post_status( $post_id ),
 			'postType'                  => \get_post_type( $post_id ),
 			'analysis'                  => [
@@ -429,7 +430,7 @@ class Elementor implements Integration_Interface {
 		/**
 		 * The website information repository.
 		 *
-		 * @var $repo Website_Information_Repository
+		 * @var Website_Information_Repository $repo
 		 */
 		$repo             = \YoastSEO()->classes->get( Website_Information_Repository::class );
 		$site_information = $repo->get_post_site_information();
@@ -438,6 +439,27 @@ class Elementor implements Integration_Interface {
 
 		$this->asset_manager->localize_script( 'elementor', 'wpseoScriptData', $script_data );
 		$this->asset_manager->enqueue_user_language_script();
+	}
+
+	/**
+	 * Checks whether the current Elementor version is compatible with our introduction v2.
+	 *
+	 * In version 3.30.0, Elementor removed the experimental flag for the editor v2.
+	 * Resulting in the editor v2 being the default.
+	 *
+	 * @return bool Whether the Elementor version is compatible with introduction v2.
+	 */
+	private function is_elementor_version_compatible_with_introduction_v2(): bool {
+		if ( ! \defined( 'ELEMENTOR_VERSION' ) ) {
+			return false;
+		}
+
+		// Take the semver version from their version string.
+		$matches = [];
+		$version = ( \preg_match( '/^([0-9]+.[0-9]+.[0-9]+)/', \ELEMENTOR_VERSION, $matches ) > 0 ) ? $matches[1] : \ELEMENTOR_VERSION;
+
+		// Check if the version is 3.30.0 or higher. This is where the editor v2 was taken out of the experimental into the default state.
+		return \version_compare( $version, '3.30.0', '>=' );
 	}
 
 	/**
@@ -473,40 +495,18 @@ class Elementor implements Integration_Interface {
 		\printf(
 			'<input type="hidden" id="%1$s" name="%1$s" value="%2$s" />',
 			\esc_attr( WPSEO_Meta::$form_prefix . 'slug' ),
-			\esc_attr( $this->get_post_slug() )
+			/**
+			 * It is important that this slug value is the same as in the database.
+			 * If the DB value is empty we can auto-generate a slug.
+			 * But if not empty, we should not touch it anymore.
+			 */
+			\esc_attr( $this->get_metabox_post()->post_name )
 		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output should be escaped in the filter.
 		echo \apply_filters( 'wpseo_elementor_hidden_fields', '' );
 
 		echo '</form>';
-	}
-
-	/**
-	 * Returns the slug for the post being edited.
-	 *
-	 * @return string
-	 */
-	protected function get_post_slug() {
-		$post = $this->get_metabox_post();
-
-		// In case get_metabox_post returns null for whatever reason.
-		if ( ! $post instanceof WP_Post ) {
-			return '';
-		}
-
-		// Drafts might not have a post_name unless the slug has been manually changed.
-		// In this case we get it using get_sample_permalink.
-		if ( ! $post->post_name ) {
-			$sample = \get_sample_permalink( $post );
-
-			// Since get_sample_permalink runs through filters, ensure that it has the expected return value.
-			if ( \is_array( $sample ) && \count( $sample ) === 2 && \is_string( $sample[1] ) ) {
-				return $sample[1];
-			}
-		}
-
-		return $post->post_name;
 	}
 
 	/**

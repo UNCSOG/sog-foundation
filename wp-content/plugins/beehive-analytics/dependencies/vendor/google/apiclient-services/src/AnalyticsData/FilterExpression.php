@@ -19,28 +19,12 @@ namespace Beehive\Google\Service\AnalyticsData;
 
 class FilterExpression extends \Beehive\Google\Model
 {
-    /**
-     * @var FilterExpressionList
-     */
-    public $andGroup;
     protected $andGroupType = FilterExpressionList::class;
     protected $andGroupDataType = '';
-    /**
-     * @var Filter
-     */
-    public $filter;
     protected $filterType = Filter::class;
     protected $filterDataType = '';
-    /**
-     * @var FilterExpression
-     */
-    public $notExpression;
     protected $notExpressionType = FilterExpression::class;
     protected $notExpressionDataType = '';
-    /**
-     * @var FilterExpressionList
-     */
-    public $orGroup;
     protected $orGroupType = FilterExpressionList::class;
     protected $orGroupDataType = '';
     /**

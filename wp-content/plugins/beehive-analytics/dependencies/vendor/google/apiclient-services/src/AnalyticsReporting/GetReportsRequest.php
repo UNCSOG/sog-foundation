@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class GetReportsRequest extends \Beehive\Google\Collection
 {
     protected $collection_key = 'reportRequests';
-    /**
-     * @var ReportRequest[]
-     */
-    public $reportRequests;
     protected $reportRequestsType = ReportRequest::class;
     protected $reportRequestsDataType = 'array';
     /**

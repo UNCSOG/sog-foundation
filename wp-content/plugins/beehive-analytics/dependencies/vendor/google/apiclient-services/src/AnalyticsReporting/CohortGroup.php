@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\AnalyticsReporting;
 class CohortGroup extends \Beehive\Google\Collection
 {
     protected $collection_key = 'cohorts';
-    /**
-     * @var Cohort[]
-     */
-    public $cohorts;
     protected $cohortsType = Cohort::class;
     protected $cohortsDataType = 'array';
     /**

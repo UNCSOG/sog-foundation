@@ -30,9 +30,8 @@ class Stats extends View {
 	/**
 	 * Initialize the class by registering hooks.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function init() {
 		// Common vars.
@@ -52,9 +51,8 @@ class Stats extends View {
 	/**
 	 * Render admin dashboard analytics widget.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function dashboard_widget() {
 		echo '<div id="beehive-dashboard-statistics-app"></div>';
@@ -69,9 +67,8 @@ class Stats extends View {
 	 *
 	 * @param array $args View template arguments.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function popular_widget_content( $args = array() ) {
 		// Render popular widget form template.
@@ -83,9 +80,8 @@ class Stats extends View {
 	 *
 	 * @param array $args View template arguments.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function popular_widget_form( $args = array() ) {
 		// Render popular widget form template.
@@ -97,9 +93,8 @@ class Stats extends View {
 	 *
 	 * Stats loaded as a meta box within post edit page.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function post_widget() {
 		echo '<div id="beehive-post-statistics-app"></div>';
@@ -112,9 +107,8 @@ class Stats extends View {
 	/**
 	 * Render stats page content for the dashboard.
 	 *
-	 * @since 3.2.7
-	 *
 	 * @return void
+	 * @since 3.2.7
 	 */
 	public function stats_page() {
 		echo '<div id="beehive-statistics-app"></div>';
@@ -127,9 +121,8 @@ class Stats extends View {
 	/**
 	 * Render settings page content for the Analytics.
 	 *
-	 * @since 3.3.0
-	 *
 	 * @return void
+	 * @since 3.3.0
 	 */
 	public function settings_page() {
 		echo '<div id="beehive-ga-admin-app"></div>';
@@ -144,10 +137,10 @@ class Stats extends View {
 	 *
 	 * @param array $vars Localized vars.
 	 *
-	 * @since 3.2.0
+	 * @return array
 	 * @since 3.2.4 Removed unwanted items.
 	 *
-	 * @return array
+	 * @since 3.2.0
 	 */
 	public function post_vars( $vars ) {
 		global $pagenow, $post;
@@ -170,20 +163,12 @@ class Stats extends View {
 	 *
 	 * @param array $vars Localized vars.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return array
+	 * @since 3.2.4
 	 */
 	public function stats_vars( $vars ) {
-		// Statistics type.
-		$type = beehive_analytics()->settings->get( 'statistics_type', 'google', $this->is_network(), 'ua' );
-
-		$vars['can_get_stats']     = Google_Analytics\Helper::instance()->can_get_stats( $this->is_network(), $exception, $type );
+		$vars['can_get_stats']     = Google_Analytics\Helper::instance()->can_get_stats( $this->is_network(), $exception );
 		$vars['stats_permissions'] = $this->stats_permissions();
-		$vars['stats_types']       = array(
-			'ga4' => __( 'Google Analytics 4', 'ga_trans' ),
-			'ua'  => __( 'Universal Analytics', 'ga_trans' ),
-		);
 
 		return $vars;
 	}
@@ -193,14 +178,13 @@ class Stats extends View {
 	 *
 	 * @param array $vars Localized vars.
 	 *
-	 * @since 3.3.5
-	 *
 	 * @return array
+	 * @since 3.3.5
 	 */
 	public function admin_vars( $vars ) {
 		$vars['show_statistics'] = (int) Google_Analytics\Admin::instance()->show_statistics_tab();
 		$vars['show_settings']   = (int) current_user_can( Capability::SETTINGS_CAP );
-		$vars['roles']           = Helpers\Permission::get_roles( true, Helpers\General::is_networkwide() );
+		$vars['roles']           = Helpers\Permission::get_roles();
 		$vars['post_types']      = $this->get_post_types();
 
 		return $vars;
@@ -209,9 +193,8 @@ class Stats extends View {
 	/**
 	 * Get the list of permitted stats item from the settings.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return array
+	 * @since 3.2.4
 	 */
 	private function stats_permissions() {
 		// Network admin is Super Man.
@@ -242,9 +225,8 @@ class Stats extends View {
 	 *
 	 * @param array $vars Existing vars.
 	 *
-	 * @since 3.3.0
-	 *
 	 * @return array
+	 * @since 3.3.0
 	 */
 	public function common_vars( $vars ) {
 		// Setup URLs.
@@ -262,9 +244,8 @@ class Stats extends View {
 	 *
 	 * @param array $items Report items.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return array
+	 * @since 3.2.4
 	 */
 	public function report_items( $items ) {
 		// Dashboard widget.
@@ -390,9 +371,8 @@ class Stats extends View {
 	/**
 	 * Get available post types data.
 	 *
-	 * @since 3.3.6
-	 *
 	 * @return array
+	 * @since 3.3.6
 	 */
 	private function get_post_types() {
 		$data = array();

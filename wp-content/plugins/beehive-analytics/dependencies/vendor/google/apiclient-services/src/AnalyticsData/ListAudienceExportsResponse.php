@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\AnalyticsData;
 class ListAudienceExportsResponse extends \Beehive\Google\Collection
 {
     protected $collection_key = 'audienceExports';
-    /**
-     * @var AudienceExport[]
-     */
-    public $audienceExports;
     protected $audienceExportsType = AudienceExport::class;
     protected $audienceExportsDataType = 'array';
     /**

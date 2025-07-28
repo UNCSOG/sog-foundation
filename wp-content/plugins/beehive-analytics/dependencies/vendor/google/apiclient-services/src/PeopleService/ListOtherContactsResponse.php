@@ -28,10 +28,6 @@ class ListOtherContactsResponse extends \Beehive\Google\Collection
      * @var string
      */
     public $nextSyncToken;
-    /**
-     * @var Person[]
-     */
-    public $otherContacts;
     protected $otherContactsType = Person::class;
     protected $otherContactsDataType = 'array';
     /**

@@ -20,10 +20,6 @@ namespace Beehive\Google\Service\Analytics;
 class Segments extends \Beehive\Google\Collection
 {
     protected $collection_key = 'items';
-    /**
-     * @var Segment[]
-     */
-    public $items;
     protected $itemsType = Segment::class;
     protected $itemsDataType = 'array';
     /**

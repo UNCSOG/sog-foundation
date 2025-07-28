@@ -12,7 +12,9 @@ import {
 	isNetwork,
 	isMultisite,
 	isSubsite,
-	isNetworkWide
+	isNetworkWide,
+	inNetworkAdmin,
+	inSubsiteAdmin
 } from '@/helpers/utils'
 
 Vue.config.productionTip = false
@@ -27,7 +29,9 @@ Vue.mixin({
 		isNetwork,
 		isMultisite,
 		isSubsite,
-		isNetworkWide
+		isNetworkWide,
+		inNetworkAdmin,
+		inSubsiteAdmin
 	},
 })
 

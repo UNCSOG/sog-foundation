@@ -39,6 +39,7 @@ class PropertiesCustomMetrics extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaArchiveCustomMetricRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function archive($name, GoogleAnalyticsAdminV1betaArchiveCustomMetricRequest $postBody, $optParams = [])
     {
@@ -53,6 +54,7 @@ class PropertiesCustomMetrics extends \Beehive\Google\Service\Resource
      * @param GoogleAnalyticsAdminV1betaCustomMetric $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaCustomMetric
+     * @throws \Google\Service\Exception
      */
     public function create($parent, GoogleAnalyticsAdminV1betaCustomMetric $postBody, $optParams = [])
     {
@@ -67,6 +69,7 @@ class PropertiesCustomMetrics extends \Beehive\Google\Service\Resource
      * format: properties/1234/customMetrics/5678
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaCustomMetric
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -89,6 +92,7 @@ class PropertiesCustomMetrics extends \Beehive\Google\Service\Resource
      * paginating, all other parameters provided to `ListCustomMetrics` must match
      * the call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListCustomMetricsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesCustomMetrics($parent, $optParams = [])
     {
@@ -108,6 +112,7 @@ class PropertiesCustomMetrics extends \Beehive\Google\Service\Resource
      * Omitted fields will not be updated. To replace the entire entity, use one
      * path with the string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaCustomMetric
+     * @throws \Google\Service\Exception
      */
     public function patch($name, GoogleAnalyticsAdminV1betaCustomMetric $postBody, $optParams = [])
     {

@@ -5,6 +5,8 @@
  * @package WPSEO\Inc
  */
 
+use Yoast\WP\SEO\General\User_Interface\General_Page_Integration;
+use Yoast\WP\SEO\Plans\User_Interface\Plans_Page_Integration;
 use Yoast\WP\SEO\Promotions\Application\Promotion_Manager;
 
 /**
@@ -345,7 +347,7 @@ class WPSEO_Addon_Manager {
 			// If the add-on's version is the latest, we have to do no further checks.
 			if ( version_compare( $installed_plugin['Version'], $plugin_data->new_version, '<' ) ) {
 				// If we haven't retrieved the Yoast Free requirements for the WP version yet, do nothing. The next run will probably get us that information.
-				if ( is_null( $plugin_data->requires ) ) {
+				if ( $plugin_data->requires === null ) {
 					continue;
 				}
 
@@ -738,7 +740,7 @@ class WPSEO_Addon_Manager {
 		}
 
 		// Check whether the licenses are valid or whether we need to show notifications.
-		$quick = ( $current_page === 'wpseo_licenses' || $current_page === 'wpseo_dashboard' );
+		$quick = ( $current_page === Plans_Page_Integration::PAGE || $current_page === General_Page_Integration::PAGE );
 
 		// Also do a fresh request on Plugins & Core Update pages.
 		$quick = $quick || $pagenow === 'plugins.php';

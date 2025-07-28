@@ -20,7 +20,6 @@
  */
 
 import apiFetch from '@wordpress/api-fetch'
-import {getOption} from './utils'
 
 // Setup middlewares.
 apiFetch.use(apiFetch.createNonceMiddleware(window.beehiveVars.rest.nonce))
@@ -79,8 +78,6 @@ export function restPost(options) {
  *
  * This is a wrapper function to include nonce and
  * our custom route base url.
- * Also this function will switch between GA4 and UA based
- * on the type selected.
  *
  * @param {object} options apiFetch options.
  *
@@ -89,10 +86,8 @@ export function restPost(options) {
  * @return {string}
  **/
 export function restGetStats(options) {
-	// v1 for UA and v2 for GA4 stats.
-	let version = getOption( 'statistics_type', 'google', 'ua' ) === 'ua' ? 'v1/' : 'v2/'
 	// Append version prefix.
-	options.path = version + options.path
+	options.path = 'v1/' + options.path
 
 	return restGet(options)
 }

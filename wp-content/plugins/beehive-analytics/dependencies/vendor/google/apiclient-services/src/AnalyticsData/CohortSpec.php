@@ -20,22 +20,10 @@ namespace Beehive\Google\Service\AnalyticsData;
 class CohortSpec extends \Beehive\Google\Collection
 {
     protected $collection_key = 'cohorts';
-    /**
-     * @var CohortReportSettings
-     */
-    public $cohortReportSettings;
     protected $cohortReportSettingsType = CohortReportSettings::class;
     protected $cohortReportSettingsDataType = '';
-    /**
-     * @var Cohort[]
-     */
-    public $cohorts;
     protected $cohortsType = Cohort::class;
     protected $cohortsDataType = 'array';
-    /**
-     * @var CohortsRange
-     */
-    public $cohortsRange;
     protected $cohortsRangeType = CohortsRange::class;
     protected $cohortsRangeDataType = '';
     /**

@@ -160,7 +160,7 @@ class Admin extends View {
 		// We need to hide sensitive data from non-admin users.
 		if ( Helpers\Permission::can_manage_settings() ) {
 			$vars['ps_levels'] = $this->is_network() ? Helpers\Permission::get_ps_levels() : array();
-			$vars['roles']     = Helpers\Permission::get_roles( false );
+			$vars['roles']     = Helpers\Permission::get_roles();
 			// Get excluded users.
 			$excluded = beehive_analytics()->settings->get( 'settings_exclude_users', 'permissions', $this->is_network(), array() );
 			// Get included users.
@@ -196,7 +196,7 @@ class Admin extends View {
 		// We need to hide sensitive data from non-admin users.
 		if ( Helpers\Permission::can_manage_settings() ) {
 			$vars['ps_levels'] = $this->is_network() ? Helpers\Permission::get_ps_levels() : array();
-			$vars['roles']     = Helpers\Permission::get_roles( false );
+			$vars['roles']     = Helpers\Permission::get_roles();
 		}
 
 		return $vars;
@@ -260,12 +260,14 @@ class Admin extends View {
 
 			// Flags.
 			$vars['flags'] = array(
-				'network'     => $this->is_network() ? 1 : 0,
-				'networkwide' => Helpers\General::is_networkwide() ? 1 : 0,
-				'multisite'   => is_multisite() ? 1 : 0,
-				'admin'       => Helpers\Permission::is_admin_user( $this->is_network() ) ? 1 : 0,
-				'super_admin' => is_multisite() && current_user_can( 'manage_network' ) ? 1 : 0,
-				'is_pro'      => beehive_analytics()->is_pro(),
+				'network'          => $this->is_network() ? 1 : 0,
+				'networkwide'      => Helpers\General::is_networkwide() ? 1 : 0,
+				'multisite'        => is_multisite() ? 1 : 0,
+				'admin'            => Helpers\Permission::is_admin_user( $this->is_network() ) ? 1 : 0,
+				'super_admin'      => is_multisite() && current_user_can( 'manage_network' ) ? 1 : 0,
+				'is_pro'           => beehive_analytics()->is_pro(),
+				'in_network_admin' => is_network_admin() ? 1 : 0,
+				'in_subsite_admin' => is_admin() && ! is_network_admin() ? 1 : 0,
 			);
 
 			$vars['dates'] = array(

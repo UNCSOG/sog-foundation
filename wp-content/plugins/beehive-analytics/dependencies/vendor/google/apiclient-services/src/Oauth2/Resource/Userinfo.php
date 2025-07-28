@@ -33,6 +33,7 @@ class Userinfo extends \Beehive\Google\Service\Resource
      *
      * @param array $optParams Optional parameters.
      * @return UserinfoModel
+     * @throws \Google\Service\Exception
      */
     public function get($optParams = [])
     {

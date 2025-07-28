@@ -61,6 +61,15 @@ abstract class SAL_Site {
 	}
 
 	/**
+	 * Returns the site slug.
+	 *
+	 * @return string
+	 */
+	public function get_slug() {
+		return ( new Status() )->get_site_suffix();
+	}
+
+	/**
 	 * Returns the site name.
 	 *
 	 * @return string
@@ -758,8 +767,8 @@ abstract class SAL_Site {
 		if ( ! $post || is_wp_error( $post ) ) {
 			return false;
 		}
-
-		if ( 'inherit' === $post->post_status ) {
+		// If the post is of status inherit, check if the parent exists ( different to 0 ) to check for the parent status object.
+		if ( 'inherit' === $post->post_status && 0 !== (int) $post->post_parent ) {
 			$parent_post     = get_post( $post->post_parent );
 			$post_status_obj = get_post_status_object( $parent_post->post_status );
 		} else {
@@ -959,16 +968,6 @@ abstract class SAL_Site {
 			'delete_users'        => $this->current_user_can( 'delete_users' ),
 			'remove_users'        => $this->current_user_can( 'remove_users' ),
 			'own_site'            => $is_wpcom_blog_owner,
-			/**
-			 * Filter whether the Hosting section in Calypso should be available for site.
-			 *
-			 * @module json-api
-			 *
-			 * @since 8.2.0
-			 *
-			 * @param bool $view_hosting Can site access Hosting section. Default to false.
-			 */
-			'view_hosting'        => apply_filters( 'jetpack_json_api_site_can_view_hosting', false ),
 			'view_stats'          => stats_is_blog_user( $this->blog_id ),
 			'activate_plugins'    => $this->current_user_can( 'activate_plugins' ),
 			'update_plugins'      => $this->current_user_can( 'update_plugins' ),
@@ -1521,6 +1520,15 @@ abstract class SAL_Site {
 	}
 
 	/**
+	 * Get the option of site partner bundle which value is coming from the Partner Flow
+	 *
+	 * @return string
+	 */
+	public function get_site_partner_bundle() {
+		return get_option( 'site_partner_bundle', '' );
+	}
+
+	/**
 	 * Get site option to determine if and how to display launchpad onboarding
 	 *
 	 * @return string
@@ -1551,6 +1559,15 @@ abstract class SAL_Site {
 		}
 
 		return array();
+	}
+
+	/**
+	 * Get site option for migration source site domain
+	 *
+	 * @return string
+	 */
+	public function get_migration_source_site_domain() {
+		return get_option( 'migration_source_site_domain', '' );
 	}
 
 	/**
