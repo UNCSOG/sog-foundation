@@ -1,13 +1,11 @@
 <?php
 
+use \OTGS\Toolset\Types\Controller\Interop\Managed\WPML\FieldsGroups;
+
 /**
  * @fixme add description
  */
 abstract class Types_Wpml_Field_Group_String implements Types_Wpml_Interface {
-
-	const CONTEXT = 'plugin Types';
-
-	const TRANSLATE_FILTER = 'wpml_translate_single_string';
 
 	/**
 	 * @var Toolset_Field_Group
@@ -43,6 +41,26 @@ abstract class Types_Wpml_Field_Group_String implements Types_Wpml_Interface {
 
 
 	/**
+	 * The title of the string as part of the translation package
+	 *  - [name]: Name
+	 *  - [description]: Description
+	 *
+	 * @return string
+	 */
+	abstract protected function get_title();
+
+
+	/**
+	 * The kind of string in the translation package
+	 *  - [name]: LINE
+	 *  - [description]: AREA
+	 *
+	 * @return string
+	 */
+	abstract protected function get_type();
+
+
+	/**
 	 * Returns the string which should be translated
 	 *
 	 * @return string
@@ -69,6 +87,30 @@ abstract class Types_Wpml_Field_Group_String implements Types_Wpml_Interface {
 	 */
 	protected function get_db_identifier_legacy() {
 		return sprintf( $this->get_db_pattern(), $this->group->get_id() );
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getPackage() {
+		switch ( $this->group->get_post_type() ) {
+			case \Toolset_Field_Group_Term::POST_TYPE:
+				$domain = \Toolset_Field_Utils::DOMAIN_TERMS;
+				break;
+			case \Toolset_Field_Group_User::POST_TYPE:
+				$domain = \Toolset_Field_Utils::DOMAIN_USERS;
+				break;
+			default:
+				$domain = \Toolset_Field_Utils::DOMAIN_POSTS;
+				break;
+		}
+		return [
+			'kind'      => FieldsGroups::getPackageKind( $domain ),
+			'kind_slug' => FieldsGroups::getPackageKindSlug( $domain ),
+			'name'      => FieldsGroups::getPackageName( $this->group->get_id() ),
+			'title'     => $this->group->get_name(),
+			'edit_link' => FieldsGroups::getPackageUrl( $domain, $this->group->get_id() ),
+		];
 	}
 
 
@@ -141,7 +183,7 @@ abstract class Types_Wpml_Field_Group_String implements Types_Wpml_Interface {
 	 */
 	private function get_translation( $string, $field_id ) {
 		return Types_Interop_Handler_Wpml::get_instance()->get_translation(
-			$string, $field_id, self::CONTEXT
+			$string, $field_id, $this->getPackage()
 		);
 	}
 
@@ -234,11 +276,13 @@ abstract class Types_Wpml_Field_Group_String implements Types_Wpml_Interface {
 			);
 		}
 
-		// register/update string
-		icl_register_string(
-			self::CONTEXT,
+		do_action(
+			'wpml_register_string',
+			$this->get_string_to_translate(),
 			$this->get_db_identifier(),
-			$this->get_string_to_translate()
+			$this->getPackage(),
+			$this->get_title(),
+			$this->get_type()
 		);
 	}
 

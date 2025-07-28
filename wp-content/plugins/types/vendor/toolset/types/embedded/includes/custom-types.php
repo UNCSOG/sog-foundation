@@ -18,68 +18,86 @@ add_action( 'wpcf_type', 'wpcf_filter_type', 10, 2 );
 function wpcf_custom_types_default() {
     return array(
         'labels' => array(
-            'name' => '',
-            'singular_name' => '',
-            'add_new' => 'Add New',
-            'add_new_item' => 'Add New %s',
-//          'edit' => 'Edit',
-            'edit_item' => 'Edit %s',
-            'new_item' => 'New %s',
-//          'view' => 'View',
-            'view_item' => 'View %s',
-            'search_items' => 'Search %s',
-            'not_found' => 'No %s found',
-            'not_found_in_trash' => 'No %s found in Trash',
-            'parent_item_colon' => 'Parent %s',
-            'menu_name' => '%s',
-            'all_items' => '%s',
+						'name'                     => '',
+						'singular_name'            => '',
+						'add_new'                  => 'Add New',
+						'add_new_item'             => 'Add New %s',
+						'edit_item'                => 'Edit %s',
+						'new_item'                 => 'New %s',
+						'view_item'                => 'View %s',
+						'view_items'               => 'View %s',
+						'search_items'             => 'Search %s',
+						'not_found'                => 'No %s found',
+						'not_found_in_trash'       => 'No %s found in Trash',
+						'parent_item_colon'        => 'Parent %s:',
+						'menu_name'                => '%s',
+						'all_items'                => 'All %s',
+						'archives'                 => '%s Archives',
+						'attributes'               => '%s Attributes',
+						'insert_into_item'         => 'Insert into %s',
+						'uploaded_to_this_item'    => 'Uploaded to this %s',
+						'featured_image'           => 'Featured image',
+						'set_featured_image'       => 'Set featured image',
+						'remove_featured_image'    => 'Remove featured image',
+						'use_featured_image'       => 'Use as featured image',
+						'filter_items_list'        => 'Filter %s list',
+						'filter_by_date'           => 'Filter by date',
+						'items_list_navigation'    => '%s list navigation',
+						'items_list'               => '%s list',
+						'item_published'           => '%s published.',
+						'item_published_privately' => '%s published privately.',
+						'item_reverted_to_draft'   => '%s reverted to draft.',
+						'item_trashed'             => '%s trashed.',
+						'item_updated'             => '%s updated.',
+						'item_link'                => '%s Link',
+						'item_link_description'    => 'A link to a %s.',
         ),
-        'slug' => '',
-        'description' => '',
-        'public' => true,
-        'capabilities' => false,
+        'slug'          => '',
+        'description'   => '',
+        'public'        => true,
+        'capabilities'  => false,
         'menu_position' => null,
-        'menu_icon' => '',
-        'taxonomies' => array(
+        'menu_icon'     => '',
+        'taxonomies'    => array(
             'category' => false,
             'post_tag' => false,
         ),
         'supports' => array(
-            'title' => true,
-            'editor' => true,
-            'trackbacks' => false,
-            'comments' => false,
-            'revisions' => false,
-            'author' => false,
-            'excerpt' => false,
-            'thumbnail' => false,
-            'custom-fields' => false,
+            'title'           => true,
+            'editor'          => true,
+            'trackbacks'      => false,
+            'comments'        => false,
+            'revisions'       => false,
+            'author'          => false,
+            'excerpt'         => false,
+            'thumbnail'       => false,
+            'custom-fields'   => false,
             'page-attributes' => false,
-            'post-formats' => false,
+            'post-formats'    => false,
         ),
         'rewrite' => array(
-            'enabled' => true,
-            'slug' => '',
+            'enabled'    => true,
+            'slug'       => '',
             'with_front' => true,
-            'feeds' => true,
-            'pages' => true,
+            'feeds'      => true,
+            'pages'      => true,
         ),
-        'has_archive' => true,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'show_in_menu_page' => '',
-        'publicly_queryable' => true,
-        'exclude_from_search' => false,
-        'hierarchical' => false,
-        'query_var_enabled' => true,
-        'query_var' => '',
-        'can_export' => true,
-        'show_rest' => false,
-        'rest_base' => '',
-        'show_in_nav_menus' => true,
+        'has_archive'          => true,
+        'show_ui'              => true,
+        'show_in_menu'         => true,
+        'show_in_menu_page'    => '',
+        'publicly_queryable'   => true,
+        'exclude_from_search'  => false,
+        'hierarchical'         => false,
+        'query_var_enabled'    => true,
+        'query_var'            => '',
+        'can_export'           => true,
+        'show_rest'            => false,
+        'rest_base'            => '',
+        'show_in_nav_menus'    => true,
         'register_meta_box_cb' => '',
-        'permalink_epmask' => 'EP_PERMALINK',
-        'update' => false,
+        'permalink_epmask'     => 'EP_PERMALINK',
+        'update'               => false,
     );
 }
 
@@ -87,6 +105,7 @@ function wpcf_custom_types_default() {
  * Inits custom types.
  */
 function wpcf_custom_types_init() {
+	do_action( 'wpcf_init_default_types_labels' );
 	$post_type_option = new Types_Utils_Post_Type_Option();
     $custom_types = $post_type_option->get_post_types();
     $needs_flush_rewrite_rules = false;
@@ -196,18 +215,61 @@ function wpcf_custom_types_register( $post_type, $data ) {
                 case 'new_item':
                 case 'view_item':
                 case 'parent_item_colon':
-                    $data['labels'][$label_key] = sprintf( $label,
-                            $data['labels']['singular_name'] );
-                    break;
+                case 'archives':
+                case 'attributes':
+								case 'item_published':
+								case 'item_published_privately':
+								case 'item_reverted_to_draft':
+								case 'item_trashed':
+								case 'item_updated':
+								case 'item_link':
+									try {
+										$data['labels'][ $label_key ] = sprintf( $label, $data['labels']['singular_name'] );
+									} catch ( Error $e ) {
+										if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+											error_log( 'Invalid post type ' . $label_key . ' label: ' . $e->getMessage() );
+										}
+									}
+                  break;
+
+								case 'insert_into_item':
+								case 'uploaded_to_this_item':
+								case 'item_link_description':
+									try {
+										$data['labels'][ $label_key ] = sprintf( $label, strtolower( $data['labels']['singular_name'] ) );
+									} catch ( Error $e ) {
+										if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+											error_log( 'Invalid post type ' . $label_key . ' label: ' . $e->getMessage() );
+										}
+									}
+									break;
 
                 case 'search_items':
                 case 'all_items':
+								case 'view_items':
                 case 'not_found':
                 case 'not_found_in_trash':
                 case 'menu_name':
-                    $data['labels'][$label_key] = sprintf( $label,
-                            $data['labels']['name'] );
-                    break;
+                case 'items_list_navigation':
+                case 'items_list':
+									try {
+										$data['labels'][ $label_key ] = sprintf( $label, $data['labels']['name'] );
+									} catch ( Error $e ) {
+										if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+											error_log( 'Invalid post type ' . $label_key . ' label: ' . $e->getMessage() );
+										}
+									}
+                  break;
+
+								case 'filter_items_list':
+									try {
+										$data['labels'][ $label_key ] = sprintf( $label, strtolower( $data['labels']['name'] ) );
+									} catch ( Error $e ) {
+										if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+											error_log( 'Invalid post type ' . $label_key . ' label: ' . $e->getMessage() );
+										}
+									}
+                  break;
             }
         }
     }

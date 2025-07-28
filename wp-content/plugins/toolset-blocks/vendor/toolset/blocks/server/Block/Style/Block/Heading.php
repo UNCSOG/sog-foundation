@@ -29,8 +29,8 @@ class Heading extends APartlyWithConfig {
 	 */
 	public function load_block_specific_style_attributes( FactoryStyleAttribute $factory ) {
 		$config = $this->get_block_config();
-		if( isset( $config[ 'align' ] ) ) {
-			if( $style = $factory->get_attribute( 'text-align', $config['align' ] ) ) {
+		if ( isset( $config['align'] ) ) {
+			if ( $style = $factory->get_attribute( 'text-align', $config['align'] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_HEADING );
 			}
 		}
@@ -59,7 +59,7 @@ class Heading extends APartlyWithConfig {
 		// Determine css selector. If it's root there is no extra css selector required.
 		$css_selector = $css_selector === self::CSS_SELECTOR_ROOT ? '' : $css_selector . ' ';
 
-		$css_selector = substr($css_selector, 0, 1) == ':' ? $css_selector : ' ' . $css_selector;
+		$css_selector = substr( $css_selector, 0, 1 ) == ':' ? $css_selector : ' ' . $css_selector;
 
 		return $this->get_css_selector_prepend() .
 			$this->tag .

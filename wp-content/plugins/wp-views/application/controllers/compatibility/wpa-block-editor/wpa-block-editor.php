@@ -1479,8 +1479,8 @@ class BlockEditorWPA extends Compatibility\Base {
 				$post_view_link = null;
 			}
 
-			// It doesn't have content in the href attribute.
-			if ( '' === $matches[1] ) {
+			// It doesn't have an href attribute, or lacks content in the href attribute.
+			if ( count( $matches ) < 1 || '' === $matches[1] ) {
 				$post_view_link = null;
 			}
 		}

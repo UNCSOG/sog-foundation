@@ -423,7 +423,7 @@ class WPToolset_Types
         // Unserialize [values] and do not allow array (take first value from array
         if ( is_array( $cond_values ) ) {
             foreach ( $cond_values as $k => &$v ) {
-                $v = maybe_unserialize( $v[0] );
+                $v = ( is_array( $v ) && ! empty( $v ) ) ? maybe_unserialize( $v[0] ) : $v;
                 $v = self::getStringFromArray($v);
             }
         }
@@ -537,8 +537,7 @@ class WPToolset_Types
             'wpml_translate_single_string',
             stripslashes( $string ),
             $context,
-            $name,
-            apply_filters( 'wpml_current_language', NULL )
+            $name
         );
     }
 

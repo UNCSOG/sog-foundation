@@ -349,11 +349,19 @@ class GF_SendGrid extends GFAddOn {
 		}
 
 		// Add BCC.
-		if ( rgar( $notification, 'bcc' ) ) {
-			$bcc_emails = GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $entry, false, false, false, 'text' );
+		if ( isset( $email['headers']['Bcc'] ) ) {
+			$bcc_emails = str_replace( 'Bcc: ', '', $email['headers']['Bcc'] );
 			$bcc_emails = array_map( 'trim', explode( ',', $bcc_emails ) );
 			foreach ( $bcc_emails as $bcc_email ) {
 				$sendgrid_email['personalizations'][0]['bcc'][] = array( 'email' => $bcc_email );
+			}
+		}
+
+		if ( isset( $email['headers']['Cc'] ) ) {
+			$cc_emails = str_replace( 'Cc: ', '', $email['headers']['Cc'] );
+			$cc_emails = array_map( 'trim', explode( ',', $cc_emails ) );
+			foreach ( $cc_emails as $cc_email ) {
+				$sendgrid_email['personalizations'][0]['cc'][] = array( 'email' => $cc_email );
 			}
 		}
 

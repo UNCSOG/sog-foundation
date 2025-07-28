@@ -2,7 +2,6 @@
 
 namespace ToolsetBlocks\Rest;
 
-
 use ToolsetBlocks\Rest\Route\IRoute;
 use ToolsetBlocks\Rest\Route\IShortcode;
 use ToolsetBlocks\Library\WordPress\Rest;
@@ -43,7 +42,7 @@ class API {
 	 * @action rest_api_init 1
 	 */
 	public function rest_api_init() {
-		if( empty( $this->routes ) ) {
+		if ( empty( $this->routes ) ) {
 			return;
 		}
 
@@ -54,7 +53,7 @@ class API {
 		);
 
 		global $post; // add current post id to script data
-		if( is_object( $post ) && property_exists( $post, 'ID' ) ) {
+		if ( is_object( $post ) && property_exists( $post, 'ID' ) ) {
 			$this->script_data->add_data(
 				'current_post_id',
 				$post->ID
@@ -65,15 +64,15 @@ class API {
 		$toolset_plugins = array(
 			'views' => array(
 				'name' => 'Toolset Views',
-				'active' => defined( 'WPV_VERSION' )
+				'active' => defined( 'WPV_VERSION' ),
 			),
 			'forms' => array(
 				'name' => 'Toolset Forms',
-				'active' => defined( 'CRED_FE_VERSION' )
+				'active' => defined( 'CRED_FE_VERSION' ),
 			),
 			'types' => array(
 				'name' => 'Toolset Types',
-				'active' => defined( 'TYPES_VERSION' )
+				'active' => defined( 'TYPES_VERSION' ),
 			),
 			'wooviews' => array(
 				'name' => 'WooCommerce Views',
@@ -83,7 +82,7 @@ class API {
 
 		$this->script_data->add_data( 'plugins', $toolset_plugins );
 
-		foreach( $this->routes as $route ) {
+		foreach ( $this->routes as $route ) {
 			$namespace_w_version = $this->namespace . '/v' . $route->get_version();
 			$route_w_slash = '/' . $route->get_name();
 
@@ -92,8 +91,8 @@ class API {
 				$namespace_w_version,
 				$route_w_slash,
 				array(
-					'methods'             => $route->get_method(),
-					'callback'            => array( $route, 'callback' ),
+					'methods' => $route->get_method(),
+					'callback' => array( $route, 'callback' ),
 					'permission_callback' => array( $route, 'permission_callback' ),
 				)
 			);

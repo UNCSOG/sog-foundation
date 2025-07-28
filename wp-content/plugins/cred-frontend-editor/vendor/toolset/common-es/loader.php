@@ -13,7 +13,7 @@
  *
  * ...and so on...
  */
-$toolset_common_es_version = 166000;
+$toolset_common_es_version = 175000;
 
 /**
  * Register Script and Style. This will always be called very very early on init as it uses a negative priority.
@@ -45,7 +45,7 @@ add_action( 'init', function() use ( $toolset_common_es_version ) {
 			wp_register_script(
 				'toolset-common-es',
 				plugin_dir_url( __FILE__ ) . 'public/toolset-common-es.js',
-				array(),
+				array( 'react', 'react-dom', 'jquery', 'lodash' ),
 				$toolset_common_es_version,
 				false
 			);
@@ -64,6 +64,21 @@ add_action( 'init', function() use ( $toolset_common_es_version ) {
 				// Always load on Toolset Settings page.
 				wp_enqueue_style( 'toolset-common-es' );
 			}
+		}
+
+		if ( ! is_admin() ) {
+			// Bundled Javascript
+			if ( ! wp_script_is( 'toolset-common-es-frontend', 'registered' ) ) {
+				wp_register_script(
+					'toolset-common-es-frontend',
+					plugin_dir_url( __FILE__ ) . 'public/toolset-common-es-frontend.js',
+					array(),
+					$toolset_common_es_version,
+					false
+				);
+			}
+
+			wp_enqueue_script( 'toolset-common-es-frontend' );
 		}
 
 		if ( ! is_admin() ) {

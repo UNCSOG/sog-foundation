@@ -325,7 +325,7 @@ class CRED_Notification_Manager_User extends CRED_Notification_Manager_Base {
 				|| $is_order_created
 				|| $is_custom_notification_to_send
 			) {
-				$notifications_to_send[] = $single_notification;
+				$notifications_to_send[ $key ] = $single_notification;
 			} else {
 				if ( isset( $single_notification[ 'event' ] ) ) {
 					$condition_fields = array();

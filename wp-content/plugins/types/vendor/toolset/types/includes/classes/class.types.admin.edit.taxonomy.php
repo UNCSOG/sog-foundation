@@ -551,6 +551,11 @@ class Types_Admin_Edit_Taxonomy extends Types_Admin_Page
                 'description' => __( "The popular items text. Default is __( 'Popular Tags' ) or null.", 'wpcf' ),
                 'label' => __('Popular Items', 'wpcf'),
             ),
+						'menu_name' => array(
+                'title' => __( '%s', 'wpcf' ),
+                'description' => __( "The menu name text. This string is the name to give menu items. Defaults to value of name.", 'wpcf' ),
+                'label' => __('Menu Name', 'wpcf'),
+            ),
             'all_items' => array(
                 'title' => __( 'All %s', 'wpcf' ),
                 'description' => __( "The all items text. Default is __( 'All Tags' ) or __( 'All Categories' ).", 'wpcf' ),
@@ -571,6 +576,11 @@ class Types_Admin_Edit_Taxonomy extends Types_Admin_Page
                 'description' => __( "The edit item text. Default is __( 'Edit Tag' ) or __( 'Edit Category' ).", 'wpcf' ),
                 'label' => __('Edit Item', 'wpcf'),
             ),
+            'view_item' => array(
+                'title' => __( 'View %s', 'wpcf' ),
+                'description' => __( 'The view item text. Default is "View {Single Label}".', 'wpcf' ),
+                'label' => __('View Item', 'wpcf'),
+            ),
             'update_item' => array(
                 'title' => __( 'Update %s', 'wpcf' ),
                 'description' => __( "The update item text. Default is __( 'Update Tag' ) or __( 'Update Category' ).", 'wpcf' ),
@@ -585,6 +595,11 @@ class Types_Admin_Edit_Taxonomy extends Types_Admin_Page
                 'title' => __( 'New %s Name', 'wpcf' ),
                 'description' => __( "The new item name text. Default is __( 'New Tag Name' ) or __( 'New Category Name' ).", 'wpcf' ),
                 'label' => __('New Item Name', 'wpcf'),
+            ),
+            'template_name' => array(
+                'title' => __( 'New %s Archives', 'wpcf' ),
+                'description' => __( 'Default is "{Single Label} Archives".', 'wpcf' ),
+                'label' => __('Item Archives', 'wpcf'),
             ),
             'separate_items_with_commas' => array(
                 'title' => __( 'Separate %s with commas', 'wpcf' ),
@@ -601,10 +616,50 @@ class Types_Admin_Edit_Taxonomy extends Types_Admin_Page
                 'description' => __( "The choose from most used text used in the taxonomy meta box. This string isn't used on hierarchical taxonomies. Default is __( 'Choose from the most used tags' ) or null.", 'wpcf' ),
                 'label' => __('Most Used', 'wpcf'),
             ),
-            'menu_name' => array(
-                'title' => __( 'Menu Name', 'wpcf' ),
-                'description' => __( "The menu name text. This string is the name to give menu items. Defaults to value of name.", 'wpcf' ),
-                'label' => __('Menu Name', 'wpcf'),
+            'most_used' => array(
+                'title' => __( 'Most Used', 'wpcf' ),
+                'description' => __( 'Title for the Most Used tab. Default is "Most Used".', 'wpcf' ),
+                'label' => __('Most Used', 'wpcf'),
+            ),
+            'not_found' => array(
+                'title' => __( 'No %s found', 'wpcf' ),
+                'description' => __( 'Used in the meta box and taxonomy list table. Default is "No {Singular Label in lowercase} found".', 'wpcf' ),
+                'label' => __('No item found', 'wpcf'),
+            ),
+            'no_terms' => array(
+                'title' => __( 'No %s', 'wpcf' ),
+                'description' => __( 'Used in the posts and media list tables. Default is "No {Plural Label in lowercase}".', 'wpcf' ),
+                'label' => __('No items', 'wpcf'),
+            ),
+            'filter_by_item' => array(
+                'title' => __( 'Filter by %s', 'wpcf' ),
+                'description' => __( 'Used only for hierarchical taxonomies, in the posts list table. Default is "Filter by {Singular Label in lowercase}".', 'wpcf' ),
+                'label' => __('Filter by item', 'wpcf'),
+            ),
+						'items_list_navigation' => array(
+                'title' => __( '%s list navigation', 'wpcf' ),
+                'description' => __( 'Label for the table pagination hidden heading. Default is "{Plural Label} list navigation".', 'wpcf' ),
+                'label' => __('Items list navigation', 'wpcf'),
+            ),
+            'items_list' => array(
+                'title' => __( '%s list', 'wpcf' ),
+                'description' => __( 'Label for the table hidden heading. Default is "{Plural Label} list".', 'wpcf' ),
+                'label' => __('Items list', 'wpcf'),
+            ),
+            'back_to_items' => array(
+                'title' => __( '&larr; Go to %s', 'wpcf' ),
+                'description' => __( 'Label displayed after a term has been updated. Default is "&larr; Go to {Plural Label}".', 'wpcf' ),
+                'label' => __('&larr; Go to Items', 'wpcf'),
+            ),
+						'item_link' => array(
+                'title' => __( '%s Link.', 'wpcf' ),
+                'description' => __( 'Title for a navigation link block variation. Default is "{Singular Label} Link".', 'wpcf' ),
+                'label' => __('Item Link', 'wpcf'),
+            ),
+            'item_link_description' => array(
+                'title' => __( 'A link to a %s', 'wpcf' ),
+                'description' => __( 'Description for a navigation link block variatio. Default is "A link to a {Singular Label in lowercase}".', 'wpcf' ),
+                'label' => __('A link to an item', 'wpcf'),
             ),
         );
 
@@ -619,7 +674,7 @@ class Types_Admin_Edit_Taxonomy extends Types_Admin_Page
                 '#name' => 'ct[labels][' . $name . ']',
                 '#title' => $label['label'],
                 '#description' => $label['description'],
-                '#value' => isset( $this->ct['labels'][$name] ) ? wp_kses_post($this->ct['labels'][$name]):'',
+                '#value' => isset( $this->ct['labels'][$name] ) ? wp_kses_post($this->ct['labels'][$name]):$label['title'],
                 '#inline' => true,
                 '#pattern' => '<tr><td><LABEL></td><td><ELEMENT><DESCRIPTION></td></tr>',
                 '#attributes' => array(

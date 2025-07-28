@@ -682,7 +682,7 @@ class DynamicSources {
 		$providers = ! empty( $atts['provider'] ) ? explode( self::VALUE_SEPARATOR, $atts['provider'] ) : [];
 		$sources = explode( self::VALUE_SEPARATOR, $atts['source'] );
 		$fields = explode( self::VALUE_SEPARATOR, $atts['field'] );
-		$default_value = explode( self::VALUE_SEPARATOR, $atts['default-value'] );
+		$default_value = explode( self::VALUE_SEPARATOR, isset( $atts['default-value'] ) ? $atts['default-value'] : '' );
 
 		// loop over all required sources
 		for( $i = 0; $i < count( $providers ); $i++ ) {
@@ -949,6 +949,8 @@ class DynamicSources {
 		// in order to allow proper deprecation code for their save components that are modified through the
 		// "blocks.getSaveElement' filter.
 		$dynamic_sources_data['version'] = strval( TOOLSET_DYNAMIC_SOURCES_LOADED );
+		global $wp_version;
+		$dynamic_sources_data['wpVersion'] = $wp_version;
 
 		wp_localize_script(
 			self::TOOLSET_DYNAMIC_SOURCES_SCRIPT_HANDLE,

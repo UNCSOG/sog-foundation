@@ -11,8 +11,11 @@ class Toolset_Theme_Integration_Settings_Model_Collection implements IteratorAgg
 		$this->label = $label;
 	}
 
-	public function getIterator() {
-		return $this->items;
+	/**
+	 * @return ArrayIterator
+	 */
+	public function getIterator(): Traversable {
+		return new ArrayIterator( $this->items );
 	}
 
 	public function addItem( $obj, $key = null ) {

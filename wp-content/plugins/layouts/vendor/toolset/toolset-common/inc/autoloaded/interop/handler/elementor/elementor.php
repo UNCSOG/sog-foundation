@@ -123,19 +123,11 @@ class ElementorModules implements HandlerInterface {
 	) {
 
 		if ( $this->is_views_active->is_met() ) {
-			$this->view_widget = $view_widget
-				? $view_widget
-				: new ViewWidget();
-
-			$this->toolset_elementor_widgets['view'] = $this->view_widget;
+			$this->toolset_elementor_widgets['view'] = $view_widget ? $view_widget : new ViewWidget();
 		}
 
 		if ( $this->is_forms_active->is_met() ) {
-			$this->form_widget = $form_widget
-				? $form_widget
-				: new FormWidget();
-
-			$this->toolset_elementor_widgets['form'] = $this->form_widget;
+			$this->toolset_elementor_widgets['form'] = $form_widget ? $form_widget : new FormWidget();
 		}
 
 		/**
@@ -168,7 +160,7 @@ class ElementorModules implements HandlerInterface {
 		\Elementor\Plugin::instance()->elements_manager->add_category(
 			'toolset-modules',
 			array(
-				'title' => __( 'Toolset', 'wpv-views' ),
+				'title' => 'Toolset',
 			)
 		);
 	}

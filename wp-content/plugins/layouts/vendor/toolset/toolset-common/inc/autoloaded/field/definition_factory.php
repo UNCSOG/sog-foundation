@@ -320,6 +320,22 @@ abstract class Toolset_Field_Definition_Factory implements Toolset_Field_Definit
 		return array_unique( $field_meta_keys );
 	}
 
+	/**
+	 * @return array[] Field configurations that have options in Types.
+	 * @since 3.4.1
+	 */
+	public function get_types_fields_with_options() {
+		$fields_from_options = $this->get_fields_from_options();
+		$fields_with_options = [];
+		foreach ( $fields_from_options as $field_slug => $field_configuration ) {
+			$field_options = toolset_getnest( $field_configuration, [ 'data', 'options' ], false );
+			if ( ! empty( $field_options ) ) {
+				$fields_with_options[ $field_slug ] = $field_configuration;
+			}
+		}
+		return $fields_with_options;
+	}
+
 
 	/**
 	 * Determine if there exists any Types field definition (within the domain) that uses this key.

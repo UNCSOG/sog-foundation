@@ -40,6 +40,9 @@ class Deletion {
 		// check if current user can delete the posts fields group
 		$this->access->current_user_can_delete_group_for_users();
 
+		do_action( 'wpcf_fields_group_delete', $group );
+		do_action( 'wpcf_user_fields_group_delete', $group );
+
 		// delete the group
 		$this->field_group_deletion->delete( $group );
 	}

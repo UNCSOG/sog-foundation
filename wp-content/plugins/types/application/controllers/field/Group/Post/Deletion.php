@@ -40,6 +40,9 @@ class Deletion {
 		// check if current user can delete the posts fields group
 		$this->access->current_user_can_delete_group_for_posts();
 
+		do_action( 'wpcf_fields_group_delete', $group );
+		do_action( 'wpcf_post_fields_group_delete', $group );
+
 		// check if it's allowed to convert rfg
 		$this->field_group_deletion->set_allow_convert_rfg_to_o2m( toolset_getget( 'wpcf_convert_rfg', false ) );
 

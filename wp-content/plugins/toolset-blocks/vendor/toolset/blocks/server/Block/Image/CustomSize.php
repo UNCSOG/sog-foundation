@@ -7,6 +7,7 @@ use ToolsetCommonEs\Utils\ImageResize;
 
 /**
  * Class CustomSize
+ *
  * @package ToolsetBlocks\Block\Image
  */
 class CustomSize {
@@ -46,10 +47,10 @@ class CustomSize {
 	 * @return mixed
 	 */
 	public function resize_by_shortcodes( $output, $tag, $attr ) {
-		foreach( $this->shortcodes as $shortcode ) {
+		foreach ( $this->shortcodes as $shortcode ) {
 			$output_resized = $this->resize_by_shortcode( $shortcode, $output, $tag, $attr );
 
-			if( $output_resized !== $output ) {
+			if ( $output_resized !== $output ) {
 				// Return the resized image.
 				return $output_resized;
 			}
@@ -68,12 +69,12 @@ class CustomSize {
 	 * @return mixed
 	 */
 	private function resize_by_shortcode( IShortcode $shortcode, $output, $tag, $attr ) {
-		if( $tag !== $shortcode->get_tag_name() ) {
+		if ( $tag !== $shortcode->get_tag_name() ) {
 			// The tag does not match the registered $shortcodes tag name. Return original output.
 			return $output;
 		}
 
-		if(
+		if (
 			! array_key_exists( $shortcode->get_width_attribute_key(), $attr ) ||
 			! array_key_exists( $shortcode->get_height_attribute_key(), $attr )
 		) {
@@ -93,7 +94,7 @@ class CustomSize {
 			$do_crop
 		);
 
-		if( ! $image_resized || $image_resized instanceof \WP_Error ) {
+		if ( ! $image_resized || $image_resized instanceof \WP_Error ) {
 			// For some reason the image could not be resized. Return original output.
 			return $output;
 		}

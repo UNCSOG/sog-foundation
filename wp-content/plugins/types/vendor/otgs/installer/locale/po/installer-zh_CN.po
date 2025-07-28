@@ -1,0 +1,764 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\\nContent-Transfer-Encoding: 8bit"
+"\\nProject-Id-Version:WPML_EXPORT\\nPOT-Creation-Date: \\nPO-Revision-Date: "
+"\\nLast-Translator: \\nLanguage-Team: \\nLanguage:en\\nMIME-Version: 1.0\\n"
+
+msgid " Your current site key (%s) does not match the selected product (%s)."
+msgstr "当前网站密钥（%s）与选定产品（%s）不一致。"
+
+msgid " to use auto-updates"
+msgstr "以使用自动更新"
+
+msgid ""
+"%1$s needs to connect to its server to check for new releases and security "
+"updates. Something in the network or security settings is preventing this. "
+"Please allow outgoing communication to %2$s to remove this notice."
+msgstr ""
+"%1$s需要连接到其服务器以检查新版本和安全更新。网络或安全设置中的某些内容正在阻止此操作。请允许与"
+"%2$s的出站通信以移除此通知。"
+
+msgid "%1$s plugin cannot connect to %2$s"
+msgstr "%1$s插件无法连接到%2$s"
+
+msgid "%1$sGet a key for this site%2$s"
+msgstr "%1$s获取此网站的密钥%2$s"
+
+msgid ""
+"%s cannot access %s to register. Try again to see if it's a temporary "
+"problem. If the problem continues, make sure that this site has access to "
+"the Internet."
+msgstr ""
+"%s无法访问"
+"%s以进行注册。请再试一次，看看这是不是暂时的问题。如果问题仍然存在，请确保此网站可以访问"
+"Internet。"
+
+msgid ""
+"%s cannot access %s to register. Try again to see if it's a temporary "
+"problem. If the problem continues, make sure that this site has access to "
+"the Internet. You can still use the plugin without registration, but you "
+"will not receive automated updates."
+msgstr ""
+"%s无法访问"
+"%s进行注册。再试一次，看看是否是暂时性的问题。如果问题仍然存在，请确保此网站可连接到互联网。无需注册您仍然可以使用插件，但您将不会收到自动更新。"
+
+msgid ""
+"%s cannot update because your site's registration is not valid. Please "
+"%sregister %s%s again for this site first."
+msgstr ""
+"%s不能更新，因为您的网站注册无效。请先为这个网站再次"
+"%s注册%s%s。"
+
+msgid ""
+"%s is registered on this site. You will receive automatic updates until %s"
+msgstr "%s已在本网站上注册。您会收到自动更新，直到%s"
+
+msgid ""
+"%s is registered on this site. Your Lifetime account gives you updates for "
+"life."
+msgstr "%s已在本网站上注册。您的终身帐户为您提供终身的更新。"
+
+msgid ""
+"%s plugin must be registered in order to receive stability and security "
+"updates. Without these updates, the plugin may become incompatible with new "
+"versions of WordPress, which include security patches."
+msgstr ""
+"%s插件必须注册才能接收稳定和安全更新。如果没有这些更新，插件可能会与包括安全补丁的新版本的"
+"WordPress不兼容。"
+
+msgid "%s support on wpml.org"
+msgstr "wpml.org上的%s支持"
+
+msgid "%s technical support"
+msgstr "%s技术支持"
+
+msgid ""
+"%s, responsible for receiving automated updates for WPML and Toolset, "
+"requires the following PHP component(s) in order to function:"
+msgstr ""
+"%s（负责接收WPML和Toolset的自动更新）需要以下"
+"PHP组件才能运行："
+
+msgid "%sRenew here%s."
+msgstr "%s这里更新%s。"
+
+msgid "(embedded)"
+msgstr "（嵌入）"
+
+msgid "Activate"
+msgstr "激活"
+
+msgid "Activate after download"
+msgstr "下载后激活"
+
+msgid "Activating %s"
+msgstr "正在激活%s"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "All Installer Instances"
+msgstr "所有安装程序实例"
+
+msgid "Already bought %s?"
+msgstr "已经购买了%s？"
+
+msgid "Already purchased %s?"
+msgstr "已经购买了%s？"
+
+msgid "Are you sure you want to remove this site key?"
+msgstr "您确定要删除此网站密钥？"
+
+msgid "Are you sure you want to unregister?"
+msgstr "您确定要取消注册？"
+
+msgid "Available"
+msgstr "可用"
+
+msgid "Beta"
+msgstr "测试版"
+
+msgid "Bought again?"
+msgstr "再次购买？"
+
+msgid "Buy %s"
+msgstr "购买%s"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Check"
+msgstr "检查"
+
+msgid "Check Now"
+msgstr "现在检查"
+
+msgid "Check for updates"
+msgstr "检查更新"
+
+msgid "Check my order status"
+msgstr "检查我的订单状态"
+
+msgid "Click to see individual components options."
+msgstr "单击查看单个组件选项。"
+
+msgid "Commercial"
+msgstr "商用"
+
+msgid "Component"
+msgstr "组件"
+
+msgid "Connection failed! Please refresh the page and try again. (%s)"
+msgstr "连接失败！请刷新页面然后重试。(%s)"
+
+msgid "Current"
+msgstr "当前"
+
+msgid "Delegated"
+msgstr "已委派"
+
+msgid "Development"
+msgstr "开发"
+
+msgid "Dismiss"
+msgstr "解雇"
+
+msgid "Do you have an account on %s?"
+msgstr "您在%s上有帐户吗？"
+
+msgid "Don't send this information and skip compatibility alerts"
+msgstr "请勿发送此信息并跳过兼容性警报"
+
+msgid "Download"
+msgstr "下载"
+
+msgid ""
+"Download failed!\\n\\nClick OK to revalidate your subscription or CANCEL to "
+"try again."
+msgstr ""
+"下载失败！\\n"
+"\\n单击“确定”以重新验证您的订阅，或单击“取消”以再次尝试。"
+
+msgid "Download failed!\\n\\nPlease refresh the page and try again."
+msgstr "下载失败！\\n\\n请刷新页面然后重试。"
+
+msgid "Downloading"
+msgstr "正在下载"
+
+msgid ""
+"Downloading is not possible because WordPress cannot write into the plugins "
+"folder. %sHow to fix%s."
+msgstr ""
+"因为WordPress不能写入到插件文件夹，无法下载。%s如何修复"
+"%s。"
+
+msgid ""
+"Downloading is not possible. WordPress cannot create required folders "
+"because of the\\n                                        256 characters "
+"limitation of the current Windows environment."
+msgstr ""
+"无法下载。由于当前Windows环境的256个字符限制，"
+"\\nWordPress无法创建所需的文件夹。"
+
+msgid "Empty site key!"
+msgstr "网站密钥是空的！"
+
+msgid "Enter site key"
+msgstr "输入网站密钥"
+
+msgid "Enter the site key for %1$s."
+msgstr "输入%1$s的网站密钥。"
+
+msgid ""
+"Enter the site key, from your %1$s account, to receive automatic updates for "
+"%2$s."
+msgstr ""
+"从您的%1$s帐户输入网站密钥，以接收%2$s的自动更新。"
+
+msgid "Extend Subscription"
+msgstr "延长订阅"
+
+msgid "Extend your subscription"
+msgstr "延长订阅"
+
+msgid "For retrieving Installer debug information use the %s page."
+msgstr "要检索安装程序调试信息，请使用%s页面。"
+
+msgid "Get a key for this site"
+msgstr "获取此网站的密钥"
+
+msgid "Got renewal already?"
+msgstr "已经续约了？"
+
+msgid "Great! You just need to extend your subscription."
+msgstr "太好了！您只需要延长您的订阅。"
+
+msgid "High priority"
+msgstr "高优先级"
+
+msgid "I do not remember"
+msgstr "我不记得了"
+
+msgid "I moved the site to this new URL"
+msgstr "我将网站移到了这个新的URL"
+
+msgid "Ignore and don't ask me again"
+msgstr "忽略，不再询问"
+
+msgid ""
+"In order to see the products information, please run the %smanual updates "
+"check%s to initialize the products list or (temporarily) remove the above "
+"code."
+msgstr ""
+"为了查看产品信息，请运行%s手动检查更新"
+"%s，以初始化产品列表或（临时）去掉以上代码。"
+
+msgid "Incorrect setup"
+msgstr "设置不正确"
+
+msgid "Individual components"
+msgstr "单个组件"
+
+msgid ""
+"Information about new versions is invalid. It may be a temporary "
+"communication problem, please check for updates again."
+msgstr "有关新版本的信息无效。这可能是暂时的通讯问题，请再次检查更新。"
+
+msgid ""
+"Information about versions of %s are invalid. It may be a temporary "
+"communication problem, please check for updates again."
+msgstr ""
+"有关"
+"%s版本的信息无效。这可能是暂时的通讯问题，请再次检查更新。"
+
+msgid "Install and activate"
+msgstr "安装并激活"
+
+msgid "Installed"
+msgstr "已安装"
+
+msgid "Installer"
+msgstr "安装程序"
+
+msgid "Installer Log"
+msgstr "安装程序日志"
+
+msgid "Installer Support"
+msgstr "安装程序支持"
+
+msgid "Installer System Status"
+msgstr "安装程序系统状态"
+
+msgid ""
+"Installer cannot contact our updates server to get information about the "
+"available products and check for new versions. If you are seeing this "
+"message for the first time, you can ignore it, as it may be a temporary "
+"communication problem. If the problem persists and your WordPress admin is "
+"slowing down, you can disable automated version checks. Add the following "
+"line to your wp-config.php file:"
+msgstr ""
+"安装程序无法与我们的更新服务器联系以获得有关可用产品的信息以及检查是否有新的版本。如果您是第一次看到这条消息，可以忽略它，因为这可能是一个暂时的通信问题。如果问题一直存在，且您的"
+"WordPress管理页面变慢，可以禁用自动版本检查。添加一下一行到"
+"wp-config.php文件："
+
+msgid ""
+"Installer cannot display the products information because the automatic "
+"updating for %s was explicitly disabled with the configuration below "
+"(usually in wp-config.php):"
+msgstr ""
+"安装程序无法显示产品信息，因为以下配置明确禁用"
+"%s的自动更新（通常在wp-config.php中）："
+
+msgid "Installing %s"
+msgstr "正在安装%s"
+
+msgid "Invalid product"
+msgstr "无效产品"
+
+msgid "Invalid request!"
+msgstr "无效的请求！"
+
+msgid "Invalid site key for the current site."
+msgstr "当前网站的网站密钥无效。"
+
+msgid ""
+"Invalid site key for the current site. If the error persists, try to un-"
+"register first and then register again with the same site key."
+msgstr "当前站点的站点密钥无效。如果错误仍然存​​在，请尝试先取消注册，然后使用相同的站点密钥再次注册。"
+
+msgid "Is this still a development site?"
+msgstr "这仍然是一个开发网站吗？"
+
+msgid ""
+"It looks like this site is a copy of a different site, or it has moved to a "
+"different URL."
+msgstr ""
+"看起来此网站是其他网站的副本，或者已移动到其他URL。"
+
+msgid ""
+"It means you will not receive updates. This can lead to stability and even "
+"security issues."
+msgstr "这意味着您将不会收到更新。这可能导致稳定甚至安全问题。"
+
+msgid "Learn more"
+msgstr "了解更多信息"
+
+msgid "Learn more: %s"
+msgstr "了解更多：%s"
+
+msgid "Log is empty"
+msgstr "日志是空的"
+
+msgid "More details"
+msgstr "更多详情"
+
+msgid "Need help?"
+msgstr "需要帮助吗？"
+
+msgid "Next"
+msgstr "下一步"
+
+msgid "No"
+msgstr "否"
+
+msgid "No repositories defined."
+msgstr "未定义库。"
+
+msgid "No worries. We can check that for you."
+msgstr "别担心。我们可以帮您查一下。"
+
+msgid "OK. You need to set up renewal for %s."
+msgstr "好的。您需要为%s设置续订。"
+
+msgid "OTGS Installer"
+msgstr "OTGS Installer"
+
+msgid "Operation complete!"
+msgstr "操作完成！"
+
+msgid "Path"
+msgstr "路径"
+
+msgid "Please install %s to allow translating %s."
+msgstr "请安装%s以允许翻译%s。"
+
+msgid "Please note that the site key is case sensitive."
+msgstr "请注意，网站密钥区分大小写。"
+
+msgid ""
+"Please update the URL of currently used site key %1$sin your account%2$s."
+msgstr "请更新%1$s您的帐户中%2$s当前使用的网站密钥的URL。"
+
+msgid "Please update your site key's URL %1$sin your account%2$s."
+msgstr "请%1$s在您的帐户中%2$s更新网站密钥的URL。"
+
+msgid ""
+"Please update your site key's URL and set it as a production site %1$sin "
+"your account%2$s."
+msgstr ""
+"请更新网站密钥的URL，并%1$s在您的帐户中"
+"%2$s将其设置为生产网站。"
+
+msgid "Plugin"
+msgstr "插件"
+
+msgid "Privacy and data usage policy"
+msgstr "隐私和数据使用政策"
+
+msgid "Production"
+msgstr "生产"
+
+msgid "Register"
+msgstr "注册"
+
+msgid "Register %s"
+msgstr "注册%s"
+
+msgid "Registered"
+msgstr "已注册"
+
+msgid "Release notes"
+msgstr "发行说明"
+
+msgid "Released"
+msgstr "已发布"
+
+msgid "Remember my preference."
+msgstr "记住我的偏好。"
+
+msgid "Remember to remove %s from this website"
+msgstr "请记得从此网站中删除%s"
+
+msgid "Remember to remove %s from this website."
+msgstr "请记得从该网站删除%s。"
+
+msgid "Remember to remove %s from this website. %sCheck my order status%s"
+msgstr "请记得从该网站删除%s。%s检查我的订单状态%s"
+
+msgid "Remove current site key (%s)"
+msgstr "删除当前网站密钥（%s）"
+
+msgid "Renew %s"
+msgstr "更新%s"
+
+msgid "Report to"
+msgstr "报告给"
+
+msgid "Reporting to"
+msgstr "报告给"
+
+msgid "Request Arguments"
+msgstr "请求参数"
+
+msgid "Request URL"
+msgstr "请求URL"
+
+msgid "Required PHP Libraries"
+msgstr "需要PHP库"
+
+msgid "Response"
+msgstr "响应"
+
+msgid "Return to the plugins page"
+msgstr "返回插件页面"
+
+msgid "Return to the updates page"
+msgstr "返回到更新页面"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "See the %1$s and let us know in %2$s."
+msgstr "查看%1$s并在%2$s中告知我们。"
+
+msgid ""
+"Send theme and plugins information, in order to get faster support and "
+"compatibility alerts"
+msgstr "发送主题和插件信息，以获得更快的支持和兼容性警报"
+
+msgid "Set Up Renewal For %s"
+msgstr "为%s设置续订"
+
+msgid "Site Moved or Copied - %s require your action"
+msgstr "站点已移动或复制 - %s需要您的操作"
+
+msgid "Site key"
+msgstr "网站密钥"
+
+msgid ""
+"Site-key was set by %s, most likely in wp-config.php. Please remove the "
+"constant before attempting to register."
+msgstr ""
+"网站键由%s设置，很可能在wp-config."
+"php中。请在尝试注册之前删除该常数。"
+
+msgid ""
+"Site-key was set by %s, most likely in wp-config.php. Please remove the "
+"constant before attempting to unregister."
+msgstr ""
+"网站键由%s设置，很可能在wp-config."
+"php中。请在尝试取消注册之前删除该常数。"
+
+msgid ""
+"Something went wrong and we could not install all updates from the %s "
+"channel. Click here to %stry again%s. If the errors persist, please switch "
+"back to the Production channel and contact the %s%s support%s."
+msgstr ""
+"出现问题了，我们无法从%s频道安装所有更新。单击此处"
+"%s再试一次"
+"%s。如果错误仍然存在，请切换回生产频道并联系%s%s支持"
+"%s。"
+
+msgid "Sorry, you are not allowed to manage Installer for this site."
+msgstr "很抱歉，您不能管理此网站的安装程序。"
+
+msgid "Subscription is expired."
+msgstr "订阅过期。"
+
+msgid "Switch"
+msgstr "切换"
+
+msgid ""
+"The plugins will update to the most recent version in the channel that you "
+"selected."
+msgstr "插件将更新为您选择的频道中的最新版本。"
+
+msgid ""
+"There was a problem switching to the %s channel. You can %sretry%s. If the "
+"problem continues, please %sdownload %s%s and install again manually"
+msgstr ""
+"切换到%s频道时出现问题。您可以%s重试"
+"%s。如果问题仍然存在，请重新%s下载%s %s并手动安装"
+
+msgid "This is a copy of my original site"
+msgstr "这是我原来网站的副本"
+
+msgid "This is a development / staging site"
+msgstr "这是一个开发/准备站点"
+
+msgid ""
+"This page lets you install plugins and update existing plugins. To remove "
+"any of these plugins, go to the %splugins%s page and if you have the "
+"permission to remove plugins you should be able to do this."
+msgstr ""
+"此页面让您可以安装插件并更新现有的插件。要删除这些插件中的任意一个，转到"
+"%s插件"
+"%s页面，如果允许您删除插件，您应该能够做到这一点。"
+
+msgid "This site is registered on %s as a development site."
+msgstr "此网站已在%s上注册为开发网站。"
+
+msgid "This site is registered on Toolset.com as a development site."
+msgstr "此网站在Toolset.com上注册为开发网站。"
+
+msgid "This site is registered on WPML.org as a development site."
+msgstr "此网站在 WPML.org上注册为开发网站。"
+
+msgid ""
+"This site is using %s plugin, which is not paid for. After receiving a "
+"refund, you should remove this plugin from your sites. Using unregistered "
+"plugins means that you are not receiving stability and security updates and "
+"will ultimately lead to problems running the site."
+msgstr ""
+"此网站正在使用未付费的"
+"%s插件。在收到退款后，您应该从您的网站上删除此插件。使用未注册的插件意味着您不会收到稳定和安全更新，最终将导致运行站点出现问题。"
+
+msgid ""
+"This site is using the %s plugin, which has not been paid for. After "
+"receiving a refund, you should remove this plugin from your sites. Using "
+"unregistered plugins means you are not receiving stability and security "
+"updates and will ultimately lead to problems running the site."
+msgstr ""
+"此网站正在使用尚未付费的"
+"%s插件。在收到退款后，您应从您的网站上删除此插件。使用未注册的插件意味着您不会收到稳定和安全更新，最终将导致网站运行出现问题。"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "To install and update %s, please %sregister%s %s for this site."
+msgstr "要安装和更新%s，请为此网站%s注册%s %s。"
+
+msgid ""
+"To select different update channels (beta, development) you must update your "
+"existing products to their most recent stable versions."
+msgstr "要选择不同的更新频道（测试版，开发版），您必须将现有产品更新为最新的稳定版本。"
+
+msgid "Toolset API server"
+msgstr "Toolset API 服务器"
+
+msgid "Unknown repository"
+msgstr "未知库"
+
+msgid "Unregister %s from this site"
+msgstr "从此网站取消注册%s"
+
+msgid "Update Plugin"
+msgstr "更新插件"
+
+msgid "Updates channel:"
+msgstr "更新频道："
+
+msgid "Updating %s"
+msgstr "正在更新%s"
+
+msgid ""
+"Updating the plugins on your site. Please don't close this page or navigate "
+"away."
+msgstr "更新您网站上的插件。请不要关闭此页或离开。"
+
+msgid "Upgrade"
+msgstr "升级"
+
+msgid "Upgrade your account"
+msgstr "升级您的帐户"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "WPML API server"
+msgstr "WPML API 服务器"
+
+msgid ""
+"We were not able to copy some plugin files. This is usually due to issues "
+"with permissions for WordPress content or plugins folder."
+msgstr ""
+"我们无法复制一些插件文件。这通常是由于"
+"WordPress内容或插件文件夹的权限问题造成的。"
+
+msgid ""
+"When this site goes live, remember to %1$s from \"development\" to "
+"\"production\" to remove this message. %2$s"
+msgstr ""
+"当此网站上线时，请记住%1$s，将\"开发\"更改为\"生产"
+"\"以删除此消息。%2$s"
+
+msgid "Yes"
+msgstr "是"
+
+msgid ""
+"You are using a potentially less stable channel for %s. If you didn't enable "
+"this on purpose, you should switch to the 'Production' channel."
+msgstr ""
+"您正在使用"
+"%s的一个可能不太稳定的频道。如果您没有特意启用，您应该切换到“生产”频道。"
+
+msgid "You are using an expired %s account."
+msgstr "您使用的是过期的%s帐户。"
+
+msgid "You are using an expired account of %s."
+msgstr "您使用的是过期的%s帐户。"
+
+msgid "You are using an expired account of %s. %sExtend your subscription%s"
+msgstr "您使用的是过期的%s帐户。%s请延长订阅%s"
+
+msgid ""
+"You are using an invalid site key defined as the constant %s (most likely in "
+"wp-config.php).\\n                                                Please "
+"remove it or use the correct value in order to be able to register correctly."
+msgstr ""
+"您正在使用定义为常量%s的无效站点密钥（很可能在wp-"
+"config.php中配置）。"
+"\\n请将其删除或使用正确的值以便能够正确注册。"
+
+msgid ""
+"You are using an unregistered version of %s and are not receiving "
+"compatibility and security updates"
+msgstr ""
+"您正在使用未注册的%s版本，将不会收到兼容性和安全更新"
+
+msgid ""
+"You are using an unregistered version of %s and are not receiving "
+"compatibility and security updates. %sRegister now%s"
+msgstr ""
+"您使用的是未注册的%s版本，将不会收到兼容和安全更新。"
+"%s立即注册%s"
+
+msgid "You are using the complementary %1$s. For the %2$s, %3$s."
+msgstr "您使用的是免费版的%1$s。要获得%2$s，%3$s。"
+
+msgid ""
+"You do not have a %1$s account yet. You need to set up a renewal for %2$s."
+msgstr "您还没有%1$s帐户。您需要为%2$s设置续订。"
+
+msgid "You have a %s account. You just need to extend your subscription."
+msgstr "您有一个%s帐户。您只需要延长您的订阅。"
+
+msgid ""
+"You have an old Types-free subscription, which doesn't provide automatic "
+"updates. %s"
+msgstr "您使用的是旧的无Types订阅，它不提供自动更新。%s"
+
+msgid ""
+"You have an old Types-free subscription, which doesn't provide automatic "
+"updates. %sUpgrade your account%s"
+msgstr ""
+"您使用的是旧的无Types订阅，它不提供自动更新。"
+"%s升级您的帐户%s"
+
+msgid ""
+"You will have to renew your subscription in order to continue getting the "
+"updates and support."
+msgstr "您必须续订以便继续获得更新和支持。"
+
+msgid "Your Email Address"
+msgstr "您的电子邮件地址"
+
+msgid ""
+"Your site is using an expired %s account, which means you won't receive "
+"updates. This can lead to stability and security issues."
+msgstr ""
+"您的站点正在使用过期的"
+"%s帐户，这意味着您将不会收到更新。这可能导致稳定和安全问题。"
+
+msgid ""
+"Your subscription appears to no longer be valid. Please try to register "
+"again using a valid site key."
+msgstr "订阅似乎不再有效。请尝试使用有效的网站密钥再次注册。"
+
+msgid "Your subscription expires in %d day."
+msgstr "您的订阅在%d天后到期。"
+
+msgid "Your subscription expires in %d days."
+msgstr "您的订阅在%d天后到期。"
+
+msgid "activated"
+msgstr "已激活"
+
+msgid "activating"
+msgstr "正在激活"
+
+msgid "communication error details"
+msgstr "通信错误详细信息"
+
+msgid "complete set of features"
+msgstr "完整的功能"
+
+msgid "downloaded"
+msgstr "已下载"
+
+msgid "downloading..."
+msgstr "下载中..."
+
+msgid "failed!"
+msgstr "失败！"
+
+msgid "installed"
+msgstr "已安装"
+
+msgid "installing..."
+msgstr "安装中..."
+
+msgid "update the site key"
+msgstr "更新站点密钥"
+
+msgid "updated"
+msgstr "已更新"
+
+msgid "updating..."
+msgstr "更新中..."
+
+msgid "upgrade to Toolset"
+msgstr "请升级到Toolset"
+
+msgid "which theme and plugins you are using."
+msgstr "您正在使用什么主题和插件。"

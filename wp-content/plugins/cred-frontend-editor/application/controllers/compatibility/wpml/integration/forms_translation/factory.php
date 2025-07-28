@@ -27,6 +27,8 @@ class Factory {
 		switch ( $mode ) {
 			case 'packages':
 				return $dic->make( '\OTGS\Toolset\CRED\Controller\Compatibility\Wpml\Integration\FormsTranslation\Packages' );
+			case 'ate':
+				return $dic->make( '\OTGS\Toolset\CRED\Controller\Compatibility\Wpml\Integration\FormsTranslation\ATE' );
 			case 'legacy':
 				return $dic->make( '\OTGS\Toolset\CRED\Controller\Compatibility\Wpml\Integration\FormsTranslation\Legacy' );
 			default:

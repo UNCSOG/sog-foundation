@@ -5,7 +5,7 @@ Plugin URI: https://toolset.com/?utm_source=viewsplugin&utm_campaign=views&utm_m
 Description: Toolset Blocks lets you create beautiful dynamic sites with ease. Design templates, archives and Views for any content type using a drag-and-drop interface.
 Author: OnTheGoSystems
 Author URI: https://toolset.com
-Version: 1.6.8
+Version: 1.6.20
 */
 
 
@@ -18,6 +18,6 @@ if ( defined( 'WPV_VERSION' ) ) {
 	require_once dirname( __FILE__ ) . '/deactivate/by-blocks-beta.php';
 	wpv_force_deactivate_by_blocks_beta( plugin_basename( __FILE__  ) );
 } else {
-	define( 'WPV_VERSION', '3.6.8' );
+	define( 'WPV_VERSION', '3.6.20' );
 	require_once dirname( __FILE__ ) . '/loader.php';
 }

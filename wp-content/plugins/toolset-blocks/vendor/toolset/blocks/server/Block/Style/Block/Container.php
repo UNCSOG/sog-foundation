@@ -52,7 +52,7 @@ class Container extends Common {
 						'paddingBottom' => '25px',
 					) :
 					array(
-						'enabled' => true
+						'enabled' => true,
 					);
 
 				if ( $settings === null ) {
@@ -79,7 +79,7 @@ class Container extends Common {
 				}
 
 				$margin_defaults = array(
-					'enabled' => true
+					'enabled' => true,
 				);
 
 				if ( is_array( $settings ) ) {
@@ -102,13 +102,13 @@ class Container extends Common {
 									 isset( $config['dynamic']['backgroundImage']['isActive'] ) &&
 									 $config['dynamic']['backgroundImage']['isActive'];
 
-			if( $is_dynamic_background ) {
+			if ( $is_dynamic_background ) {
 				$background_settings = isset( $config['style']['background'] ) ? $config['style']['background'] : array();
 				$background_settings['image']['url'] = isset( $config['backgroundImage'] ) ?
 					$config['backgroundImage'] :
 					null;
 
-				if( $style = $factory->get_attribute( 'background', $background_settings ) ) {
+				if ( $style = $factory->get_attribute( 'background', $background_settings ) ) {
 					$this->add_style_attribute( $style, self::KEY_STYLES_FOR_COMMON_STYLES );
 				}
 			}
@@ -116,7 +116,7 @@ class Container extends Common {
 
 		$inner_styles = isset( $config['inner'] ) && is_array( $config['inner'] ) ? $config['inner'] : false;
 
-		if( $inner_styles ) {
+		if ( $inner_styles ) {
 			// Max Wdith
 			$factory->apply_style_to_block_for_all_devices(
 				$this,
@@ -125,7 +125,7 @@ class Container extends Common {
 				self::KEY_STYLES_FOR_INNER,
 				'root',
 				function( $settings ) {
-					if( ! is_array( $settings ) ) {
+					if ( ! is_array( $settings ) ) {
 						return $settings;
 					}
 					$settings['widthUnit'] = isset( $settings['widthUnit'] ) ? $settings['widthUnit'] : '%';
@@ -146,12 +146,12 @@ class Container extends Common {
 		$content = parent::filter_content( $content );
 
 		$style_attributes = $this->get_style_attributes();
-		$background = isset( $style_attributes[self::KEY_STYLES_FOR_COMMON_STYLES]['background'] ) ?
-			$style_attributes[self::KEY_STYLES_FOR_COMMON_STYLES]['background']->get_css() :
+		$background = isset( $style_attributes[ self::KEY_STYLES_FOR_COMMON_STYLES ]['background'] ) ?
+			$style_attributes[ self::KEY_STYLES_FOR_COMMON_STYLES ]['background']->get_css() :
 			'';
 
 		$content = preg_replace_callback(
-			'/(\<[^\>]*'.$this->get_id().'[^\>]*)(data-bg)=\"([^\"]*)\"/',
+			'/(\<[^\>]*' . $this->get_id() . '[^\>]*)(data-bg)=\"([^\"]*)\"/',
 			function( $matches ) use ( $background ) {
 				// When the style attribute already provides a background url, we just need to replace that.
 				$new_background = strpos( $background, 'url' ) !== false
@@ -190,18 +190,34 @@ class Container extends Common {
 		return array(
 			parent::CSS_SELECTOR_ROOT => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'background-color', 'border-radius', 'background', 'padding', 'margin', 'box-shadow', 'border',
-					'min-height', 'vertical-align', 'display'
-				)
+					'background-color',
+					'border-radius',
+					'background',
+					'padding',
+					'margin',
+					'box-shadow',
+					'border',
+					'min-height',
+					'vertical-align',
+					'display',
+				),
 			),
 			'> .tb-container-inner' => array(
-				self::KEY_STYLES_FOR_INNER => array( 'max-width' )
+				self::KEY_STYLES_FOR_INNER => array( 'max-width' ),
 			),
 			'p' => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'font-size', 'font-family', 'font-style', 'font-weight', 'line-height', 'letter-spacing',
-					'text-decoration', 'text-shadow', 'text-transform', 'color'
-				)
+					'font-size',
+					'font-family',
+					'font-style',
+					'font-weight',
+					'line-height',
+					'letter-spacing',
+					'text-decoration',
+					'text-shadow',
+					'text-transform',
+					'color',
+				),
 			),
 		);
 	}

@@ -9,6 +9,12 @@ namespace ToolsetCommonEs\Assets\File;
  */
 class Factory {
 
+	/** @var FileCSS[] Storage for already requested files. */
+	private $css_files = [];
+
+	/** @var FileJS[] Storage for already requested files. */
+	private $js_files = [];
+
 	/**
 	 * @param string $file Path to file.
 	 *
@@ -16,7 +22,13 @@ class Factory {
 	 * @throws \Exception No valid css file.
 	 */
 	public function css( $file ) {
-		return new FileCSS( $file );
+		if ( ! array_key_exists( $file, $this->css_files ) ) {
+			// First time the file is requested.
+			$this->css_files[ $file ] = new FileCSS( $file );
+		}
+
+		return $this->css_files[ $file ];
+
 	}
 
 	/**
@@ -26,6 +38,12 @@ class Factory {
 	 * @throws \Exception No valid js file.
 	 */
 	public function js( $file ) {
-		return new FileJS( $file );
+		if ( ! array_key_exists( $file, $this->js_files ) ) {
+			// First time the file is requested.
+			$this->js_files[ $file ] = new FileJS( $file );
+		}
+
+		return $this->js_files[ $file ];
+
 	}
 }

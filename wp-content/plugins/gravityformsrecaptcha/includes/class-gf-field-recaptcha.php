@@ -60,19 +60,21 @@ class GF_Field_RECAPTCHA extends GF_Field {
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		$plugin_settings = gf_recaptcha()->get_plugin_settings_instance();
-		$site_key        = $plugin_settings->get_recaptcha_key( 'site_key_v3' );
-		$secret_key      = $plugin_settings->get_recaptcha_key( 'secret_key_v3' );
-
-		if ( empty( $site_key ) || empty( $secret_key ) ) {
-			GFCommon::log_error( __METHOD__ . sprintf( '(): reCAPTCHA secret keys not saved in the reCAPTCHA Settings (%s). The reCAPTCHA field will always fail validation during form submission.', admin_url( 'admin.php' ) . '?page=gf_settings&subview=recaptcha' ) );
+		if ( gf_recaptcha()->get_connection_type() === 'enterprise' ) {
+			$site_key_attr = '';
+			if ( ! gf_recaptcha()->enterprise_keys_configured() ) {
+				gf_recaptcha()->log_error( __METHOD__ . '(): Enterprise project and/or key not saved in the reCAPTCHA Settings.' );
+			}
+		} else {
+			$plugin_settings = gf_recaptcha()->get_plugin_settings_instance();
+			$site_key_attr   = sprintf( "data-sitekey='%s'", esc_attr( $plugin_settings->get_recaptcha_key( 'site_key_v3' ) ) );
 		}
 
 		$this->formId = absint( rgar( $form, 'id' ) );
 		$name         = $this->get_input_name();
 		$tabindex     = GFCommon::$tab_index > 0 ? GFCommon::$tab_index ++ : 0;
 
-		return "<div class='gf_invisible ginput_recaptchav3' data-sitekey='" . esc_attr( $site_key ) . "' data-tabindex='{$tabindex}'>"
+		return "<div class='gf_invisible ginput_recaptchav3' {$site_key_attr} data-tabindex='{$tabindex}'>"
 		       . '<input id="' . esc_attr( $name ) . '" class="gfield_recaptcha_response" type="hidden" name="' . esc_attr( $name ) . '" value=""/>'
 		       . '</div>';
 	}
@@ -93,13 +95,16 @@ class GF_Field_RECAPTCHA extends GF_Field {
 	public function validation_check( $validation_data ) {
 		$this->formId = absint( rgars( $validation_data, 'form/id' ) );
 
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! isset( $_POST[ $this->get_input_name() ] ) ) {
-			gf_recaptcha()->log_debug( __METHOD__ . '(): Aborting; REST request.' );
+		if ( $this->is_valid_field_data() ) {
+
+			// Set is_spam value.
+			$validation_data['is_spam'] = gf_recaptcha()->is_spam_submission( rgar( $validation_data, 'form' ) );
 
 			return $validation_data;
 		}
 
-		return $this->is_valid_field_data() ? $validation_data : $this->invalidate( $validation_data );
+		// Set is_valid to false and return the validation data.
+		return $this->invalidate( $validation_data );
 	}
 
 	/**
@@ -140,10 +145,15 @@ class GF_Field_RECAPTCHA extends GF_Field {
 	 * Returns the value of the input name attribute.
 	 *
 	 * @since 1.1
+	 * @since 1.2 Added optional form_id parameter.
 	 *
 	 * @return string
 	 */
-	public function get_input_name() {
+	public function get_input_name( $form_id = null ) {
+		if ( $form_id ) {
+			$this->formId = absint( $form_id );
+		}
+
 		return 'input_' . md5( 'recaptchav3' . gf_recaptcha()->get_version() . $this->formId );
 	}
 

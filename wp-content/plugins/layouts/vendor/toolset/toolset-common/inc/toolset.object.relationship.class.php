@@ -12,13 +12,20 @@ if ( ! class_exists( 'Toolset_Object_Relationship', false ) ) {
 	class Toolset_Object_Relationship
 	{
 		private static $instance;
-		
+
+		// Those properties might not need to be public, but who knows by now?
+		/** @var array */
+		public $relations = array();
+		/** @var int */
+		public $post_relationship_depth	= 0;
+		/** @var array */
+		public $post_relationship_track	= array();
+		/** @var array */
+		public $post_relationship = array();
+
 		public function __construct()
         {
-			$this->relations				= array();
-			$this->post_relationship_depth	= 0;
-			$this->post_relationship_track	= array();
-			$this->post_relationship		= array();
+			
 			
             add_action( 'admin_init',								array( $this, 'admin_init' ) );
 			

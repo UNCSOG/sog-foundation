@@ -139,12 +139,18 @@ class WPToolset_Field_File extends WPToolset_Field_Textfield {
 				// repeatable file field
 				$value = reset( $value );
 			}
-			$file_path = parse_url( $value );
-			if ( $file_path && isset( $file_path['path'] ) ) {
-				$file = pathinfo( $file_path['path'] );
+
+			if ( $value ) {
+				$file_path = parse_url( $value );
+				if ( $file_path && isset( $file_path['path'] ) ) {
+					$file = pathinfo( $file_path['path'] );
+				} else {
+					$file = pathinfo( $value );
+				}
 			} else {
-				$file = pathinfo( $value );
+				$file = [];
 			}
+			
 			if (
 				isset( $file['extension'] ) && in_array( strtolower( $file['extension'] ), array(
 					'jpg',

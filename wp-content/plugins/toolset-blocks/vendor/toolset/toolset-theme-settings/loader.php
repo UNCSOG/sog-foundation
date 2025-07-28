@@ -26,7 +26,7 @@
 * so we allow up to 1000 changes per dev cycle.
 *
 */
-$toolset_theme_settings_version = 153000;
+$toolset_theme_settings_version = 155000;
 
 
 // ----------------------------------------------------------------------//

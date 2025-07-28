@@ -360,7 +360,7 @@ abstract class CRED_Form_Base implements ICRED_Form_Base {
 
 		$mime_types = wp_get_mime_types();
 		CRED_StaticClass::$_allowed_mime_types = array_merge( $mime_types, array( 'xml' => 'text/xml' ) );
-		CRED_StaticClass::$_allowed_mime_types = apply_filters( 'upload_mimes', CRED_StaticClass::$_allowed_mime_types );
+		CRED_StaticClass::$_allowed_mime_types = apply_filters( 'upload_mimes', CRED_StaticClass::$_allowed_mime_types, null );
 
 		/**
 		 * sanitize input data

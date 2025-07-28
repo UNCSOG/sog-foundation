@@ -38,5 +38,5 @@ class DicLoader {
 }
 
 // Routes
-require_once( TB_PATH . '/server/routes.php' );
-require_once( TB_PATH . '/server/WPML/AttributesSetter.php' );
+require_once TB_PATH . '/server/routes.php';
+require_once TB_PATH . '/server/WPML/AttributesSetter.php';

@@ -66,7 +66,7 @@ class WcQuery extends \WC_Query {
 		}
 
 		// Extend key methods beyond frontend and main query.
-		$parent_class = get_parent_class();
+		$parent_class = get_parent_class( $this );
 		if ( method_exists( $parent_class, 'pre_get_posts' ) ) {
 			add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 999 );
 		}

@@ -24,6 +24,8 @@ class FormsTranslation {
 	public function initialize() {
 		$packages = $this->factory->get_controller( 'packages' );
 		$packages->initialize();
+		$ate = $this->factory->get_controller( 'ate' );
+		$ate->initialize();
 
 		$legacy = $this->factory->get_controller( 'legacy' );
 		$legacy->initialize();

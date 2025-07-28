@@ -92,7 +92,10 @@ class WPV_Meta_Frontend_Filter {
 			$decimals = $meta_type . '-field-' . $meta_name . '_decimals';
 
 			if( isset( $view_settings[$decimals] ) ) {
-				$type = 'DECIMAL(10, ' . $view_settings[$decimals] . ')';
+				$type = 'DECIMAL(11,' . $view_settings[$decimals] . ')';
+			} else {
+				// Currently, frontend filters casting to DECIMAL can not set decimal points.
+				$type = 'DECIMAL(11,10)';
 			}
 		}
 
@@ -949,7 +952,7 @@ class WPV_Meta_Frontend_Filter {
 			}
 		}
 
-		if ( ! in_array( $type, array( 'select', 'multi-select', 'radio', 'radios', 'checkbox', 'checkboxes', 'text', 'textfield', 'date', 'datepicker' ) ) ) {
+		if ( ! in_array( $type, array( 'select', 'multi-select', 'radio', 'radios', 'checkbox', 'checkboxes', 'text', 'textfield', 'integer', 'natural', 'date', 'datepicker' ) ) ) {
 			$type = 'textfield';
 		}
 
@@ -969,6 +972,15 @@ class WPV_Meta_Frontend_Filter {
 		switch ( $type ) {
 			case 'text':
 			case 'textfield':
+				$output = WPV_Meta_Frontend_Filter::wpv_control_postmeta_textfield( $atts );
+				return $output;
+			case 'integer':
+				$atts['type'] = 'number';
+				$output = WPV_Meta_Frontend_Filter::wpv_control_postmeta_textfield( $atts );
+				return $output;
+			case 'natural':
+				$atts['type'] = 'number';
+				$atts['min'] = '0';
 				$output = WPV_Meta_Frontend_Filter::wpv_control_postmeta_textfield( $atts );
 				return $output;
 			case 'date':
@@ -1201,11 +1213,11 @@ class WPV_Meta_Frontend_Filter {
 	public static function wpv_control_postmeta_textfield( $atts ) {
 		$postmeta_filter_output = '';
 		$input_attributes = array(
-			'type'	=> 'text',
-			'id'	=> 'wpv_control_textfield_' . esc_attr( $atts['url_param'] ),
-			'name'	=> esc_attr( $atts['url_param'] ),
-			'value'	=> isset( $_GET[ $atts['url_param'] ] ) ? esc_attr( wp_unslash( $_GET[ $atts['url_param'] ] ) ) : '',
-			'class'	=> ( empty( $atts['class'] ) ) ? array() : explode( ' ', $atts['class'] )
+			'type'  => toolset_getarr( $atts, 'type', 'text' ),
+			'id'    => 'wpv_control_textfield_' . esc_attr( $atts['url_param'] ),
+			'name'  => esc_attr( $atts['url_param'] ),
+			'value' => isset( $_GET[ $atts['url_param'] ] ) ? esc_attr( wp_unslash( $_GET[ $atts['url_param'] ] ) ) : '',
+			'class' => ( empty( $atts['class'] ) ) ? array() : explode( ' ', $atts['class'] )
 		);
 
 		$input_attributes['class'][] = 'js-wpv-filter-trigger-delayed';
@@ -1229,6 +1241,10 @@ class WPV_Meta_Frontend_Filter {
 			default:
 				$input_attributes['class'][] = 'wpcf-form-textfield form-textfield textfield';
 				break;
+		}
+
+		if ( array_key_exists( 'min', $atts ) ) {
+			$input_attributes['min'] = $atts['min'];
 		}
 
 		$postmeta_filter_output .= WPV_Frontend_Filter::get_input( $input_attributes );
@@ -2356,12 +2372,12 @@ class WPV_Meta_Frontend_Filter {
 				break;
 			case 'native':
 				$attribute_type_options = array(
-					'textfield'		=> __( 'Text input', 'wp-views' ),
-					'select'		=> __( 'Select dropdown', 'wpv-views' ),
-					'multi-select'	=> __( 'Select multiple', 'wpv-views' ),
-					'radios'		=> __( 'Set of radio buttons', 'wpv-views' ),
-					'checkboxes'	=> __( 'Set of checkboxes', 'wpv-views' ),
-					'date'			=> __( 'Datepicker', 'wpv-views' )
+					'textfield'    => __( 'Text input', 'wpv-views' ),
+					'select'       => __( 'Select dropdown', 'wpv-views' ),
+					'multi-select' => __( 'Select multiple', 'wpv-views' ),
+					'radios'       => __( 'Set of radio buttons', 'wpv-views' ),
+					'checkboxes'   => __( 'Set of checkboxes', 'wpv-views' ),
+					'date'         => __( 'Datepicker', 'wpv-views' )
 				);
 				break;
 			case 'select':
@@ -2372,12 +2388,14 @@ class WPV_Meta_Frontend_Filter {
 			case 'textfield':
 			default:
 				$attribute_type_options = array(
-					$toolset_field_type	=> __( 'As defined in Types', 'wpv-views' ),
-					'textfield'			=> __( 'Text input', 'wp-views' ),
-					'select'			=> __( 'Select dropdown', 'wpv-views' ),
-					'multi-select'		=> __( 'Select multiple', 'wpv-views' ),
-					'radios'			=> __( 'Set of radio buttons', 'wpv-views' ),
-					'checkboxes'		=> __( 'Set of checkboxes', 'wpv-views' ),
+					$toolset_field_type => __( 'As defined in Types', 'wpv-views' ),
+					'textfield'         => __( 'Text input', 'wpv-views' ),
+					'integer'           => __( 'Numeric input (integers)', 'wpv-views' ),
+					'natural'           => __( 'Numeric input (naturals)', 'wpv-views' ),
+					'select'            => __( 'Select dropdown', 'wpv-views' ),
+					'multi-select'      => __( 'Select multiple', 'wpv-views' ),
+					'radios'            => __( 'Set of radio buttons', 'wpv-views' ),
+					'checkboxes'        => __( 'Set of checkboxes', 'wpv-views' ),
 				);
 				break;
 		}

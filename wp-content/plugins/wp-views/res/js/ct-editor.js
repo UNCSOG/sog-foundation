@@ -2064,8 +2064,8 @@ WPViews.CTEditScreen = function( $ ) {
             if(editor_info.allow_quicktags) {
                 var quicktags_slug = editor_slug + '_quicktags';
                 self[quicktags_slug] = quicktags( { id: editor_info.selector, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-                WPV_Toolset.add_qt_editor_buttons( self[quicktags_slug],self[editor_slug] );
-				WPV_Toolset.CodeMirror_instance[ editor_info.selector ].addKeyMap( self.editor_keymap );
+                ToolsetCommon.initQuicktags( self[quicktags_slug],self[editor_slug] );
+								WPV_Toolset.CodeMirror_instance[ editor_info.selector ].addKeyMap( self.editor_keymap );
                 Toolset.hooks.doAction( 'toolset_text_editor_CodeMirror_init', editor_info.selector );
             }
         });

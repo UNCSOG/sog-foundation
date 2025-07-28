@@ -49,83 +49,36 @@ class CRED_Forms_Model extends CRED_Abstract_Model {
 	 * @return array|bool
 	 */
     public function getDefaultMessages() {
-        static $messages = false;
+			static $messages = false;
 
-        if ( !$messages ) {
-            $messages = array(
-                'cred_message_post_saved' => 'Post ' . __( 'Saved', 'wp-cred' ),
-                'cred_message_post_not_saved_singular' => __( 'The post was not saved because of the following problem:', 'wp-cred' ),
-                'cred_message_post_not_saved_plural' => __( 'The post was not saved because of the following %NN problems:', 'wp-cred' ),
-                'cred_message_invalid_form_submission' => 'Invalid Form Submission (nonce failure)',
-                'cred_message_no_data_submitted' => 'Invalid Form Submission (maybe a file has a size greater than allowed)',
-                'cred_message_upload_failed' => 'Upload Failed',
-                'cred_message_field_required' => 'This field is required',
-                'cred_message_enter_valid_date' => 'Please enter a valid date',
-                'cred_message_values_do_not_match' => 'Field values do not match',
-                'cred_message_enter_valid_email' => 'Please enter a valid email address',
-	            'cred_message_enter_valid_colorpicker' => 'Please use a valid hexadecimal value',
-                'cred_message_enter_valid_number' => 'Please enter numeric data',
-                'cred_message_enter_valid_url' => 'Please enter a valid URL address',
-                'cred_message_enter_valid_captcha' => 'Wrong CAPTCHA',
-                'cred_message_missing_captcha' => 'Missing CAPTCHA',
-                'cred_message_show_captcha' => 'Show CAPTCHA',
-                'cred_message_edit_skype_button' => 'Edit Skype Button',
-                'cred_message_not_valid_image' => 'Not Valid Image',
-                'cred_message_file_type_not_allowed' => 'File type not allowed',
-                'cred_message_image_width_larger' => 'Image width larger than %dpx',
-                'cred_message_image_height_larger' => 'Image height larger than %dpx',
-                'cred_message_show_popular' => 'Show Popular',
-                'cred_message_hide_popular' => 'Hide Popular',
-                'cred_message_add_taxonomy' => 'Add',
-                'cred_message_remove_taxonomy' => 'Remove',
-				'cred_message_add_new_taxonomy' => 'Add New',
-				'cred_message_access_error_can_not_use_form' => '',
-			);
-        }
+			if ( ! $messages ) {
+				$model           = new \OTGS\Toolset\CRED\Model\Forms\Post\Messages\DefaultMessages();
+				$defaultMessages = $model->getDefaultMessages();
+				$messages        = array();
+				foreach ( $defaultMessages as $messageId => $messageData ) {
+					$messages[ $messageId ] = toolset_getarr( $messageData, 'message', '' );
+				}
+			}
 
-        return $messages;
+      return $messages;
     }
 
 	/**
 	 * @return array|bool
 	 */
     public function getDefaultMessageDescriptions() {
-        static $desc = false;
+			static $desc = false;
 
-        if ( !$desc ) {
-            $desc = array(
-                'cred_message_post_saved' => __( 'Post saved Message', 'wp-cred' ),
-                'cred_message_post_not_saved_singular' => __( 'Post not saved message (one problem)', 'wp-cred' ),
-                'cred_message_post_not_saved_plural' => __( 'Post not saved message (several problems)', 'wp-cred' ),
-                'cred_message_invalid_form_submission' => __( 'Invalid submission message', 'wp-cred' ),
-                'cred_message_no_data_submitted' => __( 'Invalid Form Submission (maybe a file has a size greater than allowed)', 'wp-cred' ),
-                'cred_message_upload_failed' => __( 'Upload failed message', 'wp-cred' ),
-                'cred_message_field_required' => __( 'Required field message', 'wp-cred' ),
-                'cred_message_enter_valid_date' => __( 'Invalid date message', 'wp-cred' ),
-                'cred_message_values_do_not_match' => __( 'Invalid hidden field value message', 'wp-cred' ),
-                'cred_message_enter_valid_email' => __( 'Invalid email message', 'wp-cred' ),
-                'cred_message_enter_valid_colorpicker' => __( 'Invalid color picker message', 'wp-cred' ),
-                'cred_message_enter_valid_number' => __( 'Invalid numeric field message', 'wp-cred' ),
-                'cred_message_enter_valid_url' => __( 'Invalid URL message', 'wp-cred' ),
-                'cred_message_enter_valid_captcha' => __( 'Invalid captcha message', 'wp-cred' ),
-                'cred_message_missing_captcha' => __( 'Missing captcha message', 'wp-cred' ),
-                'cred_message_show_captcha' => __( 'Show captcha button', 'wp-cred' ),
-                'cred_message_edit_skype_button' => __( 'Edit skype button', 'wp-cred' ),
-                'cred_message_not_valid_image' => __( 'Invalid image message', 'wp-cred' ),
-                'cred_message_file_type_not_allowed' => __( 'Invalid file type message', 'wp-cred' ),
-                'cred_message_image_width_larger' => __( 'Invalid image width message', 'wp-cred' ),
-                'cred_message_image_height_larger' => __( 'Invalid image height message', 'wp-cred' ),
-                'cred_message_show_popular' => __( 'Taxonomy show popular message', 'wp-cred' ),
-                'cred_message_hide_popular' => __( 'Taxonomy hide popular message', 'wp-cred' ),
-                'cred_message_add_taxonomy' => __( 'Add taxonomy term', 'wp-cred' ),
-                'cred_message_remove_taxonomy' => __( 'Remove taxonomy term', 'wp-cred' ),
-				'cred_message_add_new_taxonomy' => __( 'Add new taxonomy message', 'wp-cred' ),
-				/* translators: Label for the setting to show when the current visitor can not use the current form */
-				'cred_message_access_error_can_not_use_form' => __( 'Optional message to show when the current visitor is not allowed to use this form', 'wp-cred' ),
-			);
-        }
+			if ( ! $desc ) {
+				$model           = new \OTGS\Toolset\CRED\Model\Forms\Post\Messages\DefaultMessages();
+				$defaultMessages = $model->getDefaultMessages();
+				$desc            = array();
+				foreach ( $defaultMessages as $messageId => $messageData ) {
+					$desc[ $messageId ] = toolset_getarr( $messageData, 'description', '' );
+				}
+			}
 
-        return $desc;
+      return $desc;
     }
 
 	/**

@@ -16,6 +16,7 @@ abstract class Toolset_Theme_Integration_Settings_Abstract_Controller{
 
 	protected $object_id = null;
 	protected $is_views_active = false;
+	protected $is_blocks_active = null;
 	protected $is_layouts_active = false;
 	protected $collections = null;
 

@@ -77,7 +77,7 @@ class ToolsetAccess {
 	 * @since 2.1.1
 	 */
 	public function register_access_cred_tab( $tabs ) {
-		$tabs['cred-forms'] = __( 'Toolset Forms', 'wp-cred' );
+		$tabs['cred-forms'] = 'Toolset Forms';
 		return $tabs;
 	}
 

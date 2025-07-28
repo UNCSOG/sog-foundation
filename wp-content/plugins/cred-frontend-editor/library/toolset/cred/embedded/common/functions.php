@@ -150,13 +150,11 @@ if ( function_exists( 'add_action' ) ) {
 	 * cred_common_path
 	 */
 	function cred_common_path() {
-		if ( ! defined( 'WPTOOLSET_FORMS_VERSION' ) ) {
-			$toolset_common_bootstrap = Toolset_Common_Bootstrap::getInstance();
-			$toolset_common_sections = array(
-				'toolset_forms',
-			);
-			$toolset_common_bootstrap->load_sections( $toolset_common_sections );
-		}
+		$toolset_common_bootstrap = Toolset_Common_Bootstrap::getInstance();
+		$toolset_common_sections = array(
+			'toolset_forms',
+		);
+		$toolset_common_bootstrap->load_sections( $toolset_common_sections );
 	}
 
 }

@@ -18,6 +18,7 @@ class Backend {
 
 	/**
 	 * Add a content based dependecy
+	 *
 	 * @param IGeneral $dependency [description]
 	 */
 	public function add_dependency( IGeneral $dependency ) {
@@ -28,12 +29,12 @@ class Backend {
 	 * Load registered dependencies
 	 */
 	public function load_dependencies() {
-		if( ! is_admin() ) {
+		if ( ! is_admin() ) {
 			// no backend
 			return;
 		}
 
-		foreach( $this->dependencies as $dependency ) {
+		foreach ( $this->dependencies as $dependency ) {
 			$dependency->load_dependencies();
 		}
 

@@ -374,7 +374,7 @@ class Toolset_Gui_Base {
 			self::SCRIPT_GUI_MIXIN_CODEMIRROR,
 			self::get_gui_base_url( '/js/mixins/CodeMirror.js' ),
 			array(
-				'jquery', 'underscore', Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+				'jquery', 'underscore',
 				Toolset_Assets_Manager::SCRIPT_CODEMIRROR_UTILS_PANEL,
 				Toolset_Assets_Manager::SCRIPT_CODEMIRROR_UTILS_SEARCH,
 				Toolset_Assets_Manager::SCRIPT_CODEMIRROR_UTILS_SEARCH_CURSOR,

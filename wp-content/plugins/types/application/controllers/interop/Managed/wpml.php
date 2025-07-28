@@ -58,36 +58,32 @@ class Types_Interop_Handler_Wpml implements Types_Interop_Handler_Interface {
 	 * Get translation of string.
 	 *
 	 * @param string $string The original string value to translate
-	 * @param string $string_name String name
-	 * @param string $domain String domain
+	 * @param string $string_name wpml_translate_string name
+	 * @param array $package
 	 *
 	 * @link https://wpml.org/wpml-hook/wpml_translate_single_string/
 	 *
 	 * @return false|string Translated string or false if no such string is registered.
 	 * @since 2.2.9
 	 */
-	public function get_translation( $string, $string_name, $domain ) {
-
-		// check if translation exists
-		$is_registered = apply_filters(
-			'wpml_string_id',
+	public function get_translation( $string, $string_name, $package ) {
+		$isRegistered = apply_filters(
+			'wpml_string_id_from_package',
 			null,
-			array(
-				'context' => $domain,
-				'name' => $string_name
-			)
+			$package,
+			$string_name,
+			$string
 		);
 
-		if ( $is_registered === null ) {
+		if ( $isRegistered === null ) {
 			return false;
 		}
 
-		// string is registered, return translation
 		return apply_filters(
-			'wpml_translate_single_string',
+			'wpml_translate_string',
 			$string,
-			$domain,
-			$string_name
+			$string_name,
+			$package
 		);
 	}
 

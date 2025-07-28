@@ -177,6 +177,27 @@ class WpmlTranslationUpdateHandler {
 	 * @param array $update_description_source
 	 */
 	private function one_element_action( $update_description_source ) {
+		$element_id = toolset_getarr( $update_description_source, DescriptionKey::ELEMENT_ID );
+
+		if ( $element_id ) {
+			$relationship_query = $this->database_layer_factory->relationship_query();
+
+			$relationship_query->add(
+				$relationship_query->has_domain_and_type(
+					get_post_type( $element_id ),
+					\Toolset_Element_Domain::POSTS,
+					null
+				)
+			);
+			$relationship_query->add( $relationship_query->origin( null) );
+			$relationship_definitions = $relationship_query->get_results();
+
+			if ( empty( $relationship_definitions ) ) {
+				// The element is not part of any relationship, so skip it.
+				return;
+			}
+		}
+
 		$update_description = $this->description_parser->parse( $update_description_source );
 
 		if (

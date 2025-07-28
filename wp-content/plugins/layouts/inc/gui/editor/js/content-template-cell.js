@@ -891,7 +891,7 @@ DDLayout.ContentTemplateCell = function($)
             try{
                 self._ct_code_mirror = icl_editor.codemirror('wpv-ct-inline-editor-'+id, true);
                 self._wpv_inline_editor_qt = quicktags( { id: "wpv-ct-inline-editor-"+id, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-                WPV_Toolset.add_qt_editor_buttons( self._wpv_inline_editor_qt, self._ct_code_mirror );
+                ToolsetCommon.initQuicktags( self._wpv_inline_editor_qt, self._ct_code_mirror );
                 Toolset.hooks.doAction( 'toolset_text_editor_CodeMirror_init', "wpv-ct-inline-editor-"+id );
             } catch( e ){
                 console.log( e.message );
@@ -1237,7 +1237,7 @@ DDLayout.ContentTemplateCell.ExtraEditor.prototype.build_extra_editor = function
     if(this.allow_quicktags) {
         var quicktags_slug = this.selector + '_quicktags';
         this[quicktags_slug] = quicktags( { id: this.selector, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-        WPV_Toolset.add_qt_editor_buttons( this[quicktags_slug], this.editor );
+        ToolsetCommon.initQuicktags( this[quicktags_slug], this.editor );
     }
 
     this.setChange();

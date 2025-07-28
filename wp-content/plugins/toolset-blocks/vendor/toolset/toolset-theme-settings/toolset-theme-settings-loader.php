@@ -1,6 +1,6 @@
 <?php
 if( !defined('TOOLSET_THEME_SETTINGS_VERSION') ){
-	define('TOOLSET_THEME_SETTINGS_VERSION', '1.5.3');
+	define('TOOLSET_THEME_SETTINGS_VERSION', '1.5.5');
 }
 
 if ( ! defined('TOOLSET_THEME_SETTINGS_PATH' ) ) {

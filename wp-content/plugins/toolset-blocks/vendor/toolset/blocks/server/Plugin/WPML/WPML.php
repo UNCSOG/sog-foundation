@@ -21,7 +21,7 @@ class WPML implements IPlugin {
 			$data = base64_decode( $data );
 		}
 		$field_values_to_not_translate = [ Placeholders::PLACEHOLDER_ALT_TEXT, Placeholders::PLACEHOLDER_ID, Placeholders::PLACEHOLDER_URL, Placeholders::PLACEHOLDER_FILENAME, Placeholders::PLACEHOLDER_ATTACHMENT_URL, Placeholders::PLACEHOLDER_WP_IMAGE_CLASS ];
-		if( in_array( $data, $field_values_to_not_translate, true ) ) {
+		if ( in_array( $data, $field_values_to_not_translate, true ) ) {
 			$is_translatable = 0;
 		}
 		return $is_translatable;

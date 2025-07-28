@@ -20,8 +20,13 @@ ul.wpv_pagination_dots li.wpv_pagination_dots_item {
     background-position: 0 -16px;
 }
 
+/*
+ * The URL here ensures that it loads when using this file as a standalone CSS,
+ * but also when used from webpack and loading this file from public/css/views-frontend.css,
+ * sice the file is duplicated in res/img/pagination_dots.png.
+ */
 .wpv_pagination_dots li a {
-    background-image: url("../img/pagination_dots.png");
+    background-image: url(../../res/img/pagination_dots.png);
     display: block;
     float: left;
     height: 0;
@@ -104,6 +109,11 @@ ul.wpv_pagination_dots li.wpv_pagination_dots_item {
  * #######################
  */
 
+/*
+ * The URL here ensures that it loads when using this file as a standalone CSS,
+ * but also when used from webpack and loading this file from public/css/views-frontend.css,
+ * sice the file is duplicated in res/img/sort.gif.
+ */
 .wpv-sorting-indicator {
     position: absolute;
 	display: none;

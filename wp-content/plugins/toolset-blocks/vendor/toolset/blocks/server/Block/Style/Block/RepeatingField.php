@@ -178,13 +178,27 @@ class RepeatingField extends Common {
 		$config = array(
 			parent::CSS_SELECTOR_ROOT => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'background-color', 'border-radius', 'padding', 'margin', 'box-shadow', 'border', 'display'
-				)
+					'background-color',
+					'border-radius',
+					'padding',
+					'margin',
+					'box-shadow',
+					'border',
+					'display',
+				),
 			),
 			parent::CSS_SELECTOR_ROOT . '!li' => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'font-size', 'font-family', 'font-style', 'font-weight', 'line-height', 'letter-spacing',
-					'text-decoration', 'text-shadow', 'text-transform', 'color',
+					'font-size',
+					'font-family',
+					'font-style',
+					'font-weight',
+					'line-height',
+					'letter-spacing',
+					'text-decoration',
+					'text-shadow',
+					'text-transform',
+					'color',
 				),
 			),
 			'.tb-repeating-field--flexbox' => array(

@@ -88,9 +88,11 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			$is_v2_enabled = $this->is_v2_enabled( $this->get_plugin_settings() ) || $this->is_v2_enabled();
-			if ( $is_v2_enabled  ) {
+			if ( $is_v2_enabled ) {
 
-				$this->maybe_upgrade_schema();
+				if ( is_admin() && $this->current_user_can_any( array( 'manage_options', 'gravityforms_api_settings' ) ) ) {
+					$this->maybe_upgrade_schema();
+				}
 
 				if ( ! is_admin() ) {
 					require_once( plugin_dir_path( __FILE__ ) . 'v2/class-gf-rest-authentication.php' );
@@ -564,7 +566,11 @@ if ( class_exists( 'GFForms' ) ) {
 				array(
 					'title'       => esc_html__( 'Authentication ( API version 2 )', 'gravityforms' ),
 					'id'          => 'gform_section_authentication_v2',
-					'description' => sprintf( __( 'Create an API Key below to use the REST API version 2. Alternatively, you can use cookie authentication which is supported for logged in users. %sVisit our documentation pages%s for more information.', 'gravityforms' ), '<a href="https://docs.gravityforms.com/rest-api-v2/" target="_blank">', '</a>' ),
+					'description' => sprintf(
+						esc_html__( 'Create an API Key below to use the REST API version 2. Alternatively, you can use cookie authentication which is supported for logged in users. %1$sVisit our documentation pages%2$s for more information.', 'gravityforms' ),
+						'<a href="https://docs.gravityforms.com/rest-api-v2/" target="_blank">',
+						'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>'
+					),
 					'dependency'  => array( $this, 'is_v2_enabled' ),
 					'fields'      => array(
 						array(
@@ -577,7 +583,11 @@ if ( class_exists( 'GFForms' ) ) {
 				array(
 					'title'       => esc_html__( 'Authentication ( API version 1 )', 'gravityforms' ),
 					'id'          => 'gform_section_authentication',
-					'description' => sprintf( __( 'Configure your API Key below to use the REST API version 1. Alternatively, you can use cookie authentication which is supported for logged in users. %sVisit our documentation pages%s for more information.', 'gravityforms' ), '<a href="https://docs.gravityforms.com/web-api/" target="_blank">', '</a>' ),
+					'description' => sprintf(
+						esc_html__( 'Configure your API Key below to use the REST API version 1. Alternatively, you can use cookie authentication which is supported for logged in users. %1$sVisit our documentation pages%2$s for more information.', 'gravityforms' ),
+						'<a href="https://docs.gravityforms.com/web-api/" target="_blank">',
+						'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>'
+					),
 					'dependency'  => array( $this, 'is_v1_enabled' ),
 					'fields'      => array(
 						array(
@@ -788,7 +798,7 @@ if ( class_exists( 'GFForms' ) ) {
 				$format = 'json';
 			}
 
-			$schema    = strtolower( ( rgget( 'schema' ) ) );
+			$schema    = strtolower( (string) rgget( 'schema' ) );
 			$offset    = isset( $_GET['paging']['offset'] ) ? strtolower( $_GET['paging']['offset'] ) : 0;
 			$page_size = isset( $_GET['paging']['page_size'] ) ? strtolower( $_GET['paging']['page_size'] ) : 10;
 

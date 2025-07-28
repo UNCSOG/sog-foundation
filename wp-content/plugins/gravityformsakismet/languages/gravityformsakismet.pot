@@ -1,17 +1,17 @@
-# Copyright (C) 2021 Gravity Forms
+# Copyright (C) 2025 Gravity Forms
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms Akismet Add-On 1.0\n"
+"Project-Id-Version: Gravity Forms Akismet Add-On 1.1.0\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-07-07T14:46:01+00:00\n"
+"POT-Creation-Date: 2025-07-28T13:58:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: gravityformsakismet\n"
 
 #. Plugin Name of the plugin
@@ -31,19 +31,28 @@ msgstr ""
 msgid "Gravity Forms"
 msgstr ""
 
-#: class-gf-akismet.php:210
+#: class-gf-akismet.php:354
+msgid "Akismet notified that the entry was marked as spam."
+msgstr ""
+
+#: class-gf-akismet.php:357
+msgid "Akismet notified that the entry was marked as not spam."
+msgstr ""
+
+#: class-gf-akismet.php:705
 msgid "The Akismet plugin is either inactive or not installed."
 msgstr ""
 
-#: class-gf-akismet.php:215
+#: class-gf-akismet.php:710
 msgid "To use this add-on, please visit the Forms -> Settings page to enable Akismet integration"
 msgstr ""
 
-#: class-gf-akismet.php:506
+#: class-gf-akismet.php:923
 msgid "This entry has been marked as spam."
 msgstr ""
 
 #: includes/settings/class-form-settings.php:52
+#: includes/settings/class-plugin-settings.php:44
 msgid "Akismet Settings"
 msgstr ""
 
@@ -81,4 +90,29 @@ msgstr ""
 
 #: includes/settings/class-form-settings.php:127
 msgid "Enabled"
+msgstr ""
+
+#: includes/settings/class-plugin-settings.php:47
+msgid "Protect your form entries from spam using Akismet. Don't have an Akismet account?"
+msgstr ""
+
+#: includes/settings/class-plugin-settings.php:48
+msgid "Sign up here"
+msgstr ""
+
+#: includes/settings/class-plugin-settings.php:49
+#: includes/settings/class-plugin-settings.php:75
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: includes/settings/class-plugin-settings.php:55
+msgid "Enable Akismet Integration"
+msgstr ""
+
+#: includes/settings/class-plugin-settings.php:68
+msgid "API Key"
+msgstr ""
+
+#: includes/settings/class-plugin-settings.php:74
+msgid "Click here to find your Akismet API Key"
 msgstr ""

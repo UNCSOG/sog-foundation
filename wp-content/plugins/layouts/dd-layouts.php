@@ -5,7 +5,7 @@ Plugin URI: https://toolset.com/
 Description: Design entire WordPress sites using a drag-and-drop interface.
 Author: OnTheGoSystems
 Author URI: http://www.onthegosystems.com
-Version: 2.6.16
+Version: 2.6.17
 */
 
 /**

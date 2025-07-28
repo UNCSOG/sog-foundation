@@ -40,7 +40,8 @@ class ContentTemplate {
 			false
 		);
 
-		$localization_data = $this->add_theme_settings( [] );
+		$localization_data = $this->add_main_data( [] );
+		$localization_data = $this->add_theme_settings( $localization_data );
 
 		$this->toolset_assets_manager->localize_script(
 			self::SCRIPT_HANDLE,
@@ -51,6 +52,21 @@ class ContentTemplate {
 
 	public function enqueue_assets() {
 		do_action( 'toolset_enqueue_scripts', [ self::SCRIPT_HANDLE ] );
+	}
+
+	/**
+	 * Adds main localization data
+	 *
+	 * @param  array $localization_data
+	 *
+	 * @return array
+	 */
+	private function add_main_data( $localization_data ) {
+		$localization_data['ajaxurl'] = admin_url( 'admin-ajax.php', null );
+		$localization_data['noticeNonce'] = wp_create_nonce( 'wpv_ajax_dismiss_admin_notice' );
+		$localization_data['noticeDismissed'] = apply_filters( 'wpv_filter_wpv_is_dismissed_notice', false, array( 'id' => 'ct-editing-notice', 'type' => 'user' ) ) ? 1 : 0;
+
+		return $localization_data;
 	}
 
 	/**

@@ -87,9 +87,20 @@ WPViews.WidgetsGUI = function( $ ) {
 		self.showTargetbox( $t_container, t_id );
 	};
 
+	$( document ).on( 'change keyup input cut paste', '#widgets-right .js-wpv-widget-form-target-suggest-title:not(.js-wpv-suggest-on)', function() {
+		self.initialize_suggest();
+	});
+	$( document ).on( 'change keyup input cut paste', '.wp-block-widget-area .js-wpv-widget-form-target-suggest-title:not(.js-wpv-suggest-on)', function() {
+		self.initialize_suggest();
+	});
+	$( document ).on( 'change keyup input cut paste', '.fl-builder-widget-settings .js-wpv-widget-form-target-suggest-title:not(.js-wpv-suggest-on)', function() {
+		self.initialize_suggest();
+	});
+
 	// Initialize suggest on the already existing Views Filter widgets
 	self.initialize_suggest = function() {
 		var $widgetSuggestInput = $( '#widgets-right .js-wpv-widget-form-target-suggest-title:not( .js-wpv-suggest-on )' );
+		var $blocksWidgetSuggestInput = $( '.wp-block-widget-area .js-wpv-widget-form-target-suggest-title:not( .js-wpv-suggest-on )' );
 		var $beaverBuilderWidgetSuggestInput = $( '.fl-builder-widget-settings .js-wpv-widget-form-target-suggest-title:not( .js-wpv-suggest-on )' );
 
 		var suggestionsSource = wpv_widgets_gui_texts.ajaxurl + '&action=wpv_suggest_form_targets';
@@ -102,6 +113,11 @@ WPViews.WidgetsGUI = function( $ ) {
 		if ( 0 < $widgetSuggestInput.length ) {
 			$widgetSuggestInput.suggest( suggestionsSource, suggestionsOptions );
 			$widgetSuggestInput.addClass( suggestionsOnClass );
+		}
+
+		if ( 0 < $blocksWidgetSuggestInput.length ) {
+			$blocksWidgetSuggestInput.suggest( suggestionsSource, suggestionsOptions );
+			$blocksWidgetSuggestInput.addClass( suggestionsOnClass );
 		}
 
 		if ( 0 < $beaverBuilderWidgetSuggestInput.length ) {

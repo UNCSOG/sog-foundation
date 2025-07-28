@@ -6,6 +6,7 @@ use Composer\Installer\PackageEvent;
 
 /**
  * Class PostPackageUpdate
+ *
  * @package ToolsetCommonEs\Composer
  *
  * @since 1.0.0

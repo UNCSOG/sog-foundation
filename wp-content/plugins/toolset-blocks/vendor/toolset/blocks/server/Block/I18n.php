@@ -27,7 +27,7 @@ class I18n {
 	public function initialize() {
 		add_shortcode( 'tb-i18n', array( $this, 'i18n_shortcode_render' ) );
 
-		load_plugin_textdomain( 'toolset-blocks', FALSE, basename( TB_PATH ) . '/languages/' );
+		load_plugin_textdomain( 'toolset-blocks', false, basename( TB_PATH ) . '/languages/' );
 	}
 
 	/**
@@ -37,15 +37,15 @@ class I18n {
 	 * - placeholder: list of strings, escaped and json formatted
 	 */
 	public function i18n_shortcode_render( $attributes ) {
-		if ( ! isset( $attributes[ 'code' ] ) ) {
+		if ( ! isset( $attributes['code'] ) ) {
 			return '';
 		}
-		switch ( $attributes[ 'code' ] ) {
+		switch ( $attributes['code'] ) {
 			case self::NUMBER_OF_STARS:
-				if ( ! isset( $attributes[ 'placeholders' ] ) ) {
+				if ( ! isset( $attributes['placeholders'] ) ) {
 					return '';
 				}
-				$placeholders = json_decode( urldecode( $attributes[ 'placeholders' ] ) );
+				$placeholders = json_decode( urldecode( $attributes['placeholders'] ) );
 				$placeholders = array_map( function( $value ) {
 					return do_shortcode( $value );
 				}, $placeholders );

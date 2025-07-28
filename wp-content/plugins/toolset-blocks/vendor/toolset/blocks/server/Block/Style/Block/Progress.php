@@ -74,7 +74,7 @@ class Progress extends ABlock {
 			}
 		}
 		if ( isset( $config['fontSize'] ) || ( isset( $config['autoFontSize'] ) && $config['autoFontSize'] ) ) {
-			$fontSize = $config['autoFontSize'] ? $min_height :  $config['fontSize'];
+			$fontSize = $config['autoFontSize'] ? $min_height : $config['fontSize'];
 			if ( $style = $factory->get_attribute( 'font-size', $fontSize ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_TEXT );
 			}
@@ -97,26 +97,26 @@ class Progress extends ABlock {
 		}
 		if ( isset( $config['strokeLinecap'] ) && $config['strokeLinecap'] === 'round' ) {
 			if ( $style = $factory->get_attribute( 'border-radius', [
-					'topLeft' => $config['strokeWidth'],
-					'topRight' => $config['strokeWidth'],
-					'bottomLeft' => $config['strokeWidth'],
-					'bottomRight' => $config['strokeWidth']
-				] ) ) {
+				'topLeft' => $config['strokeWidth'],
+				'topRight' => $config['strokeWidth'],
+				'bottomLeft' => $config['strokeWidth'],
+				'bottomRight' => $config['strokeWidth'],
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STROKE );
 			}
 		}
 		if ( isset( $config['strokeWidth'] ) ) {
 			if ( $style = $factory->get_attribute( 'height', [
-					'height' => $config['strokeWidth'] * 2,
-				] ) ) {
+				'height' => $config['strokeWidth'] * 2,
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STROKE );
 			}
 		}
 		if ( isset( $config['percent'] ) && ! $config['animate'] ) {
 			if ( $style = $factory->get_attribute( 'width', [
-					'width' => $config['percent'],
-					'widthUnit' => '%',
-				] ) ) {
+				'width' => $config['percent'],
+				'widthUnit' => '%',
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STROKE );
 			}
 		}
@@ -134,8 +134,8 @@ class Progress extends ABlock {
 		}
 		if ( $config['strokeWidth'] < $config['trailWidth'] ) {
 			if ( $style = $factory->get_attribute( 'top', [
-					'top' => $config['trailWidth'] - $config['strokeWidth'],
-				] ) ) {
+				'top' => $config['trailWidth'] - $config['strokeWidth'],
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STROKE );
 			}
 		}
@@ -152,25 +152,25 @@ class Progress extends ABlock {
 		}
 		if ( isset( $config['strokeLinecap'] ) && $config['strokeLinecap'] === 'round' ) {
 			if ( $style = $factory->get_attribute( 'border-radius', [
-					'topLeft' => $config['trailWidth'],
-					'topRight' => $config['trailWidth'],
-					'bottomLeft' => $config['trailWidth'],
-					'bottomRight' => $config['trailWidth']
-				] ) ) {
+				'topLeft' => $config['trailWidth'],
+				'topRight' => $config['trailWidth'],
+				'bottomLeft' => $config['trailWidth'],
+				'bottomRight' => $config['trailWidth'],
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_TRAIL );
 			}
 		}
 		if ( isset( $config['trailWidth'] ) ) {
 			if ( $style = $factory->get_attribute( 'height', [
-					'height' => $config['trailWidth'] * 2,
-				] ) ) {
+				'height' => $config['trailWidth'] * 2,
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_TRAIL );
 			}
 		}
 		if ( $config['trailWidth'] < $config['strokeWidth'] ) {
 			if ( $style = $factory->get_attribute( 'top', [
-					'top' => $config['strokeWidth'] - $config['trailWidth'],
-				] ) ) {
+				'top' => $config['strokeWidth'] - $config['trailWidth'],
+			] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_TRAIL );
 			}
 		}
@@ -180,29 +180,46 @@ class Progress extends ABlock {
 		return array(
 			parent::CSS_SELECTOR_ROOT => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'background-color', 'border-radius', 'font-size',
-					'color', 'padding', 'margin', 'box-shadow', 'border', 'display'
-				)
+					'background-color',
+					'border-radius',
+					'font-size',
+					'color',
+					'padding',
+					'margin',
+					'box-shadow',
+					'border',
+					'display',
+				),
 			),
 			'.tb-progress-data' => array(
 				self::KEY_STYLES_FOR_DATA => array(
-					'height'
-				)
+					'height',
+				),
 			),
 			'.tb-progress__text' => array(
 				self::KEY_STYLES_FOR_TEXT => array(
-					'color', 'font-size', 'height',
-				)
+					'color',
+					'font-size',
+					'height',
+				),
 			),
 			'.tb-progress__stroke' => array(
 				self::KEY_STYLES_FOR_STROKE => array(
-					'background-color', 'border-radius', 'height', 'width', 'margin', 'top',
-				)
+					'background-color',
+					'border-radius',
+					'height',
+					'width',
+					'margin',
+					'top',
+				),
 			),
 			'.tb-progress__trail' => array(
 				self::KEY_STYLES_FOR_TRAIL => array(
-					'background-color', 'border-radius', 'height', 'top',
-				)
+					'background-color',
+					'border-radius',
+					'height',
+					'top',
+				),
 			),
 		);
 	}

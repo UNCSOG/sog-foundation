@@ -25,6 +25,7 @@ class CRED_Form_Rendering {
 	public $preview_messages = array();
 	public $form_id;
 	public $html_form_id;
+	public $form_type;
 	public $_post_id;
 	public $_formHelper;
 	public $_translate_field_factory;
@@ -53,6 +54,8 @@ class CRED_Form_Rendering {
 
 	/** @var array $_validation_errors */
 	public $_validation_errors = array();
+
+	public $_attributes = array();
 
 	/**
 	 * CRED_Form_Rendering constructor.

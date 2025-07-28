@@ -3,7 +3,9 @@
 Plugin Name: Gravity Forms Akismet Add-On
 Plugin URI: https://gravityforms.com
 Description: Enhance Gravity Forms with advanced spam protection, powered by Akismet.
-Version: 1.0
+Version: 1.1.0
+Requires at least: 6.5
+Requires PHP: 7.4
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-3.0+
@@ -11,7 +13,7 @@ Text Domain: gravityformsakismet
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2020 Rocketgenius Inc.
+Copyright 2020 - 2025 Rocketgenius Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,10 +33,10 @@ along with this program.  If not, see http://www.gnu.org/licenses.
 defined( 'ABSPATH' ) || die();
 
 // Defines the current version of the Gravity Forms Akismet Add-On.
-define( 'GF_AKISMET_VERSION', '1.0' );
+define( 'GF_AKISMET_VERSION', '1.1.0' );
 
 // Defines the minimum version of Gravity Forms required to run Gravity Forms Akismet Add-On.
-define( 'GF_AKISMET_MIN_GF_VERSION', '2.4.18.5' );
+define( 'GF_AKISMET_MIN_GF_VERSION', '2.8' );
 
 // After Gravity Forms is loaded, load the Add-On.
 add_action( 'gform_loaded', array( 'GF_Akismet_Bootstrap', 'load_addon' ), 5 );

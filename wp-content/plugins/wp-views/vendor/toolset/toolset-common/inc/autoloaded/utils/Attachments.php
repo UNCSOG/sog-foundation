@@ -65,10 +65,14 @@ class Attachments {
 		}
 
 		// Split the $url into two parts with the upload directory as the separator.
-		$parsed_url = explode( wp_parse_url( $this->get_base_upload_directory(), PHP_URL_PATH ), $url );
+		$parsed_url = wp_parse_url( $this->get_base_upload_directory(), PHP_URL_PATH );
+		if ( ! is_string( $parsed_url ) ) {
+			return null;
+		}
+		$parsed_url_pieces = explode( $parsed_url, $url );
 
 		// Return nothing if there aren't any $url parts
-		$attachment_path = toolset_getarr( $parsed_url, 1 );
+		$attachment_path = toolset_getarr( $parsed_url_pieces, 1 );
 		if ( ! isset( $attachment_path ) || empty( $attachment_path ) ) {
 			return null;
 		}

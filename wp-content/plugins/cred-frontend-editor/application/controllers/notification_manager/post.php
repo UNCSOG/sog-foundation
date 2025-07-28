@@ -463,7 +463,7 @@ class CRED_Notification_Manager_Post extends CRED_Notification_Manager_Base {
 				|| $is_order_created
 				|| $is_custom_notification_to_send
 			) {
-				$notifications_to_send[] = $single_notification;
+				$notifications_to_send[ $key ] = $single_notification;
 			} else {
 				if ( isset( $single_notification[ 'event' ] ) && $is_meta_modified_event_type && ! $is_post_modified_action ) {
 					$condition_fields = array();

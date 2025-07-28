@@ -2,7 +2,6 @@
 
 namespace ToolsetBlocks\Plugin;
 
-
 class Manager {
 	/** @var IPlugin[] */
 	private $plugins = array();
@@ -18,7 +17,7 @@ class Manager {
 	 * Bootstrap all registered plugins.
 	 */
 	public function load_plugins() {
-		foreach( $this->plugins as $plugin ) {
+		foreach ( $this->plugins as $plugin ) {
 			$plugin->load();
 		}
 	}

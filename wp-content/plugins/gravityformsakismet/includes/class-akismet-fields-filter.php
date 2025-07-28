@@ -2,11 +2,9 @@
 
 namespace Gravity_Forms\Gravity_Forms_Akismet;
 
-use Akismet;
 use GFCommon;
 use GFFormsModel;
 use GF_Field;
-use GFAPI;
 
 /**
  * Class Akismet_Fields_Filter
@@ -64,6 +62,33 @@ class Akismet_Fields_Filter {
 	 * @var array
 	 */
 	private $prepared_fields = array();
+
+	/**
+	 * The form being processed.
+	 *
+	 * @since 1.1 Previously a dynamic property.
+	 *
+	 * @var array
+	 */
+	private $form;
+
+	/**
+	 * The entry being processed.
+	 *
+	 * @since 1.1 Previously a dynamic property.
+	 *
+	 * @var array
+	 */
+	private $entry;
+
+	/**
+	 * The Akismet action.
+	 *
+	 * @since 1.1 Previously a dynamic property.
+	 *
+	 * @var string
+	 */
+	private $action;
 
 	/**
 	 * Akismet_Fields_Filter constructor.
@@ -124,10 +149,69 @@ class Akismet_Fields_Filter {
 	 */
 	public function get_fields( $settings, $form, $entry, $action, $akismet_fields = array() ) {
 		$this->hydrate( $settings, $form, $entry, $action );
+		$fields = array_merge( $this->initialize_akismet_fields(), $this->initialize_additional_fields() );
+		$form_id = (int) rgar( $form, 'id' );
 
-		// Use this variable instead of reassigning $akismet_fields to make it clear that we never use the original data.
-		$initial_prepared_fields = $this->initialize_akismet_fields();
-		$additional_fields       = array(
+		if ( $this->addon->is_akismet_plugin_active() ) {
+			// Removing the Akismet plugin callback because we already captured the same data.
+			remove_filter( 'gform_akismet_fields', array( 'Akismet', 'prepare_custom_form_values' ) );
+		}
+
+		/**
+		 * Allows the data to be sent to Akismet to be overridden.
+		 *
+		 * @since 1.1 Copied over from GFCommon::get_akismet_fields().
+		 *
+		 * @param array  $fields The data to be sent to Akismet.
+		 * @param array  $form   The form which created the entry.
+		 * @param array  $entry  The entry being processed.
+		 * @param string $action The action triggering the Akismet request: submit, spam, or ham.
+		 */
+		$fields = gf_apply_filters( array( 'gform_akismet_fields', $form_id ), $fields, $form, $entry, $action );
+
+		if ( $this->is_fields_valid( $fields ) ) {
+			$this->prepared_fields = $fields;
+		}
+
+		return $this->prepared_fields;
+	}
+
+	/**
+	 * Confirms that at least one of the mapped fields or the fallbacks has a value for Akismet to evaluate.
+	 *
+	 * @since 1.1
+	 *
+	 * @param array $fields The data to be sent to Akismet.
+	 *
+	 * @return bool
+	 */
+	private function is_fields_valid( $fields ) {
+		if ( empty( $fields ) || ! is_array( $fields ) ) {
+			return false;
+		}
+
+		foreach ( $fields as $key => $value ) {
+			if ( $key === 'comment_type' || ( ! str_starts_with( $key, 'comment_' ) && ! str_starts_with( $key, 'contact_form_field_' ) ) ) {
+				continue;
+			}
+
+			if ( ! rgblank( $value ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Initializes additional data Akismet needs to make the most accurate analysis.
+	 *
+	 * @since 1.1
+	 *
+	 * @return array
+	 */
+	private function initialize_additional_fields() {
+		$fields = array(
 			'comment_author_IP' => $this->ip,
 			'user_ip'           => $this->ip,
 			'permalink'         => rgar( $this->entry, 'source_url' ),
@@ -138,21 +222,40 @@ class Akismet_Fields_Filter {
 			'blog_charset'      => get_option( 'blog_charset' ),
 		);
 
-		if ( $this->action !== 'submit' ) {
-			$additional_fields['comment_date_gmt'] = rgar( $this->entry, 'date_created' );
-		}
-
-		if ( Akismet::is_test_mode() || stripos( $additional_fields['permalink'], 'gf_page=preview&id=' . rgar( $this->form, 'id' ) ) !== false ) {
+		if ( $this->is_akismet_test_mode_enabled() || stripos( $fields['permalink'], 'gf_page=preview&id=' . rgar( $this->form, 'id' ) ) !== false ) {
 			// Prevent test submissions training the Akismet filters.
-			$additional_fields['is_test'] = 'true';
+			$fields['is_test'] = 'true';
 		} elseif ( ! empty( $this->entry['created_by'] ) ) {
 			// Akismet will return false for admins.
-			$additional_fields['user_role'] = Akismet::get_user_roles( $this->entry['created_by'] );
+			$fields['user_role'] = $this->get_user_roles( $this->entry['created_by'] );
 		}
 
-		$this->prepared_fields = array_merge( $initial_prepared_fields, $additional_fields );
+		if ( $this->action !== 'submit' ) {
+			$fields['comment_date_gmt'] = rgar( $this->entry, 'date_created' );
 
-		return $this->prepared_fields;
+			return $fields;
+		}
+
+		$ak_inputs = array(
+			'ak_hp_textarea',
+			'ak_js',
+		);
+
+		foreach ( $ak_inputs as $ak_input ) {
+			$fields[ 'POST_' . $ak_input ] = rgpost( $ak_input );
+		}
+
+		foreach ( $_SERVER as $key => $value ) {
+			if ( ! is_string( $value ) || preg_match( '/^HTTP_COOKIE/', $key ) ) {
+				continue;
+			}
+
+			if ( preg_match( '/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/', $key ) ) {
+				$fields["$key"] = $value;
+			}
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -360,7 +463,7 @@ class Akismet_Fields_Filter {
 	 *
 	 * @since 1.0
 	 *
-	 * @param object $field The field object.
+	 * @param GF_Field $field The field object.
 	 *
 	 * @return string $key
 	 */
@@ -425,4 +528,45 @@ class Akismet_Fields_Filter {
 
 		return $process_types;
 	}
+
+	/**
+	 * Determines if Akismet test mode is enabled.
+	 *
+	 * @since 1.1
+	 *
+	 * @return bool
+	 */
+	private function is_akismet_test_mode_enabled() {
+		return defined( 'AKISMET_TEST_MODE' ) && AKISMET_TEST_MODE;
+	}
+
+	/**
+	 * Gets a comma separated string of roles assigned to the user that created the entry.
+	 *
+	 * @since 1.1
+	 *
+	 * @param null|int|string $user_id Null or the ID of the user that created the entry.
+	 *
+	 * @return string
+	 */
+	private function get_user_roles( $user_id ) {
+		// Entry created by GFFormsModel::create_lead() uses string NULL when the $current_user global is empty.
+		if ( empty( $user_id ) || $user_id === 'NULL' ) {
+			return '';
+		}
+
+		$user = get_userdata( $user_id );
+		if ( empty( $user ) ) {
+			return '';
+		}
+
+		$roles = (array) $user->get( 'roles' );
+
+		if ( is_multisite() && is_super_admin( $user_id ) ) {
+			$roles[] = 'super_admin';
+		}
+
+		return implode( ',', $roles );
+	}
+
 }

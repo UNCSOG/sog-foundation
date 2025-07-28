@@ -1062,7 +1062,7 @@ class Settings {
 
 				// Get field type.
 				$dependency_field                         = $this->get_field( $_field['field'] );
-				$dependency['fields'][ $f ]['field_type'] = $dependency_field->type;
+				$dependency['fields'][ $f ]['field_type'] = rgobj( $dependency_field, 'type' );
 
 				// If field is a checkbox, check options.
 				if ( rgar( $dependency_field, 'type' ) === 'checkbox' ) {
@@ -1151,7 +1151,7 @@ class Settings {
 
 				// Get field type.
 				$dependency_field                         = $this->get_field( $_field['field'] );
-				$dependency['fields'][ $f ]['field_type'] = $dependency_field->type;
+				$dependency['fields'][ $f ]['field_type'] = rgobj( $dependency_field, 'type' );
 
 				// If field is a checkbox, check options.
 				if ( rgar( $dependency_field, 'type' ) === 'checkbox' ) {
@@ -1626,7 +1626,7 @@ class Settings {
 
 			// Validate nested fields.
 			if ( rgar( $item, 'fields' ) ) {
-				$values = $this->filter_group_values( $values, array( $item ) );
+				$values = $this->filter_group_values( $values, $item );
 			}
 
 		}
@@ -1677,7 +1677,6 @@ class Settings {
 		} else if ( is_string( $callback ) ) {
 			update_option( $callback, $values );
 		}
-
 	}
 
 
@@ -1970,7 +1969,7 @@ class Settings {
 		}
 
 		if ( is_admin() ) {
-			$form = gf_apply_filters( array( 'gform_admin_pre_render', $form_id ), $form );
+			$form = GFCommon::gform_admin_pre_render( $form );
 		}
 
 		return $form;
@@ -2641,6 +2640,7 @@ class Settings {
 
 	}
 
+
 	/**
 	 * Save previous field values.
 	 *
@@ -2717,10 +2717,6 @@ class Settings {
 
 	}
 
-
-
-
-
 	// # MISC HELPER METHODS -------------------------------------------------------------------------------------------
 
 	/**
@@ -2736,4 +2732,34 @@ class Settings {
 
 	}
 
+	/**
+	 * Remove the "has published posts" query from the REST user query.
+	 *
+	 * This will make sure that the User Select field can find all users, not just users with published posts.
+	 *
+	 * @since 2.9.5
+	 *
+	 * @param $prepared_args
+	 * @param $request
+	 *
+	 * @return mixed
+	 */
+	public function remove_has_published_posts_from_api_user_query( $prepared_args, $request ) {
+		// check the referer and make an array of the query params
+		$referer = wp_parse_url( wp_get_referer() );
+
+		if( ! rgar( $referer, 'query' ) ) {
+			return $prepared_args;
+		}
+
+		$query_params = array();
+		parse_str( $referer['query'], $query_params );
+		if( 'gf_edit_forms' !== rgar( $query_params, 'page' ) && 'settings' !== rgar( $query_params, 'view' ) ) {
+			return $prepared_args;
+		}
+
+		unset( $prepared_args['has_published_posts'] );
+
+		return $prepared_args;
+	}
 }

@@ -201,12 +201,21 @@ class WPDD_layout_cell_text_factory extends WPDD_layout_text_cell_factory{
 		add_thickbox();
 		wp_enqueue_script('media-upload');
 		wp_enqueue_script('word-count');
-		if( WPDD_Layouts::views_available() ){
-			$deps = array('jquery', 'views-shortcodes-gui-script');
-		} else {
-			$deps = array('jquery');
+		$deps = array(
+			'jquery',
+			Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+			Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
+		);
+		if( WPDD_Layouts::views_available() ) {
+			$deps[] = 'views-shortcodes-gui-script';
 		}
-		wp_register_script('text_cell_js', WPDDL_RELPATH . '/inc/gui/editor/js/text-cell.js', $deps, WPDDL_VERSION, true);
+		wp_register_script(
+			'text_cell_js',
+			WPDDL_RELPATH . '/inc/gui/editor/js/text-cell.js',
+			$deps,
+			WPDDL_VERSION,
+			true
+		);
 		wp_enqueue_script('text_cell_js');
 	}
 

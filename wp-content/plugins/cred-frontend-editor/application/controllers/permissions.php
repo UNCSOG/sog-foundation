@@ -243,6 +243,10 @@ class Permissions {
 			return $allcaps;
 		}
 
+		if ( ! isset( $caps[0] ) ) {
+			return $allcaps;
+		}
+
 		if ( strpos( $caps[0], 'with_cred' ) === false ) {
 			return $allcaps;
 		}

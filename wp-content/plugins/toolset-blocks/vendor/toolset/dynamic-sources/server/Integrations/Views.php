@@ -174,10 +174,9 @@ class Views {
 			$preview_posts
 		);
 
-		$post_preview = absint( get_post_meta( get_the_ID(), 'tb_preview_post', true ) );
-		$post_preview_object = get_post( $post_preview );
+		$post_preview = $this->get_post_preview();
 
-		if ( is_null( $post_preview_object ) ) {
+		if ( is_null( $post_preview ) ) {
 			$post_preview = $preview_posts[0]['value'];
 		} else {
 			// Make sure we do include the selected post to preview
@@ -202,6 +201,23 @@ class Views {
 		$localization_array['cache'] = apply_filters( 'toolset/dynamic_sources/filters/cache', array(), $post_preview );
 
 		return $localization_array;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	private function get_post_preview() {
+		$post_preview = absint( get_post_meta( get_the_ID(), 'tb_preview_post', true ) );
+		if ( empty( $post_preview ) ) {
+			return null;
+		}
+
+		$post_preview_object = get_post( $post_preview );
+		if ( is_null( $post_preview_object ) ) {
+			return null;
+		}
+
+		return $post_preview;
 	}
 
 	/**

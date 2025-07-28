@@ -9,10 +9,6 @@ class GFFormList {
 	public static function form_list_page() {
 		global $wpdb;
 
-		// todo: hook up bulk action confirmation js
-		// todo: apply button filter
-
-
 		if ( ! GFCommon::ensure_wp_version() ) {
 			return;
 		}
@@ -251,7 +247,7 @@ class GFFormList {
 			jQuery( document ).ready( function( $ ) {
 				$( 'body' ).addClass( 'gform_new_form' );
 				// load new form modal on New Form page
-				<?php if ( rgget( 'page' ) == 'gf_new_form' && ! rgget( 'paged' ) ) :    ?>
+				<?php if ( GFForms::get_page_query_arg() == 'gf_new_form' && ! rgget( 'paged' ) ) :    ?>
 					loadNewFormModal();
 				<?php endif; ?>
 
@@ -378,6 +374,143 @@ class GFFormList {
 
 	<?php
 	}
+
+	/**
+	 * Returns the markup for the screen options.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @param $status
+	 * @param $args
+	 *
+	 * @return string
+	 */
+	public static function get_screen_options_markup( $status, $args ) {
+
+		$return = $status;
+		if ( ! GFForms::get_page() == 'form_list' ) {
+			return $return;
+		}
+
+		$screen_options = self::get_screen_options_values();
+
+		$per_page    = rgar( $screen_options, 'per_page' );
+		$sort_order  = rgar( $screen_options, 'sort_order' );
+		$sort_column = rgar( $screen_options, 'sort_column' );
+
+		$pagination_title     = esc_html__( 'Pagination', 'gravityforms' );
+		$per_page_label       = esc_html__( 'Forms per page:', 'gravityforms' );
+		$sort_options_title   = esc_html__( 'Sorting Options', 'gravityforms' );
+		$sort_column_dropdown = self::get_screen_option_dropdown( 'order_by', $sort_column );
+		$sort_order_dropdown  = self::get_screen_option_dropdown( 'sort_order', $sort_order );
+		$button               = get_submit_button( esc_html__( 'Apply', 'gravityforms' ), 'button button-primary', 'screen-options-apply', false );
+
+
+		$return .= "
+			<fieldset class='screen-options'>
+			<legend>{$pagination_title}</legend>
+				<label for='gform_per_page'>{$per_page_label}</label>
+				<input type='number' step='1' min='1' class='screen-per-page' name='gform_per_page' id='gform_per_page' value='{$per_page}' />
+				<input type='hidden' name='wp_screen_options[option]' value='gform_forms_screen_options' />
+				<input type='hidden' name='wp_screen_options[value]' value='yes' />
+			</fieldset>
+			<fieldset class='screen-options'>
+				<legend>{$sort_options_title}</legend>
+				{$sort_column_dropdown}
+				{$sort_order_dropdown}
+			</fieldset>
+			<p class='submit'>$button</p>";
+
+		return $return;
+	}
+
+	/**
+	 * Returns the attributes for the user-specific screen options.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @return array Label and choices for the screen options settings.
+	 */
+	public static function get_screen_options_attributes() {
+		return array(
+			'order_by' => array(
+				'label'   => __( 'Default Sort Column', 'gravityforms' ),
+				'choices' => array(
+					'is_active'   => __( 'Status', 'gravityforms' ),
+					'title'       => __( 'Title', 'gravityforms' ),
+					'id'          => __( 'ID', 'gravityforms' ),
+					'entry_count' => __( 'Entries', 'gravityforms' ),
+					'view_count'  => __( 'Views', 'gravityforms' ),
+					'conversion'  => __( 'Conversion', 'gravityforms' ),
+				),
+			),
+			'sort_order' => array(
+				'label'   => __( 'Default Sort Order', 'gravityforms' ),
+				'choices' => array(
+					'ASC'  => __( 'Ascending', 'gravityforms' ),
+					'DESC' => __( 'Descending', 'gravityforms' ),
+				),
+			),
+		);
+	}
+
+	/*
+	 * Returns the dropdown markup for a screen option setting.
+	 *
+	 * @since 2.9.2
+	 *
+	 * @param string $name The name of the screen option setting.
+	 *
+	 * @return string HTML markup for the dropdown.
+	 */
+	public static function get_screen_option_dropdown( $name ) {
+		$attributes = rgar( self::get_screen_options_attributes(), $name );
+
+		if( ! $attributes ) {
+			return '';
+		}
+
+		$dropdown = '<label for="' . esc_attr( $name ) . '">' . esc_html( $attributes['label'] ) . ':&nbsp;</label>';
+		$dropdown .= '<select name="' . esc_attr( $name ) . '" style="margin-inline-end: 15px">';
+		foreach( $attributes['choices'] as $value => $label ) {
+			$saved_value = self::get_screen_options_values();
+			$dropdown .= '<option value="' . esc_attr( $value ) . '"' . selected( $value, $saved_value[$name], false ) . '>' . esc_html( $label ) . '</option>';
+		}
+		$dropdown .= '</select>';
+
+		return $dropdown;
+	}
+
+	/**
+	 * Returns the values for the user-specific screen options. If not saved by the current user, the default values are returned.
+	 *
+	 * @since 2.9.2
+	 * @return array
+	 */
+	public static function get_screen_options_values() {
+		$default_values = array(
+			'per_page'   => 20,
+			'order_by'   => 'title',
+			'sort_order' => 'ASC',
+		);
+
+		$option_values = get_user_option( 'gform_forms_screen_options' );
+
+		// Prior to 2.9.2, the per_page value was stored in a separate option.
+		$old_per_page = get_user_option( 'gform_forms_per_page' );
+		if( $old_per_page && ! is_array( $option_values ) ) {
+			$option_values = array( 'per_page' => $old_per_page );
+		} elseif( $old_per_page && is_array( $option_values ) && ! rgar( $option_values, 'per_page' ) ) {
+			$option_values['per_page'] = $old_per_page;
+		}
+
+
+ 		if ( empty( $option_values ) || ! is_array( $option_values ) ) {
+			$option_values = array();
+		}
+
+		return array_merge( $default_values, $option_values );
+	}
 }
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -423,8 +556,10 @@ class GF_Form_List_Table extends WP_List_Table {
 		 * @param array $form_count The form count by filter name.
 		 */
 		$form_count = apply_filters( 'gform_form_list_count', $form_count );
+  
+		$imported_forms = rgget( 'id' ) ? array_map( 'intval' ,explode( ',', rgget( 'id' )) ) : [];
 
-		$all_class = ( $this->filter == '' ) ? 'current' : '';
+		$all_class = $imported_forms ? '' : ( $this->filter == '' ? 'current' : '' );
 
 		$active_class = ( $this->filter == 'active' ) ? 'current' : '';
 
@@ -438,20 +573,27 @@ class GF_Form_List_Table extends WP_List_Table {
 			'inactive' => '<a class="' . $inactive_class . '" href="?page=gf_edit_forms&filter=inactive">' . esc_html( _x( 'Inactive', 'Form List', 'gravityforms' ) ) . ' <span class="count">(<span id="inactive_count">' . $form_count['inactive'] . '</span>)</span></a>',
 			'trash' => '<a class="' . $trash_class . '" href="?page=gf_edit_forms&filter=trash">' . esc_html( _x( 'Trash', 'Form List', 'gravityforms' ) ) . ' <span class="count">(<span id="trash_count">' . $form_count['trash'] . '</span>)</span></a>',
 		);
+  
 		return $views;
 	}
 
 	function prepare_items() {
 
-		$sort_column  = empty( $_GET['orderby'] ) ? 'title' : $_GET['orderby'];
+		$sort_options = GFFormList::get_screen_options_values();
+
+		$sort_column  = empty( $_GET['orderby'] ) ? $sort_options['order_by'] : $_GET['orderby'];
 		$sort_columns = array_keys( $this->get_sortable_columns() );
 
 		if ( ! in_array( strtolower( $sort_column ), $sort_columns ) ) {
 			$sort_column = 'title';
 		}
 
-		$sort_direction = empty( $_GET['order'] ) ? 'ASC' : strtoupper( $_GET['order'] );
+		$sort_direction = empty( $_GET['order'] ) ? $sort_options['sort_order'] : strtoupper( $_GET['order'] );
 		$sort_direction = $sort_direction == 'ASC' ? 'ASC' : 'DESC';
+		// Retrieve IDs from Query Parameters
+		$imported_forms = rgget( 'id' ) ? explode( ',', rgget( 'id' ) ) : [];
+		$ids            = array_map( 'intval', $imported_forms );
+
 		$search_query   = rgget( 's' );
 		$trash = false;
 		switch ( $this->filter ) {
@@ -476,6 +618,13 @@ class GF_Form_List_Table extends WP_List_Table {
 			$forms = GFFormsModel::search_forms( $search_query, $active, $sort_column, $sort_direction, $trash );
 		}
 
+		// Filter imported forms by IDs if there is any.
+		if ( ! rgempty( $ids ) ) {
+			$forms = array_filter( $forms, function ($form) use ($ids) {
+				return in_array( $form->id, $ids );
+			});
+		}
+
 		/**
 		 * Allow form list filtering.
 		 *
@@ -490,7 +639,7 @@ class GF_Form_List_Table extends WP_List_Table {
 		 */
 		$forms = apply_filters( 'gform_form_list_forms', $forms, $search_query, $active, $sort_column, $sort_direction, $trash );
 
-		$per_page = $this->get_items_per_page( 'gform_forms_per_page', 20 );
+		$per_page = $sort_options['per_page'];
 
 		$per_page = apply_filters( 'gform_page_size_form_list', $per_page );
 

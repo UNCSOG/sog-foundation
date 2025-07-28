@@ -15,7 +15,7 @@ class CodeMirror implements IGeneral {
 	 */
 	public function load_dependencies() {
 		// not needed if others already registered it
-		if( ! wp_script_is( 'codemirror', 'registered' ) ) {
+		if ( ! wp_script_is( 'codemirror', 'registered' ) ) {
 			wp_register_script(
 				'codemirror',
 				TB_URL . 'public/vendor/codemirror/codemirror.js',
@@ -28,7 +28,7 @@ class CodeMirror implements IGeneral {
 		// IMPORTANT to make codemirror a dependency of the mode and not the other way around. Because codemirror
 		// must be present before the mode is loaded. This also means the final script should have the used mode
 		// as dependecy and not codemirror.
-		if( ! wp_script_is( 'codemirror-xml', 'registered' ) ) {
+		if ( ! wp_script_is( 'codemirror-xml', 'registered' ) ) {
 			wp_register_script(
 				'codemirror-xml',
 				TB_URL . 'public/vendor/codemirror/xml.js',
@@ -36,7 +36,7 @@ class CodeMirror implements IGeneral {
 				'5.46.0'
 			);
 		}
-		if( ! wp_script_is( 'codemirror-javascript', 'registered' ) ) {
+		if ( ! wp_script_is( 'codemirror-javascript', 'registered' ) ) {
 			wp_register_script(
 				'codemirror-javascript',
 				TB_URL . 'public/vendor/codemirror/javascript.js',
@@ -44,7 +44,7 @@ class CodeMirror implements IGeneral {
 				'5.46.0'
 			);
 		}
-		if( ! wp_script_is( 'codemirror-css', 'registered' ) ) {
+		if ( ! wp_script_is( 'codemirror-css', 'registered' ) ) {
 			wp_register_script(
 				'codemirror-css',
 				TB_URL . 'public/vendor/codemirror/css.js',
@@ -52,7 +52,7 @@ class CodeMirror implements IGeneral {
 				'5.46.0'
 			);
 		}
-		if( ! wp_script_is( 'codemirror-matchbracket', 'registered' ) ) {
+		if ( ! wp_script_is( 'codemirror-matchbracket', 'registered' ) ) {
 			wp_register_script(
 				'codemirror-matchbracket',
 				TB_URL . 'public/vendor/codemirror/matchbracket.js',
@@ -60,7 +60,7 @@ class CodeMirror implements IGeneral {
 				'5.46.0'
 			);
 		}
-		if( ! wp_script_is( 'codemirror-htmlmixed', 'registered' ) ) {
+		if ( ! wp_script_is( 'codemirror-htmlmixed', 'registered' ) ) {
 			wp_register_script(
 				'codemirror-htmlmixed',
 				TB_URL . 'public/vendor/codemirror/htmlmixed.js',
@@ -70,7 +70,7 @@ class CodeMirror implements IGeneral {
 		}
 
 		// css
-		if( ! wp_style_is( 'codemirror', 'registered' ) ) {
+		if ( ! wp_style_is( 'codemirror', 'registered' ) ) {
 			wp_register_style(
 				'codemirror',
 				TB_URL . 'public/vendor/codemirror/codemirror.css',

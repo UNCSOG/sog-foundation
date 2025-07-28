@@ -22,20 +22,21 @@ if ( ! GFCommon::current_user_can_any( array( 'gravityforms_edit_forms', 'gravit
 	die( esc_html__( "You don't have adequate permission to preview forms.", 'gravityforms' ) );
 }
 
+// Get form ID.
+$form_id = absint( rgget( 'id' ) );
+
 /**
  * Fires when a Form Preview is loaded.
  *
  * The hook fires when a Form Preview is initialized and before it is rendered.
  *
  * @since 2.5
+ * @since 2.9 Added the $form_id parameter.
  */
-do_action( 'gform_preview_init' );
+do_action( 'gform_preview_init', $form_id );
 
 // Load form display class.
 require_once( GFCommon::get_base_path() . '/form_display.php' );
-
-// Get form ID.
-$form_id = absint( rgget( 'id' ) );
 
 // Get form object.
 $form       = RGFormsModel::get_form_meta( $_GET['id'] );
@@ -115,7 +116,10 @@ do_action( 'gform_preview_body_open', $form_id );
 				<input type="checkbox" name="showgrid" id="showgrid" value="Y" class="show-grid-input" /><label for="showgrid" class="show-grid-label"><?php esc_html_e( 'display grid', 'gravityforms' ) ?></label>
 				<input type="checkbox" name="showme" id="showme" value="Y" class="show-helpers-input" /><label for="showme" class="show-helpers-label"><?php esc_html_e( 'show structure', 'gravityforms' ) ?></label>
 			</span>
-
+			<!-- Visually hidden page title for screen readers -->
+			<h1 style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+				<?php echo esc_html__( $admin_title );?>
+			</h1>
 			<h2><?php esc_html_e( 'Form Preview', 'gravityforms' ) ?> : ID <?php echo $form_id; ?></h2>
 		</div>
 	</div>

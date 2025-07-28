@@ -13,7 +13,7 @@
  *
  * ...and so on...
  */
-$toolset_common_es_version = 172000;
+$toolset_common_es_version = 175000;
 
 /**
  * Register Script and Style. This will always be called very very early on init as it uses a negative priority.

@@ -332,7 +332,6 @@ class ViewParsingService {
 		$parser->offset = 0;
 		$parser->output = array();
 		$parser->stack = array();
-		$parser->empty_attrs = json_decode( '{}', true );
 
 		$view_start = null;
 		$prev_view = null;

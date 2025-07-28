@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TB_VER', '1.6.13' );
+define( 'TB_VER', '1.6.16' );
 
 define( 'TB_PATH', __DIR__ );
 define( 'TB_PATH_CSS', __DIR__ . '/public/css' );

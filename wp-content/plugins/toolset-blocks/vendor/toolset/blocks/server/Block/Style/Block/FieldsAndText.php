@@ -40,13 +40,21 @@ class FieldsAndText extends Common {
 	private function get_css_config() {
 		return array(
 			parent::CSS_SELECTOR_ROOT => array(
-				parent::KEY_STYLES_FOR_COMMON_STYLES => 'all'
+				parent::KEY_STYLES_FOR_COMMON_STYLES => 'all',
 			),
 			'p' => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'font-size', 'font-family', 'font-style', 'font-weight', 'line-height', 'letter-spacing',
-					'text-decoration', 'text-shadow', 'text-transform', 'color'
-				)
+					'font-size',
+					'font-family',
+					'font-style',
+					'font-weight',
+					'line-height',
+					'letter-spacing',
+					'text-decoration',
+					'text-shadow',
+					'text-transform',
+					'color',
+				),
 			),
 		);
 	}

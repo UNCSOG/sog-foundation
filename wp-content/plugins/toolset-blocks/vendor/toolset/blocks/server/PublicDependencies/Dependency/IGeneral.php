@@ -3,7 +3,7 @@
 namespace ToolsetBlocks\PublicDependencies\Dependency;
 
 /**
- * Interface for all dependencies 
+ * Interface for all dependencies
  */
 interface IGeneral {
 

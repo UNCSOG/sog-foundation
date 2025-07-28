@@ -6,6 +6,7 @@ use Composer\Installer\PackageEvent;
 
 /**
  * Class BundleBuild
+ *
  * @package ToolsetCommonEs\Composer
  *
  * @since 1.0.0
@@ -18,11 +19,11 @@ class BundleBuild {
 	 * @param $event
 	 */
 	public static function run( $event ) {
-		$event->getIO()->write("-------------------------------------------------");
-		$event->getIO()->write("-- TOOLSET BLOCKS: Generating build files.     --");
-		$event->getIO()->write("-------------------------------------------------");
+		$event->getIO()->write( '-------------------------------------------------' );
+		$event->getIO()->write( '-- TOOLSET BLOCKS: Generating build files.     --' );
+		$event->getIO()->write( '-------------------------------------------------' );
 		Blocks::runNpmCommand( 'run build' );
 
-		$event->getIO()->write("Completed.");
+		$event->getIO()->write( 'Completed.' );
 	}
 }

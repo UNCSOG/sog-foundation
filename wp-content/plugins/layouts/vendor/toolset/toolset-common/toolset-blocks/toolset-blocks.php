@@ -43,7 +43,7 @@ class Toolset_Blocks {
 				array(
 					array(
 						'slug'  => 'toolset',
-						'title' => __( 'Toolset', 'wpv-views' ),
+						'title' => 'Toolset',
 					),
 				)
 			);

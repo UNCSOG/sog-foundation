@@ -68,12 +68,12 @@
             'dev_requirement' => false,
         ),
         'toolset/toolset-common' => array(
-            'pretty_version' => '4.4.5',
-            'version' => '4.4.5.0',
+            'pretty_version' => '4.4.9',
+            'version' => '4.4.9.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../toolset/toolset-common',
             'aliases' => array(),
-            'reference' => 'e58ac055a7acd70de345d1d1c466099a86ccb637',
+            'reference' => 'a7882faa9a161e7186e61e5302873e32842842e3',
             'dev_requirement' => false,
         ),
         'toolset/toolset-theme-settings' => array(

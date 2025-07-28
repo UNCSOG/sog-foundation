@@ -96,7 +96,7 @@ class Youtube extends ABlock {
 
 		// Skip when the shortcode of the dynamic field is not rendered at this point.
 		// Part of the views-3260 workaround, see $this->on_register().
-		if( strpos( $content, '[tb-dynamic ' ) !== false ) {
+		if ( strpos( $content, '[tb-dynamic ' ) !== false ) {
 			return $content;
 		}
 
@@ -117,15 +117,24 @@ class Youtube extends ABlock {
 		$youtube_embed_base_url = 'https://www.youtube.com/embed/';
 		$yt_settings = isset( $config['settings'] ) ? $config['settings'] : [];
 		$url_params = [];
-		if( $yt_settings['start'] !== null ) { array_push( $url_params, 'start=' . (int) $yt_settings['start'] ); }
-		if( $yt_settings['end'] !== null ) { array_push( $url_params, 'end=' . (int) $yt_settings['end'] ); }
-		if( $yt_settings['autoplay'] === true ) { array_push( $url_params, 'autoplay=1' ); }
-		if( $yt_settings['playsinline'] === true ) { array_push( $url_params, 'playsinline=1' ); }
-		if( $yt_settings['show_controls'] === false ) { array_push( $url_params, 'controls=0' ); }
-		if( $yt_settings['allow_fullscreen'] === false ) { array_push( $url_params, 'fs=0' ); }
-		if( $yt_settings['allow_keyboard_controls'] === false ) { array_push( $url_params, 'disablekb=1' ); }
-		if( $yt_settings['only_suggest_same_channel_videos'] === true ) { array_push( $url_params, 'rel=0' ); }
-		if( $yt_settings['use_white_progress_bar'] === true ) { array_push( $url_params, 'color=white' ); }
+		if ( $yt_settings['start'] !== null ) {
+			array_push( $url_params, 'start=' . (int) $yt_settings['start'] ); }
+		if ( $yt_settings['end'] !== null ) {
+			array_push( $url_params, 'end=' . (int) $yt_settings['end'] ); }
+		if ( $yt_settings['autoplay'] === true ) {
+			array_push( $url_params, 'autoplay=1' ); }
+		if ( $yt_settings['playsinline'] === true ) {
+			array_push( $url_params, 'playsinline=1' ); }
+		if ( $yt_settings['show_controls'] === false ) {
+			array_push( $url_params, 'controls=0' ); }
+		if ( $yt_settings['allow_fullscreen'] === false ) {
+			array_push( $url_params, 'fs=0' ); }
+		if ( $yt_settings['allow_keyboard_controls'] === false ) {
+			array_push( $url_params, 'disablekb=1' ); }
+		if ( $yt_settings['only_suggest_same_channel_videos'] === true ) {
+			array_push( $url_params, 'rel=0' ); }
+		if ( $yt_settings['use_white_progress_bar'] === true ) {
+			array_push( $url_params, 'color=white' ); }
 
 		$url_params_string = count( $url_params ) > 0 ?
 			implode( '&', $url_params ) :
@@ -136,15 +145,15 @@ class Youtube extends ABlock {
 		$content = preg_replace_callback(
 			'/<iframe.*?src="\K(.*?)"/ism',
 			function ( $matches ) use ( $url_params_string, $video_ids, $youtube_embed_base_url ) {
-				if(	strpos( $matches[1], 'toolset=1' ) ) {
+				if ( strpos( $matches[1], 'toolset=1' ) ) {
 					// This was already converted.
 					return $matches[1] . '"';
 				}
 
 				$videos = explode( ',', $matches[1] );
 
-				foreach( $videos as $video ) {
-					if( preg_match_all(
+				foreach ( $videos as $video ) {
+					if ( preg_match_all(
 						'/\b(?:https?:\/\/)?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)\/(?:(?:\??v=?i?=?\/?)|watch\?vi?=|watch\?.*?&v=|(embed|shorts)\/|)([A-Z0-9_-]{11})\S*(?=\s|$)/mi',
 						$video,
 						$youtube_id
@@ -153,7 +162,7 @@ class Youtube extends ABlock {
 					}
 				}
 
-				if( count( $video_ids ) === 0 ) {
+				if ( count( $video_ids ) === 0 ) {
 					// Shouldn't happen... but return original input if it happens.
 					return $matches[1];
 				}
@@ -163,21 +172,21 @@ class Youtube extends ABlock {
 				// If there are more than one video the first parameter will be ?playlist=.
 				$appender_for_video_settings = '?';
 
-				for( $i = 0; $i < count( $video_ids ); $i++ ) {
-					if( $i === 0 ) {
+				for ( $i = 0; $i < count( $video_ids ); $i++ ) {
+					if ( $i === 0 ) {
 						// First video id is placed directly behind embed.
-						$src = $youtube_embed_base_url . $video_ids[$i];
-					} elseif( $i === 1 ) {
+						$src = $youtube_embed_base_url . $video_ids[ $i ];
+					} elseif ( $i === 1 ) {
 						// Second video will introduce the ?playlist parameter.
-						$src .= '?playlist=' . $video_ids[$i];
+						$src .= '?playlist=' . $video_ids[ $i ];
 						$appender_for_video_settings = '&';
 					} else {
 						// All other videos will be appendend to the playlist.
-						$src .= ','. $video_ids[$i];
+						$src .= ',' . $video_ids[ $i ];
 					}
 				}
 
-				if( ! empty( $url_params_string ) ) {
+				if ( ! empty( $url_params_string ) ) {
 					$src .= $appender_for_video_settings . $url_params_string;
 					$appender_for_video_settings = '&';
 				}
@@ -204,7 +213,7 @@ class Youtube extends ABlock {
 			self::CSS_SELECTOR_ROOT => [
 				self::KEY_STYLES_FOR_COMMON_STYLES => [
 					'width',
-					'display'
+					'display',
 				],
 			],
 			'> div' => [
@@ -220,8 +229,8 @@ class Youtube extends ABlock {
 					'border',
 					'border-radius',
 					'box-shadow',
-				]
-			]
+				],
+			],
 		);
 	}
 }

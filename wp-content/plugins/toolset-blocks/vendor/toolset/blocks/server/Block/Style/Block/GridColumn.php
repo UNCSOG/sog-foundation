@@ -52,15 +52,32 @@ class GridColumn extends Common {
 		return array(
 			parent::CSS_SELECTOR_ROOT => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'background-color', 'border-radius', 'background', 'padding', 'margin', 'box-shadow', 'border',
-					'min-height', 'vertical-align', 'display', 'background-image'
-				)
+					'background-color',
+					'border-radius',
+					'background',
+					'padding',
+					'margin',
+					'box-shadow',
+					'border',
+					'min-height',
+					'vertical-align',
+					'display',
+					'background-image',
+				),
 			),
 			'p' => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'font-size', 'font-family', 'font-style', 'font-weight', 'line-height', 'letter-spacing',
-					'text-decoration', 'text-shadow', 'text-transform', 'color'
-				)
+					'font-size',
+					'font-family',
+					'font-style',
+					'font-weight',
+					'line-height',
+					'letter-spacing',
+					'text-decoration',
+					'text-shadow',
+					'text-transform',
+					'color',
+				),
 			),
 		);
 	}

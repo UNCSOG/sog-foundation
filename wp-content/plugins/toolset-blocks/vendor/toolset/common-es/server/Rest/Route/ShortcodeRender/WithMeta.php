@@ -52,7 +52,8 @@ class WithMeta {
 	}
 
 	public function wpv_content_template_meta() {
-		if( preg_match( '#view_template=[\"\'](.*?)[\"\']#', $this->shortcode, $ct ) ) {
+		$shortcode = is_null($this->shortcode) ? '' : $this->shortcode;
+		if( preg_match( '#view_template=[\"\'](.*?)[\"\']#', $shortcode, $ct ) ) {
 			if( $post = get_page_by_path( $ct[1], OBJECT, 'view-template' ) ) {
 				$this->meta_data['post_title'] = $post->post_title;
 				$this->meta_data['post_edit_link'] = admin_url( 'admin.php?page=ct-editor&ct_id=' . $post->ID );

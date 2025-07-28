@@ -9,6 +9,7 @@ interface IContent extends IGeneral {
 
 	/**
 	 * Returns true/false if the current dependency is required for the content
+	 *
 	 * @param string $content Content of the current post
 	 * @return bool
 	 */

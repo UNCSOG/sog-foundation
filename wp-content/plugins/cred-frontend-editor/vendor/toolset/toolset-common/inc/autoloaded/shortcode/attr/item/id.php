@@ -79,11 +79,15 @@ class Toolset_Shortcode_Attr_Item_Id implements Toolset_Shortcode_Attr_Interface
 	 * @return array|bool|mixed
 	 */
 	protected function return_single_id( $return ) {
-		if( is_array( $return ) && count( $return ) == 1 ) {
-			$return = array_shift( $return );
+		if ( is_array( $return ) ) {
+			if ( count( $return ) == 1 ) {
+				$return = array_shift( $return );
+			} else {
+				return false;
+			}
 		}
 
-		if( is_int( $return ) || ctype_digit( $return ) ) {
+		if( is_int( $return ) || ctype_digit( strval( $return ) ) ) {
 			return $return;
 		}
 

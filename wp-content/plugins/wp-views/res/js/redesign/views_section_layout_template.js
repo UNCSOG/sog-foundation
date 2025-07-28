@@ -440,7 +440,7 @@ WPViews.ViewEditScreenInlineCT = function( $ ) {
 		WPV_Toolset.CodeMirror_instance_value["wpv_ct_inline_editor_" + template_id] = WPV_Toolset.CodeMirror_instance["wpv_ct_inline_editor_" + template_id].getValue();
 		//Add quicktags toolbar
 		var wpv_inline_editor_qt = quicktags( { id: 'wpv-ct-inline-editor-'+template_id, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-		WPV_Toolset.add_qt_editor_buttons( wpv_inline_editor_qt, WPV_Toolset.CodeMirror_instance['wpv_ct_inline_editor_' + template_id] );
+		ToolsetCommon.initQuicktags( wpv_inline_editor_qt, WPV_Toolset.CodeMirror_instance['wpv_ct_inline_editor_' + template_id] );
 
 		_.defer( function() {
 			// CSS Components compatibility

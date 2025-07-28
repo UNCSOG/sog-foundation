@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms SendGrid Add-On
 Plugin URI: https://gravityforms.com
 Description: Integrates Gravity Forms with SendGrid, allowing Gravity Forms notifications to be sent from your SendGrid account.
-Version: 1.5
+Version: 1.6.0
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 defined( 'ABSPATH' ) or die();
 
-define( 'GF_SENDGRID_VERSION', '1.5' );
+define( 'GF_SENDGRID_VERSION', '1.6.0' );
 
 // If Gravity Forms is loaded, bootstrap the SendGrid Add-On.
 add_action( 'gform_loaded', array( 'GF_SendGrid_Bootstrap', 'load' ), 5 );

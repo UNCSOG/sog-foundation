@@ -44,7 +44,7 @@ class Button extends ABlock {
 	public function filter_block_content( $content, MobileDetect $device_detect ) {
 		$content = parent::filter_block_content( $content, $device_detect );
 
-		if( strpos( $content, 'data-toolset-blocks-button' ) < strpos( $content, '<a ' ) ) {
+		if ( strpos( $content, 'data-toolset-blocks-button' ) < strpos( $content, '<a ' ) ) {
 			// The data-toolset-blocks-button is already in the root element.
 			// This is not necessary but way faster than preg_replace and the preg_replace is
 			// not needed for all fresh installations which have no buttons created with 1.1.3.
@@ -68,13 +68,13 @@ class Button extends ABlock {
 
 		$icon_styles = isset( $config['icon'] ) && is_array( $config['icon'] ) ? $config['icon'] : false;
 
-		if( empty( $icon_styles ) ) {
+		if ( empty( $icon_styles ) ) {
 			return;
 		}
 
 		// font family
-		if( isset( $icon_styles[ 'fontFamily' ] ) ) {
-			if( $style = $factory->get_attribute( 'font-family', $icon_styles['fontFamily' ] ) ) {
+		if ( isset( $icon_styles['fontFamily'] ) ) {
+			if ( $style = $factory->get_attribute( 'font-family', $icon_styles['fontFamily'] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_ICON );
 			}
 		}
@@ -89,8 +89,8 @@ class Button extends ABlock {
 			// I don't know why, font codes like '\f11f' are translated to \f => form feed (FF or 0x0C (12) in ASCII), breaking all CSS rules
 			// I wasn't able to figure out why sometimes json_decode translates it properly and in a different WP site it doesn't wrongly
 			// Solution: replace it :(
-			$font_code = str_replace( "\f", '\f', $icon_styles['fontCode' ] );
-			if( $style = $factory->get_attribute( 'content', $font_code ) ) {
+			$font_code = str_replace( "\f", '\f', $icon_styles['fontCode'] );
+			if ( $style = $factory->get_attribute( 'content', $font_code ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_ICON );
 			}
 		}
@@ -109,16 +109,16 @@ class Button extends ABlock {
 				'marginTop' => null,
 				'marginBottom' => null,
 				'marginLeft' => null,
-				'marginRight' => null
+				'marginRight' => null,
 			);
 
-			if( $position === 'left' ) {
-				$margin['marginRight'] = $icon_styles[ 'spacing' ] . 'px';
+			if ( $position === 'left' ) {
+				$margin['marginRight'] = $icon_styles['spacing'] . 'px';
 			} else {
-				$margin['marginLeft'] = $icon_styles[ 'spacing' ] . 'px';
+				$margin['marginLeft'] = $icon_styles['spacing'] . 'px';
 			}
 
-			if( $style = $factory->get_attribute( 'margin', $margin ) ) {
+			if ( $style = $factory->get_attribute( 'margin', $margin ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_ICON );
 			}
 		}
@@ -173,7 +173,7 @@ class Button extends ABlock {
 				),
 			),
 
-			'.tb-button__icon::before'   => array(
+			'.tb-button__icon::before' => array(
 				self::KEY_STYLES_FOR_ICON => array(
 					'content',
 				),

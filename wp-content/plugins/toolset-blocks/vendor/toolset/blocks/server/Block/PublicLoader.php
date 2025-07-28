@@ -29,7 +29,6 @@ class PublicLoader {
 			add_filter( 'block_categories_all', array( $this, 'register_toolset_blocks_category' ), 20 );
 		}
 
-
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 
 		add_filter( 'wpml_update_strings_in_block', [ $this, 'wpml_update_strings_in_block_filter' ], 10, 3 );
@@ -45,13 +44,13 @@ class PublicLoader {
 	 * @since 1.0.0
 	 */
 	public function register_toolset_blocks_category( $categories ) {
-		if ( ! array_search('toolset', array_column( $categories, 'slug' ) ) ) {
+		if ( ! array_search( 'toolset', array_column( $categories, 'slug' ) ) ) {
 			$categories = array_merge(
 				$categories,
 				array(
 					array(
-						'slug'  => self::TOOLSET_BLOCKS_CATEGORY_SLUG,
-						'title' => __( 'Toolset', 'wpv-views' ),
+						'slug' => self::TOOLSET_BLOCKS_CATEGORY_SLUG,
+						'title' => 'Toolset',
 					),
 				)
 			);
@@ -84,7 +83,7 @@ class PublicLoader {
 			\Toolset\DynamicSources\DynamicSources::TOOLSET_DYNAMIC_SOURCES_SCRIPT_HANDLE,
 			'codemirror-htmlmixed',
 			'glide',
-			'toolset-common-es'
+			'toolset-common-es',
 		);
 
 		// This is no longer needed when this bug is fixed:
@@ -105,11 +104,11 @@ class PublicLoader {
 		// Whenever a new custom function is allowed to be used in conditionals, it's added to an array. Once a function is deleted,
 		// it's removed from this array but the array keys are not rearranged, causing a structure similar to:
 		//
-		//      array(
-		//          0 => 'lorem',
-		//          3 => 'dolor',
-		//          7 => 'sit',
-		//      )
+		// array(
+		// 0 => 'lorem',
+		// 3 => 'dolor',
+		// 7 => 'sit',
+		// )
 		//
 		// When this array is sent to the client side through script localization, since JS won't see sequential keys
 		// this will be automatically converted into an object instead of an array.
@@ -144,7 +143,7 @@ class PublicLoader {
 		wp_set_script_translations( self::TOOLSET_BLOCKS_BLOCK_EDITOR_JS_HANDLE, 'toolset-blocks', TB_PATH . '/languages/' );
 
 		// Style
-		if( ! TB_HMR_RUNNING ) {
+		if ( ! TB_HMR_RUNNING ) {
 			// only load css when hmr is NOT active, otherwise it's included in the js
 			wp_enqueue_style(
 				self::TOOLSET_BLOCKS_BLOCK_EDITOR_CSS_HANDLE,
@@ -154,7 +153,7 @@ class PublicLoader {
 					'wp-edit-blocks',
 					'codemirror',
 					'glide',
-					'toolset-common-es'
+					'toolset-common-es',
 				),
 				TB_VER
 			);
@@ -189,7 +188,7 @@ class PublicLoader {
 	public function wpml_update_strings_in_block_filter( $block, $string_translations, $lang ) {
 		switch ( $block->blockName ) {
 			case 'toolset-blocks/fields-and-text':
-				if( strpos( $block->innerHTML, '<p' ) === false ) {
+				if ( strpos( $block->innerHTML, '<p' ) === false ) {
 					// The translation is pure text. (Not happening with ATE - Mai 2020)
 					$block->innerHTML = wpautop( $block->innerHTML );
 				}
@@ -209,12 +208,12 @@ class PublicLoader {
 	 * /public/js/style.js from our repo.
 	 */
 	private function workaround_webpack4_bug( $script_dependencies ) {
-		if( TB_HMR_RUNNING ) {
+		if ( TB_HMR_RUNNING ) {
 				// not needed when hmr is active
 				return $script_dependencies;
 		}
 
-		if( file_exists( TB_PATH . '/public/js/edit.js' ) ) {
+		if ( file_exists( TB_PATH . '/public/js/edit.js' ) ) {
 			wp_register_script(
 				'toolset_blocks-block-edit-js',
 				TB_BUNDLED_SCRIPT_PATH . '/edit.js',
@@ -225,7 +224,7 @@ class PublicLoader {
 			$script_dependencies[] = 'toolset_blocks-block-edit-js';
 		}
 
-		if( file_exists( TB_PATH . '/public/js/edit.js'  ) ) {
+		if ( file_exists( TB_PATH . '/public/js/edit.js' ) ) {
 			wp_register_script(
 				'toolset_blocks-block-style-js',
 				TB_BUNDLED_SCRIPT_PATH . '/style.js',
@@ -254,10 +253,10 @@ class PublicLoader {
 				'label' => __( 'Select a role', 'wpv-views' ),
 			],
 		];
-		foreach ( get_editable_roles() as $role_name => $role_info) {
+		foreach ( get_editable_roles() as $role_name => $role_info ) {
 			$result[] = [
 				'value' => $role_name,
-				'label' => $role_info[ 'name' ],
+				'label' => $role_info['name'],
 			];
 		}
 

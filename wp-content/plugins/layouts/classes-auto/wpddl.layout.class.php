@@ -526,7 +526,7 @@ class WPDD_layout_element {
 class WPDD_layout_row extends WPDD_layout_element {
 
 	private $cells;
-	protected $mode;
+	public $mode;
 	protected $containerPadding;
 
 	function __construct( $id, $name, $css_class_name = '', $editor_visual_template_id = '', $layout_type = 'fluid', $css_id = '', $additionalCssClasses = '', $tag = 'div', $mode = 'normal', $containerPadding = '' ) {

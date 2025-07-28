@@ -1,2 +1,6 @@
+### 1.1.0 | 2025-07-28
+- Updated to communicate directly with the Akismet API. No longer requires the Akismet plugin to be active and configured.
+- Fixed three PHP 8.2 creation of dynamic property deprecation notices that occur on form submission.
+
 ### 1.0 | 2021-07-07
 - All new!

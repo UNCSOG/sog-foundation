@@ -65,6 +65,7 @@ class WPA extends View {
 
 		$content = $this->filter_content_apply_css_classes( $content, $style );
 		$content = $this->filter_content_apply_id( $content, $style );
+		$content = $this->filter_content_apply_data_hash( $content );
 
 		return $content;
 	}
@@ -122,7 +123,6 @@ class WPA extends View {
 			return $content;
 		}
 
-		$wpa_div_class = strpos( $content, 'class="wp-block-toolset-views-wpa-editor' );
 		if(
 			preg_match( '/\sid=[^>]*?class=[\"\'](?:.*?)wp-block-toolset-views-wpa-editor/', $content ) ||
 			preg_match( '/\sclass=[\"\'](?:.*?)wp-block-toolset-views-wpa-editor[^>]*? id=/', $content )
@@ -134,7 +134,33 @@ class WPA extends View {
 		// Add id.
 		return preg_replace(
 			'/(class=[\"\'](?:.*?)wp-block-toolset-views-wpa-editor)/',
-			' id="'. $style['id'] .'" $1',
+			' id="'. esc_attr( $style['id'] ) .'" $1',
+			$content,
+			1 // Only the first div with wp-block-toolset-views-wpa-editor needs to be adjusted.
+		);
+	}
+
+	/**
+	 * Make sure the id added in the backend GUI is applied.
+	 * This is not fixable by js as any migration code kills the WPA load.
+	 *
+	 * @param string $content This the full post content.
+	 *
+	 * @return string
+	 */
+	private function filter_content_apply_data_hash( $content ) {
+		if(
+			preg_match( '/\sdata-toolset-views-wpa-editor=[^>]*?class=[\"\'](?:.*?)wp-block-toolset-views-wpa-editor/', $content ) ||
+			preg_match( '/\sclass=[\"\'](?:.*?)wp-block-toolset-views-wpa-editor[^>]*? data-toolset-views-wpa-editor=/', $content )
+		) {
+			// An id is already applied.
+			return $content;
+		}
+
+		// Add id.
+		return preg_replace(
+			'/(class=[\"\'](?:.*?)wp-block-toolset-views-wpa-editor)/',
+			' data-toolset-views-wpa-editor="'. esc_attr( $this->get_id() ) .'" $1',
 			$content,
 			1 // Only the first div with wp-block-toolset-views-wpa-editor needs to be adjusted.
 		);

@@ -16,7 +16,7 @@ if (ddl_has_feature('menu-cell') === false) {
 
 if( ! class_exists( 'Layouts_cell_Menu', false ) ) {
     
-	class Layouts_cell_Menu
+  class Layouts_cell_Menu
     {
 
         // define cell name
@@ -85,7 +85,7 @@ if( ! class_exists( 'Layouts_cell_Menu', false ) ) {
                         for="<?php the_ddl_name_attr('menu_dir'); ?>"><?php _e('Menu style', 'ddl-layouts'); ?></label>
                     <select name="<?php the_ddl_name_attr('menu_dir'); ?>">
                         <option value="nav-horizontal"><?php _e('Top Bar menu (horizontal)', 'ddl-layouts'); ?></option>
-						<option value="nav-stacked"><?php _e('Sidebar menu (vertical)', 'ddl-layouts'); ?></option>
+            <option value="nav-stacked"><?php _e('Sidebar menu (vertical)', 'ddl-layouts'); ?></option>
                     </select>
                 </p>
 
@@ -119,7 +119,7 @@ if( ! class_exists( 'Layouts_cell_Menu', false ) ) {
 
         function menu_cell_content_callback()
         {
-			/** @var WPDD_Layouts $wpddlayout */
+      /** @var WPDD_Layouts $wpddlayout */
             global $wpddlayout;
             $id = 'ddl-navbar-collapse-' . md5(time() + rand(0, 100));
             $menu_name = get_ddl_field('menu_name');
@@ -131,8 +131,8 @@ if( ! class_exists( 'Layouts_cell_Menu', false ) ) {
             $wpddlayout->enqueue_scripts('ddl-menu-cell-front-end');
 
             if( BootstrapSetting::NUMERIC_BS4 === Toolset_Settings::get_instance()->get_bootstrap_version_numeric() ) {
-				$wpddlayout->enqueue_scripts( 'ddl-menu-cell-front-end-bs3-dropdown-fallback' );
-			}
+        $wpddlayout->enqueue_scripts( 'ddl-menu-cell-front-end-bs3-dropdown-fallback' );
+      }
 
             $out = '';
 
@@ -164,11 +164,11 @@ if( ! class_exists( 'Layouts_cell_Menu', false ) ) {
                 $menu_alignment = 'right';
             }
             return apply_filters(
-            	'ddl-wrap_menu_start',
-				'<nav class="ddl-nav-wrap ddl-navbar ddl-navbar-default ddl-'.$menu_dir.' pull-'.$menu_alignment.'">',
-				$menu_dir,
-				$this
-			);
+              'ddl-wrap_menu_start',
+        '<nav class="ddl-nav-wrap ddl-navbar ddl-navbar-default ddl-'.$menu_dir.' pull-'.$menu_alignment.'">',
+        $menu_dir,
+        $this
+      );
         }
 
         private function wrap_menu_end($menu_dir)
@@ -231,7 +231,7 @@ if( ! class_exists( 'Layouts_cell_Menu', false ) ) {
 
 
 if( ! class_exists( 'DDL_Wpbootstrap_Nav_Walker', false ) ) {
-	
+  
     class DDL_Wpbootstrap_Nav_Walker extends Walker_Nav_Menu
     {
 
@@ -255,11 +255,11 @@ if( ! class_exists( 'DDL_Wpbootstrap_Nav_Walker', false ) ) {
                 $depth = (int)$depth;
                 $diff = $set_depth - $depth;
 
-				$toggle_name = (
-					BootstrapSetting::NUMERIC_BS4 === Toolset_Settings::get_instance()->get_bootstrap_version_numeric()
-						? 'bs3_fallback_dropdown'
-						: 'dropdown'
-				);
+        $toggle_name = (
+          BootstrapSetting::NUMERIC_BS4 === Toolset_Settings::get_instance()->get_bootstrap_version_numeric()
+            ? 'bs3_fallback_dropdown'
+            : 'dropdown'
+        );
 
                 if ($set_depth === 0) {
                     if ($item->is_dropdown && $depth === 0) {
@@ -298,6 +298,7 @@ if( ! class_exists( 'DDL_Wpbootstrap_Nav_Walker', false ) ) {
                 $set_depth = (int)$args[0]->depth;
                 $depth = (int)$depth;
                 $diff = $set_depth - $depth;
+                $max_depth = (int) $max_depth;
 
 
                 if ($set_depth === 0) {

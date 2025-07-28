@@ -19,7 +19,7 @@ add_action( 'init', function() {
 	}
 
 	// Frontend
-	if( ! is_admin() ) {
+	if ( ! is_admin() ) {
 		$dic->make( '\ToolsetBlocks\FrontendAssets' );
 
 		// Public Dependencies
@@ -52,7 +52,7 @@ add_action( 'init', function() {
 
 	// Common ES Blocks Styles - Add Block Factory for blocks of "Toolset Blocks".
 	add_filter( 'toolset_common_es_block_factories', function( $block_factories ) use ( $dic ) {
-		if( $block_factory = $dic->make( '\ToolsetBlocks\Block\Style\Block\Factory' ) ) {
+		if ( $block_factory = $dic->make( '\ToolsetBlocks\Block\Style\Block\Factory' ) ) {
 			$block_factories[] = $block_factory;
 		}
 		return $block_factories;
@@ -100,7 +100,7 @@ add_action( 'init', function() {
 }, 1 );
 
 add_action( 'rest_api_init', function() {
-	if( is_admin() || ( defined( 'REST_REQUEST') && REST_REQUEST ) ) {
+	if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
 		$dic = DicLoader::get_instance()->get_dic();
 
 		// Rest API

@@ -3670,6 +3670,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 			}
 		}
 		var data_for_events = {};
+		data_for_events.response     	= data.response;
 		data_for_events.view_unique_id	= data.view_num;
 		data_for_events.permalink	= data.permalink;
 		data.layout.fadeOut( 200, function() {
@@ -3787,6 +3788,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 								$( document ).trigger( 'js_event_wpv_parametric_search_form_updated', [ data_for_events ] );
 								if ( settings.update_results ) {
 									data_for_manage_updated_results.layout			= lay;
+									data_for_manage_updated_results.response		= response.data;
 									data_for_manage_updated_results.new_layout		= new_content_full_layout;
 									data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 									self.manage_update_results( data_for_manage_updated_results );
@@ -3840,6 +3842,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 								$( document ).trigger( 'js_event_wpv_parametric_search_form_updated', [ data_for_events ] );
 								if ( settings.update_results ) {
 									data_for_manage_updated_results.layout			= lay;
+									data_for_manage_updated_results.response		= response.data;
 									data_for_manage_updated_results.new_layout		= new_content_full_layout;
 									data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 									self.manage_update_results( data_for_manage_updated_results );
@@ -3898,6 +3901,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 								$( document ).trigger( 'js_event_wpv_parametric_search_form_updated', [ data_for_events ] );
 								if ( settings.update_results ) {
 									data_for_manage_updated_results.layout			= lay;
+									data_for_manage_updated_results.response		= response.data;
 									data_for_manage_updated_results.new_layout		= new_content_full_layout;
 									data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 									self.manage_update_results( data_for_manage_updated_results );
@@ -3941,6 +3945,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 								$( document ).trigger( 'js_event_wpv_parametric_search_form_updated', [ data_for_events ] );
 								if ( settings.update_results ) {
 									data_for_manage_updated_results.layout			= lay;
+									data_for_manage_updated_results.response		= response.data;
 									data_for_manage_updated_results.new_layout		= new_content_full_layout;
 									data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 									self.manage_update_results( data_for_manage_updated_results );
@@ -3996,6 +4001,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 									$( document ).trigger( 'js_event_wpv_parametric_search_form_updated', [ data_for_events ] );
 									if ( settings.update_results ) {
 										data_for_manage_updated_results.layout			= lay;
+										data_for_manage_updated_results.response		= response.data;
 										data_for_manage_updated_results.new_layout		= new_content_full_layout;
 										data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 										self.manage_update_results( data_for_manage_updated_results );
@@ -4058,6 +4064,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 									$( document ).trigger( 'js_event_wpv_parametric_search_form_updated', [ data_for_events ] );
 									if ( settings.update_results ) {
 										data_for_manage_updated_results.layout			= lay;
+										data_for_manage_updated_results.response		= response.data;
 										data_for_manage_updated_results.new_layout		= new_content_full_layout;
 										data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 										self.manage_update_results( data_for_manage_updated_results );
@@ -4096,6 +4103,7 @@ WPViews.ViewParametricSearch = function( $ ) {
 								//new_content_full_filter = new_content_full.find( '.js-wpv-filter-form' ).html();
 								new_content_full_layout = new_content_full.find( '.js-wpv-view-layout-' + view_num );
 								data_for_manage_updated_results.layout			= lay;
+								data_for_manage_updated_results.response		= response.data;
 								data_for_manage_updated_results.new_layout		= new_content_full_layout;
 								data_for_manage_updated_results.permalink		= response.data['parametric_permalink'];
 								self.manage_update_results( data_for_manage_updated_results );

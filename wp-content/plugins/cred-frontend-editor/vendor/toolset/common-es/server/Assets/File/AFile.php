@@ -2,7 +2,6 @@
 
 namespace ToolsetCommonEs\Assets\File;
 
-use PHPUnit\TextUI\RuntimeException;
 use ToolsetCommonEs\Assets\IFile;
 
 /**

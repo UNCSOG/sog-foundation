@@ -19,6 +19,7 @@ class Frontend {
 
 	/**
 	 * Add a content based dependecy
+	 *
 	 * @param IContent $dependency [description]
 	 */
 	public function add_content_based_dependency( IContent $dependency ) {
@@ -53,6 +54,7 @@ class Frontend {
 
 	/**
 	 * Add a content based dependecy
+	 *
 	 * @param IGeneral $dependency [description]
 	 */
 	public function add_dependency( IGeneral $dependency ) {
@@ -67,8 +69,8 @@ class Frontend {
 	 * @return string Untouched content
 	 */
 	public function load_dependencies_content( $content ) {
-		foreach( $this->dependencies_content as $dependency ) {
-			if( $dependency->is_required_for_content( $content ) ) {
+		foreach ( $this->dependencies_content as $dependency ) {
+			if ( $dependency->is_required_for_content( $content ) ) {
 				$dependency->load_dependencies();
 			}
 		}

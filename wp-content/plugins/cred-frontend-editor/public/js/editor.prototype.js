@@ -193,7 +193,7 @@ Toolset.CRED.EditorPagePrototype.prototype.initCodemirror = function( editorId, 
 
     if ( editorSettings.addQuicktags ) {
         var editorQt = quicktags( { id: editorId, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-        WPV_Toolset.add_qt_editor_buttons( editorQt, WPV_Toolset.CodeMirror_instance[ editorId ] );
+        ToolsetCommon.initQuicktags( editorQt, WPV_Toolset.CodeMirror_instance[ editorId ] );
     }
 
     if ( editorSettings.addBootstrap ) {

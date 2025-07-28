@@ -29,9 +29,6 @@ return [
 		'link-settings' => [
 			'title' => __( 'Link Typography', 'woocommerce-views' ),
 			'tabs' => 'normal-hover-active',
-			'colorIndicators' => [
-				'linkStyle' => [ 'textColor' ],
-			],
 			'fields' => [
 				'linkStyle' => 'all',
 			],

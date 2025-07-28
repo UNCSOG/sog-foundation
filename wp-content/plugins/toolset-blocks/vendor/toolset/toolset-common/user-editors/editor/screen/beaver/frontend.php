@@ -22,19 +22,19 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 			return;
 		}
 
-		add_filter( 'fl_builder_post_types',					array( $this, 'filter_support_medium' ) );
+		add_filter( 'fl_builder_post_types',            array( $this, 'filter_support_medium' ) );
+		add_filter( 'fl_render_content_by_id_can_view', array( $this, 'filter_can_view_medium' ), 10, 2 );
 
-		add_filter( 'body_class',								array( $this, 'body_class' ) );
+		add_filter( 'body_class', array( $this, 'body_class' ) );
 
-		add_filter( 'wpv_filter_content_template_output',		array( $this, 'filter_content_template_output' ), 10, 2 );
-		add_filter( 'wpv_filter_wpv-post-body_output',			array( $this, 'filter_content_template_output' ), 10, 2 );
-		add_filter( 'the_content',								array( $this, 'restore_beaver_filter' ), 9999 );
+		add_filter( 'wpv_filter_content_template_output', array( $this, 'filter_content_template_output' ), 10, 2 );
+		add_filter( 'wpv_filter_wpv-post-body_output',    array( $this, 'filter_content_template_output' ), 10, 2 );
+		add_filter( 'the_content',                        array( $this, 'restore_beaver_filter' ), 9999 );
 
-		add_filter( 'fl_builder_row_custom_class', array( $this, 'process_shortcodes_inside_custom_class' ), 10, 2 );
+		add_filter( 'fl_builder_row_custom_class',    array( $this, 'process_shortcodes_inside_custom_class' ), 10, 2 );
 		add_filter( 'fl_builder_column_custom_class', array( $this, 'process_shortcodes_inside_custom_class' ), 10, 2 );
 		add_filter( 'fl_builder_module_custom_class', array( $this, 'process_shortcodes_inside_custom_class' ), 10, 2 );
-
-		add_filter( 'fl_builder_module_attributes', array( $this, 'process_shortcodes_inside_custom_id_for_modules' ), 10, 2 );
+		add_filter( 'fl_builder_module_attributes',   array( $this, 'process_shortcodes_inside_custom_id_for_modules' ), 10, 2 );
 
 		$this->beaver_filter_enabled = true;
 		$this->beaver_post_id_stack = array();
@@ -75,6 +75,19 @@ class Toolset_User_Editors_Editor_Screen_Beaver_Frontend
 			$allowed_types[] = $medium_slug;
 		}
 		return $allowed_types;
+	}
+
+	/**
+	 * @param  bool $can_view
+	 * @param  int  $post_id
+	 *
+	 * @return bool
+	 */
+	public function filter_can_view_medium( $can_view, $post_id ) {
+		if ( get_post_type( $post_id ) === $this->medium->get_slug() ) {
+			return true;
+		}
+		return $can_view;
 	}
 
 	public function body_class( $classes ) {

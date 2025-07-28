@@ -40,8 +40,8 @@ class StickyLinks {
 				// Sticky Links replace the links using any WP update post function :(
 				$wpdb->update(
 					$wpdb->posts,
-					array( 'post_content' => $content),
-					array( 'ID'=> $post_id )
+					array( 'post_content' => $content ),
+					array( 'ID' => $post_id )
 				);
 			}
 		}

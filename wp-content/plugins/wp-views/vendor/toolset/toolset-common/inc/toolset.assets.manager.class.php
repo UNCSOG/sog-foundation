@@ -214,6 +214,8 @@ class Toolset_Assets_Manager {
 	const SCRIPT_COLORBOX = 'toolset-colorbox';
 	const SCRIPT_HEADJS = 'headjs';
 
+	const SCRIPT_TOOLSET_QUICKTAGS = 'toolset-quicktags-js';
+
 	const SCRIPT_ICL_EDITOR = 'icl_editor-script';
 	const SCRIPT_ICL_MEDIA_MANAGER = 'icl_media-manager-js';
 
@@ -941,9 +943,16 @@ class Toolset_Assets_Manager {
 		);
 
 		$this->register_script(
+			self::SCRIPT_TOOLSET_QUICKTAGS,
+			$this->assets_url . "/res/js/toolset-quicktags.js",
+			array( 'jquery', 'quicktags', 'wplink', self::SCRIPT_CODEMIRROR ),
+			TOOLSET_COMMON_VERSION
+		);
+
+		$this->register_script(
 			self::SCRIPT_ICL_EDITOR,
 			$this->assets_url . '/visual-editor/res/js/icl_editor_addon_plugin.js',
-			array( 'jquery', 'quicktags', 'wplink', self::SCRIPT_CODEMIRROR ),
+			array( 'jquery', self::SCRIPT_CODEMIRROR ),
 			TOOLSET_COMMON_VERSION
 		);
 

@@ -142,7 +142,7 @@ class CRED_Shortcode_Generator extends Toolset_Shortcode_Generator {
 		$this->enforce_shortcode_assets();
 		$registered_sections[ 'cred' ] = array(
 			'id'		=> 'CRED',
-			'title'		=> __( 'Toolset Forms', 'wp-cred' ),
+			'title'		=> 'Toolset Forms',
 			'href'		=> '#cred_shortcodes',
 			'parent'	=> 'toolset-shortcodes',
 			'meta'		=> 'js-cred-shortcode-generator-node'
@@ -203,9 +203,9 @@ class CRED_Shortcode_Generator extends Toolset_Shortcode_Generator {
 				'processing' => __( 'Processing', 'wp-cred' )
 			),
 			'title' => array(
-				'dialog' => __( 'Toolset - Forms', 'wp-cred' ),
+				'dialog' => 'Toolset Forms',
 				'generated' => __( 'Toolset - generated shortcode', 'wp-cred' ),
-				'button' => __( 'Toolset Forms', 'wp-cred' ),
+				'button' => 'Toolset Forms',
 			),
 			'validation' => array(
 				'mandatory'		=> __( 'This option is mandatory ', 'wp-cred' ),
@@ -257,7 +257,7 @@ class CRED_Shortcode_Generator extends Toolset_Shortcode_Generator {
 			),
 			'mce' => array(
 				'forms' => array(
-					'button' => __( 'Toolset Forms', 'wp-cred' ),
+					'button' => 'Toolset Forms',
 					'canEdit' => current_user_can( 'manage_options' ),
 					'editLink' => admin_url( 'post.php?action=edit' ),
 					'editRelationshipFormLink' => admin_url( 'admin.php?page=cred_relationship_form&action=edit' ),
@@ -456,7 +456,7 @@ class CRED_Shortcode_Generator extends Toolset_Shortcode_Generator {
 		$args = wp_parse_args( $args, $defaults );
 
 		$button			= '';
-		$button_label	= __( 'Toolset Forms', 'wp-cred' );
+		$button_label	= 'Toolset Forms';
 
 		switch ( $args['output'] ) {
 			case 'button':

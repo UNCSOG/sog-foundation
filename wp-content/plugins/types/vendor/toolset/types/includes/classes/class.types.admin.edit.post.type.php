@@ -970,6 +970,11 @@ class Types_Admin_Edit_Post_Type extends Types_Admin_Page
                 'description' => __( 'The view item text. Default is View Post/View Page.', 'wpcf' ),
                 'label' => __('View Item', 'wpcf'),
             ),
+            'view_items' => array(
+                'title' => __( 'View %s', 'wpcf' ),
+                'description' => __( 'The view item text. Default is View Post/View Page.', 'wpcf' ),
+                'label' => __('View Item', 'wpcf'),
+            ),
             'search_items' => array(
                 'title' => __( 'Search %s', 'wpcf' ),
                 'description' => __( 'The search items text. Default is Search Posts/Search Pages.', 'wpcf' ),
@@ -986,14 +991,114 @@ class Types_Admin_Edit_Post_Type extends Types_Admin_Page
                 'label' => __('Not Found In Trash', 'wpcf'),
             ),
             'parent_item_colon' => array(
-                'title' => __( 'Parent text', 'wpcf' ),
+                'title' => __( 'Parent %s:', 'wpcf' ),
                 'description' => __( "The parent text. This string isn't used on non-hierarchical types. In hierarchical ones the default is Parent Page.", 'wpcf' ),
                 'label' => __('Parent Description', 'wpcf'),
             ),
+            'menu_name' => array(
+                'title' => __( '%s', 'wpcf' ),
+                'description' => __( 'Label for the menu name. Default is the Name label.', 'wpcf' ),
+                'label' => __('Menu Name', 'wpcf'),
+            ),
             'all_items' => array(
-                'title' => __( 'All items', 'wpcf' ),
+                'title' => __( 'All %s', 'wpcf' ),
                 'description' => __( 'The all items text used in the menu. Default is the Name label.', 'wpcf' ),
                 'label' => __('All Items', 'wpcf'),
+            ),
+            'archives' => array(
+                'title' => __( '%s Archives', 'wpcf' ),
+                'description' => __( 'Label for archives in nav menus. Default is "{Plural Label} Archives".', 'wpcf' ),
+                'label' => __('Archives', 'wpcf'),
+            ),
+            'attributes' => array(
+                'title' => __( '%s Attributes', 'wpcf' ),
+                'description' => __( 'Label for the attributes meta box. Default is "{Singular Label} Attributes".', 'wpcf' ),
+                'label' => __('Attributes', 'wpcf'),
+            ),
+            'insert_into_item' => array(
+                'title' => __( 'Insert into %s', 'wpcf' ),
+                'description' => __( 'Label for the media frame button. Default is "Default is {Singular Label in lowercase}".', 'wpcf' ),
+                'label' => __('Insert into item', 'wpcf'),
+            ),
+            'uploaded_to_this_item' => array(
+                'title' => __( 'Uploaded to this %s', 'wpcf' ),
+                'description' => __( 'Label for the media frame filter. Default is "Uploaded to this {Singular Label in lowercase}".', 'wpcf' ),
+                'label' => __('Uploaded to this item', 'wpcf'),
+            ),
+            'featured_image' => array(
+                'title' => __( 'Featured image', 'wpcf' ),
+                'description' => __( 'Label for the featured image meta box title. Default is "Featured image".', 'wpcf' ),
+                'label' => __('Featured Image', 'wpcf'),
+            ),
+            'set_featured_image' => array(
+                'title' => __( 'Set featured image', 'wpcf' ),
+                'description' => __( 'Label for setting the featured image. Default is "Set featured image".', 'wpcf' ),
+                'label' => __('Set Featured Image', 'wpcf'),
+            ),
+            'remove_featured_image' => array(
+                'title' => __( 'Remove featured image', 'wpcf' ),
+                'description' => __( 'Label for removing the featured image. Default is "Remove featured image".', 'wpcf' ),
+                'label' => __('Remove Featured Image', 'wpcf'),
+            ),
+            'use_featured_image' => array(
+                'title' => __( 'Use as featured image', 'wpcf' ),
+                'description' => __( 'Label in the media frame for using a featured image. Default is "Use as featured image".', 'wpcf' ),
+                'label' => __('Use As Featured Image', 'wpcf'),
+            ),
+            'filter_items_list' => array(
+                'title' => __( 'Filter %s list', 'wpcf' ),
+                'description' => __( 'Label for the table views hidden heading. Default is "Filter {Plural Label in lowercase} list".', 'wpcf' ),
+                'label' => __('Filter items list', 'wpcf'),
+            ),
+            'filter_by_date' => array(
+                'title' => __( 'Filter by date', 'wpcf' ),
+                'description' => __( 'Label for the date filter in list tables. Default is "Filter by date".', 'wpcf' ),
+                'label' => __('Filter by date', 'wpcf'),
+            ),
+            'items_list_navigation' => array(
+                'title' => __( '%s list navigation', 'wpcf' ),
+                'description' => __( 'Label for the table pagination hidden heading. Default is "{Plural Label} list navigation".', 'wpcf' ),
+                'label' => __('Items list navigation', 'wpcf'),
+            ),
+            'items_list' => array(
+                'title' => __( '%s list', 'wpcf' ),
+                'description' => __( 'Label for the table hidden heading. Default is "{Plural Label} list".', 'wpcf' ),
+                'label' => __('Items list', 'wpcf'),
+            ),
+            'item_published' => array(
+                'title' => __( '%s published.', 'wpcf' ),
+                'description' => __( 'Label used when an item is published. Default is "{Singular Label} published.".', 'wpcf' ),
+                'label' => __('Item published', 'wpcf'),
+            ),
+            'item_published_privately' => array(
+                'title' => __( '%s published privately.', 'wpcf' ),
+                'description' => __( 'Label used when an item is published with private visibility. Default is "{Singular Label} published privately.".', 'wpcf' ),
+                'label' => __('Item published privately', 'wpcf'),
+            ),
+            'item_reverted_to_draft' => array(
+                'title' => __( '%s reverted to draft.', 'wpcf' ),
+                'description' => __( 'Label used when an item is switched to a draft. Default is "{Singular Label} reverted to draft.".', 'wpcf' ),
+                'label' => __('Item reverted to draft', 'wpcf'),
+            ),
+            'item_trashed' => array(
+                'title' => __( '%s trashed.', 'wpcf' ),
+                'description' => __( 'Label used when an item is moved to Trash. Default is "{Singular Label} trashed.".', 'wpcf' ),
+                'label' => __('Item trashed', 'wpcf'),
+            ),
+            'item_updated' => array(
+                'title' => __( '%s updated.', 'wpcf' ),
+                'description' => __( 'Label used when an item is updated. Default is "{Singular Label} updated.".', 'wpcf' ),
+                'label' => __('Item updated', 'wpcf'),
+            ),
+            'item_link' => array(
+                'title' => __( '%s Link', 'wpcf' ),
+                'description' => __( 'Title for a navigation link block variation. Default is "{Singular Label} Link".', 'wpcf' ),
+                'label' => __('Item Link', 'wpcf'),
+            ),
+            'item_link_description' => array(
+                'title' => __( 'A link to a %s.', 'wpcf' ),
+                'description' => __( 'Description for a navigation link block variatio. Default is "A link to a {Singular Label in lowercase}".', 'wpcf' ),
+                'label' => __('A link to an item', 'wpcf'),
             ),
             'enter_title_here' => array(
                 'title' => __( 'Enter title here', 'wpcf' ),
@@ -1012,13 +1117,12 @@ class Types_Admin_Edit_Post_Type extends Types_Admin_Page
             /**
              * get value
              */
-            $value = empty($this->ct['slug'])? $data['title']:(isset( $this->ct['labels'][$name] ) ? $this->ct['labels'][$name] : '');
+            $value = empty($this->ct['slug'])? $data['title']:(isset( $this->ct['labels'][$name] ) ? $this->ct['labels'][$name] : $data['title']);
             /**
              * force if empty
              */
             if (
-                true
-                && empty($value)
+                empty($value)
                 && isset($data['force_if_empty'])
                 && isset($data['default_value'])
                 && $data['force_if_empty']

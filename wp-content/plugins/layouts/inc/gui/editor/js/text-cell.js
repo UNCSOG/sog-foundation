@@ -41,7 +41,7 @@ DDLayout.TextCell = function($)
             self.editor.codemirror = icl_editor.codemirror( 'visual-editor-html-editor', true );
             self._visual_editor_html_editor_qt = quicktags( { id: 'visual-editor-html-editor', buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
             // The object is called WPV_Toolset. No need to worry. @see icl_editor_addon_plugin.js
-            WPV_Toolset.add_qt_editor_buttons( self._visual_editor_html_editor_qt, self.editor.codemirror );
+            ToolsetCommon.initQuicktags( self._visual_editor_html_editor_qt, self.editor.codemirror );
         } else {
             // Avoid loading previous content through Ctrl+Z
             self.editor.codemirror.clearHistory();

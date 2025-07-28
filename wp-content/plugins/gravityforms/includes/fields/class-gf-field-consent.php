@@ -76,7 +76,7 @@ class GF_Field_Consent extends GF_Field {
 		 *
 		 * @param string $tag Image tag.
 		 */
-		$this->checked_indicator_markup = apply_filters( 'gform_consent_checked_indicator_markup', '<img src="' . esc_url( $this->checked_indicator_url ) . '" />' );
+		$this->checked_indicator_markup = apply_filters( 'gform_consent_checked_indicator_markup', '<img src="' . esc_url( $this->checked_indicator_url ) . '" alt="" />' );
 	}
 
 	/**
@@ -272,7 +272,7 @@ class GF_Field_Consent extends GF_Field {
 
 			$css_class .= ' gfield_consent_description';
 
-			return "<div class='$css_class' id='$id'>" . nl2br( $description ) . '</div>';
+			return "<div class='$css_class' id='$id' tabindex='0'>" . nl2br( $description ) . '</div>';
 		}
 
 		return parent::get_description( $description, $css_class );

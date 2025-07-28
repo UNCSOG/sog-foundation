@@ -15,7 +15,7 @@ class InlineField {
 	 */
 	public static function replace_span_with_shortcode( $content ) {
 		return preg_replace_callback(
-			'/<span\s+((?:data-[\w\-]+=["\']+.*["\']+[\s]+)+)class=["\'].*tb-inline-field.*["\']\s*>(.*)<\/span>/U',
+			'/<span\s+((?:data-\w+=[\'"][^\'"]*[\'"]\s+)+)class=[\'"][^\'"]*tb-inline-field[^\'"]*[\'"]\s*>(.*?)<\/span>/is',
 			function ( $matches ) {
 				return '[tb-dynamic ' . str_replace( 'data-', '', $matches[1] ) . 'force-string="first"]';
 			},

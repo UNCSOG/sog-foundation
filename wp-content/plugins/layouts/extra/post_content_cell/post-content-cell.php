@@ -10,13 +10,13 @@ class WPDD_layout_cell_post_content extends WPDD_layout_cell {
 
 	function frontend_render_cell_content($target) {
 		global $WPV_templates, $post, $id, $authordata;
-		
+
 		$cell_content = $this->get_content();
-		
+
 		if ($cell_content['page'] == 'current_page') {
 			do_action('ddl-layouts-render-start-post-content');
 		}
-		
+
 		// View template support is only here for backwards support before 0.9.2.
 		// It's not used for post content cells for 0.9.2 and later.
 		if (isset($WPV_templates) && isset($cell_content['ddl_view_template_id']) && $cell_content['ddl_view_template_id'] != 'None') {
@@ -36,7 +36,7 @@ class WPDD_layout_cell_post_content extends WPDD_layout_cell {
 
 			$content = '';
 			if( $target->is_layout_argument_set( 'post-content-callback' ) && function_exists( $target->get_layout_arguments( 'post-content-callback' ) ) ) {
-				
+
 	            global $wp_query;
 
 				// in case of issue uncomment this line
@@ -65,7 +65,7 @@ class WPDD_layout_cell_post_content extends WPDD_layout_cell {
 
 				call_user_func( $target->get_layout_arguments( 'post-content-callback' ) );
 				$content = ob_get_clean();
-				
+
 				if ($cell_content['page'] == 'this_page') {
 					// restore the global wp_query.
 					$wp_query = isset( $original_query ) ? clone $original_query : null;
@@ -73,7 +73,7 @@ class WPDD_layout_cell_post_content extends WPDD_layout_cell {
 					$authordata = isset( $original_authordata ) ? clone $original_authordata : null;
 					$id = $original_id;
 				}
-				
+
 			} else {
 
 				if ( $cell_content['page'] == 'current_page' && is_object($post) && property_exists($post, 'post_content')) {
@@ -84,17 +84,17 @@ class WPDD_layout_cell_post_content extends WPDD_layout_cell {
 						$content = apply_filters('the_content', $other_post->post_content);
 					}
 				}
-				
+
 			}
-			
+
 			if (isset($WPV_templates)) {
 				add_filter('the_content', array($WPV_templates, 'the_content'), 1, 1);
 			}
-			
-			
+
+
 		}
 		$ret = $target->cell_content_callback($content, $this);
-		
+
 		if ($cell_content['page'] == 'current_page') {
 			do_action('ddl-layouts-render-end-post-content');
 		}
@@ -201,7 +201,7 @@ class WPDD_layout_cell_post_content_factory extends WPDD_layout_cell_factory{
 					</div>
 				</fieldset>
 			</li>
-		
+
 
 		</ul>
 		<?php ddl_add_help_link_to_dialog(WPDLL_POST_CONTENT_CELL, __('Learn about the Post Content cell', 'ddl-layouts')); ?>
@@ -213,7 +213,17 @@ class WPDD_layout_cell_post_content_factory extends WPDD_layout_cell_factory{
 
 
 	public function enqueue_editor_scripts() {
-		wp_register_script( 'wp-post-content-editor', ( WPDDL_GUI_RELPATH . "editor/js/post-content-cell.js" ), array('jquery'), null, true );
+		wp_register_script(
+			'wp-post-content-editor',
+			( WPDDL_GUI_RELPATH . "editor/js/post-content-cell.js" ),
+			array(
+				'jquery',
+				Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
+			),
+			null,
+			true
+		);
 		wp_enqueue_script( 'wp-post-content-editor' );
 
 		wp_localize_script('wp-post-content-editor', 'DDLayout_post_content_strings', array(
@@ -291,9 +301,9 @@ function ddl_post_content_get_post_title_callback() {
     if ( !isset($_POST["wpnonce"]) || !wp_verify_nonce($_POST["wpnonce"], 'ddl_layout_view_nonce') ) die("Undefined Nonce.");
 
     global $wpdb;
-	
+
 	echo $wpdb->get_var($wpdb->prepare( "SELECT post_title FROM {$wpdb->posts} WHERE ID=%s", $_POST['post_id']) );
-	
+
 	die();
 }
 

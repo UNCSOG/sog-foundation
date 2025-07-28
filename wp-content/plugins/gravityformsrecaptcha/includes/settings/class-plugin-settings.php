@@ -9,9 +9,11 @@ namespace Gravity_Forms\Gravity_Forms_RECAPTCHA\Settings;
 
 use Gravity_Forms\Gravity_Forms_RECAPTCHA\GF_RECAPTCHA;
 use Gravity_Forms\Gravity_Forms\Settings\Fields\Text;
+use Gravity_Forms\Gravity_Forms_RECAPTCHA\RECAPTCHA_API;
 use Gravity_Forms\Gravity_Forms_RECAPTCHA\Token_Verifier;
 use GF_Field_CAPTCHA;
 use GFCommon;
+use GFForms;
 
 /**
  * Class Plugin_Settings
@@ -51,20 +53,185 @@ class Plugin_Settings {
 	 * Get the plugin settings fields.
 	 *
 	 * @since 1.0
+	 * @since 1.7.0 Added support for reCAPTCHA v3 enterprise.
 	 * @see   GF_RECAPTCHA::plugin_settings_fields()
 	 *
 	 * @return array
 	 */
 	public function get_fields() {
+
+		// If we're in a legacy environment with both v2 and v3 keys, show the traditional settings.
+		if ( $this->use_legacy_settings() ) {
+			return array(
+				$this->get_description_fields(),
+				$this->get_v3_fields(),
+				$this->get_v2_fields(),
+				$this->get_disconnect_button(),
+			);
+		}
+
+		// If there are no keys and no connection type, show the key type selection.
+		if ( ! $this->has_populated_keys() && ! rgget( 'connection_type' ) ) {
+			return $this->get_recaptcha_key_type();
+		}
+
+		$plugin_settings = $this->addon->get_plugin_settings();
+
+		// Show the relevant fields based on the connection type.
+		switch ( rgar( $plugin_settings, 'connection_type' ) ) {
+			case 'enterprise':
+				// Force manual reconnection when a WP_Error during refresh bug (versions 1.7-1.9) erased these values.
+				if ( empty( $plugin_settings['access_token'] ) || empty( $plugin_settings['refresh_token'] ) ) {
+					return $this->get_recaptcha_key_type();
+				}
+
+				return array(
+					$this->get_description_fields( 'enterprise' ),
+					$this->get_v3_enterprise_fields(),
+					$this->get_disconnect_button(),
+				);
+			case 'v2':
+				return array(
+					$this->get_description_fields( 'v2' ),
+					$this->get_v2_fields(),
+					$this->get_change_connection_button(),
+				);
+			case 'classic':
+				return array(
+					$this->get_description_fields( 'classic' ),
+					$this->get_v3_fields(),
+					$this->get_change_connection_button(),
+				);
+			default:
+				return $this->get_recaptcha_key_type();
+		}
+	}
+
+	/**
+	 * Show the reCAPTCHA Connection Type selection.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return array
+	 */
+	private function get_recaptcha_key_type() {
+
+		$legacy_only                 = version_compare( GFForms::$version, '2.9.0-dev-1', '<' );
+		$enterprise_card_description = $legacy_only ?
+			esc_html__( 'reCAPTCHA v3 Enterprise keys require Gravity Forms 2.9 or later. Upgrade your Gravity Forms installation to get access to this connection method', 'gravityformsrecaptcha' ) :
+			esc_html__( 'Modern reCAPTCHA keys using the enterprise API. All newly created v3 keys are enterprise keys. Unlike classic keys, enterprise keys require only a site key to function.', 'gravityformsrecaptcha' );
+
+		$card_choices = array(
+			array(
+				'label'       => esc_html__( 'v3 Enterprise', 'gravityformsrecaptcha' ),
+				'value'       => 'enterprise',
+				'disabled'    => $legacy_only,
+				'icon'        => $this->addon->get_base_url() . '/images/v3enterprise.png',
+				'tag'         => esc_html__( 'Recommended', 'gravityformsrecaptcha' ),
+				'color'       => 'orange',
+				'title'       => esc_html__( 'reCAPTCHA v3 Enterprise', 'gravityformsrecaptcha' ),
+				'description' => $enterprise_card_description,
+			),
+			array(
+				'label'       => esc_html__( 'v2', 'gravityformsrecaptcha' ),
+				'value'       => 'v2',
+				'icon'        => $this->addon->get_base_url() . '/images/v3.png',
+				'tag'         => esc_html__( 'Challenge based', 'gravityformsrecaptcha' ),
+				'color'       => 'orange',
+				'title'       => esc_html__( 'reCAPTCHA v2', 'gravityformsrecaptcha' ),
+				'description' => esc_html__( 'Challenge based keys using the v2 API. This method allows a reCAPTCHA challenge field to be inserted into your forms.', 'gravityformsrecaptcha' ),
+			),
+			array(
+				'label'       => esc_html__( 'v3 Classic', 'gravityformsrecaptcha' ),
+				'value'       => 'classic',
+				'icon'        => $this->addon->get_base_url() . '/images/v3.png',
+				'tag'         => esc_html__( 'Legacy', 'gravityformsrecaptcha' ),
+				'color'       => 'blue-ribbon',
+				'title'       => esc_html__( 'reCAPTCHA v3 Classic', 'gravityformsrecaptcha' ),
+				'description' => esc_html__( 'Legacy v3 keys. New classic keys can no longer be created, but you can use an existing site key and secret.', 'gravityformsrecaptcha' ),
+			),
+		);
+
 		return array(
-			$this->get_description_fields(),
-			$this->get_v3_fields(),
-			$this->get_v2_fields(),
+			array(
+				'title'       => esc_html__( 'Select reCAPTCHA Connection Type', 'gravityformsrecaptcha' ),
+				'description' => esc_html__( 'Select which type of keys to use for reCAPTCHA.', 'gravityformsrecaptcha' ),
+				'fields'      => array(
+					array(
+						'name'     => 'nonce',
+						'type'     => 'nonce_connect',
+						'readonly' => true,
+					),
+					array(
+						'name'     => 'action',
+						'type'     => 'hidden',
+						'readonly' => true,
+						'value'    => 'recaptcha_setup',
+						'id'       => 'recaptcha_setup',
+					),
+					array(
+						'type'  => 'save',
+						'value' => esc_html__( 'Continue &rarr;', 'gravityformsrecaptcha' ),
+						'id'    => 'recaptcha-connect',
+					),
+
+				),
+			),
+			array(
+				'fields' => array(
+					array(
+						'name'    => 'connection_type',
+						'type'    => 'card',
+						'choices' => $card_choices,
+					),
+				),
+			),
 		);
 	}
 
 	/**
-	 * Gets any custom plugin settings
+	 * Check if the keys have been populated.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool
+	 */
+	private function has_populated_keys() {
+		$plugin_settings = $this->addon->get_plugin_settings();
+		if ( ! empty( rgar( $plugin_settings, 'site_key_v3' ) ) ||
+			! empty( rgar( $plugin_settings, 'secret_key_v3' ) ) ||
+			! empty( rgar( $plugin_settings, 'site_key_v2' ) ) ||
+			! empty( rgar( $plugin_settings, 'secret_key_v2' ) ) ||
+			! empty( rgar( $plugin_settings, 'site_key_v3_enterprise' ) ) ||
+			! empty( rgar( $plugin_settings, 'access_token' ) )
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Determine if we should show the legacy settings screen.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool
+	 */
+	private function use_legacy_settings() {
+		$plugin_settings = $this->addon->get_plugin_settings();
+		if ( ( ! empty( rgar( $plugin_settings, 'site_key_v3' ) ) ||
+			! empty( rgar( $plugin_settings, 'secret_key_v3' ) ) ||
+			! empty( rgar( $plugin_settings, 'site_key_v2' ) ) ||
+			! empty( rgar( $plugin_settings, 'secret_key_v2' ) )
+		) && empty( rgar( $plugin_settings, 'connection_type' ) ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Gets any custom plugin settings, ensuring they contain the latest values from the constants.
 	 *
 	 * @since 1.0
 	 *
@@ -75,6 +242,16 @@ class Plugin_Settings {
 	public function get_settings( $settings ) {
 		if ( ! is_array( $settings ) ) {
 			$settings = array();
+		}
+
+		$site_key = $this->get_recaptcha_key( 'site_key_v3', true );
+		if ( $site_key ) {
+			$settings['site_key_v3'] = $site_key;
+		}
+
+		$secret_key = $this->get_recaptcha_key( 'secret_key_v3', true );
+		if ( $secret_key ) {
+			$settings['secret_key_v3'] = $secret_key;
 		}
 
 		return array_merge(
@@ -103,14 +280,18 @@ class Plugin_Settings {
 	/**
 	 * Get the description section for the plugin settings.
 	 *
+	 * @param string $connection_type The connection type.
+	 *
 	 * @since 1.0
+	 * @since 1.7.0 Updated to show the correct description based on the connection type.
+	 *
 	 * @return array
 	 */
-	private function get_description_fields() {
+	private function get_description_fields( $connection_type = null ) {
 		return array(
 			'id'          => 'gravityformsrecaptcha_description',
 			'title'       => esc_html__( 'reCAPTCHA Settings', 'gravityformsrecaptcha' ),
-			'description' => $this->get_settings_intro_description(),
+			'description' => $this->get_settings_intro_description( $connection_type ),
 			'fields'      => array(
 				array(
 					'type' => 'html',
@@ -126,21 +307,29 @@ class Plugin_Settings {
 	 * @return array
 	 */
 	private function get_v3_fields() {
+		$site_key        = $this->get_recaptcha_key( 'site_key_v3', true );
+		$secret_key      = $this->get_recaptcha_key( 'secret_key_v3', true );
+		$connection_type = $this->addon->get_connection_type();
+
 		return array(
 			'id'     => 'gravityformsrecaptcha_v3',
-			'title'  => esc_html__( 'reCAPTCHA v3', 'gravityformsrecaptcha' ),
+			'title'  => esc_html__( 'reCAPTCHA v3 Classic', 'gravityformsrecaptcha' ),
 			'fields' => array(
 				array(
 					'name'              => 'site_key_v3',
 					'label'             => esc_html__( 'Site Key', 'gravityformsrecaptcha' ),
 					'type'              => 'text',
 					'feedback_callback' => array( $this, 'v3_keys_status_feedback_callback' ),
+					'readonly'          => empty( $site_key ) ? '' : 'readonly',
+					'after_input'       => $this->get_constant_message( $site_key, 'GF_RECAPTCHA_V3_SITE_KEY' ),
 				),
 				array(
 					'name'              => 'secret_key_v3',
 					'label'             => esc_html__( 'Secret Key', 'gravityformsrecaptcha' ),
 					'type'              => 'text',
 					'feedback_callback' => array( $this, 'v3_keys_status_feedback_callback' ),
+					'readonly'          => empty( $secret_key ) ? '' : 'readonly',
+					'after_input'       => $this->get_constant_message( $secret_key, 'GF_RECAPTCHA_V3_SECRET_KEY' ),
 				),
 				array(
 					'name'                => 'score_threshold_v3',
@@ -153,6 +342,13 @@ class Plugin_Settings {
 					'min'                 => '0.0',
 					'max'                 => '1.0',
 					'validation_callback' => array( $this, 'validate_score_threshold_v3' ),
+				),
+				array(
+					'name'     => 'connection_type',
+					'type'     => 'hidden',
+					'readonly' => true,
+					'value'    => $connection_type,
+					'id'       => 'connection_type',
 				),
 				array(
 					'name'        => 'disable_badge_v3',
@@ -178,8 +374,106 @@ class Plugin_Settings {
 						),
 					),
 				),
+				array(
+					'name' => 'action',
+					'type' => 'recaptcha_action',
+				),
 			),
 		);
+	}
+
+	/**
+	 * Get the plugin settings fields for reCAPTCHA v3 enterprise.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return array
+	 */
+	private function get_v3_enterprise_fields() {
+		$site_key        = $this->get_recaptcha_key( 'site_key_v3_enterprise', true );
+		$connection_type = $this->addon->get_connection_type();
+
+		return array(
+			'id'     => 'gravityformsrecaptcha_v3',
+			'title'  => esc_html__( 'reCAPTCHA v3 Enterprise', 'gravityformsrecaptcha' ),
+			'fields' => array(
+				array(
+					'name'  => 'recaptcha_enterprise_fields',
+					'label' => esc_html__( 'reCAPTCHA Project ID', 'gravityformsrecaptcha' ),
+					'type'  => 'recaptcha_enterprise_fields',
+				),
+				array(
+					'name'                => 'score_threshold_v3',
+					'label'               => esc_html__( 'Score Threshold', 'gravityformsrecaptcha' ),
+					'description'         => $this->get_score_threshold_description(),
+					'default_value'       => 0.5,
+					'type'                => 'text',
+					'input_type'          => 'number',
+					'step'                => '0.01',
+					'min'                 => '0.0',
+					'max'                 => '1.0',
+					'validation_callback' => array( $this, 'validate_score_threshold_v3' ),
+				),
+				array(
+					'name'     => 'connection_type',
+					'type'     => 'hidden',
+					'readonly' => true,
+					'value'    => $connection_type,
+					'id'       => 'connection_type',
+				),
+				array(
+					'name'        => 'disable_badge_v3',
+					'label'       => esc_html__( 'Disable Google reCAPTCHA Badge', 'gravityformsrecaptcha' ),
+					'description' => esc_html__( 'By default reCAPTCHA v3 displays a badge on every page of your site with links to the Google terms of service and privacy policy. You are allowed to hide the badge as long as you include the reCAPTCHA branding and links visibly in the user flow.', 'gravityformsrecaptcha' ),
+					'type'        => 'checkbox',
+					'choices'     => array(
+						array(
+							'name'  => 'disable_badge_v3',
+							'label' => esc_html__( 'I have added the reCAPTCHA branding, terms of service and privacy policy to my site. ', 'gravityformsrecaptcha' ),
+						),
+					),
+				),
+				array(
+					'name'          => 'recaptcha_keys_status_v3',
+					'type'          => 'checkbox',
+					'default_value' => $this->get_recaptcha_key( 'recaptcha_keys_status_v3' ),
+					'hidden'        => true,
+					'choices'       => array(
+						array(
+							'type' => 'checkbox',
+							'name' => 'recaptcha_keys_status_v3',
+						),
+					),
+				),
+				array(
+					'name' => 'nonce',
+					'type' => 'nonce_connect',
+				),
+				array(
+					'name' => 'action',
+					'type' => 'recaptcha_action',
+				),
+			),
+		);
+	}
+
+	/**
+	 * Returns the setting info message to be displayed when the value is defined using a constant.
+	 *
+	 * @since 1.3
+	 *
+	 * @param string $value    The value.
+	 * @param string $constant The constant name.
+	 *
+	 * @return string
+	 */
+	public function get_constant_message( $value, $constant ) {
+		if ( empty( $value ) ) {
+			return '';
+		}
+
+		// translators: %s is the constant name.
+		return '<div class="alert gforms_note_info">' . sprintf( esc_html__( 'Value defined using the %s constant.', 'gravityformsrecaptcha' ), $constant ) . '</div>';
 	}
 
 	/**
@@ -189,6 +483,8 @@ class Plugin_Settings {
 	 * @return array
 	 */
 	private function get_v2_fields() {
+		$connection_type = $this->addon->get_connection_type();
+
 		return array(
 			'id'     => 'gravityformsrecaptcha_v2',
 			'title'  => esc_html__( 'reCAPTCHA v2', 'gravityformsrecaptcha' ),
@@ -224,6 +520,13 @@ class Plugin_Settings {
 							'value' => 'invisible',
 						),
 					),
+				),
+				array(
+					'name'     => 'connection_type',
+					'type'     => 'hidden',
+					'readonly' => true,
+					'value'    => $connection_type,
+					'id'       => 'connection_type',
 				),
 				array(
 					'name'                => 'reset_v2',
@@ -274,6 +577,10 @@ class Plugin_Settings {
 						}
 					},
 				),
+				array(
+					'name' => 'action',
+					'type' => 'recaptcha_action',
+				),
 			),
 		);
 	}
@@ -297,12 +604,58 @@ class Plugin_Settings {
 	}
 
 	/**
-	 * Get the contents of the description field.
+	 * The disconnect button field.
 	 *
-	 * @since 1.0
+	 * @since 1.7.0
+	 *
 	 * @return array
 	 */
-	private function get_settings_intro_description() {
+	private function get_disconnect_button() {
+		return array(
+			'id'     => 'gravityformsrecaptcha_disconnect',
+			'title'  => esc_html__( 'Disconnect reCAPTCHA', 'gravityformsrecaptcha' ),
+			'fields' => array(
+				array(
+					'type'  => 'disconnect_recaptcha',
+					'value' => esc_html__( 'Disconnect', 'gravityformsrecaptcha' ),
+					'id'    => 'recaptcha-disconnect',
+				),
+			),
+		);
+	}
+
+	/**
+	 * The change connection type button field.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return array
+	 */
+	private function get_change_connection_button() {
+		return array(
+			'id'     => 'gravityformsrecaptcha_change_connection',
+			'title'  => esc_html__( 'Change reCAPTCHA Connection Type', 'gravityformsrecaptcha' ),
+			'fields' => array(
+				array(
+					'type'  => 'change_connection_type',
+					'value' => esc_html__( 'Change Connection Type', 'gravityformsrecaptcha' ),
+					'id'    => 'recaptcha-change-connection',
+				),
+			),
+		);
+	}
+
+	/**
+	 * Get the contents of the description field.
+	 *
+	 * @param string $connection_type The connection type.
+	 *
+	 * @since 1.0
+	 * @since 1.7.0 Updated to show the correct description based on the connection type.
+	 *
+	 * @return array
+	 */
+	private function get_settings_intro_description( $connection_type = null ) {
 		$description = array();
 
 		$description[] = array(
@@ -310,30 +663,52 @@ class Plugin_Settings {
 			esc_html__( 'By adding reCAPTCHA to your forms, you can deter automated software from submitting form entries, while still ensuring a user-friendly experience for real people.', 'gravityformsrecaptcha' ),
 		);
 
-		$description[] = array(
-			esc_html__( 'Gravity Forms integrates with three types of Google reCAPTCHA.', 'gravityformsrecaptcha' ),
-			'<ul><li>',
-			esc_html__( 'reCAPTCHA v3 - Adds a script to every page of your site and uploads form content for processing by Google.', 'gravityformsrecaptcha' ),
-			esc_html__( 'All submissions are accepted and suspicious submissions are marked as spam.', 'gravityformsrecaptcha' ),
-			esc_html__( 'When reCAPTCHA v3 is configured, it is enabled automatically on all forms by default. It can be disabled for specific forms in the form settings.', 'gravityformsrecaptcha' ),
-			'</li><li>',
-			esc_html__( 'reCAPTCHA v2 (Invisible) - Displays a badge on your form and will present a challenge to the user if the activity is suspicious e.g. select the traffic lights.', 'gravityformsrecaptcha' ),
-			esc_html__( 'Please note, only v2 keys are supported and checkbox keys are not compatible with invisible reCAPTCHA.', 'gravityformsrecaptcha' ),
-			esc_html__( 'To activate reCAPTCHA v2 on your form, simply add the CAPTCHA field in the form editor.', 'gravityformsrecaptcha' ),
-			sprintf(
-				'<a href="%s">%s</a>',
-				esc_url( 'https://docs.gravityforms.com/captcha/' ),
-				__( 'Read more about reCAPTCHA.', 'gravityformsrecaptcha' )
-			),
-			'</li><li>',
-			esc_html__( 'reCAPTCHA v2 (Checkbox) - Requires a user to click a checkbox to indicate that they are not a robot and displays a challenge if the activity is suspicious', 'gravityformsrecaptcha' ),
-			'</li></ul>',
-		);
+		if ( ! $connection_type ) {
+			$description[] = array(
+				esc_html__( 'Gravity Forms integrates with three types of Google reCAPTCHA.', 'gravityformsrecaptcha' ),
+				'<ul><li>',
+				esc_html__( 'reCAPTCHA v3 - Adds a script to every page of your site and uploads form content for processing by Google.', 'gravityformsrecaptcha' ),
+				esc_html__( 'All submissions are accepted and suspicious submissions are marked as spam.', 'gravityformsrecaptcha' ),
+				esc_html__( 'When reCAPTCHA v3 is configured, it is enabled automatically on all forms by default. It can be disabled for specific forms in the form settings.', 'gravityformsrecaptcha' ),
+				'</li><li>',
+				esc_html__( 'reCAPTCHA v2 (Invisible) - Displays a badge on your form and will present a challenge to the user if the activity is suspicious e.g. select the traffic lights.', 'gravityformsrecaptcha' ),
+				esc_html__( 'Please note, only v2 keys are supported and checkbox keys are not compatible with invisible reCAPTCHA.', 'gravityformsrecaptcha' ),
+				esc_html__( 'To activate reCAPTCHA v2 on your form, simply add the CAPTCHA field in the form editor.', 'gravityformsrecaptcha' ),
+				sprintf(
+					'<a href="%s">%s</a>',
+					esc_url( 'https://docs.gravityforms.com/captcha/' ),
+					__( 'Read more about reCAPTCHA.', 'gravityformsrecaptcha' )
+				),
+				'</li><li>',
+				esc_html__( 'reCAPTCHA v2 (Checkbox) - Requires a user to click a checkbox to indicate that they are not a robot and displays a challenge if the activity is suspicious', 'gravityformsrecaptcha' ),
+				'</li></ul>',
+			);
+		} elseif ( $connection_type === 'enterprise' ) {
+			$description[] = array(
+				esc_html__( 'v3 enterprise reCAPTCHA adds a script to every page of your site and uploads form content for processing by Google.', 'gravityformsrecaptcha' ),
+				esc_html__( 'A site secret is not required since you are authenticated by OAuth.', 'gravityformsrecaptcha' ),
+				esc_html__( 'Enterprise reCAPTCHA gives you much greater control over how submissions are handled via the Cloud Console in your Google Cloud Project.', 'gravityformsrecaptcha' ),
+				esc_html__( 'All submissions are accepted and suspicious submissions are marked as spam.', 'gravityformsrecaptcha' ),
+				esc_html__( 'When reCAPTCHA v3 is configured, it is enabled automatically on all forms by default. It can be disabled for specific forms in the form settings.', 'gravityformsrecaptcha' ),
+			);
+		} elseif ( $connection_type === 'v2' ) {
+			$description[] = array(
+				esc_html__( 'reCAPTCHA v2 (challenge-based) can run in invisible mode where a user will receive a challenge only if Google sees suspicious behavior, or with a checkbox, where the user will click a checkbox to indicate they are not a robot.', 'gravityformsrecaptcha' ),
+				esc_html__( 'Please note, only v2 keys are supported and checkbox keys are not compatible with invisible reCAPTCHA.', 'gravityformsrecaptcha' ),
+				esc_html__( 'To activate reCAPTCHA v2 on your form, simply add the CAPTCHA field in the form editor.', 'gravityformsrecaptcha' ),
+			);
+		} elseif ( $connection_type === 'classic' ) {
+			$description[] = array(
+				esc_html__( 'v3 Classic reCAPTCHA Adds a script to every page of your site and uploads form content for processing by Google.', 'gravityformsrecaptcha' ),
+				esc_html__( 'All submissions are accepted and suspicious submissions are marked as spam.', 'gravityformsrecaptcha' ),
+				esc_html__( 'When reCAPTCHA v3 is configured, it is enabled automatically on all forms by default. It can be disabled for specific forms in the form settings.', 'gravityformsrecaptcha' ),
+			);
+		}
 
 		$description[] = array(
 			esc_html__( 'For more information on reCAPTCHA, which version is right for you, and how to add it to your forms,', 'gravityformsrecaptcha' ),
 			sprintf(
-				'<a href="%s">%s</a>',
+				'<a target="_blank" href="%s">%s</a>',
 				esc_url( 'https://docs.gravityforms.com/captcha/' ),
 				esc_html__( 'check out our documentation.', 'gravityformsrecaptcha' )
 			),
@@ -355,7 +730,7 @@ class Plugin_Settings {
 				esc_html__( 'If the score is less than or equal to this threshold, the form submission will be sent to spam.', 'gravityformsrecaptcha' ),
 				esc_html__( 'The default threshold is 0.5.', 'gravityformsrecaptcha' ),
 				sprintf(
-					'<a href="%s">Learn about about reCAPTCHA.</a>',
+					'<a target="_blank" href="%s">Learn about reCAPTCHA.</a>',
 					esc_url( 'https://docs.gravityforms.com/captcha/' )
 				),
 			),
@@ -474,7 +849,7 @@ class Plugin_Settings {
 		$this->apply_status_changes( $result );
 
 		if ( is_wp_error( $result ) ) {
-			$this->addon->log_debug( __METHOD__ . '(): failed to verify reCAPTCHA token. ' . $result->get_error_message() );
+			$this->addon->log_debug( __METHOD__ . '(): Failed to verify reCAPTCHA token. ' . $result->get_error_message() );
 
 			wp_send_json_error();
 		}
@@ -516,8 +891,8 @@ class Plugin_Settings {
 	 */
 	private function get_posted_keys() {
 		$settings          = $this->addon->get_plugin_settings();
-		$posted_site_key   = $this->get_recaptcha_key( 'site_key_v3' );
-		$posted_secret_key = $this->get_recaptcha_key( 'secret_key_v3' );
+		$posted_site_key   = $this->get_posted_key( 'site_key_v3' );
+		$posted_secret_key = $this->get_posted_key( 'secret_key_v3' );
 
 		if (
 			$posted_site_key === rgar( $settings, 'site_key_v3' )
@@ -533,36 +908,191 @@ class Plugin_Settings {
 	}
 
 	/**
-	 * Get the value of one of the reCAPTCHA keys from the plugin settings.
+	 * Gets the value of the specified input from the $_POST.
 	 *
-	 * Checks first for a value defined as a constant, and secondarily, the add-on options.
-	 *
-	 * @since 1.0
+	 * @since 1.3
 	 *
 	 * @param string $key_name The name of the key to retrieve.
 	 *
 	 * @return string
 	 */
-	public function get_recaptcha_key( $key_name ) {
-		$posted_key = sanitize_text_field( rgpost( "_gform_setting_{$key_name}" ) );
+	private function get_posted_key( $key_name ) {
+		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+			$key_name = "_gform_setting_{$key_name}";
+		}
 
-		if ( $posted_key && is_admin() ) {
-			return $posted_key;
+		return sanitize_text_field( rgpost( $key_name ) );
+	}
+
+	/**
+	 * Get the value of one of the reCAPTCHA keys from the plugin settings.
+	 *
+	 * Checks first for a value defined as a constant, and secondarily, the add-on options.
+	 *
+	 * @since 1.0
+	 * @since 1.3 Added the $only_from_constant param.
+	 *
+	 * @param string $key_name           The name of the key to retrieve.
+	 * @param bool   $only_from_constant Indicates if value should only be retrieved from the constant.
+	 *
+	 * @return string
+	 */
+	public function get_recaptcha_key( $key_name, $only_from_constant = false ) {
+		if ( ! $only_from_constant && is_admin() ) {
+			$posted_key = $this->get_posted_key( $key_name );
+
+			if ( $posted_key ) {
+				return $posted_key;
+			}
 		}
 
 		$keys = array(
-			'site_key_v3'   => defined( 'GF_RECAPTCHA_V3_SITE_KEY' ) ? GF_RECAPTCHA_V3_SITE_KEY : '',
-			'secret_key_v3' => defined( 'GF_RECAPTCHA_V3_SECRET_KEY' ) ? GF_RECAPTCHA_V3_SECRET_KEY : '',
-			'site_key_v2'   => '',
-			'secret_key_v2' => '',
+			'site_key_v3'            => defined( 'GF_RECAPTCHA_V3_SITE_KEY' ) ? GF_RECAPTCHA_V3_SITE_KEY : '',
+			'secret_key_v3'          => defined( 'GF_RECAPTCHA_V3_SECRET_KEY' ) ? GF_RECAPTCHA_V3_SECRET_KEY : '',
+			'site_key_v2'            => '',
+			'secret_key_v2'          => '',
+			'site_key_v3_enterprise' => defined( 'GF_RECAPTCHA_V3_SITE_KEY_ENTERPRISE' ) ? GF_RECAPTCHA_V3_SITE_KEY_ENTERPRISE : '',
+			'project_number'         => defined( 'GF_RECAPTCHA_PROJECT_NUMBER' ) ? GF_RECAPTCHA_PROJECT_NUMBER : '',
 		);
 
 		if ( ! in_array( $key_name, array_keys( $keys ), true ) ) {
 			return '';
 		}
 
-		$key = rgar( $keys, $key_name, $this->addon->get_plugin_setting( $key_name ) );
+		$key = rgar( $keys, $key_name, '' );
+
+		if ( ! empty( $key ) || $only_from_constant ) {
+			return $key;
+		}
+
+		$key = $this->addon->get_plugin_setting( $key_name );
 
 		return ! empty( $key ) ? $key : '';
+	}
+
+	/**
+	 * Perform the enterprise OAuth connection.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function ajax_perform_enterprise_oauth() {
+
+		$this->addon->verify_ajax_nonce();
+
+		$state = wp_create_nonce( 'gravityforms_recaptcha_connect' );
+
+		if ( get_transient( 'gravityapi_request_' . $this->addon->get_slug() ) ) {
+			delete_transient( 'gravityapi_request_' . $this->addon->get_slug() );
+		}
+
+		set_transient( 'gravityapi_request_' . $this->addon->get_slug(), $state, 10 * MINUTE_IN_SECONDS );
+
+		$settings_url = rawurlencode(
+			add_query_arg(
+				array(
+					'page'    => 'gf_settings',
+					'subview' => $this->addon->get_slug(),
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+
+		$redirect_url = add_query_arg(
+			array(
+				'redirect_to' => $settings_url,
+				'state'       => $state,
+				'license'     => GFCommon::get_key(),
+			),
+			RECAPTCHA_API::get_gravity_api_url()
+		);
+
+		$this->addon->log_debug( "Redirecting to Gravity API: {$redirect_url}" );
+
+		wp_send_json_success(
+			array(
+				'errors'   => false,
+				'redirect' => esc_url_raw( $redirect_url ),
+			)
+		);
+	}
+
+	/**
+	 * Maybe update the auth tokens in the plugin settings.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function maybe_update_auth_tokens() {
+
+		$payload = $this->find_oauth_payload();
+
+		if ( ! $payload || $this->addon->is_save_postback() ) {
+			return;
+		}
+
+		if ( rgar( $payload, 'auth_error' ) ) {
+			GFCommon::add_message( esc_html__( 'An error occured while connecting to the API.', 'gravityformsrecaptcha' ) );
+			$this->addon->log_error( $payload['auth_error'] );
+			return;
+		}
+
+		$auth_payload = $this->get_decoded_auth_payload( $payload );
+
+		if ( rgar( $auth_payload, 'access_token' ) ) {
+			$settings                    = $this->addon->get_plugin_settings();
+			$settings['access_token']    = rgar( $auth_payload, 'access_token' );
+			$settings['refresh_token']   = rgar( $auth_payload, 'refresh_token' );
+			$settings['date_created']    = rgar( $auth_payload, 'created' );
+			$settings['connection_type'] = 'enterprise';
+			$this->addon->update_plugin_settings( $settings );
+		}
+	}
+
+	/**
+	 * Get the authorization payload data.
+	 *
+	 * Returns the auth POST request if it's present, otherwise attempts to return a recent transient cache.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return array
+	 */
+	private function find_oauth_payload() {
+		$payload = array_filter(
+			array(
+				'auth_payload' => rgpost( 'auth_payload' ),
+				'auth_error'   => rgpost( 'auth_error' ),
+				'state'        => rgpost( 'state' ),
+			)
+		);
+
+		if ( isset( $payload['auth_error'] ) ) {
+			return $payload;
+		}
+
+		$payload = get_transient( 'gravityapi_response_' . $this->addon->get_slug() );
+		if ( rgar( $payload, 'state' ) !== get_transient( 'gravityapi_request_' . $this->addon->get_slug() ) ) {
+			return array();
+		}
+
+		delete_transient( 'gravityapi_response_' . $this->addon->get_slug() );
+		return is_array( $payload ) ? $payload : array();
+	}
+
+	/**
+	 * Get the decoded auth payload.
+	 *
+	 * @param array $payload The auth payload.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return array|mixed
+	 */
+	private function get_decoded_auth_payload( $payload ) {
+		$auth_payload_string = rgar( $payload, 'auth_payload' );
+		return empty( $auth_payload_string ) ? array() : json_decode( $auth_payload_string, true );
 	}
 }

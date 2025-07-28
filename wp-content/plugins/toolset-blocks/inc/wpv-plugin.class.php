@@ -992,7 +992,22 @@ class WP_Views_plugin extends WP_Views {
 		wp_register_script(
 			'views-editor-js',
 			WPV_URL . "/res/js/redesign/views_editor.js",
-			array( 'jquery', 'suggest', 'wp-pointer', 'jquery-ui-dialog', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-tooltip', 'views-codemirror-conf-script', 'views-utils-script', 'toolset-utils', 'toolset-event-manager', 'underscore', 'quicktags', 'wplink'),
+			array(
+				'jquery',
+				'underscore',
+				'suggest',
+				'wp-pointer',
+				'jquery-ui-dialog',
+				'jquery-ui-sortable',
+				'jquery-ui-draggable',
+				'jquery-ui-tooltip',
+				'views-codemirror-conf-script',
+				'views-utils-script',
+				Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
+				Toolset_Assets_Manager::SCRIPT_UTILS,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_EVENT_MANAGER
+			),
 			WPV_VERSION,
 			false
 		);
@@ -1002,7 +1017,22 @@ class WP_Views_plugin extends WP_Views {
 		wp_register_script(
 			'views-archive-editor-js',
 			WPV_URL . "/res/js/redesign/views_archive_editor.js",
-			array( 'jquery', 'suggest', 'wp-pointer', 'jquery-ui-dialog', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-tooltip', 'views-codemirror-conf-script', 'views-utils-script', 'toolset-utils', 'toolset-event-manager', 'underscore', 'quicktags', 'wplink' ),
+			array(
+				'jquery',
+				'underscore',
+				'suggest',
+				'wp-pointer',
+				'jquery-ui-dialog',
+				'jquery-ui-sortable',
+				'jquery-ui-draggable',
+				'jquery-ui-tooltip',
+				'views-codemirror-conf-script',
+				'views-utils-script',
+				Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
+				Toolset_Assets_Manager::SCRIPT_UTILS,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_EVENT_MANAGER
+			),
 			WPV_VERSION,
 			false
 		);
@@ -1197,7 +1227,14 @@ class WP_Views_plugin extends WP_Views {
 		wp_register_script(
 			'views-layout-template-js',
 			WPV_URL . "/res/js/redesign/views_section_layout_template.js",
-			array( 'jquery', 'underscore', 'views-codemirror-conf-script', 'toolset-event-manager' ),
+			array(
+				'jquery',
+				'underscore',
+				'views-codemirror-conf-script',
+				Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_EVENT_MANAGER
+			),
 			WPV_VERSION,
 			false
 		);

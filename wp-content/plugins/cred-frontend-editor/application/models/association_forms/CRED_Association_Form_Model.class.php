@@ -430,46 +430,9 @@ class CRED_Association_Form_Model implements CRED_Association_Form_Model_Interfa
 	/**
 	 * @return array
 	 */
-	public function get_default_messages(){
-
-		$messages = array(
-			'cred_message_post_saved'              => array(
-				'message'     => __( 'Relationship Saved', 'wp-cred' ),
-				'description' => __( 'Relationship saved Message', 'wp-cred' )
-			),
-			'cred_message_post_not_saved_singular' => array(
-				'message'     => __( 'The relationship was not saved because of the following problem:', 'wp-cred' ),
-				'description' => __( 'Relationship not saved message (one problem)', 'wp-cred' )
-			),
-			'cred_message_post_not_saved_plural'   => array(
-				'message'     => __( 'The relationship was not saved because of the following %NN problems:', 'wp-cred' ),
-				'description' => __( 'Relationship not saved message (several problems)', 'wp-cred' )
-			),
-			'cred_message_invalid_form_submission' => array(
-				'message'     => __( 'Invalid Form Submission (nonce failure)', 'wp-cred' ),
-				'description' => __( 'Invalid submission message', 'wp-cred' )
-			),
-			'cred_message_field_required'          => array(
-				'message'     => __( 'This field is required', 'wp-cred' ),
-				'description' => __( 'Required field message', 'wp-cred' )
-			),
-			'cred_message_values_do_not_match'     => array(
-				'message'     => __( 'Field values do not match', 'wp-cred' ),
-				'description' => __( 'Invalid hidden field value message', 'wp-cred' )
-			),
-			'cred_message_enter_valid_email'       => array(
-				'message'     => __( 'Please enter a valid email address', 'wp-cred' ),
-				'description' => __( 'Invalid email message', 'wp-cred' )
-			),
-			'cred_message_enter_valid_number'      => array(
-				'message'     => __( 'Please enter numeric data', 'wp-cred' ),
-				'description' => __( 'Invalid numeric field message', 'wp-cred' )
-			),
-			'cred_message_enter_valid_url'         => array(
-				'message'     => __( 'Please enter a valid URL address', 'wp-cred' ),
-				'description' => __( 'Invalid URL message', 'wp-cred' )
-			)
-		);
+	public function get_default_messages() {
+		$model    = new \OTGS\Toolset\CRED\Model\Forms\Association\Messages\DefaultMessages();
+		$messages = $model->getDefaultMessages();
 
 		return apply_filters( 'cred_association_form_get_default_messages', $messages, $this );
 	}

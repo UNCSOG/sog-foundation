@@ -110,12 +110,7 @@ class GFEntryDetail {
 			return  self::$_form;
 		}
 
-		$form = GFFormsModel::get_form_meta( absint( $_GET['id'] ) );
-
-		$form_id = absint( $form['id'] );
-
-		$form    = apply_filters( 'gform_admin_pre_render', $form );
-		$form    = apply_filters( 'gform_admin_pre_render_' . $form_id, $form );
+		$form = GFCommon::gform_admin_pre_render( GFFormsModel::get_form_meta( absint( $_GET['id'] ) ) );
 
 		self::set_current_form( $form );
 
@@ -447,13 +442,7 @@ class GFEntryDetail {
 
 		$mode = empty( $_POST['screen_mode'] ) ? 'view' : $_POST['screen_mode'];
 
-		if ( $mode === 'edit' ) {
-			wp_print_styles( 'gform_admin_theme' );
-		}
-
 		$screen = get_current_screen();
-
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		?>
 		<script type="text/javascript">
@@ -560,6 +549,7 @@ class GFEntryDetail {
 						formId                 : '<?php echo absint( $form['id'] ); ?>'
 					},
 					function (response) {
+						response = response.trim();
 						if (response) {
 							displayMessage(response, "error", "#notifications");
 						} else {
@@ -735,7 +725,7 @@ class GFEntryDetail {
 				<label for="name"><?php esc_html_e( 'Details', 'gravityforms' ); ?></label>
 			</h3>
 
-			<div class="inside gform_wrapper gravity-theme">
+			<div class="inside gform_wrapper gravity-theme gform_wrapper_edit_form_entry">
 				<table class="form-table entry-details">
 					<tbody>
 					<?php
@@ -1328,7 +1318,7 @@ class GFEntryDetail {
 				}
 
 				esc_html_e( 'Embed Url', 'gravityforms' ); ?>:
-				<a href="<?php echo esc_url( $entry['source_url'] ) ?>" target="_blank">.../<?php echo esc_html( GFCommon::truncate_url( $entry['source_url'] ) ) ?></a>
+				<a href="<?php echo esc_url( $entry['source_url'] ) ?>" target="_blank">.../<?php echo esc_html( GFCommon::truncate_url( $entry['source_url'] ) ) ?><span class="screen-reader-text"><?php echo esc_html__('(opens in a new tab)', 'gravityforms'); ?></span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>
 				<br /><br />
 				<?php
 				if ( ! empty( $entry['post_id'] ) ) {

@@ -725,6 +725,24 @@ class Toolset_Relationship_Definition implements IToolset_Relationship_Definitio
 
 
 	/**
+	 * Get the intermediary post type, if it exists.
+	 *
+	 * Note that its existence doesn't necessarily mean that there are association fields.
+	 *
+	 * @return null|string
+	 * @since m2m
+	 */
+	public function has_intermediary_post_type() {
+		$driver = $this->get_driver();
+		if ( ! $driver instanceof Toolset_Relationship_Driver ) {
+			return false;
+		}
+
+		return null !== $driver->get_intermediary_post_type();
+	}
+
+
+	/**
 	 * Set the intermediary post type for this relationship.
 	 *
 	 * Use with caution.

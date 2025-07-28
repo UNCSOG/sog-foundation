@@ -117,7 +117,7 @@ class Plugins {
 			$version_number = toolset_getarr( $plugin_data, 'Version', WPV_VERSION );
 			$link_handle = sprintf(
 				__( '%1$s %2$s release notes', 'wpv-views' ),
-				toolset_getarr( $plugin_data, 'Name', __( 'Toolset Views', 'wpv-views' ) ),
+				toolset_getarr( $plugin_data, 'Name', 'Toolset Views' ),
 				$version_number
 
 			);

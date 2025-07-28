@@ -2369,17 +2369,22 @@ class WP_Views {
 								$site_encoding = $site_encoding ?: mb_internal_encoding();
 
 								// Load HTML with encoded HTML entities.
-								$utf8_layout_meta_html = mb_convert_encoding(
-									$utf8_layout_meta_html,
-									'HTML-ENTITIES',
-									$site_encoding
-								);
+								// Originally this was managed with:
+								// $utf8_layout_meta_html = mb_convert_encoding( $utf8_layout_meta_html, 'HTML-ENTITIES', $site_encoding );
+								// But mb_convert_encoding is deprecated with 'HTML-ENTITIES' on PHP 8.2+
+								// See https://stackoverflow.com/a/8218649
+								// Change tested against Views and WPAs built with blocks and containing UTF, Japanese, Greek, Arabic, Hebrew characters, as well as HTML tags.
+								$utf8_layout_meta_html = mb_encode_numericentity( $utf8_layout_meta_html, [ 0x80, 0x10FFFF, 0, ~0 ], $site_encoding );
 							}
 
 							$is_site_using_utf8 = strtolower( $site_encoding ) === 'utf-8';
 
-							if( ! $is_site_using_utf8 ) {
-								$utf8_layout_meta_html = utf8_encode( $utf8_layout_meta_html );
+							if( $is_mb_running && ! $is_site_using_utf8 ) {
+								// Originally this was managed with:
+								// $utf8_layout_meta_html = utf8_encode( $utf8_layout_meta_html );
+								// But utf8_encode is deprecated on PHP 8.2+
+								// Change tested against Views and WPAs built with blocks and containing UTF, Japanese, Greek, Arabic, Hebrew characters, as well as HTML tags.
+								$utf8_layout_meta_html = mb_convert_encoding( $utf8_layout_meta_html, "UTF-8", mb_detect_encoding( $utf8_layout_meta_html ) );
 							}
 
 							$use_internal_xml_errors = libxml_use_internal_errors( true );

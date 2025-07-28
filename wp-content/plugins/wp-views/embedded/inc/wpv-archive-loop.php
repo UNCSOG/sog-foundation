@@ -103,6 +103,8 @@ EOF;
 
 	public $wpv_settings = null;
 
+	public $post_count = 0;
+
 	/**
 	 * @return WPV_WordPress_Archive_Frontend The instance of WPV_WordPress_Archive_Frontend.
 	 */
@@ -182,6 +184,8 @@ EOF;
 
 		$this->wpv_settings			= null !== $wpv_settings ? $wpv_settings : WPV_Settings::get_instance();
 		$this->post_type_repository = $post_type_repository;
+
+		$this->post_count = 0;
 
 		// Layouts compatibility
 		add_action( 'wpv_action_wpv_initialize_wordpress_archive_for_archive_loop',		array( $this, 'wpv_initialize_wordpress_archive_for_archive_loop' ) );
@@ -528,6 +532,16 @@ EOF;
 	}
 
 	/**
+	 * @param \WP_Query $query
+	 * @param string    $key
+	 * @param mixed     $value
+	 */
+	private function setQueryValue( &$query, $key, $value ) {
+		$query->set( $key, $value );
+		$query->query[ $key ] = $value;
+	}
+
+	/**
 	* archive_apply_post_type_settings
 	*
 	* Apply post types settings for WordPress Archives.
@@ -560,7 +574,7 @@ EOF;
 		}
 
 		if ( ! empty( $stored_settings_per_loop ) ) {
-			$query->set('post_type', $stored_settings_per_loop );
+			$this->setQueryValue( $query,'post_type', $stored_settings_per_loop );
 		}
 	}
 
@@ -728,8 +742,7 @@ EOF;
 				$orderby = 'meta_value';
 			}
 
-			$query->set( 'meta_key', $meta_key );
-
+			$this->setQueryValue( $query, 'meta_key', $meta_key );
 		}
 
 		// Normalize orderby and orderby_second options
@@ -747,12 +760,12 @@ EOF;
 				$orderby		=> $order,
 				$orderby_second	=> $order_second
 			);
-			$query->set( 'orderby',	$orderby_array );
+			$this->setQueryValue( $query, 'orderby',	$orderby_array );
 		} else {
-			$query->set( 'orderby', $orderby );
-			$query->set( 'order', $order );
-			$query->set( 'wpv_orderby', $orderby );
-			$query->set( 'wpv_order', $order );
+			$this->setQueryValue( $query, 'orderby', $orderby );
+			$this->setQueryValue( $query, 'order', $order );
+			$this->setQueryValue( $query, 'wpv_orderby', $orderby );
+			$this->setQueryValue( $query, 'wpv_order', $order );
 		}
 
 	}
@@ -772,13 +785,12 @@ EOF;
 	*/
 
 	function archive_apply_pagination_settings( $query, $archive_settings, $archive_id ) {
-
 		if ( $query->get( 'wpv_dependency_query' ) ) {
 			return;
 		}
 
 		// Validate stored settings
-		$archive_settings['pagination']['type']				=
+		$archive_settings['pagination']['type'] =
 			( isset( $archive_settings['pagination']['type'] ) && in_array( $archive_settings['pagination']['type'], array( 'disabled', 'paged', 'ajaxed', 'rollover' ) ) ) ?
 				$archive_settings['pagination']['type'] :
 				'paged';
@@ -789,11 +801,12 @@ EOF;
 
 		// Apply settings
 		if ( $archive_settings['pagination']['type'] == 'disabled' ) {
-			$query->set( 'posts_per_page', -1 );
+			$this->setQueryValue( $query, 'posts_per_page', -1 );
 		} else if ( $archive_settings['pagination']['posts_per_page'] != 'default' ) {
-			$query->set( 'posts_per_page', (int) $archive_settings['pagination']['posts_per_page'] );
+			$this->setQueryValue( $query, 'posts_per_page', (int) $archive_settings['pagination']['posts_per_page'] );
+		} else {
+			$this->setQueryValue( $query, 'posts_per_page', get_option( 'posts_per_page', 10 ) );
 		}
-
 	}
 
 	static function extend_archive_query_for_parametric_and_counters( $post_query, $archive_settings, $archive_id ) {
@@ -1843,13 +1856,13 @@ EOF;
 							$query->is_admin	= false;
 							$query->is_archive	= true;
 							$query->is_category	= true;
-							$query->set( 'category_name', $loop['data']['term'] );
+							$this->setQueryValue( $query, 'category_name', $loop['data']['term'] );
 							break;
 						case 'post_tag':
 							$query->is_admin	= false;
 							$query->is_archive	= true;
 							$query->is_tag		= true;
-							$query->set( 'tag', $loop['data']['term'] );
+							$this->setQueryValue( $query, 'tag', $loop['data']['term'] );
 							break;
 						default:
 							$query->is_admin	= false;
@@ -2155,7 +2168,7 @@ EOF;
 
 	public function early_pre_get_posts( $query ) {
 		if ( is_wpv_wp_archive_assigned() ) {
-			$query->set( 'ep_integrate', false );
+			$this->setQueryValue( $query, 'ep_integrate', false );
 		}
 	}
 

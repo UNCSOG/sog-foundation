@@ -25,9 +25,10 @@ class WPV_Debug{
 
 	function __construct(){
 		$this->total_memory = memory_get_usage ( false );
-        // TODO:Use $WPV_settings, if possible.
-        // WPV_Debug class is initialized before WPV_Settings_Screen, can we change that?
-        $options = get_option('wpv_options');
+		// TODO:Use $WPV_settings, if possible.
+		// WPV_Debug class is initialized before WPV_Settings_Screen, can we change that?
+		$storedOptions = get_option('wpv_options');
+		$options       = is_array( $storedOptions ) ? $storedOptions : [];
 		if ( !isset($options['wpv_debug_mode']) ) {
 			$options['wpv_debug_mode'] = '';
 		}

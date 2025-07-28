@@ -90,7 +90,10 @@ class GF_SendGrid_API {
 		try {
 
 			// Get scopes.
-			$this->scopes = $this->make_request( 'scopes', array(), 'GET', 'scopes' );
+			$scopes_response = $this->make_request( 'scopes', array(), 'GET', 'scopes' );
+			if ( is_array( $scopes_response ) ) {
+				$this->scopes = $scopes_response;
+			}
 
 		} catch ( Exception $e ) {
 
@@ -126,6 +129,7 @@ class GF_SendGrid_API {
 	 * Make API request.
 	 *
 	 * @since  1.0
+	 * @since  1.5.1 Throws an exception if response code is not 200.
 	 * @access public
 	 *
 	 * @param string $action        Request action.
@@ -138,7 +142,7 @@ class GF_SendGrid_API {
 	private function make_request( $action, $options = array(), $method = 'GET', $return_key = null ) {
 
 		// Build request options string.
-		$request_options = 'GET' === $method ? '?'. http_build_query( $options ) : null;
+		$request_options = 'GET' === $method ? '?' . http_build_query( $options ) : null;
 
 		// Build request URL.
 		$request_url = $this->api_url . $action . $request_options;
@@ -161,10 +165,13 @@ class GF_SendGrid_API {
 		// Execute API request.
 		$response = wp_remote_request( $request_url, $args );
 
+
 		// If API request returns a WordPress error, throw an exception.
 		if ( is_wp_error( $response ) ) {
-			throw new Exception( 'Request failed. '. $response->get_error_message() );
+			throw new Exception( 'Request failed. ' . $response->get_error_message() );
 		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
 
 		// Convert JSON response to array.
 		$response = json_decode( $response['body'], true );
@@ -196,6 +203,10 @@ class GF_SendGrid_API {
 
 			throw new Exception( $error );
 
+		}
+
+		if ( $response_code != 200 && $response_code != 202 ) {
+			throw new Exception( 'Request failed. Response Code: ' . $response_code );
 		}
 
 		// If a return key is defined and array item exists, return it.

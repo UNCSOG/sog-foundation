@@ -72,14 +72,24 @@ class WPDD_PostEditPageManager {
 
         if ( is_admin() ) {
 
-            if ( $this->pagenow == 'post.php' && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) {
-                $this->post_id = $_GET['post'];
-                $this->init();
-                $this->has_private_layout    = WPDD_Utils::page_has_private_layout( $this->post_id );
-                $this->private_layout_in_use = WPDD_Utils::is_private_layout_in_use( $this->post_id );
+            if (
+							$this->pagenow == 'post.php'
+							&& isset( $_GET['post'] )
+							&& isset( $_GET['action'] )
+							&& $_GET['action'] === 'edit'
+						) {
+							$post_id = intval( $_GET['post'] );
+							$post_object = get_post( $post_id );
+							if ( ! $post_object ) {
+								return;
+							}
+							$this->post_id = $post_id;
+							$this->init();
+							$this->has_private_layout    = WPDD_Utils::page_has_private_layout( $this->post_id );
+							$this->private_layout_in_use = WPDD_Utils::is_private_layout_in_use( $this->post_id );
 
             } elseif ( $this->pagenow == 'post-new.php' ) {
-                $this->post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : 'post';
+                $this->post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : 'post';
                 add_action( 'admin_print_scripts', array( &$this, 'init_on_post_create' ), 1 );
             }
 
@@ -146,7 +156,10 @@ class WPDD_PostEditPageManager {
 
     private function init() {
 
-        $post_object       = get_post( $this->post_id );
+        $post_object = get_post( $this->post_id );
+				if ( ! $post_object ) {
+					return;
+				}
         $this->post_type   = &$post_object->post_type;
         $this->post_title  = &$post_object->post_title;
         $post_type_object  = get_post_type_object( $post_object->post_type );
@@ -241,6 +254,9 @@ class WPDD_PostEditPageManager {
 
     public function init_on_post_create() {
         global $post;
+				if ( ! $post ) {
+					return;
+				}
         $this->post_id = $post->ID;
         $this->init();
     }

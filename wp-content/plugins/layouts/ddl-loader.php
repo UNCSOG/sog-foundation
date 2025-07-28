@@ -3,7 +3,7 @@ if (defined('WPDDL_VERSION')) return;
 
 
 
-define( 'WPDDL_VERSION', '2.6.16' );
+define( 'WPDDL_VERSION', '2.6.17' );
 define( 'WPDDL_VERSION_OPTION', 'ddl_layouts_plugin_version' );
 define( 'WPDDL_VERSIONS_COMPARE_OPTION', 'ddl_layouts_plugin_versions_compare' );
 define( 'LAYOUTS_PLUGIN_NAME', 'Toolset Layouts' );

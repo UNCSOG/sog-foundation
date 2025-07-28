@@ -229,12 +229,23 @@ class Layouts_views_content_template_cell extends Layouts_toolset_based_cell{
 		// And make it dependant of icl_editor-script
 		// NOTE we still do not have a fallback for the Media Manager here...
 		if( is_admin() ){
-			if( WPDD_Layouts::views_available() ){
-				$deps = array('jquery', 'quicktags', 'wplink', 'views-shortcodes-gui-script');
-			} else {
-				$deps = array('jquery', 'quicktags', 'wplink');
+			$deps = array(
+				'jquery',
+				'quicktags',
+				'wplink',
+				Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
+			);
+			if( WPDD_Layouts::views_available() ) {
+				$deps[] = 'views-shortcodes-gui-script';
 			}
-			wp_register_script( 'wp-content-template-editor', ( WPDDL_GUI_RELPATH . "editor/js/content-template-cell.js" ), $deps, null, true );
+			wp_register_script(
+				'wp-content-template-editor',
+				( WPDDL_GUI_RELPATH . "editor/js/content-template-cell.js" ),
+				$deps,
+				null,
+				true
+			);
 			wp_enqueue_script( 'wp-content-template-editor' );
 
 			wp_localize_script('wp-content-template-editor', 'DDLayout_content_template_strings', array(

@@ -89,7 +89,7 @@ class Placeholders {
 		}
 
 		$replaced_content = preg_replace_callback(
-			'/\<figure.*?class=".*?tb-image.*"?src="(.*?)".*?<\/figure\>/',
+			'/\<figure.*?class=".*?tb-image.*?".*?src="(.*?)".*?>.*?<\/figure>/',
 			function ( $matches ) {
 				$img_html = $matches[0];
 

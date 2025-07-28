@@ -189,14 +189,15 @@ function wpv_apply_user_function_framework_key( $value, $attr = array() ) {
 
 function wpv_apply_user_function_date_integer( $value, $attr = array() ) {
 	$value = stripcslashes( $value );
-	if ( 
-		isset( $attr['date_integer_date_type'] ) 
+	if (
+		isset( $attr['date_integer_date_type'] )
 		&& in_array( $attr['date_integer_date_type'], array( 'year', 'month', 'week', 'day', 'hour', 'minute', 'second', 'dayofweek', 'dayofyear' ) )
 	) {
 		$this_date = '_' . strtoupper( $attr['date_integer_date_type'] );
 		$value = str_replace( '_ONE', $this_date, $value );
 	}
-	$occurences = preg_match_all( '/(\\w+)\(([^\)]*)\)/', $value, $matches );
+	$occurences    = preg_match_all( '/(\\w+)\(([^\)]*)\)/', $value, $matches );
+	$start_of_week = get_option( 'start_of_week' );
 	if ( $occurences > 0 ) {
 		global $no_parameter_found;
 		for ( $i = 0; $i < $occurences; $i++ ) {
@@ -204,7 +205,6 @@ function wpv_apply_user_function_date_integer( $value, $attr = array() ) {
 			// remove comma at the end of date value in case is left there
 			$date_value = isset( $matches[2] ) ? rtrim( $matches[2][$i], ',' ) : '';
 			$resulting_date = false;
-			$start_of_week = get_option( 'start_of_week' );
 			switch ( strtoupper( $date_func ) ) {
 				case "CURRENT_YEAR":
 					$resulting_date = date_i18n('Y');
@@ -376,6 +376,61 @@ function wpv_apply_user_function_date_integer( $value, $attr = array() ) {
 }
 
 /**
+ * @param string $value
+ * @param string $period
+ *
+ * @return int|null
+ */
+function wpv_get_offset_date_value( $value, $period ) {
+	$value         = stripcslashes( $value );
+	$period_suffix = '_' . strtoupper( $period );
+	$value         = str_replace( '_ONE', $period_suffix, $value );
+	$occurences    = preg_match_all( '/(\\w+)\(([^\)]*)\)/', $value, $matches );
+
+	if ( 1 !== $occurences ) {
+		return null;
+	}
+
+	$date_func     = $matches[1][0];
+	// remove comma at the end of date value in case is left there
+	$date_value    = isset( $matches[2] ) ? rtrim( $matches[2][0], ',' ) : '';
+
+	switch ( strtoupper( $date_func ) ) {
+		case "CURRENT_YEAR":
+		case "CURRENT_MONTH":
+		case 'CURRENT_WEEK':
+		case 'CURRENT_DAY':
+		case 'CURRENT_HOUR':
+		case 'CURRENT_MINUTE':
+		case 'CURRENT_SECOND':
+		case 'CURRENT_DAYOFWEEK':
+		case 'CURRENT_DAYOFYEAR':
+			return 0;
+		case "FUTURE_YEAR":
+		case "FUTURE_MONTH":
+		case "FUTURE_WEEK":
+		case "FUTURE_DAY":
+		case "FUTURE_HOUR":
+		case "FUTURE_MINUTE":
+		case "FUTURE_SECOND":
+		case "FUTURE_DAYOFWEEK":
+		case "FUTURE_DAYOFYEAR":
+			return $date_value;
+		case "PAST_YEAR":
+		case "PAST_MONTH":
+		case "PAST_WEEK":
+		case "PAST_DAY":
+		case "PAST_HOUR":
+		case "PAST_MINUTE":
+		case "PAST_SECOND":
+		case "PAST_DAYOFWEEK":
+		case "PAST_DAYOFYEAR":
+			return ( -1 * abs( $date_value ) );
+	}
+	return null;
+}
+
+/**
 * wpv_apply_user_function_url_param
 *
 * Takes a string and resolves the URL_PARAM(xxx) matches using $_GET parameters
@@ -501,7 +556,7 @@ function wpv_apply_user_function_date_compare( $value ) {
 	if ( $parsed ) {
 		$value = $parsed;
 	}
-	
+
 	return $value;
 }
 
@@ -629,9 +684,9 @@ function wpv_filter_variable_settings_require_framework_values( $state, $view_se
 				break;
 			case 'rollover':
 			case 'pagination':
-				if ( 
+				if (
 					is_array( $vs_value )
-					&& isset( $vs_value['posts_per_page'] ) 
+					&& isset( $vs_value['posts_per_page'] )
 				) {
 					if ( preg_match_all( $pattern, $vs_value['posts_per_page'], $matches, PREG_SET_ORDER ) ) {
 						$state = true;

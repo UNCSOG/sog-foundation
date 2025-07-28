@@ -11,8 +11,27 @@ if ( typeof WPV_Toolset.CodeMirror_instance === "undefined" ) {
 	WPV_Toolset.CodeMirror_instance = [];
 }
 
+/**
+ * We do not use this anymore but we need to keep it for backwards compatibility.
+ *
+ * All quicktags-related logic belongs now to toolset-quicktags.js
+ * However, older versions for some plugin might be expecting this to be defined.
+ *
+ * We took out the quicktags and wplink dependencies from this script;
+ * if they exists, the function will do something, otherwise it will do nothing.
+ *
+ * This means that although we want all plugins to be updated,
+ * using an onl version for any of them will not break,
+ * but it might miss sone functionality.
+ */
 if ( typeof WPV_Toolset.add_qt_editor_buttons !== 'function' ) {
     WPV_Toolset.add_qt_editor_buttons = function( qt_instance, editor_instance ) {
+			if (
+				typeof wpLink === 'undefined'
+				|| typeof QTags === 'undefined'
+			) {
+				return;
+			}
         QTags._buttonsInit();
 		WPV_Toolset.CodeMirror_instance[qt_instance.id] = editor_instance;
 

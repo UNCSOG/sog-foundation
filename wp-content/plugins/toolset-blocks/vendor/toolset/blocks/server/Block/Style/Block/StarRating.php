@@ -47,17 +47,17 @@ class StarRating extends ABlock {
 			$config['numberOfStars'] :
 			5; // default
 
-		switch( $icon ) {
+		switch ( $icon ) {
 			case 'custom':
 				// custom icon font family
-				if( isset( $config['customFontFamilyName'] ) ) {
-					if( $style = $factory->get_attribute( 'font-family', $config['customFontFamilyName'] ) ) {
+				if ( isset( $config['customFontFamilyName'] ) ) {
+					if ( $style = $factory->get_attribute( 'font-family', $config['customFontFamilyName'] ) ) {
 						$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STAR_RATING );
 					}
 				}
 
 				// custom icon font code
-				if( isset( $config['customFontCode'] ) ) {
+				if ( isset( $config['customFontCode'] ) ) {
 					$font_code = $config['customFontCode'];
 				}
 				break;
@@ -76,19 +76,19 @@ class StarRating extends ABlock {
 				break;
 		}
 
-		if( isset( $font_code ) ) {
-			if( $style = $factory->get_attribute( 'content', $font_code ) ) {
+		if ( isset( $font_code ) ) {
+			if ( $style = $factory->get_attribute( 'content', $font_code ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STAR_RATING );
 			}
 
-			if( $style = $factory->get_attribute( 'content', str_repeat( $font_code, $number_of_icons ) ) ) {
+			if ( $style = $factory->get_attribute( 'content', str_repeat( $font_code, $number_of_icons ) ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STAR_RATING_PROGRESS );
 			}
 		}
 
 		// The BackgroundColor needs to be applied as text color for the root element.
-		if( isset( $config['style'] ) && isset( $config['style']['backgroundColor'] ) ) {
-			if( $style = $factory->get_attribute( 'color', $config['style']['backgroundColor'] ) ) {
+		if ( isset( $config['style'] ) && isset( $config['style']['backgroundColor'] ) ) {
+			if ( $style = $factory->get_attribute( 'color', $config['style']['backgroundColor'] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_STAR_RATING );
 			}
 		}
@@ -108,7 +108,7 @@ class StarRating extends ABlock {
 		$content = preg_replace_callback(
 			'/(data-tb-star-rating-progress-width)=\"([-0-9\ \*\.]*)\"/',
 			function( $matches ) {
-				return 'style="width: calc('. $matches[2] .'%);"';
+				return 'style="width: calc(' . $matches[2] . '%);"';
 			},
 			do_shortcode( $content )
 		);
@@ -129,26 +129,35 @@ class StarRating extends ABlock {
 		return array(
 			parent::CSS_SELECTOR_ROOT => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'font-size', 'margin', 'padding', 'border', 'border-radius', 'box-shadow', 'line-height', 'display', 'text-align',
+					'font-size',
+					'margin',
+					'padding',
+					'border',
+					'border-radius',
+					'box-shadow',
+					'line-height',
+					'display',
+					'text-align',
 				),
 				self::KEY_STYLES_FOR_STAR_RATING => array(
-					'color', 'font-family',
-				)
+					'color',
+					'font-family',
+				),
 			),
 
 			'.tb-rating__star:before' => array(
 				self::KEY_STYLES_FOR_STAR_RATING => array(
-					'content'
-				)
+					'content',
+				),
 			),
 			'.tb-rating__rating:after' => array(
 				parent::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'color'
+					'color',
 				),
 				self::KEY_STYLES_FOR_STAR_RATING_PROGRESS => array(
-					'content'
-				)
-			)
+					'content',
+				),
+			),
 		);
 	}
 }

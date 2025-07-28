@@ -102,8 +102,7 @@ class WPV_WPML_Integration_Embedded {
 
 	public function init_hooks() {
 		add_action( 'init', array( $this, 'add_string_translation_to_formatting_instructions' ) );
-
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'init', array( $this, 'hook_filters_for_links' ) );
 
 		// Action after saving translated post content
 		add_action( 'icl_pro_translation_completed', array( $this, 'icl_pro_translation_completed' ) );
@@ -149,21 +148,12 @@ class WPV_WPML_Integration_Embedded {
 	}
 
 	/**
-	 * WPML integration actions on admin_init.
-	 *
-	 * @since 1.10
-	 */
-	public function admin_init() {
-		$this->hook_filters_for_links();
-	}
-
-	/**
 	 * Hook into WPML filters and modify links to edit or view Content Templates in
 	 * WPML Translation Management.
 	 *
 	 * @since 1.10
 	 */
-	protected function hook_filters_for_links() {
+	public function hook_filters_for_links() {
 		add_filter( 'wpml_document_edit_item_link', array( $this, 'wpml_get_document_edit_link_ct' ), 10, 5 );
 		add_filter( 'wpml_document_view_item_link', array( $this, 'wpml_get_document_view_link_ct' ), 10, 5 );
 		add_filter( 'wpml_document_edit_item_url', array( $this, 'wpml_document_edit_item_url_ct' ), 10, 3 );
@@ -193,20 +183,24 @@ class WPV_WPML_Integration_Embedded {
 			// we know WPML is active, nothing else should call this filter
 			global $sitepress;
 
-			if ( $sitepress->get_default_language() != $current_document->language_code ) {
+			if (
+				property_exists( $current_document, 'language_code' )
+				&& $sitepress->get_default_language() != $current_document->language_code
+			) {
 				// We don't allow editing CTs in nondefault languages in our editor.
 				// todo add link to translation editor instead
-				$post_edit_link = '';
-			} else {
-				$link = apply_filters( 'icl_post_link', array(), WPV_Content_Template_Embedded::POST_TYPE, $ct_id, 'edit' );
-				$is_disabled = wpv_getarr( $link, 'is_disabled', false );
-				$url = wpv_getarr( $link, 'url' );
+				return '';
+			}
 
-				if ( $is_disabled ) {
-					$post_edit_link = '';
-				} elseif ( ! empty( $url ) ) {
-					$post_edit_link = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $label );
-				}
+			$link = apply_filters( 'icl_post_link', array(), WPV_Content_Template_Embedded::POST_TYPE, $ct_id, 'edit' );
+			$is_disabled = wpv_getarr( $link, 'is_disabled', false );
+			$url = wpv_getarr( $link, 'url' );
+
+			if ( $is_disabled ) {
+				return '';
+			}
+			if ( ! empty( $url ) ) {
+				$post_edit_link = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $label );
 			}
 		}
 		return $post_edit_link;

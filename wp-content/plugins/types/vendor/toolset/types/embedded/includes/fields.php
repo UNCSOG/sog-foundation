@@ -74,11 +74,28 @@ function wpcf_admin_fields_get_groups( $post_type = TYPES_CUSTOM_FIELD_GROUP_CPT
  * @param bool $add_fields
  * @return array
  */
-function wpcf_admin_fields_get_group( $group_id, $post_type = TYPES_CUSTOM_FIELD_GROUP_CPT_NAME,
-        $add_fields = false ) {
+function wpcf_admin_fields_get_group(
+	$group_id,
+	$post_type = TYPES_CUSTOM_FIELD_GROUP_CPT_NAME,
+  $add_fields = false
+) {
     $group = get_post( $group_id );
     if ( empty( $group->ID ) ) {
-        $group = get_page_by_title( $group_id, OBJECT, $post_type );
+			$groups = get_posts(
+				array(
+						'post_type'              => $post_type,
+						'title'                  => $group_id,
+						'post_status'            => 'all',
+						'numberposts'            => 1,
+						'update_post_term_cache' => false,
+						'update_post_meta_cache' => false,           
+						'orderby'                => 'post_date ID',
+						'order'                  => 'ASC',
+				)
+			);
+			if ( ! empty( $groups ) ) {
+				$group = $groups[0];
+			}
     }
     if ( empty( $group->ID ) ) {
         $group = get_page_by_path( $group_id, OBJECT, $post_type );
@@ -152,6 +169,7 @@ function wpcf_admin_get_groups_admin_styles_by_group( $group_id ) {
 
 		return trim( $admin_styles );
 	}
+	return '';
 }
 
 /**

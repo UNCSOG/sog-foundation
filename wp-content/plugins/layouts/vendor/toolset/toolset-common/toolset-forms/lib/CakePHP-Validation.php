@@ -84,6 +84,14 @@ class WPToolset_Cake_Validation {
      */
     var $type = null;
 
+	/**
+	 * Holds current error information.
+	 *
+	 * @var array
+	 * @access public
+	 */
+	var $error = null;
+
     /**
      * Holds an array of errors messages set in this class.
      * These are used for debugging purposes
@@ -915,7 +923,7 @@ class WPToolset_Cake_Validation {
 
     /**
      * Checks that a value is a valid uuid - http://tools.ietf.org/html/rfc4122
-     * 
+     *
      * @param string $check Value to check
      * @return boolean Success
      * @access public

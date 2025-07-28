@@ -29,17 +29,18 @@ class Image extends ABlock {
 
 		parent::__construct( $block_config, $block_name_for_id_generation, $assets_loader );
 
-		/* The image block already had an blockId before getting rid of inline css.
+		/*
+		 The image block already had an blockId before getting rid of inline css.
 		   But old saved blocks are not valid. Luckily the old id is below 10 digits, while the new is above. */
-		if( strlen( $this->get_id() ) < 10 ) {
+		if ( strlen( $this->get_id() ) < 10 ) {
 			throw new \InvalidArgumentException( 'Old Image block.' . $this->get_id() );
 		}
 	}
 
-	private function apply_defaults( $block_config ){
+	private function apply_defaults( $block_config ) {
 		// ApplyMaxWidth is true by default.
 		$is_wide_or_full = isset( $block_config['align'] ) && in_array( $block_config['align'], [ 'wide', 'full' ] );
-		if( ! $is_wide_or_full &&
+		if ( ! $is_wide_or_full &&
 			( ! isset( $block_config['style'] ) || ! isset( $block_config['style']['applyMaxWidth'] ) ) ) {
 			$block_config['style']['applyMaxWidth'] = true;
 		}
@@ -83,7 +84,7 @@ class Image extends ABlock {
 		$config = $this->get_block_config();
 
 		// caption color
-		if( isset( $config['style'] ) ) {
+		if ( isset( $config['style'] ) ) {
 			$factory->apply_style_to_block_for_all_devices(
 				$this,
 				$config['style'],
@@ -96,29 +97,29 @@ class Image extends ABlock {
 		/*
 		 * Hover Styles
 		 */
-		if( ! isset( $config['hover'] ) || ! is_array( $config['hover'] ) ) {
+		if ( ! isset( $config['hover'] ) || ! is_array( $config['hover'] ) ) {
 			return;
 		}
 
 		$hover = $config['hover'];
 
 		// scale
-		if( isset( $hover['scale'] ) ) {
-			if( $style = $factory->get_attribute( 'scale', $hover['scale'] ) ) {
+		if ( isset( $hover['scale'] ) ) {
+			if ( $style = $factory->get_attribute( 'scale', $hover['scale'] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_IMAGE_HOVER );
 			}
 		}
 
 		// rotate
-		if( isset( $hover['rotate'] ) ) {
-			if( $style = $factory->get_attribute( 'rotate', $hover['rotate'] ) ) {
+		if ( isset( $hover['rotate'] ) ) {
+			if ( $style = $factory->get_attribute( 'rotate', $hover['rotate'] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_IMAGE_HOVER );
 			}
 		}
 
 		// z-index
-		if( isset( $hover['zIndex'] ) ) {
-			if( $style = $factory->get_attribute( 'zindex', $hover['zIndex'] ) ) {
+		if ( isset( $hover['zIndex'] ) ) {
+			if ( $style = $factory->get_attribute( 'zindex', $hover['zIndex'] ) ) {
 				$this->add_style_attribute( $style, self::KEY_STYLES_FOR_IMAGE_HOVER );
 			}
 		}
@@ -138,13 +139,13 @@ class Image extends ABlock {
 
 		$block_alignment = $this->get_block_alignment( $style, $device_detect );
 
-		if( ! $block_alignment ) {
+		if ( ! $block_alignment ) {
 			return $content;
 		}
 
 		$alignments_require_container = [ 'left', 'center', 'right' ];
 
-		if( in_array( $block_alignment, $alignments_require_container ) ) {
+		if ( in_array( $block_alignment, $alignments_require_container ) ) {
 			// Remove wp-block-image from figure tag.
 			$content = preg_replace(
 				'/(figure.*?class=[\"\'](?:.*?))(wp-block-image)(.*?)([\"\'])/',
@@ -179,7 +180,7 @@ class Image extends ABlock {
 	}
 
 	private function get_frame_config( $frame = 'none' ) {
-		switch( $frame ) {
+		switch ( $frame ) {
 			case self::FRAME_POLAROID:
 				return $this->get_frame_polaroid_config();
 			case self::FRAME_SHADOW_1:
@@ -193,29 +194,40 @@ class Image extends ABlock {
 		return array(
 			self::CSS_SELECTOR_ROOT => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'rotate', 'z-index', 'display', 'width', 'max-width'
+					'rotate',
+					'z-index',
+					'display',
+					'width',
+					'max-width',
 				),
 			),
 			'figcaption' => array(
 				self::KEY_STYLES_FOR_CAPTION => array(
-					'color'
-				)
+					'color',
+				),
 			),
 			'img' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'box-shadow', 'border-radius', 'background-color', 'padding', 'margin', 'border', 'height'
+					'box-shadow',
+					'border-radius',
+					'background-color',
+					'padding',
+					'margin',
+					'border',
+					'height',
 				),
 			),
 			':hover' => array(
 				self::KEY_STYLES_FOR_IMAGE_HOVER => array(
-					'rotate', 'z-index'
-				)
+					'rotate',
+					'z-index',
+				),
 			),
 			':hover img' => array(
 				self::KEY_STYLES_FOR_IMAGE_HOVER => array(
 					'scale',
-				)
-			)
+				),
+			),
 		);
 	}
 
@@ -223,33 +235,42 @@ class Image extends ABlock {
 		return array(
 			self::CSS_SELECTOR_ROOT => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'rotate', 'z-index', 'width', 'max-width'
+					'rotate',
+					'z-index',
+					'width',
+					'max-width',
 				),
 			),
 			'figcaption' => array(
 				self::KEY_STYLES_FOR_CAPTION => array(
-					'color'
-				)
+					'color',
+				),
 			),
 			'.tb-image-polaroid' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'margin'
-				)
+					'margin',
+				),
 			),
 			'.tb-image-polaroid-inner' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'background-color', 'border', 'border-radius', 'box-shadow', 'padding'
-				)
+					'background-color',
+					'border',
+					'border-radius',
+					'box-shadow',
+					'padding',
+				),
 			),
 			'img' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'height'
+					'height',
 				),
 			),
 			':hover' => array(
 				self::KEY_STYLES_FOR_IMAGE_HOVER => array(
-					'rotate', 'scale', 'z-index'
-				)
+					'rotate',
+					'scale',
+					'z-index',
+				),
 			),
 
 		);
@@ -259,33 +280,42 @@ class Image extends ABlock {
 		return array(
 			self::CSS_SELECTOR_ROOT => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'rotate', 'z-index', 'width', 'max-width'
+					'rotate',
+					'z-index',
+					'width',
+					'max-width',
 				),
 			),
 			'figcaption' => array(
 				self::KEY_STYLES_FOR_CAPTION => array(
-					'color'
-				)
+					'color',
+				),
 			),
 			'.tb-image-shadow-1' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'margin'
-				)
+					'margin',
+				),
 			),
 			'.tb-image-shadow-1-inner' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'background-color', 'border', 'border-radius', 'box-shadow', 'padding'
-				)
+					'background-color',
+					'border',
+					'border-radius',
+					'box-shadow',
+					'padding',
+				),
 			),
 			'img' => array(
 				self::KEY_STYLES_FOR_COMMON_STYLES => array(
-					'height'
+					'height',
 				),
 			),
 			':hover' => array(
 				self::KEY_STYLES_FOR_IMAGE_HOVER => array(
-					'rotate', 'scale', 'z-index'
-				)
+					'rotate',
+					'scale',
+					'z-index',
+				),
 			),
 
 		);

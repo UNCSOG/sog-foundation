@@ -17,7 +17,7 @@ class Lightbox implements IContent {
 	 * @return bool
 	 */
 	public function is_required_for_content( $content ) {
-		if( strpos( $content, 'data-lightbox' ) !== false ) {
+		if ( strpos( $content, 'data-lightbox' ) !== false ) {
 			return true;
 		}
 
@@ -39,7 +39,7 @@ class Lightbox implements IContent {
 	 */
 	public function load_dependencies() {
 		// respect theme lightbox
-		if( ! wp_script_is( 'lightbox' ) ) {
+		if ( ! wp_script_is( 'lightbox' ) ) {
 			wp_enqueue_script(
 				'lightbox',
 				TB_URL . 'public/vendor/lightbox/js/lightbox.min.js',
@@ -49,7 +49,7 @@ class Lightbox implements IContent {
 		}
 
 		// respect theme lightbox
-		if( ! wp_style_is( 'lightbox' ) ) {
+		if ( ! wp_style_is( 'lightbox' ) ) {
 			wp_enqueue_style(
 				'lightbox',
 				TB_URL . 'public/vendor/lightbox/css/lightbox.min.css',

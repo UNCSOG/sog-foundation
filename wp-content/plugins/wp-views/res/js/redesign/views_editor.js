@@ -15,7 +15,7 @@ var WPViews = WPViews || {};
 /**
  * Edit page Codemirror management.
  *
- * @note This might be better as a standalone script, including the WPV_Toolset.add_qt_editor_buttons fallback.
+ * @note This might be better as a standalone script.
  *     Even more: I could port all the needed functionality from icl_editor and ditch that dependency too!!!
  *     Oh, that would be soooo good...
  *
@@ -111,10 +111,10 @@ WPViews.EditScreenEditors = function( $ ) {
 		WPV_Toolset.CodeMirror_instance_value[ editor_id ]	= WPV_Toolset.CodeMirror_instance[ editor_id ].getValue();
 		// Instantiate Quicktags
 		WPV_Toolset.CodeMirror_instance_qt[ editor_id ]		= quicktags( {
-																id: editor_id,
-																buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close'
-															} );
-		WPV_Toolset.add_qt_editor_buttons( WPV_Toolset.CodeMirror_instance_qt[ editor_id ], WPV_Toolset.CodeMirror_instance[ editor_id ] );
+			id: editor_id,
+			buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close'
+		} );
+		ToolsetCommon.initQuicktags( WPV_Toolset.CodeMirror_instance_qt[ editor_id ], WPV_Toolset.CodeMirror_instance[ editor_id ] );
 		// Add Codemirror keymap shortcuts
 		WPV_Toolset.CodeMirror_instance[ editor_id ].addKeyMap( self.editor_keymap );
 
@@ -4911,177 +4911,3 @@ WPViews.ViewEditScreen = function( $ ) {
 jQuery( function( $ ) {
     WPViews.view_edit_screen = new WPViews.ViewEditScreen( $ );
 });
-
-/**
-* Quicktags custom implementation fallback
-*/
-
-if ( typeof WPV_Toolset.add_qt_editor_buttons !== 'function' ) {
-    WPV_Toolset.add_qt_editor_buttons = function( qt_instance, editor_instance ) {
-		var activeUrlEditor;
-        QTags._buttonsInit();
-		if ( typeof WPV_Toolset.CodeMirror_instance[qt_instance.id] === "undefined" ) {
-			WPV_Toolset.CodeMirror_instance[qt_instance.id] = editor_instance;
-		}
-        for ( var button_name in qt_instance.theButtons ) {
-			if ( qt_instance.theButtons.hasOwnProperty( button_name ) ) {
-				qt_instance.theButtons[button_name].old_callback = qt_instance.theButtons[button_name].callback;
-                if ( qt_instance.theButtons[button_name].id == 'img' ) {
-                    qt_instance.theButtons[button_name].callback = function( element, canvas, ed ) {
-						var t = this,
-						id = jQuery( canvas ).attr( 'id' ),
-						selection = WPV_Toolset.CodeMirror_instance[id].getSelection(),
-						e = "http://",
-						g = prompt( quicktagsL10n.enterImageURL, e ),
-						f = prompt( quicktagsL10n.enterImageDescription, "" );
-						t.tagStart = '<img src="' + g + '" alt="' + f + '" />';
-						selection = t.tagStart;
-						t.closeTag( element, ed );
-						WPV_Toolset.CodeMirror_instance[id].replaceSelection( selection, 'end' );
-						WPV_Toolset.CodeMirror_instance[id].focus();
-                    }
-                } else if ( qt_instance.theButtons[button_name].id == 'wpv_conditional' ) {
-                    qt_instance.theButtons[button_name].callback = function ( e, c, ed ) {
-                        WPV_Toolset.activeUrlEditor = ed;
-						var id = jQuery( c ).attr( 'id' ),
-                        t = this;
-                        window.wpcfActiveEditor = id;
-                        WPV_Toolset.CodeMirror_instance[id].focus();
-                        selection = WPV_Toolset.CodeMirror_instance[id].getSelection();
-						var current_editor_object = {};
-						if ( selection ) {
-						   //When texty selected
-						   current_editor_object = {'e' : e, 'c' : c, 'ed' : ed, 't' : t, 'post_id' : '', 'close_tag' : true, 'codemirror' : id};
-						   WPViews.shortcodes_gui.wpv_insert_popup_conditional('wpv-conditional', wpv_shortcodes_gui_texts.wpv_insert_conditional_shortcode, {}, wpv_shortcodes_gui_texts.wpv_editor_callback_nonce, current_editor_object );
-						} else if ( ed.openTags ) {
-							// if we have an open tag, see if it's ours
-							var ret = false, i = 0, t = this;
-							while ( i < ed.openTags.length ) {
-								ret = ed.openTags[i] == t.id ? i : false;
-								i ++;
-							}
-							if ( ret === false ) {
-								t.tagStart = '';
-								t.tagEnd = false;
-								if ( ! ed.openTags ) {
-									ed.openTags = [];
-								}
-								ed.openTags.push(t.id);
-								e.value = '/' + e.value;
-								current_editor_object = {'e' : e, 'c' : c, 'ed' : ed, 't' : t, 'post_id' : '', 'close_tag' : false, 'codemirror' : id};
-								WPViews.shortcodes_gui.wpv_insert_popup_conditional('wpv-conditional', wpv_shortcodes_gui_texts.wpv_insert_conditional_shortcode, {}, wpv_shortcodes_gui_texts.wpv_editor_callback_nonce, current_editor_object );
-							} else {
-								// close tag
-								ed.openTags.splice(ret, 1);
-								t.tagStart = '[/wpv-conditional]';
-								e.value = t.display;
-								window.icl_editor.insert( t.tagStart );
-							}
-						} else {
-							// last resort, no selection and no open tags
-							// so prompt for input and just open the tag
-							t.tagStart = '';
-							t.tagEnd = false;
-							if ( ! ed.openTags ) {
-								ed.openTags = [];
-							}
-							ed.openTags.push(t.id);
-							e.value = '/' + e.value;
-							current_editor_object = {'e' : e, 'c' : c, 'ed' : ed, 't' : t, 'post_id' : '', 'close_tag' : false, 'codemirror' : id};
-							WPViews.shortcodes_gui.wpv_insert_popup_conditional('wpv-conditional', wpv_shortcodes_gui_texts.wpv_insert_conditional_shortcode, {}, wpv_shortcodes_gui_texts.wpv_editor_callback_nonce, current_editor_object );
-						}
-					}
-                } else if ( qt_instance.theButtons[button_name].id == 'close' ) {
-
-                } else if ( qt_instance.theButtons[button_name].id == 'link' ) {
-					var t = this;
-					qt_instance.theButtons[button_name].callback = function ( b, c, d, e ) {
-						activeUrlEditor = c;var f,g=this;return"undefined"!=typeof wpLink?void wpLink.open(d.id):(e||(e="http://"),void(g.isOpen(d)===!1?(f=prompt(quicktagsL10n.enterURL,e),f&&(g.tagStart='<a href="'+f+'">',a.TagButton.prototype.callback.call(g,b,c,d))):a.TagButton.prototype.callback.call(g,b,c,d)))
-					};
-					jQuery( '#wp-link-submit' ).off();
-					jQuery( '#wp-link-submit' ).on( 'click', function( event ) {
-						event.preventDefault();
-						var id = jQuery( activeUrlEditor ).attr('id'),
-						selection = WPV_Toolset.CodeMirror_instance[id].getSelection(),
-						inputs = {},
-						attrs, text, title, html;
-						inputs.wrap = jQuery('#wp-link-wrap');
-						inputs.backdrop = jQuery( '#wp-link-backdrop' );
-						if ( jQuery( '#link-target-checkbox' ).length > 0 ) {
-							// Backwards compatibility - before WordPress 4.2
-							inputs.text = jQuery( '#link-title-field' );
-							attrs = wpLink.getAttrs();
-							text = inputs.text.val();
-							if ( ! attrs.href ) {
-								return;
-							}
-							// Build HTML
-							html = '<a href="' + attrs.href + '"';
-							if ( attrs.target ) {
-								html += ' target="' + attrs.target + '"';
-							}
-							if ( text ) {
-								title = text.replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
-								html += ' title="' + title + '"';
-							}
-							html += '>';
-							html += text || selection;
-							html += '</a>';
-							t.tagStart = html;
-							selection = t.tagStart;
-						} else {
-							// WordPress 4.2+
-							inputs.text = jQuery( '#wp-link-text' );
-							attrs = wpLink.getAttrs();
-							text = inputs.text.val();
-							if ( ! attrs.href ) {
-								return;
-							}
-							// Build HTML
-							html = '<a href="' + attrs.href + '"';
-							if ( attrs.target ) {
-								html += ' target="' + attrs.target + '"';
-							}
-							html += '>';
-							html += text || selection;
-							html += '</a>';
-							selection = html;
-						}
-						jQuery( document.body ).removeClass( 'modal-open' );
-						inputs.backdrop.hide();
-						inputs.wrap.hide();
-						jQuery( document ).trigger( 'wplink-close', inputs.wrap );
-						WPV_Toolset.CodeMirror_instance[id].replaceSelection( selection, 'end' );
-						WPV_Toolset.CodeMirror_instance[id].focus();
-						return false;
-                    });
-                } else {
-                    qt_instance.theButtons[button_name].callback = function( element, canvas, ed ) {
-                        var id = jQuery( canvas ).attr( 'id' ),
-                        t = this,
-                        selection = WPV_Toolset.CodeMirror_instance[id].getSelection();
-						if ( selection.length > 0 ) {
-							if ( !t.tagEnd ) {
-								selection = selection + t.tagStart;
-							} else {
-								selection = t.tagStart + selection + t.tagEnd;
-							}
-						} else {
-							if ( !t.tagEnd ) {
-								selection = t.tagStart;
-							} else if ( t.isOpen( ed ) === false ) {
-								selection = t.tagStart;
-								t.openTag( element, ed );
-							} else {
-								selection = t.tagEnd;
-								t.closeTag( element, ed );
-							}
-						}
-                        WPV_Toolset.CodeMirror_instance[id].replaceSelection(selection, 'end');
-                        WPV_Toolset.CodeMirror_instance[id].focus();
-                    }
-                }
-			}
-		}
-    }
-}

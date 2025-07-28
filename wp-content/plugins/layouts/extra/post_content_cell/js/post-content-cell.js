@@ -3,139 +3,6 @@ jQuery(function($){
     DDLayout.content_template_cell = new DDLayout.PostContentCell($);
 });
 
-// Fallback since this is in common in icl_editor_addon_plugin.js
-// But we can not know whether the common version loaded contains it or not
-// @todo keep for a couple of join releases, make this script dependant on that one and then remove
-
-var WPV_Toolset = WPV_Toolset  || {};
-if ( typeof WPV_Toolset.CodeMirror_instance === "undefined" ) {
-    WPV_Toolset.CodeMirror_instance = [];
-}
-
-if ( typeof WPV_Toolset.add_qt_editor_buttons !== 'function' ) {
-    WPV_Toolset.add_qt_editor_buttons = function( qt_instance, editor_instance ) {
-        var activeUrlEditor, html;
-        QTags._buttonsInit();
-        WPV_Toolset.CodeMirror_instance[qt_instance.id] = editor_instance;
-
-        for ( var button_name in qt_instance.theButtons ) {
-            if ( qt_instance.theButtons.hasOwnProperty( button_name ) ) {
-                qt_instance.theButtons[button_name].old_callback = qt_instance.theButtons[button_name].callback;
-                if ( qt_instance.theButtons[button_name].id == 'img' ){
-                    qt_instance.theButtons[button_name].callback = function( element, canvas, ed ) {
-                        var t = this,
-                            id = jQuery( canvas ).attr( 'id' ),
-                            selection = WPV_Toolset.CodeMirror_instance[id].getSelection(),
-                            e = "http://",
-                            g = prompt( quicktagsL10n.enterImageURL, e ),
-                            f = prompt( quicktagsL10n.enterImageDescription, "" );
-                        t.tagStart = '<img src="'+g+'" alt="'+f+'" />';
-                        selection = t.tagStart;
-                        t.closeTag( element, ed );
-                        WPV_Toolset.CodeMirror_instance[id].replaceSelection( selection, 'end' );
-                        WPV_Toolset.CodeMirror_instance[id].focus();
-                    }
-                } else if ( qt_instance.theButtons[button_name].id == 'close' ) {
-
-                } else if ( qt_instance.theButtons[button_name].id == 'link' ) {
-                    var t = this;
-                    qt_instance.theButtons[button_name].callback =
-                        function ( b, c, d, e ) {
-                            activeUrlEditor = c;
-                            var f,g=this;
-                            return "undefined" != typeof wpLink ?void wpLink.open(d.id) : (e||(e="http://"), void(g.isOpen(d)===!1 ? (f=prompt(quicktagsL10n.enterURL,e), f && (g.tagStart='<a href="'+f+'">', a.TagButton.prototype.callback.call(g,b,c,d))) : a.TagButton.prototype.callback.call(g,b,c,d)))
-                        };
-                    jQuery( '#wp-link-submit' ).off();
-					jQuery( '#wp-link-submit' ).on( 'click', function( event ) {
-						event.preventDefault();
-						if ( wpLink.isMCE() ) {
-							wpLink.mceUpdate();
-						} else {
-							var id = jQuery( activeUrlEditor ).attr('id'),
-							selection = WPV_Toolset.CodeMirror_instance[id].getSelection(),
-							inputs = {},
-							attrs, text, title, html;
-							inputs.wrap = jQuery('#wp-link-wrap');
-							inputs.backdrop = jQuery( '#wp-link-backdrop' );
-							if ( jQuery( '#link-target-checkbox' ).length > 0 ) {
-								// Backwards compatibility - before WordPress 4.2
-								inputs.text = jQuery( '#link-title-field' );
-								attrs = wpLink.getAttrs();
-								text = inputs.text.val();
-								if ( ! attrs.href ) {
-									return;
-								}
-								// Build HTML
-								html = '<a href="' + attrs.href + '"';
-								if ( attrs.target ) {
-									html += ' target="' + attrs.target + '"';
-								}
-								if ( text ) {
-									title = text.replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
-									html += ' title="' + title + '"';
-								}
-								html += '>';
-								html += text || selection;
-								html += '</a>';
-								t.tagStart = html;
-								selection = t.tagStart;
-							} else {
-								// WordPress 4.2+
-								inputs.text = jQuery( '#wp-link-text' );
-								attrs = wpLink.getAttrs();
-								text = inputs.text.val();
-								if ( ! attrs.href ) {
-									return;
-								}
-								// Build HTML
-								html = '<a href="' + attrs.href + '"';
-								if ( attrs.target ) {
-									html += ' target="' + attrs.target + '"';
-								}
-								html += '>';
-								html += text || selection;
-								html += '</a>';
-								selection = html;
-							}
-							jQuery( document.body ).removeClass( 'modal-open' );
-							inputs.backdrop.hide();
-							inputs.wrap.hide();
-							jQuery( document ).trigger( 'wplink-close', inputs.wrap );
-							WPV_Toolset.CodeMirror_instance[id].replaceSelection( selection, 'end' );
-							WPV_Toolset.CodeMirror_instance[id].focus();
-							return false;
-						}
-					});
-                } else {
-                    qt_instance.theButtons[button_name].callback = function( element, canvas, ed ) {
-                        var id = jQuery( canvas ).attr( 'id' ),
-                            t = this,
-                            selection = WPV_Toolset.CodeMirror_instance[id].getSelection();
-                        if ( selection.length > 0 ) {
-                            if ( !t.tagEnd ) {
-                                selection = selection + t.tagStart;
-                            } else {
-                                selection = t.tagStart + selection + t.tagEnd;
-                            }
-                        } else {
-                            if ( !t.tagEnd ) {
-                                selection = t.tagStart;
-                            } else if ( t.isOpen( ed ) === false ) {
-                                selection = t.tagStart;
-                                t.openTag( element, ed );
-                            } else {
-                                selection = t.tagEnd;
-                                t.closeTag( element, ed );
-                            }
-                        }
-                        WPV_Toolset.CodeMirror_instance[id].replaceSelection(selection, 'end');
-                        WPV_Toolset.CodeMirror_instance[id].focus();
-                    }
-                }
-            }
-        }
-    }
-}
 
 // END of fallback
 
@@ -673,7 +540,7 @@ DDLayout.PostContentCell = function($)
             } else {
                 self._ct_code_mirror = icl_editor.codemirror('wpv-ct-inline-editor-'+id, true);
                 self._wpv_inline_editor_qt = quicktags( { id: "wpv-ct-inline-editor-"+id, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-                WPV_Toolset.add_qt_editor_buttons( self._wpv_inline_editor_qt, self._ct_code_mirror );
+                ToolsetCommon.initQuicktags( self._wpv_inline_editor_qt, self._ct_code_mirror );
             }
 
             // Hide "CRED forms" button (it doesn't work at the moment)
