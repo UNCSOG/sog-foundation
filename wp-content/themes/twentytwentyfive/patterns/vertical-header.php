@@ -1,10 +1,10 @@
 <?php
 /**
- * Title: Vertical site header
+ * Title: Vertical header
  * Slug: twentytwentyfive/vertical-header
  * Categories: header
  * Block Types: core/template-part/vertical-header
- * Description: Vertical site header with site title and navigation.
+ * Description: Vertical Header with site title and navigation
  * Viewport width: 300
  *
  * @package WordPress

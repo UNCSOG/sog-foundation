@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Text blog single post
+ * Title: Text-only blog, single post
  * Slug: twentytwentyfive/template-single-text-blog
  * Template Types: posts, single
  * Viewport width: 1400
