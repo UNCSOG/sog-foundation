@@ -1,0 +1,11 @@
+{
+    "name": "matias/sog-saml-conf",
+    "description": "Auto provision users from SAML, adds apps team as admins (WordPress plugin)",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "SogSamlConf\\": "src/"
+        }
+    },
+    "require": {}
+}
