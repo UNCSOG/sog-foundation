@@ -576,3 +576,106 @@ function sog_foundation_parent_photo_sizes()
 }
 
 register_activation_hook(__FILE__, 'sog_foundation_parent_photo_sizes');
+
+
+// Add Theme Settings page to WordPress admin
+function parent_theme_add_admin_page() {
+    add_menu_page(
+        'Theme Settings',         // Page title
+        'Theme Settings',         // Menu title
+        'manage_options',         // Capability
+        'parent_theme_settings',  // Menu slug
+        'parent_theme_settings_page',  // Callback function
+        'dashicons-admin-generic', // Icon
+        100                        // Position
+    );
+}
+add_action('admin_menu', 'parent_theme_add_admin_page');
+
+// Settings page callback
+function parent_theme_settings_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('Theme Settings', 'parent-theme'); ?></h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('parent_theme_settings');
+            do_settings_sections('parent_theme_settings');
+            submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+function parent_theme_register_custom_settings() {
+    // Register settings
+    register_setting('parent_theme_settings', 'selected_header');
+    register_setting('parent_theme_settings', 'selected_footer');
+    register_setting('parent_theme_settings', 'sidebar_enabled');
+
+    // Add sections and fields for Headers, Footers, and Sidebar
+    add_settings_section('parent_theme_layout_section', 'Layout Options', null, 'parent_theme_settings');
+
+    // Header selection
+    add_settings_field(
+        'selected_header',
+        'Select Site Header',
+        'parent_theme_header_selection_callback',
+        'parent_theme_settings',
+        'parent_theme_layout_section'
+    );
+
+    // Footer selection
+    add_settings_field(
+        'selected_footer',
+        'Select Site Footer',
+        'parent_theme_footer_selection_callback',
+        'parent_theme_settings',
+        'parent_theme_layout_section'
+    );
+
+    // Sidebar toggle
+    add_settings_field(
+        'sidebar_enabled',
+        'Enable Sidebar for Content Type',
+        'parent_theme_sidebar_toggle_callback',
+        'parent_theme_settings',
+        'parent_theme_layout_section'
+    );
+}
+add_action('admin_init', 'parent_theme_register_custom_settings');
+
+// Callbacks for each setting
+function parent_theme_header_selection_callback() {
+    $selected_header = get_option('selected_header');
+    ?>
+    <select name="selected_header">
+        <option value="header1" <?php selected($selected_header, 'header1'); ?>>Header 1</option>
+        <option value="header2" <?php selected($selected_header, 'header2'); ?>>Header 2</option>
+        <option value="header3" <?php selected($selected_header, 'header3'); ?>>Header 3</option>
+        <option value="header4" <?php selected($selected_header, 'header4'); ?>>Header 4</option>
+        <option value="header5" <?php selected($selected_header, 'header5'); ?>>Header 5</option>
+    </select>
+    <?php
+}
+
+function parent_theme_footer_selection_callback() {
+    $selected_footer = get_option('selected_footer');
+    ?>
+    <select name="selected_footer">
+        <option value="footer1" <?php selected($selected_footer, 'footer1'); ?>>Footer 1</option>
+        <option value="footer2" <?php selected($selected_footer, 'footer2'); ?>>Footer 2</option>
+        <option value="footer3" <?php selected($selected_footer, 'footer3'); ?>>Footer 3</option>
+    </select>
+    <?php
+}
+
+function parent_theme_sidebar_toggle_callback() {
+    $sidebar_enabled = get_option('sidebar_enabled');
+    ?>
+    <input type="checkbox" name="sidebar_enabled" value="1" <?php checked($sidebar_enabled, 1); ?> />
+    <label for="sidebar_enabled">Enable sidebar for selected content types</label>
+    <?php
+}
+
