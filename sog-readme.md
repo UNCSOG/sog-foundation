@@ -7,6 +7,14 @@ Update via composer first.
     composer update
 ```
 
+Updating the pantheon wordpress commands:
+
+```
+    git remote add pantheon-wordpress https://github.com/pantheon-systems/WordPress.git
+    git fetch pantheon-wordpress
+    git merge pantheon-wordpress/master -Xtheirs
+```
+
 Then you can run the following commands:
 
 ```
