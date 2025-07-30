@@ -17,6 +17,7 @@ $page_id = get_option( 'page_for_posts' );
 			edit_post_link( __( 'Edit', 'sog-foundation-parent' ), '<span class="edit-link">', '</span>', $page_id );
 		?>
 	</div><!-- /.col -->
+
 	<div class="col-md-12">
 		<?php
 			get_template_part( 'archive', 'loop' );
