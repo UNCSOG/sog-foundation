@@ -85,32 +85,34 @@ function get_users_to_import() {
 
     // echo "<h3>Debug: get_users_to_import()</h3><br/>";
     echo "<pre>";
-        // echo "File path: $users_file\n";
-        // echo "File exists: " . (file_exists($users_file) ? 'Yes' : 'No') . "\n";
+    // echo "File path: $users_file\n";
+    // echo "File exists: " . (file_exists($users_file) ? 'Yes' : 'No') . "\n";
 
-        if (file_exists($users_file)) {
-            // Uncomment the 3 lines below if you need to debug that output.
-            // echo "File contents:\n";
-            // $file_contents = file_get_contents($users_file);
-            // echo htmlspecialchars($file_contents) . "\n\n";
+    if (file_exists($users_file)) {
+        // Uncomment the 3 lines below if you need to debug that output.
+        // echo "File contents:\n";
+        // $file_contents = file_get_contents($users_file);
+        // echo htmlspecialchars($file_contents) . "\n\n";
 
-            $users = include $users_file;
+        $users = include $users_file;
 
-            // echo "Type of \$users: " . gettype($users) . "\n";
-            // echo "Is \$users an array: " . (is_array($users) ? 'Yes' : 'No') . "\n";
-            // echo "Count of \$users: " . (is_array($users) ? count($users) : 'N/A') . "\n";
+        // echo "Type of \$users: " . gettype($users) . "\n";
+        // echo "Is \$users an array: " . (is_array($users) ? 'Yes' : 'No') . "\n";
+        // echo "Count of \$users: " . (is_array($users) ? count($users) : 'N/A') . "\n";
 
-            if (!is_array($users)) {
-                echo "Error: users-to-import.php did not return an array.\n";
-                return [];
-            }
-
-            return $users;
-        } else {
-            echo "Error: users-to-import.php file not found.\n";
+        if (!is_array($users)) {
+            echo "Error: users-to-import.php did not return an array.\n";
+            echo "</pre>";
             return [];
         }
-    echo "</pre>";
+
+        echo "</pre>";
+        return $users;
+    } else {
+        echo "Error: users-to-import.php file not found.\n";
+        echo "</pre>";
+        return [];
+    }
 }
 
 function update_users_from_array($users) {

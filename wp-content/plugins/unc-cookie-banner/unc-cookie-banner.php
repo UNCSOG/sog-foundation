@@ -51,26 +51,20 @@ class UNCCookieBanner {
     public function settings_page() {
         $can_manage = is_multisite() ? current_user_can('manage_network') : current_user_can('manage_options');
 
-        if ($can_manage) {
-            if (isset($_POST['submit']) && isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'unc_cookie_banner_settings_save')) {
-
-                if (!$can_manage) {
-                    wp_die('You do not have permission to save settings.');
-                }
-                $banner_text = wp_kses_post(wp_unslash($_POST['unc_cookie_banner_text']));
-                if (empty($banner_text)) {
-                    $banner_text = "This website uses cookies and similar technologies to understand visitor experiences. By using this website, you consent to UNC-Chapel Hill's cookie usage in accordance with their <a href='https://www.unc.edu/about/privacy-statement/'>Privacy Notice</a>.";
-                }
-                $button_text = sanitize_text_field($_POST['unc_cookie_banner_button_text']);
-                if (empty($button_text)) {
-                    $button_text = "I Accept";
-                }
-                $exclusion_list = sanitize_text_field($_POST['unc_cookie_banner_exclude_blogs']);
-
-                $this->update_option('unc_cookie_banner_text', $banner_text);
-                $this->update_option('unc_cookie_banner_button_text', $button_text);
-                $this->update_option('unc_cookie_banner_exclude_blogs', $exclusion_list);
+        if ($can_manage && isset($_POST['submit']) && isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'unc_cookie_banner_settings_save')) {
+            $banner_text = wp_kses_post(wp_unslash($_POST['unc_cookie_banner_text']));
+            if (empty($banner_text)) {
+                $banner_text = "This website uses cookies and similar technologies to understand visitor experiences. By using this website, you consent to UNC-Chapel Hill's cookie usage in accordance with their <a href='https://www.unc.edu/about/privacy-statement/'>Privacy Notice</a>.";
             }
+            $button_text = sanitize_text_field($_POST['unc_cookie_banner_button_text']);
+            if (empty($button_text)) {
+                $button_text = "I Accept";
+            }
+            $exclusion_list = sanitize_text_field($_POST['unc_cookie_banner_exclude_blogs']);
+
+            $this->update_option('unc_cookie_banner_text', $banner_text);
+            $this->update_option('unc_cookie_banner_button_text', $button_text);
+            $this->update_option('unc_cookie_banner_exclude_blogs', $exclusion_list);
         }
 
         $unc_cookie_banner_text = $this->get_option('unc_cookie_banner_text', "This website uses cookies and similar technologies to understand visitor experiences. By using this website, you consent to UNC-Chapel Hill's cookie usage in accordance with their <a href='https://www.unc.edu/about/privacy-statement/'>Privacy Notice</a>.");
