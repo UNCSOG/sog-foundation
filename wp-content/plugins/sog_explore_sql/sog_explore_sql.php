@@ -37,7 +37,7 @@ function activate() {
 
     //create default page for db explorer
     // create_default_page();
-    
+
 }
 register_activation_hook( __FILE__, 'sog_explore\activate' );
 
@@ -65,11 +65,11 @@ function sql_styles() {
 add_action( 'wp_enqueue_scripts', 'sog_explore\sql_styles' );
 
 function sql_scripts() {
-    wp_enqueue_style( 'sog_explore_sql_css',  plugin_dir_url( __FILE__ ) . 'inc/css/style.css',null, time() );                      
+    wp_enqueue_style( 'sog_explore_sql_css',  plugin_dir_url( __FILE__ ) . 'inc/css/style.css',null, time() );
 
-    wp_enqueue_script( 'sog_explore_sql_js',  plugin_dir_url( __FILE__ ) . 'inc/js/js.js',array('jquery'),time() );                      
+    wp_enqueue_script( 'sog_explore_sql_js',  plugin_dir_url( __FILE__ ) . 'inc/js/js.js',array('jquery'),time() );
 	wp_localize_script('sog_explore_sql_js', 'sog_explore_vars', array('plugin_path' => plugin_dir_url(__FILE__),"siteurl"=>get_option('siteurl')));
-    
+
     if (isset($_ENV['PANTHEON_SITE_NAME']) and $_ENV['PANTHEON_SITE_NAME']=="sog-books") {
     }else{
 	    //bootstrap 5.1.3 is already loaded by theme, loading here breaks popovers in books
@@ -91,17 +91,17 @@ add_action( 'wp_enqueue_scripts', 'sog_explore\sql_scripts' );
 add_action( 'admin_enqueue_scripts', 'sog_explore\sql_scripts' );
 
 
-function custom_menu_settings() { 
+function custom_menu_settings() {
 
-  add_menu_page( 
+  add_menu_page(
       'SOG Explore DB', //page title
       'SOG Explore DB', //menu title
       'read', //capability
       'sog_explore_menu_slug', //menu slug
       'sog_explore\admin_page', //function to run
-      'dashicons-database' 
+      'dashicons-database'
      );
-	 
+
 }
 add_action('admin_menu', 'sog_explore\custom_menu_settings');
 
@@ -121,7 +121,7 @@ add_shortcode( 'sog_explore_sql', 'sog_explore\sql' );
 
 function allow_access_to_sog_explore(){
     //check permission based on wp_option record with name save_explore_roles
-    
+
     //get option data
     $save_explore_roles=get_option( $option="sog_ex_save_explore_roles");
     if (isset($save_explore_roles)){
