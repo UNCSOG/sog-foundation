@@ -1,5 +1,5 @@
 parameters:
-    level: 4
+    level: 6
     paths:
         - wp-content/themes/sog-foundation-parent
         - wp-content/plugins/sog-api
