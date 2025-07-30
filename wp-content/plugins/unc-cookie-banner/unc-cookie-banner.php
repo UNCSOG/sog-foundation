@@ -108,7 +108,7 @@ class UNCCookieBanner {
 
         $script_path = 'dist/cookie-banner.js';
         $script_assets = $this->get_scripts_asset_defs($script_path);
-        //error_log( var_export($script_assets,true));
+        // error_log( var_export($script_assets,true));
         wp_enqueue_script('cookie-banner-script', plugins_url($script_path, __FILE__), $script_assets['dependencies'], $script_assets['version'], true);
 
         wp_localize_script('cookie-banner-script', 'cookieBannerSettings', array(
@@ -129,40 +129,40 @@ class UNCCookieBanner {
     }
 
     /**
-     * get the assets dfinitions from the assets.php for a script
+     * get the assets definitions from the assets.php for a script
      *
-     * @param [string] $script_path relative path to the script
-     * @return void
+     * @param string $script_path relative path to the script
+     * @return array
      */
-    public function get_scripts_asset_defs($script_path) {
+    public function get_scripts_asset_defs($script_path): array {
         $assets_defs = [];
         $assets_path = str_replace('.js', '.asset.php', $script_path);
-        //error_log('the path is ' . $assets_path);
+        // error_log('the path is ' . $assets_path);
         $assets_full_path = plugin_dir_path(__FILE__) . $assets_path;
-        //error_log('the file exists:' . var_export(file_exists($file_path), true));
+        // error_log('the file exists:' . var_export(file_exists($file_path), true));
 
-        //make sure the file exists
+        // make sure the file exists
         if (file_exists($assets_full_path)) {
             $assets_body = include($assets_full_path);
-            //error_log('$assets_body:' . var_export($assets_body, true));
+            // error_log('$assets_body:' . var_export($assets_body, true));
         } else {
             $assets_body = NULL;
         }
 
-        //get deps if set
+        // get deps if set
         if ($assets_body && isset($assets_body['dependencies'])) {
             $assets_defs['dependencies'] = $assets_body['dependencies'];
         } else {
             $assets_defs['dependencies'] = [];
         }
 
-        //get version if set
+        // get version if set
         if ($assets_body && isset($assets_body['version'])) {
             $assets_defs['version'] = $assets_body['version'];
         } else {
             $assets_defs['version'] = $this->plugin_version;
         }
-        //error_log( var_export(  $assets_defs, true ) );
+        // error_log( var_export(  $assets_defs, true ) );
         return $assets_defs;
     }
 
