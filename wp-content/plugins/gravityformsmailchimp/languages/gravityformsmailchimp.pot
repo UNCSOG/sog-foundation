@@ -1,0 +1,226 @@
+# Copyright (C) 2024 Gravity Forms
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gravity Forms Mailchimp Add-On 5.6.0\n"
+"Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
+"Last-Translator: Gravity Forms <support@gravityforms.com>\n"
+"Language-Team: Gravity Forms <support@gravityforms.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-12-12T18:58:29+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: gravityformsmailchimp\n"
+
+#. Plugin Name of the plugin
+msgid "Gravity Forms Mailchimp Add-On"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://gravityforms.com"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integrates Gravity Forms with Mailchimp, allowing form submissions to be automatically sent to your Mailchimp account."
+msgstr ""
+
+#. Author of the plugin
+msgid "Gravity Forms"
+msgstr ""
+
+#: class-gf-mailchimp.php:239
+msgid "Subscribe user to Mailchimp only when payment is received."
+msgstr ""
+
+#: class-gf-mailchimp.php:415
+msgid "Could not authenticate with Mailchimp."
+msgstr ""
+
+#. translators: %1 is an opening <a> tag, and %2 is a closing </a> tag.
+#: class-gf-mailchimp.php:449
+msgid "Mailchimp makes it easy to send email newsletters to your customers, manage your subscriber audiences, and track campaign performance. Use Gravity Forms to collect customer information and automatically add it to your Mailchimp subscriber audience. If you don't have a Mailchimp account, you can %1$ssign up for one here.%2$s"
+msgstr ""
+
+#: class-gf-mailchimp.php:527
+#: class-gf-mailchimp.php:537
+msgid "Connected to Mailchimp as: "
+msgstr ""
+
+#: class-gf-mailchimp.php:530
+#: class-gf-mailchimp.php:540
+msgid "Connected to Mailchimp."
+msgstr ""
+
+#: class-gf-mailchimp.php:571
+msgid "Disconnect from Mailchimp"
+msgstr ""
+
+#: class-gf-mailchimp.php:571
+msgid "Connect to Mailchimp"
+msgstr ""
+
+#: class-gf-mailchimp.php:662
+msgid "Mailchimp Feed Settings"
+msgstr ""
+
+#: class-gf-mailchimp.php:666
+#: class-gf-mailchimp.php:672
+#: class-gf-mailchimp.php:1030
+msgid "Name"
+msgstr ""
+
+#: class-gf-mailchimp.php:673
+msgid "Enter a feed name to uniquely identify this setup."
+msgstr ""
+
+#: class-gf-mailchimp.php:678
+#: class-gf-mailchimp.php:683
+msgid "Mailchimp Audience"
+msgstr ""
+
+#: class-gf-mailchimp.php:684
+msgid "Select the Mailchimp audience you would like to add your contacts to."
+msgstr ""
+
+#: class-gf-mailchimp.php:694
+#: class-gf-mailchimp.php:699
+msgid "Map Fields"
+msgstr ""
+
+#: class-gf-mailchimp.php:700
+msgid "Associate your Mailchimp merge tags to the appropriate Gravity Form fields by selecting the appropriate form field from the list."
+msgstr ""
+
+#: class-gf-mailchimp.php:705
+#: class-gf-mailchimp.php:710
+msgid "Groups"
+msgstr ""
+
+#: class-gf-mailchimp.php:711
+msgid "When one or more groups are enabled, users will be assigned to the groups in addition to being subscribed to the Mailchimp audience. When disabled, users will not be assigned to groups."
+msgstr ""
+
+#: class-gf-mailchimp.php:716
+msgid "Options"
+msgstr ""
+
+#: class-gf-mailchimp.php:721
+#: class-gf-mailchimp.php:726
+msgid "Double Opt-In"
+msgstr ""
+
+#: class-gf-mailchimp.php:727
+msgid "When the double opt-in option is enabled, Mailchimp will send a confirmation email to the user and will only add them to your Mailchimp audience upon confirmation."
+msgstr ""
+
+#: class-gf-mailchimp.php:732
+msgid "Mark subscriber as VIP"
+msgstr ""
+
+#: class-gf-mailchimp.php:740
+#: class-gf-mailchimp.php:743
+msgid "Tags"
+msgstr ""
+
+#: class-gf-mailchimp.php:744
+msgid "Associate tags to your Mailchimp contacts with a comma separated list (e.g. new lead, Gravity Forms, web source). Commas within a merge tag value will be created as a single tag."
+msgstr ""
+
+#: class-gf-mailchimp.php:751
+msgid "Note"
+msgstr ""
+
+#: class-gf-mailchimp.php:755
+#: class-gf-mailchimp.php:759
+msgid "Conditional Logic"
+msgstr ""
+
+#: class-gf-mailchimp.php:760
+msgid "When conditional logic is enabled, form submissions will only be exported to Mailchimp when the conditions are met. When disabled all form submissions will be exported."
+msgstr ""
+
+#: class-gf-mailchimp.php:788
+#: class-gf-mailchimp.php:792
+msgid "Marketing Permissions"
+msgstr ""
+
+#: class-gf-mailchimp.php:793
+msgid "When enabled and conditions are met, users will be opted into your Mailchimp audience marketing permissions. If a user is already subscribed to your audience, they will not be opted out of permissions they are already opted into."
+msgstr ""
+
+#: class-gf-mailchimp.php:868
+#: class-gf-mailchimp.php:881
+msgid "Could not load Mailchimp contact audiences. %sError: %s"
+msgstr ""
+
+#: class-gf-mailchimp.php:881
+msgid "No audiences found."
+msgstr ""
+
+#: class-gf-mailchimp.php:893
+msgid "Select a Mailchimp Audience"
+msgstr ""
+
+#: class-gf-mailchimp.php:939
+msgid "Email Address"
+msgstr ""
+
+#: class-gf-mailchimp.php:1031
+msgid "Mailchimp List"
+msgstr ""
+
+#: class-gf-mailchimp.php:1173
+msgid "Assign to group:"
+msgstr ""
+
+#: class-gf-mailchimp.php:1182
+msgid "Always"
+msgstr ""
+
+#: class-gf-mailchimp.php:1186
+msgid "If"
+msgstr ""
+
+#: class-gf-mailchimp.php:1232
+msgid "You must have at least one audience subscriber to configure Marketing Permissions."
+msgstr ""
+
+#: class-gf-mailchimp.php:1233
+msgid "Due to limitations with Mailchimp's API, we are only able to get available Marketing Permissions when the selected audience has at least one subscriber."
+msgstr ""
+
+#: class-gf-mailchimp.php:1310
+msgid "Enable permission if:"
+msgstr ""
+
+#: class-gf-mailchimp.php:1419
+msgid "Abusing this may cause your Mailchimp account to be suspended."
+msgstr ""
+
+#: class-gf-mailchimp.php:1450
+msgid "Unable to process feed because API could not be initialized."
+msgstr ""
+
+#: class-gf-mailchimp.php:1466
+msgid "A valid Email address must be provided."
+msgstr ""
+
+#: class-gf-mailchimp.php:1534
+msgid "Unable to add/update subscriber: %s"
+msgstr ""
+
+#: class-gf-mailchimp.php:1559
+msgid "Unable to add note to subscriber: %s"
+msgstr ""
+
+#: class-gf-mailchimp.php:1594
+msgid "Unable to check if email address is already used by a member: %s"
+msgstr ""
+
+#. translators: %1 is an opening <a> tag, and %2 is a closing </a> tag.
+#: class-gf-mailchimp.php:3203
+msgid "It looks like you're using an API Key to connect to Mailchimp. Please visit the %1$sMailchimp settings page%2$s in order to connect to the Mailchimp API."
+msgstr ""
