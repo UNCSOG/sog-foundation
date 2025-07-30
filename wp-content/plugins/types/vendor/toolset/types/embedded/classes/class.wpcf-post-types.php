@@ -328,6 +328,13 @@ class WPCF_Post_Types
 					}
 					$value = WPToolset_Field_Date::timetodate( $value, $format );
 					break;
+				case 'checkbox':
+				case 'colorpicker':
+					$field_definition_service = Toolset_Field_Definition_Factory_Post::get_instance();
+					$field_definition         = $field_definition_service->load_field_definition( $field['slug'] );
+					$post_field = $field_definition->instantiate( $post_id );
+					$value = $post_field->get_renderer( Toolset_Field_Renderer_Purpose::PREVIEW, Toolset_Common_Bootstrap::MODE_ADMIN, array() )->render();
+					break;
 				default:
 					require_once WPCF_EMBEDDED_ABSPATH . '/frontend.php';
 					$value = types_render_field( $field['id'] );

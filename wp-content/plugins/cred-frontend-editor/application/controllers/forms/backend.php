@@ -50,6 +50,9 @@ class Backend extends Base {
 	protected $toolset_settings;
 
 
+	/** @var \Toolset_Gui_Base */
+	protected $gui_base ;
+
 	/**
 	 * Constructor
 	 *

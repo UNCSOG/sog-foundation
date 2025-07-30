@@ -22,6 +22,9 @@ final class WPCF_Page_Edit_Termmeta_Form extends Types_Admin_Edit_Fields {
 	/** @var null|Toolset_Field_Group_Term Currently edited field group. */
 	private $field_group = null;
 
+	/** @var array */
+	public $ct = [];
+
 
 	public function __construct() {
 		parent::__construct();
@@ -157,6 +160,8 @@ final class WPCF_Page_Edit_Termmeta_Form extends Types_Admin_Edit_Fields {
 
 		$field_group_id = (int) toolset_getarr( $_REQUEST, $this->get_id, 0 );
 
+		$this->update = [];
+
 		// If it's update, get data
 		if ( 0 != $field_group_id ) {
 
@@ -164,7 +169,6 @@ final class WPCF_Page_Edit_Termmeta_Form extends Types_Admin_Edit_Fields {
 
 			if ( null == $this->get_field_group() ) {
 
-				$this->update = false;
 				wpcf_admin_message( sprintf( __( "Group with ID %d do not exist", 'wpcf' ), $field_group_id ) );
 
 			} else {

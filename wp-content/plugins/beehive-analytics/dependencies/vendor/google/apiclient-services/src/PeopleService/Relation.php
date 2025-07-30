@@ -25,7 +25,6 @@ class Relation extends \Beehive\Google\Model
     public $formattedType;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

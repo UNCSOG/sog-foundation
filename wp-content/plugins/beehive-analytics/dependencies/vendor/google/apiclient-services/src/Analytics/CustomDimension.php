@@ -49,7 +49,6 @@ class CustomDimension extends \Beehive\Google\Model
     public $name;
     protected $parentLinkType = CustomDimensionParentLink::class;
     protected $parentLinkDataType = '';
-    public $parentLink;
     /**
      * @var string
      */

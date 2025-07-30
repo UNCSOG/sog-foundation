@@ -1,0 +1,52 @@
+<?php
+/**
+ * @since m2m
+ */
+?>
+<script type="text/html" id="tmpl-wpv-admin-filter-post-relationship-ancestor_node">
+	<div class="wpv-editable-list-item js-wpv-filter-post-relationship-ancestor-node-item">
+		<button 
+			class="button-secondary wpv-editable-list-item-delete js-wpv-filter-post-relationship-ancestor-node-remove"
+			><i class="fa fa-times"></i></button>
+		<select 
+			class="wpv-filter-post-relationship-ancestor-node js-wpv-filter-post-relationship-ancestor-node"
+			data-acestorfor="{{data.branchRoot}}"
+			>
+			<option value=""><?php _e( 'Select one relationship', 'wpv-views' ); ?></option>
+		<# _.each( data.ancestors, function( ancestorData, ancestorKey ) { #>
+			<option 
+				<# if ( data.isM2mEnabled ) { #>
+					value="{{{ancestorData.type}}}@{{{ancestorData.relationship}}}.{{{ancestorData.role}}}"
+				<# } else { #>
+					value="{{{ancestorData.type}}}"
+				<# } #>
+				<#  if ( _.has( ancestorData, 'selected' ) && ancestorData.selected ) { #> selected="selected"<# } #>>
+				<# if ( ancestorData.relationshipIsLegacy ) { #>
+				{{{ancestorData.labelSingular}}}
+				<# } else if ( 'repeatable_group' == ancestorData.relationshipOrigin ) { #>
+				<?php echo sprintf(
+					__( '%1$s (as the owner of %2$s groups)', 'wpv-views' ),
+					'{{{ancestorData.labelSingular}}}',
+					'{{{ancestorData.relationshipLabel}}}'
+				); ?>
+				<# } else { #>
+				<?php echo sprintf(
+					__( '%1$s (in %2$s connections)', 'wpv-views' ),
+					'{{{ancestorData.labelSingular}}}',
+					'{{{ancestorData.relationshipLabel}}}'
+				); ?>
+				<# } #>
+			</option>
+		<# }); #>
+		</select>
+		<button 
+			class="button-secondary wpv-editable-list-item-add js-wpv-filter-post-relationship-ancestor-node-add" 
+			style="display:none"
+			><i class="fa fa-plus"></i> <?php _e( 'Add new ancestor', 'wpv-view' ); ?></button>
+		<# if ( _.isEmpty( data.ancestors ) ) { #>
+			<p class="toolset-alert toolset-alert-error">
+			<?php _e( 'There are no further ancestors defined', 'wpv-views' ); ?>
+			</p>
+		<# } #>
+	</div>
+</script>

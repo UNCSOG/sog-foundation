@@ -1,0 +1,45 @@
+{
+    "type": "project",
+    "config": {
+        "vendor-dir": "vendor",
+        "allow-plugins": {
+            "composer/installers": true,
+            "pantheon-systems/upstream-management": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
+    "require": {
+        "wpackagist-plugin/beehive-analytics": "^3.4.17",
+        "wpackagist-plugin/better-search-replace": "^1.4.10",
+        "wpackagist-plugin/co-authors-plus":"3.6.2",
+        "wpackagist-plugin/codepress-admin-columns":"4.7.7",
+        "wpackagist-plugin/redirection": "^5.5.2",
+        "wpackagist-plugin/relevanssi":"4.23.1",
+        "wpackagist-plugin/wordpress-seo":"25.5",
+        "wpackagist-plugin/wp-ban":"1.69.1",
+        "wpackagist-plugin/wp-saml-auth": "^2.2.0",
+        "wpackagist-theme/twentytwentyfive": "^1.2",
+        "pantheon-systems/upstream-management": "^1.0.1"
+    },
+    "extra": {
+        "installer-paths": {
+            "wp-content/plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "wp-content/themes/{$name}/": [
+                "type:wordpress-theme"
+            ]
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpstan/extension-installer": "^1.4",
+        "szepeviktor/phpstan-wordpress": "^2.0"
+    }
+}

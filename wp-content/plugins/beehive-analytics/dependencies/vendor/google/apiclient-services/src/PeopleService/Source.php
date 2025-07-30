@@ -29,7 +29,6 @@ class Source extends \Beehive\Google\Model
     public $id;
     protected $profileMetadataType = ProfileMetadata::class;
     protected $profileMetadataDataType = '';
-    public $profileMetadata;
     /**
      * @var string
      */

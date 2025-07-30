@@ -22,7 +22,6 @@ class GoalEventDetails extends \Beehive\Google\Collection
     protected $collection_key = 'eventConditions';
     protected $eventConditionsType = GoalEventDetailsEventConditions::class;
     protected $eventConditionsDataType = 'array';
-    public $eventConditions;
     /**
      * @var bool
      */

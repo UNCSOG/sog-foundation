@@ -22,7 +22,6 @@ class Webproperties extends \Beehive\Google\Collection
     protected $collection_key = 'items';
     protected $itemsType = Webproperty::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

@@ -6,13 +6,13 @@ var ToolsetTypes = ToolsetTypes || {};
  * @deprecated This file is DEPRECATED in favor of public/js/settings.js.
  */
 ToolsetTypes.SettingsScreen = function( $ ) {
-	
+
 	var self = this;
-	
+
 	/**
 	* Images
 	*/
-	
+
 	$( document ).on( 'click', '.js-wpcf-settings-clear-cache-images', function() {
 		var thiz = $( this ),
 		thiz_container = thiz.closest( '.js-wpcf-settings-clear-cache-images-container' ),
@@ -34,7 +34,7 @@ ToolsetTypes.SettingsScreen = function( $ ) {
 				thiz.prop('disabled', false );
 			});
 	});
-	
+
 	$( document ).on( 'click', '.js-wpcf-settings-clear-cache-images-outdated', function() {
 		var thiz = $( this ),
 		thiz_container = thiz.closest( '.js-wpcf-settings-clear-cache-images-container' ),
@@ -56,15 +56,15 @@ ToolsetTypes.SettingsScreen = function( $ ) {
 				thiz.prop('disabled', false );
 			});
 	});
-	
+
 	self.wpcf_image_state = $( '.js-toolset-wpcf-image-settings input, .js-toolset-wpcf-image-settings select' ).serialize();
-	
+
 	$( document ).on( 'change', '.js-toolset-wpcf-image-settings input, .js-toolset-wpcf-image-settings select', function() {
 		if ( self.wpcf_image_state != $( '.js-toolset-wpcf-image-settings input, .js-toolset-wpcf-image-settings select' ).serialize() ) {
 			self.wpcf_image_options_debounce_update();
 		}
 	});
-	
+
 	self.save_wpcf_image_options = function() {
 		var data = $( '.js-toolset-wpcf-image-settings input, .js-toolset-wpcf-image-settings select' ).serialize();
 		self.save_settings_section( 'wpcf_settings_save_image_settings', data )
@@ -79,54 +79,23 @@ ToolsetTypes.SettingsScreen = function( $ ) {
 			.fail( function( ajaxContext ) {
 				$( document ).trigger( 'js-toolset-event-update-setting-section-failed' );
 			});
-		
+
 	};
-	
+
 	self.wpcf_image_options_debounce_update = _.debounce( self.save_wpcf_image_options, 1000 );
-	
-	/**
-	* Help box
-	*/
-	
-	self.wpcf_help_box_state = $( '.js-toolset-wpcf-help-box-settings input' ).serialize();
-	
-	$( document ).on( 'change', '.js-toolset-wpcf-help-box-settings input', function() {
-		if ( self.wpcf_help_box_state != $( '.js-toolset-wpcf-help-box-settings input' ).serialize() ) {
-			self.wpcf_help_box_options_debounce_update();
-		}
-	});
-	
-	self.save_wpcf_help_box_options = function() {
-		var data = $( '.js-toolset-wpcf-help-box-settings input' ).serialize();
-		self.save_settings_section( 'wpcf_settings_save_help_box_settings', data )
-			.done( function( response ) {
-				if ( response.success ) {
-					self.wpcf_help_box_state = $( '.js-toolset-wpcf-help-box-settings input' ).serialize();
-					$( document ).trigger( 'js-toolset-event-update-setting-section-completed' );
-				} else {
-					$( document ).trigger( 'js-toolset-event-update-setting-section-failed', [ response.data ] );
-				}
-			})
-			.fail( function( ajaxContext ) {
-				$( document ).trigger( 'js-toolset-event-update-setting-section-failed' );
-			});
-		
-	};
-	
-	self.wpcf_help_box_options_debounce_update = _.debounce( self.save_wpcf_help_box_options, 1000 );
-	
+
 	/**
 	* Custom field metabox
 	*/
-	
+
 	self.wpcf_custom_field_metabox_state = $( '.js-toolset-wpcf-custom-field-metabox-settings input' ).serialize();
-	
+
 	$( document ).on( 'change', '.js-toolset-wpcf-custom-field-metabox-settings input', function() {
 		if ( self.wpcf_custom_field_metabox_state != $( '.js-toolset-wpcf-custom-field-metabox-settings input' ).serialize() ) {
 			self.wpcf_custom_field_metabox_options_debounce_update();
 		}
 	});
-	
+
 	self.save_wpcf_custom_field_metabox_options = function() {
 		var data = $( '.js-toolset-wpcf-custom-field-metabox-settings input' ).serialize();
 		self.save_settings_section( 'wpcf_settings_save_custom_field_metabox_settings', data )
@@ -141,23 +110,23 @@ ToolsetTypes.SettingsScreen = function( $ ) {
 			.fail( function( ajaxContext ) {
 				$( document ).trigger( 'js-toolset-event-update-setting-section-failed' );
 			});
-		
+
 	};
-	
+
 	self.wpcf_custom_field_metabox_options_debounce_update = _.debounce( self.save_wpcf_custom_field_metabox_options, 1000 );
-	
+
 	/**
 	* Unfiltered HTML
 	*/
-	
+
 	self.wpcf_unfiltered_html_state = $( '.js-toolset-wpcf-unfiltered-html-settings input' ).serialize();
-	
+
 	$( document ).on( 'change', '.js-toolset-wpcf-unfiltered-html-settings input', function() {
 		if ( self.wpcf_unfiltered_html_state !=  $( '.js-toolset-wpcf-unfiltered-html-settings input' ).serialize() ) {
 			self.wpcf_unfiltered_html_options_debounce_update();
 		}
 	});
-	
+
 	self.save_wpcf_unfiltered_html_options = function() {
 		var data = $( '.js-toolset-wpcf-unfiltered-html-settings input' ).serialize();
 		self.save_settings_section( 'wpcf_settings_save_unfiltered_html_settings', data )
@@ -172,15 +141,15 @@ ToolsetTypes.SettingsScreen = function( $ ) {
 			.fail( function( ajaxContext ) {
 				$( document ).trigger( 'js-toolset-event-update-setting-section-failed' );
 			});
-		
+
 	};
-	
+
 	self.wpcf_unfiltered_html_options_debounce_update = _.debounce( self.save_wpcf_unfiltered_html_options, 1000 );
-	
+
 	/**
 	* Helper method for saving settings
 	*/
-	
+
 	self.save_settings_section = function( save_action, save_data ) {
 		var data = {
 			action:			save_action,
@@ -195,11 +164,11 @@ ToolsetTypes.SettingsScreen = function( $ ) {
 			dataType:	"json"
 		});
 	};
-	
+
 	self.init = function() {
-		
+
 	};
-	
+
 	self.init();
 
 };

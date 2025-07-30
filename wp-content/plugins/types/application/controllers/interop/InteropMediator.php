@@ -141,6 +141,16 @@ class InteropMediator {
 					$dic->make( RepeatableFieldSortorderTranslation::class )->initialize();
 				},
 			],
+			[
+				self::DEF_IS_NEEDED => function() {
+					return $this->wpml_service->is_wpml_active_and_configured();
+				},
+				self::DEF_INIT_CALLBACK => static function( Injector $dic ) {
+					$dic->make( \OTGS\Toolset\Types\Controller\Interop\Managed\WPML\PostTypes::class )->initialize();
+					$dic->make( \OTGS\Toolset\Types\Controller\Interop\Managed\WPML\Taxonomies::class )->initialize();
+					$dic->make( \OTGS\Toolset\Types\Controller\Interop\Managed\WPML\FieldsGroups::class )->initialize();
+				},
+			],
 		];
 	}
 

@@ -9,7 +9,7 @@ use OTGS\Toolset\CRED\Model\Wordpress\Transient;
 
 /**
  * Generate caching objects for forms based on their domain.
- * 
+ *
  * @since 2.1.2
  */
 class Factory {
@@ -37,7 +37,7 @@ class Factory {
 	 *
 	 * @param $transient_key
 	 *
-	 * @return \OTGS\Toolset\CRED\Cache\ITransient
+	 * @return \OTGS\Toolset\CRED\Cache\ITransient|null
 	 * @since 2.1.2
 	 */
 	public function create_by_transient_key( $transient_key ) {
@@ -49,7 +49,7 @@ class Factory {
 			case AssociationForms::TRANSIENT_KEY:
 				return new Association( $this->wpdb, $this->wp_transient );
 			default:
-				throw new \Exception( 'Unknown transient key' );
+				return null;
 		}
 	}
 
@@ -57,7 +57,7 @@ class Factory {
 	 * Get caching object by post type.
 	 * @param $post_type
 	 *
-	 * @return \OTGS\Toolset\CRED\Cache\ITransient
+	 * @return \OTGS\Toolset\CRED\Cache\ITransient|null
 	 * @since 2.1.2
 	 */
 	public function create_by_post_type( $post_type ) {
@@ -71,7 +71,7 @@ class Factory {
 			case AssociationForms::ASSOCIATION_FORMS_POST_TYPE:
 				return new Association( $this->wpdb, $this->wp_transient );
 			default:
-				throw new \Exception( 'Unknown post type' );
+				return null;
 		}
 	}
 
@@ -79,7 +79,7 @@ class Factory {
 	 * Get caching object by domain.
 	 * @param $domain
 	 *
-	 * @return \OTGS\Toolset\CRED\Cache\ITransient
+	 * @return \OTGS\Toolset\CRED\Cache\ITransient|null
 	 * @since 2.1.2
 	 */
 	public function create_by_domain( $domain ) {
@@ -93,7 +93,7 @@ class Factory {
 			case \CRED_Form_Domain::ASSOCIATIONS:
 				return new Association( $this->wpdb, $this->wp_transient );
 			default:
-				throw new \Exception( 'Unknown domain' );
+				return null;
 		}
 	}
 }

@@ -21,7 +21,6 @@ class Segment extends \Beehive\Google\Model
 {
     protected $dynamicSegmentType = DynamicSegment::class;
     protected $dynamicSegmentDataType = '';
-    public $dynamicSegment;
     /**
      * @var string
      */

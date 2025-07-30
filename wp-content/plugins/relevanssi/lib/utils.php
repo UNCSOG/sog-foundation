@@ -206,11 +206,6 @@ function relevanssi_debug_echo( string $notice ) {
  */
 function relevanssi_do_shortcode( string $content ): string {
 	if ( 'on' === get_option( 'relevanssi_expand_shortcodes' ) ) {
-		// TablePress support.
-		if ( function_exists( 'relevanssi_enable_tablepress_shortcodes' ) ) {
-			$tablepress_controller = relevanssi_enable_tablepress_shortcodes();
-		}
-
 		relevanssi_disable_shortcodes();
 
 		/**
@@ -364,7 +359,7 @@ function relevanssi_get_an_object( $source ) {
 		// Convert from post ID to post.
 		$object = relevanssi_get_post_object( $source );
 		$format = 'id';
-	} elseif ( isset( $source->type ) ) {
+	} elseif ( is_object( $source ) && property_exists( $source, 'type' ) ) {
 		// Convert from id=>type to post.
 		$object = relevanssi_get_post_object( $source->ID );
 		$format = 'id=>type';
@@ -429,9 +424,15 @@ function relevanssi_get_current_language( bool $locale = true ) {
 
 		if ( isset( $post ) ) {
 			if ( isset( $post->term_id ) && function_exists( 'pll_get_term_language' ) ) {
-				$current_language = pll_get_term_language( $post->term_id, $locale ? 'locale' : 'slug' );
+				$term_language = pll_get_term_language( $post->term_id, $locale ? 'locale' : 'slug' );
+				if ( $term_language ) {
+					$current_language = $term_language;
+				}
 			} elseif ( ! isset( $post->user_id ) && function_exists( 'pll_get_post_language' ) ) {
-				$current_language = pll_get_post_language( $post->ID, $locale ? 'locale' : 'slug' );
+				$post_language = pll_get_post_language( $post->ID, $locale ? 'locale' : 'slug' );
+				if ( $post_language ) {
+					$current_language = $post_language;
+				}
 			}
 		} elseif ( function_exists( 'pll_current_language' ) ) {
 			$pll_language     = pll_current_language( $locale ? 'locale' : 'slug' );
@@ -792,7 +793,14 @@ function relevanssi_is_multiple_words( string $str ): bool {
 	if ( empty( $str ) ) {
 		return false;
 	}
-	$punctuation = get_option( 'relevanssi_punctuation' );
+	$punctuation = get_option(
+		'relevanssi_punctuation',
+		array(
+			'quotes'     => 'replace',
+			'hyphens'    => 'replace',
+			'ampersands' => 'replace',
+		)
+	);
 	if ( 'replace' === $punctuation['hyphens'] ) {
 		$str = str_replace(
 			array(
@@ -987,6 +995,57 @@ function relevanssi_off_or_on( array $request, string $option ) {
 		return 'on';
 	}
 	return 'off';
+}
+
+/**
+ * Post password checker.
+ * 
+ * Determines whether the post requires password and whether a correct password
+ * has been provided.
+ * 
+ * This is the same function as core post_password_required(), except this uses
+ * relevanssi_get_post() instead of get_post().
+ * 
+ * @param int|WP_Post|null $post The post to check.
+ *
+ * @return bool false if a password is not required or the correct password
+ * cookie is present, true otherwise.
+ */
+function relevanssi_post_password_required( $post ) : bool {
+	$post = relevanssi_get_post( $post );
+
+	if ( empty( $post->post_password ) ) {
+		/** This filter is documented in wp-includes/post-template.php */
+		return apply_filters( 'post_password_required', false, $post );
+	}
+
+	if ( ! isset( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] ) ) {
+		/** This filter is documented in wp-includes/post-template.php */
+		return apply_filters( 'post_password_required', true, $post );
+	}
+
+	require_once ABSPATH . WPINC . '/class-phpass.php';
+	$hasher = new PasswordHash( 8, true );
+
+	$hash = wp_unslash( $_COOKIE[ 'wp-postpass_' . COOKIEHASH ] );
+	if ( ! str_starts_with( $hash, '$P$B' ) ) {
+		$required = true;
+	} else {
+		$required = ! $hasher->CheckPassword( $post->post_password, $hash );
+	}
+
+	/**
+	 * Filters whether a post requires the user to supply a password.
+	 *
+	 * @since 4.7.0
+	 *
+	 * @param bool    $required Whether the user needs to supply a password.
+	 * 							True if password has not been provided or is
+	 * 							incorrect, false if password has been supplied
+	 * 							or is not required.
+	 * @param WP_Post $post     Post object.
+	 */
+	return apply_filters( 'post_password_required', $required, $post );
 }
 
 /**
@@ -1240,7 +1299,12 @@ function relevanssi_strip_invisibles( $text ) {
  */
 function relevanssi_strip_tags( $content ) {
 	if ( ! is_string( $content ) ) {
-		$content = strval( $content );
+		try {
+			$content = strval( $content );
+		} catch ( Exception $e ) {
+			// Likely an object without a toString method.
+			return $content;
+		}
 	}
 	$content = relevanssi_strip_invisibles( $content );
 
@@ -1658,4 +1722,19 @@ function relevanssi_user_agent_is_bot(): bool {
 		}
 	}
 	return false;
+}
+
+/**
+ * Validates that the parameter is a valid taxonomy type.
+ *
+ * @parameter string $taxonomy The taxonomy to validate.
+ *
+ * @return string The validated taxonomy, empty string if invalid.
+ */
+function relevanssi_validate_taxonomy( $taxonomy ) {
+	$taxonomy = sanitize_text_field( $taxonomy );
+	if ( taxonomy_exists( $taxonomy ) ) {
+		return $taxonomy;
+	}
+	return '';
 }

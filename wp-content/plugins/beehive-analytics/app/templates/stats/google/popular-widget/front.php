@@ -18,7 +18,7 @@ defined( 'WPINC' ) || die();
 
 <?php if ( isset( $content ) ) : // Only when content set. ?>
 
-	<div id="<?php echo esc_attr( $args['id'] ); ?>">
+	<div <?php echo isset( $args['id'] ) ? 'id="' . esc_attr( $args['id'] ) . '"' : ''; ?>>
 
 		<?php if ( isset( $before_title ) ) : ?>
 			<?php echo $before_title; // phpcs:ignore ?>

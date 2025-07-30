@@ -90,9 +90,17 @@ class OTGS_Installer_Plugins_Page_Notice {
 		switch ( $notice['type'] ) {
 			case 'expired':
 				$message = $this->prepareMessage(
-					__( 'You are using an expired account of %s. %sExtend your subscription%s', 'installer' ),
+					__( 'Your %s account has expired. %sPurchase today%s to protect your site from breaking changes in future WordPress releases.', 'installer' ),
 					$notice['product'],
-					$menu_url_with_action
+					'https://wpml.org/purchase/?utm_source=plugin&utm_medium=gui&utm_campaign=installer&utm_term=expired-over-30-days'
+				);
+				break;
+
+			case 'in_grace':
+				$message = $this->prepareMessage(
+					__( 'Your %s account has expired. %sRenew today%s to protect your site from breaking changes in future WordPress releases.', 'installer' ),
+					$notice['product'],
+					'https://wpml.org/account/?utm_source=plugin&utm_medium=gui&utm_campaign=installer&utm_term=expired-within-30-days'
 				);
 				break;
 
@@ -108,7 +116,8 @@ class OTGS_Installer_Plugins_Page_Notice {
 
 			case 'legacy_free':
 				$message = sprintf(
-					__( 'You have an old Types-free subscription, which doesn\'t provide automatic updates. %sUpgrade your account%s', 'installer' ),
+					__( 'You have an old, free subscription for Toolset Types which doesn\'t provide automatic updates. %sUpgrade your account%s', 'installer' ),
+							
 					'<a href="' . $menu_url . '">',
 					'</a>'
 				);

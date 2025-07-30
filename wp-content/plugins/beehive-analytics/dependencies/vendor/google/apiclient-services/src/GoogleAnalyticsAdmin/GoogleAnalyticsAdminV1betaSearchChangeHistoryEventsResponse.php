@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsResponse extends \Beehi
     protected $collection_key = 'changeHistoryEvents';
     protected $changeHistoryEventsType = GoogleAnalyticsAdminV1betaChangeHistoryEvent::class;
     protected $changeHistoryEventsDataType = 'array';
-    public $changeHistoryEvents;
     /**
      * @var string
      */

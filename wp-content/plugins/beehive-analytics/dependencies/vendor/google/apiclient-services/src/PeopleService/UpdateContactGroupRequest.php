@@ -21,7 +21,6 @@ class UpdateContactGroupRequest extends \Beehive\Google\Model
 {
     protected $contactGroupType = ContactGroup::class;
     protected $contactGroupDataType = '';
-    public $contactGroup;
     /**
      * @var string
      */

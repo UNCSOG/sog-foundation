@@ -1,14 +1,14 @@
-# Copyright (C) 2023 WPMU DEV
+# Copyright (C) 2025 WPMU DEV
 # This file is distributed under the GNU General Public License (Version 2 - GPLv2).
 msgid ""
 msgstr ""
-"Project-Id-Version: Beehive Pro 3.4.9\n"
+"Project-Id-Version: Beehive Pro 3.4.17\n"
 "Report-Msgid-Bugs-To: https://wpmudev.com\n"
-"POT-Creation-Date: 2023-09-11 09:59:30+00:00\n"
+"POT-Creation-Date: 2025-04-25 16:14:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2023-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
@@ -22,7 +22,7 @@ msgid "Maximum number of posts to show:"
 msgstr ""
 
 #: core/controllers/class-admin.php:128 core/controllers/class-menu.php:136
-#: core/data/class-locale.php:365
+#: core/data/class-locale.php:370
 msgid "Dashboard"
 msgstr ""
 
@@ -35,7 +35,7 @@ msgid "Docs"
 msgstr ""
 
 #: core/controllers/class-admin.php:137
-msgid "Upgrade For 60% Off!"
+msgid "Upgrade For 80% Off!"
 msgstr ""
 
 #: core/controllers/class-admin.php:139
@@ -113,11 +113,11 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: core/controllers/class-menu.php:213 core/data/class-locale.php:429
+#: core/controllers/class-menu.php:213 core/data/class-locale.php:433
 msgid "Beehive Tutorials"
 msgstr ""
 
-#: core/controllers/class-menu.php:214 core/data/class-locale.php:428
+#: core/controllers/class-menu.php:214 core/data/class-locale.php:432
 msgid "Tutorials"
 msgstr ""
 
@@ -194,7 +194,7 @@ msgid "Facebook"
 msgstr ""
 
 #: core/data/class-locale.php:72
-msgid "Twitter"
+msgid "X"
 msgstr ""
 
 #: core/data/class-locale.php:73
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Custom Users"
 msgstr ""
 
-#: core/data/class-locale.php:137 core/data/class-locale.php:366
+#: core/data/class-locale.php:137 core/data/class-locale.php:371
 #: core/modules/google-analytics/class-admin.php:193
 #: core/modules/google-analytics/class-admin.php:197
 #: core/modules/google-analytics/data/class-locale.php:237
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Administrator"
 msgstr ""
 
-#: core/data/class-locale.php:142 core/helpers/class-permission.php:342
+#: core/data/class-locale.php:142 core/helpers/class-permission.php:334
 msgid "Network Administrator"
 msgstr ""
 
@@ -708,12 +708,12 @@ msgid "Please use valid Google Analytics 4 Measurement ID Ex : G-XXXXXXXXXX"
 msgstr ""
 
 #: core/data/class-locale.php:280
-#: core/modules/google-analytics/data/class-locale.php:179
+#: core/modules/google-analytics/data/class-locale.php:181
 msgid "Admin pages tracking"
 msgstr ""
 
 #: core/data/class-locale.php:281
-#: core/modules/google-analytics/data/class-locale.php:180
+#: core/modules/google-analytics/data/class-locale.php:182
 msgid "Enable Admin pages tracking"
 msgstr ""
 
@@ -747,7 +747,7 @@ msgid "Network-wide Measurement ID"
 msgstr ""
 
 #: core/data/class-locale.php:290
-#: core/modules/google-analytics/data/class-locale.php:195
+#: core/modules/google-analytics/data/class-locale.php:196
 msgid "Measurement ID"
 msgstr ""
 
@@ -815,30 +815,50 @@ msgid "Choose your view (profile)"
 msgstr ""
 
 #: core/data/class-locale.php:323
-msgid "Choose your stream (profile)"
+msgid "Choose your account"
 msgstr ""
 
 #: core/data/class-locale.php:324
-msgid "Automatically detect Measurement ID"
+msgid "Choose your property"
 msgstr ""
 
 #: core/data/class-locale.php:325
+msgid "Choose your stream"
+msgstr ""
+
+#: core/data/class-locale.php:326
+msgid "Automatically detect Measurement ID"
+msgstr ""
+
+#: core/data/class-locale.php:327
 msgid "Add Measurement ID"
 msgstr ""
 
-#: core/data/class-locale.php:328
-msgid "No website information"
+#: core/data/class-locale.php:330
+msgid "Select Account to load properties"
 msgstr ""
 
-#: core/data/class-locale.php:329
-msgid "Select a website"
+#: core/data/class-locale.php:331
+msgid "Select Property to load streams"
 msgstr ""
 
 #: core/data/class-locale.php:332
-msgid "Easily connect with Google by clicking the “Connect with Google” button."
+msgid "Select Stream"
+msgstr ""
+
+#: core/data/class-locale.php:333
+msgid "No website information"
+msgstr ""
+
+#: core/data/class-locale.php:334
+msgid "Select a website"
 msgstr ""
 
 #: core/data/class-locale.php:337
+msgid "Easily connect with Google by clicking the “Connect with Google” button."
+msgstr ""
+
+#: core/data/class-locale.php:342
 #. translators: %s: Google support doc link.
 msgid ""
 "We couldn't connect your Google account. Please try reconnecting with the "
@@ -846,7 +866,7 @@ msgid ""
 "target=\"_blank\">new API project</a> with Google and use that instead."
 msgstr ""
 
-#: core/data/class-locale.php:341
+#: core/data/class-locale.php:346
 #. translators: %1$s: Google support doc link. %2$s WPMUDEV support link.
 msgid ""
 "We couldn't connect your Google account. Please try reconnecting with the "
@@ -856,182 +876,176 @@ msgid ""
 "support</a> for assistance."
 msgstr ""
 
-#: core/data/class-locale.php:348
+#: core/data/class-locale.php:353
 msgid ""
 "A tracking ID is what connects your website to your Google Analytics "
 "account. Use 'Automatically detect tracking ID,' and Beehive will find and "
 "set up your tracking code automatically."
 msgstr ""
 
-#: core/data/class-locale.php:367
+#: core/data/class-locale.php:372
 #: core/modules/google-tag-manager/class-admin.php:64
 #: core/modules/google-tag-manager/data/class-locale.php:37
 msgid "Google Tag Manager"
 msgstr ""
 
-#: core/data/class-locale.php:368
+#: core/data/class-locale.php:373
 msgid "Analytics Configuration"
 msgstr ""
 
-#: core/data/class-locale.php:371
+#: core/data/class-locale.php:376
 msgid "Configure account"
 msgstr ""
 
-#: core/data/class-locale.php:372
+#: core/data/class-locale.php:377
 #: core/modules/google-analytics/data/class-locale.php:41
 #: core/modules/google-analytics/data/class-locale.php:99
 #: core/modules/google-analytics/data/class-locale.php:263
-#: core/modules/google-analytics/views/class-stats.php:302
+#: core/modules/google-analytics/views/class-stats.php:283
 msgid "Pageviews"
 msgstr ""
 
-#: core/data/class-locale.php:373
+#: core/data/class-locale.php:378
 msgid "New Users"
 msgstr ""
 
-#: core/data/class-locale.php:374
+#: core/data/class-locale.php:379
 #: core/modules/google-analytics/data/class-locale.php:105
 msgid "Top Page"
 msgstr ""
 
-#: core/data/class-locale.php:375
+#: core/data/class-locale.php:380
 #: core/modules/google-analytics/data/class-locale.php:108
-#: core/modules/google-analytics/views/class-stats.php:342
-#: core/modules/google-analytics/views/class-stats.php:382
+#: core/modules/google-analytics/views/class-stats.php:323
+#: core/modules/google-analytics/views/class-stats.php:363
 msgid "Top Search Engine"
 msgstr ""
 
-#: core/data/class-locale.php:376
+#: core/data/class-locale.php:381
 #: core/modules/google-analytics/data/class-locale.php:109
-#: core/modules/google-analytics/views/class-stats.php:337
-#: core/modules/google-analytics/views/class-stats.php:374
+#: core/modules/google-analytics/views/class-stats.php:318
+#: core/modules/google-analytics/views/class-stats.php:355
 msgid "Top Medium"
 msgstr ""
 
-#: core/data/class-locale.php:377
+#: core/data/class-locale.php:382
 msgid "Never"
 msgstr ""
 
-#: core/data/class-locale.php:378
+#: core/data/class-locale.php:383
 #: core/modules/google-analytics/data/class-locale.php:111
 msgid "None"
 msgstr ""
 
-#: core/data/class-locale.php:379
+#: core/data/class-locale.php:384
 msgid "Coming Soon"
 msgstr ""
 
-#: core/data/class-locale.php:380
+#: core/data/class-locale.php:385
 #: core/modules/google-analytics/data/class-locale.php:42
 #: core/modules/google-analytics/data/class-locale.php:98
 #: core/modules/google-analytics/data/class-locale.php:261
-#: core/modules/google-analytics/views/class-stats.php:292
+#: core/modules/google-analytics/views/class-stats.php:273
 msgid "Sessions"
 msgstr ""
 
-#: core/data/class-locale.php:381
+#: core/data/class-locale.php:386
 #: core/modules/google-analytics/data/class-locale.php:40
 #: core/modules/google-analytics/data/class-locale.php:103
 #: core/modules/google-analytics/data/class-locale.php:262
-#: core/modules/google-analytics/views/class-stats.php:297
+#: core/modules/google-analytics/views/class-stats.php:278
 msgid "Users"
 msgstr ""
 
-#: core/data/class-locale.php:382
+#: core/data/class-locale.php:387
 #: core/modules/google-analytics/data/class-locale.php:43
 #: core/modules/google-analytics/data/class-locale.php:100
-#: core/modules/google-analytics/views/class-stats.php:307
+#: core/modules/google-analytics/views/class-stats.php:288
 msgid "Pages/Sessions"
 msgstr ""
 
-#: core/data/class-locale.php:383
+#: core/data/class-locale.php:388
 msgid "Avg. time"
 msgstr ""
 
-#: core/data/class-locale.php:384
+#: core/data/class-locale.php:389
 #: core/modules/google-analytics/data/class-locale.php:45
 #: core/modules/google-analytics/data/class-locale.php:102
 msgid "Bounce Rate"
 msgstr ""
 
-#: core/data/class-locale.php:385
+#: core/data/class-locale.php:390
 msgid "View Full Report"
 msgstr ""
 
-#: core/data/class-locale.php:386
+#: core/data/class-locale.php:391
 #: core/modules/google-analytics/data/class-locale.php:113
 #: core/modules/google-analytics/data/class-locale.php:255
 msgid "Fetching latest data..."
 msgstr ""
 
-#: core/data/class-locale.php:387
+#: core/data/class-locale.php:392
 msgid "GTM Account"
 msgstr ""
 
-#: core/data/class-locale.php:388
+#: core/data/class-locale.php:393
 msgid "Error"
 msgstr ""
 
-#: core/data/class-locale.php:389
+#: core/data/class-locale.php:394
 msgid "Active"
 msgstr ""
 
-#: core/data/class-locale.php:390
+#: core/data/class-locale.php:395
 msgid "Inactive"
 msgstr ""
 
-#: core/data/class-locale.php:391
+#: core/data/class-locale.php:396
 #: core/modules/google-tag-manager/data/class-locale.php:99
 msgid "Variables"
 msgstr ""
 
-#: core/data/class-locale.php:392
-#: core/modules/google-analytics/views/class-stats.php:184
+#: core/data/class-locale.php:397
 msgid "Google Analytics 4"
 msgstr ""
 
-#: core/data/class-locale.php:393
-#: core/modules/google-analytics/views/class-stats.php:185
-msgid "Universal Analytics"
-msgstr ""
-
-#: core/data/class-locale.php:396
+#: core/data/class-locale.php:400
 msgid "Finish Setup"
 msgstr ""
 
-#: core/data/class-locale.php:397
+#: core/data/class-locale.php:401
 msgid "Learn More"
 msgstr ""
 
-#: core/data/class-locale.php:398
+#: core/data/class-locale.php:402
 msgid "Configure"
 msgstr ""
 
-#: core/data/class-locale.php:401
+#: core/data/class-locale.php:405
 msgid ""
 "View your websites full analytics report with Sessions, Users Pageviews, "
 "Average time and Bounce Rate."
 msgstr ""
 
-#: core/data/class-locale.php:402
+#: core/data/class-locale.php:406
 #: core/modules/google-tag-manager/data/class-locale.php:68
 msgid ""
 "Set up Google Tag Manager on your website and assign predefined and "
 "customizable variables to the data layer."
 msgstr ""
 
-#: core/data/class-locale.php:403
-msgid "Monitor Google Analytics 4 and Universal Analytics status."
+#: core/data/class-locale.php:407
+msgid "Monitor Google Analytics 4 status."
 msgstr ""
 
-#: core/data/class-locale.php:406
+#: core/data/class-locale.php:410
 msgid ""
 "You need to authenticate with your Google account to automatically get the "
 "tracking ID for this website and enable access to statistics, or you can "
 "add the tracking ID manually."
 msgstr ""
 
-#: core/data/class-locale.php:407
+#: core/data/class-locale.php:411
 msgid ""
 "Authenticate with Google Analytics account to automatically get the "
 "tracking code for this website and enable statistics for whole network. "
@@ -1039,56 +1053,53 @@ msgid ""
 "Settings."
 msgstr ""
 
-#: core/data/class-locale.php:408
+#: core/data/class-locale.php:412
 msgid "We haven't collected enough data. Please check back soon."
 msgstr ""
 
-#: core/data/class-locale.php:410
+#: core/data/class-locale.php:414
 #. translators: %s: Link to statistics page.
 msgid ""
 "Your account has been set up successfully. You can view the statistics <a "
 "href=\"%s\">here</a>."
 msgstr ""
 
-#: core/data/class-locale.php:411
+#: core/data/class-locale.php:415
 msgid ""
 "Google Tag Manager has not been added to your website. Add your Container "
 "ID to finish setup."
 msgstr ""
 
-#: core/data/class-locale.php:432
+#: core/data/class-locale.php:436
 msgid "View all"
 msgstr ""
 
-#: core/endpoints/class-actions.php:62
+#: core/endpoints/class-actions.php:60
 msgid "The action type to perform."
 msgstr ""
 
-#: core/endpoints/class-actions.php:72 core/endpoints/class-settings.php:73
+#: core/endpoints/class-actions.php:70 core/endpoints/class-settings.php:73
 #: core/endpoints/class-settings.php:99
-#: core/modules/google-analytics/endpoints/v1/class-data.php:60
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:115
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:145
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:175
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:220
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:240
-#: core/modules/google-analytics/endpoints/v2/class-data.php:72
+#: core/modules/google-analytics/endpoints/v1/class-data.php:71
+#: core/modules/google-analytics/endpoints/v1/class-data.php:95
+#: core/modules/google-analytics/endpoints/v1/class-data.php:119
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:503
 msgid "The network flag."
 msgstr ""
 
-#: core/endpoints/class-actions.php:113
+#: core/endpoints/class-actions.php:110
 msgid "Unknown action."
 msgstr ""
 
-#: core/endpoints/class-actions.php:138
+#: core/endpoints/class-actions.php:134
 msgid "Data refreshed. New data should begin feeding shortly."
 msgstr ""
 
-#: core/endpoints/class-actions.php:185
-msgid "Plugin settings reset succesfully."
+#: core/endpoints/class-actions.php:179
+msgid "Plugin settings reset successfully."
 msgstr ""
 
-#: core/endpoints/class-actions.php:185
+#: core/endpoints/class-actions.php:179
 msgid "Couldn't reset the settings."
 msgstr ""
 
@@ -1144,7 +1155,7 @@ msgstr ""
 
 #: core/modules/google-analytics/class-admin.php:115
 #: core/modules/google-analytics/data/class-locale.php:248
-#: core/modules/google-analytics/views/class-stats.php:362
+#: core/modules/google-analytics/views/class-stats.php:343
 #: core/modules/google-tag-manager/data/class-locale.php:101
 msgid "Visitors"
 msgstr ""
@@ -1159,7 +1170,7 @@ msgstr ""
 msgid "Google Analytics"
 msgstr ""
 
-#: core/modules/google-analytics/class-helper.php:102
+#: core/modules/google-analytics/class-helper.php:99
 msgid ""
 "You need to authenticate with your Google account to enable access to "
 "statistics."
@@ -1167,7 +1178,7 @@ msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:44
 #: core/modules/google-analytics/data/class-locale.php:101
-#: core/modules/google-analytics/views/class-stats.php:312
+#: core/modules/google-analytics/views/class-stats.php:293
 msgid "Avg. Time"
 msgstr ""
 
@@ -1261,12 +1272,12 @@ msgid "Audience"
 msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:97
-#: core/modules/google-analytics/views/class-stats.php:324
+#: core/modules/google-analytics/views/class-stats.php:305
 msgid "Top Pages & Views"
 msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:104
-#: core/modules/google-analytics/views/class-stats.php:328
+#: core/modules/google-analytics/views/class-stats.php:309
 msgid "Traffic"
 msgstr ""
 
@@ -1279,8 +1290,8 @@ msgid "Top Referral"
 msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:110
-#: core/modules/google-analytics/views/class-stats.php:347
-#: core/modules/google-analytics/views/class-stats.php:378
+#: core/modules/google-analytics/views/class-stats.php:328
+#: core/modules/google-analytics/views/class-stats.php:359
 msgid "Top Social Network"
 msgstr ""
 
@@ -1299,8 +1310,8 @@ msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:116
 #: core/modules/google-analytics/data/class-locale.php:253
-#: core/modules/google-analytics/views/class-stats.php:332
-#: core/modules/google-analytics/views/class-stats.php:370
+#: core/modules/google-analytics/views/class-stats.php:313
+#: core/modules/google-analytics/views/class-stats.php:351
 msgid "Top Countries"
 msgstr ""
 
@@ -1377,12 +1388,20 @@ msgid ""
 "try again."
 msgstr ""
 
+#: core/modules/google-analytics/data/class-locale.php:166
+msgid "Please select a valid property."
+msgstr ""
+
 #: core/modules/google-analytics/data/class-locale.php:167
+msgid "Please select a valid stream."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:169
 #. translators: %s: Google API error message.
 msgid "Google API error: %s"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:170
+#: core/modules/google-analytics/data/class-locale.php:172
 #. translators: %s: Link to doc.
 msgid ""
 "Multiple analytics accounts are linked to your Google account. To enhance "
@@ -1390,85 +1409,81 @@ msgid ""
 "25 accounts. <a href=\"%s\" target=\"_blank\">Learn more</a>"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:176
+#: core/modules/google-analytics/data/class-locale.php:178
 msgid "E.g: G-XXXXXXXXXX"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:181
+#: core/modules/google-analytics/data/class-locale.php:183
 msgid "Display Advertising"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:182
+#: core/modules/google-analytics/data/class-locale.php:184
 msgid "Enable Display Advertising Support"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:183
+#: core/modules/google-analytics/data/class-locale.php:185
 msgid "Exclude Roles from Tracking"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:184
+#: core/modules/google-analytics/data/class-locale.php:186
 msgid "Statistics in post types"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:185
+#: core/modules/google-analytics/data/class-locale.php:187
 msgid "IP Anonymization"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:186
+#: core/modules/google-analytics/data/class-locale.php:188
 msgid "Enable IP Anonymization"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:187
 #: core/modules/google-analytics/data/class-locale.php:189
+#: core/modules/google-analytics/data/class-locale.php:191
 msgid "Force on sub-sites tracking"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:188
+#: core/modules/google-analytics/data/class-locale.php:190
 msgid "Whole network tracking"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:190
+#: core/modules/google-analytics/data/class-locale.php:192
 msgid "Pro Site Permissions"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:191
-msgid "Universal Analytics Profile"
-msgstr ""
-
-#: core/modules/google-analytics/data/class-locale.php:192
+#: core/modules/google-analytics/data/class-locale.php:193
 msgid "Analytics 4 Profile"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:193
+#: core/modules/google-analytics/data/class-locale.php:194
 msgid "Use a different measurement ID"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:194
+#: core/modules/google-analytics/data/class-locale.php:195
 msgid "Network Measurement ID"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:196
+#: core/modules/google-analytics/data/class-locale.php:197
 msgid "User Roles"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:197
+#: core/modules/google-analytics/data/class-locale.php:198
 msgid "Post Types"
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:201
+#: core/modules/google-analytics/data/class-locale.php:202
 msgid ""
 "Note: This will only feed data to Google, to view analytics in your "
 "Dashboard you'll need to authenticate your account on the Settings tab."
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:204
+#: core/modules/google-analytics/data/class-locale.php:205
 msgid ""
 "When enabled, the activity in the wp-admin area will be tracked and "
 "included in statistics. By default, only the activity on the front-end "
 "pages of your site are tracked."
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:206
+#: core/modules/google-analytics/data/class-locale.php:207
 #. translators: %s: Google support docs link.
 msgid ""
 "Enable support for Google's Display Advertising and get additional "
@@ -1476,31 +1491,25 @@ msgid ""
 "target=\"_blank\">here</a>."
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:208
+#: core/modules/google-analytics/data/class-locale.php:209
 #. translators: %s: Google support docs link.
 msgid ""
 "When enabled, visitor IP address will be <a href=\"%s\" "
 "target=\"_blank\">anonymized</a>."
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:209
+#: core/modules/google-analytics/data/class-locale.php:210
 msgid ""
 "We see you have Pro Sites active. Choose which levels you want to access "
 "analytics."
 msgstr ""
 
-#: core/modules/google-analytics/data/class-locale.php:210
+#: core/modules/google-analytics/data/class-locale.php:211
 msgid ""
 "Connect and authenticate your Google Analytics account to view analytics "
 "data on Beehive's Dashboard. If you only want to connect your site to "
 "Google Analytics without displaying the analytics data on Beehive's "
 "dashboard, add the Measurement ID in the corresponding field."
-msgstr ""
-
-#: core/modules/google-analytics/data/class-locale.php:211
-msgid ""
-"Authenticate with Google to connect your Universal Analytics profile and "
-"begin feeding analytics to your WordPress Dashboard."
 msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:212
@@ -1570,7 +1579,7 @@ msgid "Mediums"
 msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:250
-#: core/modules/google-analytics/views/class-stats.php:366
+#: core/modules/google-analytics/views/class-stats.php:347
 msgid "Top Pages"
 msgstr ""
 
@@ -1611,7 +1620,7 @@ msgid "Page/Sessions"
 msgstr ""
 
 #: core/modules/google-analytics/data/class-locale.php:266
-#: core/modules/google-analytics/views/class-stats.php:317
+#: core/modules/google-analytics/views/class-stats.php:298
 msgid "Bounce Rates"
 msgstr ""
 
@@ -1640,77 +1649,81 @@ msgstr ""
 msgid "%s visits."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:105
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:135
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:165
-msgid "The end date in YYYY-MM-DD format."
+#: core/modules/google-analytics/endpoints/v1/class-data.php:90
+msgid "The selected account ID."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:110
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:140
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:170
-msgid "The start date in YYYY-MM-DD format."
+#: core/modules/google-analytics/endpoints/v1/class-data.php:114
+msgid "The selected property ID."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:195
+#: core/modules/google-analytics/endpoints/v1/class-data.php:144
+msgid "Property parameter is required."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-data.php:199
+msgid "Account parameter is required."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:151
 msgid "No. of items required."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:215
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:171
 msgid "Should force skip cache."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:500
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:441
 msgid "Analytics API is up and working."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:510
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:451
 msgid "Analytics API is not ready."
 msgstr ""
 
-#: core/modules/google-analytics/endpoints/v1/class-stats.php:536
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:476
 msgid "Couldn't fetch data. Please try again later."
 msgstr ""
 
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:490
+msgid "The date in YYYY-MM-DD format."
+msgstr ""
+
 #: core/modules/google-analytics/stats/formatters/class-ga4.php:165
-#: core/modules/google-analytics/stats/formatters/class-ua.php:116
 msgid "Desktop"
 msgstr ""
 
 #: core/modules/google-analytics/stats/formatters/class-ga4.php:169
-#: core/modules/google-analytics/stats/formatters/class-ua.php:120
 msgid "Mobile"
 msgstr ""
 
 #: core/modules/google-analytics/stats/formatters/class-ga4.php:173
-#: core/modules/google-analytics/stats/formatters/class-ua.php:124
 msgid "Tablet"
 msgstr ""
 
-#: core/modules/google-analytics/stats/formatters/class-ga4.php:952
-#: core/modules/google-analytics/stats/formatters/class-ua.php:331
+#: core/modules/google-analytics/stats/formatters/class-ga4.php:955
 msgid "Other"
 msgstr ""
 
-#: core/modules/google-analytics/views/class-stats.php:273
+#: core/modules/google-analytics/views/class-stats.php:254
 msgid "Dashboard Widget"
 msgstr ""
 
-#: core/modules/google-analytics/views/class-stats.php:277
-#: core/modules/google-analytics/views/class-stats.php:281
+#: core/modules/google-analytics/views/class-stats.php:258
+#: core/modules/google-analytics/views/class-stats.php:262
 msgid "General Stats"
 msgstr ""
 
-#: core/modules/google-analytics/views/class-stats.php:288
+#: core/modules/google-analytics/views/class-stats.php:269
 msgid "Audiences"
 msgstr ""
 
-#: core/modules/google-analytics/views/class-stats.php:358
+#: core/modules/google-analytics/views/class-stats.php:339
 msgid "Statistics/Google Analytics"
 msgstr ""
 
 #: core/modules/google-analytics/widgets/class-popular.php:48
-#: core/modules/google-analytics/widgets/class-popular.php:118
+#: core/modules/google-analytics/widgets/class-popular.php:115
 msgid "Most popular posts"
 msgstr ""
 
@@ -1718,11 +1731,11 @@ msgstr ""
 msgid "Your site's most popular posts."
 msgstr ""
 
-#: core/modules/google-analytics/widgets/class-popular.php:168
+#: core/modules/google-analytics/widgets/class-popular.php:157
 msgid "No data yet."
 msgstr ""
 
-#: core/modules/google-analytics/widgets/class-popular.php:306
+#: core/modules/google-analytics/widgets/class-popular.php:282
 msgid "Loading..."
 msgstr ""
 
@@ -2048,13 +2061,13 @@ msgid ""
 "href=\"%s\">Account Page</a>."
 msgstr ""
 
-#: core/utils/abstracts/class-endpoint.php:136
-#: core/utils/abstracts/class-endpoint.php:139
+#: core/utils/abstracts/class-endpoint.php:131
+#: core/utils/abstracts/class-endpoint.php:134
 #. translators: %s is error message from Google API.
 msgid "Google API Error: %s"
 msgstr ""
 
-#: core/utils/abstracts/class-endpoint.php:144
+#: core/utils/abstracts/class-endpoint.php:139
 msgid "Unknown error occurred. Please try clearing cache."
 msgstr ""
 
@@ -2067,23 +2080,23 @@ msgstr ""
 msgid "Made with %s by WPMU DEV"
 msgstr ""
 
-#: core/views/class-admin.php:275 core/views/class-admin.php:303
+#: core/views/class-admin.php:277 core/views/class-admin.php:305
 msgid "Last week"
 msgstr ""
 
-#: core/views/class-admin.php:295
+#: core/views/class-admin.php:297
 msgid "Today"
 msgstr ""
 
-#: core/views/class-admin.php:299
+#: core/views/class-admin.php:301
 msgid "Yesterday"
 msgstr ""
 
-#: core/views/class-admin.php:307
+#: core/views/class-admin.php:309
 msgid "Last month"
 msgstr ""
 
-#: core/views/class-admin.php:311
+#: core/views/class-admin.php:313
 msgid "Last year"
 msgstr ""
 

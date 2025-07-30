@@ -26,10 +26,8 @@ class GetReportsResponse extends \Beehive\Google\Collection
     public $queryCost;
     protected $reportsType = Report::class;
     protected $reportsDataType = 'array';
-    public $reports;
     protected $resourceQuotasRemainingType = ResourceQuotasRemaining::class;
     protected $resourceQuotasRemainingDataType = '';
-    public $resourceQuotasRemaining;
     /**
      * @param int
      */

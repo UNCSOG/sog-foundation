@@ -22,7 +22,6 @@ class BatchUpdateContactsRequest extends \Beehive\Google\Collection
     protected $collection_key = 'sources';
     protected $contactsType = Person::class;
     protected $contactsDataType = 'map';
-    public $contacts;
     /**
      * @var string
      */

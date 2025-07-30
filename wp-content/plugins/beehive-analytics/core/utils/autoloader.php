@@ -65,6 +65,11 @@ if ( ! function_exists( 'beehive_auto_loader' ) ) {
 			}
 		}
 
+		// If filename is not found, do not continue.
+		if ( empty( $file_name ) ) {
+			return;
+		}
+
 		// Now build a path to the file using mapping to the file location.
 		$filepath  = trailingslashit( untrailingslashit( plugin_dir_path( dirname( __DIR__ ) ) ) . $namespace );
 		$filepath .= $file_name;

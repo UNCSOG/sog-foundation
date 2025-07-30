@@ -16,7 +16,6 @@ defined( 'WPINC' ) || die;
 
 use Beehive\Core\Helpers\General;
 use Beehive\Core\Utils\Abstracts\Base;
-use Beehive\Core\Modules\Google_Analytics\Data;
 use Beehive\Core\Modules\Google_Analytics\Helper;
 use Beehive\Google\Service\AnalyticsReporting\Metric;
 use Beehive\Google\Service\AnalyticsReporting\OrderBy;
@@ -466,20 +465,9 @@ abstract class Request extends Base {
 
 		// Get currently assigned id.
 		$account = beehive_analytics()->settings->get( 'account_id', 'google', $network );
-
-		// Some times, account id can be empty when user didn't save the settings. We need to handle this ourselves.
-		if ( empty( $account ) ) {
-			// Get available profiles.
-			$profiles = Data::instance()->profiles( $network );
-			if ( ! empty( $profiles ) ) {
-				// Set the first item for now.
-				$account = $profiles[0]->getId();
-				// Update the settings.
-				beehive_analytics()->settings->update( 'account_id', $account, 'google', $network );
-			}
+		if ( ! empty( $account ) ) {
+			$this->account = $account;
 		}
-
-		$this->account = $account;
 	}
 
 	/**

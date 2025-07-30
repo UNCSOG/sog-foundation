@@ -1,0 +1,142 @@
+body { padding-top: 43px; }
+.ddl-builder-bar{
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 100008;
+}
+
+/* Fix position when WP Admin Bar is enabled */
+
+.admin-bar .ddl-builder-bar{
+    top: 32px;
+}
+
+@media all and (max-width: 782px){
+    .admin-bar .ddl-builder-bar{
+        top: 46px;
+    }
+}
+
+/* Toolbar content wrapper */
+
+.ddl-builder-bar-content{
+    background: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    color: #999999;
+    font-size: 14px;
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    height: 43px;
+}
+
+.ddl-builder-bar-history{
+    float: left;
+    padding: 7px 10px;
+}
+.ddl-builder-bar-history .button{
+    padding: 5px 5px 0;
+}
+.ddl-builder-bar-history .dashicons{
+    font-size: 16px;
+}
+.ddl-builder-bar-title{
+    color: #333;
+    float: left;
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 28px;
+    padding: 7px 10px;
+}
+
+/* Action bar */
+
+.ddl-builder-bar-actions{
+    float: right;
+    padding: 7px;
+}
+
+.ddl-builder-bar .ont-btn {
+    display: inline-block;
+    margin: 0 0 0 1px;
+}
+.ddl-button-done, .ddl-button-edit{text-transform: lowercase!important;}
+.ddl-button-done:first-letter, .ddl-button-edit:first-letter{text-transform: capitalize!important;}
+.button.button-save-layout{
+    margin-top:0px!important;
+    float:none!important;
+
+}
+/*
+ * Make sure that save button inside toolbar looks exactly the same
+ * no matter which theme is active.
+ */
+
+.button.button-save-layout input{
+    margin:0!important;
+    background:transparent!important;
+    color:inherit!important;
+    border:none!important;
+    padding:0!important;
+    font-size:inherit!important;
+    line-height: inherit!important;
+    font-weight: inherit!important;
+    text-transform: none !important;
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    letter-spacing: normal;
+}
+div.ddl-builder-bar-content div.dd-message-container{top: 3px !important;right: 0!important; left:220px!important;z-index:4;width: 73.3%!important;}
+.ddl-messages{font-size: 14px;
+    display: inline-block;
+    margin-left: 15px;
+    margin-top: 8px;}
+/*.ddl-messages.layout_0{color:#009999;}
+.ddl-messages.layout_1{color:#999;}
+.ddl-messages.layout_2{color:#0099ff;}
+.ddl-messages.private{color:#f05a28!important;}*/
+.dd-message-container-fe{float:right;padding-top:4px;}
+.ddl-messages i{color:green;padding-right:6px;}
+.ddl-messages{color:#666;}
+.ddl-error i{color:red;padding-right:6px;}
+.ddl-messages:first-child{margin-right: 12px;}
+.ddl-builder-bar-help{font-size:12px;position:relative;top:13px;left:6px;}
+.ddl-builder-bar-help i{
+    font-size:14px;
+    color: #007acc;
+}
+.ddl-builder-bar-help-text{
+    padding-left:2px;
+    font-weight: normal !important;
+}
+/* Make sure that theme css doesn't affect on help link styling (inside toolbar) */
+.ddl-builder-bar-help a{
+    color: #007acc;
+    text-decoration: none;
+}
+.ddl-builder-bar-help a:hover{
+    text-decoration: none;
+    color: #007dd2;
+}
+.ddl-builder-bar-help a[target="_blank"]:not(.notarget):after {
+    content: "\00a0\f08e";
+    font-family: 'FontAwesome';
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    font-size: .7em;
+}
+/* Change cursor type for disabled button inside toolbar  */
+.ddl-builder-bar-actions input[disabled][type="submit"]{
+    cursor: not-allowed !important;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    box-shadow: none;
+    letter-spacing: normal;
+}
+.ddl-builder-bar-actions .button{
+    letter-spacing: normal;
+    font-weight: normal !important;
+}

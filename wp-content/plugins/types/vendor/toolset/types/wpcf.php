@@ -298,19 +298,6 @@ if( ! function_exists( 'wpcf_is_client' ) ) {
 
         // check db stored value
         if( get_option( 'wpcf-is-client' ) ) {
-            $settings = wpcf_get_settings( 'help_box' );
-
-            // prioritise settings if available
-            if( $settings ) {
-                switch( $settings ) {
-                    case 'by_types':
-                    case 'all':
-                        return false;
-                    case 'no':
-                        return true;
-                }
-            }
-
             $is_client = get_option( 'wpcf-is-client' );
 
             // client

@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaListGoogleAdsLinksResponse extends \Beehive\Goog
     protected $collection_key = 'googleAdsLinks';
     protected $googleAdsLinksType = GoogleAnalyticsAdminV1betaGoogleAdsLink::class;
     protected $googleAdsLinksDataType = 'array';
-    public $googleAdsLinks;
     /**
      * @var string
      */

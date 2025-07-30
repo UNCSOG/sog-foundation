@@ -400,7 +400,6 @@ function wpcf_get_settings($specific = false)
         'add_resized_images_to_library' => 0,
         'images_remote' => 0,
         'images_remote_cache_time' => '36',
-        'help_box' => 'by_types',
         'hide_standard_custom_fields_metabox' => 'show',
         'postmeta_unfiltered_html' => 'on',
         'usermeta_unfiltered_html' => 'on',

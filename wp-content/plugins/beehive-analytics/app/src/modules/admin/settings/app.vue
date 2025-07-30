@@ -44,7 +44,7 @@
 		<onboarding v-if="showOnboarding"/>
 		<!-- Onboarding end -->
 		<!-- Welcome modal -->
-		<welcome-modal v-else-if="showWelcome"/>
+		<!--<welcome-modal v-else-if="showWelcome"/>-->
 		<!-- welcome modal end -->
 
 		<!-- Reset confirmation modal -->

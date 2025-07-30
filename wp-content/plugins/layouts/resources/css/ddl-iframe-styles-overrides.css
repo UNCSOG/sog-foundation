@@ -1,0 +1,16 @@
+/** OVERRIDES IFRAME BEHAVIOUR FOR Toolset iFrame **/
+
+/** Enabling scrolling for screens having height 768px or lower. **/
+/** Since the document is loaded in an iFrame, the corresponding max-height refers to the document height "within" the iFrame. **/
+@media (max-height: 470px) {
+	body.modal-open {
+		overflow: auto !important;
+	}
+}
+body.post-type-cred-form #poststuff #post-body.columns-2, body.toolset_page_cred_relationship_form #poststuff #post-body.columns-2{margin-right:0px;}
+body.post-type-cred-form #postbox-container-1, body.toolset_page_cred_relationship_form #postbox-container-1{display:none;}
+body.post-type-cred-user-form #poststuff #post-body.columns-2, body.toolset_page_cred_relationship_form #poststuff #post-body.columns-2{margin-right:0px;}
+body.post-type-cred-user-form #postbox-container-1, body.toolset_page_cred_relationship_form #postbox-container-1{display:none;}
+
+.wrap.toolset-views h1, .wrap > h1, body.wp-admin div.wrap h1.wp-heading-inline, .wrap > .page-title-action, .screen-meta-toggle{display:none;}
+div.toolset-ui-dialog.ui-widget-content{/*top:50px;*/}

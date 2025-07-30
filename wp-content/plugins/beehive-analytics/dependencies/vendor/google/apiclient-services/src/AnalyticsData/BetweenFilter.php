@@ -21,10 +21,8 @@ class BetweenFilter extends \Beehive\Google\Model
 {
     protected $fromValueType = NumericValue::class;
     protected $fromValueDataType = '';
-    public $fromValue;
     protected $toValueType = NumericValue::class;
     protected $toValueDataType = '';
-    public $toValue;
     /**
      * @param NumericValue
      */

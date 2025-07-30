@@ -272,7 +272,12 @@ class Types_Ajax_Handler_Repeatable_Group extends Toolset_Ajax_Handler_Abstract 
 	private function get_and_validate_repeatable_group( WP_Post $parent_post ) {
 		// Important: This needs to happen before get_repeatable_group_by_post_data() is called, otherwise we
 		// won't get the correct results.
-		$this->wpml_service->switch_language( $this->wpml_service->get_post_language( $parent_post->ID ) );
+		// ------------------
+		// Counter-important: if we switch to the default language, the RFG GUI is rendered in the default language
+		// because we rely now in the user admin language and not in the admin content language!
+		// Watch out for problems when editing RFG fields with translated content?
+		// ------------------
+		// $this->wpml_service->switch_language( $this->wpml_service->get_post_language( $parent_post->ID ) );
 
 		$repeatable_group = $this->get_repeatable_group_by_post_data();
 		if ( ! $repeatable_group ) {

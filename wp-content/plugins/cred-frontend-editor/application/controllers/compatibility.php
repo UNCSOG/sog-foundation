@@ -43,6 +43,7 @@ class Compatibility {
 		$this->load_blocks();
 		$this->load_wpml();
 		$this->load_events_calendar();
+		$this->load_fluent_crm();
 	}
 
 	/**
@@ -85,4 +86,10 @@ class Compatibility {
 		$events_calendar_manager = $dic->make( '\OTGS\Toolset\CRED\Controller\Compatibility\EventsCalendar\Manager' );
 		$events_calendar_manager->initialize();
 	}
+
+	private function load_fluent_crm() {
+		$fluent_crm_manager = new \OTGS\Toolset\CRED\Controller\Compatibility\FluentCrm\Manager();
+		$fluent_crm_manager->add_hooks();
+	}
+
 }

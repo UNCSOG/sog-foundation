@@ -9,6 +9,8 @@
 class WPCF_Usermeta_Field extends WPCF_Field
 {
 
+	public $currentUID;
+
 	/**
 	 * Set current post and field.
 	 *

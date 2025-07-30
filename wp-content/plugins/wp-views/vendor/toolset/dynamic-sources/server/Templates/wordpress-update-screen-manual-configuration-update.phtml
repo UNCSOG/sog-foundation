@@ -1,0 +1,44 @@
+<?php
+/**
+ * Template for the manual configuration update information and button on the WordPress update screen.
+ */
+?>
+<div class="wrap" style="clear: both;">
+	<h3><?php _e( 'Theme and Plugins compatibility with Toolset Dynamic Sources', 'wpv-views' ) ?></h3>
+
+	<p><?php _e( 'Configuration for compatibility between your active plugins and theme is updated automatically on daily basis.', 'wpv-views' ); ?></p>
+	<div id="toolset_dynamic_sources_theme_plugins_integration">
+		<p><?php printf( __( 'Last checked on %s', 'wpv-views' ), '<span id="toolset_conf_upd">' . esc_html( $context['last_updated'] ) . '</span>' ) ?></p>
+		<p><input class="button" id="update_toolset_config" value="<?php echo __( 'Update', 'wpv-views' ) ?>" type="button" /></p>
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery( document ).ready(
+		function ( $ ) {
+			$( '#update_toolset_config' ).click(
+				function () {
+					var button = $( this );
+					button.prop( 'disabled', true );
+					jQuery.ajax(
+						{
+							type: 'post',
+							url: ajaxurl,
+							data: {
+								action: 'update_toolset_dynamic_sources_config_index',
+								security: '<?php echo esc_html( $context['nonce'] ) ?>'
+							},
+							success: function ( response ) {
+								if ( response )
+									$( '#toolset_conf_upd' ).html( response );
+							},
+							complete: function () {
+								button.prop( 'disabled', false );
+							}
+						}
+					);
+				}
+			);
+		}
+	);
+</script>

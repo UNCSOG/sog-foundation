@@ -109,6 +109,11 @@ class PostCleanupHandler implements PostCleanupInterface {
 			return;
 		}
 
+		if ( ! $this->has_relationships( $post ) ) {
+			// The post is not part of any relationship, so skip it.
+			return;
+		}
+
 		if ( ! $this->is_last_element_in_group_involved_in_association( $post ) ) {
 			// A post may be one of several in an element group, which corresponds with a
 			// translation group from WPML.
@@ -253,6 +258,19 @@ class PostCleanupHandler implements PostCleanupInterface {
 	 * @param int $post_id
 	 */
 	public function cleanup_after_delete( $post_id ) {
+		try {
+			// We don't really care about post translations at this point.
+			$post = $this->element_factory->get_post_untranslated( $post_id );
+		} catch ( Toolset_Element_Exception_Element_Doesnt_Exist $e ) {
+			// The post is already gone, do nothing.
+			return;
+		}
+
+		if ( ! $this->has_relationships( $post ) ) {
+			// The post is not part of any relationship, so skip it.
+			return;
+		}
+
 		$connected_element_persistence = $this->database_layer_factory->connected_element_persistence();
 		$group_id = $connected_element_persistence->query_element_group_id_directly( $post_id, \Toolset_Element_Domain::POSTS );
 
@@ -266,5 +284,29 @@ class PostCleanupHandler implements PostCleanupInterface {
 		}
 
 		$connected_element_persistence->remove_element_from_group( $element_group, $post_id );
+	}
+
+	/**
+	 * @param \Toolset_Post $post
+	 *
+	 * @return bool
+	 */
+	private function has_relationships( $post ) {
+		$relationship_query = $this->database_layer_factory->relationship_query();
+
+		$relationship_query->add(
+			$relationship_query->has_domain_and_type(
+				$post->get_type(),
+				\Toolset_Element_Domain::POSTS,
+				null
+			)
+		);
+		$relationship_query->add( $relationship_query->origin( null) );
+		$relationship_definitions = $relationship_query->get_results();
+
+		if ( empty( $relationship_definitions ) ) {
+			return false;
+		}
+		return true;
 	}
 }

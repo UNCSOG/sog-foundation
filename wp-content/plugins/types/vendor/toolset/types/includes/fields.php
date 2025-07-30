@@ -310,8 +310,10 @@ function wpcf_admin_fields_save_group( $group, $post_type = TYPES_CUSTOM_FIELD_G
             return false;
         }
         $post['ID'] = $post_to_update->ID;
-        $slug_pre_save = $post_to_update->post_name;
         $post['post_status'] = $post_to_update->post_status;
+				if ( $post_to_update->post_name !== $post['post_name'] ) {
+					$slug_pre_save = $post_to_update->post_name;
+				}
     }
 
     if ( $update ) {

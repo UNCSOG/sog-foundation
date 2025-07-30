@@ -21,10 +21,8 @@ class RemarketingAudienceStateBasedAudienceDefinition extends \Beehive\Google\Mo
 {
     protected $excludeConditionsType = RemarketingAudienceStateBasedAudienceDefinitionExcludeConditions::class;
     protected $excludeConditionsDataType = '';
-    public $excludeConditions;
     protected $includeConditionsType = IncludeConditions::class;
     protected $includeConditionsDataType = '';
-    public $includeConditions;
     /**
      * @param RemarketingAudienceStateBasedAudienceDefinitionExcludeConditions
      */

@@ -135,9 +135,29 @@ abstract class Toolset_Field_Group implements publicAPI\CustomFieldGroup {
 	 * Handles string translation if applicable.
 	 */
 	public function get_display_name() {
-		return wpcf_translate(
-			sprintf( 'group %d name', $this->get_id() ),
-			$this->get_name()
+		if ( ! class_exists( '\OTGS\Toolset\Types\Controller\Interop\Managed\WPML\FieldsGroups' ) ) {
+			return $this->get_name();
+		}
+
+		switch ( $this->get_post_type() ) {
+			case \Toolset_Field_Group_Term::POST_TYPE:
+				$domain = \Toolset_Field_Utils::DOMAIN_TERMS;
+				break;
+			case \Toolset_Field_Group_User::POST_TYPE:
+				$domain = \Toolset_Field_Utils::DOMAIN_USERS;
+				break;
+			default:
+				$domain = \Toolset_Field_Utils::DOMAIN_POSTS;
+				break;
+		}
+
+		$package = \OTGS\Toolset\Types\Controller\Interop\Managed\WPML\FieldsGroups::getPackage( $domain, $this->get_id(), $this->get_name() );
+
+		return apply_filters(
+			'wpml_translate_string',
+			$this->get_name(),
+			sprintf( 'group-%s-name', $this->get_slug() ),
+			$package
 		);
 	}
 
@@ -176,13 +196,6 @@ abstract class Toolset_Field_Group implements publicAPI\CustomFieldGroup {
 	}
 
 
-	/*
-	 * $group['meta_box_context'] = 'normal';
-    $group['meta_box_priority'] = 'high';
-    $group['filters_association'] = get_post_meta( $post->ID, '_wp_types_group_filters_association', true );
-	 */
-
-
 	/**
 	 * Change name of the field group.
 	 *
@@ -192,9 +205,10 @@ abstract class Toolset_Field_Group implements publicAPI\CustomFieldGroup {
 	 * @param string $value New value of the post name. Note that it may be further modified by WordPress before saving.
 	 */
 	public function set_name( $value ) {
-		$result = $this->update_post( array( 'post_name' => sanitize_title( $value ) ) );
+		$originalValue = $this->get_slug();
+		$result        = $this->update_post( array( 'post_name' => sanitize_title( $value ) ) );
 		if( true == $result ) {
-			do_action( 'wpcf_field_group_renamed', $value, $this );
+			do_action( 'wpcf_field_group_renamed', $value, $originalValue, $this );
 		}
 	}
 

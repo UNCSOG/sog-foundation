@@ -27,8 +27,8 @@ if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
             'wpcf_wpml_relationship_get_children_query', 10, 5 );
 
     add_filter( 'types_fields', 'wpcf_wpml_fields_filter', 10, 3 );
-    add_filter( 'types_post_type', 'wpcf_wpml_post_types_translate', 10, 3 );
-    add_filter( 'types_taxonomy', 'wpcf_wpml_taxonomy_translate', 10, 3 );
+    //add_filter( 'types_post_type', 'wpcf_wpml_post_types_translate', 10, 2 );
+    //add_filter( 'types_taxonomy', 'wpcf_wpml_taxonomy_translate', 10, 3 );
 
     /*
      *
@@ -153,6 +153,7 @@ function wpcf_wpml_init() {
  * @param string $name name of translated string
  * @param mixed $string value to translate, but process only strings
  * @param string $context context of translation
+ * @param string $lang deprecated
  * @return string translated string
  */
 function wpcf_translate( $name, $string, $context = 'plugin Types', $lang = null )
@@ -163,9 +164,6 @@ function wpcf_translate( $name, $string, $context = 'plugin Types', $lang = null
     if ( empty($string) || !is_string($string) ) {
         return $string;
     }
-    if ( ! $lang ) {
-        $lang = apply_filters( 'wpml_current_language', NULL );
-    }
     /**
      * translate
      */
@@ -173,8 +171,7 @@ function wpcf_translate( $name, $string, $context = 'plugin Types', $lang = null
         'wpml_translate_single_string',
         stripslashes( $string ),
         $context,
-        $name,
-        $lang
+        $name
     );
 }
 
@@ -186,9 +183,8 @@ function wpcf_translate( $name, $string, $context = 'plugin Types', $lang = null
  * @param string $value
  * @param bool   $allow_empty_value
  */
-function wpcf_translate_register_string( $context, $name, $value,
-        $allow_empty_value = false ) {
-    if ( function_exists( 'icl_register_string' ) ) {
+function wpcf_translate_register_string( $context, $name, $value, $allow_empty_value = false ) {
+    if ( function_exists( 'icl_register_string' ) && ! is_null( $value ) ) {
         icl_register_string( $context, $name, stripslashes( $value ),
             $allow_empty_value );
     }
@@ -586,14 +582,15 @@ function wpcf_wpml_relationship_save_post_hook( $parent_post_id ){
  * @param array $data
  */
 function wpcf_custom_types_register_translation( $post_type, $data ) {
-    if ( !function_exists( 'icl_register_string' ) ) {
-        return $data;
+    if ( ! function_exists( 'icl_register_string' ) ) {
+        return;
     }
-    if ( isset( $data['description'] ) ) {
-        wpcf_translate_register_string( 'Types-CPT',
-                $post_type . ' description', $data['description'] );
-    }
-    wpcf_wpml_register_labels( $post_type, $data, 'post_type' );
+
+		if ( toolset_getarr( $data, '_builtin', false ) ) {
+			return;
+		}
+
+		do_action( 'wpcf_register_translations_for_cpt', $data, $post_type );
 }
 
 /**
@@ -603,14 +600,15 @@ function wpcf_custom_types_register_translation( $post_type, $data ) {
  * @param type $data
  */
 function wpcf_custom_taxonimies_register_translation( $taxonomy, $data ) {
-    if ( !function_exists( 'icl_register_string' ) ) {
+    if ( ! function_exists( 'icl_register_string' ) ) {
         return $data;
     }
-    if ( isset( $data['description'] ) ) {
-        wpcf_translate_register_string( 'Types-TAX', $taxonomy . ' description',
-                $data['description'] );
-    }
-    wpcf_wpml_register_labels( $taxonomy, $data, 'taxonomy' );
+
+		if ( toolset_getarr( $data, '_builtin', false ) ) {
+			return;
+		}
+
+		do_action( 'wpcf_register_translations_for_taxonomy', $data, $taxonomy );
 }
 
 /**
@@ -619,6 +617,7 @@ function wpcf_custom_taxonimies_register_translation( $taxonomy, $data ) {
  * @param string $prefix
  * @param array  $data
  * @param string $context
+ * @deprecated
  */
 function wpcf_wpml_register_labels( $prefix, $data, $context = 'post' ) {
     foreach ( $data['labels'] as $label => $string ) {
@@ -628,15 +627,15 @@ function wpcf_wpml_register_labels( $prefix, $data, $context = 'post' ) {
             case 'tax':
                 $default = wpcf_custom_taxonomies_default();
                 if ( $label == 'name' || $label == 'singular_name' ) {
-                	$string_context = array( 'domain'  => 'Types-TAX' );
+                	$string_context = array( 'domain' => 'toolset-types-taxonomy-labels-for-' . $prefix );
 	                $string_context['context'] = $label === 'name' ? 'taxonomy general name' : 'taxonomy singular name';
                     wpcf_translate_register_string( $string_context, false, $string );
                     break;
                 }
                 if ( isset( $default['labels'][$label] ) && $string == $default['labels'][$label] ) {
-                    wpcf_translate_register_string( 'Types-TAX', $label, $string );
+                    wpcf_translate_register_string( 'toolset-types-taxonomy-default-labels', $label, $string );
                 } else {
-                    wpcf_translate_register_string( 'Types-TAX',
+                    wpcf_translate_register_string( 'toolset-types-taxonomy-labels-for-' . $prefix,
                             $prefix . ' ' . $label, $string );
                 }
                 break;
@@ -646,7 +645,7 @@ function wpcf_wpml_register_labels( $prefix, $data, $context = 'post' ) {
 
                 // Name and singular_name
                 if ( $label == 'name' || $label == 'singular_name' ) {
-                    wpcf_translate_register_string( 'Types-CPT',
+                    wpcf_translate_register_string( 'toolset-types-cpt-labels-for-' . $prefix,
                             $prefix . ' ' . $label, $string );
                     break;
                 }
@@ -654,9 +653,9 @@ function wpcf_wpml_register_labels( $prefix, $data, $context = 'post' ) {
                 // Check others for defaults
                 if ( isset( $default['labels'][$label] ) && $string == $default['labels'][$label] ) {
                     // Register default translation
-                    wpcf_translate_register_string( 'Types-CPT', $label, $string );
+                    wpcf_translate_register_string( 'toolset-types-cpt-default-labels', $label, $string );
                 } else {
-                    wpcf_translate_register_string( 'Types-CPT',
+                    wpcf_translate_register_string( 'toolset-types-cpt-labels-for-' . $prefix,
                             $prefix . ' ' . $label, $string );
                 }
                 break;
@@ -669,6 +668,7 @@ function wpcf_wpml_register_labels( $prefix, $data, $context = 'post' ) {
  *
  * @param type $post_type
  * @param type $data
+ * @deprecated
  */
 function wpcf_wpml_post_types_translate( $data, $post_type ) {
     if ( !function_exists( 'icl_t' ) ) {
@@ -677,20 +677,20 @@ function wpcf_wpml_post_types_translate( $data, $post_type ) {
     $default = wpcf_custom_types_default();
     if ( !empty( $data['description'] ) ) {
         $data['description'] = wpcf_translate( $post_type . ' description',
-                $data['description'], 'Types-CPT' );
+                $data['description'], 'toolset-types-cpt-labels-for-' . $post_type );
     }
     foreach ( $data['labels'] as $label => $string ) {
         if ( $label == 'name' || $label == 'singular_name' ) {
             $data['labels'][$label] = wpcf_translate( $post_type . ' ' . $label,
-                    $string, 'Types-CPT' );
+                    $string, 'toolset-types-cpt-labels-for-' . $post_type );
             continue;
         }
         if ( !isset( $default['labels'][$label] ) || $string !== $default['labels'][$label] ) {
             $data['labels'][$label] = wpcf_translate( $post_type . ' ' . $label,
-                    $string, 'Types-CPT' );
+                    $string, 'toolset-types-cpt-labels-for-' . $post_type );
         } else {
             $data['labels'][$label] = wpcf_translate( $label, $string,
-                    'Types-CPT' );
+										'toolset-types-cpt-default-labels' );
         }
     }
     return $data;
@@ -701,6 +701,7 @@ function wpcf_wpml_post_types_translate( $data, $post_type ) {
  *
  * @param type $taxonomy
  * @param type $data
+ * @deprecated
  */
 function wpcf_wpml_taxonomy_translate( $data, $taxonomy ) {
     if ( !function_exists( 'icl_t' ) ) {
@@ -709,20 +710,20 @@ function wpcf_wpml_taxonomy_translate( $data, $taxonomy ) {
     $default = wpcf_custom_taxonomies_default();
     if ( !empty( $data['description'] ) ) {
         $data['description'] = wpcf_translate( $taxonomy . ' description',
-                $data['description'], 'Types-TAX' );
+                $data['description'], 'toolset-types-taxonomy-labels-for-' . $taxonomy );
     }
     foreach ( $data['labels'] as $label => $string ) {
         if ( $label == 'name' || $label == 'singular_name' ) {
             $data['labels'][$label] = wpcf_translate( $taxonomy . ' ' . $label,
-                    $string, 'Types-TAX' );
+                    $string, 'toolset-types-taxonomy-labels-for-' . $taxonomy );
             continue;
         }
         if ( !isset( $default['labels'][$label] ) || $string !== $default['labels'][$label] ) {
             $data['labels'][$label] = wpcf_translate( $taxonomy . ' ' . $label,
-                    $string, 'Types-TAX' );
+                    $string, 'toolset-types-taxonomy-labels-for-' . $taxonomy );
         } else {
             $data['labels'][$label] = wpcf_translate( $label, $string,
-                    'Types-TAX' );
+                    'toolset-types-taxonomy-default-labels' );
         }
     }
     return $data;

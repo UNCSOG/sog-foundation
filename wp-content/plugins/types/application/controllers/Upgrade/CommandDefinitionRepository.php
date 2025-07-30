@@ -7,6 +7,7 @@ use OTGS\Toolset\Common\Upgrade\CommandDefinition;
 use OTGS\Toolset\Types\Upgrade\Commands\Upgrade2010000CleanMessInNonAdminUserCaps;
 use OTGS\Toolset\Types\Upgrade\Commands\Upgrade2021600CleanMessInAdminUserCaps;
 use OTGS\Toolset\Types\Upgrade\Commands\Upgrade3040000OneShotRelationshipDatabaseLayerMigration;
+use OTGS\Toolset\Types\Upgrade\Commands\Upgrade3060000TranslationPackages;
 
 /**
  * Upgrade command definition repository for Types.
@@ -44,6 +45,10 @@ class CommandDefinitionRepository implements \OTGS\Toolset\Common\Upgrade\Comman
 			$this->definition(
 				Upgrade3040000OneShotRelationshipDatabaseLayerMigration::class,
 				3040000
+			),
+			$this->definition(
+				Upgrade3060000TranslationPackages::class,
+				3060000
 			),
 		];
 	}

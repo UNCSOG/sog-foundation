@@ -37,7 +37,7 @@ class Scripts extends Base {
 		add_action( 'beehive_gtm_frontend_inline_scripts_header', array( $this, 'tag_manager' ), 10, 2 );
 
 		// Add noscript script.
-		add_action( 'wp_footer', array( $this, 'no_script' ) );
+		add_action( 'wp_body_open', array( $this, 'no_script' ), -9999 );
 	}
 
 	/**

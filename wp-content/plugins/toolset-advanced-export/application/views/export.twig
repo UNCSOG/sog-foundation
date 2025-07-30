@@ -1,0 +1,46 @@
+{% extends "base.twig" %}
+
+{% block body %}
+
+    <p>{{ __( 'This section allows you to export various settings which are not covered by the WordPress XML export. The purpose of exporting and importing these settings is to allow users of your Toolset-based theme to receive an exact copy of your site without having to set options manually.' ) }}</p>
+    <p>
+        <a href="https://wp-types.com/documentation/user-guides/how-to-build-toolset-based-themes/?utm_source=toolset-advanced-export&utm_campaign=plugin&utm_medium=plugin-admin&utm_term=How%20to%20build%20Toolset-based%20themes" target="_blank">
+            {{ __( 'How to build Toolset-based themes' ) }}
+        </a>
+    </p>
+
+    <div style="margin-top: 30px;">
+        {% for section_name, section_label in sections %}
+            <p>
+                <label>
+                    <input type="checkbox" value="{{ section_name }}"
+                           data-bind="checked: selectedSections, disable: isExportInProgress"
+                    />
+                    {{ section_label|raw }}
+                </label>
+            </p>
+        {% endfor %}
+    </div>
+
+    <p class="toolset-update-button-wrap">
+
+        <span class="toolset-alert toolset-alert-error"
+              style="float: left; margin-bottom: 5px;"
+              data-bind="text: exportErrorMessage, visible: exportErrorMessage().length > 0"
+        ></span>
+
+        <span style="float: left; font-weight: bold"
+              data-bind="visible: ( downloadLink().length > 0 )"
+        >
+            <a data-bind="attr: { href: downloadLink }">{{ __( 'Download exported settings' ) }}</a>
+        </span>
+
+        <button
+                type="submit" name="toolset_extra_export" class="button button-primary form-submit submit"
+                data-bind="click: onExportClick, enablePrimary: ( isExportPossible() && ! isExportInProgress() )"
+        >{{ __( 'Export' ) }}</button>
+
+        <span class="spinner" data-bind="style: { visibility: (isExportInProgress() ? 'visible' : 'hidden') }"></span>
+    </p>
+
+{% endblock %}

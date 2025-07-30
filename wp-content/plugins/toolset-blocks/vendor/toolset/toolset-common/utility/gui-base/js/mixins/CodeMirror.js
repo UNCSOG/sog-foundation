@@ -2,6 +2,33 @@ var Toolset = Toolset || {};
 Toolset.Gui = Toolset.Gui || {};
 Toolset.Gui.Mixins = Toolset.Gui.Mixins || {};
 
+Toolset.Gui.CodeMirrorStore = {
+	instances: new Array(),
+	getInstance: function( id ) {
+		return Toolset.Gui.CodeMirrorStore.instances[ id ];
+	},
+	restartInstance: function( id, mode ) {
+		if ( Toolset.Gui.CodeMirrorStore.instances[ id ] ) {
+			Toolset.Gui.CodeMirrorStore.instances[ id ].toTextArea();
+			Toolset.Gui.CodeMirrorStore.instances[ id ] = false;
+			jQuery( '#' + id ).focus();
+		}
+		return Toolset.Gui.CodeMirrorStore.createInstance( id, mode );
+	},
+	createInstance: function( id, mode ) {
+		Toolset.Gui.CodeMirrorStore.instances[ id ] = CodeMirror.fromTextArea(document.getElementById( id ), {
+				mode: mode,
+				tabMode: "indent",
+				lineWrapping: true,
+				lineNumbers : true
+		});
+
+		jQuery( '#' + id ).focus();
+
+		return Toolset.Gui.CodeMirrorStore.instances[ id ];
+	}
+};
+
 
 /**
  * Mixin for easy initialization and management of a single CodeMirror editor.
@@ -39,26 +66,17 @@ Toolset.Gui.Mixins.CodeMirror = function () {
 
             // Dispose of the previous instance if it exists. This will happen only of the user edits a snippet,
             // then deletes it, then creates a new snippet with the same slug and edits it again.
-            var previousEditorInstance = icl_editor.codemirrorGet(textareaId);
+            var previousEditorInstance = Toolset.Gui.CodeMirrorStore.getInstance(textareaId);
             if( !! previousEditorInstance ) {
-                icl_editor.toggleCodeMirror(textareaId, false, editorMode);
+                Toolset.Gui.CodeMirrorStore.restartInstance(textareaId, editorMode);
             }
 
-            self.editorInstance = icl_editor.codemirror(
-                textareaId,
-                true,
-                editorMode
-            );
-
-            //var quicktagsInstance = quicktags({ id: textareaId, buttons: 'b'});
-            //WPV_Toolset.add_qt_editor_buttons(quicktagsInstance, self.editorInstance);
+						self.editorInstance = Toolset.Gui.CodeMirrorStore.restartInstance(textareaId, editorMode);
 
             self.editorInstance.on('change', function(cm) {
                 var value = cm.getValue();
                 onChangeCallback(value);
             });
-
-            WPV_Toolset.CodeMirror_instance[textareaId] = self.editorInstance;
         };
 
         if (jQuery.isReady) {

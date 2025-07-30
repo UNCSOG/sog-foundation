@@ -20,6 +20,8 @@ class Types_Admin_Edit_Custom_Fields_Group extends Types_Admin_Edit_Fields {
 	/** @var Types_Page_Field_Group_Post_Relationship_Helper */
 	private $relationship_helper;
 
+	/** @var array */
+	public $ct = [];
 
 	public function __construct( $is_doing_ajax = false ) {
 		parent::__construct();
@@ -129,12 +131,13 @@ class Types_Admin_Edit_Custom_Fields_Group extends Types_Admin_Edit_Fields {
 
 		$this->current_user_can_edit = WPCF_Roles::user_can_create( 'custom-field' );
 
+		$this->update = [];
+
 		// If it's update, get data
 		// Note (by christian 3 June 2016): "Update" means: we're on group edit page and not on creating a new one.
 		if ( isset( $_REQUEST[ $this->get_id ] ) ) {
 			$this->update = wpcf_admin_fields_get_group( intval( $_REQUEST[ $this->get_id ] ) );
 			if ( empty( $this->update ) ) {
-				$this->update = false;
 				wpcf_admin_message( sprintf( __( 'Group with ID %d do not exist', 'wpcf' ), intval( $_REQUEST[ $this->get_id ] ) ) );
 			} else {
 				$this->current_user_can_edit = WPCF_Roles::user_can_edit( 'custom-field', $this->update );

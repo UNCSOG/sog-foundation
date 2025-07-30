@@ -111,7 +111,7 @@ final class Beehive extends Base {
 	private function define() {
 		// Shared UI version.
 		if ( ! defined( 'BEEHIVE_SUI_VERSION' ) ) {
-			define( 'BEEHIVE_SUI_VERSION', '2.12.13' );
+			define( 'BEEHIVE_SUI_VERSION', '2.12.23' );
 		}
 
 		// Plugin directory.

@@ -83,13 +83,12 @@ class Settings extends Base {
 		),
 		'reports'      => array(), // Selected report permissions.
 		'google'       => array(
-			'client_id'       => '', // Google client id entered by user.
-			'client_secret'   => '', // Google client secret entered by user.
-			'api_key'         => '', // Google API key (unused).
-			'account_id'      => '', // UA account.
-			'stream'          => '', // GA4 stream.
-			'auto_track_ga4'  => true, // Check if automatic tracking code detection is enabled for GA4.
-			'statistics_type' => 'ga4', // Analytics statistics type (ua or ga4).
+			'client_id'      => '', // Google client id entered by user.
+			'client_secret'  => '', // Google client secret entered by user.
+			'api_key'        => '', // Google API key (unused).
+			'account_id'     => '', // UA account.
+			'stream'         => '', // GA4 stream.
+			'auto_track_ga4' => true, // Check if automatic tracking code detection is enabled for GA4.
 		),
 		'google_login' => array(
 			'client_id'      => '', // The client id used to login.
@@ -196,6 +195,8 @@ class Settings extends Base {
 		$settings = $this->default_settings;
 
 		if ( $network ) {
+			$settings['permissions']['roles']          = array( 'super_admin' );
+			$settings['permissions']['settings_roles'] = array( 'super_admin' );
 			/**
 			 * Filter to modify default network settings array.
 			 *
@@ -216,6 +217,9 @@ class Settings extends Base {
 				unset( $settings['data']['data'] );
 				unset( $settings['data']['settings'] );
 			}
+
+			$settings['permissions']['roles']          = array( 'administrator' );
+			$settings['permissions']['settings_roles'] = array( 'administrator' );
 
 			/**
 			 * Filter to modify default settings array.
@@ -264,7 +268,7 @@ class Settings extends Base {
 		}
 
 		// Get all roles.
-		$roles = Permission::get_roles( false );
+		$roles = Permission::get_roles();
 
 		// Report items.
 		$items = Views\Admin::instance()->report_items();
@@ -572,7 +576,7 @@ class Settings extends Base {
 			// Now process the parent.
 			if ( isset( $child['name'] ) && in_array( $child['name'], $items, true ) ) {
 				// Increase the selected children count.
-				$selected_count ++;
+				++$selected_count;
 			}
 		}
 

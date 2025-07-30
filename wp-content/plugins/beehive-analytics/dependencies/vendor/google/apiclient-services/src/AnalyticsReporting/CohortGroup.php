@@ -22,7 +22,6 @@ class CohortGroup extends \Beehive\Google\Collection
     protected $collection_key = 'cohorts';
     protected $cohortsType = Cohort::class;
     protected $cohortsDataType = 'array';
-    public $cohorts;
     /**
      * @var bool
      */

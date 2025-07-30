@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaListAccountSummariesResponse extends \Beehive\Go
     protected $collection_key = 'accountSummaries';
     protected $accountSummariesType = GoogleAnalyticsAdminV1betaAccountSummary::class;
     protected $accountSummariesDataType = 'array';
-    public $accountSummaries;
     /**
      * @var string
      */

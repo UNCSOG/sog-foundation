@@ -22,7 +22,6 @@ class SchemaRestrictionResponse extends \Beehive\Google\Collection
     protected $collection_key = 'activeMetricRestrictions';
     protected $activeMetricRestrictionsType = ActiveMetricRestriction::class;
     protected $activeMetricRestrictionsDataType = 'array';
-    public $activeMetricRestrictions;
     /**
      * @param ActiveMetricRestriction[]
      */

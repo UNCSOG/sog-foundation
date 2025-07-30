@@ -15,10 +15,10 @@ namespace Beehive\Core\Modules\Google_Analytics;
 defined( 'WPINC' ) || die;
 
 use Beehive\Core\Helpers\Permission;
-use Beehive\Google\Service\Analytics as Analytics_Service;
 use Beehive\Core\Utils\Abstracts\Base;
 use Beehive\Core\Modules\Google_Analytics\Views\Stats;
 use Beehive\Core\Modules\Google_Analytics\Views\Tracking;
+use Beehive\Google\Service\Analytics as Analytics_Service;
 
 /**
  * Class Analytics
@@ -30,16 +30,12 @@ class Analytics extends Base {
 	/**
 	 * Register all the hooks related to module.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function init() {
 		// Add Google Analytics auth scopes.
 		add_filter( 'beehive_google_auth_scopes', array( $this, 'auth_scopes' ) );
-
-		// Setup profiles after authentication.
-		add_action( 'beehive_google_auth_completed', array( $this, 'setup_profiles' ), 10, 3 );
 
 		// Stats menu is required only when logged in.
 		if ( Helper::instance()->can_get_stats( $this->is_network() ) ) {
@@ -52,12 +48,9 @@ class Analytics extends Base {
 		Stats::instance()->init();
 		Tracking::instance()->init();
 
-		// Rest API for UA.
+		// Rest API for GA4.
 		Endpoints\V1\Data::instance();
 		Endpoints\V1\Stats::instance();
-		// Rest API for GA4.
-		Endpoints\V2\Data::instance();
-		Endpoints\V2\Stats::instance();
 	}
 
 	/**
@@ -65,9 +58,8 @@ class Analytics extends Base {
 	 *
 	 * @param array $scopes Auth scopes.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return array $scopes
+	 * @since 3.2.0
 	 */
 	public function auth_scopes( $scopes = array() ) {
 		// Add Google Analytics auth scope.
@@ -81,9 +73,8 @@ class Analytics extends Base {
 	 *
 	 * Register all widgets with WordPress.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function widgets() {
 		// Make sure the user has capability.
@@ -94,24 +85,4 @@ class Analytics extends Base {
 	}
 
 
-	/**
-	 * Update the available list of GA profiles after the authentication.
-	 *
-	 * We are prefetching this so that the users won't see empty list.
-	 *
-	 * @param bool $success Is success or fail?.
-	 * @param bool $default Did we connect using default credentials?.
-	 * @param bool $network Network flag.
-	 *
-	 * @since 3.2.0
-	 *
-	 * @return void
-	 */
-	public function setup_profiles( $success, $default, $network ) {
-		// Fetch the list of profiles.
-		if ( $success ) {
-			Data::instance()->streams( $network, true );
-			Data::instance()->profiles_list( $network, true );
-		}
-	}
 }

@@ -1,0 +1,16 @@
+header#headerMain {
+	color: $white;
+	background-color: $unc-web-carolina-blue;
+
+	a {
+		color: $white;
+		text-decoration: underline;
+
+		&:hover,
+		&:focus,
+		&:active,
+		&:target {
+			text-decoration: none;
+		}
+	}
+}

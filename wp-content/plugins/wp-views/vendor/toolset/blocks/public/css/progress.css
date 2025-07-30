@@ -1,0 +1,4 @@
+.tb-progress{position:relative;text-align:center}.tb-progress svg{display:inline-block;overflow:visible !important}.tb-progress__trail{background:#c1c1c1;display:inline-block;position:absolute;width:100%;left:0;top:0}.tb-progress__stroke{background:#444;display:inline-block;position:absolute;left:0;top:0}html[dir="rtl"] .tb-progress__stroke{left:auto;right:0}.tb-progress__text{display:none;color:#fff;line-height:1em;position:absolute;top:0;width:100%;left:0;text-align:center;justify-content:center;align-items:center}
+
+.tb-progress{text-align:center}.tb-progress svg{display:inline-block;overflow:visible !important}
+

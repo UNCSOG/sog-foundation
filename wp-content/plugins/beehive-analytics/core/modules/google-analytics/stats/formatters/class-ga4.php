@@ -879,6 +879,9 @@ class GA4 extends Formatter {
 	 * @return mixed
 	 */
 	private function format_value( $name, $value ) {
+		if ( empty( $value ) ) {
+			return $value;
+		}
 		switch ( $name ) {
 			// Normal numbers.
 			case 'sessions':
@@ -906,9 +909,9 @@ class GA4 extends Formatter {
 			// Year and week.
 			case 'week':
 				// Get year from the string.
-				$year = substr( $value, 0, 4 );
+				$year = (int) substr( $value, 0, 4 );
 				// Get week number from the string.
-				$week = substr( $value, 4, 2 );
+				$week = (int) substr( $value, 4, 2 );
 
 				try {
 					$dto = new \DateTime();

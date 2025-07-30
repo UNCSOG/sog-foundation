@@ -161,6 +161,7 @@ export default {
 				return {
 					'background-image':
 						'url(' + this.$vars.whitelabel.custom_image + ')',
+					'background-size': '96px 96px',
 				}
 			}
 		},

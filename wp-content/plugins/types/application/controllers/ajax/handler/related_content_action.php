@@ -1074,7 +1074,7 @@ class Types_Ajax_Handler_Related_Content_Action extends Toolset_Ajax_Handler_Abs
 	) {
 		$formatted_post = [
 			'id' => $post->get_id(),
-			'text' => $post->get_title(),
+			'text' => apply_filters( 'types_format_potential_association_post_label', $post->get_title(), $post->get_id(), $post->get_type() ),
 		];
 
 		$is_disabled = false;

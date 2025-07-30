@@ -30,7 +30,6 @@ class Columns extends \Beehive\Google\Collection
     public $etag;
     protected $itemsType = Column::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var string
      */

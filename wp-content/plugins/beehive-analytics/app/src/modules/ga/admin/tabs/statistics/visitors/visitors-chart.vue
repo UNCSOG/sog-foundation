@@ -122,7 +122,7 @@ export default {
 		 * @return {boolean}
 		 */
 		canGetStats() {
-			return this.$moduleVars.can_get_stats > 0
+			return this.$store.state.helpers.canGetStats
 		},
 
 		/**

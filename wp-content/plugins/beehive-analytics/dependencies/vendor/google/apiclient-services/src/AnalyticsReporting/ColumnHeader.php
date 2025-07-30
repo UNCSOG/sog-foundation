@@ -26,7 +26,6 @@ class ColumnHeader extends \Beehive\Google\Collection
     public $dimensions;
     protected $metricHeaderType = MetricHeader::class;
     protected $metricHeaderDataType = '';
-    public $metricHeader;
     /**
      * @param string[]
      */

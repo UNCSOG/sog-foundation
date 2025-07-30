@@ -1,0 +1,270 @@
+<wpml-config>
+	<custom-fields>
+		<custom-field action="copy">_views_template</custom-field>
+		<custom-field action="ignore">_views_template_new_type</custom-field>
+		<custom-field action="ignore">_wpv_settings</custom-field>
+		<custom-field action="ignore">_wpv_layout_settings</custom-field>
+		<custom-field action="ignore">_wpv_view_sync</custom-field>
+
+		<custom-field action="ignore">_view_loop_template</custom-field>
+
+		<!-- Content Template fields, @since 1.9 -->
+		<!-- todo can we make this conditional for a specific post type? -->
+		<custom-field action="ignore">_view_loop_id</custom-field>
+		<custom-field action="ignore">_edit_lock</custom-field>
+		<custom-field action="ignore">_wpv_view_template_extra_state</custom-field> <!-- deprecated -->
+		<custom-field action="copy">_wpv_view_template_mode</custom-field>
+		<custom-field action="copy">_wpv_view_template_extra_css</custom-field>
+		<custom-field action="copy">_wpv_view_template_extra_js</custom-field>
+		<custom-field action="translate" label="Content template description">_wpv-content-template-decription</custom-field>
+	</custom-fields>
+
+	<custom-types>
+		<custom-type translate="1" display-as-translated="1">view-template</custom-type>
+		<custom-type translate="0">view</custom-type>
+		<custom-type translate="1" display-as-translated="1">wpa-helper</custom-type>
+	</custom-types>
+
+	<gutenberg-blocks>
+		<gutenberg-block type="toolset-blocks/star-rating" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-blocks/repeating-field" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-blocks/container" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/view-editor" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/custom-search-container" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/view-template-block" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/wpa-editor" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/table-header-column" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/table-column" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-blocks/grid" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-blocks/grid-column" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-blocks/heading" translate="1">
+			<xpath label="Heading text">//*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6 or self::p]</xpath>
+			<key label="Heading text" name="content"/>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/button" translate="1">
+			<xpath label="Button text">//span</xpath>
+			<key label="Button text" name="buttonText" />
+			<xpath label="Button link">//a/@href</xpath>
+			<key label="Button link" name="url" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/countdown" translate="1">
+			<xpath label="Countdown label">//div[contains(@class, 'tb-countdown__days')]/span[contains(@class, 'countdown__label')]</xpath>
+			<key label="Countdown label" name="dayLabel" />
+			<xpath label="Countdown label">//div[contains(@class, 'tb-countdown__hours')]/span[contains(@class, 'countdown__label')]</xpath>
+			<key label="Countdown label" name="hourLabel" />
+			<xpath label="Countdown label">//div[contains(@class, 'tb-countdown__minutes')]/span[contains(@class, 'countdown__label')]</xpath>
+			<key label="Countdown label" name="minuteLabel" />
+			<xpath label="Countdown label">//div[contains(@class, 'tb-countdown__seconds')]/span[contains(@class, 'countdown__label')]</xpath>
+			<key label="Countdown label" name="secondLabel" />
+			<xpath label="Text when countdown is finished">//div[contains(@class, 'tb-countdown__message')]</xpath>
+			<key label="Text when countdown is finished" name="message" />
+			<xpath label="Redirect URL when countdown is finished">//div/@data-countdown-redirect</xpath>
+			<key label="Redirect URL when countdown is finished" name="redirectUrl" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/progress" translate="1">
+			<xpath label="Progress bar text">//span[contains(@class, 'tb-progress__text')]</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/audio" translate="1">
+			<xpath label="Audio URL">//audio/@src</xpath>
+			<key label="Audio URL" name="src" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/video" translate="1">
+			<xpath label="Video URL">//video/@src</xpath>
+			<key label="Video URL" name="src" />
+			<xpath label="Video preview image URL">//video/@poster</xpath>
+			<key label="Video preview image URL" name="poster" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/image" translate="1">
+			<xpath label="Image link URL">//a/@href</xpath>
+			<xpath label="Image file URL">//figure[contains(@class, 'tb-image-url')]/img/@src</xpath>
+			<xpath label="Image alt text">//img/@alt</xpath>
+			<xpath label="Image caption">//figcaption</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/field" translate="1">
+			<xpath label="Field block text">//span</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/social-share" translate="1">
+			<xpath label="Social share URL">//@data-shareurl</xpath>
+			<key label="Social share URL" name="url" />
+			<xpath label="Social share post title">//@data-title</xpath>
+			<key label="Social share post title" name="title" />
+			<xpath label="Social share post description">//div[contains(@class, 'tb-social-share__excerpt')]</xpath>
+			<key label="Social share post description" name="excerpt" />
+			<xpath label="Social share image URL">//@data-image</xpath>
+			<key label="Social share image URL" name="image" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-views/view-pagination-block" translate="1">
+			<key label="Pagination text" name="text_for_*"/>
+			<key label="Pagination &quot;previous page&quot; label" name="text_for_previous_link" />
+			<key label="Pagination &quot;next page&quot; label" name="text_for_next_link" />
+			<key label="Pagination &quot;first page&quot; label" name="text_for_first_link" />
+			<key label="Pagination &quot;last page&quot; label" name="text_for_last_link" />
+			<key label="Skipped pages placeholder of pagination" name="ellipsis" />
+			<xpath label="Pagination dropdown label">//label[contains(@class, 'dropdown-label')]</xpath>
+			<key label="Pagination dropdown label" name="dropdownLabel" />
+
+			<!-- No clue when the block uses theses definitions. -->
+			<xpath label="Previous Text of Pagination">//span[contains(@class, 'previous-text')]</xpath>
+			<key label="Previous Text of Pagination" name="previousText" />
+			<xpath label="Next Text of Pagination">//span[contains(@class, 'next-text')]</xpath>
+			<key label="Next Text of Pagination" name="nextText" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/fields-and-text" translate="1">
+			<xpath label="Field and Text block content">//div[contains(@class, 'tb-fields-and-text')]</xpath>
+			<key label="Field and Text block content" name="content" />
+		</gutenberg-block>
+		<gutenberg-block type="toolset-views/sorting" translate="1">
+			<xpath label="Sorting label">//div[contains(@class, 'wpv-sorting-block-label')]</xpath>
+			<key label="Sorting label" name="label"/>
+			<key label="Sorting fields" name="fields">
+				<key label="Sorting fields text" name="*">
+					<key label="Sorting label" name="flabel"/>
+					<key label="Label to sort by ascending" name="asc_label"/>
+					<key label="Label to sort by descending" name="desc_label"/>
+				</key>
+			</key>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-views/custom-search-filter" translate="1">
+			<xpath label="Custom search filter label">//div[contains(@class, 'wpv-custom-search-filter')]//span[contains(@class, 'wpv-custom-search-filter__input')]</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-views/custom-search-submit" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-views/custom-search-reset" translate="0"></gutenberg-block>
+		<gutenberg-block type="toolset-blocks/youtube" translate="1">
+			<xpath label="YouTube video URL">//iframe/@src</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/image-slider" translate="1">
+			<xpath label="Slider image caption">//figcaption</xpath>
+		</gutenberg-block>
+		<gutenberg-block type="toolset-blocks/gallery" translate="1">
+			<xpath label="Gallery image caption">//figcaption</xpath>
+			<xpath label="Gallery image alt text">//img/@alt</xpath>
+		</gutenberg-block>
+	</gutenberg-blocks>
+
+	<shortcodes>
+		<shortcode>
+			<tag label="Post Excerpt">wpv-post-excerpt</tag>
+			<attributes>
+				<attribute label="&quot;Read More&quot; label">more</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Previous Link">wpv-post-previous-link</tag>
+			<attributes>
+				<attribute label="Previous post link format">format</attribute>
+				<attribute label="Previous post link label">link</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Next Link">wpv-post-next-link</tag>
+			<attributes>
+				<attribute label="Next post link format">format</attribute>
+				<attribute label="Next post link label">link</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Filter Submit">wpv-filter-submit</tag>
+			<attributes>
+				<attribute label="Custom search submit label">name</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Filter Reset">wpv-filter-reset</tag>
+			<attributes>
+				<attribute label="Custom search reset label">reset_label</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Filter Search Box">wpv-filter-search-box</tag>
+			<attributes>
+				<attribute label="Custom search filter label">placeholder</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Edit Post Link">toolset-edit-post-link</tag>
+		</shortcode>
+		<shortcode>
+			<tag label="Edit User Link">toolset-edit-user-link</tag>
+		</shortcode>
+		<shortcode>
+			<tag label="Pages Navigation Links">wpv-pager-nav-links</tag>
+			<attributes>
+				<attribute label="Pagination link label">anchor_text</attribute>
+				<attribute label="Skipped pages placeholder of pagination">ellipsis</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Archive Navigation Links">wpv-pager-archive-nav-links</tag>
+			<attributes>
+				<attribute label="Archive page link label">anchor_text</attribute>
+				<attribute label="Skipped pages placeholder of archive">ellipsis</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Custom Search Control">wpv-control</tag>
+			<attributes>
+				<attribute label="Custom search placeholder text">default_label</attribute>
+				<attribute label="Custom search title">title</attribute>
+				<attribute label="Custom search placeholder text">placeholder</attribute>
+				<!-- display_values -->
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Ancestor Control">wpv-control-post-ancestor</tag>
+			<attributes>
+				<attribute label="Custom search placeholder text">default_label</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Item Control">wpv-control-item</tag>
+			<attributes>
+				<attribute label="Custom search placeholder text">default_label</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Taxonomy Control">wpv-control-post-taxonomy</tag>
+			<attributes>
+				<attribute label="Custom search placeholder text">default_label</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Postmeta Control">wpv-control-postmeta</tag>
+			<attributes>
+				<attribute label="Custom search placeholder text">default_label</attribute>
+				<attribute label="Custom search title">title</attribute>
+				<attribute label="Custom search placeholder text">placeholder</attribute>
+				<!-- display_values -->
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Product filter: On sale status" ignore-content="0">wpv-control-post-product-onsale</tag>
+		</shortcode>
+		<shortcode>
+			<tag label="Product filter: Price" ignore-content="0">wpv-control-post-product-price</tag>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Read More">wpv-post-read-more</tag>
+			<attributes>
+				<attribute label="Label of Post Read More">label</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Date">wpv-post-date</tag>
+			<attributes>
+				<attribute label="Format of Post Date">format</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Post Edit Link">wpv-post-edit-link</tag>
+			<attributes>
+				<attribute label="Label of Post Edit Link">text</attribute>
+			</attributes>
+		</shortcode>
+		<shortcode>
+			<tag label="Filter Search Box">wpv-filter-search-box</tag>
+			<attributes>
+				<attribute label="Label of Filter Search Box">placeholder</attribute>
+			</attributes>
+		</shortcode>
+	</shortcodes>
+</wpml-config>

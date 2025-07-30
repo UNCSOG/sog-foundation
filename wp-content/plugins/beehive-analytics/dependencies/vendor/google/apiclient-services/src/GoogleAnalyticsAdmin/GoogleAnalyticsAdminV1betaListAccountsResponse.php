@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaListAccountsResponse extends \Beehive\Google\Col
     protected $collection_key = 'accounts';
     protected $accountsType = GoogleAnalyticsAdminV1betaAccount::class;
     protected $accountsDataType = 'array';
-    public $accounts;
     /**
      * @var string
      */

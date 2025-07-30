@@ -21,7 +21,6 @@ class Occupation extends \Beehive\Google\Model
 {
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

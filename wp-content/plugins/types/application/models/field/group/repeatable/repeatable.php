@@ -151,4 +151,26 @@ class Types_Field_Group_Repeatable extends Types_Field_Group_Post {
 
 		return false;
 	}
+
+	/**
+	 * Get group name as it should be displayed to the user.
+	 * Handles string translation if applicable.
+	 *
+	 * @return string
+	 */
+	public function get_display_name() {
+		$package = array(
+			'kind' => 'Toolset Types',
+			'name' => $this->get_slug(),
+			'title' => 'Relationship ' . $this->get_name(),
+			'edit_link' => '',
+		);
+
+		return apply_filters(
+			'wpml_translate_string',
+			$this->get_name(),
+			sprintf( '%s-plural', $this->get_slug() ),
+			$package
+		);
+	}
 }

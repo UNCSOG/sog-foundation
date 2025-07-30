@@ -25,7 +25,6 @@ class ClientData extends \Beehive\Google\Model
     public $key;
     protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
-    public $metadata;
     /**
      * @var string
      */

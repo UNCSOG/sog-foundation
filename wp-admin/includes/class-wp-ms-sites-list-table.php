@@ -115,12 +115,12 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 			|| preg_match( '/^[0-9]{1,3}\.$/', $s )
 		) {
 			// IPv4 address.
-			$sql = $wpdb->prepare(
-				"SELECT blog_id FROM {$wpdb->registration_log} WHERE {$wpdb->registration_log}.IP LIKE %s",
-				$wpdb->esc_like( $s ) . ( ! empty( $wild ) ? '%' : '' )
+			$reg_blog_ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT blog_id FROM {$wpdb->registration_log} WHERE {$wpdb->registration_log}.IP LIKE %s",
+					$wpdb->esc_like( $s ) . ( ! empty( $wild ) ? '%' : '' )
+				)
 			);
-
-			$reg_blog_ids = $wpdb->get_col( $sql );
 
 			if ( $reg_blog_ids ) {
 				$args['site__in'] = $reg_blog_ids;
@@ -302,7 +302,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	/**
 	 * @global string $mode List table view mode.
 	 *
-	 * @param string $which The location of the pagination nav markup: 'top' or 'bottom'.
+	 * @param string $which The location of the pagination nav markup: Either 'top' or 'bottom'.
 	 */
 	protected function pagination( $which ) {
 		global $mode;
@@ -319,7 +319,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 *
 	 * @since 5.3.0
 	 *
-	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+	 * @param string $which The location of the extra table nav markup: Either 'top' or 'bottom'.
 	 */
 	protected function extra_tablenav( $which ) {
 		?>
@@ -333,7 +333,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 			 *
 			 * @since 5.3.0
 			 *
-			 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+			 * @param string $which The location of the extra table nav markup: Either 'top' or 'bottom'.
 			 */
 			do_action( 'restrict_manage_sites', $which );
 
@@ -353,7 +353,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		 *
 		 * @since 5.3.0
 		 *
-		 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+		 * @param string $which The location of the extra table nav markup: Either 'top' or 'bottom'.
 		 */
 		do_action( 'manage_sites_extra_tablenav', $which );
 	}
@@ -611,7 +611,9 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @global string $mode List table view mode.
+	 * Generates the list table rows.
+	 *
+	 * @since 3.1.0
 	 */
 	public function display_rows() {
 		foreach ( $this->items as $blog ) {
@@ -756,7 +758,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 							'activateblog_' . $blog['blog_id']
 						)
 					),
-					__( 'Activate' )
+					_x( 'Activate', 'site' )
 				);
 			} else {
 				$actions['deactivate'] = sprintf(

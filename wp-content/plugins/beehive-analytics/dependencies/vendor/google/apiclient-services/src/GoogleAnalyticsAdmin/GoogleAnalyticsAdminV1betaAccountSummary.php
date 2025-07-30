@@ -34,7 +34,6 @@ class GoogleAnalyticsAdminV1betaAccountSummary extends \Beehive\Google\Collectio
     public $name;
     protected $propertySummariesType = GoogleAnalyticsAdminV1betaPropertySummary::class;
     protected $propertySummariesDataType = 'array';
-    public $propertySummaries;
     /**
      * @param string
      */

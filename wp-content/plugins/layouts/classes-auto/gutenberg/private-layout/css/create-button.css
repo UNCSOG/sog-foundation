@@ -1,0 +1,7 @@
+button.button-primary-toolset.components-button.is-default:focus:enabled{
+	background: #EF6223;
+	border-color: #EF6223;
+	-webkit-box-shadow: inset 0 1px 0 rgba(239, 239, 239, 0.5);
+	box-shadow: inset 0 1px 0 rgba(239, 239, 239, 0.5);
+	color: #fff;
+}

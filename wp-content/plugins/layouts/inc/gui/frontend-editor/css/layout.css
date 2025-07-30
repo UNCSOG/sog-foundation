@@ -1,0 +1,189 @@
+/* Row & Cell overlay */
+.ddl-frontend-editor-overlay{
+    min-height: 30px;
+    border: 1px dashed #f05a28;
+    bottom: 0;
+    box-sizing: border-box !important;
+    color: #fff;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100006;
+}
+.ddl-frontend-editor-parent{
+    position: relative;
+}
+.ddl-frontend-editor-parent:after{
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.ddl-frontend-editor-parent .ddl-frontend-editor-overlay{
+   /* border-color: #a0a0a0;
+    background: rgba(0, 0, 0, .2); */
+    z-index: 100005;
+}
+.ddl-frontend-editor-overlay-cell{
+    background: none;
+    z-index: 100006 !important;
+}
+.ddl-frontend-editor-overlay-cell .ddl-block-overlay-title{display:none;}
+
+/* Row & Cell action bar */
+.ddl-block-overlay-actions {
+    background: #f05a28;
+    float: right;
+    margin: 0 -1px;
+    text-shadow: none;
+}
+
+/* Action bar title */
+.ddl-block-overlay-title {
+    background: #a0a0a0;
+    color: #fff !important;
+    float: left;
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    font-size: 12px;
+    height: 22px;
+    line-height: 21px;
+    padding: 0 15px;
+}
+
+/* action bar buttons */
+.ddl-block-overlay-actions i, .ddl-block-overlay-actions span {
+    color: #fff !important;
+    cursor: pointer;
+    display: block !important;
+    float: left;
+    font-size: 14px !important;
+    height: 28px !important;
+    font-weight: 100 !important;
+    line-height: 28px !important;
+    opacity: 0.8;
+    filter: alpha(opacity = 80);
+    text-align: center;
+    width: 28px !important;
+}
+.ddl-block-overlay-actions span i.fa-stack-2x{font-size:23px!important;padding-top:1px;}
+.ddl-block-overlay-actions span i.fa-stack-1x{font-size:14px!important;}
+/* Element hierarchy panel */
+.ddl-element-action-panel{
+    position: absolute;
+    z-index: 100007;
+    top: 28px;
+    right: 0;
+    background: #fff;
+    border: 1px solid #999;
+    padding: 1px;
+    display: none;
+    opacity: 0;
+    transform: translateY(12px);
+    font-size: 11px;
+    transition: all .1s ease-in;
+}
+.ddl-element-action-panel.active{
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Element hierarchy panel title */
+.ddl-element-action-panel .title, .edit-layout-menu .title a{
+    color: #009999;
+    font-weight: bold;
+    padding: 5px 4px;
+}
+.edit-layout-menu .title a{text-decoration:none;cursor:pointer;}
+.edit-layout-menu .title a:hover{color: #f05a28;text-decoration:none;cursor:pointer;}
+.ddl-element-action-panel .title.inactive{
+    color: #999;
+}
+.ddl-element-action-panel .title.active{
+    color: #f05a28;
+}
+
+/* Element hierarchy panel tree */
+.ddl-element-action-panel .items{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-weight: bold;
+}
+.ddl-element-action-panel .items li{
+    margin: 0 0 0px 0;
+    padding: 3px 3px;
+    cursor: pointer;
+    border-top:1px solid white;
+}
+.ddl-element-action-panel .items.inactive li{
+    background: #999;
+    color: #fff;
+}
+.ddl-element-action-panel .items.active li{
+    background-color: #f05a28;
+    color: #fff;
+}
+.ddl-element-action-panel .items.inactive li.ddl-dropdown-element-private_layout{background:white;color:#f05a28;}
+/*.ddl-element-action-panel .items.inactive li:nth-last-child(-n+2){background: #f05a28;}
+.ddl-element-action-panel .items.inactive li.ddl-dropdown-element-current{background: #f05a28;}*/
+
+/* Move button */
+.ddl-block-overlay-actions i.ddl-block-move {
+    cursor: move;
+}
+.ddl-element-action-panel .title.layout_title_0{color:#009999;}
+.ddl-element-action-panel .title.layout_title_1{color:#999;}
+.ddl-element-action-panel .title.layout_title_2{color:#0099ff;}
+.ddl-element-action-panel .title.layout_title_3{color:#009999;}
+.ddl-element-action-panel .title.layout_title_5{color:#0099ff;}
+.ddl-element-action-panel .title.layout_title_6{color:#009999;}
+.ddl-element-action-panel .title.layout_title_4{color:#f05a28;}
+
+.ddl-element-action-panel li.layout_0, .ddl-element-action-panel .items.inactive li.layout_0{background: #009999;}
+.ddl-element-action-panel li.layout_1, .ddl-element-action-panel .items.inactive li.layout_1{background: #999;}
+.ddl-element-action-panel li.layout_2, .ddl-element-action-panel .items.inactive li.layout_2{background: #0099ff;}
+.ddl-element-action-panel li.layout_3, .ddl-element-action-panel .items.inactive li.layout_3{background: #009999;}
+.ddl-element-action-panel li.layout_4, .ddl-element-action-panel .items.inactive li.layout_4{background: #999;}
+.ddl-element-action-panel li.layout_5, .ddl-element-action-panel .items.inactive li.layout_5{background: #0099ff;}
+.ddl-element-action-panel li.private_layout, .ddl-element-action-panel .items.inactive li.private_layout{background: #f05a28;}
+
+.ddl-frontend-editor-editable.layout_0 .ddl-frontend-editor-overlay-parent{
+    border-color: #009999;
+    background: rgba(0,153,153, .2);
+    z-index: 100005;
+}
+.ddl-frontend-editor-editable.layout_1 .ddl-frontend-editor-overlay-parent{
+    border-color: #999;
+    background: rgba(153,153,153, .2);
+    z-index: 100005;
+}
+.ddl-frontend-editor-editable.layout_2 .ddl-frontend-editor-overlay-parent{
+    border-color: #f05a28;
+    background: rgba(0,153,255, .2);
+    z-index: 100005;
+}
+.ddl-frontend-editor-editable.private_layout .ddl-frontend-editor-overlay-parent{
+    border-color: #f05a28;
+    background: rgba(240,90,40, .2);
+    z-index: 100005;
+}
+.ddl-frontend-editor-editable.layout_0 .ddl-block-overlay-title{background:#009999;}
+.ddl-frontend-editor-editable.layout_1 .ddl-block-overlay-title{background:#999;}
+.ddl-frontend-editor-editable.layout_2 .ddl-block-overlay-title{background:#0099ff;}
+.ddl-frontend-editor-editable.private_layout .ddl-block-overlay-title{background:#f05a28;}
+.layout_0 .ddl-frontend-editor-overlay{border: 1px dashed #009999;}
+.layout_1 .ddl-frontend-editor-overlay{border: 1px dashed #999;}
+.layout_2 .ddl-frontend-editor-overlay{border: 1px dashed #0099ff;}
+.private_layout .ddl-frontend-editor-overlay{border: 1px dashed #f05a28;}
+.layout_0 .ddl-frontend-editor-overlay .ddl-block-overlay-actions{background:#009999;}
+.layout_1 .ddl-frontend-editor-overlay .ddl-block-overlay-actions{background:#999;}
+.layout_2 .ddl-frontend-editor-overlay .ddl-block-overlay-actions{background:#0099ff;}
+.private_layout .ddl-frontend-editor-overlay .ddl-block-overlay-actions{background:#f05a28;}
+.ddl-frontend-editor .clearfix{ overflow: visible !important; }
+
+/* Make sure to keep correct right padding for cell when editing Layout in front-end */
+.ddl-full-width-row>[class^="col-"]:not(:only-of-type) { padding-right: 0; }

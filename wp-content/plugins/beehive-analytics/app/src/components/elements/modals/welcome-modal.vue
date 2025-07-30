@@ -13,7 +13,7 @@
 					class="sui-box-header sui-flatten sui-content-center sui-spacing-top--60 sui-spacing-left--60 sui-spacing-right--60"
 				>
 					<whitelabel-banner
-						src="welcome/ga4.png"
+						src="welcome/welcome.png"
 						:alt="$i18n.title.new_welcome_title"
 					/>
 

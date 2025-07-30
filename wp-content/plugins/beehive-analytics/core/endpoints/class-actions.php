@@ -27,7 +27,6 @@ use Beehive\Core\Utils\Abstracts\Endpoint;
  * @package Beehive\Core\Endpoints
  */
 class Actions extends Endpoint {
-
 	/**
 	 * API endpoint for the current endpoint.
 	 *
@@ -43,9 +42,8 @@ class Actions extends Endpoint {
 	 * All custom routes for the stats functionality should be registered
 	 * here using register_rest_route() function.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return void
+	 * @since 3.2.4
 	 */
 	public function register_routes() {
 		register_rest_route(
@@ -86,9 +84,8 @@ class Actions extends Endpoint {
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function action( $request ) {
 		// Get the params.
@@ -124,9 +121,8 @@ class Actions extends Endpoint {
 	 *
 	 * @param bool $network Network flag.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function refresh( $network ) {
 		// Clear entire cache.
@@ -148,9 +144,8 @@ class Actions extends Endpoint {
 	 *
 	 * @param bool $network Network flag.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function dismiss_onboarding( $network ) {
 		// Set the flag.
@@ -168,9 +163,8 @@ class Actions extends Endpoint {
 	 *
 	 * @param bool $network Network flag.
 	 *
-	 * @since 3.3.5
-	 *
 	 * @return WP_REST_Response
+	 * @since 3.3.5
 	 */
 	public function reset_settings( $network ) {
 		// Clean cache transients.
@@ -182,7 +176,7 @@ class Actions extends Endpoint {
 		// Send response.
 		return $this->get_response(
 			array(
-				'message' => $success ? __( 'Plugin settings reset succesfully.', 'ga_trans' ) : __( 'Couldn\'t reset the settings.', 'ga_trans' ),
+				'message' => $success ? __( 'Plugin settings reset successfully.', 'ga_trans' ) : __( 'Couldn\'t reset the settings.', 'ga_trans' ),
 			),
 			$success
 		);

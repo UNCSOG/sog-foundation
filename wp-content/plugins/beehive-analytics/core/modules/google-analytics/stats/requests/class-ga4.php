@@ -819,7 +819,7 @@ class GA4 extends Request {
 				} else {
 					$dimension_order_by = new DimensionOrderBy();
 					$dimension_order_by->setDimensionName( $field );
-					//$dimension_order_by->setOrderType( 'NUMERIC' );
+					// $dimension_order_by->setOrderType( 'NUMERIC' );
 					$order_by->setDimension( $dimension_order_by );
 					$order_by->setDesc( false );
 				}
@@ -1009,50 +1009,23 @@ class GA4 extends Request {
 	 *
 	 * @return void
 	 */
-	public function setup_account( $network = false ) {
+	public function setup_account( $network = false ): void {
 		// Decide login source.
 		$network = Helper::instance()->login_source( $network ) === 'network';
 
 		// Get currently assigned id.
-		$stream = beehive_analytics()->settings->get( 'stream', 'google', $network );
+		$property = beehive_analytics()->settings->get( 'property', 'google', $network );
 
-		// Some times, stream can be empty when user didn't save the settings. We need to handle this ourselves.
-		if ( empty( $stream ) ) {
-			// Get available profiles.
-			$streams = Data::instance()->streams( $network );
-			if ( ! empty( $streams[0]['property'] ) ) {
-				// Set the first item for now.
-				$stream = $streams[0]['property'];
-				// Update the settings.
-				beehive_analytics()->settings->update( 'stream', $stream, 'google', $network );
+		// Sometimes, property can be empty when user didn't save the settings. We need to handle this ourselves.
+		if ( empty( $property ) ) {
+			$stream = beehive_analytics()->settings->get( 'stream', 'google', $network );
+			if ( empty( $stream ) ) {
+				// Get first property.
+				$property = Data::instance()->default_property( $network );
+			} else {
+				$property = Data::instance()->fetch_property( $stream, $network );
 			}
 		}
-
-		// Set stream instead of account.
-		$this->set_property_from_stream( $stream, $network );
-	}
-
-	/**
-	 * Set the property ID from the stream string.
-	 *
-	 * @since 3.4.0
-	 *
-	 * @param string $stream  Stream string.
-	 * @param bool   $network Network flag.
-	 *
-	 * @return void
-	 */
-	private function set_property_from_stream( $stream, $network ) {
-		// We need a stream.
-		if ( empty( $stream ) ) {
-			return;
-		}
-
-		// Get available profiles.
-		$streams = Data::instance()->streams( $network );
-
-		if ( isset( $streams[ $stream ]['property'] ) ) {
-			$this->account = $streams[ $stream ]['property'];
-		}
+		$this->account = $property;
 	}
 }

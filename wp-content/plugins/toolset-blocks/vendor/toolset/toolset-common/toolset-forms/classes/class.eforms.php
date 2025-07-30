@@ -1137,6 +1137,8 @@ class Enlimbo_Forms {
 			 */
 			// make sure "option value" and "stored option value" are both trimmed
 			$option_value = trim( $value['#value'] );
+			// set to empty string if null
+			$element['#default_value'] = isset($element['#default_value']) ? $element['#default_value'] : '';
 			$stored_value = is_array( $element['#default_value'] ) ? array_map( 'trim', $element['#default_value'] ) : trim( $element['#default_value'] );
 
 			if ( array_key_exists( '#multiple', $element ) && $element['#multiple'] ) {

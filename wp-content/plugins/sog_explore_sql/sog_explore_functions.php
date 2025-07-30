@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace sog_explore;
 
@@ -75,10 +75,10 @@ function admin_page(){
 			);
 	}
 
-	
-	
+
+
 ?>
-	
+
 	<div class="row my-2">
 		<div class="col">
 			<h1 class="text-center">
@@ -103,7 +103,7 @@ function admin_page(){
 		</div>
 	</div>
 
-<?php	
+<?php
 }
 
 function display_setting_choose_tables(){
@@ -276,7 +276,7 @@ function display_setting_start_here(){
 				</h5>
 				<ol>
 					<?php 	if( current_user_can('administrator') ) { ?>
-						<li>First thing you need to do is choose which tables you want to display.  
+						<li>First thing you need to do is choose which tables you want to display.
 						Click the button on the left labeled "Choose Tables" to see all the tables within the database.
 						<li>Add this shortcode <code>[sog_explore_sql]</code> to any page or post.
 						<?php if ($sog_ex_default_page_url){ ?>
@@ -295,7 +295,7 @@ function display_setting_start_here(){
 						Who can view this?
 					</h5>
 					<ol>
-						<li>Using the choices below, check which roles should have access.  
+						<li>Using the choices below, check which roles should have access.
 							<br>These users will also have the ability to edit any table marked with "Allow Update" on the Choose Table screen.
 						<div class="mt-2">
 							<?php foreach ($wp_roles->roles as $key=>$value) { ?>
@@ -323,7 +323,7 @@ function display_setting_start_here(){
 						<div class="form-check mt-3">
 							<input class="form-check-input mt-1" id="stale_check_option" type="checkbox" <?php echo $stale_check_option_checked;?> value="1">
 							<label class="form-check-label" for="flexCheckDefault">
-								With this checked the program will alert you when the data needs to be refreshed when attempting to make an update.  
+								With this checked the program will alert you when the data needs to be refreshed when attempting to make an update.
 								It will work regardless of the frequency seconds below.
 								With this not checked, it will save your data, overwriting the data that was changed after you loaded the table.
 							</label>
@@ -331,7 +331,7 @@ function display_setting_start_here(){
 						<div class="form mt-3">
 							<input class="form-input mt-1 rounded" id="stale_check_option_seconds" type="input" value="<?php echo $stale_check_option_seconds;?>">
 							<label class="form-label">
-								How frequently should it check for stale data, in seconds. 
+								How frequently should it check for stale data, in seconds.
 							</label>
 							<div class="mb-2">
 							Minimum 5 seconds.  This interval will only check when the page/tab has focus.
@@ -385,7 +385,7 @@ function display_setting_start_here(){
 					</h5>
 					<ol>
 						<li>If you want to see what data moves back and forth in the console, you can add debug=1 to the url.
-						<li>It will check for stale data every X seconds (controlled above) as well as whenever you edit a field.  If any record in that table has been updated between the time 
+						<li>It will check for stale data every X seconds (controlled above) as well as whenever you edit a field.  If any record in that table has been updated between the time
 							you first loaded the page and now, it will create an alert and prompt you to refresh the table. To refresh the table you can
 							<ol>
 								<li>Reload the browser
@@ -393,14 +393,14 @@ function display_setting_start_here(){
 								<li>Toggle a field checkbox, edit icon, or group icon.
 								<li>Click the green "Refresh Table" button on the top right of the table.
 							</ol>
-						<li>If you were to disable editing a table while someone still has that table open in a browser with edit fields turned on, 
+						<li>If you were to disable editing a table while someone still has that table open in a browser with edit fields turned on,
 							the server will NOT let the edit happen and will remove the edit input fields, displaying them as a normal table cell.
 						<li>The URL stores the table name so you can bookmark URL's for easy sharing or loading.
 						<li>If you are an admin on the WordPress site you will have the option to see exactly what sql is being executed with each action.  It displays at the bottom.
 						<li>Every update made to a table creates a log entry and can be viewed in the sog_ex_explore_log table. There is also the option to restore a value that has been changed while viewing the log table.
 								<br><strong>Note:</strong> Currently all updates get logged to the local database, as of now the ability to restore a value does not work on a remote database.
 						<li>Some updates to the plugin require you to load the admin page. Just loading the page will trigger the actions, nothing else needs to be done.
-						<li>Some tables take longer to load than others.  To avoid waiting for a new load with each check of a checkbox, you can enable to the option to "Load with button only."  
+						<li>Some tables take longer to load than others.  To avoid waiting for a new load with each check of a checkbox, you can enable to the option to "Load with button only."
 							With this checked, the table will not be loaded until you click the green "Go" button above the field checkboxes.
 						<li>Database Tables
 							<ul>
@@ -456,11 +456,11 @@ function display_setting_data(){
 }
 
 function display_manage_table_select($data) {
-		$datasets=array(
-			array("slug"=>"report_tables","name"=>"Choose DB Tables"),
-			// array("slug"=>"setting","name"=>"Settings"),
-			);
-			usort($datasets, "sort_by_alpha"); //sort results desc on similar %
+	$datasets=array(
+		array("slug"=>"report_tables","name"=>"Choose DB Tables"),
+		// array("slug"=>"setting","name"=>"Settings"),
+	);
+	usort($datasets, "sort_by_alpha"); //sort results desc on similar %
 ?>
 	<div class="row">
 		<div class="col-md-4 text-start">
@@ -482,16 +482,15 @@ function display_manage_table_select($data) {
 	</div>
 	<div class="manage_table_wrapper">
 		<?php
-		
+
 		?>
 
 	</div>
-
-<?php	
-}
+<?php }
 
 function display_manage_table_html($data) {
 	$delete_column=1;
+
 	if ($data['table_name']=="sog_ex_report_tables") {
 		$sortable=0;
 		// $add_row_0="name";
@@ -508,7 +507,7 @@ function display_manage_table_html($data) {
 		$col_names=array("Use", "Name", "Display Name","Description");
 		$helper_text="";
 		$table_data=get_generic_sql(array("table_name"=>$data['table_name'],"fields"=>"use_this, fk_table_name, display_name, description","order_by"=>"order by name","where"=>"and status=1"));
-	}else{
+	} else {
 		$sortable=0;
 		$add_row_0="name";
 		$third_field="";
@@ -534,26 +533,27 @@ function display_manage_table_html($data) {
 		<?php
 			if (!$download_only) {
 				display_generic_manage_table(array("table_data"=>$table_data,
-													"field_class"=>$field_class,
-													"delete_column"=>$delete_column,
-													"input_col"=>$input_col,
-													"checkbox_col"=>$checkbox_col,
-													"textarea_col"=>$textarea_col,
-													"table_display_name"=>$data['table_display_name'],
-													"col_names"=>$col_names,
-													"add_row_0"=>$add_row_0,
-													"skinny_col"=>$skinny_col,
-													"sortable"=>$sortable,
-													"skip_col"=>$skip_col,
-													"use_generic_manage"=>1,
-													"table_name"=>$data['table_name'],
-													"add_new_row"=>$add_new_row,
-													"id_column_name"=>$id_column_name,
-													"update_i_s_ss"=>$update_i_s_ss,
-													)
-											);
+					"field_class"=>$field_class,
+					"delete_column"=>$delete_column,
+					"input_col"=>$input_col,
+					"checkbox_col"=>$checkbox_col,
+					"textarea_col"=>$textarea_col,
+					"table_display_name"=>$data['table_display_name'],
+					"col_names"=>$col_names,
+					"add_row_0"=>$add_row_0,
+					"skinny_col"=>$skinny_col,
+					"sortable"=>$sortable,
+					"skip_col"=>$skip_col,
+					"use_generic_manage"=>1,
+					"table_name"=>$data['table_name'],
+					"add_new_row"=>$add_new_row,
+					"id_column_name"=>$id_column_name,
+					"update_i_s_ss"=>$update_i_s_ss,
+					)
+				);
 			}
-				// echo build_simple_table(array("table"=>$table_data,"class"=>"generic_table_download_only"));
+
+			// echo build_simple_table(array("table"=>$table_data,"class"=>"generic_table_download_only"));
 		?>
 
 		</div>
@@ -564,42 +564,42 @@ function display_manage_table_html($data) {
 function display_generic_manage_table($data) {
 	// echo "<pre>";print_r($all_log_actions);echo "</pre>";
 	$table_options=array(	"data"=>$data['table_data'], //this holds the array of data returned from sql
-							"id"=>$data['table_name']."_table", //the html id of the table
-							"class"=>"table table-bordered table-sm table-hover report_data_table", //the classes for this table
-							"field_class"=>$data['field_class'],
-							"input_col"=>$data['input_col'], //which rows beginning with 0 will have input fields
-							"textarea_col"=>$data['textarea_col'], //which rows beginning with 0 will have input fields
-							"checkbox_col"=>$data['checkbox_col'], //which rows beginning with 0 will have input fields
-							"col_names"=>$data['col_names'], //names of columns for header row
-							"id_column_name"=>$data['id_column_name'], //which col name from data is unique id col
-							"db"=>$_SESSION['db_to_use'], //the name of the db
-							"table_name"=>$data['table_name'], //the name of the table to be updated
-							// "permission"=>array(1,2), //array of permission id's
-							// "reload_on_add_row"=>1, //reload_on_add_row or reload_with_ajax or neither will do nothing
-							"reload_with_ajax"=>1, 
-							"add_new_row"=>$data['add_new_row'], //which col, beginning with 0, columns 1=name //only for string input fields for now
-							"add_row_0"=>$data['add_row_0'], 
-							"table_display_name"=>$data['table_display_name'] ?? "", 
-							"delete_col"=>$data['delete_column'], //Should a delete column be included
-							"delete_class"=>"generic_table_delete", //Should a delete column be included
-							"change_status_on_delete"=>0, //change status to 0 instead of deleting
-							"closest"=>"tr",
-							"skinny_col"=>$data['skinny_col'],
-							// "wide_row"=>1, //which col has the description and should be longer.
-							"form_control"=>1, //should form-control be added to inputs
-							// "table_sort_head"=>1, 
-							"sortable"=>$data['sortable'], //drag and drop sortable
-							"use_span_instead_of_input"=>1, //for non input cells
-							"use_filter"=>false,
-							"wrapping_class"=>".generic_input_table_wrapper",
-							"use_generic_manage"=>$data['use_generic_manage'],
-							"skip_col"=>$data['skip_col'],
-							"allow_duplicates"=>false,
-							"use_add_new_button"=>false,
-							"update_i_s_ss"=>$data['update_i_s_ss'],
+		"id"=>$data['table_name']."_table", //the html id of the table
+		"class"=>"table table-bordered table-sm table-hover report_data_table", //the classes for this table
+		"field_class"=>$data['field_class'],
+		"input_col"=>$data['input_col'], //which rows beginning with 0 will have input fields
+		"textarea_col"=>$data['textarea_col'], //which rows beginning with 0 will have input fields
+		"checkbox_col"=>$data['checkbox_col'], //which rows beginning with 0 will have input fields
+		"col_names"=>$data['col_names'], //names of columns for header row
+		"id_column_name"=>$data['id_column_name'], //which col name from data is unique id col
+		"db"=>$_SESSION['db_to_use'], //the name of the db
+		"table_name"=>$data['table_name'], //the name of the table to be updated
+		// "permission"=>array(1,2), //array of permission id's
+		// "reload_on_add_row"=>1, //reload_on_add_row or reload_with_ajax or neither will do nothing
+		"reload_with_ajax"=>1,
+		"add_new_row"=>$data['add_new_row'], //which col, beginning with 0, columns 1=name //only for string input fields for now
+		"add_row_0"=>$data['add_row_0'],
+		"table_display_name"=>$data['table_display_name'] ?? "",
+		"delete_col"=>$data['delete_column'], //Should a delete column be included
+		"delete_class"=>"generic_table_delete", //Should a delete column be included
+		"change_status_on_delete"=>0, //change status to 0 instead of deleting
+		"closest"=>"tr",
+		"skinny_col"=>$data['skinny_col'],
+		// "wide_row"=>1, //which col has the description and should be longer.
+		"form_control"=>1, //should form-control be added to inputs
+		// "table_sort_head"=>1,
+		"sortable"=>$data['sortable'], //drag and drop sortable
+		"use_span_instead_of_input"=>1, //for non input cells
+		"use_filter"=>false,
+		"wrapping_class"=>".generic_input_table_wrapper",
+		"use_generic_manage"=>$data['use_generic_manage'],
+		"skip_col"=>$data['skip_col'],
+		"allow_duplicates"=>false,
+		"use_add_new_button"=>false,
+		"update_i_s_ss"=>$data['update_i_s_ss'],
 	);
-	 $table_html=build_table_with_inputs($table_options);
-	 echo $table_html;
+	$table_html=build_table_with_inputs($table_options);
+	echo $table_html;
 }
 
 function display_setting_settings(){
@@ -607,8 +607,7 @@ function display_setting_settings(){
 // echo "<pre>";print_r($settings);echo "</pre>";
 ?>
 	<div class="my-3 row"
-		data-slug="setting_feedback"
-	>
+		data-slug="setting_feedback">
 				<div class="col-md-12">
 					<div class="h3 text-center">
 						Settings
@@ -631,7 +630,7 @@ function display_setting_settings(){
 								<td class="text-center">
 										<?php if ($setting['is_bool']) {?>
 											<label class="checkbox-inline" ></label>
-												<input type="checkbox" class="update_setting xform-check-input" 
+												<input type="checkbox" class="update_setting xform-check-input"
 													data-setting_id="<?php echo $setting['id'];?>"
 													<?php if ($setting['value']) { echo "checked";}?>
 													data-is_bool="<?php echo $setting['is_bool'];?>"
@@ -643,20 +642,18 @@ function display_setting_settings(){
 										<?php } ?>
 								</td>
 								<td class="">
-											<div class="" title="<?php echo $setting['id'];?>">
-												<?php echo $setting['name'];?>
-											</div>
-											<div class="small">
-												<?php echo $setting['description'];?>
-											</div>
-										</span>
-											
-
+										<div class="" title="<?php echo $setting['id'];?>">
+											<?php echo $setting['name'];?>
+										</div>
+										<div class="small">
+											<?php echo $setting['description'];?>
+										</div>
+									</span>
 								</td>
 							</tr>
 							<?php $previous_category=$setting['category'];?>
 						<?php } ?>
-					</table>	
+					</table>
 				</div>
 	</div>
 
@@ -668,7 +665,7 @@ function get_setting_data($data) {
 	if ($data['order_by']) {
 		$order_by="order by ".$data['order_by'];
 	}else{
-		$order_by="order by category, sort";	
+		$order_by="order by category, sort";
 	}
 	if ($data['in_dom']) {
 		$in_dom_sql="and in_dom=1";
@@ -699,10 +696,10 @@ return $new_array;
 
 function update_tables() {
 
-	//get tables from sog_ex_report_tables and if it no longer exists in schema, delete from sog_ex_report_tables 
-	$current_sog_ex_tables_sql=get_generic_sql(array("fields"=>"fk_table_name","table_name"=>"sog_ex_report_tables")); 
-	$current_sog_ex_tables_simple_array = array_column($current_sog_ex_tables_sql, 'fk_table_name'); 
- 
+	//get tables from sog_ex_report_tables and if it no longer exists in schema, delete from sog_ex_report_tables
+	$current_sog_ex_tables_sql=get_generic_sql(array("fields"=>"fk_table_name","table_name"=>"sog_ex_report_tables"));
+	$current_sog_ex_tables_simple_array = array_column($current_sog_ex_tables_sql, 'fk_table_name');
+
 	//check if using remote db
 	$remote_db_option=get_option("sog_ex_remote_db_option");
 	$sog_ex_remote_db_option_db_name=get_option("sog_ex_remote_db_option_db_name");
@@ -713,8 +710,8 @@ function update_tables() {
 		$valid_remote_db=db_connect_remote_check_only($creds);
 
 		if ($valid_remote_db['status']=="success"){
-			//get tables from this wp db 
-			$wp_db_tables=get_tables_remote(array("sog_ex_remote_db_option_db_name"=>$sog_ex_remote_db_option_db_name)); 
+			//get tables from this wp db
+			$wp_db_tables=get_tables_remote(array("sog_ex_remote_db_option_db_name"=>$sog_ex_remote_db_option_db_name));
 		}else{
 			echo "<div>Unable to connect to remote database.  Reverting to local database.</div>";
 			echo "<div>".$valid_remote_db['error_message']."</div>";
@@ -724,51 +721,51 @@ function update_tables() {
 			$remote_db_option=0;
 
 			//revert to local
-			$wp_db_tables=get_tables(null); 
+			$wp_db_tables=get_tables(null);
 		}
 	}else{
-		//get tables from this wp db 
-		$wp_db_tables=get_tables(null); 
+		//get tables from this wp db
+		$wp_db_tables=get_tables(null);
 	}
 
-	// echo "<pre>wp_db_tables";print_r($wp_db_tables);echo "</pre>"; 
+	// echo "<pre>wp_db_tables";print_r($wp_db_tables);echo "</pre>";
 
 
 	if (isset($wp_db_tables) and $wp_db_tables) {
 
-	
-		$wp_db_tables_simple_array = array_column($wp_db_tables, 'table_name'); 
 
-		//get values from array2 that are not in array 1 array_diff($array2, $array1); 
-		//get names in sog_ex_tables that are not in wp_db tables 
-		$diff = array_diff($current_sog_ex_tables_simple_array, $wp_db_tables_simple_array); 
+		$wp_db_tables_simple_array = array_column($wp_db_tables, 'table_name');
 
-		// echo "current_sog_ex_tables_simple_array<pre>";print_r($current_sog_ex_tables_simple_array);echo "</pre>"; 
-		// echo "wp_db_tables_simple_array<pre>";print_r($wp_db_tables_simple_array);echo "</pre>"; 
-		// echo "diff<pre>";print_r($diff);echo "</pre>"; 
+		//get values from array2 that are not in array 1 array_diff($array2, $array1);
+		//get names in sog_ex_tables that are not in wp_db tables
+		$diff = array_diff($current_sog_ex_tables_simple_array, $wp_db_tables_simple_array);
 
-		//delete tables that no longer exist 
-		if (isset($diff) and count($diff)>0) { 
-			//create csv with single quotes 
-			$tables="'".implode("','",$diff)."'"; 
-			$delete_sql="delete from sog_ex_report_tables where fk_table_name in (".$tables.")"; 
+		// echo "current_sog_ex_tables_simple_array<pre>";print_r($current_sog_ex_tables_simple_array);echo "</pre>";
+		// echo "wp_db_tables_simple_array<pre>";print_r($wp_db_tables_simple_array);echo "</pre>";
+		// echo "diff<pre>";print_r($diff);echo "</pre>";
+
+		//delete tables that no longer exist
+		if (isset($diff) and count($diff)>0) {
+			//create csv with single quotes
+			$tables="'".implode("','",$diff)."'";
+			$delete_sql="delete from sog_ex_report_tables where fk_table_name in (".$tables.")";
 			// echo  "<br>".$delete_sql;
-			$delete_sql_result=generic_sql_query(array("sql"=>$delete_sql)); 
-			// echo "delete_sql_result<pre>";print_r($delete_sql_result);echo "</pre>"; 
+			$delete_sql_result=generic_sql_query(array("sql"=>$delete_sql));
+			// echo "delete_sql_result<pre>";print_r($delete_sql_result);echo "</pre>";
 		}
 
 		//now process tables
 		if ($remote_db_option){
-			//get tables from this wp db 
-			$all_tables=get_tables_remote(array("sog_ex_remote_db_option_db_name"=>$sog_ex_remote_db_option_db_name)); 
+			//get tables from this wp db
+			$all_tables=get_tables_remote(array("sog_ex_remote_db_option_db_name"=>$sog_ex_remote_db_option_db_name));
 		}else{
-			//get tables from this wp db 
-			$all_tables=get_tables(null); 
+			//get tables from this wp db
+			$all_tables=get_tables(null);
 		}
-		
+
 		// echo "all_tables<pre>";print_r($all_tables);echo "</pre>";
 		$sql="insert ignore into sog_ex_report_tables (fk_table_name) values ";
-		foreach ($all_tables as $table) { 
+		foreach ($all_tables as $table) {
 			$table_name=$table['table_name'];
 			$sql.="('".$table_name."'),";
 		}
@@ -779,7 +776,7 @@ function update_tables() {
 }
 
 function display_report_builder($atts){
-	
+
 	//dropdown to choose table
 	$report_tables=get_tables_to_use(null);
 	// echo "report_tables<pre>";print_r($report_tables);echo "</pre>";
@@ -818,7 +815,7 @@ function display_report_builder($atts){
 	<div class="report_builder p-2 mx-auto"
 		data-stale_check_option_ms="<?php echo $stale_check_option_ms;?>"
 	>
-		<div class="row sog_ex_report_header_row"> 
+		<div class="row sog_ex_report_header_row">
 			<div class="col-4">
 				<label class="form-label ">Database</label>
 				<select class="form-control select_report_db d-none">
@@ -887,7 +884,7 @@ function display_report_builder($atts){
 function get_report_data($data) {
 	$fx=__FUNCTION__;
 	$new_array=[];
-	
+
 	$return['data_sent_to_get_report_data']=$data;
 
 	$selects=implode(", ",$data['field_names']);
@@ -896,7 +893,7 @@ function get_report_data($data) {
 	$wheres=stripslashes($wheres);
 
 	$from=$data['table_name'];
-	
+
 	$keys=get_primary_key(array("table_name"=>$data['table_name']));
 	$return['keys']=$keys;
 
@@ -924,8 +921,8 @@ function get_report_data($data) {
 	}else{
 		$order="";
 	}
-	
-	
+
+
 	//check if using remote db
 	$remote_db_option=get_option("sog_ex_remote_db_option");
 	$sog_ex_remote_db_option_db_name=get_option("sog_ex_remote_db_option_db_name");
@@ -937,14 +934,14 @@ function get_report_data($data) {
 	}
 
 	$sql="
-		select 
-			".$selects." 
-			".$count_sql." 
-		from ".$from." 
+		select
+			".$selects."
+			".$count_sql."
+		from ".$from."
 		where 1=?
-		".$wheres." 
-		".$group_by." 
-		".$order." 
+		".$wheres."
+		".$group_by."
+		".$order."
 		".$limit."
 
 	";
@@ -952,14 +949,14 @@ function get_report_data($data) {
 	// return $return;
 
 	$sql_for_display="
-		select 
-			".$selects." 
-			".$count_sql." 
-		from ".$from." 
+		select
+			".$selects."
+			".$count_sql."
+		from ".$from."
 		where 1=1
-		".$wheres." 
-		".$group_by." 
-		".$order." 
+		".$wheres."
+		".$group_by."
+		".$order."
 		".$limit."
 
 	";
@@ -978,7 +975,7 @@ function get_report_data($data) {
 return $return;
 }
 
-function display_report_show_all_options() { 
+function display_report_show_all_options() {
 	// echo "data<pre>";print_r($data);echo "</pre>";
 ?>
 	<div class="xhide_until_limit_ready d-none">
@@ -1042,14 +1039,14 @@ function build_report_options($data){
 		/*
 			Specific to DWI ONLY
 			since the dwi site can handle multiple schema's but the sog_explore_sql plugin cannot, check if its the proper db
-			to edit the table they must be either WP administrator (current_user_can('administrator')) 
+			to edit the table they must be either WP administrator (current_user_can('administrator'))
 			or have their onyen hard coded into the "details" tab on the DWI page
 			this overrides the plugin generic setting that allows editing
 		*/
 
 		//first get dwi field onyens allowed to edit this table
 		$onyen_csv=get_generic_sql(array("table_name"=>"dwi_update_table_perm","fields"=>"onyen_csv",
-		"where"=>"and fk_table_name='".$data['table_name']."' and fk_schema_name='".$data['db']."'")); 
+		"where"=>"and fk_table_name='".$data['table_name']."' and fk_schema_name='".$data['db']."'"));
 		// echo "data<pre>";print_r($data);echo "</pre>";
 
 		//initialize array
@@ -1059,7 +1056,7 @@ function build_report_options($data){
 		if (isset($onyen_csv) and is_array($onyen_csv)){
 			//remove spaces
 			$onyen_csv_no_spaces = str_replace(' ', '', $onyen_csv[0]['onyen_csv']);
-			
+
 			//turn into array
 			$onyen_array=explode(",",$onyen_csv_no_spaces);
 		}
@@ -1086,7 +1083,7 @@ function build_report_options($data){
 
 	//display the chexkbox section
 	display_report_field_checkboxes(array("fields"=>$fields,"keys"=>$keys,"table_name"=>$data['table_name'],"allow_update"=>$allowed_to_edit));
-	
+
 	echo "<div class='explore_filters_here'>";
 		display_report_field_filters(array("table_name"=>$data['table_name'],"where_based_on_other_filters"=>$data['where_based_on_other_filters'] ?? []));
 	echo "</div>";
@@ -1117,21 +1114,21 @@ function check_if_stale_data($data){
 	WHERE 1=?
 	and table_name=?
 	and (action='update_record' or action='restore_field')
-	order by id desc 
+	order by id desc
 	limit 1
 
-	
+
 	";
 	// echo $sql."-".$_SESSION['db_to_use'];
 	$place_holder=1;
-	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql); 
-	$stmt -> bind_param("sssis",$data['last_datetime_checked'],$data['last_datetime_checked'],$data['last_datetime_checked'],$place_holder,$data['table_name']) or die("Couldn't bind ".$fx." ."); 
-	$stmt->execute() or die("Couldn't execute ".$fx." ."); 
+	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql);
+	$stmt -> bind_param("sssis",$data['last_datetime_checked'],$data['last_datetime_checked'],$data['last_datetime_checked'],$place_holder,$data['table_name']) or die("Couldn't bind ".$fx." .");
+	$stmt->execute() or die("Couldn't execute ".$fx." .");
 	$sql_result = $stmt->get_result();
-	$num_rows = mysqli_num_rows($sql_result);	
+	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
 		$new_array = $row;
-	}	
+	}
 return $new_array ?? null;
 }
 
@@ -1145,18 +1142,18 @@ function get_tables_to_use($data) {
 		and status=1
 		order by sort_order,fk_table_name
 
-	
+
 	";
 	// echo $sql."-".$_SESSION['db_to_use'];
 	$place_holder=1;
-	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql); 
-	$stmt -> bind_param("i",$place_holder) or die("Couldn't bind ".$fx." ."); 
-	$stmt->execute() or die("Couldn't execute ".$fx." ."); 
+	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql);
+	$stmt -> bind_param("i",$place_holder) or die("Couldn't bind ".$fx." .");
+	$stmt->execute() or die("Couldn't execute ".$fx." .");
 	$sql_result = $stmt->get_result();
-	$num_rows = mysqli_num_rows($sql_result);	
+	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
 		$new_array[] = $row;
-	}	
+	}
 return $new_array;
 }
 
@@ -1167,7 +1164,7 @@ function get_tables($data) {
 			where 1=?
 			and table_schema=?
 
-	
+
 	";
 	// echo $sql."-".$_SESSION['db_to_use'];
 	$place_holder=1;
@@ -1175,10 +1172,10 @@ function get_tables($data) {
 	$stmt -> bind_param("is",$place_holder,$_SESSION['db_to_use']);
 	$stmt->execute();
 	$sql_result = $stmt->get_result();
-	$num_rows = mysqli_num_rows($sql_result);	
+	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
 		$new_array[] = $row;
-	}	
+	}
 return $new_array;
 }
 
@@ -1189,7 +1186,7 @@ function get_tables_remote($data) {
 			where 1=?
 			and table_schema=?
 
-	
+
 	";
 // return $data;
 	$place_holder=1;
@@ -1197,10 +1194,10 @@ function get_tables_remote($data) {
 	$stmt -> bind_param("is",$place_holder,$data['sog_ex_remote_db_option_db_name']);
 	$stmt->execute();
 	$sql_result = $stmt->get_result();
-	$num_rows = mysqli_num_rows($sql_result);	
+	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
 		$new_array[] = $row;
-	}	
+	}
 return $new_array;
 }
 
@@ -1221,7 +1218,7 @@ function get_table_fields($data) {
 		$con = db_connect(null) or die("Couldn't connect to db.");
 		$db_to_use=$_SESSION['db_to_use'];
 	}
-	
+
 	if (1) {
 		$order="order by COLUMN_NAME";
 	}else{
@@ -1251,18 +1248,18 @@ function get_table_fields($data) {
 return $new_array;
 }
 
-function display_report_field_filters($data) { 
+function display_report_field_filters($data) {
 	// echo "data<pre>";print_r($data);echo "</pre>";
 
 	//check if using remote db
 	$remote_db_option=get_option("sog_ex_remote_db_option");
 
 	if ($remote_db_option){
-		
+
 	}else{
-		
+
 	}
-	
+
 	//get the filters they had saved
 	$filters=get_generic_sql(array("return_only"=>0,"table_name"=>"sog_ex_explore_filter",
 	"fields"=>"fk_table_name, field_name, si, fk_username, value, value_like",
@@ -1271,7 +1268,7 @@ function display_report_field_filters($data) {
 				and fk_table_name='".$data['table_name']."'
 				and status=1 "));
 	// echo "filters<pre>";print_r($filters);echo "</pre>";
-	
+
 ?>
 	<?php if ($filters) { ?>
 		<div class="report_filter_wrapper">
@@ -1296,12 +1293,12 @@ function display_report_field_filters($data) {
 						"group_by"=>"group by `".$filter['field_name']."`"));
 						// echo "values<pre>";print_r($values);echo "</pre>";
 						?>
-					
+
 					<div class="report_filters table_info"
 						data-table_name="<?php echo $data['table_name'];?>"
 					>
 						<label class="form-label">
-						<?php 
+						<?php
 							// optionally beautify name
 							$name_to_display=$filter['field_name'];
 							if (1) {
@@ -1315,7 +1312,7 @@ function display_report_field_filters($data) {
 							data-field_name="<?php echo $filter['field_name'];?>"
 							data-data_type="<?php echo $filter['si'];?>"
 
-						></i>		
+						></i>
 
 						</label>
 
@@ -1326,7 +1323,7 @@ function display_report_field_filters($data) {
 						>
 							<option value="">Select <?php echo $name_to_display;?>
 							<?php foreach ($values as $value) { ?>
-								<?php 
+								<?php
 									if ($filter['value']==$value[$filter['field_name']]) {
 										$selected="selected";
 									}else{
@@ -1353,7 +1350,7 @@ function display_report_field_filters($data) {
 <?php
 }
 
-function display_report_field_checkboxes($data) { 
+function display_report_field_checkboxes($data) {
 
 	// echo "data<pre>";print_r($data['fields']);echo "</pre>";
 
@@ -1408,7 +1405,7 @@ function display_report_field_checkboxes($data) {
 		// echo "saved_groups<pre>";print_r($saved_groups);echo "</pre>";
 	}
 
-	
+
 	$temp_array=[];
 	$filter_icon_class="";
 	$group_icon_color="";
@@ -1428,7 +1425,7 @@ function display_report_field_checkboxes($data) {
 	<div class="report_checkbox_wrapper table_info"
 		data-table_name="<?php echo $data['table_name'] ?? "";?>"
 		data-fk_schema_name="<?php echo $data['db_name'] ?? "";?>"
-		
+
 	>
 		<div class="row mt-2 report_choice_header">
 			<div class="col-3">
@@ -1469,7 +1466,7 @@ function display_report_field_checkboxes($data) {
 			data-table_name="<?php echo $data['table_name'];?>"
 		>
 			<?php foreach ($data['fields'] as $field) { ?>
-				<?php 
+				<?php
 					//determine if part of primary key
 					if (in_array($field['COLUMN_NAME'],$data['keys'])) {
 						$key_html="<i title='This is a primary key' class='primary_key_icon fas fa-key fa_icon text-warning'></i>";
@@ -1551,23 +1548,23 @@ function display_report_field_checkboxes($data) {
 							title="<?php echo $filter_title;?>"
 							data-field_name="<?php echo $field['COLUMN_NAME'] ?? "";?>"
 							data-data_type="<?php echo $field['DATA_TYPE'] ?? "";?>"
-						></i>		
+						></i>
 						<i class="far fa-layer-group <?php echo $group_icon_color;?> <?php echo $group_icon_class;?> <?php echo $group_icon_class_from_save;?>"
 							title="<?php echo $group_title;?>"
 							data-field_name="<?php echo $field['COLUMN_NAME'] ?? "";?>"
 							data-data_type="<?php echo $field['DATA_TYPE'] ?? "";?>"
-						></i>		
+						></i>
 						<i class="fa-pencil edit_icon <?php echo $edit_icon_class;?> <?php echo $edit_icon_class_from_save;?>"
 							title="<?php echo $edit_icon_title;?>"
-						></i>		
+						></i>
 						<i class="far fa-info-circle fa_icon"
 							title="Type: <?php echo $field['COLUMN_TYPE'];?> | Empty: <?php echo $field['is_nullable'];?> | Default: <?php echo $field['column_default'];?> | Extra: <?php echo $field['EXTRA'];?>"
-						></i>		
+						></i>
 					<input class="form-check-input report_checkbox <?php echo $primary_key_class;?>" type="checkbox" value="<?php echo $data['table_name'].".`".$field['COLUMN_NAME'];?>`"
 						title="Toggle field in the table" <?php echo $checked;?>
 					>
 					<label class="filter_this" title="<?php echo $field['COLUMN_NAME'];?>">
-						<?php echo $field['COLUMN_NAME'];?>	
+						<?php echo $field['COLUMN_NAME'];?>
 					</label>
 					<?php echo $key_html;?>
 				</div>
@@ -1582,13 +1579,13 @@ function beautify_field_name($data) {
 	//show display name if exists, if not split name on _ and capatilize first letter
 	//change to lower case
 	$temp_name=strtolower($data['field_name']);
-	
+
 	//split on _
 	$temp_name=explode("_",$temp_name);
-	
+
 	//put back together with spaces
 	$temp_name=implode(" ",$temp_name);
-	
+
 	//capatilize each word
 	$name_to_display=ucwords($temp_name);
 return $name_to_display;
@@ -1639,11 +1636,11 @@ return $table_html;
 function build_sog_ex_table($data) {
 	// echo "<pre>data";print_r($data);echo "</pre>";
 	/*
-		need field name in td and th 
+		need field name in td and th
 		need record id in tr
 	*/
 
-	//which log entries will allow a restore button 
+	//which log entries will allow a restore button
 	$allow_on_action=array("update_record","restore_field");
 
 	//if this is the log table then create the restore button
@@ -1686,14 +1683,14 @@ function build_sog_ex_table($data) {
 					<?php } ?>
 					<?php if ($data['table_name']=="sog_ex_explore_log"){ ?>
 						<th>
-							
+
 						</th>
 					<?php } ?>
 				</thead>
 				<tbody>
 					<?php foreach ($data['table'] as $table_rows => $rows) { ?>
 						<?php //echo "<pre>";print_r($rows);echo "</pre>"; ?>
-						<?php 
+						<?php
 							$key_values=[];
 							//need to get the values of each primary key
 							foreach ($data['keys'] as $key_field_name){
@@ -1717,22 +1714,22 @@ function build_sog_ex_table($data) {
 									<?php }else{ ?>
 										<?php echo $sub_row; ?>
 									<?php } ?>
-			
+
 								</td>
 							<?php } ?>
 							<?php if ($data['table_name']=="sog_ex_explore_log"){ ?>
 								<td class="text-center">
 									<?php
 									//as of now, restore only works for changes made to looalhost and remote_db_option is not on
-									
+
 									//check if using remote db
 									$remote_db_option=get_option("sog_ex_remote_db_option");
 
-									if (	$restore_option 
-												and $rows['action']=="update_record" 
+									if (	$restore_option
+												and $rows['action']=="update_record"
 												and count($key_values)
-												and !$remote_db_option 
-												and $sub_key=="description" 
+												and !$remote_db_option
+												and $sub_key=="description"
 												and $sub_row=="localhost"
 												){	//check if restore option is true, if this an update_record entry, and if the primary key has been selected ?>
 											<?php echo $restore_button_html;?>
@@ -1795,7 +1792,7 @@ function build_table_with_inputs($options) {
 	if (isset($options['table_sort_head']) and $options['table_sort_head']) {$table_sort_head="table_sort_head";$th_clickable="clickable";}else{$table_sort_head="";$th_clickable="";}
 	if ($options['form_control']) {$form_control="form-control";}else{$form_control="";}
 	if ($sortable) {$sortable_wrapper="build_form_sortable";}else{$sortable_wrapper="";}
-	
+
 	foreach ($permission as $perm) {
 		$perm_arr_of_hash[]=$perm;
 	}
@@ -1829,7 +1826,7 @@ function build_table_with_inputs($options) {
 						</div>
 					</div>
 				';
-			
+
 		}
 		$table_html.="<table id='".$id."' class='generic_input_table ".$class."' data-initial_sort='".$order_column."' data-order_direction='".$order_direction."'>";
 			$table_html.= "<thead>";
@@ -1861,9 +1858,9 @@ function build_table_with_inputs($options) {
 				$table_html.= "</tr>";
 			$table_html.= "</thead>";
 			$table_html.= "<tbody class=' ".$sortable_wrapper." '
-				data-db='".$db."'  
-				data-table_name='".$table_name."' 
-				data-id_column_name='".$id_column_name."' 
+				data-db='".$db."'
+				data-table_name='".$table_name."'
+				data-id_column_name='".$id_column_name."'
 			>";
 			if ($add_new_row) {
 				$table_html.="<tr class='add_new'>";
@@ -1873,19 +1870,19 @@ function build_table_with_inputs($options) {
 								if ($x==$add_new_row) {
 									$table_html.='
 									<div class="input-group">
-										<input type=text title="Add New '.$col_names[$x].'" placeholder="Add New '.$col_names[$x].'" 
-											class="generic_table_add_new '.$form_control.'" 
-											data-allow_duplicates="'.$allow_duplicates.'" 
-											data-use_generic_manage="'.$use_generic_manage.'" 
-											data-si="s" 
-											data-db="'.$db.'" 
-											data-table_name="'.$table_name.'" 
-											data-field_name="'.$headers[$x].'" 
-											data-col_num="'.$add_new_row.'" 
-											data-reload_on_add_row="'.$reload_on_add_row.'" 
-											data-reload_with_ajax="'.$reload_with_ajax.'" 
-											data-p="'.$perm_csv_of_hash.'" 
-											data-ignore_last_inserted_id="'.$ignore_last_inserted_id.'" 
+										<input type=text title="Add New '.$col_names[$x].'" placeholder="Add New '.$col_names[$x].'"
+											class="generic_table_add_new '.$form_control.'"
+											data-allow_duplicates="'.$allow_duplicates.'"
+											data-use_generic_manage="'.$use_generic_manage.'"
+											data-si="s"
+											data-db="'.$db.'"
+											data-table_name="'.$table_name.'"
+											data-field_name="'.$headers[$x].'"
+											data-col_num="'.$add_new_row.'"
+											data-reload_on_add_row="'.$reload_on_add_row.'"
+											data-reload_with_ajax="'.$reload_with_ajax.'"
+											data-p="'.$perm_csv_of_hash.'"
+											data-ignore_last_inserted_id="'.$ignore_last_inserted_id.'"
 										>';
 										if ($use_add_new_button) {
 											$table_html.='
@@ -1932,14 +1929,14 @@ function build_table_with_inputs($options) {
 									}
 										if (in_array($col_count,$input_col)) {
 											$table_html.='<input type=text title="'.$value.'" class=" sog_ex_generic_update '.$td_listener_class.' '.$class_to_use.' '.$form_control.'"
-															data-si="'.$update_i_s_ss.'" 
-															data-db="'.$db.'" 
-															data-table_name="'.$table_name.'" 
-															data-field_name="'.$col_name.'" 
-															data-id_column_name="'.$id_column_name.'" 
-															data-'.$id_column_name.'="'.$id_value.'" 
-															data-p="'.$perm_csv_of_hash.'" 
-															id="'.$id.'_'.$col_name.'_'.$id_value.'" 
+															data-si="'.$update_i_s_ss.'"
+															data-db="'.$db.'"
+															data-table_name="'.$table_name.'"
+															data-field_name="'.$col_name.'"
+															data-id_column_name="'.$id_column_name.'"
+															data-'.$id_column_name.'="'.$id_value.'"
+															data-p="'.$perm_csv_of_hash.'"
+															id="'.$id.'_'.$col_name.'_'.$id_value.'"
 															value="'.$value.'"
 															aria-label="'.$col_names[$col_count].'"
 															><span class="sort_helper_hidden">'.$value.'</span>';
@@ -1952,17 +1949,17 @@ function build_table_with_inputs($options) {
 										}elseif (in_array($col_count,$checkbox_col)) {
 											if ($row) {$checked="checked";}else{$checked="";}
 											$table_html.='<input type=checkbox class=" form-check-input sog_ex_generic_update '.$td_listener_class.' '.$class_to_use.' "
-															title="'.$col_name.'" 
+															title="'.$col_name.'"
 															'.$checked.'
-															data-si="'.$update_i_s_ss.'" 
-															data-'.$col_name.'="'.$value.'" 
-															data-db="'.$db.'" 
-															data-table_name="'.$table_name.'" 
-															data-field_name="'.$col_name.'" 
-															data-id_column_name="'.$id_column_name.'" 
-															data-'.$id_column_name.'="'.$id_value.'" 
-															id="'.$id.'_'.$col_name.'_'.$id_value.'" 
-															data-p="'.$perm_csv_of_hash.'" 
+															data-si="'.$update_i_s_ss.'"
+															data-'.$col_name.'="'.$value.'"
+															data-db="'.$db.'"
+															data-table_name="'.$table_name.'"
+															data-field_name="'.$col_name.'"
+															data-id_column_name="'.$id_column_name.'"
+															data-'.$id_column_name.'="'.$id_value.'"
+															id="'.$id.'_'.$col_name.'_'.$id_value.'"
+															data-p="'.$perm_csv_of_hash.'"
 															value="1"
 															aria-label="'.$col_names[$col_count].'"
 															><span class="sort_helper_hidden">'.$value.'</span>';
@@ -1992,18 +1989,18 @@ function build_table_with_inputs($options) {
 													$table_html.='title="This completely deletes this record from the database."';
 												}
 												$table_html.='
-													data-change_status="'.$change_status_on_delete.'" 
-													data-closest="'.$closest.'" 
-													data-db="'.$db.'" 
-													data-table_name="'.$table_name.'" 
-													data-'.$col_name.'="'.$value.'" 
-													data-id_column_name="'.$id_column_name.'" 
-													data-p="'.$perm_csv_of_hash.'" 
-													data-'.$id_column_name.'="'.$id_value.'" 
+													data-change_status="'.$change_status_on_delete.'"
+													data-closest="'.$closest.'"
+													data-db="'.$db.'"
+													data-table_name="'.$table_name.'"
+													data-'.$col_name.'="'.$value.'"
+													data-id_column_name="'.$id_column_name.'"
+													data-p="'.$perm_csv_of_hash.'"
+													data-'.$id_column_name.'="'.$id_value.'"
 													value="'.$value.'"
 												></i></td>';
 							}
-							
+
 						$table_html.= "</tr>";
 					}
 			$table_html.= "</tbody>";
@@ -2012,19 +2009,19 @@ function build_table_with_inputs($options) {
 		$table_html.= "</table>";
 	$table_html.="</div>";
 	if (!$table[0]) {
-			$table_html='<input type=text title="Add New" placeholder="Add New" 
-			class="generic_table_add_new '.$form_control.'" 
-			data-si="s" 
-			data-db="'.$db.'" 
-			data-use_generic_manage="'.$use_generic_manage.'" 
-			data-table_name="'.$table_name.'" 
-			data-table_display_name="'.$table_display_name.'" 
-			data-field_name="'.$add_row_0.'" 
-			data-col_num="'.$add_new_row.'" 
-			data-reload_on_add_row="'.$reload_on_add_row.'" 
-			data-reload_with_ajax="'.$reload_with_ajax.'" 
-			data-p="'.$perm_csv_of_hash.'" 
-			data-ignore_last_inserted_id="'.$ignore_last_inserted_id.'" 
+			$table_html='<input type=text title="Add New" placeholder="Add New"
+			class="generic_table_add_new '.$form_control.'"
+			data-si="s"
+			data-db="'.$db.'"
+			data-use_generic_manage="'.$use_generic_manage.'"
+			data-table_name="'.$table_name.'"
+			data-table_display_name="'.$table_display_name.'"
+			data-field_name="'.$add_row_0.'"
+			data-col_num="'.$add_new_row.'"
+			data-reload_on_add_row="'.$reload_on_add_row.'"
+			data-reload_with_ajax="'.$reload_with_ajax.'"
+			data-p="'.$perm_csv_of_hash.'"
+			data-ignore_last_inserted_id="'.$ignore_last_inserted_id.'"
 			>';
 
 	}
@@ -2053,7 +2050,7 @@ function get_generic_sql($data) {
 	}else{
 		$con = db_connect(null) or die("Couldn't connect to db.");
 	}
-	
+
 	$new_array=[];
 
 	if (isset($data['where'])) {$where=$data['where'];}else{$where="";}
@@ -2062,22 +2059,22 @@ function get_generic_sql($data) {
 	if (isset($data['limit'])) {$limit=$data['limit'];}else{$limit="";}
 
 
-	$sql=" SELECT ".$data['fields']." 
-			FROM ".$data['table_name']." 
+	$sql=" SELECT ".$data['fields']."
+			FROM ".$data['table_name']."
 			WHERE 1=?
-			".$where."  
-			".$group_by." 
-			".$order_by." 
-			".$limit." 
+			".$where."
+			".$group_by."
+			".$order_by."
+			".$limit."
 	";
 	if (isset($data['return_only']) and $data['return_only']){
 		return $sql;
 	}
 	// echo $sql;
 	$place_holder=1;
-	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql); 
-	$stmt -> bind_param("i",$place_holder) or die("Couldn't bind ".$fx." ."); 
-	$stmt->execute() or die("Couldn't execute ".$fx." ."); 
+	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql);
+	$stmt -> bind_param("i",$place_holder) or die("Couldn't bind ".$fx." .");
+	$stmt->execute() or die("Couldn't execute ".$fx." .");
 	$sql_result = $stmt->get_result();
 	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
@@ -2085,14 +2082,14 @@ function get_generic_sql($data) {
 	}
 
 return $new_array;
-	
+
 }
 
 function db_connect($db_name) {
 	// $value=debug_backtrace()[1]['function'];
 	// echo "<br>".$value;
-	// array_push($_SESSION['calling_from'],$value);	
-	
+	// array_push($_SESSION['calling_from'],$value);
+
     if(!isset($connection)) {
 		//gets set in top of far.php
 		//db name is ignored since now using inside wp
@@ -2107,7 +2104,7 @@ function db_connect($db_name) {
 
     }
     if($connection === false) {
-        echo mysqli_connect_error(); 
+        echo mysqli_connect_error();
     }
     return $connection;
 }
@@ -2136,10 +2133,10 @@ function get_db_creds($data) {
 			require_once("/wp-load.php");
 		}
 		$get_defined_constants = get_defined_constants();
-		$return['localhost'] = $get_defined_constants['DB_HOST']; 
-		$return['username'] = $get_defined_constants['DB_USER']; 
-		$return['password'] = $get_defined_constants['DB_PASSWORD']; 
-		$return['db_to_use'] = $get_defined_constants['DB_NAME']; 
+		$return['localhost'] = $get_defined_constants['DB_HOST'];
+		$return['username'] = $get_defined_constants['DB_USER'];
+		$return['password'] = $get_defined_constants['DB_PASSWORD'];
+		$return['db_to_use'] = $get_defined_constants['DB_NAME'];
 	}
 return $return;
 }
@@ -2179,7 +2176,7 @@ function db_connect_remote($data) {
 
     }
     if($connection === false) {
-        echo mysqli_connect_error(); 
+        echo mysqli_connect_error();
     }
     return $connection;
 }
@@ -2215,9 +2212,9 @@ function db_connect_remote_check_only($data) {
 				$sql="SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?";
 				// return $sql." ".$data['db_name'];
 				$place_holder=1;
-				$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql. " ".$data['db_name']); 
-				$stmt -> bind_param("s",$data['db_name']) or die("Couldn't bind ".$fx." ."); 
-				$stmt->execute() or die("Couldn't execute ".$fx." ."); 
+				$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql. " ".$data['db_name']);
+				$stmt -> bind_param("s",$data['db_name']) or die("Couldn't bind ".$fx." .");
+				$stmt->execute() or die("Couldn't execute ".$fx." .");
 				$sql_result = $stmt->get_result();
 				$num_rows = mysqli_num_rows($sql_result);
 				$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
@@ -2232,18 +2229,18 @@ function db_connect_remote_check_only($data) {
 					$return['error_message']="Database '".$data['db_name']."' does not exist.";
 				}
 			}
-	
+
 		}else{
 			$return['status']="fail";
 			$return['error_message']="Hostname unreachable ".$data['hostname'];
 		}
 
-		
+
 	} catch (mysqli_sql_exception $e) {
 		$return['e']=$e;
 		$return['catch']="fail catch";
 	}
-	
+
 return $return;
 }
 
@@ -2281,8 +2278,8 @@ function update_generic_table_s($data) {
 		where ".$data['id_column_name']."=?
 		";
 		// return $sql."-".$data['value']."-".$data['id'];
-		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_s-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']); 
-		$stmt -> bind_param("si",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_s ."); 
+		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_s-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']);
+		$stmt -> bind_param("si",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_s .");
 		if ($stmt->execute()) {
 			$return['status']="success";
 			// $return['sql']=$sql."-".$data['value']."-".$data['id'];
@@ -2290,7 +2287,7 @@ function update_generic_table_s($data) {
 			$return['status']="fail";
 			$return['error_message']=mysqli_error($con);
 		}
-return $return;	
+return $return;
 }
 
 function update_generic_table_ss($data) {
@@ -2300,15 +2297,15 @@ function update_generic_table_ss($data) {
 		where ".$data['id_column_name']."=?
 		";
 		// return $sql."-".$data['value']."-".$data['id'];
-		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_s-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']); 
-		$stmt -> bind_param("ss",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_s ."); 
+		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_s-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']);
+		$stmt -> bind_param("ss",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_s .");
 		if ($stmt->execute()) {
 			$return['status']="success";
 		}else {
 			$return['status']="fail";
 			$return['error_message']=mysqli_error($con);
 		}
-return $return;	
+return $return;
 }
 
 function update_generic_table_sss($data) {
@@ -2320,8 +2317,8 @@ function update_generic_table_sss($data) {
 		and ".$data['id_column_name_2']."=?
 		";
 		// return $sql."-".$data['value']."-".$data['id']."-".$data['id_2'];
-		$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx."-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']); 
-		$stmt -> bind_param("sss",$data['value'],$data['id'],$data['id_2']) or die("Couldn't bind update_generic_table_s ."); 
+		$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx."-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']);
+		$stmt -> bind_param("sss",$data['value'],$data['id'],$data['id_2']) or die("Couldn't bind update_generic_table_s .");
 		if ($stmt->execute()) {
 			$return['status']="success";
 		}else {
@@ -2329,7 +2326,7 @@ function update_generic_table_sss($data) {
 			$return['error_message']=mysqli_error($con);
 		}
 	$return['sql']=$sql;
-return $return;	
+return $return;
 }
 
 function update_generic_table_i($data) {
@@ -2340,14 +2337,14 @@ function update_generic_table_i($data) {
 		";
 		// return $sql."-".$data['value']."-".$data['id'];
 		// exit;
-		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_i sql:".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']."-".$data['db_name']); 
-		$stmt -> bind_param("ii",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_i. value:".$data['value']." id:".$data['id']); 
+		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_i sql:".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']."-".$data['db_name']);
+		$stmt -> bind_param("ii",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_i. value:".$data['value']." id:".$data['id']);
 		if ($stmt->execute()) {
 			$return['status']="success";
 		}else {
 			$return['error_message']=mysqli_error($con);
 		}
-return $return;	
+return $return;
 }
 
 function update_generic_table_is($data) {
@@ -2358,15 +2355,15 @@ function update_generic_table_is($data) {
 		where ".$data['id_column_name']."=?
 		";
 		// return $sql."-".$data['value']."-".$data['id'];
-		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_s-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']); 
-		$stmt -> bind_param("is",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_s ."); 
+		$stmt = $con->prepare($sql) or die("Couldn't prepare update_generic_table_s-".$sql."-".$data['field_name']."-".$data['id']."-".$data['value']."-".$data['id_column_name']);
+		$stmt -> bind_param("is",$data['value'],$data['id']) or die("Couldn't bind update_generic_table_s .");
 		if ($stmt->execute()) {
 			$return['status']="success";
 		}else {
 			$return['status']="fail";
 			$return['error_message']=mysqli_error($con);
 		}
-return $return;	
+return $return;
 }
 
 function create_help_block($text) {
@@ -2422,9 +2419,9 @@ function get_primary_key($data) {
 	$sql="SHOW KEYS FROM ".$data['table_name']." WHERE 1=? and Key_name = 'PRIMARY'";
 	// return $sql;
 	$place_holder=1;
-	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql); 
-	$stmt -> bind_param("i",$place_holder) or die("Couldn't bind ".$fx." ."); 
-	$stmt->execute() or die("Couldn't execute ".$fx." ."); 
+	$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql);
+	$stmt -> bind_param("i",$place_holder) or die("Couldn't bind ".$fx." .");
+	$stmt->execute() or die("Couldn't execute ".$fx." .");
 	$sql_result = $stmt->get_result();
 	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
@@ -2436,7 +2433,7 @@ return $new_array;
 function create_salted_hash_of($thing){
 	//this creates an md5 string based on the item in question and the salt.
 	//the salt is created when first logging in by combining their username and time()
-	return md5($thing.$_SESSION['salt']);	
+	return md5($thing.$_SESSION['salt']);
 }
 
 function get_field_name_from_hash($data) {
@@ -2453,7 +2450,7 @@ function get_field_name_from_hash($data) {
 		$con = db_connect(null) or die("Couldn't connect to db.");
 		$db_name=$_SESSION['db_to_use'];
 	}
-	
+
 	$sql=" select column_name as field_name, table_name as table_name
 			from information_schema.columns
 			where 1=?
@@ -2463,10 +2460,10 @@ function get_field_name_from_hash($data) {
 	";
 	// return $sql."-".$db_name;
 	$place_holder=1;
-	$stmt = $con->prepare($sql) or die("Couldn't prepare get_db_table_field_name_from_hash ."); 
-	$stmt -> bind_param("issss",$place_holder,$db_name,$data['table_name'],$_SESSION['salt'],$data['field_name_hash']) or die("Couldn't bind get_db_table_field_name_from_hash ."); 
-	$stmt->execute() or die("Couldn't execute get_db_table_field_name_from_hash ."); 
-	$sql_result = $stmt->get_result() or die("Couldn't getresult get_db_table_field_name_from_hash ."); 
+	$stmt = $con->prepare($sql) or die("Couldn't prepare get_db_table_field_name_from_hash .");
+	$stmt -> bind_param("issss",$place_holder,$db_name,$data['table_name'],$_SESSION['salt'],$data['field_name_hash']) or die("Couldn't bind get_db_table_field_name_from_hash .");
+	$stmt->execute() or die("Couldn't execute get_db_table_field_name_from_hash .");
+	$sql_result = $stmt->get_result() or die("Couldn't getresult get_db_table_field_name_from_hash .");
 	$num_rows = mysqli_num_rows($sql_result);
 	$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
 		$new_array[] = $row;
@@ -2499,7 +2496,7 @@ function sog_ex_report_generic_update($data){
 	}else{
 		$con = db_connect(null) or die("Couldn't connect to db.");
 	}
-	
+
 	$sql="update ".$data['table_name']."
 	set ".$data['field_name']."=?
 	where 1=1
@@ -2516,8 +2513,8 @@ function sog_ex_report_generic_update($data){
 	$return['sql_for_display']=$sql_for_display;
 
 	try {
-		$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql); 
-		$stmt -> bind_param("s",$data['value']) or die("Couldn't bind ".$fx.". ".$sql." - ".$data['value']); 
+		$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql);
+		$stmt -> bind_param("s",$data['value']) or die("Couldn't bind ".$fx.". ".$sql." - ".$data['value']);
 		if ($stmt->execute()) {
 			$return['status']="success";
 		}else {
@@ -2525,7 +2522,7 @@ function sog_ex_report_generic_update($data){
 			$return['error_message']=mysqli_error($con);
 		}
 	} catch (\mysqli_sql_exception $e) {
-		
+
 	}
 return $return ?? null;
 }
@@ -2538,15 +2535,15 @@ function sog_ex_report_restore_value($log_id){
 		//the log table id is passed in, from that get all the other data
 		// adding where clause to only allow restoring from a log entry with action of update_record
 		$log_data=get_generic_sql(array("table_name"=>"sog_ex_explore_log","fields"=>"*","where"=>"and id=".$log_id." and action='update_record'"));
-		
+
 		if (isset($log_data) and $log_data){
 			$return['log_data']=$log_data;
-			
+
 			//check if exists by trying to get this field, also holds the value before the change in case it needs to be restored
 			$value_before_changing=confirm_keys_and_values(array("table_name"=>$log_data[0]['table_name'],"field_name"=>$log_data[0]['field_name'],
 			"primary_key_field"=>$log_data[0]['primary_key_field'],"primary_key_value"=>$log_data[0]['primary_key_value']));
 			$return['value_before_changing']=$value_before_changing;
-	
+
 
 			//the primary key fields and values have already been verified so ok to use them NOT in a prepared statement
 			$primary_key_field_array=explode(",",$log_data[0]['primary_key_field']);
@@ -2568,8 +2565,8 @@ function sog_ex_report_restore_value($log_id){
 			$return['sql']=$sql." - ".$log_data[0]['old_value'];
 
 			try {
-				$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql); 
-				$stmt -> bind_param("s",$log_data[0]['old_value']) or die("Couldn't bind ".$fx); 
+				$stmt = $con->prepare($sql) or die("Couldn't prepare ".$fx.". ".$sql);
+				$stmt -> bind_param("s",$log_data[0]['old_value']) or die("Couldn't bind ".$fx);
 				if ($stmt->execute()) {
 					$return['status']="success";
 				}else {
@@ -2577,7 +2574,7 @@ function sog_ex_report_restore_value($log_id){
 					$return['error_message']=mysqli_error($con);
 				}
 			} catch (\mysqli_sql_exception $e) {
-				
+
 			}
 		}else{
 			$return['message']="Couldn't find that record in the log table";
@@ -2615,7 +2612,7 @@ function sog_ex_report_restore_value($log_id){
 				"other"=>null,
 			));
 			$return['the_log'] = $the_log;
-		
+
 			}else{
 				$return['all_good'] = "update did NOT work so restoring";
 				//new value does not match, alert and replace with data selected when verifying the field
@@ -2652,7 +2649,7 @@ function confirm_keys_and_values($data) {
 	if (isset($data['value_to_check']) and $data['value_to_check']){
 		$where_sql.="and ".$data['field_name']."='".$data['value_to_check']."'";
 	}
-	
+
 
 	//check if using remote db
 	$remote_db_option=get_option("sog_ex_remote_db_option");
@@ -2663,31 +2660,31 @@ function confirm_keys_and_values($data) {
 	}else{
 		$con = db_connect(null) or die("Couldn't connect to db.");
 	}
-	
-	$sql="select ".$data['field_name']." 
+
+	$sql="select ".$data['field_name']."
 	from ".$data['table_name']."
 	where 1=1
 	$where_sql
 	";
 	$place_holder=1;
-	
+
 	try {
-		$stmt = $con->prepare($sql); 
+		$stmt = $con->prepare($sql);
 
 		if (count($primary_key_field_array)==1) {
-			$stmt -> bind_param("s",$primary_key_value_array[0]) or die("Couldn't bind ".$fx." ."); 
+			$stmt -> bind_param("s",$primary_key_value_array[0]) or die("Couldn't bind ".$fx." .");
 			$binds[]=$primary_key_value_array[0];
 		}elseif (count($primary_key_field_array)==2) {
-			$stmt -> bind_param("ss",$primary_key_value_array[0],$primary_key_value_array[1]) or die("Couldn't bind ".$fx." ."); 
+			$stmt -> bind_param("ss",$primary_key_value_array[0],$primary_key_value_array[1]) or die("Couldn't bind ".$fx." .");
 			$binds[]=$primary_key_value_array[0];
 			$binds[]=$primary_key_value_array[1];
 		}elseif (count($primary_key_field_array)==3) {
-			$stmt -> bind_param("sss",$primary_key_value_array[0],$primary_key_value_array[1],$primary_key_value_array[2]) or die("Couldn't bind ".$fx." ."); 
+			$stmt -> bind_param("sss",$primary_key_value_array[0],$primary_key_value_array[1],$primary_key_value_array[2]) or die("Couldn't bind ".$fx." .");
 			$binds[]=$primary_key_value_array[0];
 			$binds[]=$primary_key_value_array[1];
 			$binds[]=$primary_key_value_array[2];
 		}elseif (count($primary_key_field_array)==4) {
-			$stmt -> bind_param("ssss",$primary_key_value_array[0],$primary_key_value_array[1],$primary_key_value_array[2],$primary_key_value_array[3]) or die("Couldn't bind ".$fx." ."); 
+			$stmt -> bind_param("ssss",$primary_key_value_array[0],$primary_key_value_array[1],$primary_key_value_array[2],$primary_key_value_array[3]) or die("Couldn't bind ".$fx." .");
 			$binds[]=$primary_key_value_array[0];
 			$binds[]=$primary_key_value_array[1];
 			$binds[]=$primary_key_value_array[2];
@@ -2696,7 +2693,7 @@ function confirm_keys_and_values($data) {
 			return "More than 4 bindings";
 		}
 
-		$stmt->execute() or die("Couldn't execute ".$fx." ."); 
+		$stmt->execute() or die("Couldn't execute ".$fx." .");
 		$sql_result = $stmt->get_result();
 		$num_rows = mysqli_num_rows($sql_result);
 		$cols=[];while ($row = $sql_result->fetch_array(MYSQLI_ASSOC)) {
@@ -2707,7 +2704,7 @@ function confirm_keys_and_values($data) {
 		// $return['binds']=$binds;
 		$return['new_array']=$new_array;
 	} catch (\mysqli_sql_exception $e) {
-		
+
 	}
 return $return ?? null;
 
@@ -2719,11 +2716,11 @@ function the_log($data) {
 	}else{
 		$onyen=$_SESSION['sog_explore_user_login'];
 	}
-	
-	
+
+
 	$fx=__FUNCTION__;
 	$con = db_connect(null) or die("Couldn't connect to db. - ".__FUNCTION__);
-	
+
 	$sql="insert into sog_ex_explore_log (action, table_name, field_name, primary_key_field, primary_key_value, old_value, new_value, description, other, onyen)
 			values (?,?,?,?,?,?,?,?,?,?)
 		";
@@ -2776,7 +2773,7 @@ function httpGet($url, $data){
 	curl_setopt($curl, CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_VERBOSE, true);
-	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5); 
+	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 5); //timeout in seconds
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -2797,7 +2794,7 @@ function httpPing($url){
 	curl_setopt($curl, CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_VERBOSE, true);
-	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2); 
+	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 2);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 2); //timeout in seconds
 	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -2815,7 +2812,7 @@ return $return;
 
 function create_sql_tables(){
 	// $con = db_connect(null) or die("Couldn't connect to db.");
-	
+
 	$sql_report_tables="
 		CREATE TABLE IF NOT EXISTS sog_ex_report_tables (
 			fk_table_name varchar(100) NOT NULL,
@@ -2887,7 +2884,7 @@ function create_sql_tables(){
 	$return['adding_allow_insert_col']=add_column(array("col_name"=>"sort_sql","table_name"=>"sog_ex_explore_user_choices","attributes"=>"varchar(255) null after edit_fields"));
 
 
-return $return;	
+return $return;
 }
 
 

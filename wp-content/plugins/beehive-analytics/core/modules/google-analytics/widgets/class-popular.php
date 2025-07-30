@@ -55,9 +55,8 @@ class Popular extends Widget {
 	/**
 	 * Initialize the class by registering hooks.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function init() {
 		// Setup vars for the front end widget.
@@ -75,12 +74,11 @@ class Popular extends Widget {
 	 *
 	 * Displays the widget based on the contents of the included template.
 	 *
-	 * @param array $args     Widget arguments.
+	 * @param array $args Widget arguments.
 	 * @param array $instance Values of the widget.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function widget( $args, $instance ) {
 		// Add instance to arguments.
@@ -107,9 +105,8 @@ class Popular extends Widget {
 	 *
 	 * @param array $instance Thhe options for the widget.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return void
+	 * @since 3.2.0
 	 */
 	public function form( $instance ) {
 		$args = array(
@@ -127,27 +124,20 @@ class Popular extends Widget {
 	 *
 	 * @param array $vars Script vars.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return array
+	 * @since 3.2.0
 	 */
 	public function widget_vars( $vars ) {
-		// Statistics type.
-		$type = beehive_analytics()->settings->get( 'statistics_type', 'google', false, 'ua' );
-
 		// Can we get the stats.
-		$vars['can_get_stats'] = Google_Analytics\Helper::instance()->can_get_stats( false, $exception, $type );
+		$vars['can_get_stats'] = Google_Analytics\Helper::instance()->can_get_stats( false, $exception );
 		/**
 		 * Modify no. of retries if the most popular widget request is empty.
 		 *
-		 * @since 3.2.4
-		 *
 		 * @param int $retries Number of retries.
+		 *
+		 * @since 3.2.4
 		 */
 		$vars['retries'] = apply_filters( 'beehive_google_popular_widget_retries', 1 );
-
-		// Statistics type.
-		$vars['stats_type'] = $type;
 
 		return $vars;
 	}
@@ -156,11 +146,10 @@ class Popular extends Widget {
 	 * Add localized strings that can be used in JavaScript.
 	 *
 	 * @param array  $strings Existing strings.
-	 * @param string $script  Script name.
-	 *
-	 * @since 3.2.4
+	 * @param string $script Script name.
 	 *
 	 * @return array
+	 * @since 3.2.4
 	 */
 	public function setup_i18n( $strings, $script ) {
 		if ( 'beehive-popular-widget' === $script ) {
@@ -176,11 +165,10 @@ class Popular extends Widget {
 	 * Get the scripts list to register.
 	 *
 	 * @param array $scripts Scripts list.
-	 * @param bool  $admin   Is admin assets?.
-	 *
-	 * @since 3.2.4
+	 * @param bool  $admin Is admin assets?.
 	 *
 	 * @return array
+	 * @since 3.2.4
 	 */
 	public function get_scripts( $scripts, $admin ) {
 		if ( ! $admin ) {
@@ -205,16 +193,14 @@ class Popular extends Widget {
 	 * pages API response, you will get less no. of items after the
 	 * emission of other sites.
 	 *
-	 * @since 3.2.4
-	 * @since 3.4.0 Added new param v2.
-	 *
-	 * @param int  $count      No. of items required.
+	 * @param int  $count No. of items required.
 	 * @param bool $cache_only Should check only cache.
-	 * @param bool $v2         Is GA4 (v2) stats.
 	 *
 	 * @return array
+	 * @since 3.2.4
+	 * @since 3.4.0 Added new param v2.
 	 */
-	public function get_list( $count = 0, $cache_only = false, $v2 = false ) {
+	public function get_list( $count = 0, $cache_only = false ) {
 		// Get the count from widget settings.
 		if ( empty( $count ) ) {
 			// Get settings.
@@ -239,12 +225,7 @@ class Popular extends Widget {
 		 */
 		$count = apply_filters( 'beehive_google_popular_widget_items_count', $count );
 
-		// Get cache key.
-		if ( $v2 ) {
-			$cache_key = Cache::cache_key( 'popular_posts_v2_' . $count );
-		} else {
-			$cache_key = Cache::cache_key( 'popular_posts_' . $count );
-		}
+		$cache_key = Cache::cache_key( 'popular_posts_v2_' . $count );
 
 		// Get list from cache.
 		$list = Cache::get_transient( $cache_key );
@@ -259,11 +240,7 @@ class Popular extends Widget {
 			$list = array();
 
 			// Get the stats instance.
-			if ( $v2 ) {
-				$stats = Google_Analytics\Stats\GA4::instance();
-			} else {
-				$stats = Google_Analytics\Stats\UA::instance();
-			}
+			$stats = Google_Analytics\Stats\GA4::instance();
 
 			// Get the stats.
 			$urls = $stats->stats(
@@ -293,9 +270,8 @@ class Popular extends Widget {
 	 * When widget is rendered, we need to render the content
 	 * only if it exist in cache if the argument is set.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return string
+	 * @since 3.2.0
 	 */
 	private function cache_content() {
 		// Get the stats instance.
@@ -322,12 +298,11 @@ class Popular extends Widget {
 	 * We need to get only the posts data. Exclude all
 	 * other post types.
 	 *
-	 * @param array $urls  Popular post urls.
+	 * @param array $urls Popular post urls.
 	 * @param int   $count No. of items required.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return array
+	 * @since 3.2.0
 	 */
 	private function setup_list( $urls = array(), $count = 5 ) {
 		$list = array();
@@ -380,9 +355,8 @@ class Popular extends Widget {
 	 *
 	 * @param string $url Post url.
 	 *
-	 * @since 3.2.0
-	 *
 	 * @return string
+	 * @since 3.2.0
 	 */
 	private function process_url( $url ) {
 		/**

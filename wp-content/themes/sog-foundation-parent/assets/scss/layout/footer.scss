@@ -1,0 +1,17 @@
+footer#footer {
+	color: $white;
+	background-color: $unc-gray;
+
+	a {
+		color: $white;
+		text-decoration: underline;
+
+		&:hover,
+		&:focus,
+		&:active,
+		&:target {
+			color: $unc-hyperlink-blue;
+			text-decoration: none;
+		}
+	}
+}

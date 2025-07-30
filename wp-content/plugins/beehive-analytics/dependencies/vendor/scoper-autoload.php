@@ -18,9 +18,6 @@ if (!class_exists('Google_AccessToken_Verify', false) && !interface_exists('Goog
 if (!class_exists('Google_AuthHandler_AuthHandlerFactory', false) && !interface_exists('Google_AuthHandler_AuthHandlerFactory', false) && !trait_exists('Google_AuthHandler_AuthHandlerFactory', false)) {
     spl_autoload_call('Beehive\Google_AuthHandler_AuthHandlerFactory');
 }
-if (!class_exists('Google_AuthHandler_Guzzle5AuthHandler', false) && !interface_exists('Google_AuthHandler_Guzzle5AuthHandler', false) && !trait_exists('Google_AuthHandler_Guzzle5AuthHandler', false)) {
-    spl_autoload_call('Beehive\Google_AuthHandler_Guzzle5AuthHandler');
-}
 if (!class_exists('Google_AuthHandler_Guzzle6AuthHandler', false) && !interface_exists('Google_AuthHandler_Guzzle6AuthHandler', false) && !trait_exists('Google_AuthHandler_Guzzle6AuthHandler', false)) {
     spl_autoload_call('Beehive\Google_AuthHandler_Guzzle6AuthHandler');
 }
@@ -69,50 +66,25 @@ if (!class_exists('Google_Task_Runner', false) && !interface_exists('Google_Task
 if (!class_exists('Google_Utils_UriTemplate', false) && !interface_exists('Google_Utils_UriTemplate', false) && !trait_exists('Google_Utils_UriTemplate', false)) {
     spl_autoload_call('Beehive\Google_Utils_UriTemplate');
 }
-if (!class_exists('ComposerAutoloaderInit9d335173197a8fc26fbff9daac09eaad', false) && !interface_exists('ComposerAutoloaderInit9d335173197a8fc26fbff9daac09eaad', false) && !trait_exists('ComposerAutoloaderInit9d335173197a8fc26fbff9daac09eaad', false)) {
-    spl_autoload_call('Beehive\ComposerAutoloaderInit9d335173197a8fc26fbff9daac09eaad');
+if (!class_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false) && !interface_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false) && !trait_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false)) {
+    spl_autoload_call('Beehive\ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d');
 }
 
 // Exposed functions. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
-if (!function_exists('phpseclib_safe_serialize')) {
-    function phpseclib_safe_serialize() {
-        return \Beehive\phpseclib_safe_serialize(...func_get_args());
-    }
-}
-if (!function_exists('uri_template')) {
-    function uri_template() {
-        return \Beehive\uri_template(...func_get_args());
-    }
-}
 if (!function_exists('oauth2client_php_autoload')) {
     function oauth2client_php_autoload() {
         return \Beehive\oauth2client_php_autoload(...func_get_args());
     }
 }
-if (!function_exists('composerRequire9d335173197a8fc26fbff9daac09eaad')) {
-    function composerRequire9d335173197a8fc26fbff9daac09eaad() {
-        return \Beehive\composerRequire9d335173197a8fc26fbff9daac09eaad(...func_get_args());
-    }
-}
-if (!function_exists('RandomCompat_intval')) {
-    function RandomCompat_intval() {
-        return \Beehive\RandomCompat_intval(...func_get_args());
-    }
-}
-if (!function_exists('RandomCompat_strlen')) {
-    function RandomCompat_strlen() {
-        return \Beehive\RandomCompat_strlen(...func_get_args());
-    }
-}
-if (!function_exists('RandomCompat_substr')) {
-    function RandomCompat_substr() {
-        return \Beehive\RandomCompat_substr(...func_get_args());
-    }
-}
 if (!function_exists('zend_monitor_custom_event')) {
     function zend_monitor_custom_event() {
         return \Beehive\zend_monitor_custom_event(...func_get_args());
+    }
+}
+if (!function_exists('trigger_deprecation')) {
+    function trigger_deprecation() {
+        return \Beehive\trigger_deprecation(...func_get_args());
     }
 }
 

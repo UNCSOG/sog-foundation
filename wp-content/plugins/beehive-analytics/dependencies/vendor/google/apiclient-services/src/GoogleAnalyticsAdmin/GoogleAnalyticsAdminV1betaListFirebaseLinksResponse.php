@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaListFirebaseLinksResponse extends \Beehive\Googl
     protected $collection_key = 'firebaseLinks';
     protected $firebaseLinksType = GoogleAnalyticsAdminV1betaFirebaseLink::class;
     protected $firebaseLinksDataType = 'array';
-    public $firebaseLinks;
     /**
      * @var string
      */

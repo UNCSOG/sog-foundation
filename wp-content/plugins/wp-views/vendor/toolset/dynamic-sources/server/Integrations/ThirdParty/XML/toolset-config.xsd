@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="toolset-config" type="toolsetConfig"/>
+	<!--
+	XML Schema file for the toolset-config.xml file
+
+	Product: Toolset Dynamic Sources
+	Site: https://toolset.com
+
+	Author: OnTheGo Systems
+	-->
+
+
+	<!-- Main: start -->
+	<xs:complexType name="toolsetConfig">
+		<xs:all>
+			<xs:element type="toolset-blocks" name="blocks" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<!-- Main: end -->
+
+	<!-- Blocks: start -->
+	<xs:complexType name="toolset-blocks">
+		<xs:sequence>
+			<xs:element type="toolset-block" name="block" maxOccurs="unbounded" minOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="toolset-block">
+		<xs:sequence>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element type="toolset-dynamic-attribute-group" name="dynamic-attribute-group" maxOccurs="unbounded" />
+				<xs:element type="toolset-dynamic-attribute" name="dynamic-attribute" maxOccurs="unbounded" />
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute type="xs:string" name="name" use="required"/>
+		<xs:attribute name="removeSaveWrapper" type="xs:boolean"/>
+		<xs:attribute type="xs:string" name="condition"/>
+		<xs:attribute type="xs:string" name="parentCondition"/>
+	</xs:complexType>
+
+	<xs:complexType name="toolset-dynamic-attribute-group">
+		<xs:sequence>
+			<xs:element type="toolset-dynamic-attribute" name="dynamic-attribute" maxOccurs="unbounded" minOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute type="xs:string" name="name" use="required"/>
+		<xs:attribute type="xs:string" name="label" use="required"/>
+		<xs:attribute type="xs:string" name="condition"/>
+		<xs:attribute type="xs:string" name="parentCondition"/>
+	</xs:complexType>
+
+	<xs:complexType name="toolset-dynamic-attribute">
+		<xs:simpleContent>
+			<xs:extension base="toolset-dynamic-attribute-props"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	<!-- Blocks: end -->
+
+	<xs:complexType name="toolset-dynamic-attribute-props">
+		<xs:simpleContent>
+			<xs:extension base="toolset-non-empty-string">
+				<xs:attribute name="category" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="text"/>
+							<xs:enumeration value="url"/>
+							<xs:enumeration value="number"/>
+							<xs:enumeration value="image"/>
+							<xs:enumeration value="audio"/>
+							<xs:enumeration value="video"/>
+							<xs:enumeration value="html"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="bannedCategories">
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:pattern value="[text|url|number|image|audio|video|html]*(, ?[text|url|number|image|audio|video|html]*)*"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute type="xs:string" name="label" use="required"/>
+				<xs:attribute name="wrapper">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="paragraph"/>
+							<xs:enumeration value="div"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute type="xs:string" name="condition"/>
+				<xs:attribute type="xs:string" name="parentCondition"/>
+				<xs:attribute type="xs:string" name="hashClass"/>
+				<xs:attribute type="xs:string" name="prefix"/>
+				<xs:attribute type="xs:string" name="help"/>
+				<xs:attribute type="xs:string" name="dependsOn"/>
+				<xs:attribute type="xs:string" name="imageDataCorrelations"/>
+				<xs:attribute type="xs:boolean" name="serverSideUse"/>
+				<xs:attribute name="forceType">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="int"/>
+							<xs:enumeration value="string"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="outputFormat">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="raw"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute type="xs:string" name="replaceInSourceContent"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<!-- Shared types: start -->
+	<xs:simpleType name="toolset-non-empty-string">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Shared types: end -->
+</xs:schema>

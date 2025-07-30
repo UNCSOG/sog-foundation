@@ -1108,6 +1108,12 @@ class Query implements AssociationQuery {
 			/** @var IToolset_Relationship_Definition $relationship_definition */
 			$relationship_definition = $relationship_condition->get_relationship_definition();
 			foreach ( Toolset_Relationship_Role::all() as $role ) {
+				if (
+					Toolset_Relationship_Role::INTERMEDIARY === $role->get_name()
+					&& ! $relationship_definition->has_intermediary_post_type()
+				) {
+					continue;
+				}
 				$element_type = $relationship_definition->get_element_type( $role );
 				if ( Toolset_Element_Domain::POSTS !== $element_type->get_domain() ) {
 					continue;

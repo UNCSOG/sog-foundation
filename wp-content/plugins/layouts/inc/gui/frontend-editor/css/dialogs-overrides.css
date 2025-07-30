@@ -1,0 +1,257 @@
+.ddl-dialog h4{font-size: 14px;margin: 1.33em 0;padding-left: 12px;}
+.ddl-dialog h1, .ddl-dialog h2, .ddl-dialog h3, .ddl-dialog h4, .ddl-dialog h5, .ddl-dialog h6 {
+    display: block;
+    font-weight: 600;
+    color: #474747;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", "Open Sans", sans-serif;
+}
+.ddl-form-item {
+    clear: both;
+}
+
+.ddl-form-item fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ddl-form-item input[type=checkbox], input[type=image], input[type=radio] {
+    width: inherit;
+    margin: 0;
+    position: relative;
+}
+
+/* Buttonset padding */
+.ddl-dialogs-container.ui-dialog .ui-dialog-buttonpane{
+    padding: 10px;
+}
+.ddl-dialogs-container.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{
+    width: 100%;
+}
+.ddl-dialogs-container.ui-dialog .ui-dialog-buttonpane .cancel{
+    float: left;
+}
+.ddl-dialogs-container.ui-dialog .ui-dialog-buttonpane .backend{
+    float: right;
+}
+
+/* Avada fix */
+.ddl-dialogs-container {
+    outline: none !important;
+}
+body.ddl-frontend-editor.fusion-body #cboxOverlay {
+    z-index: 999!important;
+}
+
+body.ddl-frontend-editor.fusion-body header.fusion-header-wrapper {
+    z-index: 99;
+}
+
+body.ddl-frontend-editor.fusion-body .toolset_select2-container {
+    z-index: 999999;
+}
+/* Close button for message box */
+
+.ddl-dialogs-container.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close,
+.ddl-dialogs-container.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close:focus,
+.ddl-dialogs-container.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close:active {
+    padding: 0;
+    background: none;
+    color: #000 !important;
+    position: absolute;
+    right: 0 !important;
+    top: 0 !important;
+    border: none !important;
+    overflow: hidden;
+    height: 36px;
+    outline: none !important;
+}
+
+.ddl-dialogs-container.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close:before {
+    vertical-align: initial;
+}
+
+/* Inputs fix for Avada */
+.ddl-dialogs-container.ui-dialog .ddl-form input[type="text"],
+.ddl-dialogs-container.ui-dialog .ddl-form input[type="number"],
+.ddl-dialogs-container.ui-dialog .ddl-form textarea,
+.ddl-dialogs-container.ui-dialog .ddl-form select,
+.ddl-dialogs-container.ui-dialog .ddl-form .radio,
+.ddl-dialogs-container.ui-dialog .ddl-form .checkbox,
+.ddl-dialogs-container.ui-dialog .ddl-form .fields-group,
+.ddl-dialogs-container.ui-dialog .ddl-form .desc,
+.ddl-dialogs-container.ui-dialog .ddl-form .toolset_select2-container {
+    margin-right: inherit;
+}
+
+/* Twenty Sixteen media button */
+.ddl-dialog .js-wpv-v-icon {
+    list-style: none;
+    padding: 0;
+}
+
+/* Twenty Sixteen buttons font */
+.ddl-dialog button, .ddl-dialogs-container button{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", "Open Sans", sans-serif;
+}
+
+.ddl-dialog .button, .ddl-dialogs-container .button, .ddl-dialog button, .ddl-dialogs-container button{text-transform: none;}
+.ddl-dialog-content-icon{width:18%;padding-top:12px;}
+.ddl-dialog-content-text{width:82%;}
+.ddl-dialog-message-content{float:left;display:block;}
+.ddl-dialog-message-content{font-size:18px;}
+.ddl-dialog-message-content p{padding-top:8px;}
+.ddl-dialog-message-content .fa-lg{font-size:2.3em!important;}
+
+/*// FIXES //*/
+#colorbox{outline: none!important;}
+input[type="radio"]{width:auto;}
+.ddl-dialog fieldset{border:none;}
+.ddl-dialog .fields-group label:first-child{margin-left:0px;}
+.ddl-dialog .fields-group label:last-child{margin-left:10px;}
+.ddl-dialog .fields-group input[type="checkbox"]{margin-top:2px;}
+.ddl-form .fields-group{width:522px;}
+.ddl-dialog input[type="text"]{min-height:29px;margin-top:3px;}
+.ddl-dialog select, .ddl-dialog input, .ddl-dialog .toolset_select2, .ddl-dialog .toolset_select2 > *, .ddl-dialog .toolset_select2-results, .toolset_select2-results__options, .toolset_select2-results__option{font-size:14px!important;}
+.ddl-dialog a, .ddl-dialog a:hover{color:#0073aa!important;}
+.checkbox.checkbox-smaller.float-none{text-align:left;width:auto!important;margin-left:-19px!important;}
+.post-content-cell-button-wrap{padding:12px;text-align: center;}
+.post-content-cell-button-wrap .button{text-transform: capitalize;}
+.ddl-dialog p{
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 1em 0;
+}
+
+
+/* MEDIA UPLOADER FIXES */
+.media-selection{
+    position:relative;
+    padding-left: 0px;
+}
+.media-button{text-transform: capitalize!important;}
+
+/* General Fixes */
+.ddl-dialog .wp-editor-tabs a,
+.ddl-dialog .button {
+    color: #555!important;
+    font-weight: inherit!important;
+    text-decoration: none;
+}
+
+.ddl-dialog .button.button-primary {
+    color: #fff!important;
+}
+
+body.ddl-frontend-editor .button {
+    font-weight: inherit;
+}
+
+.ddl-dialog h1, .ddl-dialog h2, .ddl-dialog h3, .ddl-dialog h4, .ddl-dialog h5, .ddl-dialog h6 {
+    color: #333;
+}
+
+.ddl-dialog {
+    color: #333;
+}
+
+input.toolset_select2-search__field,
+.toolset_select2-results ul li {
+    color: initial;
+}
+
+.ddl-dialog .clear {
+    clear: both;
+}
+
+.ddl-dialog .checkbox input[type=checkbox], .ddl-dialog .checkbox-inline input[type=checkbox], .ddl-dialog .radio input[type=radio], .ddl-dialog .radio-inline input[type=radio]{position:relative;}
+
+/* Genesis Fixes */
+/* Image Radio Select */
+.theme-integration-radio-images {
+    width: 555px;
+    float: right;
+    clear: right;
+}
+
+.theme-integration-radio-images img {
+    max-width: 80%;
+    padding: 5%;
+    background-color: #f7f7f7;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+}
+
+.theme-integration-radio-images .input-hidden {
+    position: absolute;
+    left: -9999px;
+}
+
+.theme-integration-radio-images input[type=radio]:checked + label>img {
+    border: 1px solid #F36528;
+}
+figure.row-type span{color: #444;font-size: 13px;line-height: 1.4em;display:inline-block;}
+
+/* Widget Cell Overrides */
+.ddl-dialog fieldset{
+    display:block!important;
+    padding: initial;
+    margin: initial;
+    min-width: inherit;
+}
+.ddl-form label, .ddl-form legend {
+    border-bottom: 0;
+    color: inherit;
+}
+.ddl-form .js-widget-cell-fieldset .fields-group {
+    width: 555px;
+}
+.ddl-form .js-widget-cell-fieldset .fields-group label:first-child,
+.ddl-form .js-widget-cell-fieldset .fields-group label:last-child {
+    margin-left: 0;
+}
+.ddl-dialog .js-widget-cell-fieldset input[type="text"] {
+    min-height: inherit;
+    margin-top: inherit;
+    height: 24px;
+    font-size: 13px!important;
+}
+.ddl-dialog .ddl-form.widget-cell select,
+.ddl-dialog .js-widget-cell-fieldset select {
+    padding: 2px;
+    line-height: 28px;
+    height: 28px;
+    font-size: 13px!important;
+}
+.ddl-dialog .js-widget-cell-fieldset input[type="number"].tiny-text {
+    width: 100%;
+}
+span.label{font-size:100%;font-weight:normal;}
+
+/*Toolset Starter Theme Fixes*/
+
+.ddl-form input[type="text"],
+.ddl-form input[type="number"],
+.ddl-form textarea,
+.ddl-form select,
+.ddl-form .radio, /* radios and checkboxes should be wrapped in .radio or .checkbox element */
+.ddl-form .checkbox,
+.ddl-form .fields-group,
+.ddl-form .desc,
+.ddl-form .toolset_select2-container {
+    width: 555px;
+}
+.ddl-dialog h4{padding-left:0px;margin-bottom: 6px;}
+.ddl-dialog p.ddl-fields-description{margin-top:0px;padding-top:0px;}
+
+.ddl-dialog .js-form-image-box-wrap .label{
+    color: #000000;
+    font-size: 13px;
+}
+
+i.ddl-help-link-external{padding-left:2px;}
+
+.ddl-dialog .ddl-fields-description a[target="_blank"]:not(.notarget):after {
+    content: "" !important;
+}
+.ddl-dialog-content .label{color:#888!important;}

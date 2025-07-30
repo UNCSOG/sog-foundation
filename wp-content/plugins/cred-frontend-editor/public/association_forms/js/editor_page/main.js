@@ -168,7 +168,7 @@ Toolset.CRED.AssociationFormsEditor.Class = function( $ ) {
 
     self.addQtButtons = function(){
         self._visual_editor_html_editor_qt = quicktags( { id: 'cred_association_form_content', buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-        WPV_Toolset.add_qt_editor_buttons( self._visual_editor_html_editor_qt, self.editor.codemirror );
+        ToolsetCommon.initQuicktags( self._visual_editor_html_editor_qt, self.editor.codemirror );
     };
 
 	self.addBootstrapGridButton = function() {

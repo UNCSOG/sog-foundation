@@ -22,7 +22,6 @@ class EntityUserLinks extends \Beehive\Google\Collection
     protected $collection_key = 'items';
     protected $itemsType = EntityUserLink::class;
     protected $itemsDataType = 'array';
-    public $items;
     /**
      * @var int
      */

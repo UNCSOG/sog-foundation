@@ -42,6 +42,7 @@ class Oauth2 extends \Beehive\Google\Service
     const OPENID = "openid";
     public $userinfo;
     public $userinfo_v2_me;
+    public $rootUrlTemplate;
     private $base_methods;
     /**
      * Constructs the internal representation of the Oauth2 service.
@@ -54,6 +55,7 @@ class Oauth2 extends \Beehive\Google\Service
     {
         parent::__construct($clientOrConfig);
         $this->rootUrl = $rootUrl ?: 'https://www.googleapis.com/';
+        $this->rootUrlTemplate = $rootUrl ?: 'https://www.UNIVERSE_DOMAIN/';
         $this->servicePath = '';
         $this->batchPath = 'batch/oauth2/v2';
         $this->version = 'v2';
@@ -70,6 +72,7 @@ class Oauth2 extends \Beehive\Google\Service
      * @opt_param string access_token
      * @opt_param string id_token
      * @return Tokeninfo
+     * @throws \Google\Service\Exception
      */
     public function tokeninfo($optParams = [])
     {

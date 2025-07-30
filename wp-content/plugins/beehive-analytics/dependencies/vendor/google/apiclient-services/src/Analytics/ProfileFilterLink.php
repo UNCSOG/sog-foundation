@@ -21,7 +21,6 @@ class ProfileFilterLink extends \Beehive\Google\Model
 {
     protected $filterRefType = FilterRef::class;
     protected $filterRefDataType = '';
-    public $filterRef;
     /**
      * @var string
      */
@@ -32,7 +31,6 @@ class ProfileFilterLink extends \Beehive\Google\Model
     public $kind;
     protected $profileRefType = ProfileRef::class;
     protected $profileRefDataType = '';
-    public $profileRef;
     /**
      * @var int
      */

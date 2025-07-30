@@ -201,7 +201,16 @@ class Loader {
 		foreach ( $devices as $device_key => $device_info ) {
 			$style = '';
 
-			foreach ( $reversed_blocks as $block ) {
+			foreach ( $reversed_blocks as $block_key => $block ) {
+				if ( false === strpos( $content, $block_key ) ) {
+					// Avoid adding styles to external blocks processed over the_content filters.
+					// While one of our blocks might live in the post content, rendering a 3rd party shortcode full of blocks
+					// can lead to our styles being attached to each of those inner, external blocks.
+					// Let's add our block styles only when processing a piece of content containing that block.
+					// Also, per a comment below, we tend to apply styles to a block up to two times (due to Views loops).
+					// If a 3rd party shortcode fires the the_content filter internally more than once, then our block might miss its own styles.
+					continue;
+				}
 				$this->blocks_applied[] = $block->get_id();
 				$block->prepend_to_css_selector( $this->selector_body_id );
 				$style .= $block->get_css( [], true, $device_key );

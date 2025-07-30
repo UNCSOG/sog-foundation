@@ -1,0 +1,16 @@
+<?php
+/**
+ * Template for switching Wordpress Archive editor (from block to classic)
+ */
+?>
+<div id="wpv-wpa-change-editor" class="hidden" data-title="<?php esc_html_e( 'Switch Template editor', 'wpv-views' ) ?>">
+	<p><?php esc_html_e( 'You are switching to the Classic Editor for your WordPress Archive. Because it is not compatible with the block editor, your content will be reset.', 'wpv-views' ); ?></p>
+	<p>
+		<a href="<?php echo esc_url( $context['admin_url'] ); ?>&wpa_change_editor=gutenberg" class="button button-primary"><?php esc_html_e( 'Yes, reset the WordPress Archive content', 'wpv-views' ); ?></a>
+	</p>
+</div>
+
+<a href="#" id="wpv-wpa-change-editor-opener" title="<?php esc_attr_e( 'Stop using the Block Editor on this WordPress Archive', 'wpv-views' ); ?>">
+	<?php esc_html_e( 'Use the Clasic Editor for this Archive', 'wpv-views' ); ?>
+</a>
+

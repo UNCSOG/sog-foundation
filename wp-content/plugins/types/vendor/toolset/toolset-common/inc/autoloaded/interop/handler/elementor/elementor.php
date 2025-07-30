@@ -17,7 +17,8 @@ class ElementorModules implements HandlerInterface {
 	 *
 	 * @var string Minimum Elementor version required to run the widget.
 	 */
-	const MINIMUM_ELEMENTOR_VERSION = '2.0.0';
+	const MINIMUM_ELEMENTOR_VERSION             = '2.0.0';
+	const ELEMENTOR_VERSION_REGISTER_API_CHANGE = '3.5.0';
 
 	const PAGE_BUILDER_NAME = 'elementor';
 
@@ -48,6 +49,15 @@ class ElementorModules implements HandlerInterface {
 	}
 
 	/**
+	 * @param  string $version_number
+	 *
+	 * @return bool
+	 */
+	private function is_version_above( $version_number ) {
+		return version_compare( $this->constants->constant( 'ELEMENTOR_VERSION' ), self::MINIMUM_ELEMENTOR_VERSION, '>=' );
+	}
+
+	/**
 	 * Initializes the Page Builder Module integration for the Elementor page builder.
 	 */
 	public function initialize() {
@@ -56,8 +66,8 @@ class ElementorModules implements HandlerInterface {
 			return;
 		}
 
-		// Check for required Elementor version.
-		if ( ! version_compare( $this->constants->constant( 'ELEMENTOR_VERSION' ), self::MINIMUM_ELEMENTOR_VERSION, '>=' ) ) {
+		// Check for required minimum Elementor version.
+		if ( ! $this->is_version_above( self::MINIMUM_ELEMENTOR_VERSION ) ) {
 			return;
 		}
 
@@ -88,10 +98,14 @@ class ElementorModules implements HandlerInterface {
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_frontend_widget_styles' ) );
 
 		// Register widgets category.
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets_category' ) );
+		add_action( 'elementor/elements/elements_registered', array( $this, 'register_widgets_category' ) );
 
-		// Register widgets category.
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ) );
+		// Register widgets.
+		if ( $this->is_version_above( self::MINIMUM_ELEMENTOR_VERSION ) ) {
+			add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
+		} else {
+			add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ) );
+		}
 
 		// Initialize widgets.
 		$this->initialize_widgets();
@@ -109,19 +123,11 @@ class ElementorModules implements HandlerInterface {
 	) {
 
 		if ( $this->is_views_active->is_met() ) {
-			$this->view_widget = $view_widget
-				? $view_widget
-				: new ViewWidget();
-
-			$this->toolset_elementor_widgets['view'] = $this->view_widget;
+			$this->toolset_elementor_widgets['view'] = $view_widget ? $view_widget : new ViewWidget();
 		}
 
 		if ( $this->is_forms_active->is_met() ) {
-			$this->form_widget = $form_widget
-				? $form_widget
-				: new FormWidget();
-
-			$this->toolset_elementor_widgets['form'] = $this->form_widget;
+			$this->toolset_elementor_widgets['form'] = $form_widget ? $form_widget : new FormWidget();
 		}
 
 		/**
@@ -135,11 +141,13 @@ class ElementorModules implements HandlerInterface {
 	/**
 	 * Register the Toolset Elementor widgets.
 	 *
+	 * @param  \Elementor\Widgets_Manager $widgets_manager
+	 *
 	 * @throws Exception
 	 */
-	public function register_widgets() {
+	public function register_widgets( $widgets_manager ) {
 		foreach ( $this->toolset_elementor_widgets as $widget ) {
-			\Elementor\Plugin::instance()->widgets_manager->register_widget_type( $widget );
+			$widgets_manager->register_widget_type( $widget );
 		}
 	}
 
@@ -152,7 +160,7 @@ class ElementorModules implements HandlerInterface {
 		\Elementor\Plugin::instance()->elements_manager->add_category(
 			'toolset-modules',
 			array(
-				'title' => __( 'Toolset', 'wpv-views' ),
+				'title' => 'Toolset',
 			)
 		);
 	}

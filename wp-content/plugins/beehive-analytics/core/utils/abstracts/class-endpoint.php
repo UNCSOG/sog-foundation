@@ -66,9 +66,8 @@ abstract class Endpoint extends Base {
 	/**
 	 * Set up WordPress hooks and filters
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return void
+	 * @since 3.2.4
 	 */
 	public function register_hooks() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
@@ -77,9 +76,8 @@ abstract class Endpoint extends Base {
 	/**
 	 * Get namespace of the endpoint.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return string
+	 * @since 3.2.4
 	 */
 	public function get_namespace() {
 		return $this->namespace;
@@ -88,9 +86,8 @@ abstract class Endpoint extends Base {
 	/**
 	 * Get current version of the endpoint.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @return string
+	 * @since 3.2.4
 	 */
 	public function get_version() {
 		return $this->version;
@@ -99,12 +96,11 @@ abstract class Endpoint extends Base {
 	/**
 	 * Get formatted response for the current request.
 	 *
-	 * @since 3.2.4
-	 *
-	 * @param array $data    Response data.
+	 * @param array $data Response data.
 	 * @param bool  $success Is request success.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function get_response( $data = array(), $success = true ) {
 		// Response status.
@@ -122,13 +118,12 @@ abstract class Endpoint extends Base {
 	/**
 	 * Send error message response from exception class.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param \Exception|Google_Exception|bool $exception Exception object.
-	 * @param array                            $data      Response data.
-	 * @param bool                             $status    Response status.
+	 * @param array                            $data Response data.
+	 * @param bool                             $status Response status.
 	 *
 	 * @return WP_REST_Response
+	 * @since 3.2.4
 	 */
 	public function get_error_response( $exception, $data = array(), $status = false ) {
 		if ( $exception instanceof Exception ) {
@@ -154,14 +149,13 @@ abstract class Endpoint extends Base {
 	 * This is a wrapper function to get default value if the param
 	 * is not found. Also with optional sanitization.
 	 *
-	 * @since 3.2.4
-	 *
-	 * @param WP_REST_Request $request           Request object.
-	 * @param string          $key               Parameter name.
-	 * @param mixed           $default           Default value.
+	 * @param WP_REST_Request $request Request object.
+	 * @param string          $key Parameter name.
+	 * @param mixed           $default Default value.
 	 * @param string|bool     $sanitize_callback Sanitization callback.
 	 *
 	 * @return mixed
+	 * @since 3.2.4
 	 */
 	public function get_param( WP_REST_Request $request, $key, $default = '', $sanitize_callback = false ) {
 		// Get param.
@@ -181,11 +175,10 @@ abstract class Endpoint extends Base {
 	/**
 	 * Check if a given request has access to manage settings.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return bool
+	 * @since 3.2.4
 	 */
 	public function settings_permission( $request ) {
 		$capable = Permission::can_manage_settings(
@@ -195,11 +188,11 @@ abstract class Endpoint extends Base {
 		/**
 		 * Filter to modify settings rest capability.
 		 *
-		 * @since 3.2.4
-		 *
 		 * @param WP_REST_Request $request Request object.
 		 *
-		 * @param bool            $capable Is user capable?.
+		 * @param bool $capable Is user capable?.
+		 *
+		 * @since 3.2.4
 		 */
 		return apply_filters( 'beehive_rest_settings_permission', $capable, $request );
 	}
@@ -207,11 +200,10 @@ abstract class Endpoint extends Base {
 	/**
 	 * Check if a given request has access to the analytics data.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return bool
+	 * @since 3.2.4
 	 */
 	public function analytics_permission( $request ) {
 		$capable = Permission::can_view_analytics(
@@ -221,11 +213,11 @@ abstract class Endpoint extends Base {
 		/**
 		 * Filter to modify stats rest capability.
 		 *
-		 * @since 3.2.4
-		 *
 		 * @param WP_REST_Request $request Request object.
 		 *
-		 * @param bool            $capable Is user capable?.
+		 * @param bool $capable Is user capable?.
+		 *
+		 * @since 3.2.4
 		 */
 		return apply_filters( 'beehive_rest_analytics_permission', $capable, $request );
 	}
@@ -233,11 +225,10 @@ abstract class Endpoint extends Base {
 	/**
 	 * Check if a given request has access to public data.
 	 *
-	 * @since 3.2.4
-	 *
 	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return bool
+	 * @since 3.2.4
 	 */
 	public function public_permission( $request ) {
 		$capable = true;
@@ -247,9 +238,9 @@ abstract class Endpoint extends Base {
 		 *
 		 * @paran bool $capable Is user capable?.
 		 *
-		 * @since 3.2.4
-		 *
 		 * @param WP_REST_Request $request Request object.
+		 *
+		 * @since 3.2.4
 		 */
 		return apply_filters( 'beehive_rest_public_permission', $capable, $request );
 	}
@@ -261,13 +252,12 @@ abstract class Endpoint extends Base {
 	 * Please note, if the parameter key is not specifically
 	 * checked, the validation will return true.
 	 *
-	 * @since 3.2.4
-	 *
-	 * @param mixed           $param   Paramter value.
+	 * @param mixed           $param Paramter value.
 	 * @param WP_REST_Request $request Request object.
-	 * @param string          $key     Paramter key.
+	 * @param string          $key Paramter key.
 	 *
 	 * @return bool
+	 * @since 3.2.4
 	 */
 	public function validate_param( $param, $request, $key ) {
 		switch ( $key ) {

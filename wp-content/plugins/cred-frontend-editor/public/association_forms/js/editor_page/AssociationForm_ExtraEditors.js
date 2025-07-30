@@ -24,7 +24,7 @@ Toolset.CRED.AssociationFormsEditor.ExtraEditor.prototype.buildExtraEditor = fun
     if(this.allow_quicktags) {
         var quicktags_slug = this.selector + '_quicktags';
         this[quicktags_slug] = quicktags( { id: this.selector, buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,close' } );
-        WPV_Toolset.add_qt_editor_buttons( this[quicktags_slug], this.editor );
+        ToolsetCommon.initQuicktags( this[quicktags_slug], this.editor );
     }
 
     this.setChange();

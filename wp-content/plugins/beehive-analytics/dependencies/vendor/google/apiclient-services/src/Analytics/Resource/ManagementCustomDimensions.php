@@ -38,6 +38,7 @@ class ManagementCustomDimensions extends \Beehive\Google\Service\Resource
      * @param string $customDimensionId The ID of the custom dimension to retrieve.
      * @param array $optParams Optional parameters.
      * @return CustomDimension
+     * @throws \Google\Service\Exception
      */
     public function get($accountId, $webPropertyId, $customDimensionId, $optParams = [])
     {
@@ -54,6 +55,7 @@ class ManagementCustomDimensions extends \Beehive\Google\Service\Resource
      * @param CustomDimension $postBody
      * @param array $optParams Optional parameters.
      * @return CustomDimension
+     * @throws \Google\Service\Exception
      */
     public function insert($accountId, $webPropertyId, CustomDimension $postBody, $optParams = [])
     {
@@ -75,6 +77,7 @@ class ManagementCustomDimensions extends \Beehive\Google\Service\Resource
      * @opt_param int start-index An index of the first entity to retrieve. Use this
      * parameter as a pagination mechanism along with the max-results parameter.
      * @return CustomDimensions
+     * @throws \Google\Service\Exception
      */
     public function listManagementCustomDimensions($accountId, $webPropertyId, $optParams = [])
     {
@@ -98,6 +101,7 @@ class ManagementCustomDimensions extends \Beehive\Google\Service\Resource
      * warnings related to the custom dimension being linked to a custom data source
      * / data set.
      * @return CustomDimension
+     * @throws \Google\Service\Exception
      */
     public function patch($accountId, $webPropertyId, $customDimensionId, CustomDimension $postBody, $optParams = [])
     {
@@ -120,6 +124,7 @@ class ManagementCustomDimensions extends \Beehive\Google\Service\Resource
      * warnings related to the custom dimension being linked to a custom data source
      * / data set.
      * @return CustomDimension
+     * @throws \Google\Service\Exception
      */
     public function update($accountId, $webPropertyId, $customDimensionId, CustomDimension $postBody, $optParams = [])
     {

@@ -1,0 +1,2 @@
+.tb-video video{max-width:100%;margin-left:0;margin-right:0;margin-bottom:1em}.tb-video.alignwide video,.tb-video.alignfull video{width:100%}@supports ((position: -webkit-sticky) or (position: sticky)){.tb-video [poster]{-o-object-fit:cover;object-fit:cover}}.tb-video.aligncenter{text-align:center}
+

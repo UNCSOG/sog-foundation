@@ -9,7 +9,7 @@
 				class="sui-box-header sui-flatten sui-content-center sui-spacing-top--60"
 			>
 				<whitelabel-banner
-					src="onboarding/tracking.png"
+					src="onboarding/setup.png"
 					:alt="$i18n.label.add_measurement_id"
 				/>
 

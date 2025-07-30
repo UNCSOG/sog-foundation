@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaListDataStreamsResponse extends \Beehive\Google\
     protected $collection_key = 'dataStreams';
     protected $dataStreamsType = GoogleAnalyticsAdminV1betaDataStream::class;
     protected $dataStreamsDataType = 'array';
-    public $dataStreams;
     /**
      * @var string
      */

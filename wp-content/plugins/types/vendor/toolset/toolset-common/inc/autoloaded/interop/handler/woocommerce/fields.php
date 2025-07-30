@@ -273,6 +273,9 @@ class Fields {
 			return;
 		}
 		$post_fields_group = $post_group_factory->create( self::FIELD_GROUP_NAME, self::FIELD_GROUP_TITLE, 'publish' );
+		if ( null === $post_fields_group ) {
+			return;
+		}
 		$post_fields_group->assign_post_type( self::WOOCOMMERCE_POST_TYPE );
 		$post_fields_group->set_purpose( \Toolset_Field_Group::PURPOSE_SYSTEM );
 		$this->create_fields( $post_fields_group );

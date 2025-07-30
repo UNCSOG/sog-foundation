@@ -1,0 +1,24 @@
+<?php
+/**
+ * Template File
+ * This file is the Views Settings section for the Toolset Theme Settings settings.
+ *
+ * @since 2.8.1
+ */
+?>
+
+<div class="js-wpv-default-wpa-editor-summary">
+	<p>
+		<label>
+			<input type="checkbox"
+				   id="js-wpv-disable-toolset-theme-settings"
+			       name="wpv-disable-toolset-theme-settings"
+			       class="js_wpv_disable_toolset_theme_settings"
+			       autocomplete="off"
+			       value="1" <?php checked( $context['disable_theme_settings'] === true ); ?>/>
+			<?php
+			echo __( 'Disable the Toolset Theme Settings integration', 'wpv-views' );
+			?>
+		</label>
+	</p>
+</div>

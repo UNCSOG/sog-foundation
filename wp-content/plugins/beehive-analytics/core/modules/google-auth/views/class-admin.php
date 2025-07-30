@@ -29,9 +29,9 @@ class Admin extends View {
 	/**
 	 * Initialize the class by registering hooks.
 	 *
+	 * @return void
 	 * @since 3.2.0
 	 *
-	 * @return void
 	 */
 	public function init() {
 		// Localization.
@@ -49,9 +49,9 @@ class Admin extends View {
 	 *
 	 * @param array $vars Vars.
 	 *
+	 * @return array
 	 * @since 3.2.4
 	 *
-	 * @return array
 	 */
 	public function common_vars( $vars ) {
 		// Only for admins.
@@ -73,21 +73,17 @@ class Admin extends View {
 		/**
 		 * Filter to modify maximum no. of accounts returned in streams request.
 		 *
-		 * @since 3.4.1
+		 * @param int $page_size No. of items (default 200).
+		 *
 		 * @since 3.4.8 Changed the limit to 25.
 		 *
-		 * @param int $page_size No. of items (default 200).
+		 * @since 3.4.1
 		 */
 		$accounts_limit = (int) apply_filters( 'beehive_google_analytics_ga4_accounts_page_size', 25 );
 
-		// Get Google profiles.
 		if ( Google_Auth\Helper::instance()->is_logged_in( $this->is_network() ) ) {
-			$vars['google']['profiles']          = Google_Analytics\Data::instance()->profiles_list( $this->is_network() );
-			$vars['google']['streams']           = array_values( Google_Analytics\Data::instance()->streams( $this->is_network() ) );
 			$vars['google']['show_limit_notice'] = ! empty( $accounts_count ) && $accounts_count > $accounts_limit;
 		} else {
-			$vars['google']['profiles']          = array();
-			$vars['google']['streams']           = array();
 			$vars['google']['show_limit_notice'] = false;
 		}
 
@@ -99,9 +95,9 @@ class Admin extends View {
 	 *
 	 * @param array $vars Existing vars.
 	 *
+	 * @return array
 	 * @since 3.2.4
 	 *
-	 * @return array
 	 */
 	public function google_vars( $vars ) {
 		$google_helper = Google_Auth\Helper::instance();

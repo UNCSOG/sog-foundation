@@ -1,0 +1,58 @@
+<?php
+/**
+ * Template File
+ * This file is the Views Settings section for the Cache settings.
+ *
+ * @since 2.8.1
+ */
+?>
+
+<h3><?php
+/* translators: Title of the setting section about the plugin generated cache for custom fields keys */
+echo esc_html( __( 'Cache for custom fields', 'wpv-views' ) );
+?></h3>
+<div class="toolset-advanced-setting">
+	<p>
+		<?php
+		/* translators: Explanation for the setting about how to invalidate the internal cache for custom field keys */
+		echo esc_html( __( 'Views stores a cache for custom fields keys for internal usage. Generating this cache can be expensive on large sites, so you might want to keep this cache until you manually clear it.', 'wpv-views' ) ); ?>
+	</p>
+	<ul>
+		<li>
+			<label>
+				<input id="wpv-manage-meta-transient-method-<?php echo esc_attr( \OTGS\Toolset\Views\Controller\Cache\Meta\Gui::CRON ); ?>"
+					type="radio"
+					autocomplete="off"
+					name="wpv-manage-meta-transient-method"
+					<?php checked( $context['manage_meta_transient_method'], \OTGS\Toolset\Views\Controller\Cache\Meta\Gui::CRON ); ?>
+					value="<?php echo esc_attr( \OTGS\Toolset\Views\Controller\Cache\Meta\Gui::CRON ); ?>" />
+				<?php
+				/* translators: Label of the option to invalidate the cache for custom fields when a new field is created. */
+				echo esc_html( __( 'Toolset will manage this cache and clear it automatically', 'wpv-views' ) );
+				?>
+			</label>
+		</li>
+		<li>
+			<label>
+				<input id="wpv-manage-meta-transient-method-<?php echo esc_attr( \OTGS\Toolset\Views\Controller\Cache\Meta\Gui::MANUAL ); ?>"
+					type="radio"
+					autocomplete="off"
+					name="wpv-manage-meta-transient-method"
+					<?php checked( $context['manage_meta_transient_method'], \OTGS\Toolset\Views\Controller\Cache\Meta\Gui::MANUAL ); ?>
+					value="<?php echo esc_attr( \OTGS\Toolset\Views\Controller\Cache\Meta\Gui::MANUAL ); ?>" />
+				<?php
+				/* translators: Label of the option to invalidate the cache for custom fields only manually. */
+				echo esc_html( __( 'Keep this cache until I clear it manually here', 'wpv-views' ) );
+				?>
+			</label>
+		</li>
+	</ul>
+	<p>
+		<button class="button-secondary js-wpv-manage-meta-transient-method-manual-fire">
+			<?php
+			/* translators: Label of the butto to manually invalidate the custom fields cacke */
+			echo esc_html( __( 'Clear custom fields cache now', 'wpv-views' ) );
+			?>
+		</button>
+	</p>
+</div>

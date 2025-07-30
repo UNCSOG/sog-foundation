@@ -70,7 +70,7 @@ abstract class Toolset_Field_Group_Factory {
 		$this->wp_post_factory = $wp_post_factory ?: new WpPostFactory();
 		$this->cache = $cache ?: InMemoryCache::get_instance();
 
-		add_action( 'wpcf_field_group_renamed', array( $this, 'field_group_renamed' ), 10, 2 );
+		add_action( 'wpcf_field_group_renamed', array( $this, 'field_group_renamed' ), 10, 3 );
 		add_action( 'wpcf_group_updated', array( $this, 'reset_query_cache' ) );
 	}
 
@@ -131,7 +131,15 @@ abstract class Toolset_Field_Group_Factory {
 		$fg_post = null;
 
 		// when $force_query_by_name is not used, check if a post id is given
-		if ( ! $force_query_by_name && ( ctype_digit( $field_group ) || is_int( $field_group ) ) && (int) $field_group > 0 ) {
+		if (
+			! $force_query_by_name
+			&& ! is_object( $field_group )
+			&& (
+				( is_string( $field_group ) && ctype_digit( $field_group ) )
+				|| is_int( $field_group )
+			)
+			&& (int) $field_group > 0
+		) {
 			// query by post id
 			$fg_post = $this->wp_post_factory->load( $field_group );
 		} else if ( $fg_post = $this->get_field_group_by_name( $field_group ) ) {
@@ -303,10 +311,11 @@ abstract class Toolset_Field_Group_Factory {
 	/**
 	 * Update cache after a field group is renamed.
 	 *
+	 * @param string $new_name The old name of the field group.
 	 * @param string $original_name The old name of the field group.
 	 * @param Toolset_Field_Group $field_group The field group involved, with already updated name.
 	 */
-	public function field_group_renamed( $original_name, $field_group ) {
+	public function field_group_renamed( $new_name, $original_name, $field_group ) {
 		if( $field_group->get_post_type() === $this->get_post_type() ) {
 			$this->clear_from_cache( $original_name );
 			$this->save_to_cache( $field_group );

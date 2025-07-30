@@ -93,11 +93,11 @@ class Capability extends Base {
 		// Custom capability.
 		$custom_cap = beehive_analytics()->settings->get( 'custom_cap', 'permissions' );
 
-		global $wp_roles;
+		$wp_roles = wp_roles();
 
 		// Make sure admin user has the capability in single installations.
-		if ( ! in_array( 'administrator', $enabled_roles, true ) ) {
-			$enabled_roles = array_merge( array( 'administrator' ), $enabled_roles );
+		if ( ! is_multisite() && ! in_array( 'administrator', $enabled_roles, true ) ) {
+			$enabled_roles[] = 'administrator';
 		}
 
 		// Loop through each roles.
@@ -154,8 +154,8 @@ class Capability extends Base {
 		global $wp_roles;
 
 		// Make sure admin user has the capability in single installations.
-		if ( ! in_array( 'administrator', $enabled_roles, true ) ) {
-			$enabled_roles = array_merge( array( 'administrator' ), $enabled_roles );
+		if ( ! is_multisite() && ! in_array( 'administrator', $enabled_roles, true ) ) {
+			$enabled_roles[] = 'administrator';
 		}
 
 		// Loop through each roles.
@@ -247,8 +247,9 @@ class Capability extends Base {
 		$roles = (array) beehive_analytics()->settings->get( 'settings_roles', 'permissions', ! $override, array() );
 
 		// Make sure admin user has the capability in single installations and subsites.
-		$roles = array_merge( array( 'administrator' ), $roles );
-
+		if ( ! is_multisite() && ! in_array( 'administrator', $roles, true ) ) {
+			$roles[] = 'administrator';
+		}
 		// Get user object.
 		$user = get_userdata( $args[1] );
 

@@ -1,0 +1,112 @@
+Wordpress Plugin: 
+Toolset Module Manager, by OnTheGoSystems
+
+Changelog:
+
+1.0
+* Initial release
+
+1.1
+* Added modules library taken from reference sites.
+* Added support for Views 1.3 release.
+* Added support for embedded module manager to be used in such themes like Toolset Bootstrap.
+
+1.2
+* Fixed bugs relating to modules export.
+* Update codes for WooCommerce Views auto-import of modules from reference sites.
+
+1.3
+* Removed plugin headers on embedded to prevent activation error when uploading zip.
+* Fixed bug on cannot reassign auto global variable in PHP 5.4.
+* Fixed bug relating to PHP strict standards of only variables should be passed by reference.
+* Added feature to allow module manager to run local versions of reference sites in testing modules.
+* Updated function on automatic importing of modules to return post ID to be used by other plugins.
+* Fixed issue on step 2 minor display and undefine id PHP notices during modules import.
+* Fixed several PHP warnings and issues on creating temp lock file in both Linux and Windows.
+* Decompressed minified CSS and port the changes to embedded module manager.
+* Added PHP isset changes on checking ID existence from main plugin file to embedded.
+* Changing outdated text in embedded module manager from View Templates terminology to Content Templates.
+* Fixed bug on inline module manager section not checking on correct Views because of HTML entities.
+* Fixed bug on inline module manager section not saving or updating due to jQuery error.
+* Fixed bug on unable to add new module when using Mozilla Firefox browser in Windows operating system.
+
+1.4
+* Removed module manager main minified CSS file and use un-minified version.
+* Unified the CSS of the module manager dev version with the main CSS file.
+* Fixed JS console errors appearing when pointers are not dismissed after fresh installation.
+* Hide define modules screen when no full version of Toolset plugins are activated.
+* List the content of installed modules and link to elements.
+* Do not start the import process if there is no file to import by disabling import button.
+* Style components of an imported Module from the Library.
+* Use new icons for the module manager components.
+* Added onthego-resources resources for icons library.
+* Fixed issues on incompatibility with CRED 1.3 and new Toolset forms library.
+* Added method to prepare and validate modules before export.
+* Make all modules items checked by default for importing. Unchecked modules will not be imported.
+* Added new function to validate modules display on define modules page for consistency.
+
+1.5
+
+* Added support on importing of post relationships created by Types plugin (Requires Types version above 1.6.3)
+* Added support on importing of Content Template assignments to post type by Views (Requires Views version above 1.6.4)
+* Added "All all items" button when creating new module. Allow users to add all module items available with one click. No need to drag and drop each one of them.
+* Updated to the latest OnTheGo Systems icons library.
+
+1.6
+
+* Added compatibility to servers under open base directory restrictions with regards to importin modules.
+* Fixed incompatibility issue on some servers with regards to PHP http_build_query function.
+* Updated onthego resources on embedded and update plugin version.
+
+1.6.1
+
+* Added support for standalone embedded version. This makes it executable in the plugins directory.
+* Converted the embedded version to be Toolset Installer compatible.
+
+1.6.2
+
+* Security improvements
+* Fixed some strings which are not displayed when translated
+* Compatibility with WordPress 4.2
+
+1.6.3
+
+* Added translations
+* Updated to use Toolset common localization code to load translations
+* Added import API for messages.
+* Added support for Layouts plugin in modules.
+* Added more user friendly warnings.
+* Fixed issues on expanding module info right after it's was added.
+
+1.6.4
+
+* Fixed a couple of typo errors in text.
+* Fixed: Updated links to the new Toolset components page.
+* Fixed: Issue when adding a module with the same name as existing module.
+* Fixed: PHP notices found during export.
+
+1.6.5
+
+* New: Support for new Toolset shared menu.
+* Usability: Added release notes link.
+
+1.6.6
+
+* New: Support for new Layouts JS.
+* New: Improved usability when doing a null import.
+* Fixed: Styling glitches on shared import/export screen.
+
+1.6.7
+
+* New: Cosmetic changes in Module Manager box - important for consistency.
+* Usability: Easy deletion of module element in a module with a very long list of items.
+* Usability: Clearly identify Views WordPress Archives in Module Manager module item list.
+
+1.6.8
+
+* Fixed: Fatal error during activation when cURL extension is not enabled on the server.
+* Fixed: Layouts CSS is not imported when one of the resource is missing.
+* Fixed: JS errors when using ampersands and other special characters in module names.
+* New: Validate module names to accept only a-z or A-Z or 0-9 or hyphen and space characters.
+* Updated: Localization files.
+* New: Validate if module contents are valid inside an imported zip file.

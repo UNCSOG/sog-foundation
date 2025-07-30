@@ -340,6 +340,10 @@ class Types_Admin_Taxonomies_List_Table extends WP_List_Table
                 case 'delete':
                     unset($this->custom_taxonomies[$key]);
                     $slugs_to_delete[] = $key;
+										/**
+										 * @param string $key
+										 */
+                    do_action( 'wpcf_taxonomy_delete', $key );
                     break;
                 case 'deactivate':
                     if ( wpcf_is_builtin_taxonomy($key) ) {
@@ -362,6 +366,10 @@ class Types_Admin_Taxonomies_List_Table extends WP_List_Table
              * update post types
              */
             if ( count($slugs_to_delete) ) {
+							/**
+							 * @param string[] $slugs_to_delete
+							 */
+							do_action( 'wpcf_taxonomies_deleted', $slugs_to_delete );
 	            $post_type_option = new Types_Utils_Post_Type_Option();
                 $custom_types = $post_type_option->get_post_types();
                 if ( !empty($custom_types) ) {
@@ -475,7 +483,7 @@ class Types_Admin_Taxonomies_List_Table extends WP_List_Table
                         $map_post_types_by_taxonomy[ $slug ][] = sprintf(
 							'<a href="%1$s">%2$s</a>',
 							esc_url( admin_url( 'admin.php?page=wpcf-edit-type&wpcf-post-type=' . $post_type_slug ) ),
-							stripslashes( wpcf_translate( $temp_post_type . ' name', $temp_post_type, 'Types-CPT' ) )
+							stripslashes( wpcf_translate( $temp_post_type . ' name', $temp_post_type, 'toolset-types-cpt-labels-for-' . $post_type_slug ) )
 						);
                     }
                 }
@@ -555,7 +563,7 @@ class Types_Admin_Taxonomies_List_Table extends WP_List_Table
 						$one['supports'][] = sprintf(
 							'<a href="%1$s">%2$s</a>',
 							esc_url( admin_url( 'admin.php?page=wpcf-edit-type&wpcf-post-type=' . $post_type_slug ) ),
-							stripslashes( wpcf_translate( $post_type_name . ' name', $post_type_name, 'Types-CPT' ) )
+							stripslashes( wpcf_translate( $post_type_name . ' name', $post_type_name, 'toolset-types-cpt-labels-for-' . $post_type_slug ) )
 						);
                     }
                 }

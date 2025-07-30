@@ -22,7 +22,6 @@ class BatchRunPivotReportsRequest extends \Beehive\Google\Collection
     protected $collection_key = 'requests';
     protected $requestsType = RunPivotReportRequest::class;
     protected $requestsDataType = 'array';
-    public $requests;
     /**
      * @param RunPivotReportRequest[]
      */

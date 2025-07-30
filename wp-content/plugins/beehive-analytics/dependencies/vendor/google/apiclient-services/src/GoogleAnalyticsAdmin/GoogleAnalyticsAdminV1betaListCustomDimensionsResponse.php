@@ -22,7 +22,6 @@ class GoogleAnalyticsAdminV1betaListCustomDimensionsResponse extends \Beehive\Go
     protected $collection_key = 'customDimensions';
     protected $customDimensionsType = GoogleAnalyticsAdminV1betaCustomDimension::class;
     protected $customDimensionsDataType = 'array';
-    public $customDimensions;
     /**
      * @var string
      */

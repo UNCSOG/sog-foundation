@@ -1,0 +1,45 @@
+<?php
+	            	// Example structure ready for PHP implementation
+	            ?>
+
+	            <ul class="tree hidden" id="js-layouts-tree-bac"> <?php // TODO: Remove .hidden class! ?>
+	                 <li class="js-tree-category js-tree-category-title">
+	                    <h3 class="tree-category-title">
+							<?php _e( 'Layouts:', 'ddl-layouts' ); ?>
+	                    </h3>
+	                    <ul class="js-tree-category-items">
+	                        <li class="js-tree-category-item <?php //  if ( has_child_ddl_layouts() ) : ?>js-tree-category<?php // endif; ?>">
+	                            <p class="item-name-wrap js-item-name-wrap">
+	                                 <?php //  if ( has_child_ddl_layouts() ) : ?>
+	                                <i class="js-tree-toggle fa fa-minus-square-o icon-collapse-alt" data-expanded="true" data-text-expanded="Collapse" data-text-collapsed="Expand" title="Collapse"></i>
+	                                <?php // endif; ?>
+	                                <a href="#">
+	                                    <span class="js-item-name">[POST_ITLE]</span>
+	                                </a>
+	                                <i class="fa fa-info-circle icon-info-sign js-show-item-desc" data-target="[POST_SLUG]"></i>
+	                            </p>
+	                            <p class="item-desc js-item-desc" data-name="[POST_SLUG]">
+	                                POST_DESC]
+	                            </p>
+
+	                            <?php //  if ( has_child_ddl_layouts() ) : ?>
+	                            <ul class="js-tree-category-items">
+	                                <?php // ( while ( has_child_ddl_layouts() ) : the_child_layout(); ) ?>
+	                                <li class="js-tree-category-item">
+	                                    <p class="item-name-wrap js-item-name-wrap">
+	                                        <a href="#">
+	                                            <span class="js-item-name">[POST_ITLE]</span>
+	                                        </a>
+	                                        <i class="fa fa-info-circle icon-info-sign js-show-item-desc" data-target="[POST_SLUG_2]"></i>
+	                                    </p>
+	                                    <p class="item-desc js-item-desc" data-name="[POST_SLUG_2]">
+	                                        POST_DESC]
+	                                    </p>
+	                                </li> <!-- .js-tree-category-item -->
+	                                <?php // endwhile; ?>
+	                            </ul> <!-- . js-tree-category-items -->
+	                            <?php // endif; ?>
+	                        </li>
+	                    </ul> <!-- .js-tree-category-items -->
+	                </li>
+	            </ul> <!-- #js-layouts-tree -->

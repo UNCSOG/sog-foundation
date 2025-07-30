@@ -126,7 +126,7 @@ class Resource
         // NOTE: because we're creating the request by hand,
         // and because the service has a rootUrl property
         // the "base_uri" of the Http Client is not accounted for
-        $request = new Request($method['httpMethod'], $url, ['content-type' => 'application/json'], $postBody ? \json_encode($postBody) : '');
+        $request = new Request($method['httpMethod'], $url, $postBody ? ['content-type' => 'application/json'] : [], $postBody ? \json_encode($postBody) : '');
         // support uploads
         if (isset($parameters['data'])) {
             $mimeType = isset($parameters['mimeType']) ? $parameters['mimeType']['value'] : 'application/octet-stream';

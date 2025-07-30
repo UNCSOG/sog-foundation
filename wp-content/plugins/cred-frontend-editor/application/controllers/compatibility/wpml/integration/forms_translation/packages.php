@@ -19,7 +19,10 @@ use OTGS\Toolset\CRED\Controller\Forms\Post\Main as PostFormController;
 class Packages extends Base {
 
 	const SHORTCODE_NAME = 'cred_i18n';
-	const PREFIX = 'toolset-forms-';
+	const PREFIX         = 'toolset-forms-';
+
+	const PACKAGE_NAME = 'Toolset Forms';
+	const PACKAGE_SLUG = 'toolset-forms';
 
 	/**
 	 * Caches packages.
@@ -86,9 +89,10 @@ class Packages extends Base {
 			return $this->packages[ $form->ID ];
 		}
 		$this->packages[ $form->ID ] = array(
-			'kind' => 'Toolset Forms',
-			'name' => $form->ID,
-			'title' => $form->post_title,
+			'kind'      => self::PACKAGE_NAME,
+			'kind_slug' => self::PACKAGE_SLUG,
+			'name'      => $form->ID,
+			'title'     => $form->post_title,
 			'edit_link' => get_edit_post_link( $form->ID ),
 		);
 		return $this->packages[ $form->ID ];
@@ -108,6 +112,16 @@ class Packages extends Base {
 		}
 		$form_post = get_post( $form_id );
 		return $this->get_form_context( $form_post );
+	}
+
+	/**
+	 * @param int $formId
+	 *
+	 * @return string
+	 */
+	private function get_string_context( $formId ) {
+		// See WPML_Package_Helper::get_string_context.
+		return sanitize_title_with_dashes( self::PACKAGE_SLUG . '-' . $formId);
 	}
 
 	protected function register_strings( \WP_Post $form, $form_data ) {
@@ -145,7 +159,7 @@ class Packages extends Base {
 	/**
 	 * Register notifications
 	 *
-	 * @param array $notifications Form notifications
+	 * @param \stdClass $notifications Form notifications
 	 */
 	private function register_notifications( $notifications, $context ) {
 		if ( $notifications && isset( $notifications->notifications ) && is_array( $notifications->notifications ) ) {
@@ -166,8 +180,8 @@ class Packages extends Base {
 	/**
 	 * Process Form content to extract shortcodes
 	 *
-	 * @param string $form Form post
-	 * @param string $context WPML package context
+	 * @param \WP_Post $form Form post
+	 * @param string   $context WPML package context
 	 */
 	private function process_content( \WP_Post $form, $context ) {
 		$content = $form->post_content;
@@ -283,8 +297,6 @@ class Packages extends Base {
 			$data_attributes = [
 				'placeholder' => [ 'Placeholder ' . $field, $field . '-placeholder', 'placeholder' ],
 				'user_default_value' => [ 'Default value ' . $field, $field . '-default-value', 'default value' ],
-				'display_value_not_selected' => [ 'Not selected value ' . $field, $field . '-not-selected-value', 'value not selected' ],
-				'display_value_selected' => [ 'Selected value ' . $field, $field . '-selected-value', 'value selected' ],
 			];
 			$field_definition_array = $field_definition->get_definition_array();
 			if ( isset( $field_definition_array['data'] ) ) {
@@ -292,6 +304,18 @@ class Packages extends Base {
 					if ( isset( $field_definition_array['data'][ $data_key ] ) ) {
 						$existing_translations = $this->types_field_translator->get_translations( $field_definition_array['data'][ $data_key ], $data_attribute[2] );
 						$this->register_string( $data_attribute[0], $field_definition_array['data'][ $data_key ], $context, $data_attribute[1], self::WPML_STRING_TYPE_LINE, $existing_translations );
+					}
+				}
+				if ( function_exists( 'icl_unregister_string' ) ) {
+					$stringContext = $this->get_string_context( $form->ID );
+					$dataAttributesToRemove = [
+						'display_value_not_selected' => $stringContext . '-' . $field . '-not-selected-value',
+						'display_value_selected'     => $stringContext . '-' . $field . '-selected-value',
+					];
+					foreach ( $dataAttributesToRemove as $removeKey => $removeName ) {
+						if ( isset( $field_definition_array['data'][ $removeKey ] ) ) {
+							icl_unregister_string( $stringContext, $removeName );
+						}
 					}
 				}
 				if ( isset( $field_definition_array['data']['validate'] ) ) {
@@ -306,7 +330,7 @@ class Packages extends Base {
 		if ( isset( $atts['data']['options'] ) ) {
 			foreach ( $atts['data']['options'] as $option_id => $option_data ) {
 				if ( isset( $option_data['label'] ) ) {
-					$this->register_string( 'Label ' . $field . '-' . $index, $option_data['label'], $context, $field . '-option' );
+					$this->register_string( 'Label ' . $field . '-' . $option_id, $option_data['label'], $context, $field . '-option-' . $option_id );
 				}
 			}
 		}
@@ -333,6 +357,9 @@ class Packages extends Base {
 	 */
 	private function translate_string( $string, $name ) {
 		$form_post_id = apply_filters( 'cred_current_form_post_id', null );
+		if ( ! $form_post_id ) {
+			return $string;
+		}
 		$package = $this->get_package_context( $form_post_id );
 
 		return apply_filters( 'wpml_translate_string', $string, self::PREFIX . $form_post_id . '-' . $name, $package );

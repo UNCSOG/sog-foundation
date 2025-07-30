@@ -98,7 +98,7 @@ export default {
 		 * @return {boolean}
 		 */
 		canGetStats() {
-			return this.$moduleVars.can_get_stats
+			return this.$store.state.helpers.canGetStats
 		},
 
 		/**

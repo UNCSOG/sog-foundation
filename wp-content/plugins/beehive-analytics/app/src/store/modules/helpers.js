@@ -23,6 +23,7 @@ const helpers = {
 			message: '',
 		},
 		permissions: moduleVars.stats_permissions || {},
+		canGetStats: moduleVars.can_get_stats || false,
 		users: moduleVars.users || {},
 	},
 
@@ -111,6 +112,18 @@ const helpers = {
 				Vue.set(state.users, user.ID, user)
 			}
 		},
+
+		/**
+		 * Update the flag to decide if we can get stats.
+		 *
+		 * This will only update the value in store.
+		 *
+		 * @param {object} state State of the module.
+		 * @param {boolean} flag Flag.
+		 */
+		setCanGetStats: (state, flag) => {
+			state.canGetStats = flag
+		},
 	},
 
 	actions: {
@@ -175,7 +188,7 @@ const helpers = {
 		 */
 		updateGoogleStreams: async ({ commit, dispatch }, data) => {
 			restGet({
-				path: 'v2/data/streams',
+				path: 'v1/data/streams',
 				params: {
 					network: isNetwork() ? 1 : 0,
 				},
@@ -227,6 +240,21 @@ const helpers = {
 				// Update the user data.
 				commit('storeUser', user)
 			}
+		},
+
+		/**
+		 * Action to update the flag for stats availability.
+		 *
+		 * Use this from any component.
+		 *
+		 * @param {object} Commit and State.
+		 * @param {boolean} flag Flag.
+		 *
+		 * @return {Promise<void>}
+		 */
+		updateCanGetStats: async ({ commit }, flag) => {
+			commit('setCanGetStats', flag)
+			window.beehiveModuleVars.can_get_stats = flag
 		},
 	},
 }

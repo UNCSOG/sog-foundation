@@ -26,7 +26,6 @@ class ReportRow extends \Beehive\Google\Collection
     public $dimensions;
     protected $metricsType = DateRangeValues::class;
     protected $metricsDataType = 'array';
-    public $metrics;
     /**
      * @param string[]
      */

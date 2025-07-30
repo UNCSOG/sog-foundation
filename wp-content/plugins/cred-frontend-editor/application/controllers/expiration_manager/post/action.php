@@ -15,6 +15,9 @@ class Action {
 
 	const CUSTOM_ACTIONS_FILTER_HANDLE = 'cred_post_expiration_custom_actions';
 
+	/** @var PostExpirationManager */
+	private $manager;
+
 	/**
 	 * Manager constructor.
 	 *

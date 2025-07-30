@@ -83,7 +83,7 @@ export default {
 		 * @returns {boolean}
 		 */
 		canGetStats() {
-			return this.$moduleVars.can_get_stats || this.isConnected
+			return this.$store.state.helpers.canGetStats || this.isConnected
 		},
 
 		/**

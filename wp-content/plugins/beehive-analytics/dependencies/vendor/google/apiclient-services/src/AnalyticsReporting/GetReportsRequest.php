@@ -22,7 +22,6 @@ class GetReportsRequest extends \Beehive\Google\Collection
     protected $collection_key = 'reportRequests';
     protected $reportRequestsType = ReportRequest::class;
     protected $reportRequestsDataType = 'array';
-    public $reportRequests;
     /**
      * @var bool
      */

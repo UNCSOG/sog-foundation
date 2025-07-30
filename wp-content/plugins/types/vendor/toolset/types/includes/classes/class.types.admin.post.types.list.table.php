@@ -326,6 +326,10 @@ class Types_Admin_Post_Types_List_Table extends WP_List_Table
                 case 'delete':
                     unset($this->custom_types[$key]);
                     $slugs_to_delete[] = $key;
+										/**
+										 * @param string $key
+										 */
+                    do_action( 'wpcf_post_type_delete', $key );
                     break;
                 case 'deactivate':
                     $this->custom_types[$key]['disabled'] = 1;
@@ -347,6 +351,10 @@ class Types_Admin_Post_Types_List_Table extends WP_List_Table
              * update custom taxonomies
              */
             if ( count($slugs_to_delete) ) {
+							/**
+							 * @param string[] $slugs_to_delete
+							 */
+							do_action( 'wpcf_post_types_deleted', $slugs_to_delete );
                 $custom_taxonomies = get_option(WPCF_OPTION_NAME_CUSTOM_TAXONOMIES, array());
                 if ( !empty($custom_taxonomies) ) {
                     foreach ( $slugs_to_delete as $slug ) {
@@ -425,7 +433,7 @@ class Types_Admin_Post_Types_List_Table extends WP_List_Table
                     $map_taxonomies_by_post_type[$post_type][$slug] = sprintf(
 						'<a href="%1$s">%2$s</a>',
 						esc_url( admin_url( 'admin.php?page=wpcf-edit-tax&wpcf-tax=' .  $slug ) ),
-						stripslashes( wpcf_translate( $data->labels->name . ' name', $data->labels->name, 'Types-TAX' ) )
+						stripslashes( wpcf_translate( $data->labels->name . ' name', $data->labels->name, 'toolset-types-taxonomy-labels-for-' . $slug ) )
 					);
                 }
             }
@@ -443,7 +451,7 @@ class Types_Admin_Post_Types_List_Table extends WP_List_Table
                     $map_taxonomies_by_post_type[$post_type][$slug] = sprintf(
 						'<a href="%1$s">%2$s</a>',
 						esc_url( admin_url( 'admin.php?page=wpcf-edit-tax&wpcf-tax=' . $slug ) ),
-						stripslashes( wpcf_translate( $data['labels']['name'] . ' name', $data['labels']['name'], 'Types-TAX' ) )
+						stripslashes( wpcf_translate( $data['labels']['name'] . ' name', $data['labels']['name'], 'toolset-types-taxonomy-labels-for-' . $slug ) )
 					);
                 }
             }

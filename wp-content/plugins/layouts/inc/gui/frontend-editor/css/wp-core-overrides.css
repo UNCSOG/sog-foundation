@@ -1,0 +1,192 @@
+/* Border for visual editor */
+.ddl-dialog .wp-editor-container{
+    border: 1px solid #e5e5e5;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+/* Fix for Genesis */
+.ddl-dialog .mce-widget.mce-btn button{
+    background: inherit;
+}
+/* Fix for Media Gallery*/
+body.ddl-frontend-editor .screen-reader-text, .screen-reader-text span, .ui-helper-hidden-accessible {
+    position: absolute;
+    margin: -1px;
+    padding: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+    word-wrap: normal!important;
+}
+body.ddl-frontend-editor .media-frame,
+body.ddl-frontend-editor .media-modal {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !important;
+    -webkit-overflow-scrolling: touch;
+}
+body.ddl-frontend-editor .media-modal-content h1,
+body.ddl-frontend-editor .media-modal-content h2,
+body.ddl-frontend-editor .media-modal-content h3,
+body.ddl-frontend-editor .media-modal-content h4,
+body.ddl-frontend-editor .media-modal-content h5,
+body.ddl-frontend-editor .media-modal-content h6 {
+    color: #23282d;
+    font-weight: 600;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    -webkit-overflow-scrolling: touch;
+}
+body.ddl-frontend-editor .image-details h2,
+body.ddl-frontend-editor .image-details h3,
+body.ddl-frontend-editor .media-sidebar h2,
+body.ddl-frontend-editor .media-sidebar h3 {
+    color: #666;
+}
+body.ddl-frontend-editor .media-toolbar-primary.search-form {
+    display: inherit;
+    -webkit-box-align: inherit;
+    -ms-flex-align: inherit;
+    align-items: inherit;
+}
+body.ddl-frontend-editor .media-button {
+    text-transform: inherit!important;
+}
+body.ddl-frontend-editor .attachment-details .setting select,
+body.ddl-frontend-editor .media-sidebar .setting select {
+    width: initial;
+    color: initial;
+}
+body.ddl-frontend-editor .ddl-dialog textarea,
+body.ddl-frontend-editor .ddl-dialog select,
+body.ddl-frontend-editor .ddl-dialog input[type="color"],
+body.ddl-frontend-editor .ddl-dialog input[type="date"],
+body.ddl-frontend-editor .ddl-dialog input[type="datetime"],
+body.ddl-frontend-editor .ddl-dialog input[type="datetime-local"],
+body.ddl-frontend-editor .ddl-dialog input[type="email"],
+body.ddl-frontend-editor .ddl-dialog input[type="month"],
+body.ddl-frontend-editor .ddl-dialog input[type="number"],
+body.ddl-frontend-editor .ddl-dialog input[type="password"],
+body.ddl-frontend-editor .ddl-dialog input[type="range"],
+body.ddl-frontend-editor .ddl-dialog input[type="search"],
+body.ddl-frontend-editor .ddl-dialog input[type="tel"],
+body.ddl-frontend-editor .ddl-dialog input[type="text"],
+body.ddl-frontend-editor .ddl-dialog input[type="time"],
+body.ddl-frontend-editor .ddl-dialog input[type="url"],
+body.ddl-frontend-editor .ddl-dialog input[type="week"] {
+    height: inherit;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+    background-color: #fff;
+    color: #32373c;
+    outline: 0;
+    -webkit-transition: 50ms border-color ease-in-out;
+    transition: 50ms border-color ease-in-out;
+}
+body.ddl-frontend-editor .ddl-dialog input[type="checkbox"] {
+    border: 1px solid #b4b9be;
+    background: #fff;
+    color: #555;
+    clear: none;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 0;
+    height: 16px;
+    margin: -4px 4px 0 0;
+    outline: 0;
+    padding: 0!important;
+    text-align: center;
+    vertical-align: middle;
+    width: 16px;
+    min-width: 16px;
+    -webkit-appearance: none;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    -webkit-transition: .05s border-color ease-in-out;
+    transition: .05s border-color ease-in-out;
+}
+body.ddl-frontend-editor .ddl-dialog input[type=checkbox]:checked:before {
+    content: "\f147";
+    margin: -3px 0 0 -4px;
+    color: #1e8cbe;
+}
+body.ddl-frontend-editor .ddl-dialog input[type=radio]:checked:before,
+body.ddl-frontend-editor .ddl-dialog input[type=checkbox]:checked:before {
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+    width: 6px;
+    font: 400 21px/1 dashicons;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body.ddl-frontend-editor .ddl-dialog input[type=text]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=search]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=radio]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=tel]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=time]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=url]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=week]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=password]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=checkbox]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=color]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=date]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=datetime]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=datetime-local]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=email]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=month]:focus,
+body.ddl-frontend-editor .ddl-dialog input[type=number]:focus,
+body.ddl-frontend-editor .ddl-dialog select:focus,
+body.ddl-frontend-editor .ddl-dialog textarea:focus {
+    border-color: #5b9dd9;
+    -webkit-box-shadow: 0 0 2px rgba(30,140,190,.8);
+    box-shadow: 0 0 2px rgba(30,140,190,.8);
+    outline: none;
+
+}
+body .wp-switch-editor {
+    padding-top: 3px;
+}
+body.ddl-frontend-editor select.attachment-filters {
+    float: left;
+    height: 28px;
+    padding: 2px;
+    vertical-align: middle;
+    line-height: 28px;
+    margin: 1px;
+}
+input#media-search-input {
+    height: 25px;
+    line-height: 25px;
+    color: #444;
+}
+body.ddl-frontend-editor .media-modal .thumbnail {
+    display: initial;
+    padding: initial;
+    margin-bottom: initial;
+    line-height: initial;
+    background-color: initial;
+    border: initial;
+    border-radius: initial;
+}
+body.ddl-frontend-editor .media-modal .thumbnail img {
+    max-width: inherit;
+}
+.uploader-inline h2, .uploader-inline h3 {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 400!important;
+    margin: 0;
+}
+body.ddl-frontend-editor .gallery-settings select {
+    height: 28px;
+    padding: 2px;
+    vertical-align: middle;
+    line-height: 28px;
+    margin: 1px;
+    color: #32373c;
+}
+.media-frame input:disabled, .media-frame input[readonly], .media-frame textarea:disabled, .media-frame textarea[readonly] {
+    background-color: #eee !important;
+}

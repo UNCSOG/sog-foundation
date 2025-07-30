@@ -22,7 +22,6 @@ class SimpleSegment extends \Beehive\Google\Collection
     protected $collection_key = 'orFiltersForSegment';
     protected $orFiltersForSegmentType = OrFiltersForSegment::class;
     protected $orFiltersForSegmentDataType = 'array';
-    public $orFiltersForSegment;
     /**
      * @param OrFiltersForSegment[]
      */

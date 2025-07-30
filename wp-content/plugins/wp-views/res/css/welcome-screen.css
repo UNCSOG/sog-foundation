@@ -1,0 +1,57 @@
+body {
+	background: url(../img/welcome/bg-line.png) no-repeat 100% 0;
+}
+#wpcontent {
+	background: url(../img/welcome/bg-brick.png) no-repeat 0 0;
+}
+.wrap-welcome {
+	text-align: center !important;
+}
+.wrap-welcome .notice {
+	display: none !important;
+}
+.wrap-welcome-inner {
+	width: 100%;
+	max-width: 700px;
+	margin: 45px auto 0;
+}
+.wrap-welcome-inner__header {
+	margin-bottom: 50px;
+}
+.wrap-welcome-inner__header h2 {
+	font-size: 24px;
+	color: #333;
+	text-align: center !important;
+	margin-bottom: 0.5em;
+}
+.wrap-welcome-inner__header p {
+	font-size: 16px;
+	color: #666;
+}
+.wrap-welcome-inner__video {
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 60px;
+	padding-top: 56.25%;
+}
+.wrap-welcome-inner__video iframe{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	border: 0;
+}
+.wrap-welcome-inner__cta a {
+	display: inline-flex;
+	font-size: 18px;
+	color: #fff;
+	padding: 19px 25px 17px;
+	border-radius: 3px;
+	background: linear-gradient(to right, #ed793e, #ff4742);
+	text-decoration: none;
+}
+.wrap-welcome-inner__cta a svg {
+	width: 20px;
+	margin-left: 15px;
+}

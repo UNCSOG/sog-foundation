@@ -330,7 +330,7 @@ class MainController {
 			$this->get_cleanup_factory()->troubeshooting_section()->register();
 		} );
 
-		add_filter( 'before_delete_post', function ( $post_id ) {
+		add_action( 'before_delete_post', function ( $post_id ) {
 			// Handle events on post deletion (triggered by wp_delete_post()).
 			//
 			// Basically, that means checking if there are any associations with this post and delete them.
@@ -347,7 +347,7 @@ class MainController {
 			}
 		} );
 
-		add_filter( 'after_delete_post', function ( $post_id ) {
+		add_action( 'after_delete_post', function ( $post_id ) {
 			$this->get_cleanup_factory()->post()->cleanup_after_delete( $post_id );
 		} );
 

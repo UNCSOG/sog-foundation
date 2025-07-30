@@ -48,95 +48,38 @@ class CRED_User_Forms_Model extends CRED_Abstract_Model {
 	/**
 	 * @return array|bool
 	 */
-    public function getDefaultMessages() {
-        static $messages = false;
+	public function getDefaultMessages() {
+		static $messages = false;
 
-        if (!$messages) {
-            $messages = array(
-                'cred_message_post_saved' => 'User ' . __('Saved', 'wp-cred'),
-                'cred_message_post_not_saved_singular' => __('The user was not saved because of the following problem:', 'wp-cred'),
-                'cred_message_post_not_saved_plural' => __('The user was not saved because of the following %NN problems:', 'wp-cred'),
-                'cred_message_invalid_form_submission' => __( 'Invalid User Form Submission (nonce failure)', 'wp-cred'),
-                'cred_message_no_data_submitted' => __( 'Invalid User Form Submission (maybe a file has a size greater than allowed)', 'wp-cred'),
-                'cred_message_upload_failed' => __( 'Upload Failed', 'wp-cred'),
-                'cred_message_field_required' => __( 'This field is required', 'wp-cred'),
-	            'cred_message_invalid_username' => __( 'The username can only contain alphanumeric characters, spaces, -, _, . or @', 'wp-cred'),
-	            'cred_message_passwords_do_not_match' => __( 'Passwords do not match', 'wp-cred'),
-                'cred_message_enter_valid_date' => __( 'Please enter a valid date', 'wp-cred'),
-                'cred_message_values_do_not_match' => __( 'Field values do not match', 'wp-cred'),
-                'cred_message_enter_valid_email' => __( 'Please enter a valid email address', 'wp-cred'),
-                'cred_message_enter_valid_colorpicker' => __( 'Please use a valid hexadecimal value', 'wp-cred'),
-                'cred_message_enter_valid_number' => __( 'Please enter numeric data', 'wp-cred'),
-                'cred_message_enter_valid_url' => __( 'Please enter a valid URL address', 'wp-cred'),
-	            'cred_message_email_already_exists' => __( 'Sorry, that email address is already used!', 'wp-cred'),
-	            'cred_message_username_already_exists' => __( 'Sorry, that username already exists!', 'wp-cred'),
-	            'cred_message_invalid_edit_user_role' => __( 'This form can not edit users with a role of %%EDITED_USER_ROLE%%', 'wp-cred'),
-                'cred_message_enter_valid_captcha' => __( 'Wrong CAPTCHA', 'wp-cred'),
-                'cred_message_missing_captcha' => __( 'Missing CAPTCHA', 'wp-cred'),
-                'cred_message_show_captcha' => __( 'Show CAPTCHA', 'wp-cred'),
-                'cred_message_edit_skype_button' => __( 'Edit Skype Button', 'wp-cred'),
-                'cred_message_not_valid_image' => __( 'Not Valid Image', 'wp-cred'),
-                'cred_message_file_type_not_allowed' => __( 'File type not allowed', 'wp-cred'),
-                'cred_message_image_width_larger' => __( 'Image width larger than %dpx', 'wp-cred'),
-                'cred_message_image_height_larger' => __( 'Image height larger than %dpx', 'wp-cred'),
-                'cred_message_show_popular' => __( 'Show Popular', 'wp-cred'),
-                'cred_message_hide_popular' => __( 'Hide Popular', 'wp-cred'),
-                'cred_message_add_taxonomy' => __( 'Add', 'wp-cred'),
-                'cred_message_remove_taxonomy' => __( 'Remove', 'wp-cred'),
-				'cred_message_add_new_taxonomy' => __( 'Add New', 'wp-cred'),
-				'cred_message_access_error_can_not_use_form' => '',
-			);
-        }
+		if ( ! $messages ) {
+			$model           = new \OTGS\Toolset\CRED\Model\Forms\User\Messages\DefaultMessages();
+			$defaultMessages = $model->getDefaultMessages();
+			$messages        = array();
+			foreach ( $defaultMessages as $messageId => $messageData ) {
+				$messages[ $messageId ] = toolset_getarr( $messageData, 'message', '' );
+			}
+		}
 
-        return $messages;
-    }
+		return $messages;
+	}
 
-	/**
-	 * @return array|bool
-	 */
-    public function getDefaultMessageDescriptions() {
-        static $desc = false;
+/**
+ * @return array|bool
+ */
+	public function getDefaultMessageDescriptions() {
+		static $desc = false;
 
-        if (!$desc) {
-	        $desc = array(
-		        'cred_message_post_saved' => __( 'User saved Message', 'wp-cred' ),
-		        'cred_message_post_not_saved_singular' => __( 'User not saved message (one problem)', 'wp-cred' ),
-		        'cred_message_post_not_saved_plural' => __( 'User not saved message (several problems)', 'wp-cred' ),
-		        'cred_message_invalid_form_submission' => __( 'Invalid submission message', 'wp-cred' ),
-		        'cred_message_no_data_submitted' => __( 'Invalid Form Submission (maybe a file has a size greater than allowed)', 'wp-cred' ),
-		        'cred_message_upload_failed' => __( 'Upload failed message', 'wp-cred' ),
-		        'cred_message_field_required' => __( 'Required field message', 'wp-cred' ),
-		        'cred_message_invalid_username' => __( 'Invalid username message', 'wp-cred' ),
-		        'cred_message_passwords_do_not_match' => __('Passwords do not match', 'wp-cred'),
-		        'cred_message_enter_valid_date' => __( 'Invalid date message', 'wp-cred' ),
-		        'cred_message_values_do_not_match' => __( 'Invalid hidden field value message', 'wp-cred' ),
-		        'cred_message_enter_valid_email' => __( 'Invalid email message', 'wp-cred' ),
-		        'cred_message_enter_valid_colorpicker' => __( 'Invalid color picker message', 'wp-cred' ),
-		        'cred_message_enter_valid_number' => __( 'Invalid numeric field message', 'wp-cred' ),
-		        'cred_message_enter_valid_url' => __( 'Invalid URL message', 'wp-cred' ),
-		        'cred_message_email_already_exists' => __( 'Email already exists message', 'wp-cred' ),
-		        'cred_message_username_already_exists' => __( 'Username already exists message', 'wp-cred' ),
-		        'cred_message_invalid_edit_user_role' => __( 'Invalid Editing User Role', 'wp-cred' ),
-		        'cred_message_enter_valid_captcha' => __( 'Invalid captcha message', 'wp-cred' ),
-		        'cred_message_missing_captcha' => __( 'Missing captcha message', 'wp-cred' ),
-		        'cred_message_show_captcha' => __( 'Show captcha button', 'wp-cred' ),
-		        'cred_message_edit_skype_button' => __( 'Edit skype button', 'wp-cred' ),
-		        'cred_message_not_valid_image' => __( 'Invalid image message', 'wp-cred' ),
-		        'cred_message_file_type_not_allowed' => __( 'Invalid file type message', 'wp-cred' ),
-		        'cred_message_image_width_larger' => __( 'Invalid image width message', 'wp-cred' ),
-		        'cred_message_image_height_larger' => __( 'Invalid image height message', 'wp-cred' ),
-		        'cred_message_show_popular' => __( 'Taxonomy show popular message', 'wp-cred' ),
-		        'cred_message_hide_popular' => __( 'Taxonomy hide popular message', 'wp-cred' ),
-		        'cred_message_add_taxonomy' => __( 'Add taxonomy term', 'wp-cred' ),
-		        'cred_message_remove_taxonomy' => __( 'Remove taxonomy term', 'wp-cred' ),
-				'cred_message_add_new_taxonomy' => __( 'Add new taxonomy message', 'wp-cred' ),
-				/* translators: Label for the setting to show when the current visitor can not use the current form */
-				'cred_message_access_error_can_not_use_form' => __( 'Optional message to show when the current visitor is not allowed to use this form', 'wp-cred' ),
-			);
-        }
+		if ( ! $desc ) {
+			$model           = new \OTGS\Toolset\CRED\Model\Forms\User\Messages\DefaultMessages();
+			$defaultMessages = $model->getDefaultMessages();
+			$desc            = array();
+			foreach ( $defaultMessages as $messageId => $messageData ) {
+				$desc[ $messageId ] = toolset_getarr( $messageData, 'description', '' );
+			}
+		}
 
-        return $desc;
-    }
+		return $desc;
+	}
 
 	/**
 	 * @param string $src

@@ -7,7 +7,7 @@ if (\class_exists('Beehive\\Google_Client', \false)) {
     // @see https://github.com/googleapis/google-api-php-client/issues/1976
     return;
 }
-$classMap = ['Beehive\\Google\\Client' => 'Google_Client', 'Beehive\\Google\\Service' => 'Google_Service', 'Beehive\\Google\\AccessToken\\Revoke' => 'Google_AccessToken_Revoke', 'Beehive\\Google\\AccessToken\\Verify' => 'Google_AccessToken_Verify', 'Beehive\\Google\\Model' => 'Google_Model', 'Beehive\\Google\\Utils\\UriTemplate' => 'Google_Utils_UriTemplate', 'Beehive\\Google\\AuthHandler\\Guzzle6AuthHandler' => 'Google_AuthHandler_Guzzle6AuthHandler', 'Beehive\\Google\\AuthHandler\\Guzzle7AuthHandler' => 'Google_AuthHandler_Guzzle7AuthHandler', 'Beehive\\Google\\AuthHandler\\Guzzle5AuthHandler' => 'Google_AuthHandler_Guzzle5AuthHandler', 'Beehive\\Google\\AuthHandler\\AuthHandlerFactory' => 'Google_AuthHandler_AuthHandlerFactory', 'Beehive\\Google\\Http\\Batch' => 'Google_Http_Batch', 'Beehive\\Google\\Http\\MediaFileUpload' => 'Google_Http_MediaFileUpload', 'Beehive\\Google\\Http\\REST' => 'Google_Http_REST', 'Beehive\\Google\\Task\\Retryable' => 'Google_Task_Retryable', 'Beehive\\Google\\Task\\Exception' => 'Google_Task_Exception', 'Beehive\\Google\\Task\\Runner' => 'Google_Task_Runner', 'Beehive\\Google\\Collection' => 'Google_Collection', 'Beehive\\Google\\Service\\Exception' => 'Google_Service_Exception', 'Beehive\\Google\\Service\\Resource' => 'Google_Service_Resource', 'Beehive\\Google\\Exception' => 'Google_Exception'];
+$classMap = ['Beehive\\Google\\Client' => 'Google_Client', 'Beehive\\Google\\Service' => 'Google_Service', 'Beehive\\Google\\AccessToken\\Revoke' => 'Google_AccessToken_Revoke', 'Beehive\\Google\\AccessToken\\Verify' => 'Google_AccessToken_Verify', 'Beehive\\Google\\Model' => 'Google_Model', 'Beehive\\Google\\Utils\\UriTemplate' => 'Google_Utils_UriTemplate', 'Beehive\\Google\\AuthHandler\\Guzzle6AuthHandler' => 'Google_AuthHandler_Guzzle6AuthHandler', 'Beehive\\Google\\AuthHandler\\Guzzle7AuthHandler' => 'Google_AuthHandler_Guzzle7AuthHandler', 'Beehive\\Google\\AuthHandler\\AuthHandlerFactory' => 'Google_AuthHandler_AuthHandlerFactory', 'Beehive\\Google\\Http\\Batch' => 'Google_Http_Batch', 'Beehive\\Google\\Http\\MediaFileUpload' => 'Google_Http_MediaFileUpload', 'Beehive\\Google\\Http\\REST' => 'Google_Http_REST', 'Beehive\\Google\\Task\\Retryable' => 'Google_Task_Retryable', 'Beehive\\Google\\Task\\Exception' => 'Google_Task_Exception', 'Beehive\\Google\\Task\\Runner' => 'Google_Task_Runner', 'Beehive\\Google\\Collection' => 'Google_Collection', 'Beehive\\Google\\Service\\Exception' => 'Google_Service_Exception', 'Beehive\\Google\\Service\\Resource' => 'Google_Service_Resource', 'Beehive\\Google\\Exception' => 'Google_Exception'];
 foreach ($classMap as $class => $alias) {
     \class_alias($class, $alias);
 }
@@ -32,9 +32,6 @@ if (\false) {
     {
     }
     class Google_AuthHandler_AuthHandlerFactory extends \Beehive\Google\AuthHandler\AuthHandlerFactory
-    {
-    }
-    class Google_AuthHandler_Guzzle5AuthHandler extends \Beehive\Google\AuthHandler\Guzzle5AuthHandler
     {
     }
     class Google_AuthHandler_Guzzle6AuthHandler extends \Beehive\Google\AuthHandler\Guzzle6AuthHandler

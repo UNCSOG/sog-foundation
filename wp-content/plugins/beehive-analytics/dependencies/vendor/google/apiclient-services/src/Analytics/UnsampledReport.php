@@ -26,7 +26,6 @@ class UnsampledReport extends \Beehive\Google\Model
     public $accountId;
     protected $cloudStorageDownloadDetailsType = UnsampledReportCloudStorageDownloadDetails::class;
     protected $cloudStorageDownloadDetailsDataType = '';
-    public $cloudStorageDownloadDetails;
     /**
      * @var string
      */
@@ -41,7 +40,6 @@ class UnsampledReport extends \Beehive\Google\Model
     public $downloadType;
     protected $driveDownloadDetailsType = UnsampledReportDriveDownloadDetails::class;
     protected $driveDownloadDetailsDataType = '';
-    public $driveDownloadDetails;
     /**
      * @var string
      */

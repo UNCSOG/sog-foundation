@@ -118,8 +118,8 @@ $link-decoration: none;
 
 // UNC Custom Theme Layout
 // @import "dist/scss/layout/main";
-// @import "dist/scss/layout/header";
-// @import "dist/scss/layout/footer";
+@import "dist/scss/layout/header";
+@import "dist/scss/layout/footer";
 
 /**
  * General

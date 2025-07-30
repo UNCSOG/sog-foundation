@@ -1,0 +1,348 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Module Manager\n"
+"POT-Creation-Date: 2013-03-18 13:22+0200\n"
+"PO-Revision-Date: 2013-03-18 13:22+0200\n"
+"Last-Translator: Nikos M. <nikosms0@gmail.com>\n"
+"Language-Team:  <nikos.m@icanlocalize.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: c:\\xampp\\htdocs\\crud\\wp-content\\plugins"
+"\\module_manager\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: loader.php:131 loader.php:276 _prev/loader.php:109 _prev/loader.php:192
+#, php-format
+msgid "File \"%s\" doesn't exist!"
+msgstr ""
+
+#: classes/ModuleManager.php:119 _prev/classes/ModuleManager.php:89
+msgid "Module does nor exist"
+msgstr ""
+
+#: classes/ModuleManager.php:164 _prev/classes/ModuleManager.php:134
+msgid "Nothing to export"
+msgstr ""
+
+#: classes/ModuleManager.php:169 _prev/classes/ModuleManager.php:139
+msgid "PHP does not support ZipArchive class"
+msgstr ""
+
+#: classes/ModuleManager.php:269 _prev/classes/ModuleManager.php:239
+msgid "Could not create tmp module folder"
+msgstr ""
+
+#: classes/ModuleManager.php:271 _prev/classes/ModuleManager.php:241
+msgid "Unknown error"
+msgstr ""
+
+#: classes/ModuleManager.php:273 _prev/classes/ModuleManager.php:243
+msgid "No module file given"
+msgstr ""
+
+#: classes/ModuleManager.php:288 _prev/classes/ModuleManager.php:258
+msgid "Tmp module folder does not exist"
+msgstr ""
+
+#: classes/ModuleManager.php:293 _prev/classes/ModuleManager.php:263
+msgid "No module info given"
+msgstr ""
+
+#: classes/ModuleManager.php:302 _prev/classes/ModuleManager.php:272
+msgid "No module items given"
+msgstr ""
+
+#: classes/ModuleManager.php:361 _prev/classes/ModuleManager.php:309
+msgid "Wrong step"
+msgstr ""
+
+#: classes/ModuleManager.php:412 _prev/classes/ModuleManager.php:360
+msgid "PHP does not support zip_open function"
+msgstr ""
+
+#: classes/ModuleManager.php:442 _prev/classes/ModuleManager.php:390
+msgid "No zip entry"
+msgstr ""
+
+#: classes/ModuleManager.php:447 _prev/classes/ModuleManager.php:395
+msgid "No xml files in .zip."
+msgstr ""
+
+#: classes/ModuleManager.php:456 _prev/classes/ModuleManager.php:404
+msgid "Unable to open .zip file"
+msgstr ""
+
+#: classes/ModuleManager.php:461 _prev/classes/ModuleManager.php:409
+msgid "File is not .zip format"
+msgstr ""
+
+#: classes/ModuleManager.php:464 _prev/classes/ModuleManager.php:412
+msgid "Unknown error during import"
+msgstr ""
+
+#: classes/ModuleManager.php:513 _prev/classes/ModuleManager.php:461
+msgid "Could no create TMP folder with necessary permissions"
+msgstr ""
+
+#: classes/ModuleManager.php:587 _prev/classes/ModuleManager.php:515
+msgid "Settings"
+msgstr ""
+
+#: classes/ModuleManager.php:596 views/modules.php:9
+#: _prev/classes/ModuleManager.php:524 _prev/views/modules.php:9
+msgid "Module Manager"
+msgstr ""
+
+#: views/modules.php:13 _prev/views/modules.php:13
+msgid "Define Modules"
+msgstr ""
+
+#: views/modules.php:14 _prev/views/modules.php:14
+msgid "Import Modules"
+msgstr ""
+
+#: views/modules.php:38
+msgid "Types 1.2.1 or greater is required for Module Manager"
+msgstr ""
+
+#: views/modules.php:42
+msgid "Views 1.2.1 or greater is required for Module Manager"
+msgstr ""
+
+#: views/modules.php:46
+msgid "FORMS 1.1.4 or greater is required for Module Manager"
+msgstr ""
+
+#: views/templates/import.tpl.php:7 _prev/views/templates/import.tpl.php:7
+msgid ""
+"This screen is used to import modules. \n"
+"    You can see the module details like Name, Description and detailed "
+"contents.\n"
+"    Also you can choose what to import and what not, depending on what "
+"exists already on your Wordpress Installation."
+msgstr ""
+
+#: views/templates/import.tpl.php:21 views/templates/import.tpl.php:127
+#: _prev/views/templates/import.tpl.php:21
+#: _prev/views/templates/import.tpl.php:127
+#, php-format
+msgid "Import: Step %d of %d"
+msgstr ""
+
+#: views/templates/import.tpl.php:32 views/templates/import.tpl_bak.php:14
+#: _prev/views/templates/import.tpl.php:32
+msgid "Upload Error"
+msgstr ""
+
+#: views/templates/import.tpl.php:51 _prev/views/templates/import.tpl.php:51
+msgid "Module Information"
+msgstr ""
+
+#: views/templates/import.tpl.php:53 _prev/views/templates/import.tpl.php:53
+msgid "Module Name:"
+msgstr ""
+
+#: views/templates/import.tpl.php:59 _prev/views/templates/import.tpl.php:59
+msgid "Module Description:"
+msgstr ""
+
+#: views/templates/import.tpl.php:69 _prev/views/templates/import.tpl.php:69
+msgid "Module Contents:"
+msgstr ""
+
+#: views/templates/import.tpl.php:77 _prev/views/templates/import.tpl.php:77
+msgid "Section:"
+msgstr ""
+
+#: views/templates/import.tpl.php:96 _prev/views/templates/import.tpl.php:96
+msgid "A different version is installed"
+msgstr ""
+
+#: views/templates/import.tpl.php:98 _prev/views/templates/import.tpl.php:98
+msgid "Same version is installed"
+msgstr ""
+
+#: views/templates/import.tpl.php:111 _prev/views/templates/import.tpl.php:111
+msgid "Import selected items"
+msgstr ""
+
+#: views/templates/import.tpl.php:120 _prev/views/templates/import.tpl.php:120
+msgid "No File was uploaded"
+msgstr ""
+
+#: views/templates/import.tpl.php:169 _prev/views/templates/import.tpl.php:169
+#, php-format
+msgid "(%d) %s were <strong>overwritten</strong>"
+msgstr ""
+
+#: views/templates/import.tpl.php:175 _prev/views/templates/import.tpl.php:175
+#, php-format
+msgid "(%d) %s were <strong>created</strong>"
+msgstr ""
+
+#: views/templates/import.tpl.php:181 _prev/views/templates/import.tpl.php:181
+#, php-format
+msgid "(%d) %s <strong>failed</strong> to import"
+msgstr ""
+
+#: views/templates/import.tpl.php:199 _prev/views/templates/import.tpl.php:199
+msgid "Import failed"
+msgstr ""
+
+#: views/templates/import.tpl.php:205 _prev/views/templates/import.tpl.php:205
+msgid "Import succesful"
+msgstr ""
+
+#: views/templates/import.tpl.php:220 _prev/views/templates/import.tpl.php:220
+msgid "No items were selected"
+msgstr ""
+
+#: views/templates/import.tpl.php:226 _prev/views/templates/import.tpl.php:226
+msgid "No Module information was given"
+msgstr ""
+
+#: views/templates/import.tpl.php:241 views/templates/import.tpl_bak.php:25
+#: _prev/views/templates/import.tpl.php:241
+msgid "Import Module"
+msgstr ""
+
+#: views/templates/import.tpl.php:247 views/templates/import.tpl_bak.php:46
+#: _prev/views/templates/import.tpl.php:247
+msgid "Select the module .zip file to upload:&nbsp;"
+msgstr ""
+
+#: views/templates/import.tpl.php:251 views/templates/import.tpl_bak.php:50
+#: _prev/views/templates/import.tpl.php:251
+msgid "Import"
+msgstr ""
+
+#: views/templates/import.tpl_bak.php:41
+msgid "Import Succesful"
+msgstr ""
+
+#: views/templates/inline.tpl.php:6 _prev/views/templates/inline.tpl.php:6
+#, php-format
+msgid "\"%s\" is part of these Modules: "
+msgstr ""
+
+#: views/templates/inline.tpl.php:35 _prev/views/templates/inline.tpl.php:35
+msgid "Add New Module"
+msgstr ""
+
+#: views/templates/inline.tpl.php:42 views/templates/modules.tpl.php:952
+#: _prev/views/templates/inline.tpl.php:42
+#: _prev/views/templates/modules.tpl.php:923
+msgid "Module Name"
+msgstr ""
+
+#: views/templates/inline.tpl.php:52 _prev/views/templates/inline.tpl.php:52
+msgid "Module already exists!"
+msgstr ""
+
+#: views/templates/modules.tpl.php:42 views/templates/modules.tpl.php:89
+#: _prev/views/templates/modules.tpl.php:42
+#: _prev/views/templates/modules.tpl.php:89
+msgid "Click for details"
+msgstr ""
+
+#: views/templates/modules.tpl.php:124 views/templates/modules.tpl.php:1213
+#: _prev/views/templates/modules.tpl.php:124
+#: _prev/views/templates/modules.tpl.php:1163
+msgid "Module Description"
+msgstr ""
+
+#: views/templates/modules.tpl.php:124 views/templates/modules.tpl.php:1214
+#: _prev/views/templates/modules.tpl.php:124
+#: _prev/views/templates/modules.tpl.php:1164
+msgid "Click for description"
+msgstr ""
+
+#: views/templates/modules.tpl.php:127 views/templates/modules.tpl.php:1224
+#: _prev/views/templates/modules.tpl.php:127
+#: _prev/views/templates/modules.tpl.php:1174
+msgid "Remove"
+msgstr ""
+
+#: views/templates/modules.tpl.php:128 views/templates/modules.tpl.php:1225
+#: _prev/views/templates/modules.tpl.php:128
+#: _prev/views/templates/modules.tpl.php:1175
+msgid "Export"
+msgstr ""
+
+#: views/templates/modules.tpl.php:663
+#: _prev/views/templates/modules.tpl.php:662
+msgid "Do you want to completely remove this module?"
+msgstr ""
+
+#: views/templates/modules.tpl.php:821
+msgid "Add new module"
+msgstr ""
+
+#: views/templates/modules.tpl.php:822
+msgid "Click here to add a new module"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1030
+msgid "Add modules here"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1031
+msgid ""
+"Drag elements here from the left to add them to the module. Drag elements "
+"back to the left to remove them from module. "
+msgstr ""
+
+#: views/templates/modules.tpl.php:1124
+#: _prev/views/templates/modules.tpl.php:1075
+msgid "An error occurred please try again"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1129
+#: _prev/views/templates/modules.tpl.php:1080
+msgid "Module is empty"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1143
+#: _prev/views/templates/modules.tpl.php:1094
+msgid "Settings have changed, if you leave the page they will not be saved!"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1157
+#: _prev/views/templates/modules.tpl.php:1107
+msgid "Settings changed, you need to resave before leaving the page"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1161
+#: _prev/views/templates/modules.tpl.php:1111
+msgid "Available Items"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1164
+#: _prev/views/templates/modules.tpl.php:1114
+msgid ""
+"Drag elements from here to a module on the right to group them to modules. "
+"Drag elements back here to remove them from modules."
+msgstr ""
+
+#: views/templates/modules.tpl.php:1166
+#: _prev/views/templates/modules.tpl.php:1116
+msgid "Search"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1192
+#: _prev/views/templates/modules.tpl.php:1142
+msgid "Modules"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1237
+#: _prev/views/templates/modules.tpl.php:1187
+msgid "Add New"
+msgstr ""
+
+#: views/templates/modules.tpl.php:1240
+#: _prev/views/templates/modules.tpl.php:1190
+msgid "Save Modules"
+msgstr ""

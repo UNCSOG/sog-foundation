@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad
+class ComposerStaticInitc8003cd4a111fbcfc47e07813d07ff1a
 {
     public static $files = array (
         'b45b351e6b6f7487d819961fef2fda77' => __DIR__ . '/..' . '/jakeasmith/http_build_url/src/http_build_url.php',
@@ -855,6 +855,9 @@ class ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad
         'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\LiteSpeedCache' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/LiteSpeedCache.php',
         'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\RepeatableFieldSortorderTranslation' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/RepeatableFieldSortorderTranslation.php',
         'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\SiteGroundOptimizer' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/SiteGroundOptimizer.php',
+        'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\WPML\\FieldsGroups' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/WPML/FieldsGroups.php',
+        'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\WPML\\PostTypes' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/WPML/PostTypes.php',
+        'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\WPML\\Taxonomies' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/WPML/Taxonomies.php',
         'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\WordPressImageScaleDown' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/WordPressImageScaleDown.php',
         'OTGS\\Toolset\\Types\\Controller\\Interop\\Managed\\WpmlTridAutodraftOverride' => __DIR__ . '/../..' . '/application/controllers/interop/Managed/WpmlTridAutodraftOverride.php',
         'OTGS\\Toolset\\Types\\Controller\\Interop\\OnDemand\\WpmlTridAutodraftOverride' => __DIR__ . '/../..' . '/application/controllers/interop/OnDemand/WpmlTridAutodraftOverride.php',
@@ -910,6 +913,7 @@ class ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad
         'OTGS\\Toolset\\Types\\Upgrade\\Commands\\Upgrade2010000CleanMessInNonAdminUserCaps' => __DIR__ . '/../..' . '/application/controllers/Upgrade/Commands/Upgrade2010000CleanMessInNonAdminUserCaps.php',
         'OTGS\\Toolset\\Types\\Upgrade\\Commands\\Upgrade2021600CleanMessInAdminUserCaps' => __DIR__ . '/../..' . '/application/controllers/Upgrade/Commands/Upgrade2021600CleanMessInAdminUserCaps.php',
         'OTGS\\Toolset\\Types\\Upgrade\\Commands\\Upgrade3040000OneShotRelationshipDatabaseLayerMigration' => __DIR__ . '/../..' . '/application/controllers/Upgrade/Commands/Upgrade3040000OneShotRelationshipDatabaseLayerMigration.php',
+        'OTGS\\Toolset\\Types\\Upgrade\\Commands\\Upgrade3060000TranslationPackages' => __DIR__ . '/../..' . '/application/controllers/Upgrade/Commands/Upgrade3060000TranslationPackages.php',
         'OTGS\\Toolset\\Types\\Upgrade\\TypesVersion' => __DIR__ . '/../..' . '/application/controllers/Upgrade/TypesVersion.php',
         'OTGS\\Toolset\\Types\\User\\Access' => __DIR__ . '/../..' . '/application/models/user/Access.php',
         'OTGS\\Toolset\\Types\\User\\AccessFactory' => __DIR__ . '/../..' . '/application/models/user/AccessFactory.php',
@@ -1657,9 +1661,9 @@ class ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit96ba3351fb223bb667d05e1da87e58ad::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc8003cd4a111fbcfc47e07813d07ff1a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc8003cd4a111fbcfc47e07813d07ff1a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc8003cd4a111fbcfc47e07813d07ff1a::$classMap;
 
         }, null, ClassLoader::class);
     }

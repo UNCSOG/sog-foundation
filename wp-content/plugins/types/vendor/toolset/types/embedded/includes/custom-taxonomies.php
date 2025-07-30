@@ -10,41 +10,52 @@
  */
 function wpcf_custom_taxonomies_default() {
     return array(
-        'slug' => '',
-        'description' => '',
-        'supports' => array(),
-        'public' => true,
-        'show_in_nav_menus' => true,
-        'hierarchical' => false,
-        'show_ui' => true,
-        'show_tagcloud' => true,
-        'show_admin_column' => false,
-        'update_count_callback' => '',
-        'query_var_enabled' => true,
-        'query_var' => '',
-        'rewrite' => array(
-            'enabled' => true,
-            'slug' => '',
-            'with_front' => true,
+				'slug'                  => '',
+				'description'           => '',
+				'supports'              => array(),
+				'public'                => true,
+				'show_in_nav_menus'     => true,
+				'hierarchical'          => false,
+				'show_ui'               => true,
+				'show_tagcloud'         => true,
+				'show_admin_column'     => false,
+				'update_count_callback' => '',
+				'query_var_enabled'     => true,
+				'query_var'             => '',
+				'capabilities'          => false,
+				'rewrite'               => array(
+            'enabled'      => true,
+            'slug'         => '',
+            'with_front'   => true,
             'hierarchical' => true
         ),
-        'capabilities' => false,
         'labels' => array(
-            'name' => '',
-            'singular_name' => '',
-            'search_items' => 'Search %s',
-            'popular_items' => 'Popular %s',
-            'all_items' => 'All %s',
-            'parent_item' => 'Parent %s',
-            'parent_item_colon' => 'Parent %s:',
-            'edit_item' => 'Edit %s',
-            'update_item' => 'Update %s',
-            'add_new_item' => 'Add New %s',
-            'new_item_name' => 'New %s Name',
-            'separate_items_with_commas' => 'Separate %s with commas',
-            'add_or_remove_items' => 'Add or remove %s',
-            'choose_from_most_used' => 'Choose from the most used %s',
-            'menu_name' => '%s',
+						'name'                       => '',
+						'singular_name'              => '',
+						'search_items'               => 'Search %s',
+						'popular_items'              => 'Popular %s',
+						'menu_name'                  => '%s',
+						'all_items'                  => 'All %s',
+						'parent_item'                => 'Parent %s',
+						'parent_item_colon'          => 'Parent %s:',
+						'edit_item'                  => 'Edit %s',
+						'view_item'                  => 'View %s',
+						'update_item'                => 'Update %s',
+						'add_new_item'               => 'Add New %s',
+						'new_item_name'              => 'New %s Name',
+						'template_name'              => '%s Archives',
+						'separate_items_with_commas' => 'Separate %s with commas',
+						'add_or_remove_items'        => 'Add or remove %s',
+						'choose_from_most_used'      => 'Choose from the most used %s',
+						'not_found'                  => 'No %s found.',
+						'no_terms'                   => 'No %s',
+						'filter_by_item'             => 'Filter by %s',
+						'items_list_navigation'      => '%s list navigation',
+						'items_list'                 => '%s list',
+						'most_used'                  => 'Most used',
+						'back_to_items'              => '&larr; Go to %s',
+						'item_link'                  => '%s Link',
+						'item_link_description'      => 'A link to a %s',
         ),
         'meta_box_cb' => array(
             'disabled' => false,
@@ -58,6 +69,7 @@ function wpcf_custom_taxonomies_default() {
  */
 function wpcf_custom_taxonomies_init()
 {
+	do_action( 'wpcf_init_default_taxonomies_labels' );
     $custom_taxonomies = get_option( WPCF_OPTION_NAME_CUSTOM_TAXONOMIES, array() );
     if ( !empty( $custom_taxonomies ) ) {
         foreach ( $custom_taxonomies as $taxonomy => $data ) {
@@ -174,14 +186,6 @@ function wpcf_custom_taxonomies_register( $taxonomy, $data ) {
 	// Set labels
 	if ( ! empty( $data['labels'] ) ) {
 
-		if ( ! isset( $data['labels']['name'] ) ) {
-			$data['labels']['name'] = $taxonomy;
-		}
-
-		if ( ! isset( $data['labels']['singular_name'] ) ) {
-			$data['labels']['singular_name'] = $data['labels']['name'];
-		}
-
 		foreach ( $data['labels'] as $label_key => $label ) {
 			$data['labels'][ $label_key ] = $label = stripslashes( $label );
 
@@ -196,7 +200,27 @@ function wpcf_custom_taxonomies_register( $taxonomy, $data ) {
 				case 'update_item':
 				case 'add_new_item':
 				case 'new_item_name':
-					$data['labels'][ $label_key ] = sprintf( $label, $data['labels']['singular_name'] );
+				case 'view_item':
+				case 'template_name':
+				case 'item_link':
+					try {
+						$data['labels'][ $label_key ] = sprintf( $label, $data['labels']['singular_name'] );
+					} catch ( Error $e ) {
+						if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+							error_log( 'Invalid taxonomy ' . $label_key . ' label: ' . $e->getMessage() );
+						}
+					}
+					break;
+
+				case 'filter_by_item':
+				case 'item_link_description':
+					try {
+						$data['labels'][ $label_key ] = sprintf( $label, strtolower( $data['labels']['singular_name'] ) );
+					} catch ( Error $e ) {
+						if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+							error_log( 'Invalid taxonomy ' . $label_key . ' label: ' . $e->getMessage() );
+						}
+					}
 					break;
 
 				case 'search_items':
@@ -206,7 +230,27 @@ function wpcf_custom_taxonomies_register( $taxonomy, $data ) {
 				case 'add_or_remove_items':
 				case 'choose_from_most_used':
 				case 'menu_name':
-					$data['labels'][ $label_key ] = sprintf( $label, $data['labels']['name'] );
+				case 'items_list_navigation':
+				case 'items_list':
+				case 'back_to_items':
+					try {
+						$data['labels'][ $label_key ] = sprintf( $label, $data['labels']['name'] );
+					} catch ( Error $e ) {
+						if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+							error_log( 'Invalid taxonomy ' . $label_key . ' label: ' . $e->getMessage() );
+						}
+					}
+					break;
+
+				case 'not_found':
+				case 'no_terms':
+					try {
+						$data['labels'][ $label_key ] = sprintf( $label, strtolower( $data['labels']['name'] ) );
+					} catch ( Error $e ) {
+						if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+							error_log( 'Invalid taxonomy ' . $label_key . ' label: ' . $e->getMessage() );
+						}
+					}
 					break;
 			}
 		}
@@ -264,8 +308,8 @@ function wpcf_custom_taxonomies_register( $taxonomy, $data ) {
 	 * Translate (and register with WPML) the taxonomy strings in the correct gettext context
 	 * @link https://onthegosystems.myjetbrains.com/youtrack/issue/types-1323
 	 */
-	$taxonomy_args['labels']['name']          = _x( $taxonomy_args['labels']['name'], 'taxonomy general name', 'Types-TAX' );
-	$taxonomy_args['labels']['singular_name'] = _x( $taxonomy_args['labels']['singular_name'], 'taxonomy singular name', 'Types-TAX' );
+	//$taxonomy_args['labels']['name']          = _x( $taxonomy_args['labels']['name'], 'taxonomy general name', 'toolset-types-taxonomy-labels-for-' . $taxonomy );
+	//$taxonomy_args['labels']['singular_name'] = _x( $taxonomy_args['labels']['singular_name'], 'taxonomy singular name', 'toolset-types-taxonomy-labels-for-' . $taxonomy );
 
 	$result = register_taxonomy( $taxonomy, $object_types_filtered, $taxonomy_args );
 

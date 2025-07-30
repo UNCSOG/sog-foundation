@@ -1,0 +1,32 @@
+.hidden,
+.ddl-dialogs-container{
+    display: none;
+}
+
+/* Add margin to body */
+.ddl-frontend-editor{
+    /*margin-top: 44px !important;*/
+}
+
+/* Make wrapper relative, so we can append absolute overlay in it */
+.ddl-frontend-editor-editable{
+    position: relative;
+}
+
+/* Animations */
+@keyframes opacity {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Transformations */
+.flip-h{
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph; /*IE*/
+    filter: fliph; /*IE*/
+}
+body.disable-scrollbar{overflow: auto;}
+body.noscroll{position:static;}

@@ -13,6 +13,9 @@ class Types_Admin_Edit_Meta_Fields_Group extends Types_Admin_Edit_Fields
         '/add_meta_boxes$/',
     );
 
+		/** @var array */
+		public $ct = [];
+
 
     public function __construct()
     {
@@ -67,13 +70,14 @@ class Types_Admin_Edit_Meta_Fields_Group extends Types_Admin_Edit_Fields
 
         $this->current_user_can_edit = WPCF_Roles::user_can_create('user-meta-field');
 
+				$this->update = [];
+
         // If it's update, get data
         $this->update = false;
         if (isset($_REQUEST[$this->get_id])) {
             $this->update = wpcf_admin_fields_get_group(intval($_REQUEST[$this->get_id]), TYPES_USER_META_FIELD_GROUP_CPT_NAME);
             $this->current_user_can_edit = WPCF_Roles::user_can_edit('user-meta-field', $this->update);
             if (empty($this->update)) {
-                $this->update = false;
                 wpcf_admin_message(sprintf(__("Group with ID %d do not exist", 'wpcf'), intval($_REQUEST[$this->get_id])));
             } else {
                 $this->update['fields'] = wpcf_admin_fields_get_fields_by_group( sanitize_text_field( $_REQUEST[$this->get_id] ), 'slug', false, true, false, TYPES_USER_META_FIELD_GROUP_CPT_NAME, 'wpcf-usermeta');
@@ -462,8 +466,20 @@ var wpcfDefaultCss = ' .  json_encode( base64_encode($admin_styles_value) ) . ';
             // Name changed
             if (strtolower($group_name) != strtolower($post->post_title)) {
                 // Check if already exists
-                $exists = get_page_by_title($group_name, 'OBJECT', TYPES_USER_META_FIELD_GROUP_CPT_NAME);
-                if (!empty($exists)) {
+								$groups = get_posts(
+									array(
+											'post_type'              => TYPES_USER_META_FIELD_GROUP_CPT_NAME,
+											'title'                  => $group_name,
+											'post_status'            => 'all',
+											'numberposts'            => 1,
+											'update_post_term_cache' => false,
+											'update_post_meta_cache' => false,           
+											'orderby'                => 'post_date ID',
+											'order'                  => 'ASC',
+									)
+								);
+                if (!empty($groups)) {
+									$exists = $groups[0];
                     $form->triggerError();
                     wpcf_admin_message(
                         sprintf(
@@ -485,8 +501,20 @@ var wpcfDefaultCss = ' .  json_encode( base64_encode($admin_styles_value) ) . ';
         } else {
             $new_group = true;
             // Check if already exists
-            $exists = get_page_by_title($group_name, 'OBJECT', TYPES_USER_META_FIELD_GROUP_CPT_NAME);
-            if (!empty($exists)) {
+						$groups = get_posts(
+							array(
+									'post_type'              => TYPES_USER_META_FIELD_GROUP_CPT_NAME,
+									'title'                  => $group_name,
+									'post_status'            => 'all',
+									'numberposts'            => 1,
+									'update_post_term_cache' => false,
+									'update_post_meta_cache' => false,           
+									'orderby'                => 'post_date ID',
+									'order'                  => 'ASC',
+							)
+						);
+            if (!empty($groups)) {
+							$exists = $groups[0];
                 $form->triggerError();
                 wpcf_admin_message(
                     sprintf(

@@ -129,6 +129,16 @@ class WPCF_Field
      */
     var $unique_id = '';
 
+		/**
+		 * Meta
+		 */
+		var $__meta = '';
+
+		/**
+		 * Meta object
+		 */
+		var $meta_object;
+
     public function __construct( $config = array() ) {
 
     }

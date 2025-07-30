@@ -27,7 +27,6 @@ class SearchUserActivityResponse extends \Beehive\Google\Collection
     public $sampleRate;
     protected $sessionsType = UserActivitySession::class;
     protected $sessionsDataType = 'array';
-    public $sessions;
     /**
      * @var int
      */

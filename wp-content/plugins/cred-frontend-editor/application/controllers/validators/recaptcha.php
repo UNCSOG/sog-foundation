@@ -9,6 +9,7 @@ define( 'CRED_GOOGLE_RECAPTCHA_V2_VALIDATION_URL', 'https://www.google.com/recap
 class CRED_Validator_Recaptcha extends CRED_Validator_Base implements ICRED_Validator {
 
 	protected $recaptcha_via_url;
+	protected $message_controller;
 
 	function __construct( CRED_Form_Base $base_form, CRED_Validate_Recaptcha_Via_Url $recaptcha_via_url, \OTGS\Toolset\CRED\Controller\FormAction\Message\Base $message_controller ) {
 		parent::__construct( $base_form );

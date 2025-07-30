@@ -1,0 +1,31 @@
+/**
+    Toolset Import
+    @since 1.8
+*/
+.modules-list-area{
+    margin-left: 20px;
+}
+.modman-import-details{
+    border: 1px solid #ccc;
+    width: 100%;
+}
+.modman-import-details thead tr td{
+    border-bottom: 1px solid #ccc;
+    font-weight: 600;
+}
+.modman_instruction{
+    margin-top: 20px;
+}
+.modman_instruction ul li{
+    font-size: 15px;
+    list-style: disc;
+    margin-left: 20px;
+}
+.modman_outer_link{
+    padding-right:15px;
+    background: url("../images/outer_link.png") right no-repeat;
+}
+.import-module-header h2, .import-module-info h2{
+    font-weight: normal;
+    line-height: 22px;
+}

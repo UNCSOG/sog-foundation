@@ -158,10 +158,10 @@ class CRED_Asset_Manager {
 		wp_register_script( 'cred_gui', $this->get_admin_assets_url( 'common/js/gui.js' ), array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-dialog', 'wp-pointer' ), CRED_FE_VERSION );
 		wp_register_script( 'cred_mvc', $this->get_admin_assets_url( 'common/js/mvc.js' ), array( 'jquery', 'icl_editor-script' ), CRED_FE_VERSION );
 		wp_register_script( self::SCRIPT_CODEMIRROR_SHORTCODES_MODE, $this->get_admin_assets_url( 'third-party/codemirror_shortcodes.js' ), array( 'jquery', Toolset_Assets_Manager::SCRIPT_CODEMIRROR ), CRED_FE_VERSION );
-		wp_register_script( 'cred_cred_dev', $this->get_admin_assets_url( 'js/cred.js' ), array( 'jquery', 'underscore', 'cred_console_polyfill', 'toolset-meta-html-codemirror-xml-script', 'toolset-codemirror-script', 'toolset-meta-html-codemirror-css-script', self::SCRIPT_CODEMIRROR_SHORTCODES_MODE, 'cred_extra', 'cred_utils', 'cred_gui', 'cred_mvc', 'jquery-ui-sortable', 'toolset-utils', 'toolset-event-manager' ), CRED_FE_VERSION );
-		wp_register_script( 'cred_cred_nocodemirror_dev', $this->get_admin_assets_url( 'js/cred.js' ), array( 'jquery', 'underscore', 'cred_console_polyfill', 'cred_extra', 'cred_utils', 'cred_gui', 'cred_mvc', 'jquery-ui-sortable', 'toolset-utils', 'toolset-event-manager' ), CRED_FE_VERSION );
+		wp_register_script( 'cred_cred_dev', $this->get_admin_assets_url( 'js/cred.js' ), array( 'jquery', 'underscore', 'cred_console_polyfill', 'toolset-meta-html-codemirror-xml-script', 'toolset-codemirror-script', 'toolset-meta-html-codemirror-css-script', self::SCRIPT_CODEMIRROR_SHORTCODES_MODE, 'cred_extra', 'cred_utils', 'cred_gui', 'cred_mvc', 'cred_settings', 'jquery-ui-sortable', 'toolset-utils', 'toolset-event-manager' ), CRED_FE_VERSION );
+		wp_register_script( 'cred_cred_nocodemirror_dev', $this->get_admin_assets_url( 'js/cred.js' ), array( 'jquery', 'underscore', 'cred_console_polyfill', 'cred_extra', 'cred_utils', 'cred_gui', 'cred_mvc', 'cred_settings', 'jquery-ui-sortable', 'toolset-utils', 'toolset-event-manager' ), CRED_FE_VERSION );
 		wp_register_script( 'cred_cred_post_dev', $this->get_admin_assets_url( 'js/post.js' ), array( 'jquery', 'cred_console_polyfill', 'cred_extra', 'cred_utils', 'cred_gui', 'toolset-event-manager', 'cred_cred_dev', 'cred_settings' ), CRED_FE_VERSION );
-		wp_register_script( 'cred_cred_nocodemirror', $this->get_admin_assets_url( 'js/cred.js' ), array( 'jquery', 'underscore', 'jquery-ui-dialog', 'wp-pointer', 'jquery-effects-scale', 'cred_extra', 'cred_utils', 'cred_gui', 'cred_mvc', 'jquery-ui-sortable', 'toolset-utils', 'toolset-event-manager' ), CRED_FE_VERSION );
+		wp_register_script( 'cred_cred_nocodemirror', $this->get_admin_assets_url( 'js/cred.js' ), array( 'jquery', 'underscore', 'jquery-ui-dialog', 'wp-pointer', 'jquery-effects-scale', 'cred_extra', 'cred_utils', 'cred_gui', 'cred_mvc', 'cred_settings', 'jquery-ui-sortable', 'toolset-utils', 'toolset-event-manager' ), CRED_FE_VERSION );
 		wp_register_script( 'cred_wizard_dev', $this->get_admin_assets_url( 'js/wizard.js' ), array( 'cred_cred_dev' ), CRED_FE_VERSION );
 		wp_register_script( 'cred_settings', $this->get_admin_assets_url( 'js/settings.js' ), array( 'jquery', 'underscore', 'jquery-ui-dialog', 'jquery-ui-tabs', 'toolset-settings' ), CRED_FE_VERSION );
 
@@ -202,6 +202,7 @@ class CRED_Asset_Manager {
 			array(
 				'jquery',
 				'underscore',
+				'wplink',
 				'quicktags',
 				Toolset_Assets_Manager::SCRIPT_TOOLSET_EVENT_MANAGER,
 				Toolset_Assets_Manager::SCRIPT_TOOLSET_SHORTCODE,
@@ -218,6 +219,7 @@ class CRED_Asset_Manager {
 				Toolset_Assets_Manager::SCRIPT_CODEMIRROR_XML,
 				Toolset_Assets_Manager::SCRIPT_ICL_EDITOR,
 				Toolset_Assets_Manager::SCRIPT_ICL_MEDIA_MANAGER,
+				Toolset_Assets_Manager::SCRIPT_TOOLSET_QUICKTAGS,
 				Toolset_Assets_Manager::SCRIPT_KNOCKOUT,
 				Toolset_Assets_Manager::SCRIPT_UTILS,
 				Toolset_Assets_Manager::SCRIPT_SELECT2,
@@ -563,7 +565,9 @@ class CRED_Asset_Manager {
 	 * @deprecated 1.9.3
 	 */
 	public function enqueue_cred_button_assets() {
-		wp_enqueue_script( 'cred_settings' );
+		if ( ! apply_filters( 'cred_filter_enqueue_legacy_button_assets', true ) ) {
+			return;
+		}
 		wp_enqueue_script( 'cred_cred_post_dev' );
 		wp_enqueue_style( 'cred_cred_style_dev' );
 	}

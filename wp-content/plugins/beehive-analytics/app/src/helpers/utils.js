@@ -290,3 +290,36 @@ export function hasPermissionsAccess() {
 export function hideDocLinks() {
 	return window.beehiveVars.whitelabel.hide_doc_link > 0
 }
+
+/**
+ * Resets the URL of the current page to the URL of the accounts page.
+ *
+ * This will fix https://incsub.atlassian.net/browse/BEE-377 error.
+ *
+ * @return {void}
+ */
+export function resetAccountPageUrl() {
+	window.history.replaceState(null, null, window.beehiveVars.urls.accounts)
+}
+
+/**
+ * Check if the current page is in network admin.
+ *
+ * @since 3.3.9
+ *
+ * @return {boolean}
+ */
+export function inNetworkAdmin() {
+	return window.beehiveVars.flags.in_network_admin === 1
+}
+
+/**
+ * Check if the current page is in subsite admin.
+ *
+ * @since 3.3.9
+ *
+ * @return {boolean}
+ */
+export function inSubsiteAdmin() {
+	return window.beehiveVars.flags.in_subsite_admin === 1
+}

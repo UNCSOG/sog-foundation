@@ -34,7 +34,6 @@ class GoalUrlDestinationDetails extends \Beehive\Google\Collection
     public $matchType;
     protected $stepsType = GoalUrlDestinationDetailsSteps::class;
     protected $stepsDataType = 'array';
-    public $steps;
     /**
      * @var string
      */
