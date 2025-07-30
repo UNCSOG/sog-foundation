@@ -93,7 +93,7 @@ if (! function_exists('wp_body_open')) {
 
 if (! function_exists('sog_foundation_parent_add_user_fields')) {
     /**
-     * Add new User fields to Userprofile:
+     * Add new User fields to User profile:
      * get_user_meta( $user->ID, 'facebook_profile', true );
      *
      * @since v1.0
@@ -615,7 +615,7 @@ function parent_theme_register_custom_settings() {
     register_setting('parent_theme_settings', 'sidebar_enabled');
 
     // Add sections and fields for Headers, Footers, and Sidebar
-    add_settings_section('parent_theme_layout_section', 'Layout Options', null, 'parent_theme_settings');
+    add_settings_section('parent_theme_layout_section', 'Layout Options', function() {}, 'parent_theme_settings');
 
     // Header selection
     add_settings_field(
