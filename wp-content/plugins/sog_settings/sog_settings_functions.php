@@ -191,20 +191,20 @@ function display_setting_settings()
                                         <?php echo $setting['id'];?>
                                     </td>
                                     <td class="text-center">
-                                            <?php if ($setting['is_bool']) {?>
-                                                <label class="checkbox-inline" ></label>
-                                                    <input type="checkbox" class="sog_settings_update_setting xform-check-input"
-                                                        data-setting_id="<?php echo $setting['id'];?>"
-                                                        <?php if ($setting['value']) {
-                                                            echo 'checked';
-                                                        }?>
-                                                        data-is_bool="<?php echo $setting['is_bool'];?>"
-                                                        >
-                                            <?php } else { ?>
-                                                    <input  type="text" class="form-control sog_settings_update_setting" value="<?php echo htmlspecialchars($setting['value'] ?? '');?>"
-                                                        data-setting_id="<?php echo $setting['id'];?>"
-                                                        >
-                                            <?php } ?>
+                                        <?php if ($setting['is_bool']) {?>
+                                            <label class="checkbox-inline" ></label>
+                                                <input type="checkbox" class="sog_settings_update_setting xform-check-input"
+                                                    data-setting_id="<?php echo $setting['id'];?>"
+                                                    <?php if ($setting['value']) {
+                                                        echo 'checked';
+                                                    }?>
+                                                    data-is_bool="<?php echo $setting['is_bool'];?>"
+                                                    >
+                                        <?php } else { ?>
+                                                <input  type="text" class="form-control sog_settings_update_setting" value="<?php echo htmlspecialchars($setting['value'] ?? '');?>"
+                                                    data-setting_id="<?php echo $setting['id'];?>"
+                                                    >
+                                        <?php } ?>
                                     </td>
                                     <td class="">
                                                 <div class="" title="<?php echo $setting['id'];?>">
@@ -237,19 +237,19 @@ function display_setting_instructions()
                         These settings do not do anything by themselves.  They serve as a location to be referenced in other parts of the website or other applications.
                     </div>
                     <div>
-                        To use on this website they can be retreived in a few ways.
+                        To use on this website they can be retrieved in a few ways.
                     </div>
                 </div>
                 <ul>
                     <li><strong>Session Variable</strong> - They are stored in the global $_SESSION variable and can for example setting #2 can be retrieved like this <code>$_SESSION['sog_setting_2']</code>.
                     This is the fastest way to use a setting especially if you need it inside a loop, making the fx call (defined below) is inefficient in a loop.
-                    <br>If you look in the code you will see that I am outputing the value of Demo Test Setting 2, feel free to change it then return to this page. <?php echo $_SESSION['sog_setting_2'];?>
+                    <br>If you look in the code you will see that I am outputting the value of Demo Test Setting 2, feel free to change it then return to this page. <?php echo $_SESSION['sog_setting_2'];?>
                     <li><strong>Function Call for Boolean Setting</strong> - You can get the value of a boolean setting by calling <code>is_setting(1)</code> which will return true or false or will output 1 or 0. Setting 1: <?php echo is_setting(1);?>
                     <li><strong>Function Call for Text Setting</strong> - You can get the value of a setting by calling <code>get_setting(2)</code> which will return the value of the setting. Value of setting 2: <?php echo get_setting(2);?>
                     <li><strong>Directly from SQL</strong> - The settings are stored in a sql table called sog_settings in the WP DB.  The field names are visible on the Manage Settings page.
                     <li><strong>Elsewhere in WP</strong> - You can use the settings from the <code>$_SESSION</code> variable anywhere, but if you want to call the functions <code>is_setting</code> or <code>get_setting</code>
-					you will have to use the namsspace.
-					<br>Inside another plugin you will need to add <code>use sog_settings;</code> at the top of the file and then prepend the name space. Outisde a plugin you just need to prepend it with the name space lke this <code>sog_settings\get_setting(2);</code>
+					you will have to use the namespace.
+					<br>Inside another plugin you will need to add <code>use sog_settings;</code> at the top of the file and then prepend the name space. Outside a plugin you just need to prepend it with the name space like this <code>sog_settings\get_setting(2);</code>
                 </ul>
 				<div>
 					To Create additional tabs on the left.
@@ -335,7 +335,7 @@ function add_column($data)
     $new_array = [];
     $con = db_connect(null) or die("Couldn't connect to db.");
 
-    //chcek if column exists
+    // check if column exists
     $col_name = $data['col_name'];
     $table_name = $data['table_name'];
     $attributes = $data['attributes'];
