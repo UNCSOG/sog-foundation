@@ -21,8 +21,8 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 			$last_datetime_checked=$_POST['sog_ex_report_generic_update'][5] ?? null;
 
 			//get field name from salted hash, this ensures someone doesnt put this field name hash into the dom of another table and try to update that
-			$this_field=get_field_name_from_hash(array("table_name"=>$table_name,"field_name_hash"=>$field_name_hash))[0]; 
-			$response_array['this_field'] = $this_field; 
+			$this_field=get_field_name_from_hash(array("table_name"=>$table_name,"field_name_hash"=>$field_name_hash))[0];
+			$response_array['this_field'] = $this_field;
 
 			$problem=false;
 
@@ -34,7 +34,7 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 				$response_array['alert_message'] = "Sorry, you do not have access to this table.";
 			}
 
-		
+
 			//check if exists by trying to get this field, also holds the value before the change.
 			$confirm_keys_and_values=confirm_keys_and_values(array("table_name"=>$this_field['table_name'],"field_name"=>$this_field['field_name'],
 			"primary_key_field"=>$primary_key_field,"primary_key_value"=>$primary_key_value));
@@ -69,7 +69,7 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 
 			//now check if they had stale data when they submitted
 			$check_if_stale_data=check_if_stale_data(array("last_datetime_checked"=>$last_datetime_checked,"table_name"=>$table_name));
-			$response_array['check_if_stale_data'] = $check_if_stale_data; 
+			$response_array['check_if_stale_data'] = $check_if_stale_data;
 
 			//get setting to check for stale
 			$stale_check_option=get_option("sog_ex_stale_check_option");
@@ -118,7 +118,7 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 						$new_db_value=confirm_keys_and_values(array("table_name"=>$this_field['table_name'],"field_name"=>$this_field['field_name'],
 						"primary_key_field"=>$primary_key_field,"primary_key_value"=>$primary_key_value,"value_to_check"=>$value));
 						$response_array['new_db_value'] = $new_db_value;
-						
+
 						//compare that value to what user submitted
 						if (isset($new_db_value) and $new_db_value['new_array'][0][$this_field['field_name']]==$value){
 							//all good, value was replaced
@@ -129,7 +129,7 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 							//add to log file if from remote db
 							$remote_db_option=get_option("sog_ex_remote_db_option");
 							$remote_db_option_label=get_option("sog_ex_remote_db_option_label");
-					
+
 							if ($remote_db_option){
 								$db_creds=get_db_creds_remote(null);
 								if (isset($db_creds)){
@@ -157,7 +157,7 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 								"description"=>$db_creds_json,
 								"other"=>null,
 							));
-						
+
 
 						}else{
 							//new value does not match, alert and replace with data selected when verifying the field
@@ -165,41 +165,41 @@ if(isset($_POST['sog_ex_report_generic_update']) && !empty($_POST['sog_ex_report
 								"primary_key_field"=>$primary_key_field,"primary_key_value"=>$primary_key_value,"value"=>$confirm_keys_and_values['new_array'][0][$this_field['field_name']]));
 							$response_array['restore_result'] = $restore_result;
 							$response_array['restore_result']['value'] = $confirm_keys_and_values['new_array'][0][$this_field['field_name']];
-		
+
 							$result['status'] = "fail";
 							$result['error_message'] = "That data did not save properly, most likely the formatting is wrong. The original value will be restored.";
 							$response_array['alert_message'] = "Invalid data \nOK to restore original value. \nCancel to edit and try again.";
 						}
-					
+
 
 					}else{
-						$response_array['status'] = "fail"; 
+						$response_array['status'] = "fail";
 						$response_array['message'] = "Could not locate a record with those primary keys and values";
 					}
 
 				}else{
-					$response_array['status'] = "fail"; 
+					$response_array['status'] = "fail";
 					$response_array['message'] = "The primay key fields do not match";
 				}
 			}else{
-				$response_array['status'] = "fail"; 
+				$response_array['status'] = "fail";
 				$response_array['message'] = "Not allowed to do that.";
 			}
 
 			if (isset($result) and $result['status']=="success") {
 				$use_the_log=1;
-				$response_array['status'] = 'success'; 
+				$response_array['status'] = 'success';
 				$response_array['generic_update_date_modified'] = date("n/j/y g:i:s A");
 
 				//this function checks for stale date before it will get status of success
 				$response_array['last_datetime_checked'] = date('Y-m-d H:i:s');
 
 			}else {
-				$response_array['status'] = 'fail'; 
+				$response_array['status'] = 'fail';
 				if (isset($result) and $result['error_message']) {
 					$response_array['fail_message'] = "Uh-oh, something went wrong. ".$result['error_message'];
 				}else{
-					$response_array['fail_message'] = 'Oops.  Something is not right in sql, call IT and give them code 1045 ('.$table_name.').'; 
+					$response_array['fail_message'] = 'Oops.  Something is not right in sql, call IT and give them code 1045 ('.$table_name.').';
 				}
 			}
 
@@ -229,7 +229,7 @@ if(isset($_POST['generic_update']) && !empty($_POST['generic_update'])) {
 			//prevent editing of log file
 			if ($table_name=="sog_ex_report_tables" and $field_name=="allow_update" and $id=="sog_ex_explore_log"){
 				$allow=0;
-				$response_array['show_alert'] = "Umm nope, you can't edit the log table."; 
+				$response_array['show_alert'] = "Umm nope, you can't edit the log table.";
 			}elseif ($table_name=="sog_ex_report_tables" and $field_name=="allow_update"){
 				//check if keys exist in case they want to allow update
 				$keys=get_primary_key(array("table_name"=>$id));
@@ -238,7 +238,7 @@ if(isset($_POST['generic_update']) && !empty($_POST['generic_update'])) {
 				if (isset($keys) and $keys){
 				}else{
 					$allow=0;
-					$response_array['show_alert'] = "This table does not have a primary key."; 
+					$response_array['show_alert'] = "This table does not have a primary key.";
 				}
 			}
 
@@ -246,22 +246,22 @@ if(isset($_POST['generic_update']) && !empty($_POST['generic_update'])) {
 				if ($si=="s" or $si=="ss") {
 					if ($si=="s") {
 						$result=update_generic_table_s(array("table_name"=>$table_name,"field_name"=>$field_name,"id"=>$id,"value"=>$value,"id_column_name"=>$id_column_name));
-						$response_array['result'] = $result; 
-						$response_array['arr'] = array("table_name"=>$table_name,"field_name"=>$field_name,"id"=>$id,"value"=>$value,"id_column_name"=>$id_column_name); 
+						$response_array['result'] = $result;
+						$response_array['arr'] = array("table_name"=>$table_name,"field_name"=>$field_name,"id"=>$id,"value"=>$value,"id_column_name"=>$id_column_name);
 					}else{
 						$result=update_generic_table_ss(array("table_name"=>$table_name,"field_name"=>$field_name,"id"=>$id,"value"=>$value,"id_column_name"=>$id_column_name));
 					}
 					if ($result['status']=="success") {
 						$use_the_log=1;
-						$response_array['status'] = 'success'; 
+						$response_array['status'] = 'success';
 						$response_array['generic_update_date_modified'] = date("n/j/y g:i:s A");
-						
+
 					}else {
-						$response_array['status'] = 'fail'; 
+						$response_array['status'] = 'fail';
 						if ($result['error_message']) {
 							$response_array['message'] = "Uh-oh, something went wrong.  The error is :".$result['error_message'];
 						}else{
-							$response_array['message'] = 'Oops.  Something is not right in sql, call IT and give them code 1045 ('.$table_name.').'; 
+							$response_array['message'] = 'Oops.  Something is not right in sql, call IT and give them code 1045 ('.$table_name.').';
 						}
 					}
 				}elseif ($si=="i" or $si=="is") {
@@ -272,32 +272,32 @@ if(isset($_POST['generic_update']) && !empty($_POST['generic_update'])) {
 						}
 					if ($result) {
 						$use_the_log=1;
-						$response_array['status'] = 'success'; 
-						$response_array['generic_update_date_modified'] = date("n/j/y g:i:s A");; 
+						$response_array['status'] = 'success';
+						$response_array['generic_update_date_modified'] = date("n/j/y g:i:s A");;
 					}else {
-						$response_array['status'] = 'fail'; 
-						$response_array['message'] = 'Oops.  Something is not right in sql, call IT and give them code 1045 ('.$table_name.').'; 
+						$response_array['status'] = 'fail';
+						$response_array['message'] = 'Oops.  Something is not right in sql, call IT and give them code 1045 ('.$table_name.').';
 					}
 
 				}else{
-					$response_array['status'] = 'fail'; 
-					$response_array['message'] = 'Uh-Oh'; 
+					$response_array['status'] = 'fail';
+					$response_array['message'] = 'Uh-Oh';
 				}
 
 				//if this is removing the allow_update check, and value is 1 and update was success
 				if ($table_name=="sog_ex_report_tables" and $field_name=="allow_update" and !$value and $result['status']=="success"){
-					
+
 					//then clear out the edit fields for all users on that table.
 					$delete_saved_edit_fields_sql="update sog_ex_explore_user_choices set edit_fields=null where fk_table_name='".$id."';";
 					$delete_saved_edit_fields=generic_sql_query(array("sql"=>$delete_saved_edit_fields_sql));
-					$response_array['delete_saved_edit_fields'] = $delete_saved_edit_fields; 
-					$response_array['delete_saved_edit_fields_sql'] = $delete_saved_edit_fields_sql; 
+					$response_array['delete_saved_edit_fields'] = $delete_saved_edit_fields;
+					$response_array['delete_saved_edit_fields_sql'] = $delete_saved_edit_fields_sql;
 
 				}
 			}else {
-				$response_array['status'] = 'fail'; 
+				$response_array['status'] = 'fail';
 				if (!$response_array['message']) {
-					$response_array['message'] = 'Uh-Oh, there is a problem with a permission.  Call IT and give them code 1044 ('.$table_name.').'; 
+					$response_array['message'] = 'Uh-Oh, there is a problem with a permission.  Call IT and give them code 1044 ('.$table_name.').';
 				}
 			}
 
@@ -311,9 +311,9 @@ if(isset($_POST['generic_update']) && !empty($_POST['generic_update'])) {
 if(isset($_POST['load_manage_dataset']) && !empty($_POST['load_manage_dataset'])) {
 	$table=$_POST['load_manage_dataset'][0] ?? null;
 	$display_name=$_POST['load_manage_dataset'][1] ?? null;
-	
+
 	if ($table) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 		ob_start();
 			display_manage_table_html(array("table_display_name"=>$display_name,"table_name"=>$table));
 		$html = ob_get_clean();
@@ -322,7 +322,7 @@ if(isset($_POST['load_manage_dataset']) && !empty($_POST['load_manage_dataset'])
 
     header('Content-type: application/json');
     echo json_encode($response_array);
-	
+
 	// usleep(1250000);// pauses for .25 seconds
 	exit;
 }
@@ -335,16 +335,16 @@ if(isset($_POST['generic_load_menu_section']) && !empty($_POST['generic_load_men
 		if (function_exists("sog_explore\display_".$slug)) {
 			call_user_func_array("sog_explore\display_".$slug,array(null));
 		}else{
-			$response_array['error_message'] = 'Hmm, something went wrong.  I couldn\'t find that data.'; 
+			$response_array['error_message'] = 'Hmm, something went wrong.  I couldn\'t find that data.';
 		}
 	$html = ob_get_clean();
 
-	$response_array['html'] = $html; 
-	$response_array['slug'] = $slug; 
+	$response_array['html'] = $html;
+	$response_array['slug'] = $slug;
 	if ($html) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
     header('Content-type: application/json');
@@ -394,16 +394,16 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 		/*
 			Specific to DWI ONLY
 			since the dwi site can handle multiple schema's but the sog_explore_sql plugin cannot, check if its the proper db
-			to edit the table they must be either WP administrator (current_user_can('administrator')) 
+			to edit the table they must be either WP administrator (current_user_can('administrator'))
 			or have their onyen hard coded into the "details" tab on the DWI page
 			this overrides the plugin generic setting that allows editing
 		*/
 
 		//first get dwi field onyens allowed to edit this table
 		$onyen_csv=get_generic_sql(array("table_name"=>"dwi_update_table_perm","fields"=>"onyen_csv",
-		"where"=>"and fk_table_name='".$table_name."' and fk_schema_name='".$db."'")); 
+		"where"=>"and fk_table_name='".$table_name."' and fk_schema_name='".$db."'"));
 		// echo "data<pre>";print_r($data);echo "</pre>";
-		// $response_array['onyen_csv'] = $onyen_csv; 
+		// $response_array['onyen_csv'] = $onyen_csv;
 
 		//initialize array
 		$onyen_array=[];
@@ -412,7 +412,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 		if (isset($onyen_csv) and is_array($onyen_csv)){
 			//remove spaces
 			$onyen_csv_no_spaces = str_replace(' ', '', $onyen_csv[0]['onyen_csv']);
-			
+
 			//turn into array
 			$onyen_array=explode(",",$onyen_csv_no_spaces);
 		}
@@ -437,7 +437,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 		}
 	}
 
-	// $response_array['onyen_array'] = $onyen_array; 
+	// $response_array['onyen_array'] = $onyen_array;
 
 
 	if ($allow) {
@@ -474,7 +474,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 			$update_auto_save_option=update_option("sog_ex_auto_save_".$_SESSION['sog_explore_user_login'],1);
 
 			//########################## To save Filters ##########################
-			//remove existing filters from database so if the filter passed in is now blank, 
+			//remove existing filters from database so if the filter passed in is now blank,
 			//this wouldn't know to update the db since it doesnt have anything to loop through
 			$delete_saved="update sog_ex_explore_filter set value=null, value_like=null where fk_table_name='".$table_name."' and fk_username='".$_SESSION['sog_explore_user_login']."';";
 			generic_sql_query(array("sql"=>$delete_saved));
@@ -506,13 +506,13 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 					//taking advantage of generic function to store this value
 					$filter_update_sql=update_generic_table_ss(array("table_name"=>"sog_ex_explore_filter","field_name"=>"value","value"=>$filter_value,
 					"id_column_name"=>"fk_table_name='".$table_name."' and fk_username='".$_SESSION['sog_explore_user_login']."' and field_name","id"=>$field_name));
-					
-					$response_array['filter_update_sql'][] = $filter_update_sql; 
+
+					$response_array['filter_update_sql'][] = $filter_update_sql;
 
 					//since this filter is being called with =, need to null out value_like from table, since it wont get updated, because it doesn't exist
 					$delete_value_like_sql="update sog_ex_explore_filter set value_like=null where fk_table_name='".$table_name."' and field_name='".$field_name."' and fk_username='".$_SESSION['sog_explore_user_login']."';";
 					generic_sql_query(array("sql"=>$delete_value_like_sql));
-					
+
 
 				}elseif (str_contains($temp,"like")){
 					//no =, so must be like filter
@@ -531,8 +531,8 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 					//taking advantage of generic function to store this value
 					$filter_update_sql=update_generic_table_ss(array("table_name"=>"sog_ex_explore_filter","field_name"=>"value_like","value"=>$filter_value,
 					"id_column_name"=>"fk_table_name='".$table_name."' and fk_username='".$_SESSION['sog_explore_user_login']."' and field_name","id"=>$field_name));
-					
-					$response_array['filter_update_sql'][] = $filter_update_sql; 
+
+					$response_array['filter_update_sql'][] = $filter_update_sql;
 
 					//since this filter is being called with like, need to null out value from table, since it wont get updated, because it doesn't exist
 					$delete_value_like_sql="update sog_ex_explore_filter set value=null where fk_table_name='".$table_name."' and field_name='".$field_name."' and fk_username='".$_SESSION['sog_explore_user_login']."';";
@@ -555,7 +555,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 			$save_edits_chosen=update_generic_table_sss(array("table_name"=>"sog_ex_explore_user_choices","field_name"=>"edit_fields","value"=>json_encode($fields_to_edit),
 				"id_column_name"=>"fk_username","id"=>$_SESSION['sog_explore_user_login'],"id_column_name_2"=>"fk_table_name","id_2"=>$table_name));
 
-				
+
 		}else{
 			//set auto save as wp_option
 			$update_auto_save_option=delete_option("sog_ex_auto_save_".$_SESSION['sog_explore_user_login']);
@@ -596,7 +596,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 			if ($field_names) {
 				//check for saved order for this table
 				$saved_sort=$user_saved_choices[0]['sort_sql'] ?? "";
-				$response_array['saved_sort'] = $saved_sort; 
+				$response_array['saved_sort'] = $saved_sort;
 
 				//if saved order was on count column, and this containts no groupings, that means there will be no count column to order by, remove the saved sort
 				if (!$groupings and str_contains($saved_sort,"_count")){
@@ -611,9 +611,9 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 				//pass in string table_name and array of field_names
 				$table_data=get_report_data(array("field_names"=>$field_names,"table_name"=>$table_name,"filters"=>$filters,"limit"=>$limit_to_use,"groupings"=>$groupings,"order"=>$saved_sort));
 
-				$response_array['table_data'] = $table_data; 
-				$response_array['sql'] = $table_data['sql']; 
-				$response_array['table_data_count'] = count($table_data['table_data'] ?? []); 
+				$response_array['table_data'] = $table_data;
+				$response_array['sql'] = $table_data['sql'];
+				$response_array['table_data_count'] = count($table_data['table_data'] ?? []);
 	// echo "table_data<pre>";print_r($table_data);echo "</pre>";
 	// return;
 
@@ -621,7 +621,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 					// echo build_simple_table(array("table"=>$table_data['table_data'],"class"=>"bg-white table table-sm table-bordered table-striped table-hover report_data_table"));
 					echo build_sog_ex_table(array("table"=>$table_data['table_data'],"class"=>"bg-white table table-sm table-bordered table-striped table-hover report_data_table",
 						"keys"=>$table_data['keys'],"fields_to_edit"=>$fields_to_edit,"table_name"=>$table_name));
-					
+
 					if (isset($show_sql) and $show_sql==1){
 						?>
 							<div class="row pt-3 mt-3 border-top output_select_query">
@@ -639,7 +639,7 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 										MySQL Update Query
 									</div>
 									<div class="sql_output_here p-2 bg-muted border text-danger">
-										
+
 									</div>
 								</div>
 							</div>
@@ -653,41 +653,41 @@ if(isset($_POST['process_report_request']) && !empty($_POST['process_report_requ
 
 				//now get count without limit
 				$table_data_no_limit=get_report_data(array("field_names"=>$field_names,"fk_schema_name"=>$fk_schema_name,"table_name"=>$table_name,"filters"=>$filters,"limit"=>"","groupings"=>$groupings,"order"=>$saved_sort));
-				$response_array['table_data_no_limit_count'] = count($table_data_no_limit['table_data']); 
+				$response_array['table_data_no_limit_count'] = count($table_data_no_limit['table_data']);
 			}else{
 				echo "<div class='report_no_data text-center my-2 h5'>
 						Choose fields to get started.
 					</div>";
 				$table_data_no_limit=[];
 			}
-		
+
 		$response_array['last_datetime_checked'] = date('Y-m-d H:i:s');
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
 		//no access
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
 	$html = ob_get_clean();
-	$response_array['html'] = $html; 
+	$response_array['html'] = $html;
 
-	//requried 
-	$response_array['field_names'] = $field_names; 
-	$response_array['limit_to_use'] = $limit_to_use; 
+	//requried
+	$response_array['field_names'] = $field_names;
+	$response_array['limit_to_use'] = $limit_to_use;
 
 	//just for debugging
-	// $response_array['save_fields_chosen'] = $save_fields_chosen; 
-	// $response_array['save_edits_chosen'] = $save_edits_chosen; 
-	// $response_array['save_groups_chosen'] = $save_groups_chosen; 
-	// $response_array['fields_from_save'] = $fields_from_save; 
-	// $response_array['filters'] = $filters; 
-	// $response_array['groupings'] = $groupings; 
-	// $response_array['fields_to_edit'] = $fields_to_edit; 
+	// $response_array['save_fields_chosen'] = $save_fields_chosen;
+	// $response_array['save_edits_chosen'] = $save_edits_chosen;
+	// $response_array['save_groups_chosen'] = $save_groups_chosen;
+	// $response_array['fields_from_save'] = $fields_from_save;
+	// $response_array['filters'] = $filters;
+	// $response_array['groupings'] = $groupings;
+	// $response_array['fields_to_edit'] = $fields_to_edit;
 	// $response_array['elapsed_time'] = $elapsed_time;
-	// $response_array['table_name'] = $table_name; 
-	// $response_array['save_auto_save'] = $save_auto_save; 
-	// $response_array['report_limit'] = $report_limit; 
+	// $response_array['table_name'] = $table_name;
+	// $response_array['save_auto_save'] = $save_auto_save;
+	// $response_array['report_limit'] = $report_limit;
 	// $elapsed_time=(microtime(true) - $GLOBALS['time']);
 
 	$response_array['sql_for_display'] = $table_data_no_limit['sql_for_display'] ??  null;
@@ -709,7 +709,7 @@ if(isset($_POST['select_report_table']) && !empty($_POST['select_report_table'])
 	$sql="insert ignore into sog_ex_explore_user_choices (fk_username,fk_table_name) values ('".$_SESSION['sog_explore_user_login']."','".$table_name."')";
 	$add_user_entry=generic_sql_query(array("sql"=>$sql));
 
-	$response_array['sql'] = $sql; 
+	$response_array['sql'] = $sql;
 	$response_array['add_user_entry'] = $add_user_entry;
 
 	if ($_ENV['PANTHEON_SITE_NAME']=="sog-dwi"){
@@ -723,13 +723,13 @@ if(isset($_POST['select_report_table']) && !empty($_POST['select_report_table'])
 	ob_start();
 		build_report_options(array("table_name"=>$table_name,"db"=>$db));
 	$html = ob_get_clean();
-	$response_array['html'] = $html; 
+	$response_array['html'] = $html;
 
 	if (1) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 		$response_array['alert_message'] = "Hmm, I had trouble finding their advising page";
 	}
     header('Content-type: application/json');
@@ -744,7 +744,7 @@ if(isset($_POST['add_explore_filter']) && !empty($_POST['add_explore_filter'])) 
 	$field_name=$_POST['add_explore_filter'][1] ?? null;
 	$do_what=$_POST['add_explore_filter'][2] ?? null;
 	$data_type=$_POST['add_explore_filter'][3] ?? null;
-	
+
 	//determing if field is string or in for doing
 	$int_types=array("int","smallint","tinyint","mediumint","bigint");
 	if (in_array(strtolower($data_type),$int_types)) {
@@ -752,16 +752,16 @@ if(isset($_POST['add_explore_filter']) && !empty($_POST['add_explore_filter'])) 
 	}else{
 		$si="s";
 	}
-	
-	if ($table_name) { 
+
+	if ($table_name) {
 		if ($do_what=="add") {
 			$sql="insert ignore into sog_ex_explore_filter (fk_table_name, field_name, si, fk_username)
-				values ('".$table_name."','".$field_name."','".$si."','".$_SESSION['sog_explore_user_login']."') 
+				values ('".$table_name."','".$field_name."','".$si."','".$_SESSION['sog_explore_user_login']."')
 			";
 			$add_filter=generic_sql_query(array("sql"=>$sql));
 			$response_array['add_filter'] = $add_filter;
 		}else{
-			$sql="delete from sog_ex_explore_filter 
+			$sql="delete from sog_ex_explore_filter
 				where 1=1
 				and fk_table_name='".$table_name."'
 				and field_name='".$field_name."'
@@ -771,20 +771,20 @@ if(isset($_POST['add_explore_filter']) && !empty($_POST['add_explore_filter'])) 
 			$response_array['remove_filter'] = $remove_filter;
 		}
 
-		
+
 		//now create filters
 		ob_start();
 			display_report_field_filters(array("table_name"=>$table_name));
 		$html = ob_get_clean();
-		$response_array['filters_html'] = $html; 
+		$response_array['filters_html'] = $html;
 
 	}
 
 	if (1) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 		$response_array['alert_message'] = "Hmm, I had trouble finding their advising page";
 	}
     header('Content-type: application/json');
@@ -796,7 +796,7 @@ if(isset($_POST['add_explore_filter']) && !empty($_POST['add_explore_filter'])) 
 //************  *****************/
 if(isset($_POST['select_all_none_choose_tables']) && !empty($_POST['select_all_none_choose_tables'])) {
 	$which=$_POST['select_all_none_choose_tables'][0] ?? null;
-	
+
 	if ($which=="all") {
 		$sql="update sog_ex_report_tables set use_this=1";
 	}elseif ($which=="none") {
@@ -804,11 +804,11 @@ if(isset($_POST['select_all_none_choose_tables']) && !empty($_POST['select_all_n
 	}
 	$update=generic_sql_query(array("sql"=>$sql));
 	$response_array['update'] = $update;
-	
+
 	if ($update['status']=="success") {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
     header('Content-type: application/json');
@@ -823,12 +823,12 @@ if(isset($_POST['save_explore_roles']) && !empty($_POST['save_explore_roles'])) 
 	if (isset($report_array_of_roles) and is_array($report_array_of_roles)) {
 		$value=implode(",",$report_array_of_roles);
 		$update_option=update_option( $option="sog_ex_save_explore_roles", $value );
-		$response_array['update_option'] = $update_option; 
+		$response_array['update_option'] = $update_option;
 	}
 	if ($update_option) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
@@ -874,25 +874,25 @@ if(isset($_POST['save_stale_check_option']) && !empty($_POST['save_stale_check_o
 
 	//save checkbox
 	$stale_check_option=update_option( $option="sog_ex_stale_check_option", $value );
-	$response_array['stale_check_option'] = $stale_check_option; 
+	$response_array['stale_check_option'] = $stale_check_option;
 
 	//save ms
 	$stale_check_option_seconds=update_option( $option="sog_ex_stale_check_option_seconds", $ms );
-	$response_array['stale_check_option_seconds'] = $stale_check_option_seconds; 
+	$response_array['stale_check_option_seconds'] = $stale_check_option_seconds;
 	$response_array['return_seconds'] = $return_seconds; //this is so the screen will reflect what was actually saved
 
 	//save subset limit
 	$subset_limit_option=update_option( $option="sog_ex_subset_limit_option", $subset_limit );
-	$response_array['subset_limit_option'] = $subset_limit_option; 
+	$response_array['subset_limit_option'] = $subset_limit_option;
 	$response_array['return_subset_limit'] = $return_subset_limit; //this is so the screen will reflect what was actually saved
 
 
 
 
 	if (1) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
@@ -913,37 +913,37 @@ if(isset($_POST['save_remote_db_option']) && !empty($_POST['save_remote_db_optio
 
 	//save checkbox
 	$remote_db_option=update_option( $option="sog_ex_remote_db_option", $value );
-	$response_array['remote_db_option'] = $remote_db_option; 
+	$response_array['remote_db_option'] = $remote_db_option;
 
 	//save options
 	$remote_db_option_hostname=update_option( $option="sog_ex_remote_db_option_hostname", $hostname );
-	// $response_array['remote_db_option_hostname'] = $remote_db_option_hostname; 
+	// $response_array['remote_db_option_hostname'] = $remote_db_option_hostname;
 
 	$remote_db_option_port=update_option( $option="sog_ex_remote_db_option_port", $port );
-	// $response_array['remote_db_option_port'] = $remote_db_option_port; 
+	// $response_array['remote_db_option_port'] = $remote_db_option_port;
 
 	$remote_db_option_username=update_option( $option="sog_ex_remote_db_option_username", $username );
-	// $response_array['remote_db_option_username'] = $remote_db_option_username; 
+	// $response_array['remote_db_option_username'] = $remote_db_option_username;
 
 	$remote_db_option_password=update_option( $option="sog_ex_remote_db_option_password", $password );
-	// $response_array['remote_db_option_password'] = $remote_db_option_password; 
+	// $response_array['remote_db_option_password'] = $remote_db_option_password;
 
 	$remote_db_option_db_name=update_option( $option="sog_ex_remote_db_option_db_name", $db_name );
-	// $response_array['remote_db_option_db_name'] = $remote_db_option_db_name; 
+	// $response_array['remote_db_option_db_name'] = $remote_db_option_db_name;
 
 	$remote_db_option_db_name=update_option( $option="sog_ex_remote_db_option_label", $label );
-	// $response_array['remote_db_option_label'] = $remote_db_option_label; 
+	// $response_array['remote_db_option_label'] = $remote_db_option_label;
 
 	//need to check if remote db exists with saved data.
 	$check_valid_remote_db=db_connect_remote_check_only(array("hostname"=>$hostname,"port"=>$port,"username"=>$username,"password"=>$password,"db_name"=>$db_name));
-	$response_array['check_valid_remote_db'] = $check_valid_remote_db; 
+	$response_array['check_valid_remote_db'] = $check_valid_remote_db;
 
 	if ($check_valid_remote_db['status']=="success") {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
 		//remove use this option from options
 		$remote_db_option=update_option( $option="sog_ex_remote_db_option", 0 );
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
@@ -960,12 +960,12 @@ if(isset($_POST['sog_ex_restore_value']) && !empty($_POST['sog_ex_restore_value'
 	$log_id=(int)$log_id;
 
 	$sog_ex_report_restore_value=sog_ex_report_restore_value($log_id);
-	$response_array['sog_ex_report_restore_value'] = $sog_ex_report_restore_value; 
+	$response_array['sog_ex_report_restore_value'] = $sog_ex_report_restore_value;
 
 	if ($sog_ex_report_restore_value['status']=="success") {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
@@ -983,13 +983,13 @@ if(isset($_POST['check_if_stale_data']) && !empty($_POST['check_if_stale_data'])
 	if (!$check_if_stale_data){
 		$check_if_stale_data['is_stale']=null;
 	}
-	$response_array['check_if_stale_data'] = $check_if_stale_data; 
+	$response_array['check_if_stale_data'] = $check_if_stale_data;
 
 
 	if (1) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
@@ -1021,9 +1021,9 @@ if(isset($_POST['save_sort_column']) && !empty($_POST['save_sort_column'])) {
 	}
 
 	if (1) {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 
@@ -1048,9 +1048,9 @@ if(isset($_POST['reset_table_settings']) && !empty($_POST['reset_table_settings'
 	$del_2=generic_sql_query(array("sql"=>$delete_saved));
 
 	if ($del_1['status']=="success" and $del_2['status']=="success") {
-		$response_array['status'] = 'success'; 
+		$response_array['status'] = 'success';
 	}else{
-		$response_array['status'] = 'fail'; 
+		$response_array['status'] = 'fail';
 	}
 
 

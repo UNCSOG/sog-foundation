@@ -1,7 +1,6 @@
 (function($) {
 	$(document).ready(function() {
-
-		$(this).on("change",".sog_settings_generic_update",function(){
+		$(this).on("change", ".sog_settings_generic_update", function() {
 			sog_settings_generic_update($(this));
 		});
 
@@ -12,16 +11,14 @@
 		$(this).on("click", '.sog_settings_delete,.sog_settings_delete',function(){
 			if ($(this).data("confirm_message")) {
 				var confirm_delete=confirm($(this).data("confirm_message"));
-			}else{
+			} else {
 				var confirm_delete=confirm("Are you sure you want to delete this.");
 			}
+
 			if (confirm_delete) {
 				sog_settings_delete($(this));
 			}
 		});
-
-
-
 	});
 
 	///////////// ************ Functions **********************/////////////////
@@ -33,19 +30,22 @@
 		var setting_id=elem.data("setting_id");
 		var is_bool=elem.data("is_bool");
 		var value;
+
 		if (is_bool) {
 			if (elem.is(":checked")) {
 				value=1;
-			}else{
+			} else {
 				value=null;
 			}
-		}else {
+		} else {
 			value=elem.val();
 		}
+
 		data_to_send.push(setting_id);
 		data_to_send.push(value);
 		data_to_send.push(is_bool);
 		// // console.log(data_to_send);
+
 		$.ajax({ url: plugin_dir()+'/process.php',
 			type: 'POST',
 			data    : {sog_settings_update_setting:data_to_send},
@@ -53,22 +53,21 @@
 			},
 			success: function(output) {
 				// // console.log(output);
-				if(output.status == "success"){
+				if(output.status == "success") {
 					save_flash(elem);
-				}else{
+				} else {
 					if (output.alert_message) {
 						alert(output.alert_message);
 					}
 					// console.log("status is NOT success "+fx_name);
-					// // console.log(output);
+					// console.log(output);
 				}
 			},
 			error: function (request, status, error) {
 				// console.log("error in ajax call");
 				// console.log(error);
 			},
-			complete: function(){
-			}
+			complete: function() {}
 	});
 	}
 
@@ -116,17 +115,16 @@
 		data_to_send.push(other);
 		data_to_send.push(is_check);
 
-		if (getParameterByName("debug",null)){
+		if (getParameterByName("debug",null)) {
 			console.log(data_to_send);
 		}
 
 		$.ajax({ url: plugin_dir()+'/process.php',
 			type: 'POST',
 			data    : {generic_update:data_to_send},
-			beforeSend: function(){
-			},
+			beforeSend: function() {},
 			success: function(output) {
-				if (getParameterByName("debug",null)){
+				if (getParameterByName("debug",null)) {
 					console.log(output);
 				}
 
@@ -135,31 +133,33 @@
 					save_flash($(".generic_update_date_modified"));
 					save_flash(elem);
 					// elem.closest('tr').fadeOut(150).fadeIn(150);
+
 					if (needs_refresh) {
 						location.reload();
 						exit;
 					}
+
 					if (output.show_alert) {
 						alert(output.show_alert);
 					}
+
 					if (output.update_html) {
 						$(output.this_div).html(output.update_html);
 						save_flash(output.flash_this);
 					}
-				}else{
+				} else {
 					if (output.show_alert) {
 						alert(output.show_alert);
 					}
+
 					// console.log("status is NOT success "+fx_name);
-					// // console.log(output);
+					// console.log(output);
 				}
 			},
 			error: function () {
 				// console.log("error in ajax call");
 			},
-			complete: function(){
-
-			}
+			complete: function() {}
 		});
 	}
 
@@ -183,7 +183,7 @@
 		var new_row;
 		var table_id=$(this).closest('table').attr('id');
 		var num_of_cols=$("#"+table_id+" > tbody > tr:first > td").length;
-		// // console.log("num_of_cols"+num_of_cols);
+		// console.log("num_of_cols"+num_of_cols);
 		data_to_send.push(table_name);
 		data_to_send.push(field_name);
 		data_to_send.push(value);
@@ -195,10 +195,12 @@
 		data_to_send.push(allow_duplicates);
 		data_to_send.push(table_display_name);
 		data_to_send.push(ignore_last_inserted_id);
+
 		if (getParameterByName("debug",null)){
 			console.log(data_to_send);
 		}
-	if (value) {
+
+		if (value) {
 			$.ajax({ url: plugin_dir()+'/process.php',
 				type: 'POST',
 				data    : {generic_table_add_new:data_to_send},
@@ -206,25 +208,27 @@
 					elem.prop("disabled",true).prop("readonly",true);
 				},
 				success: function(output) {
-						if (getParameterByName("debug",null)) {
-							console.log(output);
-						}
-						if(output.status == "success"){
+					if (getParameterByName("debug",null)) {
+						console.log(output);
+					}
+
+					if(output.status == "success") {
 						if (reload) {
 							location.reload();
-						}else if (reload_with_ajax){
+						} else if (reload_with_ajax) {
 							elem.closest("#display_section").html(output.html);
-						}else{
+						} else {
 						}
-					}else{
+					} else {
 						// console.log(output);
 						// console.log("status is NOT success "+fx_name);
+
 						if (output.show_alert) {
 							alert(output.show_alert);
 						}
 
-						// //// console.log(output.message);
-						// // console.log(output);
+						// console.log(output.message);
+						// console.log(output);
 					}
 				},
 				error: function () {
@@ -232,42 +236,39 @@
 				},
 				complete: function(){
 					elem.prop("disabled",false).prop("readonly",false);
-
 				}
 			});
 		}
 	}
 
 	function sog_settings_load_menu_section() {
-		//call spinner and remove when done
-
+		// call spinner and remove when done
 		var fx_name=arguments.callee.name;
 		var data_to_send = [];
 		var elem=$(this);
 		var slug=elem.data("slug");
 		data_to_send.push(slug);
 		console.log(data_to_send);
+
 		$.ajax({ url: plugin_dir()+'/process.php',
 			type: 'POST',
 			data    : {sog_settings_load_menu_section:data_to_send},
-			beforeSend: function(){
-
-			},
+			beforeSend: function() {},
 			success: function(output) {
 				console.log(output);
-				if(output.status == "success"){
+
+				if(output.status == "success") {
 					$("#display_section").html(output.html);
-				}else{
+				} else {
 					$("#display_section").html(output.error_message);
 					// console.log("status is NOT success "+fx_name);
-					// // console.log(output);
+					// console.log(output);
 				}
 			},
 			error: function () {
 				// console.log("error in ajax call");
 			},
-			complete: function(){
-			}
+			complete: function() {}
 		});
 	}
 
@@ -291,63 +292,59 @@
 		data_to_send.push(p);
 		data_to_send.push(db);
 		data_to_send.push(change_status);
-		if (getParameterByName("debug",null)){
+
+		if (getParameterByName("debug",null)) {
 			console.log(data_to_send);
 		}
+
 		$.ajax({ url: plugin_dir()+'/process.php',
 			type: 'POST',
 			data    : {sog_settings_delete:data_to_send},
-			beforeSend: function(){
-
-			},
+			beforeSend: function() {},
 			success: function(output) {
-				if (getParameterByName("debug",null)){
+				if (getParameterByName("debug",null)) {
 					console.log(output);
 				}
-				if(output.status == "success"){
+
+				if(output.status == "success") {
 					if (output.reload) {
 						location.reload(output.reload);
-					}else if (reload) {
+					} else if (reload) {
 						location.reload();
-					}else {
+					} else {
 						if (empty) {
 							elem.closest(closest).fadeOut(300, function(){ $(this).html("");});
-						}else{
+						} else {
 							elem.closest(closest).fadeOut(300, function(){ $(this).remove();});
 						}
 					}
-				}else{
+				} else {
 					// console.log("status is NOT success "+fx_name);
-					// // console.log(output);
+					// console.log(output);
 				}
 			},
 			error: function () {
 				// console.log("error in ajax call");
 			},
-			complete: function(){
-
-
-			}
+			complete: function() {}
 		});
 	}
 
 	function save_flash(this_div) {
 		if (this_div) {
 			$(this_div).fadeOut(150).fadeIn(150);
-		} else {
-
-		}
+		} else {}
 	}
 
-	function plugin_dir(){
-		var dir=sog_settings_vars.plugin_path;
+	function plugin_dir() {
+		var dir = sog_settings_vars.plugin_path;
 		// console.log(dir);
 		return dir;
 	}
 
 	function getParameterByName(name, url) {
 		if (!url) {
-		url = window.location.href;
+			url = window.location.href;
 		}
 
 		name = name.replace(/[\[\]]/g, "\\$&");
