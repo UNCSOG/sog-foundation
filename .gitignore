@@ -68,9 +68,9 @@ vendor/*
 *.psd
 *.zip
 
-# Custom Theme Specific #
+# Custom Site / Theme Specific #
 #################
-.ddev
+.ddev/config.yaml
 development/*
 wp-content/ai1wm-backups/*
 wp-content/development/*

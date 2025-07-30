@@ -41,7 +41,6 @@ NOTE: Fix your merge conflicts if you still have any try not to rebase if can.
 
 ```
     git add .
-    git rebase --continue
     git push origin master
 ```
 
