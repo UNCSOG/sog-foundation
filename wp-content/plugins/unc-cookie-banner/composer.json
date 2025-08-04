@@ -1,9 +1,0 @@
-{
-	"name": "unc/unc-cookie-banner",
-	"description": "Repo for UNC Cookie Banner ",
-	"type": "wordpress-plugin",
-	"version": "1.0.4",
-	"require": {
-		"composer/installers": "~1.0"
-	}
-}

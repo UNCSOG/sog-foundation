@@ -15,6 +15,7 @@
         }
     ],
     "require": {
+        "phpmailer/phpmailer": "~5.2",
         "wpackagist-plugin/beehive-analytics": "^3.4.17",
         "wpackagist-plugin/better-search-replace": "^1.4.10",
         "wpackagist-plugin/co-authors-plus":"3.6.2",
@@ -38,6 +39,7 @@
         }
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.59",
         "phpstan/phpstan": "^2.1",
         "phpstan/extension-installer": "^1.4",
         "szepeviktor/phpstan-wordpress": "^2.0"
