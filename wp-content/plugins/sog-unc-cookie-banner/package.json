@@ -1,0 +1,12 @@
+{
+	"name": "sog-unc-cookie-banner",
+	"version": "1.0.3",
+	"scripts": {
+		"build": "wp-scripts build src/cookie-banner.js --output-path=dist",
+		"start": "wp-scripts start src/cookie-banner.js --output-path=dist  --webpack-src-dir=src/ --webpack-devtool"
+	},
+	"devDependencies": {
+		"@wordpress/dom-ready": "^3.23.0",
+		"@wordpress/scripts": "^25.0.0"
+	}
+}
