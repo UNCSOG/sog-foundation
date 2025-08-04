@@ -1,0 +1,9 @@
+{
+	"name": "sog-it/sog-unc-cookie-banner",
+	"description": "Repo for the SOG UNC Cookie Banner ",
+	"type": "wordpress-plugin",
+	"version": "0.0.1",
+	"require": {
+		"composer/installers": "~1.0"
+	}
+}
