@@ -19,6 +19,7 @@ class Admins
             'leo1',
             'cisarano',
             'haciali',
+            'vanton'
         ];
     }
 }
