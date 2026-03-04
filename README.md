@@ -49,3 +49,17 @@ If you want to pull updates from the subtree repository:
 ```
 git subtree pull --prefix=wp-content/plugins/sog-unc-cookie-banner ssh://git@sc.unc.edu/sog-it/sog-unc-cookie-banner.git main --squash
 ```
+
+## Plugin Activate Command
+
+If the following command doesn't work for you try logging into the website and manually activating it on the plugins page.
+
+```
+ddev wp plugin activate sog-unc-cookie-banner
+```
+
+or
+
+```
+wp plugin activate sog-unc-cookie-banner
+```
