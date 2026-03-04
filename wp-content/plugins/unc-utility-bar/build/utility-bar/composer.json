@@ -1,0 +1,19 @@
+{
+    "name": "unc/unc-utility-bar-reference",
+    "description": "build the reference files and standalone utility bar widget",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "H. Adam Lenz",
+            "email": "hadamlenz@unc.edu"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

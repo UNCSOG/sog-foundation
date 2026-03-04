@@ -1,0 +1,86 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "utility-bar/utility-bar",
+	"version": "2.2.1",
+	"title": "Utility bar",
+	"icon": "admin-plugins",
+	"category": "widgets",
+	"textdomain": "utility-bar",
+	"description": "the Utility Bar at the top of the page",
+	"render": "file:./render.php",
+	"editorScript": "file:./build/utility-bar-block.js",
+	"style": "file:./build/utility-bar-block.css",
+	"attributes": {
+		"showSkipLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"skipLinkTarget": {
+			"type": "string",
+			"default": "#main"
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				"spacing": {
+					"margin": {
+						"top": "0px"
+					},
+					"padding": {
+						"top": "0.5rem",
+						"bottom": "0.5rem"
+					}
+				},
+				"typography": {
+					"fontSize": "var(--wp--preset--font-size--small)"
+				}
+			}
+		}
+	},
+	"styles": [
+		{
+			"name": "dark-gray",
+			"label": "Dark Grey"
+		},
+		{
+			"name": "gray",
+			"label": "Grey"
+		},
+		{
+			"name": "black",
+			"label": "Black"
+		},
+		{
+			"name": "navy",
+			"label": "Athletic"
+		},
+		{
+			"name": "blue",
+			"label": "Carolina"
+		},
+		{
+			"name": "white",
+			"label": "White"
+		}
+	],
+	"supports": {
+		"alignWide": true,
+		"anchor": true,
+		"color": {
+			"text": false,
+			"background": false,
+			"heading": false,
+			"link": false
+		},
+		"html": false,
+		"lock": true,
+		"multiple": false,
+		"reusable": false
+	},
+	"example": {
+		"attributes": {
+			
+		}
+	}
+}

@@ -1,0 +1,416 @@
+/**
+styles for the utility bar
+**/
+//sizes for the container queries
+$large: 956px;
+$small: 566px;
+
+//some other important sizes
+$font-size: 16px !important;
+$font-weight: 400 !important;
+$default-mix-width: 1170px;
+$row-height: 48px;
+
+//fonts
+$sans-serif: "Open Sans", sans-serif !important;
+$serif: "Source Serif 4", serif !important;
+
+//colors
+$athletic: #13294b;
+$carolina: #4b9cd3;
+$hyperlink: #007fae;
+$white: #ffffff;
+$grey: #e5e5e5;
+$dark-grey: #414141;
+$black: #151515;
+
+:root :where(#unc-utility-bar),
+:root :where(.wp-block-utility-bar-utility-bar) {
+	white-space: nowrap;
+	display: flex;
+	justify-content: center;
+	align-self:stretch;
+	background-color: $carolina;
+	max-width: 100vw;
+	font-size: $font-size;
+	font-weight: $font-weight;
+	//background: #007fae;
+
+	//classic utility bar
+	&:not(.wp-block) {
+		//if we want to force a text size this is good, but remove the supports>typography>fontSize from block.json
+		letter-spacing: initial;
+		margin-top: 0;
+		padding-top: 0;
+
+		#utiltity-bar-nav {
+			margin: 0 4px;
+		}
+		//background: #414141;
+	}
+
+	nav[aria-label="skip"] > a,
+	.utility-bar-skip-link {
+		font-weight: 700;
+		color: var(--wp--preset--color--black, $black);
+	}
+
+	//this is to fix the ServerSiderender extra div in the editor
+	> div {
+		width: 100%;
+		max-width: var(--wp--style--global--content-size, $default-mix-width);
+	}
+
+	&,
+	& a {
+		color: #13294b;
+		text-decoration: none;
+	}
+
+	& a:is(:hover, :focus-within, :focus) {
+		text-underline-offset: 7.2px;
+		text-decoration-line: underline;
+		text-decoration-thickness: 1px;
+		text-decoration-skip-ink: auto;
+	}
+
+	//container with width set to --unc-utility-bar-width
+	//falls back to the older --wp--style--global--content-size
+	.utility-bar-container {
+		width: 100%;
+		max-width: var(--unc-utility-bar-width, var(--wp--style--global--content-size, $default-mix-width));
+		padding: 0;
+	}
+
+	//the row eveything is in
+	//used for container queries
+	.utility-bar-row {
+		height: $row-height;
+		display: flex;
+		flex-direction: row;
+		//justify-content: space-between;
+		align-content: center;
+		container-type: inline-size;
+		container-name: utility-bar-row;
+	}
+
+	//everything in the link back to unc.edu
+	#utility-bar-unc-link {
+		padding: 0 1.6px 0 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex: 0;
+	}
+	
+	//this is the default style of the logo
+	#utility-bar-unc-link > #unc-interlocking-logo {
+		margin: 0 1.6px 0 4px;
+		max-width: 40px;
+		width: 40px;
+		min-width: 40px;
+
+		@container utility-bar-row (min-width: #{$small}) {
+			display: flex;
+			margin: 0 4.8px;
+		}
+
+		@container utility-bar-row (min-width: #{$large}) {
+			display: flex;
+			margin: 0 12px 0 0;
+		}
+
+		& > #logo-fill {
+			fill: $white;
+		}
+
+		& > #logo-stroke {
+			fill: $athletic;
+		}
+	}
+
+	//change logo when the link is hover/focused
+	@container utility-bar-row (max-width: #{$large}) {
+		#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+			& > #logo-stroke,
+			& > #logo-fill {
+				fill: $white;
+			}
+		}
+	}
+
+	//the university of north carolina text
+	#unc-ub-title {
+		font-size: 16px !important;
+		//not shown until large
+		font-family: $serif;
+		display: none;
+
+		@container utility-bar-row (min-width: #{$large}) {
+			display: flex;
+		}
+
+		// span.em {
+		// 	font-style: italic;
+		// 	white-space: pre;
+		// }
+	}
+
+	//the navigaiton links
+	#utiltity-bar-nav {
+		margin: 0 16px 0 16px;
+		padding-left: 0;
+		display: flex;
+		flex: 1;
+		max-width: calc(100% - 60px);
+		flex-direction: row;
+		align-items: stretch;
+		flex-wrap: nowrap;
+		//justify-content: start;
+		justify-content: space-between;
+
+		@container utility-bar-row (min-width: #{$large}) {
+			justify-content: end;
+			padding-right: 4px;
+			gap: 12px;
+		}
+
+		.utiltity-bar-nav-item {
+			font-family: "Open Sans", sans-serif !important;
+			list-style-type: none;
+
+			a.utiltity-bar-link {
+				display: inline-block;
+				height: 100%;
+				line-height: $row-height;
+				padding-left: 1px;
+				padding-right: 1px;
+				vertical-align: middle;
+				white-space: nowrap;
+				font-family: $sans-serif;
+				font-size: 13px;
+
+				@container utility-bar-row (min-width: #{$small}) {
+					padding-left: 3px;
+					padding-right: 3px;
+				}
+			}
+
+			&.md-down-hidden-list-item {
+				display: none;
+
+				@container utility-bar-row (min-width: #{$small}) {
+					display: inline;
+				}
+			}
+		}
+	}
+
+	//the added styles to the classes
+	//for example: is-style-blue in the block editor and blue in classic
+	&.is-style-default,
+	&.is-style-blue,
+	&.blue {
+		background: $carolina;
+		color: $athletic;
+
+		a {
+			color: $athletic;
+		}
+
+		#utility-bar-unc-link > #unc-interlocking-logo {
+			& > #logo-fill {
+				fill: $white;
+			}
+
+			& > #logo-stroke {
+				fill: $athletic;
+			}
+		}
+
+		@container utility-bar-row (max-width: #{$large}) {
+			#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+				& > #logo-stroke,
+				& > #logo-fill {
+					fill: $athletic;
+				}
+			}
+		}
+	}
+
+	&.is-style-black,
+	&.black {
+		background: $black;
+		color: white;
+		.wp-block-utility-bar-utility-bar {
+			background: $black;
+		}
+
+		a {
+			color: $white;
+		}
+
+		#utility-bar-unc-link > #unc-interlocking-logo {
+			& > #logo-fill {
+				fill: $carolina;
+			}
+
+			& > #logo-stroke {
+				fill: $white;
+			}
+		}
+		@container utility-bar-row (max-width: #{$large}) {
+			#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+				& > #logo-stroke,
+				& > #logo-fill {
+					fill: $white;
+				}
+			}
+		}
+	}
+
+	&.is-style-dark-gray,
+	&.dark-gray {
+		background: $dark-grey;
+		color: white;
+		.wp-block-utility-bar-utility-bar {
+			background: $dark-grey;
+		}
+
+		a {
+			color: $white;
+		}
+
+		#utility-bar-unc-link > #unc-interlocking-logo {
+			& > #logo-fill {
+				fill: $carolina;
+			}
+
+			& > #logo-stroke {
+				fill: $white;
+			}
+		}
+		@container utility-bar-row (max-width: #{$large}) {
+			#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+				& > #logo-stroke,
+				& > #logo-fill {
+					fill: $white;
+				}
+			}
+		}
+	}
+
+	//this is navy in classic and athletic in block editor
+	&.is-style-navy,
+	&.navy {
+		background: $athletic;
+		color: $white;
+		.wp-block-utility-bar-utility-bar {
+			background: $athletic;
+		}
+
+		a {
+			color: $white;
+		}
+
+		#utility-bar-unc-link > #unc-interlocking-logo {
+			& > #logo-fill {
+				fill: $carolina;
+			}
+
+			& > #logo-stroke {
+				fill: $white;
+			}
+		}
+
+		@container utility-bar-row (max-width: #{$large}) {
+			#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+				& > #logo-stroke,
+				& > #logo-fill {
+					fill: $white;
+				}
+			}
+		}
+	}
+
+	&.is-style-gray,
+	&.gray {
+		background: $grey;
+		color: $athletic;
+		.wp-block-utility-bar-utility-bar {
+			background: $grey;
+		}
+
+		a {
+			color: $athletic;
+		}
+
+		#utility-bar-unc-link > #unc-interlocking-logo {
+			& > #logo-fill {
+				fill: $carolina;
+			}
+
+			& > #logo-stroke {
+				fill: $athletic;
+			}
+		}
+
+		@container utility-bar-row (max-width: #{$large}) {
+			#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+				& > #logo-stroke,
+				& > #logo-fill {
+					fill: $athletic;
+				}
+			}
+		}
+	}
+
+	&.is-style-white,
+	&.white {
+		background: $white;
+		color: $athletic !important;
+
+		a {
+			background: $white;
+			color: $athletic !important;
+		}
+
+		.wp-block-utility-bar-utility-bar {
+			background: $white;
+		}
+
+		#utility-bar-unc-link > #unc-interlocking-logo {
+			& > #logo-fill {
+				fill: $carolina;
+			}
+
+			& > #logo-stroke {
+				fill: $athletic;
+			}
+		}
+
+		a:hover,
+		a:focus {
+			text-decoration-color: $hyperlink;
+		}
+
+		@container utility-bar-row (max-width: #{$large}) {
+			#utility-bar-unc-link:is(:hover, :focus-within, :focus) > #unc-interlocking-logo {
+				& > #logo-stroke,
+				& > #logo-fill {
+					fill: $athletic;
+				}
+			}
+		}
+	}
+}
+
+//dont allow clicking in the editor
+.editor-styles-wrapper .wp-block-utility-bar-utility-bar {
+	a,
+	a:hover {
+		cursor: not-allowed;
+		pointer-events: none !important;
+		//border: thin solid red;
+	}
+}

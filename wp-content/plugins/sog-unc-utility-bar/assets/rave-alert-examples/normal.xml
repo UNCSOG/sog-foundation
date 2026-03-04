@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+  <identifier>16450363400001358752250</identifier>
+  <sender>TheUniversityofNorthCarolinaatChapelHill</sender>
+  <sent>2022-02-16T13:32:20-05:00</sent>
+  <status>Actual</status>
+  <msgType>Alert</msgType>
+  <scope>Public</scope>
+  <info>
+    <language>en-US</language>
+    <category>Safety</category>
+    <event>Normal</event>
+    <urgency>Immediate</urgency>
+    <severity>Moderate</severity>
+    <certainty>Observed</certainty>
+    <senderName>The University of North Carolina at Chapel Hill</senderName>
+    <headline>The University is currently operating under normal conditions</headline>
+    <description>The University is currently operating under normal conditions</description>
+    <web>http://alertcarolina.unc.edu</web>
+    <parameter>
+      <valueName>ACTYPE</valueName>
+      <value>Normal</value>
+    </parameter>
+  </info>
+</alert>

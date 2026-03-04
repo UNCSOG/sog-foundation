@@ -1,0 +1,79 @@
+
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>UNC Utility Bar</title>
+		<link rel="stylesheet" href="https://its.unc.edu/wp-content/themes/heelium/assets/css/main.min.css">
+		<script type="text/javascript" id="unc-ub-script" data-color="dark-gray" src="https://its.unc.edu/web-assets/utility-bar/utility-bar.min.js"></script>
+		<style>
+			h2 { margin-top: 30px; }
+			a, a:hover, a:visited { color: #007FAE; }
+			a:hover { text-decoration: underline; }
+			.color-btns .btn { margin: 5px 2px; }
+			.btn-default, .btn-primary, pre { border-radius: 0; }
+			.btn-default { color: #007FAE; }
+			.btn-default:hover { color: #007FAE; }
+			.btn-gray { background: #747474; color: #fff; border-color: #767676; }
+			.btn-gray:hover { color: #747474; }
+			.btn-dark-gray { background: #414141; color: #fff; border-color: #414141; }
+			.btn-dark-gray:hover { background: #747474; color: #fff; border-color: #747474; }
+			.btn-black { background: #151515; color: #fff; border-color: #000; }
+			.btn-black:hover { background: #414141; color: #fff; border-color: #414141; }
+			.btn-navy { background: #13294B; color: #fff; border-color: #13294B; }
+			.btn-navy:hover { background: #1d3f72; color: #fff; border-color: #13294B;  }
+			.btn-primary, a.btn-primary { background: #007FAE; color: #fff; border: 1px solid #007fae }
+			.btn-primary:hover { background: #00658a; }
+			body > .container { background: #fff; padding: 0 30px 20px; margin-top: 20px; }
+			body.blue { background: #4B9CD3; }
+		</style>
+		<script>
+			function colorChange(color) {
+				document.getElementById("unc-ub-wrapper").className = color;
+				if ( "white" == color ) {
+					document.body.className = "blue";
+				} else {
+					document.body.className = "";
+				}
+				document.getElementById("ub-code").innerHTML = '&lt;script type="text/javascript" id="unc-ub-script" data-color="' + color + '" src="https://its.unc.edu/web-assets/utility-bar/utility-bar.min.js"&gt;&lt;/script&gt;';
+			}
+		</script>
+		<!-- ITS Google Analytics -->
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-832251-1', 'auto');
+			ga('send', 'pageview');
+		</script>
+
+	</head>
+	<body>
+		<div class="container">
+			<div class="page-header">
+				<h1>UNC Utility Bar</h1>
+			</div>
+			<p>The UNC Utility Bar is a centralized navbar that can be added to any UNC website. A script to render it is hosted by ITS, so it will always remain up to date and consistent across web properties. This page demonstrates what the utility bar looks like, what the customization options are and how to include it on your site.</p>
+			<h2>Colors</h2>
+			<p>There are six different color options for the utility bar: Gray, Dark Gray (default), Black, Navy, Blue and White. These match the colors from <a href="http://identity.unc.edu/colors/">the official UNC color palette for web applications</a>. They have been optimized to meet the minimum accessibility requirements for color contrast.</p>
+			<p>You can preview the different colors on this page by clicking the buttons below.</p>
+			<div class="color-btns">
+				<button class="btn btn-default btn-gray" role="button" onClick="colorChange('gray')">Gray</button>
+				<button class="btn btn-default btn-dark-gray" role="button" onClick="colorChange('dark-gray')">Dark Gray</button>
+				<button class="btn btn-default btn-black" role="button" onClick="colorChange('black')">Black</button>
+				<button class="btn btn-default btn-navy" role="button" onClick="colorChange('navy')">Navy</button>
+				<button class="btn btn-primary" role="button" onClick="colorChange('blue')">Blue</button>
+				<button class="btn btn-default" role="button" onClick="colorChange('white')">White</button>
+			</div>
+			<h2>Instructions</h2>
+			<p>To add the utility bar to your site, select the color you would like using the buttons above, then copy the code below and place it in the <code>&lt;head&gt;</code> section of your HTML page or CMS template.</p>
+			<pre id="ub-code" class="language-html" data-lang="html">&lt;script type="text/javascript" id="unc-ub-script" data-color="dark-gray" src="https://its.unc.edu/web-assets/utility-bar/utility-bar.min.js"&gt;&lt;/script&gt;</pre>
+			<h2>Contribute</h2>
+			<p>The UNC Utility Bar is open source and the project is hosted on <a href="https://sc.unc.edu">ITS Source Control</a>. We welcome and encourage contributions from developers across campus.</p>
+			<p class="text-center"><a class="btn btn-primary" href="https://sc.unc.edu/itsds/unc-utility-bar">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a></p>
+		</div>
+	</body>
+</html>

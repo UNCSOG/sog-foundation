@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+    <identifier>16469439700001359537518</identifier>
+    <sender>UNC-TestSite</sender>
+    <sent>2022-03-10T15:26:10-05:00</sent>
+    <status>Test</status>
+    <msgType>Alert</msgType>
+    <scope>Public</scope>
+    <code>200</code>
+    <info>
+        <language>en-US</language>
+        <category>Other</category>
+        <event>ITS Digital Services - Alert Carolina Push TEST</event>
+        <urgency>Immediate</urgency>
+        <severity>Extreme</severity>
+        <certainty>Observed</certainty>
+        <senderName>UNC-TestSite</senderName>
+        <headline>This is a test with event codes and more parameters</headline>
+        <description>!TEST TEST!</description>
+        <instruction>do the thing</instruction>
+        <web>https://alertfeed-alertcarolina.pantheonsite.io</web>
+        <parameter>
+            <valueName>ACTYPE</valueName>
+            <value>Emergency</value>
+        </parameter>
+        <parameter>
+            <valueName>fuu</valueName>
+            <value>barr</value>
+        </parameter>
+    </info>
+</alert>

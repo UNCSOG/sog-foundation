@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+    <identifier>16467475290001565241010</identifier>
+    <sender>UNC-TestSite</sender>
+    <sent>2022-03-08T08:52:09-05:00</sent>
+    <status>Test</status>
+    <msgType>Cancel</msgType>
+    <scope>Public</scope>
+    <references>UNC-TestSite,16467471140001359253941,2022-03-08T08:45:14-05:00</references>
+    <info>
+        <language>en-US</language>
+        <category>Other</category>
+        <event>ITS Digital Services - Alert Carolina Push TEST</event>
+        <urgency>Immediate</urgency>
+        <severity>Extreme</severity>
+        <certainty>Observed</certainty>
+        <senderName>UNC-TestSite</senderName>
+        <headline>A headline</headline>
+        <description>!TEST TEST!</description>
+        <instruction>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</instruction>
+        <web>https://alertfeed-alertcarolina.pantheonsite.io</web>
+        <parameter>
+            <valueName>ACTYPE</valueName>
+            <value>Emergency</value>
+        </parameter>
+    </info>
+</alert>

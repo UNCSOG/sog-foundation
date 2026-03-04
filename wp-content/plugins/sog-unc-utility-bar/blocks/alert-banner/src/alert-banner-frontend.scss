@@ -1,0 +1,50 @@
+:root :where(.alert-service-banner) {
+	z-index: 100;
+	position: relative;
+	min-height: 30px;
+	width: 100%;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	&.emergency-alert {
+		background-color: #ffff00;
+		color: #cf2e2e !important;
+
+		a, .banner-text{
+			color: #cf2e2e !important;
+		}
+	}
+	&.adverse-alert {
+		background-color: #c6ddf6;
+		color: #000000;
+
+		a, .banner-text{
+			color: #000000 !important;
+		}
+	}
+
+	a {
+		padding: 2px 0;
+		display: inline-block;
+		height: 100%;
+		max-width: 100%;
+		text-decoration: underline;
+		
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
+.alert-service-banner:not(.wp-block-utility-bar-alert-banner) a{
+	font-size:16px;
+}
+
+body.alert-unpublished{
+	.alert-service-banner{
+		display: none;
+	}
+}

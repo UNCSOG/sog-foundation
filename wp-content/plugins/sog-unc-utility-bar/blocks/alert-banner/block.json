@@ -1,0 +1,70 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "utility-bar/alert-banner",
+	"title": "Alert Banner",
+	"icon": "info",
+	"category": "widgets",
+	"description": "the alert banner shown when Alert Carolina sends out a campus wide alert.  This should not be seen on the front unless there is an alert.  There are two Alert types: An Emergency alert is a crime or other severe emergency.  An adverse alert is bad weather or something less severe",
+	"keywords": ["alert", "alertcarolina", "emergency", "weather"],
+	"editorScript": "alert-banner-block-script",
+	"editorStyle": "alert-banner-block-style",
+	"viewScript":"alert-banner-frontend-script",
+	"viewStyle": "alert-banner-frontend-style",
+	"blockHooks": {
+		"utility-bar/utility-bar":"after"
+	},
+	"attributes": {
+		"useRest":{
+			"type":"boolean",
+			"default":false
+		},
+		"hiddenInEditor":{
+			"type":"boolean",
+			"default":true
+		},
+		"styles":{
+			"type":"object",
+			"default":{
+				"elements": {
+					"link": {
+						"typeography":{
+							"fontSize": "16px"
+						}
+					}
+				}
+			}
+		}
+	},
+	"styles": [
+		{
+			"name": "emergency",
+			"label": "Emergency"
+		},
+		{
+			"name": "adverse",
+			"label": "Adverse"
+		}
+	],
+	"supports": {
+		
+		"color": {
+			"text": false,
+			"background": false,
+			"heading": false,
+			"link": false
+		},
+		"html": false,
+		"multiple": false,
+		"reusable": false,
+		"alignWide": false,
+		"spacing": {
+			"margin": false,
+			"padding": false
+		},
+		"typography": {
+			"fontSize": false,
+			"lineHeight": false
+		}
+	}
+}

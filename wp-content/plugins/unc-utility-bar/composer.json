@@ -1,0 +1,19 @@
+{
+    "name": "unc/unc-utility-bar",
+    "description": "A service for publishing, pushing, and receiving cap alerts, and displaying the unified ",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "H. Adam Lenz",
+            "email": "hadamlenz@unc.edu"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

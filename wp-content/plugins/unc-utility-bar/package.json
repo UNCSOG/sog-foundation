@@ -1,0 +1,57 @@
+{
+  "name": "utility-bar",
+  "version": "2.2.1",
+  "description": "The Unified UNC Utility bar with Alerts from Alert Carolina and a propper place to put your notifications on top of the page",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm-run-all clean build:*",
+    "build:admin": "wp-scripts build src/admin/index.js --output-path=build/admin",
+    "build:admin-network": "wp-scripts build src/network-admin/index.js --output-path=build/network-admin",
+    "build:block-utility-bar": "wp-scripts build blocks/utility-bar/src/utility-bar-block.js --output-path=blocks/utility-bar/build",
+    "build:block-alert-banner": "npm-run-all build:block-alert-banner-*",
+    "build:block-alert-banner-admin": "wp-scripts build blocks/alert-banner/src/alert-banner-block.js --output-path=blocks/alert-banner/build/admin",
+    "build:block-alert-banner-frontend": "wp-scripts build blocks/alert-banner/src/alert-banner-frontend.js --output-path=blocks/alert-banner/build/frontend",
+    "build:customizer": "wp-scripts build src/customizer/customizer.js --output-path=build/customizer",
+    "build:editor": "wp-scripts build src/editor/index.js --output-path=build/editor",
+    "build:frontend": "wp-scripts build src/frontend/index.js --output-path=build/frontend",
+    "build:web-assets-utility-bar": "webpack --env mode=production --config src/webscript-utility-bar/webpack.config.js",
+    "clean": "rm -rf build",
+    "start": "npm-run-all --parallel start:*",
+    "start:admin": "wp-scripts start src/admin/index.js --output-path=build/admin --webpack-devtool",
+    "start:admin-network": "wp-scripts start src/network-admin/index.js --output-path=build/network-admin --webpack-devtool",
+    "start:block-utility-bar": "wp-scripts start blocks/utility-bar/src/utility-bar-block.js --output-path=blocks/utility-bar/build --webpack-devtool",
+    "start:block-alert-banner": "npm-run-all --parallel start:block-alert-banner-*",
+    "start:block-alert-banner-admin": "wp-scripts start blocks/alert-banner/src/alert-banner-block.js --output-path=blocks/alert-banner/build/admin --webpack-devtool",
+    "start:block-alert-banner-frontend": "wp-scripts start blocks/alert-banner/src/alert-banner-frontend.js --output-path=blocks/alert-banner/build/frontend --webpack-devtool",
+    "start::customizer": "wp-scripts start src/customizer/customizer.js  --output-path=build/customizer --webpack-devtool",
+    "start:editor": "wp-scripts start",
+    "start:frontend": "wp-scripts start src/frontend/index.js --output-path=build/frontend --webpack-devtool",
+    "start:web-assets-utility-bar": "webpack --env mode=development --watch --config src/webscript-utility-bar/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://sc.unc.edu/itsds/unc-utility-bar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/api-fetch": "^7.31.0",
+    "@wordpress/dom-ready": "^4.31.0",
+    "@wordpress/icons": "^10.31.0",
+    "@wordpress/scripts": "^30.24.0",
+    "@wordpress/server-side-render": "^6.4.0",
+    "baseline-browser-mapping": "^2.9.7",
+    "container-query-polyfill": "^1.0.2",
+    "copy-webpack-plugin": "^13.0.1",
+    "fast-xml-parser": "^5.2.5",
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.5",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.94.2",
+    "sass-loader": "^16.0.6"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "lity": "^2.4.1"
+  }
+}

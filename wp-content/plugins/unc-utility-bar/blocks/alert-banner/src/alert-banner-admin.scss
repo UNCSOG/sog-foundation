@@ -1,0 +1,32 @@
+:root :where(.wp-block-utility-bar-alert-banner) {
+	z-index: 100;
+	position: relative;
+	min-height: 30px;
+	width: 100%;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	&.is-style-emergency{
+		background-color: #ffff00;
+		color: #cf2e2e;
+	}
+	&.is-style-adverse {
+		background-color: #c6ddf6;
+		color: #000000;
+	}
+
+	a {
+		padding: 5px 0;
+		display: inline-block;
+		height: 100%;
+		width: 100%;
+		text-decoration: underline;
+		font-size:16px;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
