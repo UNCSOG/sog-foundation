@@ -478,9 +478,9 @@ if (! function_exists('sog_foundation_parent_comment')) {
         $defaults = [
             'fields' => apply_filters('comment_form_default_fields', $fields),
             'comment_field' => '<div class="form-floating mb-3">
-											<textarea id="comment" name="comment" class="form-control" aria-required="true" required placeholder="' . esc_attr__('Comment', 'sog-foundation-parent') . ($req ? '*' : '') . '"></textarea>
-											<label for="comment">' . esc_html__('Comment', 'sog-foundation-parent') . '</label>
-										</div>',
+                                    <textarea id="comment" name="comment" class="form-control" aria-required="true" required placeholder="' . esc_attr__('Comment', 'sog-foundation-parent') . ($req ? '*' : '') . '"></textarea>
+                                    <label for="comment">' . esc_html__('Comment', 'sog-foundation-parent') . '</label>
+                                </div>',
             /** This filter is documented in wp-includes/link-template.php */
             'must_log_in' => '<p class="must-log-in">' . sprintf(wp_kses_post(__('You must be <a href="%s">logged in</a> to post a comment.', 'sog-foundation-parent')), wp_login_url(esc_url(get_the_permalink(get_the_ID())))) . '</p>',
             /** This filter is documented in wp-includes/link-template.php */
@@ -553,6 +553,24 @@ function sog_foundation_parent_scripts_loader()
 
     // 2. Scripts.
     wp_enqueue_script('mainjs', get_theme_file_uri('build/main.js'), [], $theme_version, true);
+
+    // Enqueue accessibility.js
+    wp_enqueue_script(
+        'accessibility',
+        get_theme_file_uri('js/accessibility.js'),
+        [],
+        $theme_version,
+        true
+    );
+
+    // Enqueue sog.js
+    wp_enqueue_script(
+        'sog',
+        get_theme_file_uri('js/sog.js'),
+        [],
+        $theme_version,
+        true
+    );
 
     if (is_singular() && comments_open() && get_option('thread_comments')) {
         wp_enqueue_script('comment-reply');
@@ -678,4 +696,3 @@ function parent_theme_sidebar_toggle_callback() {
     <label for="sidebar_enabled">Enable sidebar for selected content types</label>
     <?php
 }
-

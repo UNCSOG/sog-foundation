@@ -1,4 +1,4 @@
-s<?php
+<?php
 /**
  * Template Name: Blog Index
  * Description: The template for displaying the Blog index /blog.
@@ -24,5 +24,6 @@ $page_id = get_option( 'page_for_posts' );
 		?>
 	</div><!-- /.col -->
 </div><!-- /.row -->
+
 <?php
 get_footer();

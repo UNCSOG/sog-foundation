@@ -16,8 +16,7 @@ defined('ABSPATH') || exit;
  *
  * @return void
  */
-function sog_foundation_parent_customize($wp_customize)
-{
+function sog_foundation_parent_customize($wp_customize) {
     /**
      * Initialize sections
      */
@@ -40,6 +39,7 @@ function sog_foundation_parent_customize($wp_customize)
             'sanitize_callback' => 'esc_url_raw',
         ]
     );
+
     $wp_customize->add_control(
         new WP_Customize_Image_Control(
             $wp_customize,
@@ -54,6 +54,29 @@ function sog_foundation_parent_customize($wp_customize)
         )
     );
 
+    // Favicon Image
+    $wp_customize->add_setting(
+        'favicon_image',
+        [
+            'default' => '',
+            'sanitize_callback' => 'esc_url_raw',
+        ]
+    );
+
+    $wp_customize->add_control(
+        new WP_Customize_Image_Control(
+            $wp_customize,
+            'favicon_image',
+            [
+                'label' => __('Favicon Image', 'sog-foundation-parent'),
+                'description' => __('Upload a favicon (recommended size: 32x32px or 64x64px PNG).', 'sog-foundation-parent'),
+                'section' => 'title_tagline',
+                'settings' => 'favicon_image',
+                'priority' => 2,
+            ]
+        )
+    );
+
     // Predefined Navbar scheme.
     $wp_customize->add_setting(
         'navbar_scheme',
@@ -62,6 +85,7 @@ function sog_foundation_parent_customize($wp_customize)
             'sanitize_callback' => 'sanitize_text_field',
         ]
     );
+
     $wp_customize->add_control(
         'navbar_scheme',
         [
@@ -86,6 +110,7 @@ function sog_foundation_parent_customize($wp_customize)
             'sanitize_callback' => 'sanitize_text_field',
         ]
     );
+
     $wp_customize->add_control(
         'navbar_position',
         [
@@ -110,6 +135,7 @@ function sog_foundation_parent_customize($wp_customize)
             'sanitize_callback' => 'sanitize_text_field',
         ]
     );
+
     $wp_customize->add_control(
         'search_enabled',
         [
@@ -118,6 +144,51 @@ function sog_foundation_parent_customize($wp_customize)
             'section' => 'theme_header_section',
             'settings' => 'search_enabled',
             'priority' => 3,
+        ]
+    );
+
+    // Custom Site Name
+    $wp_customize->add_setting(
+        'custom_site_name',
+        [
+            'default' => '',
+            'sanitize_callback' => 'sanitize_text_field',
+        ]
+    );
+
+    $wp_customize->add_control(
+        'custom_site_name',
+        [
+            'type' => 'text',
+            'label' => __('Custom Site Name', 'sog-foundation-parent'),
+            'section' => 'title_tagline',
+            'settings' => 'custom_site_name',
+            'priority' => 1,
+        ]
+    );
+
+    // Container Width Setting
+    $wp_customize->add_setting(
+        'container_width',
+        [
+            'default' => 'container',
+            'sanitize_callback' => 'sanitize_text_field',
+        ]
+    );
+
+    $wp_customize->add_control(
+        'container_width',
+        [
+            'type' => 'select',
+            'label' => __('Container Width', 'sog-foundation-parent'),
+            'description' => __('Choose the maximum width for the site container.'),
+            'section' => 'theme_header_section',
+            'settings' => 'container_width',
+            'choices' => [
+                'container' => __('Default (Fixed Width)', 'sog-foundation-parent'),
+                'container-fluid' => __('Full Width (Fluid)', 'sog-foundation-parent'),
+            ],
+            'priority' => 20,
         ]
     );
 }
