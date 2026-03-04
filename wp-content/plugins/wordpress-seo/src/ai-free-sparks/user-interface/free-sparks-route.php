@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\AI_Free_Sparks\User_Interface;
 
@@ -65,7 +66,7 @@ class Free_Sparks_Route implements Route_Interface {
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'start' ],
 				'permission_callback' => [ $this, 'can_edit_posts' ],
-			]
+			],
 		);
 	}
 

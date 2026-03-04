@@ -79,9 +79,6 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		add_action( 'edit_attachment', [ $this, 'save_postdata' ] );
 		add_action( 'add_attachment', [ $this, 'save_postdata' ] );
 
-		$this->editor = new WPSEO_Metabox_Editor();
-		$this->editor->register_hooks();
-
 		$this->social_is_enabled            = WPSEO_Options::get( 'opengraph', false, [ 'wpseo_social' ] ) || WPSEO_Options::get( 'twitter', false, [ 'wpseo_social' ] );
 		$this->is_advanced_metadata_enabled = WPSEO_Capability_Utils::current_user_can( 'wpseo_edit_advanced_metadata' ) || WPSEO_Options::get( 'disableadvanced_meta', null, [ 'wpseo' ] ) === false;
 
@@ -134,7 +131,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 				$post_type,
 				'normal',
 				apply_filters( 'wpseo_metabox_prio', 'high' ),
-				[ '__block_editor_compatible_meta_box' => true ]
+				[ '__block_editor_compatible_meta_box' => true ],
 			);
 		}
 	}
@@ -151,7 +148,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			'<a href="https://www.mozilla.org/firefox/new/">',
 			'<a href="https://www.google.com/chrome/">',
 			'<a href="https://www.microsoft.com/windows/microsoft-edge">',
-			'</a>'
+			'</a>',
 		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output escaped above.
@@ -205,7 +202,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			/* translators: 1: link open tag; 2: link close tag. */
 			__( 'The canonical URL that this page should point to. Leave empty to default to permalink. %1$sCross domain canonical%2$s supported too.', 'wordpress-seo' ),
 			'<a href="https://googlewebmastercentral.blogspot.com/2009/12/handling-legitimate-cross-domain.html" target="_blank" rel="noopener">',
-			WPSEO_Admin_Utils::get_new_tab_message() . '</a>'
+			WPSEO_Admin_Utils::get_new_tab_message() . '</a>',
 		);
 
 		WPSEO_Meta::$meta_fields['advanced']['redirect']['title']       = __( '301 Redirect', 'wordpress-seo' );
@@ -254,7 +251,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 				$post_type,
 				'normal',
 				apply_filters( 'wpseo_metabox_prio', 'high' ),
-				[ '__block_editor_compatible_meta_box' => true ]
+				[ '__block_editor_compatible_meta_box' => true ],
 			);
 		}
 	}
@@ -281,7 +278,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		$permalink = $this->get_permalink();
 
 		$post_formatter = new WPSEO_Metabox_Formatter(
-			new WPSEO_Post_Metabox_Formatter( $this->get_metabox_post(), [], $permalink )
+			new WPSEO_Post_Metabox_Formatter( $this->get_metabox_post(), [], $permalink ),
 		);
 
 		$values = $post_formatter->get_values();
@@ -425,7 +422,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			$tabs[] = new WPSEO_Metabox_Section_React(
 				'schema',
 				'<span class="wpseo-schema-icon"></span>' . __( 'Schema', 'wordpress-seo' ),
-				''
+				'',
 			);
 		}
 
@@ -436,7 +433,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 				'',
 				[
 					'html_after' => '<div id="wpseo-section-social"></div>',
-				]
+				],
 			);
 		}
 
@@ -487,7 +484,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 					$tab['name'],
 					$tab['link_content'],
 					$tab['content'],
-					$options
+					$options,
 				);
 			}
 		}
@@ -729,7 +726,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			WPSEO_Meta::get_meta_field_defs( 'general', $post->post_type ),
 			WPSEO_Meta::get_meta_field_defs( 'advanced' ),
 			$social_fields,
-			WPSEO_Meta::get_meta_field_defs( 'schema', $post->post_type )
+			WPSEO_Meta::get_meta_field_defs( 'schema', $post->post_type ),
 		);
 
 		foreach ( $meta_boxes as $key => $meta_box ) {
@@ -808,6 +805,11 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	public function enqueue() {
 		global $pagenow;
 
+		if ( $this->readability_analysis->is_enabled() ) {
+			$this->editor = new WPSEO_Metabox_Editor();
+			$this->editor->register_hooks();
+		}
+
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 
 		if ( self::is_post_overview( $pagenow ) ) {
@@ -832,7 +834,9 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		}
 
 		$asset_manager->enqueue_style( 'metabox-css' );
-		$asset_manager->enqueue_style( 'scoring' );
+		if ( $this->readability_analysis->is_enabled() ) {
+			$asset_manager->enqueue_style( 'scoring' );
+		}
 		$asset_manager->enqueue_style( 'monorepo' );
 		$asset_manager->enqueue_style( 'ai-generator' );
 		$asset_manager->enqueue_style( 'ai-fix-assessments' );
@@ -885,6 +889,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			'postId'                     => $post_id,
 			'postStatus'                 => get_post_status( $post_id ),
 			'postType'                   => get_post_type( $post_id ),
+			'isPage'                     => get_post_type( $post_id ) === 'page',
 			'usedKeywordsNonce'          => wp_create_nonce( 'wpseo-keyword-usage-and-post-types' ),
 			'analysis'                   => [
 				'plugins' => $plugins_script_data,
@@ -908,7 +913,6 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		}
 
 		$asset_manager->localize_script( $post_edit_handle, 'wpseoScriptData', $script_data );
-		$asset_manager->enqueue_user_language_script();
 	}
 
 	/**
@@ -1097,7 +1101,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			[
 				$meta->presentation->title,
 				$meta->presentation->meta_description,
-			]
+			],
 		);
 
 		preg_match_all( '/%%cf_([A-Za-z0-9_]+)%%/', $replace_vars_fields, $matches );

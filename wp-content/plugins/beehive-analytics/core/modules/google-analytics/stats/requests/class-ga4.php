@@ -860,14 +860,21 @@ class GA4 extends Request {
 			$days = 0;
 		}
 
-		// We need to show date in month format.
-		if ( $days >= 364 ) {
-			$this->period_dimension = 'month';
-		} elseif ( $days >= 89 ) {
-			$this->period_dimension = 'week';
+		// Choose appropriate granularity for breathable line chart rendering.
+		if ( $days >= 730 ) {
+			// 2+ years: yearly granularity (2+ data points)
+			$this->period_dimension = 'year';
+		} elseif ( $days >= 180 ) {
+			// 6+ months: monthly granularity (6+ data points)
+			$this->period_dimension = 'yearMonth';
+		} elseif ( $days >= 60 ) {
+			// 3+ months: weekly granularity (12+ data points)
+			$this->period_dimension = 'yearWeek';
 		} elseif ( $days > 0 ) {
+			// 1-89 days: daily granularity (1-89 data points)
 			$this->period_dimension = 'date';
 		} else {
+			// Same day: hourly granularity (24 data points)
 			$this->period_dimension = 'dateHour';
 		}
 

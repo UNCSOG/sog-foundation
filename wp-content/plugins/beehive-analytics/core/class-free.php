@@ -85,8 +85,6 @@ class Free extends Base {
 					'dashboard_page_beehive-accounts-network',
 					'dashboard_page_beehive-settings',
 					'dashboard_page_beehive-settings-network',
-					'dashboard_page_beehive-tutorials',
-					'dashboard_page_beehive-tutorials-network',
 					'dashboard_page_beehive-google-analytics',
 					'dashboard_page_beehive-google-analytics-network',
 					'dashboard_page_beehive-google-tag-manager',
@@ -119,7 +117,7 @@ class Free extends Base {
 	/**
 	 * Setup and load the Cross Sell module.
 	 *
-	 * @since 3.4.17
+	 * @since 3.4.18
 	 *
 	 * @return void
 	 */
@@ -148,11 +146,12 @@ class Free extends Base {
 			'parent_slug' => 'beehive',
 			'capability'  => 'manage_options',
 			'menu_slug'   => 'beehive_cross_sell',
-			'position'    => 6,
+			'position'    => 5,
 		);
 
 		$cross_sell = new \WPMUDEV\Modules\Plugin_Cross_Sell( $submenu_params );
 	}
+
 
 	/**
 	 * Initialize modules for the free version of the plugin.

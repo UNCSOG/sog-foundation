@@ -5,8 +5,10 @@
  * @package WPSEO
  */
 
+use Yoast\WP\SEO\Conditionals\WooCommerce_Conditional;
 use Yoast\WP\SEO\Helpers\Product_Helper;
 use Yoast\WP\SEO\Helpers\Score_Icon_Helper;
+use Yoast\WP\SEO\Integrations\Admin\Brand_Insights_Page;
 use Yoast\WP\SEO\Integrations\Support_Integration;
 use Yoast\WP\SEO\Models\Indexable;
 use Yoast\WP\SEO\Presenters\Admin\Premium_Badge_Presenter;
@@ -154,9 +156,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 	 * @return bool True if SEO score is enabled, false otherwise.
 	 */
 	protected function get_is_seo_enabled() {
-		if ( $this->is_seo_enabled === null ) {
-			$this->is_seo_enabled = ( new WPSEO_Metabox_Analysis_SEO() )->is_enabled();
-		}
+		$this->is_seo_enabled ??= ( new WPSEO_Metabox_Analysis_SEO() )->is_enabled();
 
 		return $this->is_seo_enabled;
 	}
@@ -167,9 +167,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 	 * @return bool True if readability is enabled, false otherwise.
 	 */
 	protected function get_is_readability_enabled() {
-		if ( $this->is_readability_enabled === null ) {
-			$this->is_readability_enabled = ( new WPSEO_Metabox_Analysis_Readability() )->is_enabled();
-		}
+		$this->is_readability_enabled ??= ( new WPSEO_Metabox_Analysis_Readability() )->is_enabled();
 
 		return $this->is_readability_enabled;
 	}
@@ -180,9 +178,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 	 * @return bool|Indexable The indexable, false if none could be found.
 	 */
 	protected function get_current_indexable() {
-		if ( $this->current_indexable === null ) {
-			$this->current_indexable = $this->indexable_repository->for_current_page();
-		}
+		$this->current_indexable ??= $this->indexable_repository->for_current_page();
 
 		return $this->current_indexable;
 	}
@@ -235,7 +231,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 							'id'     => 'wpseo-seo-focus-keyword',
 							'title'  => __( 'Focus keyphrase: ', 'wordpress-seo' ) . '<span class="wpseo-focus-keyword">' . $focus_keyword . '</span>',
 							'meta'   => [ 'tabindex' => '0' ],
-						]
+						],
 					);
 					$wp_admin_bar->add_menu(
 						[
@@ -244,7 +240,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 							'title'  => __( 'SEO score', 'wordpress-seo' ) . ': ' . $this->score_icon_helper->for_seo( $indexable, 'adminbar-sub-menu-score' )
 									->present(),
 							'meta'   => [ 'tabindex' => '0' ],
-						]
+						],
 					);
 				}
 
@@ -256,7 +252,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 							'title'  => __( 'Readability', 'wordpress-seo' ) . ': ' . $this->score_icon_helper->for_readability( $indexable->readability_score, 'adminbar-sub-menu-score' )
 									->present(),
 							'meta'   => [ 'tabindex' => '0' ],
-						]
+						],
 					);
 				}
 
@@ -271,7 +267,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 								'tabindex' => '0',
 								'target'   => '_blank',
 							],
-						]
+						],
 					);
 				}
 			}
@@ -288,9 +284,8 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 			$this->add_network_settings_submenu( $wp_admin_bar );
 		}
 
-		if ( ! $this->product_helper->is_premium() ) {
-			$this->add_premium_link( $wp_admin_bar );
-		}
+		$this->add_premium_link( $wp_admin_bar );
+		$this->add_brand_insights_link( $wp_admin_bar );
 	}
 
 	/**
@@ -590,12 +585,29 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 	 * @return void
 	 */
 	protected function add_premium_link( WP_Admin_Bar $wp_admin_bar ) {
-		$sale_percentage = '';
-		if ( YoastSEO()->classes->get( Promotion_Manager::class )->is( 'black-friday-2024-promotion' ) ) {
-			$sale_percentage = sprintf(
-				'<span class="admin-bar-premium-promotion">%1$s</span>',
-				esc_html__( '30% OFF', 'wordpress-seo' )
-			);
+		// Don't show the Upgrade button if Yoast SEO WooCommerce addon is active.
+		$addon_manager = new WPSEO_Addon_Manager();
+		if ( $addon_manager->is_installed( WPSEO_Addon_Manager::WOOCOMMERCE_SLUG ) ) {
+			return;
+		}
+
+		$has_woocommerce = ( new Woocommerce_Conditional() )->is_met();
+
+		// Don't show the Upgrade button if Premium is active without the WooCommerce plugin.
+		if ( $this->product_helper->is_premium() && ! $has_woocommerce ) {
+			return;
+		}
+
+		$link = $this->shortlinker->build_shortlink( 'https://yoa.st/admin-bar-get-premium' );
+
+		if ( $has_woocommerce ) {
+			$link = $this->shortlinker->build_shortlink( 'https://yoa.st/admin-bar-get-premium-woocommerce' );
+		}
+
+		$button_label = esc_html__( 'Upgrade', 'wordpress-seo' );
+
+		if ( YoastSEO()->classes->get( Promotion_Manager::class )->is( 'black-friday-promotion' ) ) {
+			$button_label = esc_html__( '30% off - BF Sale', 'wordpress-seo' );
 		}
 		$wp_admin_bar->add_menu(
 			[
@@ -603,15 +615,46 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 				'id'     => 'wpseo-get-premium',
 				// Circumvent an issue in the WP admin bar API in order to pass `data` attributes. See https://core.trac.wordpress.org/ticket/38636.
 				'title'  => sprintf(
-					'<a href="%1$s" target="_blank" data-action="load-nfd-ctb" data-ctb-id="f6a84663-465f-4cb5-8ba5-f7a6d72224b2" style="padding:0;">%2$s &raquo; %3$s</a>',
-					esc_url( $this->shortlinker->build_shortlink( 'https://yoa.st/admin-bar-get-premium' ) ),
-					esc_html__( 'Get Yoast SEO Premium', 'wordpress-seo' ),
-					$sale_percentage
+					'<a href="%1$s" target="_blank" data-action="load-nfd-ctb" data-ctb-id="f6a84663-465f-4cb5-8ba5-f7a6d72224b2">%2$s</a>',
+					esc_url( $link ),
+					$button_label,
 				),
 				'meta'   => [
 					'tabindex' => '0',
 				],
-			]
+			],
+		);
+	}
+
+	/**
+	 * Adds the Brand Insights link to the admin bar.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar Admin bar instance to add the menu to.
+	 *
+	 * @return void
+	 */
+	protected function add_brand_insights_link( WP_Admin_Bar $wp_admin_bar ) {
+		$page = $this->product_helper->is_premium() ? 'wpseo_brand_insights_premium' : 'wpseo_brand_insights';
+
+		$button_content = 'AI Brand Insights';
+
+		$menu_title = '<span class="yoast-brand-insights-gradient-border">'
+			. '<span class="yoast-brand-insights-content">'
+			. $button_content
+			. Brand_Insights_Page::EXTERNAL_LINK_ICON
+			. '</span></span>';
+
+		$wp_admin_bar->add_menu(
+			[
+				'parent' => self::MENU_IDENTIFIER,
+				'id'     => $page,
+				'title'  => $menu_title,
+				'href'   => admin_url( 'admin.php?page=' . $page ),
+				'meta'   => [
+					'tabindex' => '0',
+					'target'   => '_blank',
+				],
+			],
 		);
 	}
 
@@ -645,6 +688,11 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 
 			// Don't add the Google Search Console menu item.
 			if ( $submenu_page[4] === 'wpseo_search_console' ) {
+				continue;
+			}
+
+			// Don't add the Brand Insights menu items (they're now in the main menu).
+			if ( $submenu_page[4] === 'wpseo_brand_insights' || $submenu_page[4] === 'wpseo_brand_insights_premium' ) {
 				continue;
 			}
 
@@ -865,7 +913,7 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 			' <div class="wp-core-ui wp-ui-notification yoast-issue-counter%s"><span class="yoast-issues-count" aria-hidden="true">%d</span><span class="screen-reader-text">%s</span></div>',
 			( $notification_count ) ? '' : ' wpseo-no-adminbar-notifications',
 			$notification_count,
-			$counter_screen_reader_text
+			$counter_screen_reader_text,
 		);
 	}
 
@@ -888,9 +936,9 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 				'There is a new notification.',
 				'There are new notifications.',
 				$new_notifications_count,
-				'wordpress-seo'
+				'wordpress-seo',
 			),
-			$new_notifications_count
+			$new_notifications_count,
 		);
 
 		return '<div class="yoast-issue-added">' . $notification . '</div>';
@@ -909,9 +957,9 @@ class WPSEO_Admin_Bar_Menu implements WPSEO_WordPress_Integration {
 	/**
 	 * Add submenu items to a menu item.
 	 *
-	 * @param array        $submenu_items Submenu items array.
-	 * @param WP_Admin_Bar $wp_admin_bar  Admin bar object.
-	 * @param string       $parent_id     Parent menu item ID.
+	 * @param array<array{id: string, title: string, href: string}> $submenu_items Submenu items array.
+	 * @param WP_Admin_Bar                                          $wp_admin_bar  Admin bar object.
+	 * @param string                                                $parent_id     Parent menu item ID.
 	 *
 	 * @return void
 	 */

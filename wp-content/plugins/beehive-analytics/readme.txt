@@ -1,6 +1,6 @@
-===Beehive: Google Analytics Dashboard & Visitor Stats===
+=== Beehive Analytics - Google Analytics Dashboard ===
 Plugin Name: Beehive Analytics - Google Analytics Dashboard
-Version: 3.4.17
+Version: 3.4.19.1
 Plugin URI: https://wpmudev.com/project/beehive-analytics-pro/
 Tags: google analytics, google analytics dashboard, google tag manager, wordpress analytics, website Analytics
 Author URI: https://wpmudev.com/
@@ -9,7 +9,7 @@ Contributors: WPMUDEV
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.4.17
+Stable tag: 3.4.19.1
 License: GPLv2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -221,7 +221,6 @@ Traffic, bounce rate, sessions, user locations, referral sources, top-performing
 
 Ready to get your site stats straight from the source?
 Download Beehive and bring Google Analytics to your WordPress dashboard.
-
 == Screenshots ==
 
 1. Google Analytics on Your WordPress Site
@@ -233,10 +232,24 @@ Download Beehive and bring Google Analytics to your WordPress dashboard.
 
 == Changelog ==
 
-= 3.4.17 (2025-04-25) =
+= 3.4.19.1 (2025-12-17) =
+
+- Miscellaneous improvements.
+
+= 3.4.19 (2025-11-20) =
+
+- Miscellaneousness improvements.
+
+= 3.4.18 (2025-08-25) =
+
+- Enhance: Removed tutorials menu widget and related assets.
+- Fix: CSS pointer-events rule making links non-clickable in GTM integrations.
+- Fix: Custom range statistics display and date ordering in GA4 reports.
+- Fix: Security improvements.
+
+= 3.4.17 (2025-02-25) =
 
 - Enhance: Compatibility with WordPress 6.8
-- Enhance: Add a new menu item to help you discover other free plugins by WPMU DEV and more
 
 = 3.4.16 (2024-02-24) =
 
@@ -514,3 +527,12 @@ Download Beehive and bring Google Analytics to your WordPress dashboard.
 
 
 [Changelog for previous versions](https://wpmudev.com/project/beehive-analytics-pro/#view-changelog).
+
+== About Us ==
+WPMU DEV is a premium supplier of quality WordPress plugins, services and support. Join us here:
+[https://wpmudev.com/](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=wpmu_dev_link)
+
+Don't forget to stay up to date on everything WordPress from the Internet's number one resource:
+[WPMU DEV Blog](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=beehive-readme&utm_content=wpmu_dev_blog_link)
+
+Hey, one more thing… we hope you [enjoy our free offerings](https://profiles.wordpress.org/wpmudev/#content-plugins) as much as we've loved making them for you!

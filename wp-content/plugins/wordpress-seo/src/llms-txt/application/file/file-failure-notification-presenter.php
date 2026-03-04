@@ -36,9 +36,9 @@ class File_Failure_Notification_Presenter extends Abstract_Presenter {
 			case 'not_managed_by_yoast_seo':
 				$message = \sprintf(
 				/* translators: 1: Link start tag to the WordPress Reading Settings page, 2: Link closing tag. */
-					\esc_html__( 'It looks like there is an llms.txt file already that wasn\'t created by Yoast, or the llms.txt file created by Yoast has been edited manually. We don\'t want to overwrite this file\'s content, so if you want to let Yoast keep auto-generating the llms.txt file, you can %1$smanually delete the existing one%2$s. Otherwise, consider disabling the Yoast feature.', 'wordpress-seo' ),
-					'<a href="' . \esc_url( WPSEO_Shortlinker::get( 'https://yoa.st/llms-txt-file-deletion' ) ) . '">',
-					'</a>'
+					\esc_html__( 'An existing llms.txt file wasn\'t created by Yoast or has been edited manually. Yoast won\'t overwrite it. %1$sDelete it manually%2$s or turn off this feature.', 'wordpress-seo' ),
+					'<a href="' . \esc_url( WPSEO_Shortlinker::get( 'https://yoa.st/llms-txt-file-deletion' ) ) . '" target="_blank" rel="noopener noreferrer">',
+					'</a>',
 				);
 				break;
 			case 'filesystem_permissions':
@@ -53,7 +53,7 @@ class File_Failure_Notification_Presenter extends Abstract_Presenter {
 		return \sprintf(
 			'<strong>%1$s</strong> %2$s',
 			\esc_html__( 'Your llms.txt file couldn\'t be auto-generated', 'wordpress-seo' ),
-			$message
+			$message,
 		);
 	}
 }

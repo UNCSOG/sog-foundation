@@ -84,7 +84,7 @@ class Admin extends Base {
 		$classes .= ' sui-beehive-admin ';
 
 		// Check if plugin admin.
-		$is_plugin_admin = General::is_plugin_settings() || General::is_plugin_dashboard() || General::is_plugin_accounts() || General::is_plugin_tutorials();
+		$is_plugin_admin = General::is_plugin_settings() || General::is_plugin_dashboard() || General::is_plugin_accounts() ;
 
 		/**
 		 * Filter to include current page for Beehive admin class.
@@ -134,7 +134,7 @@ class Admin extends Base {
 
 		// Expired membership.
 		if ( ! beehive_analytics()->is_pro() || 'upgrade' === $membership ) {
-			$custom['upgrade'] = '<a href="https://wpmudev.com/project/beehive-analytics-pro?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_pluginlist_upgrade" aria-label="' . esc_attr( __( 'Upgrade For 80% Off!', 'ga_trans' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Upgrade For 80% Off!', 'ga_trans' ) . '</a>';
+			$custom['upgrade'] = '<a href="https://wpmudev.com/project/beehive-analytics-pro?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_pluginlist_upgrade" aria-label="' . esc_attr( __( 'Get Beehive Pro', 'ga_trans' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Get Beehive Pro', 'ga_trans' ) . '</a>';
 		} elseif ( 'renew' === $membership ) {
 			$custom['renew'] = '<a href="https://wpmudev.com/?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_pluginlist_renew" aria-label="' . esc_attr( __( 'Renew Your Membership', 'ga_trans' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Renew Membership', 'ga_trans' ) . '</a>';
 		}

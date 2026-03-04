@@ -1,10 +1,10 @@
 === Admin Columns ===
 Contributors: codepress, tschutter, davidmosterd, dungengronovius, engelen
 Tags: admin, column, columns, table, tables
-Requires at least: 4.7.3
-Tested up to: 6.6.2
+Requires at least: 5.9
+Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 4.7.7
+Stable tag: 4.7.20
 License: GPLv2
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -209,6 +209,73 @@ You can find a list of the available actions and filters (and examples on how to
 8. Posts Screen with custom fields.
 
 == Changelog ==
+
+= 4.7.20 =
+Release Date: December 5th, 2025
+
+* [Fixed] Upgrade notice Fatal fix
+
+= 4.7.19 =
+Release Date: December 2nd, 2025
+
+* [Added] Black friday promo
+
+= 4.7.18 =
+Release Date: September 22nd, 2025
+
+* [Improved] Prepared backward compatibility for upcoming 7.0 release
+
+= 4.7.17 =
+Release Date: August 27th, 2025
+
+* [Fixed] Security fixes (Axios update)
+
+= 4.7.16 =
+Release Date: June 17th, 2025
+
+* [Fixed] Cache optimization
+
+= 4.7.15 =
+Release Date: June 16th, 2025
+
+* [Fixed] Better null check for options to prevent PHP 8.3 issues
+* [Improved] Small UI changes in the admin view
+
+= 4.7.14 =
+Release Date: April 30th, 2025
+
+* [Improved] Column values with modals can now contain extra links
+
+= 4.7.13 =
+Release Date: March 19th, 2025
+
+* [Improved] Compacter display of the Value modal of the Images column
+
+= 4.7.12 =
+Release Date: March 12th, 2025
+
+* [Fixed] Corruption issues affecting certain languages in the core.
+
+= 4.7.11 =
+Release Date: March 3rd, 2025
+
+* [Updated] Axios library updates because of know security issues with older version
+
+= 4.7.10 =
+Release Date: January 7th, 2025
+
+* [Fixed] Prevent conflicting classnames for generated column names
+
+= 4.7.9 =
+Release Date: November 5th, 2024
+
+* [Improved] Better edit term link with taxonomy as parameter
+
+
+= 4.7.8 =
+Release Date: October 1st, 2024
+
+* [Improved] WordPress tested up to 6.6.2
 
 = 4.7.7 =
 Release Date: June 10th, 2024

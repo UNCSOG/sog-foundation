@@ -140,7 +140,9 @@ final class PrivateKey extends EC implements Common\PrivateKey
                 if ($shortFormat == 'ASN1') {
                     return $signature;
                 }
-                \extract(ASN1Signature::load($signature));
+                $loaded = ASN1Signature::load($signature);
+                $r = $loaded['r'];
+                $s = $loaded['s'];
                 return $this->formatSignature($r, $s);
             }
         }

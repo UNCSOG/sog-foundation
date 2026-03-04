@@ -92,10 +92,12 @@ class PostmanSuggestProSocket {
 
         $pluginData = apply_filters( 'postman_get_plugin_metadata', null );
 
-        wp_register_script( 'postman-suggest-pro-sockets', POST_SMTP_ASSETS . 'js/postman-admin.js', array( 'jquery' ), $pluginData['version'], true );
+        wp_register_script( 'postman-suggest-pro-sockets', POST_SMTP_ASSETS . 'js/postman-admin.js', array( 'jquery' ),  '1.2.5' , true );
 
         wp_enqueue_script( 'postman-suggest-pro-sockets' );
-
+	    
+        $this->data['lessSecureNotice'] = wp_create_nonce( 'less-secure-security' );
+        
         wp_localize_script( 
             'postman-suggest-pro-sockets', 
             'postmanPro', 
@@ -267,14 +269,20 @@ class PostmanSuggestProSocket {
 		    ),
             array(
                 'logo'        => $images_url . 'logos/wizard-google.png',
-                'title'       => __( 'One-Click Setup', 'post-smtp-pro' ),
-                'description' => __( 'Quick and easy way to configure the Google workspace / Gmail mailer in Post SMTP.', 'post-smtp-pro' ),
+                'title'       => __( 'Google One-Click SMTP', 'post-smtp-pro' ),
+                'description' => __( 'Instantly connect with Google Workspace (Gmail) SMTP by authorizing your Google account.', 'post-smtp-pro' ),
+            ),
+            array(
+                'logo'        => $images_url . 'logos/office365.png',
+                'title'       => __( 'Microsoft 365 One-Click SMTP', 'post-smtp-pro' ),
+                'description' => __( 'Instantly connect with your Microsoft 365/ Office 365 account without manually configuring your own app.', 'post-smtp-pro' ),
             ),
 	    );
         
         $bonus = array(
-           
-            'email-logs-attachment'      => array(
+
+            'email-logs-attachment' =>
+            array(
                 'logo'          => $images_url . 'logos/email-delivery-log.png',
                 'title'         => __( 'Email Log Attachment', 'post-smtp-pro' ),
                 'description'   => __( 'View and resend any email attachment right from you email log screen to streamline email communication.', 'post-smtp-pro' )
@@ -297,7 +305,7 @@ class PostmanSuggestProSocket {
             array(
                 'logo' => $images_url . 'logos/email-delivery-and-logs.png',
                 'title' => esc_html__( 'Email Delivery and Logs', 'post-smtp' ),
-                'description' => esc_html__( 'Get more advance logs filter with all technical details.', 'post-smtp' ),
+                'description' => esc_html__( 'Send emails from the back-end, manage your email quota, retry failed emails, and delete log history to optimize email delivery.', 'post-smtp' ),
             ),
             array(
                 'logo' => $images_url . 'logos/microsoft-teams.png',
@@ -306,12 +314,12 @@ class PostmanSuggestProSocket {
             ),
         );
         $features         = array(
-            esc_attr__( 'Office365, Amazon SES, and Zoho SMTP.', 'post-smtp' ),
-	        esc_attr__( 'Resend failed emails in bulk.', 'post-smtp' ),
-	        esc_attr__( 'Auto-resend failed emails.', 'post-smtp' ),
-	        esc_attr__( 'Open email tracking.', 'post-smtp' ),
-	        esc_attr__( 'Advance email report and tracking.', 'post-smtp' ),
-	        esc_attr__( 'Post SMTP Mobile App PRO.', 'post-smtp' ),
+            esc_attr__( 'Office365, Amazon SES, and Zoho SMTP', 'post-smtp' ),
+	        esc_attr__( 'Resend failed emails in bulk', 'post-smtp' ),
+	        esc_attr__( 'Auto-resend failed emails', 'post-smtp' ),
+	        esc_attr__( 'Open emails tracking', 'post-smtp' ),
+	        esc_attr__( 'Google / Microsoft One-Click Setup', 'post-smtp' ),
+	        esc_attr__( 'Post SMTP Mobile App Pro', 'post-smtp' ),
         );
 
         ob_start();
@@ -444,14 +452,14 @@ class PostmanSuggestProSocket {
                 
                 <span class="post-smtp-close-button">&times;</span>
                 
-                <div class="post-smtp-logo post-smtp-container">
-                    <img src="<?php echo esc_attr( POST_SMTP_ASSETS ) . 'images/reporting/post_logo.png'; ?>" alt="Post SMTP Logo" />
+                <div class="post-smtp-logo post-smtp-container" style="padding-bottom: 10px;">
+                    <img style="width: 180px;" src="<?php echo esc_attr( POST_SMTP_ASSETS ) . 'images/reporting/post_logo_p.png'; ?>" alt="Post SMTP Logo" />
                 </div>
                 
                 <div class="post-smtp-container" style="padding-top:0;padding-bottom: 0;">
                     
                     <h2 class="post-smtp-h2">
-                        <?php esc_html_e( 'Unlock Pro SMTP Mailers & More Advanced Features!', 'post-smtp' ); ?>
+                        <?php esc_html_e( 'Enhance Your Email Deliverability With Premium Features.', 'post-smtp' ); ?>
                     </h2>
                     
                     <ul class="post-smtp-unorderlist">
@@ -467,9 +475,9 @@ class PostmanSuggestProSocket {
                 
                 <div class="post-smtp-text-center" style="margin-top: 25px;">
                     <a href="https://postmansmtp.com/pricing/?utm_source=plugin&utm_medium=extension_screen_pop_up&utm_campaign=plugin" class="post-smtp-cta">
-                        <img style="margin: 0 4px -6px 0;" alt="diamond" src="<?php echo esc_attr( $images_url ); ?>diamond.png" />
-                        <?php esc_html_e( 'Get Post SMTP Pro', 'post-smtp' ); ?>
-                        <img style="margin: 0 0 -4px 4px;" alt="arrow" src="<?php echo esc_attr( $images_url ); ?>arrow.png" />
+                        <!-- <img style="margin: 0 4px -6px 0;" alt="diamond" src="<?//php echo esc_attr( $images_url ); ?>diamond.png" /> -->
+                        <?php esc_html_e( 'Upgrade Now', 'post-smtp' ); ?>
+                        <img style="margin: 0 0 -2px 4px;" alt="arrow" src="<?php echo esc_attr( $images_url ); ?>arrow_1.png" />
                     </a>
                 </div>
             </div>

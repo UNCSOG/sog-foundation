@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Beehive\ParagonIE\ConstantTime;
 
+use Beehive\SensitiveParameter;
 use TypeError;
 /**
  *  Copyright (c) 2016 - 2022 Paragon Initiative Enterprises.

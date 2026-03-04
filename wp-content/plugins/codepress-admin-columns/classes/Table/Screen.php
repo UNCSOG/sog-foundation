@@ -151,6 +151,7 @@ final class Screen implements Registerable
             'value_loading' => __('Loading...', 'codepress-admin-columns'),
             'edit'          => __('Edit', 'codepress-admin-columns'),
             'download'      => __('Download', 'codepress-admin-columns'),
+            'view'          => __('View', 'codepress-admin-columns'),
         ]);
 
         $script = new Asset\Script(
@@ -169,6 +170,8 @@ final class Screen implements Registerable
                 'table_id'         => $this->list_screen->get_table_attr_id(),
                 'screen'           => $this->get_current_screen_id(),
                 'meta_type'        => $this->list_screen->get_meta_type(),
+                'label_plural'     => $this->list_screen->get_label(),
+                'label_singular'   => $this->list_screen->get_singular_label(),
                 'list_screen_link' => $this->get_list_screen_clear_link(),
                 'current_user_id'  => get_current_user_id(),
                 'number_format'    => [

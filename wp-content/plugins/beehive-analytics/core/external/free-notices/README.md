@@ -34,7 +34,7 @@ Make sure to change the following:
 DO NOT include this submodule in Pro plugins. These notices are only for wp.org versions.
 
 
-## Code Example (from Smush) ##
+## Code Example : Registering a plugin (from Smush) ##
 
 ```
 #!php

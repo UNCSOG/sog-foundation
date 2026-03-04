@@ -27,7 +27,7 @@ if (! class_exists ( "PostmanGoogleAuthenticationManager" )) {
 		const SCOPE_MODIFY = 'https://www.googleapis.com/auth/gmail.modify';
 		
 		// Full access to the account, including permanent deletion of threads and messages. This scope should only be requested if your application needs to immediately and permanently delete threads and messages, bypassing Trash; all other actions can be performed with less permissive scopes.
-		const SCOPE_FULL_ACCESS = 'https://mail.google.com/';
+		const SCOPE_FULL_ACCESS = 'https://www.googleapis.com/auth/gmail.send';
 		const AUTH_TEMP_ID = 'GOOGLE_OAUTH_TEMP_ID';
 		const VENDOR_NAME = 'google';
 		// the sender email address
@@ -89,7 +89,7 @@ if (! class_exists ( "PostmanGoogleAuthenticationManager" )) {
 		public function processAuthorizationGrantCode($transactionId) {
 			if (isset ( $_GET ['code'] )) {
 				$this->getLogger ()->debug ( 'Found authorization code in request header' );
-				$code = filter_input( INPUT_GET, 'code', FILTER_SANITIZE_STRING );
+				$code = filter_input( INPUT_GET, 'code', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 				if (isset ( $_GET ['state'] ) && $_GET ['state'] == $transactionId) {
 					$this->getLogger ()->debug ( 'Found valid state in request header' );
 				} else {

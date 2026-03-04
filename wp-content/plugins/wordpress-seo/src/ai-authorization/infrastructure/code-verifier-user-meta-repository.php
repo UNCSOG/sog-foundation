@@ -6,6 +6,7 @@ use RuntimeException;
 use Yoast\WP\SEO\AI_Authorization\Domain\Code_Verifier;
 use Yoast\WP\SEO\Helpers\Date_Helper;
 use Yoast\WP\SEO\Helpers\User_Helper;
+
 /**
  * Class Code_Verifier_Repository
  */
@@ -54,7 +55,7 @@ class Code_Verifier_User_Meta_Repository implements Code_Verifier_User_Meta_Repo
 			[
 				'code'       => $code,
 				'created_at' => $created_at,
-			]
+			],
 		);
 	}
 

@@ -18,6 +18,7 @@ or use:
     git remote add pantheon-wordpress https://github.com/pantheon-systems/WordPress.git
     git fetch pantheon-wordpress
     git merge pantheon-wordpress/master -Xtheirs
+    git commit -m "Merging pantheon-wordpress/master to update wordpress."
 ```
 
 Then you can run the following commands:

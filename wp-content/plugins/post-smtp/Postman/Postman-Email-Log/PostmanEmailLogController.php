@@ -109,7 +109,7 @@ class PostmanEmailLogController {
 			'DTCols'	=>	array(
 				array( 'data'	=>	'id' ),
 				array( 'data'	=>	'original_subject' ),
-				array( 'data'	=>	'to_header' ),
+				array( 'data'	=>	'original_to' ),
 				array( 'data'	=>	'time' ),
 				array( 'data'	=>	'success' ),
 				array( 'data'	=>	'actions' )
@@ -259,7 +259,7 @@ class PostmanEmailLogController {
 	 */
 	private function getRequestParameter( $parameterName ) {
 		if ( isset( $_POST [ $parameterName ] ) ) {
-			$value = filter_var( $_POST [ $parameterName ], FILTER_SANITIZE_STRING );
+			$value = sanitize_text_field( $_POST [ $parameterName ] );
 			$this->logger->trace( sprintf( 'Found parameter "%s"', $parameterName ) );
 			$this->logger->trace( $value );
 			return $value;
@@ -317,17 +317,20 @@ class PostmanEmailLogController {
 	/**
 	 */
 	function view_log_item() {
-		// only do this for administrators
-		if ( PostmanUtils::isAdmin() ) {
-			$this->logger->trace( 'handling view item' );
-			$postid = absint( $_REQUEST ['email'] );
-			$post = get_post( $postid );
+		// Check if user has permission to view email logs
+		if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+			wp_die( __( 'Sorry, you are not allowed to view email logs.', 'post-smtp' ) );
+		}
+		
+		$this->logger->trace( 'handling view item' );
+		$postid = absint( $_REQUEST ['email'] );
+		$post = get_post( $postid );
 
-			if ( $post->post_type !== 'postman_sent_mail' ) {
-			    return;
-            }
+		if ( $post->post_type !== 'postman_sent_mail' ) {
+		    return;
+        }
 
-			$meta_values = PostmanLogFields::get_instance()->get( $postid );
+		$meta_values = PostmanLogFields::get_instance()->get( $postid );
 			// https://css-tricks.com/examples/hrs/
 			print '<html><head><style>body {font-family: monospace;} hr {
     border: 0;
@@ -360,14 +363,13 @@ class PostmanEmailLogController {
 			if ( ! empty( $meta_values ['transport_uri'] [0] ) ) {
 				printf( '<tr><th style="text-align:right">%s:</th><td>%s</td></tr>', _x( 'Delivery-URI', 'What is the unique URI of the configuration?', 'post-smtp' ), esc_html( $meta_values ['transport_uri'] [0] ) );
 			}
-			print '</table>';
-			print '<hr/>';
-			print '<pre>';
-			print $this->sanitize_message( $post->post_content );
-			print '</pre>';
-			print '</body></html>';
-			die();
-		}
+		print '</table>';
+		print '<hr/>';
+		print '<pre>';
+		print $this->sanitize_message( $post->post_content );
+		print '</pre>';
+		print '</body></html>';
+		die();
 	}
 
 	function sanitize_message( $message ) {
@@ -380,12 +382,15 @@ class PostmanEmailLogController {
 	/**
 	 */
 	function view_transcript_log_item() {
-		// only do this for administrators
-		if ( PostmanUtils::isAdmin() ) {
-			$this->logger->trace( 'handling view transcript item' );
-			$postid = absint($_REQUEST ['email']);
-			$post = get_post( $postid );
-			$meta_values = PostmanLogFields::get_instance()->get( $postid );
+		// Check if user has permission to view email logs
+		if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+			wp_die( __( 'Sorry, you are not allowed to view email logs.', 'post-smtp' ) );
+		}
+		
+		$this->logger->trace( 'handling view transcript item' );
+		$postid = absint($_REQUEST ['email']);
+		$post = get_post( $postid );
+		$meta_values = PostmanLogFields::get_instance()->get( $postid );
 			// https://css-tricks.com/examples/hrs/
 			print '<html><head><style>body {font-family: monospace;} hr {
     border: 0;
@@ -401,10 +406,9 @@ class PostmanEmailLogController {
 				/* Translators: Meaning "Not Applicable" */
 				print __( 'n/a', 'post-smtp' );
 			}
-			print '</pre>';
-			print '</body></html>';
-			die();
-		}
+		print '</pre>';
+		print '</body></html>';
+		die();
 	}
 
 	/**

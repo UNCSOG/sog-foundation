@@ -507,11 +507,11 @@ function relevanssi_prevent_default_request( $request, $query ) {
 			}
 		}
 
-		if ( isset( $_REQUEST['action'] ) && 'acf' === substr( $_REQUEST['action'], 0, 3 ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] ) && 'acf' === substr( $_REQUEST['action'], 0, 3 ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			// ACF stuff, do not touch (eg. a relationship field search).
 			return $request;
 		}
-		if ( isset( $query->query_vars['action'] ) && 'acf' === substr( $query->query_vars['action'], 0, 3 ) ) {
+		if ( isset( $query->query_vars['action'] ) && is_string( $query->query_vars['action'] ) && 'acf' === substr( $query->query_vars['action'], 0, 3 ) ) {
 			// ACF stuff, do not touch (eg. a relationship field search).
 			return $request;
 		}
@@ -1829,6 +1829,9 @@ function relevanssi_replace_synonyms_in_terms( array $terms ): array {
 			$new_term = array();
 			foreach ( $synonyms as $pair ) {
 				if ( empty( $pair ) ) {
+					continue;
+				}
+				if ( strpos( $pair, '=' ) === false ) {
 					continue;
 				}
 				list( $key, $value ) = explode( '=', $pair );

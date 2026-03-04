@@ -500,12 +500,21 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 		 * It checks the given data array against the table fields and determines the types based on that, it stores the values in the table then.
 		 *
 		 * @param array $data - The data to be saved (check above about the format).
+		 * @param \wpdb $connection - \wpdb connection to be used for name extraction.
 		 *
 		 * @return int
 		 *
 		 * @since 4.6.0
+		 * @since 5.5.0 - Added connection parameter.
 		 */
-		public static function save( $data ) {
+		public static function save( $data, $connection = null ) {
+			if ( null !== $connection ) {
+				if ( $connection instanceof \wpdb ) {
+					$_wpdb = $connection;
+				}
+			} else {
+				$_wpdb = static::get_connection();
+			}
 
 			// Use today's date if not set up.
 			if ( ! isset( $data['created_on'] ) ) {
@@ -513,7 +522,7 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 
 			}
 
-			return parent::save( $data );
+			return parent::save( $data, $_wpdb );
 		}
 
 		/**
@@ -757,8 +766,6 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 			$max_sdate = Plugin_Settings_Helper::get_pruning_date(); // Pruning date.
 			$archiving = Settings_Helper::is_archiving_set_and_enabled();
 
-		// phpcs:disable
-		// phpcs:enable
 
 			// Calculate limit timestamp.
 			$max_stamp = $now - ( strtotime( $max_sdate ) - $now );
@@ -826,7 +833,5 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 			return count( self::load_query( $sql ) );
 		}
 
-		// phpcs:disable
-		// phpcs:enable
 	}
 }

@@ -98,14 +98,6 @@ class I18n extends Base {
 					Locale::onboarding(),
 					Locale::auth_form(),
 					Locale::welcome(),
-					Locale::tutorials()
-				);
-				break;
-			case 'beehive-tutorials':
-				// Add strings.
-				$strings = array_merge_recursive(
-					$strings,
-					Locale::tutorials()
 				);
 				break;
 		}

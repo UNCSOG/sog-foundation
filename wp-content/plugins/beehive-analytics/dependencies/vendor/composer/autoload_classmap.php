@@ -1219,6 +1219,7 @@ return array(
     'Beehive\\phpseclib3\\Math\\Common\\FiniteField\\Integer' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Math/Common/FiniteField/Integer.php',
     'Beehive\\phpseclib3\\Math\\PrimeField' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Math/PrimeField.php',
     'Beehive\\phpseclib3\\Math\\PrimeField\\Integer' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Math/PrimeField/Integer.php',
+    'Beehive\\phpseclib3\\Net\\SCP' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Net/SCP.php',
     'Beehive\\phpseclib3\\Net\\SFTP' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Net/SFTP.php',
     'Beehive\\phpseclib3\\Net\\SFTP\\Stream' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Net/SFTP/Stream.php',
     'Beehive\\phpseclib3\\Net\\SSH2' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Net/SSH2.php',

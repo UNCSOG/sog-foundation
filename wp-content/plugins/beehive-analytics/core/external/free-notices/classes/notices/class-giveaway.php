@@ -199,10 +199,9 @@ if ( ! class_exists( __NAMESPACE__ . '\\Giveaway' ) ) {
 		 *
 		 * @since 2.0.1
 		 *
+		 * @param string $action Action.
 		 * @param string $plugin Plugin ID.
 		 * @param string $type   Notice type.
-		 *
-		 * @param string $action Action.
 		 *
 		 * @return void
 		 */

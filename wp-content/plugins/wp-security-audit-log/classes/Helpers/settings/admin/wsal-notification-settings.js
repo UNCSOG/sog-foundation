@@ -1,6 +1,90 @@
 var $doc = jQuery(document),
     $window = jQuery(window);
 
+/**
+ * Validate a comma-separated list of email addresses with no spaces.
+ *
+ * @param string emailVal - The email string to validate.
+ *
+ * @returns boolean - True if the email string is valid, false otherwise.
+ *
+ * @since 5.5.0
+ */
+function wsalIsValidEmailList(emailVal) {
+	// Accepts comma-separated emails, no spaces
+	const emailPattern =
+		/^([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20})(,[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,20})*$/;
+
+	return emailVal.length > 0 && emailPattern.test(emailVal);
+}
+
+/**
+ * Validate a field inside an accordion in the email Notifications section:
+ *
+ * /wp-admin/admin.php?page=wsal-notifications
+ *
+ * @param string emailInputFieldSelector - The jQuery selector for the email input field to validate.
+ *
+ * @since 5.5.0
+ */
+function wsalNotificationEmailValidation(emailInputFieldSelector, checkboxTriggerSelector) {
+  const { __ } = wp.i18n;
+
+	const $emailField = jQuery(emailInputFieldSelector);
+	const $checkboxTrigger = jQuery(checkboxTriggerSelector);
+	const $checkboxToggle = jQuery(checkboxTriggerSelector).find('.switchery');
+
+	const emailErrorNoticeId = emailInputFieldSelector.replace('#', 'wsal-') + '-alert';
+
+  const emailErrorNotice =
+    '<div id="' + emailErrorNoticeId + '"><span style="color:red;" class="extra-text">' +
+    __( 'Please enter one or more valid email addresses separated by commas, with no spaces.', 'wp-security-audit-log' ) +
+    '</span></div>';
+
+	/**
+	 * Listen for input changes. Remove the error message as soon as the input is valid again.
+	 * Unblock the checkbox if necessary.
+	 */
+	$emailField.on('input', function () {
+		const val = $emailField.val().trim();
+		const valid = wsalIsValidEmailList(val);
+
+		if (valid || val.length === 0) {
+			jQuery('#' + emailErrorNoticeId).remove();
+			$checkboxToggle.removeClass('wsal-disabled');
+      $checkboxTrigger.css('pointer-events', '');
+		}
+	});
+
+	/**
+	 * Listen for blur event. Add or remove the error messages needed.
+	 * Block or unblock the checkbox if necessary, to prevent triggering not-focused error in case the input field is not valid.
+	 */
+	$emailField.on('blur', function () {
+		let val = $emailField.val().trim();
+		const valid = wsalIsValidEmailList(val);
+
+		// If field contains only spaces, empty it
+		if (val.replace(/[,\s]/g, '').length === 0) {
+			$emailField.val('');
+			val = '';
+		}
+
+		if (!valid && val.length > 0) {
+			$checkboxToggle.addClass('wsal-disabled');
+      $checkboxTrigger.css('pointer-events', 'none');
+
+			if (jQuery('#' + emailErrorNoticeId).length === 0) {
+				$emailField.after(emailErrorNotice);
+			}
+		} else {
+			jQuery('#' + emailErrorNoticeId).remove();
+			$checkboxToggle.removeClass('wsal-disabled');
+      $checkboxTrigger.css('pointer-events', '');
+		}
+	});
+}
+
 $doc.ready(function () {
 
     var $wsalBody = jQuery('body');
@@ -192,6 +276,9 @@ $doc.ready(function () {
         var $saveAlert = jQuery('#wsal-saving-settings');
     }
 
+    wsalNotificationEmailValidation('#notification_daily_email_address', '#notification_daily_summary_notification-item');
+    wsalNotificationEmailValidation('#notification_weekly_email_address' , '#notification_weekly_summary_notification-item');
+
     jQuery('#wsal_form').submit(function (evt) {
         $wsalBody.addClass('has-overlay');
         $saveAlert.fadeIn();
@@ -315,14 +402,25 @@ $doc.ready(function () {
 
             error: function (xhr, status, error) {
                 if ('undefined' != typeof xhr.status && xhr.status != 200) {
+                    const { __ } = wp.i18n;
+                    let errorMessage = __( 'An error occurred while saving notification settings. Please try again.', 'wp-security-audit-log' );
+
+                    // Handle different error message formats
+                    if (xhr.responseJSON?.data) {
+                      if (typeof xhr.responseJSON.data === 'string') {
+                          errorMessage = xhr.responseJSON.data;
+                      } else if (xhr.responseJSON.data[0]?.message) {
+                          errorMessage = xhr.responseJSON.data[0].message;
+                      }
+                    }
 
                     $saveAlert.addClass('is-failed').delay(900);
-                    $saveAlert.append('<div class="wsal-error-message">' + xhr.responseJSON.data[0].message + '<p><button id="wsal_remove_error" type="button">Close</button></p></div>');
+                    $saveAlert.append('<div class="wsal-error-message">' + errorMessage + '<p><button id="wsal_remove_error" type="button">Close</button></p></div>');
 
                     jQuery('#wsal_remove_error').click(function (e) {
-                        $saveAlert.addClass('is-failed').delay(900).fadeOut(700);
-                        $wsalBody.removeClass('has-overlay');
-                        jQuery('.wsal-error-message').remove();
+                      $saveAlert.addClass('is-failed').delay(900).fadeOut(700);
+                      $wsalBody.removeClass('has-overlay');
+                      jQuery('.wsal-error-message').remove();
                     });
                 }
                 return false;
@@ -643,17 +741,16 @@ $doc.ready(function () {
 
     /**
      * Sends test email
-     * 
      */
     $doc.on('click', '#test_email_notification_settings_ajax', function (e) {
-        //const email_body = (jQuery('#email_notifications_body').length) ? jQuery('#email_notifications_body').val() : null;
 
-        var inputid = 'email_notifications_body';
+        const inputid = 'email_notifications_body';
 
-        var email_body;
-        var editor = tinyMCE.get(inputid);
+        let email_body;
+        const editor = tinyMCE.get(inputid);
 
-        var textArea = jQuery('textarea#' + inputid);
+        const textArea = jQuery('textarea#' + inputid);
+
         if (textArea.length > 0 && textArea.is(':visible')) {
             email_body = textArea.val();
         } else {
@@ -661,7 +758,9 @@ $doc.ready(function () {
         }
 
         const email_subject = (jQuery('#email_notifications_subject').length) ? jQuery('#email_notifications_subject').val() : null;
+
         const email = (jQuery('#notification_default_email_address').length) ? jQuery('#notification_default_email_address').val() : null;
+
         const nonceValue = jQuery('#twilio_notification_nonce').val();
 
         if (!email_body || !email_subject || !email) {

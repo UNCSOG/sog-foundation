@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Yoast\WP\SEO\Introductions\Application;
 
 use Yoast\WP\SEO\Helpers\Current_Page_Helper;
@@ -61,23 +60,12 @@ class Google_Docs_Addon_Upsell implements Introduction_Interface {
 	}
 
 	/**
-	 * Returns the name of the introduction.
-	 *
-	 * @return string The name.
-	 */
-	public function get_name() {
-		\_deprecated_function( __METHOD__, 'Yoast SEO Premium 21.6', 'Please use get_id() instead' );
-
-		return self::ID;
-	}
-
-	/**
 	 * Returns the requested pagination priority. Lower means earlier.
 	 *
 	 * @return int The priority.
 	 */
 	public function get_priority() {
-		return 10;
+		return 20;
 	}
 
 	/**
@@ -87,6 +75,6 @@ class Google_Docs_Addon_Upsell implements Introduction_Interface {
 	 * @return bool Whether this introduction should show.
 	 */
 	public function should_show() {
-		return $this->current_page_helper->is_yoast_seo_page();
+		return false;
 	}
 }

@@ -66,8 +66,8 @@ if (!class_exists('Google_Task_Runner', false) && !interface_exists('Google_Task
 if (!class_exists('Google_Utils_UriTemplate', false) && !interface_exists('Google_Utils_UriTemplate', false) && !trait_exists('Google_Utils_UriTemplate', false)) {
     spl_autoload_call('Beehive\Google_Utils_UriTemplate');
 }
-if (!class_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false) && !interface_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false) && !trait_exists('ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d', false)) {
-    spl_autoload_call('Beehive\ComposerAutoloaderInite4d65117da795904e46c677f78e6e62d');
+if (!class_exists('ComposerAutoloaderInit94fd464169cd2b450167c7081c90e524', false) && !interface_exists('ComposerAutoloaderInit94fd464169cd2b450167c7081c90e524', false) && !trait_exists('ComposerAutoloaderInit94fd464169cd2b450167c7081c90e524', false)) {
+    spl_autoload_call('Beehive\ComposerAutoloaderInit94fd464169cd2b450167c7081c90e524');
 }
 
 // Exposed functions. For more information see:

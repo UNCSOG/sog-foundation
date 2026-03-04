@@ -57,17 +57,6 @@ class General {
 	);
 
 	/**
-	 * List of plugin tutorials pages.
-	 *
-	 * @since 3.3.7
-	 * @var array $accounts_pages
-	 */
-	public static $tutorials_pages = array(
-		'dashboard_page_beehive-tutorials',
-		'dashboard_page_beehive-tutorials-network',
-	);
-
-	/**
 	 * List of dashboard pages.
 	 *
 	 * @since  3.3.7
@@ -173,22 +162,6 @@ class General {
 	}
 
 	/**
-	 * Check if current page is plugin tutorials page.
-	 *
-	 * @since 3.3.7
-	 *
-	 * @return bool
-	 */
-	public static function is_plugin_tutorials() {
-		// Get current screen id.
-		$current_screen = get_current_screen();
-
-		// Check if current page is our plugin page.
-		// Using strpos to support translation - https://incsub.atlassian.net/browse/BEE-15.
-		return isset( $current_screen->id ) && strpos( $current_screen->id, 'page_beehive-tutorials' );
-	}
-
-	/**
 	 * Get list of page ids of plugin admin pages.
 	 *
 	 * PLEASE NOTE: Settings subpages maynot be correct when you
@@ -204,7 +177,6 @@ class General {
 			self::$dashboard_pages,
 			self::$settings_pages,
 			self::$accounts_pages,
-			self::$tutorials_pages
 		);
 
 		/**

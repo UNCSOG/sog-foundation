@@ -598,6 +598,9 @@ function relevanssi_get_post_meta_for_all_posts( array $post_ids, string $field 
  */
 function relevanssi_get_post_object( $post_id ) {
 	$object = null;
+	if ( ! $post_id ) {
+		return new WP_Error( 'null_value', 'Null post ID' );
+	}
 	if ( '*' === substr( $post_id, 0, 1 ) ) {
 		// Convert from **type**id to a user or a term object.
 		$parts = explode( '**', $post_id );
@@ -1253,7 +1256,7 @@ function relevanssi_strip_all_tags( $content ): string {
  * Strips invisible elements from text.
  *
  * Strips <style>, <script>, <object>, <embed>, <applet>, <noscript>, <noembed>,
- * <iframe> and <del> tags and their contents and comments from the text.
+ * <iframe>, <del> and <svg> tags and their contents and comments from the text.
  *
  * @param string $text The source text.
  *
@@ -1274,6 +1277,7 @@ function relevanssi_strip_invisibles( $text ) {
 			'@<noembed[^>]*?.*?</noembed>@siu',
 			'@<iframe[^>]*?.*?</iframe>@siu',
 			'@<del[^>]*?.*?</del>@siu',
+			'@<svg[^>]*?.*?</svg>@siu',
 			'@<!--.*?-->@siu',
 		),
 		' ',

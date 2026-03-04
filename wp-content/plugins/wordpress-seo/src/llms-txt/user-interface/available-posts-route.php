@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Llms_Txt\User_Interface;
 
@@ -90,7 +91,7 @@ class Available_Posts_Route implements Route_Interface {
 						],
 					],
 				],
-			]
+			],
 		);
 	}
 
@@ -107,19 +108,18 @@ class Available_Posts_Route implements Route_Interface {
 			$this->validate_request_parameters( $request_parameters );
 
 			$available_posts_container = $this->available_posts_repository->get_posts( $request_parameters );
-
 		} catch ( Exception $exception ) {
 			return new WP_REST_Response(
 				[
 					'error' => $exception->getMessage(),
 				],
-				$exception->getCode()
+				$exception->getCode(),
 			);
 		}
 
 		return new WP_REST_Response(
 			$available_posts_container->to_array(),
-			200
+			200,
 		);
 	}
 

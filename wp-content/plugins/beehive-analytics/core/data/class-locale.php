@@ -418,27 +418,6 @@ class Locale {
 	}
 
 	/**
-	 * Get the localization vars for the tutorials page.
-	 *
-	 * This data will be only available in tutorials scripts.
-	 *
-	 * @since 3.3.7
-	 *
-	 * @return array
-	 */
-	public static function tutorials() {
-		return array(
-			'title' => array(
-				'tutorials'         => __( 'Tutorials', 'ga_trans' ),
-				'beehive_tutorials' => __( 'Beehive Tutorials', 'ga_trans' ),
-			),
-			'label' => array(
-				'view_all' => __( 'View all', 'ga_trans' ),
-			),
-		);
-	}
-
-	/**
 	 * Get the localization vars for the welcome modal.
 	 *
 	 * @since 3.3.0

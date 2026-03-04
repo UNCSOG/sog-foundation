@@ -16,6 +16,7 @@ use WSAL\Helpers\WP_Helper;
 use WSAL\MainWP\MainWP_Helper;
 use WSAL\Entities\Metadata_Entity;
 use WSAL\Entities\Occurrences_Entity;
+use WSAL\WP_Sensors\WP_Plugins_Themes_Sensor;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -61,8 +62,11 @@ if ( ! class_exists( '\WSAL\Helpers\Formatters\Alert_Formatter' ) ) {
 					// NULL value check is here because events related to user meta fields didn't have the MetaLink meta prior to version 4.3.2.
 
 					if ( $configuration['is_js_in_links_allowed'] && 'NULL' !== $value ) {
-						$label  = __( 'Exclude custom field from the monitoring', 'wp-security-audit-log' );
-						$result = "<a href=\"#\" data-object-type='{$metadata['Object']}' data-disable-custom-nonce='" . \wp_create_nonce( 'disable-custom-nonce' . $value ) . "' onclick=\"return WsalDisableCustom(this, '" . $value . "');\"> {$label}</a>";
+						$label = __( 'Exclude custom field from the monitoring', 'wp-security-audit-log' );
+
+						$escaped_value = \esc_js( $value );
+
+						$result = "<a href=\"#\" data-object-type='" . \esc_attr( $metadata['Object'] ) . "' data-disable-custom-nonce='" . \esc_attr( \wp_create_nonce( 'disable-custom-nonce' . $value ) ) . "' onclick=\"return WsalDisableCustom(this, '" . $escaped_value . "');\"> " . \esc_html( $label ) . '</a>';
 
 						return self::wrap_in_hightlight_markup( $result, $configuration, true );
 					}
@@ -226,6 +230,39 @@ if ( ! class_exists( '\WSAL\Helpers\Formatters\Alert_Formatter' ) ) {
 
 					return self::wrap_in_hightlight_markup( $return, $configuration );
 
+				/**
+				 * Allow users to expand truncated previous Login Page URL. These URLs can be long, so they're truncated by default.
+				 *
+				 * @since 5.6.0
+				 */
+				case '%LoginPageURL%' === $expression:
+					// If value is NULL or empty, return an empty string. This avoids displaying 'NULL' in the alert for old plugin versions before 5.6.0.
+					if ( 'NULL' === $value || empty( $value ) ) {
+						return '';
+					}
+
+					$max_length = $configuration['max_meta_value_length'];
+
+					if ( mb_strlen( $value ) > $max_length ) {
+						$truncated = mb_substr( $value, 0, $max_length );
+						$result    = '<span class="wsal-truncated-url"><strong>' . \esc_html( $truncated ) . '...</strong></span>';
+
+						return $result;
+					}
+
+					// If JS in links is not allowed, we just show the full URL.
+					if ( mb_strlen( $value ) > $max_length ) {
+						$value = \esc_html( $value );
+					}
+
+					return self::wrap_in_hightlight_markup( $value, $configuration );
+
+				case '%EditorLinkOrder%' === $expression:
+					if ( ! isset( $metadata['EditorLinkOrder'] ) ) {
+						return '';
+					}
+					return $metadata['EditorLinkOrder'];
+
 				default:
 					/**
 					 * Allows meta formatting via filter if no match was found.
@@ -283,7 +320,7 @@ if ( ! class_exists( '\WSAL\Helpers\Formatters\Alert_Formatter' ) ) {
 				case '%old_path%':
 				case '%FilePath%':
 					if ( mb_strlen( $value ) > $length ) {
-						$value = mb_substr( $value, 0, $length ); // phpcs:ignore
+						$value = mb_substr( $value, 0, $length );
 					}
 					break;
 				case '%MetaValue%':
@@ -306,11 +343,11 @@ if ( ! class_exists( '\WSAL\Helpers\Formatters\Alert_Formatter' ) ) {
 		 * - check if the link is disabled
 		 * - optional URL processing
 		 *
-		 * @param array  $configuration         The configuration rules for formatting which needs to be used.
-		 * @param string $url URL.
-		 * @param string $label Label.
-		 * @param string $title Title.
-		 * @param string $target Target attribute.
+		 * @param array  $configuration - The configuration rules for formatting which needs to be used.
+		 * @param string $url - URL.
+		 * @param string $label - Label.
+		 * @param string $title - Title.
+		 * @param string $target - Target attribute.
 		 *
 		 * @return string
 		 *
@@ -360,22 +397,31 @@ if ( ! class_exists( '\WSAL\Helpers\Formatters\Alert_Formatter' ) ) {
 		 * we moved to a different implementation. Introducing another link markup would require adding link format with
 		 * placeholders to the formatter configuration.
 		 *
-		 * @param array  $configuration         The configuration rules for formatting which needs to be used.
-		 * @param string $url    URL.
-		 * @param string $label  Label.
-		 * @param string $title  Title.
-		 * @param string $target Target attribute.
+		 * @param array  $configuration - The configuration rules for formatting which needs to be used.
+		 * @param string $url - URL.
+		 * @param string $label - Label.
+		 * @param string $title - Title.
+		 * @param string $target - Target attribute.
 		 *
 		 * @return string
+		 *
+		 * @since 5.5.0 - Added $extra_css_classes parameter to allow passing custom classes for the link.
 		 */
-		private static function build_link_markup( array $configuration, $url, $label, $title = '', $target = '_blank' ) {
+		private static function build_link_markup( array $configuration, $url, $label, $title = '', $target = '_blank', $extra_css_classes = array() ) {
+
+			// This may be expanded in the future. For the moment, just add thickbox class when necessary.
+			$extra_css_classes = WP_Plugins_Themes_Sensor::maybe_add_thickbox_class( $url );
 
 			if ( $configuration['use_html_markup_for_links'] ) {
-				return '<a href="' . \esc_url( $url ) . '" title="' . $title . '" target="' . $target . '">' . $label . '</a>';
+				$classes_attr = $extra_css_classes ? ' class="' . \esc_attr( implode( ' ', $extra_css_classes ) ) . '"' : '';
+				$title_attr   = $title ? ' title="' . \esc_attr( $title ) . '"' : '';
+
+				return '<a ' . $classes_attr . ' href="' . \esc_url( $url ) . '" ' . $title_attr . ' target="' . $target . '">' . $label . '</a>';
 			}
 
 			return $label . ': ' . \esc_url( $url );
 		}
+
 		/**
 		 * Wraps given value in highlight markup.
 		 *

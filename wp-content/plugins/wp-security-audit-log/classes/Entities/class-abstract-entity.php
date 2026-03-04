@@ -68,7 +68,6 @@ if ( ! class_exists( '\WSAL\Entities\Abstract_Entity' ) ) {
 		 */
 		public static function get_table_name( $connection = null ): string {
 			if ( null !== $connection ) {
-
 				if ( $connection instanceof \wpdb ) {
 					return $connection->base_prefix . static::$table;
 				}
@@ -275,6 +274,12 @@ if ( ! class_exists( '\WSAL\Entities\Abstract_Entity' ) ) {
 				// Please do not report this code as a PHP 7 incompatibility. Observe the surrounding logic.
 				$code = mysql_errno( $_wpdb->dbh ); // phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysql_errno
 			}
+
+			// WP Playground SQLite compatibility fix.
+			if ( $_wpdb instanceof \WP_SQLite_DB ) {
+				$code = 1146;
+			}
+
 			return $code;
 		}
 
@@ -323,13 +328,42 @@ if ( ! class_exists( '\WSAL\Entities\Abstract_Entity' ) ) {
 			$table_name = self::get_table_name( $_wpdb );
 
 			if ( self::check_table_exists( $table_name, $connection ) ) {
-
 				static::get_connection()->query( 'TRUNCATE ' . $table_name );
 
 				return true;
 			}
 
 			return false;
+		}
+
+		/**
+		 * Count records in the table using primary index 'id'.
+		 * Adds a LIMIT for performance.
+		 *
+		 * @param \wpdb $connection Optional DB connection.
+		 *
+		 * @return int
+		 *
+		 * @since 5.5.0
+		 */
+		public static function count_records( $connection = null ): int {
+			if ( null !== $connection ) {
+				if ( $connection instanceof \wpdb ) {
+					$_wpdb = $connection;
+				}
+			} else {
+				$_wpdb = static::get_connection();
+			}
+
+			$table_name = self::get_table_name();
+
+			if ( ! self::check_table_exists( $table_name, $connection ) ) {
+					return 0;
+			}
+
+			$sql = 'SELECT count(id) FROM ' . self::get_table_name( $_wpdb ) . ' LIMIT 1';
+
+			return (int) $_wpdb->get_var( $sql );
 		}
 
 		/**
@@ -421,12 +455,21 @@ if ( ! class_exists( '\WSAL\Entities\Abstract_Entity' ) ) {
 		 * It checks the given data array against the table fields and determines the types based on that, it stores the values in the table then.
 		 *
 		 * @param array $data - The data to be saved (check above about the format).
+		 * @param \wpdb $connection - \wpdb connection to be used for name extraction.
 		 *
 		 * @return int
 		 *
 		 * @since 4.5.0
+		 * @since 5.5.0 - Added connection parameter.
 		 */
-		public static function save( $data ) {
+		public static function save( $data, $connection = null ) {
+			if ( null !== $connection ) {
+				if ( $connection instanceof \wpdb ) {
+					$_wpdb = $connection;
+				}
+			} else {
+				$_wpdb = static::get_connection();
+			}
 
 			$format      = array();
 			$insert_data = array();
@@ -445,8 +488,6 @@ if ( ! class_exists( '\WSAL\Entities\Abstract_Entity' ) ) {
 			}
 
 			if ( ! empty( $format ) ) {
-				$_wpdb = static::get_connection();
-
 				$_wpdb->suppress_errors( true );
 
 				$_wpdb->replace( self::get_table_name( $_wpdb ), $insert_data, $format );
@@ -505,9 +546,11 @@ if ( ! class_exists( '\WSAL\Entities\Abstract_Entity' ) ) {
 		 * @param \wpdb  $connection - \wpdb connection to be used for name extraction.
 		 * @param string $extra - The extra SQL string (if needed).
 		 *
-		 * @return array
+		 * @return array|object|null|void - Database query result or null on failure.
 		 *
 		 * @since 5.0.0
+		 *
+		 * @since 5.6.0 - Changed return comment
 		 */
 		public static function load( $cond = 'id=%d', $args = array( 1 ), $connection = null, $extra = '' ) {
 			if ( null !== $connection ) {

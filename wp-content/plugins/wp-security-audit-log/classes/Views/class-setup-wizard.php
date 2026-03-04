@@ -678,17 +678,17 @@ if ( ! class_exists( '\WSAL\Views\Setup_Wizard' ) ) {
 					<br />
 					<label for="6">
 						<input id="6" name="wsal-pruning-limit" type="radio" value="6" />
-						<?php esc_html_e( '6 months', 'wp-security-audit-log' ); ?>
+						<?php esc_html_e( '6 months (Older data will be deleted.)', 'wp-security-audit-log' ); ?>
 					</label>
 					<br />
 					<label for="12">
 						<input id="12" name="wsal-pruning-limit" type="radio" value="12" />
-						<?php esc_html_e( '12 months', 'wp-security-audit-log' ); ?>
+						<?php esc_html_e( '12 months (Older data will be deleted.)', 'wp-security-audit-log' ); ?>
 					</label>
 					<br />
 					<label for="none">
 						<input id="none" name="wsal-pruning-limit" type="radio" value="none" />
-						<?php esc_html_e( 'Keep all data.', 'wp-security-audit-log' ); ?>
+						<?php esc_html_e( 'Keep all data', 'wp-security-audit-log' ); ?>
 					</label>
 				</fieldset>
 
@@ -788,7 +788,7 @@ if ( ! class_exists( '\WSAL\Views\Setup_Wizard' ) ) {
 				</p>
 				<fieldset>
 					<label for="3"><?php esc_html_e( 'Email address:', 'wp-security-audit-log' ); ?>
-						<input id="notification_weekly_email_address" name="built-in-notifications[notification_weekly_email_address]" required="required" type="text" value="<?php echo \sanitize_email( \get_bloginfo( 'admin_email' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" pattern="([a-zA-Z0-9\._\%\+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,4}[,]{0,}){1,}">
+						<input id="notification_weekly_email_address" name="built-in-notifications[notification_weekly_email_address]" required="required" type="text" value="<?php echo \sanitize_email( \get_bloginfo( 'admin_email' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" pattern="([a-zA-Z0-9\._\%\+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[,]{0,}){1,}">
 					</label>
 					<p></p>
 				</fieldset>
@@ -880,7 +880,7 @@ if ( ! class_exists( '\WSAL\Views\Setup_Wizard' ) ) {
 				</p>
 				<fieldset>
 					<label for="3"><?php esc_html_e( 'Email address:', 'wp-security-audit-log' ); ?>
-						<input id="notification_default_email_address" name="notifications[notification_default_email_address]" required="required" type="text" value="<?php echo \sanitize_email( \get_bloginfo( 'admin_email' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" pattern="([a-zA-Z0-9\._\%\+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,4}[,]{0,}){1,}">
+						<input id="notification_default_email_address" name="notifications[notification_default_email_address]" required="required" type="text" value="<?php echo \sanitize_email( \get_bloginfo( 'admin_email' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" pattern="([a-zA-Z0-9\._\%\+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,20}[,]{0,}){1,}">
 					</label>
 					<p></p>
 				</fieldset>

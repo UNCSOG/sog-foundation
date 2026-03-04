@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\Llms_Txt\Domain\Content_Types;
 
@@ -126,7 +127,7 @@ class Content_Type_Entry {
 			$meta->post->post_title,
 			$meta->canonical,
 			$meta->post->post_excerpt,
-			$meta->post->post_name
+			$meta->post->post_name,
 		);
 	}
 
@@ -144,7 +145,7 @@ class Content_Type_Entry {
 			$post->post_title,
 			$permalink,
 			$post->post_excerpt,
-			$post->post_name
+			$post->post_name,
 		);
 	}
 }

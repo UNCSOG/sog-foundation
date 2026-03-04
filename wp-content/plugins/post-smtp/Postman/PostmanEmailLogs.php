@@ -56,6 +56,11 @@ class PostmanEmailLogs {
             isset( $_GET['log_id'] ) && !empty( $_GET['log_id'] )
         ) {
 
+            // Check if user has permission to view email logs
+            if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+                wp_die( __( 'Sorry, you are not allowed to access this page.', 'post-smtp' ) );
+            }
+
             // Print
             if( isset( $_GET['print'] ) && $_GET['print'] == 1  ) {
 
@@ -308,12 +313,10 @@ class PostmanEmailLogs {
         $data['time'] = !isset( $data['time'] ) ? current_time( 'timestamp' ) : $data['time'];
 
         if( !empty( $id ) ) {
-
             return $this->update( $data, $id );
-
         }
         else {
-                return $this->db->insert( $this->db->prefix . $this->db_name, $data  ) ? $this->db->insert_id : false;
+            return $this->db->insert( $this->db->prefix . $this->db_name, $data  ) ? $this->db->insert_id : false;
         }
 
     }
@@ -329,11 +332,13 @@ class PostmanEmailLogs {
      */
     public function update( $data, $id ) {
 
-        return $this->db->update(
-            $this->db->prefix . $this->db_name,
-            $data,
-            array( 'id' => $id )
-        );
+        $result = $this->db->update(
+			$this->db->prefix . $this->db_name,
+			$data,
+			array( 'id' => $id )
+		);
+
+		return $result !== false ? $id : false;
 
     }
 
@@ -345,13 +350,18 @@ class PostmanEmailLogs {
      * @version 1.0
      */
     public function get_logs_ajax() {
-
         if( !wp_verify_nonce( $_GET['security'], 'security' ) ) {
 
             return;
 
         }
 
+        // Check if user has permission to view email logs
+        if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+            wp_send_json_error( __( 'Sorry, you are not allowed to access email logs.', 'post-smtp' ) );
+            return;
+        }
+  
         if( isset( $_GET['action'] ) && $_GET['action'] == 'ps-get-email-logs' ) {
 
             $logs_query = new PostmanEmailQueryLog;
@@ -379,7 +389,7 @@ class PostmanEmailLogs {
                 $query['from'] = strtotime( sanitize_text_field( $_GET['from'] ) );
 
             }
-
+       
             if( isset( $_GET['to'] ) && !empty( $_GET['to'] ) ) {
 
                 $query['to'] = strtotime( sanitize_text_field( $_GET['to'] ) ) + 86400;
@@ -393,7 +403,6 @@ class PostmanEmailLogs {
             }
 
             $data = $logs_query->get_logs( $query );
-
             //WordPress Date, Time Format
             $date_format = get_option( 'date_format' );
 		    $time_format = get_option( 'time_format' );
@@ -409,7 +418,7 @@ class PostmanEmailLogs {
                 '&quot;',
                 '&#039;'
             );
-
+   
             //Lets manage the Date format :)
             foreach( $data as $row ) {
 
@@ -419,7 +428,11 @@ class PostmanEmailLogs {
 
                     $row->success = '<span title="Success">Success</span>';
 
-                }
+                } else if( $row->success == 'Sent ( ** Fallback ** )' ){
+
+                    $row->success = '<span title="Sent ( ** Fallback ** )">Success</span><a href="#" class="ps-status-log ps-popup-btn">View details</a>';
+                    
+               }
                 elseif( $row->success == 'In Queue' ) {
 
                     $row->success = '<span title="In Queue">In Queue</span>';
@@ -480,6 +493,12 @@ class PostmanEmailLogs {
 
             return;
 
+        }
+
+        // Check if user has permission to manage email logs
+        if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+            wp_send_json_error( __( 'Sorry, you are not allowed to delete email logs.', 'post-smtp' ) );
+            return;
         }
 		
 		if( isset( $_POST['action'] ) && $_POST['action'] == 'ps-delete-email-logs' ) {
@@ -551,6 +570,12 @@ class PostmanEmailLogs {
 
             return;
 
+        }
+
+        // Check if user has permission to export email logs
+        if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+            wp_send_json_error( __( 'Sorry, you are not allowed to export email logs.', 'post-smtp' ) );
+            return;
         }
 
 		if( isset( $_POST['action'] ) && $_POST['action'] == 'ps-export-email-logs' ) {
@@ -645,6 +670,12 @@ class PostmanEmailLogs {
 
         }
 
+        // Check if user has permission to view email logs
+        if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+            wp_send_json_error( __( 'Sorry, you are not allowed to view email logs.', 'post-smtp' ) );
+            return;
+        }
+
 		if( isset( $_POST['action'] ) && $_POST['action'] == 'ps-view-log' ) {
 
 			$id = sanitize_text_field( $_POST['id'] );
@@ -727,6 +758,12 @@ class PostmanEmailLogs {
 
             return;
 
+        }
+
+        // Check if user has permission to resend emails
+        if ( ! current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) ) {
+            wp_send_json_error( __( 'Sorry, you are not allowed to resend emails.', 'post-smtp' ) );
+            return;
         }
 
         if( isset( $_POST['action'] ) && $_POST['action'] == 'ps-resend-email' ) {

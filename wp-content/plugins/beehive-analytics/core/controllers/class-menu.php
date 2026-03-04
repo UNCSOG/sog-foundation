@@ -42,7 +42,9 @@ class Menu extends Base {
 		add_filter( 'beehive_main_menu_items', array( $this, 'dashboard_menu' ), 1 );
 		add_filter( 'beehive_main_menu_items', array( $this, 'accounts_menu' ), 4 );
 		add_filter( 'beehive_main_menu_items', array( $this, 'settings_menu' ), 5 );
-		add_filter( 'beehive_main_menu_items', array( $this, 'tutorials_menu' ), 6 );
+		add_filter( 'beehive_main_menu_items', array( $this, 'upgrade_menu' ), 6 );
+		// Add admin styles for upgrade menu.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_upgrade_scripts' ) );
 	}
 
 	/**
@@ -194,30 +196,50 @@ class Menu extends Base {
 	}
 
 	/**
-	 * Register admin menu for tutorials.
+	 * Register upgrade submenu for Beehive Pro.
 	 *
 	 * @param array $menu_items Menu items.
 	 *
-	 * @since 3.3.7
-	 *
 	 * @return array
 	 */
-	public function tutorials_menu( $menu_items ) {
-		// Add tutorials page.
+	public function upgrade_menu( $menu_items ) {
+		if ( beehive_analytics()->is_pro() ) {
+			return $menu_items;
+		}
+		// Add upgrade page.
 		if ( current_user_can( Capability::SETTINGS_CAP ) ) {
-			// Check if tutorials should be hidden.
-			$hide = apply_filters( 'wpmudev_branding_hide_doc_link', false );
-
-			if ( ! $hide ) {
-				$menu_items['beehive-tutorials'] = array(
-					'page_title' => __( 'Beehive Tutorials', 'ga_trans' ),
-					'menu_title' => __( 'Tutorials', 'ga_trans' ),
+				$menu_items['https://wpmudev.com/project/beehive-analytics-pro/?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_submenu_upsell'] = array(
+					'page_title' => __( 'Get Beehive Pro', 'ga_trans' ),
+					'menu_title' => __( 'Get Beehive Pro', 'ga_trans' ),
 					'cap'        => Capability::SETTINGS_CAP,
-					'callback'   => array( Admin_View::instance(), 'tutorials_page' ),
+					'callback'   => '',
 				);
-			}
 		}
 
 		return $menu_items;
+	}
+
+	/**
+	 * Enqueue upgrade menu styles.
+	 *
+	 * @return void
+	 */
+	public function enqueue_upgrade_scripts() {
+		$css = '
+		#adminmenu .wp-submenu li a[href*="wpmudev.com/project/beehive-analytics-pro"] {
+			background: #8D00B1;
+			color: #ffffff;
+			font-weight: 500;
+		}
+		';
+
+		$js = "
+		jQuery(document).ready(function($) {
+			$('a[href*=\"wpmudev.com/project/beehive-analytics-pro\"]').attr('target', '_blank');
+		});
+		";
+
+		wp_add_inline_script( 'admin-bar', $js );
+		wp_add_inline_style( 'admin-bar', $css );
 	}
 }

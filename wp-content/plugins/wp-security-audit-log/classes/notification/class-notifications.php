@@ -289,8 +289,6 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 				// AJAX test email part.
 				\add_action( 'wp_ajax_wsal_send_notifications_test_email', array( Notification_Helper::class, 'send_test_email' ) );
 
-				// phpcs:disable
-				// phpcs:enable
 			}
 
 			$current_settings = Settings_Helper::get_option_value( self::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME, array() );
@@ -300,8 +298,6 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 				self::build_in_check_and_save( array( 'notification_weekly_summary_notification' => true ), true );
 			}
 
-			// phpcs:disable
-			// phpcs:enable
 		}
 
 		/**
@@ -654,11 +650,69 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 		}
 
 		/**
+		 * Checks if required email addresses are set for enabled notifications.
+		 *
+		 * @param array $data Array of notification settings from the form.
+		 * @param bool  $has_default_email Whether a default email address is configured.
+		 *
+		 * @return bool True if all required emails are set, false if any are missing.
+		 *
+		 * @since 5.6.0
+		 */
+		private static function check_if_required_data_is_set( array $data, bool $has_default_email ): bool {
+
+			foreach ( self::$events_to_collect as $event_id ) {
+
+				/**
+				 * The main checkbox that enables/disables the entire notification for this event.
+				 *
+				 * E.g. notification_event_4003_notification
+				 */
+				$checkbox_key = 'notification_event_' . $event_id . '_notification';
+
+				/**
+				 * Checkbox to enable a custom email different than the default one set in Notification settings.
+				 * "Use different email address / SMS number / Slack channel"
+				 *
+				 * E.g. notification_event_1003_notification_custom_message
+				 */
+				$check_box_custom_email_key = 'notification_event_' . $event_id . '_notification_custom_message';
+
+				/**
+				 * The email input field that should contain the custom email address(es) for this event.
+				 */
+				$email_key = 'notification_event_' . $event_id . '_notification_email_address';
+
+				// Skip if notification is not enabled upon form submission.
+				if ( ! isset( $data[ $checkbox_key ] ) || false === $data[ $checkbox_key ] ) {
+					continue;
+				}
+
+				if ( isset( $data[ $check_box_custom_email_key ] ) && $data[ $check_box_custom_email_key ] ) {
+
+					// Even if just 1 email is missing AND we don't have the default email, it's enough to throw the error, return false.
+					if ( ! $has_default_email ) {
+						if ( ! isset( $data[ $email_key ] ) || empty( $data[ $email_key ] ) ) {
+							return false;
+						}
+					}
+				} elseif ( ! $has_default_email ) {
+					// If we don't have a custom email, and default email is also falsy, we can't proceed.
+						return false;
+				}
+			}
+
+			return true;
+		}
+
+		/**
 		 * Collects all the submitted reports data and saves them or generates a new report.
 		 *
 		 * @return void
 		 *
 		 * @since 5.1.1
+		 *
+		 * @since 5.6.0 Added check for required email addresses when enabling notifications.
 		 */
 		public static function save_settings_ajax() {
 			if ( \check_ajax_referer( 'notifications-data', 'wsal-security' ) ) {
@@ -669,14 +723,30 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 
 				if ( isset( $_POST[ self::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME ] ) && ! empty( $_POST[ self::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME ] ) && \is_array( $_POST[ self::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME ] ) ) {
 
-					$data = \stripslashes_deep( $_POST[ self::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-					self::build_in_check_and_save( $data );
+					$data_data_built_in = array_map( 'sanitize_text_field', \stripslashes_deep( $_POST[ self::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME ] ) );
+					self::build_in_check_and_save( $data_data_built_in );
 				}
 
 				if ( isset( $_POST[ self::NOTIFICATIONS_SETTINGS_NAME ] ) && ! empty( $_POST[ self::NOTIFICATIONS_SETTINGS_NAME ] ) && \is_array( $_POST[ self::NOTIFICATIONS_SETTINGS_NAME ] ) ) {
 
 					$data = \stripslashes_deep( $_POST[ self::NOTIFICATIONS_SETTINGS_NAME ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 					self::settings_check_and_save( $data );
+				}
+
+				$default_email_address_is_set = false;
+
+				if ( isset( $data['notification_default_email_address'] ) ) {
+					$default_email_address_is_set = $data['notification_default_email_address'] ? true : false;
+				}
+
+				$if_required_data_is_set = self::check_if_required_data_is_set( $data_data_built_in, $default_email_address_is_set );
+
+				// Check if built-in notifications were disabled due to missing recipients.
+				if ( ! $if_required_data_is_set ) {
+					\wp_send_json_error(
+						\esc_html__( 'One or more notification settings could not be enabled because no email was set for them. Please specify custom recipients for all notification settings enabled, or, configure at least one default recipient in the Notification Settings tab.', 'wp-security-audit-log' ),
+						400
+					);
 				}
 
 				if ( isset( $_POST[ self::CUSTOM_NOTIFICATIONS_SETTINGS_NAME ] ) && ! empty( $_POST[ self::CUSTOM_NOTIFICATIONS_SETTINGS_NAME ] ) && \is_array( $_POST[ self::CUSTOM_NOTIFICATIONS_SETTINGS_NAME ] ) ) {
@@ -1090,6 +1160,8 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 		 * @return void
 		 *
 		 * @since 5.1.1
+		 *
+		 * @since 5.6.0 - Added suppression of event triggers during first-time initialization.
 		 */
 		private static function build_in_check_and_save( array $post_array, bool $first_time = false ) {
 			if ( ! \current_user_can( 'manage_options' ) ) {
@@ -1099,9 +1171,19 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 				}
 			}
 
+			/**
+			 * Suppress events on first time activation and upon settings reset via the plugin's options.
+			 */
+			$suppress_events_on_first_time_activation = false;
+
+			if ( $first_time ) {
+				$suppress_events_on_first_time_activation = true;
+			}
+
 			$report_options = array();
 
 			$no_defaults = false;
+
 			if ( ! self::is_default_mail_set() && ! self::is_default_twilio_set() && ! self::is_default_slack_set() ) {
 				$no_defaults = true;
 			}
@@ -1111,7 +1193,7 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 			$report_options['daily_summary_notification'] = ( ( isset( $post_array['notification_daily_summary_notification'] ) ) ? filter_var( $post_array['notification_daily_summary_notification'], FILTER_VALIDATE_BOOLEAN ) : false );
 
 			$current_daily_summary_notification = isset( $current_settings['daily_summary_notification'] ) ? $current_settings['daily_summary_notification'] : '';
-			if ( $current_daily_summary_notification !== $report_options['daily_summary_notification'] ) {
+			if ( ! $suppress_events_on_first_time_activation && $current_daily_summary_notification !== $report_options['daily_summary_notification'] ) {
 				Alert_Manager::trigger_event(
 					6310,
 					array(
@@ -1123,7 +1205,7 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 			$report_options['daily_email_address'] = ( ( isset( $post_array['notification_daily_email_address'] ) ) ? \sanitize_text_field( \wp_unslash( $post_array['notification_daily_email_address'] ) ) : Email_Helper::get_default_email_to() );
 
 			$current_daily_mail_address = isset( $current_settings['daily_email_address'] ) ? $current_settings['daily_email_address'] : '';
-			if ( $report_options['daily_email_address'] !== $current_daily_mail_address ) {
+			if ( ! $suppress_events_on_first_time_activation && $report_options['daily_email_address'] !== $current_daily_mail_address ) {
 				Alert_Manager::trigger_event(
 					6311,
 					array(
@@ -1141,7 +1223,7 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 			$report_options['weekly_summary_notification'] = ( ( isset( $post_array['notification_weekly_summary_notification'] ) ) ? filter_var( $post_array['notification_weekly_summary_notification'], FILTER_VALIDATE_BOOLEAN ) : false );
 
 			$current_weekly_summary_notification = isset( $current_settings['weekly_summary_notification'] ) ? $current_settings['weekly_summary_notification'] : '';
-			if ( $current_weekly_summary_notification !== $report_options['weekly_summary_notification'] ) {
+			if ( ! $suppress_events_on_first_time_activation && $current_weekly_summary_notification !== $report_options['weekly_summary_notification'] ) {
 				Alert_Manager::trigger_event(
 					6319,
 					array(
@@ -1153,7 +1235,7 @@ if ( ! class_exists( '\WSAL\Views\Notifications' ) ) {
 			$report_options['weekly_email_address'] = ( ( isset( $post_array['notification_weekly_email_address'] ) ) ? \sanitize_text_field( \wp_unslash( $post_array['notification_weekly_email_address'] ) ) : Email_Helper::get_default_email_to() );
 
 			$current_weekly_mail_address = isset( $current_settings['weekly_email_address'] ) ? $current_settings['weekly_email_address'] : '';
-			if ( $report_options['weekly_email_address'] !== $current_weekly_mail_address ) {
+			if ( ! $suppress_events_on_first_time_activation && $report_options['weekly_email_address'] !== $current_weekly_mail_address ) {
 				Alert_Manager::trigger_event(
 					6328,
 					array(

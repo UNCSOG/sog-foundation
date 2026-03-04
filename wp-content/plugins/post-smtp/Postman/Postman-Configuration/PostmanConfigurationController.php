@@ -292,6 +292,15 @@ class PostmanConfigurationController {
 		print '<div id="sendgrid_settings" class="authentication_setting non-basic non-oauth2">';
 		do_settings_sections( PostmanSendGridTransport::SENDGRID_AUTH_OPTIONS );
 		print '</div>';
+		print '<div id="emailit_settings" class="authentication_setting non-basic non-oauth2">';
+		do_settings_sections( PostmanEmailitTransport::EMAILIT_AUTH_OPTIONS );
+		print '</div>';
+		print '<div id="maileroo_settings" class="authentication_setting non-basic non-oauth2">';
+		do_settings_sections( PostmanMailerooTransport::MAILEROO_AUTH_OPTIONS );
+		print '</div>';
+		print '<div id="sweego_settings" class="authentication_setting non-basic non-oauth2">';
+		do_settings_sections( PostmanSweegoTransport::SWEEGO_AUTH_OPTIONS );
+		print '</div>';
 		print '<div id="mailersend_settings" class="authentication_setting non-basic non-oauth2">';
 		do_settings_sections( PostmanMailerSendTransport::MAILERSEND_AUTH_OPTIONS );
 		print '</div>';
@@ -300,6 +309,12 @@ class PostmanConfigurationController {
 		print '</div>';
         print '<div id="sendinblue_settings" class="authentication_setting non-basic non-oauth2">';
         do_settings_sections( PostmanSendinblueTransport::SENDINBLUE_AUTH_OPTIONS );
+        print '</div>';
+        print '<div id="mailtrap_settings" class="authentication_setting non-basic non-oauth2">';
+        do_settings_sections( PostmanMailtrapTransport::MAILTRAP_AUTH_OPTIONS );
+        print '</div>';
+        print '<div id="resend_settings" class="authentication_setting non-basic non-oauth2">';
+        do_settings_sections( PostmanResendTransport::RESEND_AUTH_OPTIONS );
         print '</div>';
 		print '<div id="mailjet_settings" class="authentication_setting non-basic non-oauth2">';
         do_settings_sections( PostmanMailjetTransport::MAILJET_AUTH_OPTIONS );

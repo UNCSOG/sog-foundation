@@ -180,7 +180,7 @@ export default {
 			Object.keys(vm.stats.countries).forEach(function (key) {
 				chartData.push([
 					vm.stats.countries[key][0],
-					vm.stats.countries[key][2],
+					parseInt(vm.stats.countries[key][2]) || 0,
 					vm.geoToolTip(
 						vm.stats.countries[key][0],
 						vm.stats.countries[key][1],

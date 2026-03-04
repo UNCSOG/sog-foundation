@@ -3,8 +3,8 @@ Contributors: wdm-team
 Donate link: https://www.webdesign-muenchen.de
 Tags: email, mail, queue, email log, wp_mail
 Requires at least: 5.9
-Tested up to: 6.8
-Stable tag: 1.4.5
+Tested up to: 6.9
+Stable tag: 1.4.6
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,15 +13,15 @@ Take control of emails sent by WordPress. Queue outgoing emails and get notified
 
 == Description ==
 
-This plugin will improve the security of your WordPress website, by delaying the email submission of wp_mail().
+This plugin enhances the security and stability of your WordPress installation by delaying and controlling wp_mail() email submissions through a managed queue.
 
-If your website shows any strange behaviour, e.g. a spam bot is trying to flood your contact form, you will be alerted directly.
+If your site exhibits unusual behavior — such as a spam bot repeatedly submitting forms — you will be alerted immediately.
 
-* Intercepts wp_mail() and puts emails into a Queue
-* Control how many emails and how often emails are sent
-* Log every email submission of the Queue
-* Get alerted if your Queue is running full
-* Get alerted if WordPress is not able to send emails
+* Intercepts wp_mail() and places outgoing messages in a queue
+* Configure how many emails are sent and at what interval
+* Log all queued email submissions
+* Receive alerts when the queue grows unexpectedly
+* Receive alerts when WordPress is unable to send emails
 
 == Frequently Asked Questions ==
 
@@ -35,7 +35,7 @@ You can enable the Alerting feature and control at which point exactly you want 
 
 = How does this plugin work?
 
-If enabled this plugin intercepts the wp_mail() function. Instead of sending the mails directly, it stores them in the database and sends them step by step with a delay during the WP Cron.
+When enabled, the plugin intercepts wp_mail(). Instead of sending emails immediately, they are stored in the database and released gradually via WP-Cron according to your configured interval.
 
 = Does this plugin change the way HOW the emails are sent? =
 
@@ -175,6 +175,9 @@ Please make sure that your WP Cron is running reliably.
 
 == Changelog ==
 
+= 1.4.6 =
+* Added support for the `pre_wp_mail` hook
+
 = 1.4.5 =
 * Check for incompatible plugins
 * Minor bug fixes
@@ -208,7 +211,7 @@ Please make sure that your WP Cron is running reliably.
 * Added feature to send emails instantly without delay bypassing the queue
 
 = 1.2 =
-* Perfomance and security improvements
+* Performance and security improvements
 
 = 1.1 =
 * Resend emails

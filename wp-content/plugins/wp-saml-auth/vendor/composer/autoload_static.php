@@ -7,30 +7,30 @@ namespace Composer\Autoload;
 class ComposerStaticInit2836104defd4e8ee2d5ccd91156cd4e3
 {
     public static $prefixLengthsPsr4 = array (
-        'R' => 
+        'R' =>
         array (
             'RobRichards\\XMLSecLibs\\' => 23,
         ),
-        'P' => 
+        'P' =>
         array (
             'PantheonSystems\\WPSamlAuth\\Behat\\' => 33,
         ),
-        'O' => 
+        'O' =>
         array (
             'OneLogin\\' => 9,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'RobRichards\\XMLSecLibs\\' => 
+        'RobRichards\\XMLSecLibs\\' =>
         array (
             0 => __DIR__ . '/..' . '/robrichards/xmlseclibs/src',
         ),
-        'PantheonSystems\\WPSamlAuth\\Behat\\' => 
+        'PantheonSystems\\WPSamlAuth\\Behat\\' =>
         array (
             0 => __DIR__ . '/../..' . '/tests/behat/bootstrap',
         ),
-        'OneLogin\\' => 
+        'OneLogin\\' =>
         array (
             0 => __DIR__ . '/..' . '/onelogin/php-saml/src',
         ),

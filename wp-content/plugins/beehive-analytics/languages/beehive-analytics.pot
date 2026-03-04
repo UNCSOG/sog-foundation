@@ -2,16 +2,16 @@
 # This file is distributed under the GNU General Public License (Version 2 - GPLv2).
 msgid ""
 msgstr ""
-"Project-Id-Version: Beehive Pro 3.4.17\n"
+"Project-Id-Version: Beehive Pro 3.4.19.1\n"
 "Report-Msgid-Bugs-To: https://wpmudev.com\n"
-"POT-Creation-Date: 2025-04-25 16:14:06+00:00\n"
+"POT-Creation-Date: 2025-12-17 07:18:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
-"X-Generator: grunt-wp-i18n 1.0.3\n"
+"X-Generator: grunt-wp-i18n 1.0.4\n"
 
 #: app/templates/stats/google/popular-widget/admin.php:18
 msgid "Title"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Maximum number of posts to show:"
 msgstr ""
 
-#: core/controllers/class-admin.php:128 core/controllers/class-menu.php:136
+#: core/controllers/class-admin.php:128 core/controllers/class-menu.php:138
 #: core/data/class-locale.php:370
 msgid "Dashboard"
 msgstr ""
@@ -34,8 +34,9 @@ msgstr ""
 msgid "Docs"
 msgstr ""
 
-#: core/controllers/class-admin.php:137
-msgid "Upgrade For 80% Off!"
+#: core/controllers/class-admin.php:137 core/controllers/class-menu.php:212
+#: core/controllers/class-menu.php:213
+msgid "Get Beehive Pro"
 msgstr ""
 
 #: core/controllers/class-admin.php:139
@@ -92,33 +93,25 @@ msgid ""
 "is processed in such a way that visitors cannot be identified."
 msgstr ""
 
-#: core/controllers/class-menu.php:135
+#: core/controllers/class-menu.php:137
 msgid "Beehive Dashboard"
 msgstr ""
 
-#: core/controllers/class-menu.php:161
+#: core/controllers/class-menu.php:163
 msgid "Beehive Accounts"
 msgstr ""
 
-#: core/controllers/class-menu.php:162 core/data/class-locale.php:205
+#: core/controllers/class-menu.php:164 core/data/class-locale.php:205
 msgid "Accounts"
 msgstr ""
 
-#: core/controllers/class-menu.php:186
+#: core/controllers/class-menu.php:188
 msgid "Beehive Settings"
 msgstr ""
 
-#: core/controllers/class-menu.php:187 core/data/class-locale.php:79
+#: core/controllers/class-menu.php:189 core/data/class-locale.php:79
 #: core/data/class-locale.php:116
 msgid "Settings"
-msgstr ""
-
-#: core/controllers/class-menu.php:213 core/data/class-locale.php:433
-msgid "Beehive Tutorials"
-msgstr ""
-
-#: core/controllers/class-menu.php:214 core/data/class-locale.php:432
-msgid "Tutorials"
 msgstr ""
 
 #: core/data/class-locale.php:41
@@ -1070,10 +1063,6 @@ msgid ""
 "ID to finish setup."
 msgstr ""
 
-#: core/data/class-locale.php:436
-msgid "View all"
-msgstr ""
-
 #: core/endpoints/class-actions.php:60
 msgid "The action type to perform."
 msgstr ""
@@ -1139,15 +1128,15 @@ msgstr ""
 msgid "Beehive Pro"
 msgstr ""
 
-#: core/helpers/class-general.php:89
+#: core/helpers/class-general.php:78
 msgid "Beehive"
 msgstr ""
 
-#: core/helpers/class-general.php:236
+#: core/helpers/class-general.php:208
 msgid "User"
 msgstr ""
 
-#: core/helpers/class-general.php:353
+#: core/helpers/class-general.php:325
 msgid ""
 "Autoloader is missing. Please run `composer install` if you are on "
 "development version."
@@ -1701,7 +1690,7 @@ msgstr ""
 msgid "Tablet"
 msgstr ""
 
-#: core/modules/google-analytics/stats/formatters/class-ga4.php:955
+#: core/modules/google-analytics/stats/formatters/class-ga4.php:957
 msgid "Other"
 msgstr ""
 
@@ -2075,28 +2064,28 @@ msgstr ""
 msgid "Unknown error occurred."
 msgstr ""
 
-#: core/views/class-admin.php:218
+#: core/views/class-admin.php:204
 #. translators: %s: heart icon
 msgid "Made with %s by WPMU DEV"
 msgstr ""
 
-#: core/views/class-admin.php:277 core/views/class-admin.php:305
+#: core/views/class-admin.php:262 core/views/class-admin.php:290
 msgid "Last week"
 msgstr ""
 
-#: core/views/class-admin.php:297
+#: core/views/class-admin.php:282
 msgid "Today"
 msgstr ""
 
-#: core/views/class-admin.php:301
+#: core/views/class-admin.php:286
 msgid "Yesterday"
 msgstr ""
 
-#: core/views/class-admin.php:309
+#: core/views/class-admin.php:294
 msgid "Last month"
 msgstr ""
 
-#: core/views/class-admin.php:313
+#: core/views/class-admin.php:298
 msgid "Last year"
 msgstr ""
 

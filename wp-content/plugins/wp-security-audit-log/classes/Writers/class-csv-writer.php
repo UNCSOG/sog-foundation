@@ -19,6 +19,7 @@ use WSAL\Helpers\User_Helper;
 use WSAL\Controllers\Connection;
 use WSAL\Helpers\Settings_Helper;
 use WSAL\Extensions\Views\Reports;
+use WSAL\Controllers\Alert_Manager;
 use WSAL\Entities\Occurrences_Entity;
 use WSAL\ListAdminEvents\List_Events;
 
@@ -97,6 +98,13 @@ if ( ! class_exists( '\WSAL\Writers\CSV_Writer' ) ) {
 			$enclosure            = '"';
 			$csv_export_separator = ',';
 
+			// Load all alerts once for filtering excluded links.
+			$all_alerts = array();
+
+			if ( \class_exists( '\WSAL\Extensions\Views\Reports' ) ) {
+				$all_alerts = Alert_Manager::get_alerts();
+			}
+
 			if ( ! empty( $data ) ) {
 
 				foreach ( $data as $row ) {
@@ -154,10 +162,17 @@ if ( ! class_exists( '\WSAL\Writers\CSV_Writer' ) ) {
 					$current_row = array();
 					foreach ( array_keys( self::prepare_header() ) as $column_name ) {
 						if ( 'mesg' == $column_name ) {
+							// Get raw message and filter out excluded links.
+							$raw_message = List_events::format_column_value( $row, $column_name );
+
+							if ( isset( $row['alert_id'] ) && ! empty( $all_alerts ) && \class_exists( '\WSAL\Extensions\Views\Reports' ) ) {
+								$raw_message = Reports::maybe_exclude_alert_message_from_report( $raw_message, (int) $row['alert_id'], $all_alerts );
+							}
+
 							$html = htmlspecialchars_decode(
 								\trim(
 									\strip_tags(
-										str_replace( array( '<br />', '<br>', '<br/>', '</br>' ), "\n", List_events::format_column_value( $row, $column_name ) ),
+										str_replace( array( '<br />', '<br>', '<br/>', '</br>' ), "\n", $raw_message ),
 										array( 'a' )
 									)
 								)
@@ -227,18 +242,18 @@ if ( ! class_exists( '\WSAL\Writers\CSV_Writer' ) ) {
 		 */
 		public static function write_csv_ajax() {
 			if ( ! array_key_exists( 'nonce', $_POST ) || ! wp_verify_nonce( $_POST['nonce'], 'wsal-export-csv-nonce' ) ) { // phpcs:ignore
-				wp_send_json_error( esc_html_e( 'nonce is not provided or incorrect', 'wp-security-audit-log' ) );
+				wp_send_json_error( esc_html__( 'nonce is not provided or incorrect', 'wp-security-audit-log' ) );
 				die();
 			}
 
 			if ( ! array_key_exists( 'query', $_POST ) ) {
-				wp_send_json_error( esc_html_e( 'query is not provided or incorrect', 'wp-security-audit-log' ) );
+				wp_send_json_error( esc_html__( 'query is not provided or incorrect', 'wp-security-audit-log' ) );
 				die();
 			} else {
 				$query = \unserialize( \base64_decode( \sanitize_text_field( \wp_unslash( $_POST['query'] ) ) ), array( 'allowed_classes' => false ) );
 
 				if ( ! \is_array( $query ) ) {
-					wp_send_json_error( esc_html_e( 'Unrecognized format', 'wp-security-audit-log' ) );
+					wp_send_json_error( esc_html__( 'Unrecognized format', 'wp-security-audit-log' ) );
 					die();
 				}
 
@@ -247,21 +262,24 @@ if ( ! class_exists( '\WSAL\Writers\CSV_Writer' ) ) {
 			}
 
 			if ( ! array_key_exists( 'order', $_POST ) ) {
-				wp_send_json_error( esc_html_e( 'order is not provided or incorrect', 'wp-security-audit-log' ) );
+				wp_send_json_error( esc_html__( 'order is not provided or incorrect', 'wp-security-audit-log' ) );
 				die();
 			}
 
 			if ( ! array_key_exists( 'step', $_POST ) ) {
-				wp_send_json_error( esc_html_e( 'step is not provided or incorrect', 'wp-security-audit-log' ) );
+				wp_send_json_error( esc_html__( 'step is not provided or incorrect', 'wp-security-audit-log' ) );
 				die();
 			}
 
 			if ( ! array_key_exists( 'records', $_POST ) ) {
-				wp_send_json_error( esc_html_e( 'records is not provided or incorrect', 'wp-security-audit-log' ) );
+				wp_send_json_error( esc_html__( 'records is not provided or incorrect', 'wp-security-audit-log' ) );
 				die();
 			}
 
 			self::$events = self::query_table( $query, \wp_unslash( $_POST['order'] ), (int) \wp_unslash( $_POST['step'] ), (int) \wp_unslash( $_POST['records'] ) ); // phpcs:ignore -- WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+			// Count self events, used in client side code to show more accurate progress.
+			$self_events_count = count( self::$events );
 
 			$exports_path = Settings_Helper::get_working_dir_path_static( 'exports' );
 			if ( $exports_path instanceof \WP_Error ) {
@@ -287,9 +305,10 @@ if ( ! class_exists( '\WSAL\Writers\CSV_Writer' ) ) {
 				$progress = self::write_csv( $step );
 				wp_send_json_success(
 					array(
-						'step'      => ++$step,
-						'file_name' => \basename( self::$file_name ),
-						'url'       => $url,
+						'step'         => ++$step,
+						'file_name'    => \basename( self::$file_name ),
+						'url'          => $url,
+						'record_count' => $self_events_count,
 					)
 				);
 			} else {
@@ -369,11 +388,13 @@ if ( ! class_exists( '\WSAL\Writers\CSV_Writer' ) ) {
 				}
 			}
 
-			if ( 1 === $step ) {
-				$limit = array( $per_page );
-			} else {
-				$limit = array( $step * $per_page, $per_page );
-			}
+			/**
+			 * Calculate offset for the query, we need to subtract 1 if step > 1 to get the correct offset.
+			 */
+			$offset = max( 0, ( $step > 1 ? ( $step - 1 ) * $per_page : 0 ) );
+
+			// Specify the correct range of records, from $offset to the next $per_page value.
+			$limit = array( $offset, $per_page );
 
 			$events = Occurrences_Entity::build_query(
 				array(),

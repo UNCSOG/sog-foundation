@@ -156,8 +156,8 @@ class Token_Manager implements Token_Manager_Interface {
 				new Request(
 					'/token/invalidate',
 					$request_body,
-					$request_headers
-				)
+					$request_headers,
+				),
 			);
 		} catch ( Unauthorized_Exception | Forbidden_Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch -- Reason: Ignored on purpose.
 			// If the credentials in our request were already invalid, our job is done and we continue to remove the tokens client-side.
@@ -242,7 +242,7 @@ class Token_Manager implements Token_Manager_Interface {
 		$refresh_jwt = $this->refresh_token_repository->get_token( $user->ID );
 
 		// Generate a code verifier and store it in the database.
-		$code_verifier = $this->code_verifier->generate( $user->ID, $user->user_email );
+		$code_verifier = $this->code_verifier->generate( $user->user_email );
 		$this->code_verifier_repository->store_code_verifier( $user->ID, $code_verifier->get_code(), $code_verifier->get_created_at() );
 
 		$request_body    = [
@@ -276,6 +276,11 @@ class Token_Manager implements Token_Manager_Interface {
 		$payload = \base64_decode( $parts[1] );
 		$json    = \json_decode( $payload );
 		if ( $json === null || ! isset( $json->exp ) ) {
+			return true;
+		}
+
+		// Ensure exp is a valid numeric value.
+		if ( ! \is_numeric( $json->exp ) ) {
 			return true;
 		}
 

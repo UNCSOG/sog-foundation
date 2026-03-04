@@ -84,3 +84,9 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+	.sui-description {
+		pointer-events: auto !important;
+	}
+</style>

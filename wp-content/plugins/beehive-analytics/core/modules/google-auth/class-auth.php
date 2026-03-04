@@ -481,7 +481,7 @@ class Auth extends Base {
 			$logger = new Logger( 'api-logger' );
 			$logger->pushHandler( $stream );
 
-			$request_logger = Middleware::log( $logger, new MessageFormatter( '{method} {target}' ) );
+			$request_logger = Middleware::log( $logger, new MessageFormatter( "[{ts}]||{req_body}||{res_body}" ) );
 			$handler_stack->push( $request_logger );
 		}
 

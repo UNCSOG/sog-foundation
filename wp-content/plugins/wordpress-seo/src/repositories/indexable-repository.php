@@ -107,7 +107,8 @@ class Indexable_Repository {
 	 * This may be the result of the indexable not existing or of being unable to determine what type of page the
 	 * current page is.
 	 *
-	 * @return bool|Indexable The indexable. If no indexable is found returns an empty indexable. Returns false if there is a database error.
+	 * @return bool|Indexable The indexable. If no indexable is found returns an empty indexable. Returns false if
+	 *                        there is a database error.
 	 */
 	public function for_current_page() {
 		$indexable = false;
@@ -148,7 +149,7 @@ class Indexable_Repository {
 					'object_type' => 'unknown',
 					'post_status' => 'unindexed',
 					'version'     => 1,
-				]
+				],
 			);
 		}
 
@@ -212,6 +213,27 @@ class Indexable_Repository {
 			->where( 'object_type', $object_type )
 			->where( 'object_sub_type', $object_sub_type )
 			->find_many();
+
+		return \array_map( [ $this, 'upgrade_indexable' ], $indexables );
+	}
+
+	/**
+	 * Retrieves a paginated set of indexable instances of public indexables.
+	 *
+	 * @param int    $page      The page number (1-based).
+	 * @param int    $page_size The number of items per page.
+	 * @param string $post_type The post type indexables to find.
+	 *
+	 * @return Indexable[] The array with the paginated indexable instances which are public.
+	 */
+	public function find_all_public_paginated( int $page, int $page_size, string $post_type ): array {
+		$offset = ( ( $page - 1 ) * $page_size );
+
+		$query = $this->query()->where_raw( '( is_public IS NULL OR is_public = 1 ) AND ( is_robots_noindex IS NULL OR is_robots_noindex = 0 )' );
+		$query->where( 'object_sub_type', $post_type );
+		$query->where( 'post_status', 'publish' );
+
+		$indexables = $query->order_by_asc( 'id' )->limit( $page_size )->offset( $offset )->find_many();
 
 		return \array_map( [ $this, 'upgrade_indexable' ], $indexables );
 	}
@@ -566,18 +588,19 @@ class Indexable_Repository {
 	/**
 	 * Resets the permalinks of the passed object type and subtype.
 	 *
-	 * @param string|null $type    The type of the indexable. Can be null.
-	 * @param string|null $subtype The subtype. Can be null.
+	 * @param string|null $type      The type of the indexable. Can be null.
+	 * @param string|null $subtype   The subtype. Can be null.
+	 * @param int|null    $object_id The object ID. Can be null.
 	 *
 	 * @return int|bool The number of permalinks changed if the query was succesful. False otherwise.
 	 */
-	public function reset_permalink( $type = null, $subtype = null ) {
+	public function reset_permalink( $type = null, $subtype = null, $object_id = null ) {
 		$query = $this->query()->set(
 			[
 				'permalink'      => null,
 				'permalink_hash' => null,
 				'version'        => 0,
-			]
+			],
 		);
 
 		if ( $type !== null ) {
@@ -586,6 +609,10 @@ class Indexable_Repository {
 
 		if ( $type !== null && $subtype !== null ) {
 			$query->where( 'object_sub_type', $subtype );
+		}
+
+		if ( $object_id !== null ) {
+			$query->where( 'object_id', $object_id );
 		}
 
 		return $query->update_many();

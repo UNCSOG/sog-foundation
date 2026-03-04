@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\AI_HTTP_Request\Domain\Exceptions;
 
@@ -7,6 +8,6 @@ namespace Yoast\WP\SEO\AI_HTTP_Request\Domain\Exceptions;
  *
  * @phpcs:disable Yoast.NamingConventions.ObjectNameDepth.MaxExceeded
  */
-class Too_Many_Requests_Exception extends Remote_Request_Exception {
+class Too_Many_Requests_Exception extends Payment_Required_Exception {
 
 }

@@ -82,20 +82,6 @@ class Admin extends View {
 	}
 
 	/**
-	 * Render tutorials page content for the site.
-	 *
-	 * @since 3.3.6
-	 *
-	 * @return void
-	 */
-	public function tutorials_page() {
-		echo '<div id="beehive-tutorials-app"></div>';
-
-		Assets::instance()->enqueue_style( 'beehive-tutorials' );
-		Assets::instance()->enqueue_script( 'beehive-tutorials' );
-	}
-
-	/**
 	 * Get Beehive menu icon data.
 	 *
 	 * Get svg image instead of an image url.
@@ -255,7 +241,6 @@ class Admin extends View {
 				'plugins'  => is_multisite() ? network_admin_url( 'plugins.php' ) : admin_url( 'plugins.php' ),
 				'settings' => Helpers\Template::settings_url( 'permissions', $this->is_network() ),
 				'accounts' => Helpers\Template::accounts_url( 'google', $this->is_network() ),
-				'bf'       => 'https://wpmudev.com/black-friday/?coupon=BFP-2021&utm_source=beehive_' . ( beehive_analytics()->is_pro() ? 'pro' : 'free' ) . '&utm_medium=referral&utm_campaign=bf2021',
 			);
 
 			// Flags.

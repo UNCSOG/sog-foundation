@@ -139,6 +139,7 @@ class Columns implements Enqueueables, Admin\ScreenOptions, Renderable, Renderab
             return $this->menu->render(
                     $this->list_screen->get_key(),
                     (string)$this->list_screen->get_table_url(),
+                    $this->list_screen->get_label(),
                     true
                 ) . $modal->render();
         }
@@ -169,7 +170,11 @@ class Columns implements Enqueueables, Admin\ScreenOptions, Renderable, Renderab
         ); ?>">
 			<div class="ac-admin__header">
 
-                <?= $this->menu->render($this->list_screen->get_key(), (string)$this->list_screen->get_table_url()) ?>
+                <?= $this->menu->render(
+                    $this->list_screen->get_key(),
+                    (string)$this->list_screen->get_table_url(),
+                    $this->list_screen->get_label()
+                ) ?>
 
                 <?php
                 do_action('ac/settings/after_title', $this->list_screen); ?>
@@ -291,7 +296,7 @@ class Columns implements Enqueueables, Admin\ScreenOptions, Renderable, Renderab
                             'show_actions'   => ! $this->list_screen->is_read_only(),
                             'show_clear_all' => apply_filters('ac/enable_clear_columns_button', false),
                         ]);
-
+     
                         do_action('ac/settings/before_columns', $this->list_screen);
 
                         echo $columns->set_template('admin/edit-columns');

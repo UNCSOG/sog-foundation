@@ -31,6 +31,7 @@ class WPSEO_Options {
 		'wpseo_ms'            => 'WPSEO_Option_MS',
 		'wpseo_taxonomy_meta' => 'WPSEO_Taxonomy_Meta',
 		'wpseo_llmstxt'       => 'WPSEO_Option_Llmstxt',
+		'wpseo_tracking_only' => 'WPSEO_Option_Tracking_Only',
 	];
 
 	/**
@@ -560,9 +561,7 @@ class WPSEO_Options {
 	protected static function is_multisite() {
 		static $is_multisite;
 
-		if ( $is_multisite === null ) {
-			$is_multisite = is_multisite();
-		}
+		$is_multisite ??= is_multisite();
 
 		return $is_multisite;
 	}

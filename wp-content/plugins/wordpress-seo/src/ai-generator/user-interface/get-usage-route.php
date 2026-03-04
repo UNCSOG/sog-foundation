@@ -1,4 +1,5 @@
 <?php
+
 // phpcs:disable Yoast.NamingConventions.NamespaceName.TooLong -- Needed in the folder structure.
 namespace Yoast\WP\SEO\AI_Generator\User_Interface;
 
@@ -7,6 +8,7 @@ use WPSEO_Addon_Manager;
 use Yoast\WP\SEO\AI_Authorization\Application\Token_Manager;
 use Yoast\WP\SEO\AI_HTTP_Request\Application\Request_Handler;
 use Yoast\WP\SEO\AI_HTTP_Request\Domain\Exceptions\Remote_Request_Exception;
+use Yoast\WP\SEO\AI_HTTP_Request\Domain\Exceptions\Too_Many_Requests_Exception;
 use Yoast\WP\SEO\AI_HTTP_Request\Domain\Exceptions\WP_Request_Exception;
 use Yoast\WP\SEO\AI_HTTP_Request\Domain\Request;
 use Yoast\WP\SEO\Conditionals\AI_Conditional;
@@ -100,19 +102,19 @@ class Get_Usage_Route implements Route_Interface {
 				],
 				'callback'            => [ $this, 'get_usage' ],
 				'permission_callback' => [ $this, 'check_permissions' ],
-			]
+			],
 		);
 	}
 
 	/**
 	 * Runs the callback that gets the monthly usage of the user.
 	 *
-	 * @param WP_REST_Response $response The response object containing the parameters for the request.
+	 * @param WP_REST_Request $request The request object.
 	 *
 	 * @return WP_REST_Response The response of the callback action.
 	 */
-	public function get_usage( $response ): WP_REST_Response {
-		$is_woo_product_entity = $response->get_param( 'is_woo_product_entity' );
+	public function get_usage( $request ): WP_REST_Response {
+		$is_woo_product_entity = $request->get_param( 'is_woo_product_entity' );
 		$user                  = \wp_get_current_user();
 		try {
 			$token           = $this->token_manager->get_or_request_access_token( $user );
@@ -122,16 +124,18 @@ class Get_Usage_Route implements Route_Interface {
 			$action_path     = $this->get_action_path( $is_woo_product_entity );
 			$response        = $this->request_handler->handle( new Request( $action_path, [], $request_headers, false ) );
 			$data            = \json_decode( $response->get_body() );
-
-		}  catch ( Remote_Request_Exception | WP_Request_Exception $e ) {
+		} catch ( Remote_Request_Exception | WP_Request_Exception $e ) {
 			$message = [
 				'errorMessage'    => $e->getMessage(),
 				'errorIdentifier' => $e->get_error_identifier(),
 				'errorCode'       => $e->getCode(),
 			];
+			if ( $e instanceof Too_Many_Requests_Exception ) {
+				$message['missingLicenses'] = $e->get_missing_licenses();
+			}
 			return new WP_REST_Response(
 				$message,
-				$e->getCode()
+				$e->getCode(),
 			);
 		}
 

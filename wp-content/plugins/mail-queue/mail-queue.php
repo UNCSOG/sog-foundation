@@ -4,7 +4,7 @@
  * Plugin Name:       Mail Queue
  * Plugin URI:        https://www.webdesign-muenchen.de/wordpress-plugin-mail-queue/
  * Description:       Take Control and improve Security of wp_mail(). Queue and log outgoing emails, and get alerted, if your website wants to send more emails than usual.
- * Version:           1.4.5
+ * Version:           1.4.6
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            WDM
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) { exit; }
 PLUGIN VERSION
 **************************************************************** */
 
-$wdm_wpma_version = '1.4.5';
+$wdm_wpma_version = '1.4.6';
 
 
 
@@ -65,15 +65,22 @@ Overwrite wp_mail() if Plugin enabled and no Cron is running
 **************************************************************** */
 $wdm_wpma_mailid = 0;
 $wdm_wpma_options = wdm_wpma_get_settings(); // Get Settings
+$wdm_wpma_pre_wp_mail_priority = 99999;
 
 if ($wdm_wpma_options['enabled'] == '1' && wp_doing_cron() == false) {
-    add_filter( 'pre_wp_mail' , 'wdm_wpma_prewpmail', 10, 2);
+    // High priority: run late in the game to react to previous filters
+    add_filter('pre_wp_mail', 'wdm_wpma_prewpmail', $wdm_wpma_pre_wp_mail_priority, 2);
 }
 
 // pre WP Mail Filter
-function wdm_wpma_prewpmail($null, $atts) {
+function wdm_wpma_prewpmail($return, $atts) {
 
     global $wpdb, $wdm_wpma_options;
+
+    if (!is_null($return)) {
+        // Another pre_wp_mail filter has already returned a value, so the mail is not added to the queue
+        return $return;
+    }
 
     // Mail Variables
     $to          = $atts['to'];
@@ -219,7 +226,8 @@ CRON
 **************************************************************** */
 function wdm_wpma_search_mail_from_queue() {
    
-    global $wpdb,$wdm_wpma_options,$wdm_wpma_mailid;
+    global $wpdb,$wdm_wpma_options, $wdm_wpma_mailid, $wdm_wpma_pre_wp_mail_priority;
+
     if ($wdm_wpma_options['enabled'] != '1') { return; }
     $tableName = $wpdb->prefix.$wdm_wpma_options['tableName'];
 
@@ -284,9 +292,9 @@ function wdm_wpma_search_mail_from_queue() {
                 if ($item['attachments'] && $item['attachments'] != '') { $attachments = maybe_unserialize($item['attachments']); } else { $attachments = ''; }
                 $wdm_wpma_mailid = $item['id'];  
 
-                remove_filter('pre_wp_mail','wdm_wpma_prewpmail',10);
+                remove_filter('pre_wp_mail', 'wdm_wpma_prewpmail', $wdm_wpma_pre_wp_mail_priority);
                 $sendstatus = wp_mail($to,$item['subject'],$item['message'],$headers,$attachments); // Finally sends the email for real
-                add_filter( 'pre_wp_mail' , 'wdm_wpma_prewpmail', 10, 2);
+                add_filter('pre_wp_mail', 'wdm_wpma_prewpmail', $wdm_wpma_pre_wp_mail_priority, 2);
                 if ($sendstatus) {
                     $wpdb->update($tableName,array('timestamp'=>current_time('mysql',false),'status'=>'sent'),array('id'=>$item['id']),'%s','%d');
                 }

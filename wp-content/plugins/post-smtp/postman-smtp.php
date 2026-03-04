@@ -4,12 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 /*
  * Plugin Name: Post SMTP
- * Plugin URI: https://wordpress.org/plugins/post-smtp/
+ * Plugin URI: https://postmansmtp.com/
  * Description: Email not reliable? Post SMTP is the first and only WordPress SMTP plugin to implement OAuth 2.0 for Gmail, Hotmail and Yahoo Mail. Setup is a breeze with the Configuration Wizard and integrated Port Tester. Enjoy worry-free delivery even if your password changes!
- * Version: 3.3.0
+ * Version: 3.8.0
  * Author: Post SMTP
  * Text Domain: post-smtp
- * Author URI: https://postmansmtp.com
+ * Author URI: https://profiles.wordpress.org/saadiqbal/
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -48,7 +48,7 @@ if ( ! function_exists( 'ps_fs' ) ) {
                 'type'                => 'plugin',
                 'public_key'          => 'pk_28fcefa3d0ae86f8cdf6b7f71c0cc',
                 'is_premium'          => false,
-                'has_addons'          => false,
+                'has_addons'          => true,
 				'bundle_id' 		  => '10910',
 				'bundle_public_key'   => 'pk_c5110ef04ba30cd57dd970a269a1a',
                 'has_paid_plans'      => false,
@@ -102,7 +102,7 @@ ps_fs()->add_filter( 'plugin_icon' , 'ps_fs_custom_icon' );
 define( 'POST_SMTP_BASE', __FILE__ );
 define( 'POST_SMTP_PATH', __DIR__ );
 define( 'POST_SMTP_URL', plugins_url('', POST_SMTP_BASE ) );
-define( 'POST_SMTP_VER', '3.3.0' );
+define( 'POST_SMTP_VER', '3.8.0' );
 define( 'POST_SMTP_DB_VERSION', '1.0.1' );
 define( 'POST_SMTP_ASSETS', plugin_dir_url( __FILE__ ) . 'assets/' );
 
@@ -202,6 +202,8 @@ function post_smtp_general_scripts() {
     wp_localize_script( 'post-smtp-localize', 'post_smtp_localize', $localize );
     wp_enqueue_script( 'post-smtp-localize' );
     wp_enqueue_script( 'post-smtp-hooks', POST_SMTP_URL . '/script/post-smtp-hooks.js', [], false );
+	// Add admin bar notification for Log Only or No Action delivery modes (only one message at a time)
+	add_action( 'admin_bar_menu', array( 'PostmanViewController', 'addDeliveryModeAdminBarNotice' ), 100 );
 }
 add_action( 'admin_enqueue_scripts', 'post_smtp_general_scripts', 8 );
 
@@ -223,3 +225,19 @@ function post_setupPostman() {
 	$kevinCostner = new Postman( __FILE__, POST_SMTP_VER );
 	do_action( 'post_smtp_init');
 }
+
+/**
+ * Hide the "Addons" submenu in the Freemius-powered menu.
+ *
+ * @param bool   $is_visible Current visibility state.
+ * @param string $id         Submenu ID.
+ *
+ * @return bool Updated visibility state.
+ */
+function ps_fs_submenu_addon_visibility_handler( $is_visible, $id ) {
+    if ( 'addons' === $id ) {
+        $is_visible = false;
+    }
+    return $is_visible;
+}
+ps_fs()->add_filter( 'is_submenu_visible', 'ps_fs_submenu_addon_visibility_handler', 10, 2 );

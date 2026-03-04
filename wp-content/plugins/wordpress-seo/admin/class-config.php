@@ -8,6 +8,7 @@
 use Yoast\WP\SEO\Actions\Alert_Dismissal_Action;
 use Yoast\WP\SEO\General\User_Interface\General_Page_Integration;
 use Yoast\WP\SEO\Integrations\Academy_Integration;
+use Yoast\WP\SEO\Integrations\Admin\Redirects_Page_Integration;
 use Yoast\WP\SEO\Integrations\Settings_Integration;
 use Yoast\WP\SEO\Integrations\Support_Integration;
 use Yoast\WP\SEO\Plans\User_Interface\Plans_Page_Integration;
@@ -60,8 +61,9 @@ class WPSEO_Admin_Pages {
 				Academy_Integration::PAGE,
 				Support_Integration::PAGE,
 				Plans_Page_Integration::PAGE,
+				Redirects_Page_Integration::PAGE,
 			],
-			true
+			true,
 		);
 		$new_dashboard_page = ( $page === General_Page_Integration::PAGE && ! is_network_admin() );
 		if ( $page_exceptions || $new_dashboard_page ) {
@@ -124,7 +126,6 @@ class WPSEO_Admin_Pages {
 		}
 
 		$this->asset_manager->localize_script( 'settings', 'wpseoScriptData', $script_data );
-		$this->asset_manager->enqueue_user_language_script();
 	}
 
 	/**

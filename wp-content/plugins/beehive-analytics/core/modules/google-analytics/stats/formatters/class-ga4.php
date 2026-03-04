@@ -233,10 +233,12 @@ class GA4 extends Formatter {
 	 */
 	protected function get_period_value( $data ) {
 		// Get the dimension type.
-		if ( isset( $data['dimensions']['month'] ) ) {
-			return $data['dimensions']['month'];
-		} elseif ( isset( $data['dimensions']['week'] ) ) {
-			return $data['dimensions']['week'];
+		if ( isset( $data['dimensions']['year'] ) ) {
+			return $data['dimensions']['year'];
+		} elseif ( isset( $data['dimensions']['yearMonth'] ) ) {
+			return $data['dimensions']['yearMonth'];
+		} elseif ( isset( $data['dimensions']['yearWeek'] ) ) {
+			return $data['dimensions']['yearWeek'];
 		} elseif ( isset( $data['dimensions']['dateHour'] ) ) {
 			return $data['dimensions']['dateHour'];
 		} elseif ( isset( $data['dimensions']['date'] ) ) {
@@ -899,15 +901,15 @@ class GA4 extends Formatter {
 				break;
 
 			// Year and month.
-			case 'month':
+			case 'yearMonth':
 				// Create a DateTime object from the Ym format.
-				$date = \DateTime::createFromFormat( 'm', $value );
-				// Use the d/m/Y format.
+				$date = \DateTime::createFromFormat( 'Ym', $value );
+				// Use the M format.
 				$value = $date->format( 'M' );
 				break;
 
 			// Year and week.
-			case 'week':
+			case 'yearWeek':
 				// Get year from the string.
 				$year = (int) substr( $value, 0, 4 );
 				// Get week number from the string.
@@ -933,9 +935,9 @@ class GA4 extends Formatter {
 
 			// Hour.
 			case 'dateHour':
-				// Create a DateTime object from the Ym format.
+				// Create a DateTime object from the YmdH format.
 				$date = \DateTime::createFromFormat( 'YmdH', $value );
-				// Use the d/m/Y format.
+				// Use the ga, D, M j, Y format.
 				$value = $date->format( 'ga, D, M j, Y' );
 				break;
 
@@ -943,7 +945,7 @@ class GA4 extends Formatter {
 			case 'date':
 				// Create a DateTime object from the Ymd format.
 				$date = \DateTime::createFromFormat( 'Ymd', $value );
-				// Use the d/m/Y format.
+				// Use the M j format.
 				$value = $date->format( 'M j' );
 				break;
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WSAL\WP_Sensors;
 
 use WSAL\Helpers\User_Helper;
+use WSAL\Helpers\Settings_Helper;
 use WSAL\Controllers\Alert_Manager;
 use WSAL\Helpers\DateTime_Formatter_Helper;
 
@@ -52,6 +53,8 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_System_Sensor' ) ) {
 	 * 6018 Modified the list of keywords for comments blacklisting
 	 * 6061 Email was sent
 	 * 6064 Email was sent
+	 * 6079 WordPress core update available
+	 * 6080 WordPress core translation files updated
 	 *
 	 * @package    wsal
 	 * @subpackage sensors
@@ -134,6 +137,10 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_System_Sensor' ) ) {
 			} else {
 				self::$wp_core_version = \get_bloginfo( 'version' );
 			}
+
+			\add_action( 'upgrader_process_complete', array( __CLASS__, 'on_core_translation_update' ), 10, 2 );
+
+			\add_action( 'set_site_transient', array( __CLASS__, 'on_available_wp_core_update' ), 10, 3 );
 		}
 
 		/**
@@ -980,16 +987,20 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_System_Sensor' ) ) {
 			}
 
 			// Permalinks changed.
-			if ( $is_permalink_page && ! empty( $post_array['permalink_structure'] ) && isset( $post_array['_wpnonce'] )
+			if ( $is_permalink_page && isset( $post_array['_wpnonce'] )
 			&& wp_verify_nonce( $post_array['_wpnonce'], 'update-permalink' ) ) {
 				$old = get_option( 'permalink_structure' );
-				$new = trim( \sanitize_text_field( \wp_unslash( $post_array['permalink_structure'] ) ) );
+				$new = isset( $post_array['permalink_structure'] ) ? trim( \sanitize_text_field( \wp_unslash( $post_array['permalink_structure'] ) ) ) : '';
 				if ( $old !== $new ) {
+					$plain_value = '/%p=123%/';
+					$old_pattern = '' === $old ? $plain_value : $old;
+					$new_pattern = '' === $new ? $plain_value : $new;
+
 					Alert_Manager::trigger_event(
 						6005,
 						array(
-							'OldPattern'    => $old,
-							'NewPattern'    => $new,
+							'OldPattern'    => $old_pattern,
+							'NewPattern'    => $new_pattern,
 							'CurrentUserID' => User_Helper::get_user()->ID,
 						)
 					);
@@ -1333,5 +1344,122 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_System_Sensor' ) ) {
 				)
 			);
 		}
+
+		/**
+		 * Notify when a WordPress core translation is updated.
+		 *
+		 * @param \WP_Upgrader|\Language_Pack_Upgrader $upgrader \WP_Upgrader instance. In other contexts this might be a Theme_Upgrader, Plugin_Upgrader, Core_Upgrade, or Language_Pack_Upgrader instance.
+		 * @param array                                $options  Array of bulk item update data.
+		 *
+		 * @since 5.5.0
+		 */
+		public static function on_core_translation_update( $upgrader, $options ) {
+
+			if ( ! isset( $options['type'] ) || ! isset( $options['action'] ) ) {
+				return;
+			}
+
+			if ( 'translation' !== $options['type'] || 'update' !== $options['action'] ) {
+				return;
+			}
+
+			$translations = $options['translations'];
+
+			foreach ( $translations as $translation ) {
+
+				// Only proceed if the translation is for the core.
+				if ( 'core' !== $translation['type'] ) {
+					continue;
+				}
+
+				/**
+				 * Example of $translation:
+				 * [0] => Array
+				 * (
+				 * [language] => it_IT
+				 * [type] => core
+				 * [slug] => default
+				 * [version] => 6.8.2
+				 * )
+				 */
+
+				$name = '';
+
+				if ( method_exists( $upgrader, 'get_name_for_update' ) ) {
+
+					// Name - e.g. "WordPress".
+					$name = $upgrader->get_name_for_update( (object) $translation );
+				}
+
+				// If name is empty, let's use the slug as a fallback.
+				if ( empty( $name ) && ! empty( $translation['slug'] ) ) {
+					$name = $translation['slug'];
+				}
+			}
+
+			Alert_Manager::trigger_event(
+				6080,
+				array(
+					'language' => $translation['language'],
+				)
+			);
+		}
+
+		/**
+		 * Notify when a theme update is available.
+		 *
+		 * @param string $transient - The name of the site transient.
+		 * @param mixed  $value - Site transient value.
+		 * @param int    $expiration - Time until expiration in seconds.
+		 *
+		 * @since 5.6.0
+		 */
+		public static function on_available_wp_core_update( $transient, $value, $expiration ) {
+
+			// If this is not the update_plugins transient, return early.
+			if ( 'update_core' !== $transient ) {
+				return;
+			}
+
+			// If there aren't updates, return early.
+			if (
+				! is_array( $value->updates )
+				|| empty( $value->updates[0] )
+				) {
+				return;
+			}
+
+			$new_available_version = $value->updates[0]->version ?? null;
+			$current_version       = \wp_get_wp_version();
+
+			$last_notified_version = Settings_Helper::get_option_value( 'notified_wp_core_update', array() );
+
+			if ( $new_available_version && version_compare( $current_version, $new_available_version, '<' ) ) {
+
+				// Check if this version was already notified, and in that case, skip the event for this plugin.
+				if ( $last_notified_version === $new_available_version ) {
+					return;
+				}
+
+				$update_admin_screen = \esc_url( \network_admin_url( 'update-core.php' ) );
+
+				$server_address = isset( $_SERVER['SERVER_ADDR'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : '127.0.0.1';
+
+				Alert_Manager::trigger_event(
+					6079,
+					array(
+						'CurrentUserID'    => 0,
+						'ClientIP'         => $server_address,
+						'CurrentWPVersion' => $current_version,
+						'NewWPVersion'     => $new_available_version,
+						'UpdateAdminUrl'   => $update_admin_screen,
+					)
+				);
+
+				// Mark this core update as notified, use the current new version as reference.
+				Settings_Helper::set_option_value( 'notified_wp_core_update', $new_available_version );
+			}
+		}
 	}
+
 }

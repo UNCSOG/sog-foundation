@@ -23,13 +23,16 @@ use Yoast\WP\SEO\Helpers\Language_Helper;
 use Yoast\WP\SEO\Helpers\Options_Helper;
 use Yoast\WP\SEO\Helpers\Post_Type_Helper;
 use Yoast\WP\SEO\Helpers\Product_Helper;
+use Yoast\WP\SEO\Helpers\Route_Helper;
 use Yoast\WP\SEO\Helpers\Schema\Article_Helper;
 use Yoast\WP\SEO\Helpers\Taxonomy_Helper;
 use Yoast\WP\SEO\Helpers\User_Helper;
 use Yoast\WP\SEO\Helpers\Woocommerce_Helper;
 use Yoast\WP\SEO\Llms_Txt\Application\Configuration\Llms_Txt_Configuration;
+use Yoast\WP\SEO\Llms_Txt\Application\Health_Check\File_Runner;
 use Yoast\WP\SEO\Llms_Txt\Infrastructure\Content\Manual_Post_Collection;
 use Yoast\WP\SEO\Promotions\Application\Promotion_Manager;
+use Yoast\WP\SEO\Schema\Application\Configuration\Schema_Configuration;
 
 /**
  * Class Settings_Integration.
@@ -198,11 +201,32 @@ class Settings_Integration implements Integration_Interface {
 	protected $llms_txt_configuration;
 
 	/**
+	 * Holds the Schema_Configuration instance.
+	 *
+	 * @var Schema_Configuration
+	 */
+	protected $schema_configuration;
+
+	/**
 	 * The manual post collection.
 	 *
 	 * @var Manual_Post_Collection
 	 */
 	private $manual_post_collection;
+
+	/**
+	 * Runs the health check.
+	 *
+	 * @var File_Runner
+	 */
+	private $runner;
+
+	/**
+	 * Holds the Route_Helper.
+	 *
+	 * @var Route_Helper
+	 */
+	private $route_helper;
 
 	/**
 	 * Constructs Settings_Integration.
@@ -222,6 +246,9 @@ class Settings_Integration implements Integration_Interface {
 	 * @param Content_Type_Visibility_Dismiss_Notifications $content_type_visibility The Content_Type_Visibility_Dismiss_Notifications instance.
 	 * @param Llms_Txt_Configuration                        $llms_txt_configuration  The Llms_Txt_Configuration instance.
 	 * @param Manual_Post_Collection                        $manual_post_collection  The manual post collection.
+	 * @param File_Runner                                   $runner                  The file runner.
+	 * @param Route_Helper                                  $route_helper            The Route_Helper.
+	 * @param Schema_Configuration                          $schema_configuration    The Schema_Configuration.
 	 */
 	public function __construct(
 		WPSEO_Admin_Asset_Manager $asset_manager,
@@ -238,7 +265,10 @@ class Settings_Integration implements Integration_Interface {
 		Options_Helper $options,
 		Content_Type_Visibility_Dismiss_Notifications $content_type_visibility,
 		Llms_Txt_Configuration $llms_txt_configuration,
-		Manual_Post_Collection $manual_post_collection
+		Manual_Post_Collection $manual_post_collection,
+		File_Runner $runner,
+		Route_Helper $route_helper,
+		Schema_Configuration $schema_configuration
 	) {
 		$this->asset_manager           = $asset_manager;
 		$this->replace_vars            = $replace_vars;
@@ -255,6 +285,9 @@ class Settings_Integration implements Integration_Interface {
 		$this->content_type_visibility = $content_type_visibility;
 		$this->llms_txt_configuration  = $llms_txt_configuration;
 		$this->manual_post_collection  = $manual_post_collection;
+		$this->runner                  = $runner;
+		$this->route_helper            = $route_helper;
+		$this->schema_configuration    = $schema_configuration;
 	}
 
 	/**
@@ -349,7 +382,7 @@ class Settings_Integration implements Integration_Interface {
 					self::PAGE,
 					[ $this, 'display_page' ],
 				],
-			]
+			],
 		);
 
 		return $pages;
@@ -365,17 +398,24 @@ class Settings_Integration implements Integration_Interface {
 	 * @return array The pages.
 	 */
 	public function add_settings_saved_page( $pages ) {
+		$runner = $this->runner;
 		\add_submenu_page(
 			'',
 			'',
 			'',
 			'wpseo_manage_options',
 			self::PAGE . '_saved',
-			static function () {
+			static function () use ( $runner ) {
 				// Add success indication to HTML response.
 				$success = empty( \get_settings_errors() ) ? 'true' : 'false';
 				echo \esc_html( "{{ yoast-success: $success }}" );
-			}
+
+				$runner->run();
+				if ( ! $runner->is_successful() ) {
+					$failure_reason = $runner->get_generation_failure_reason();
+					echo \esc_html( "{{ yoast-llms-txt-generation-failure: $failure_reason }}" );
+				}
+			},
 		);
 
 		return $pages;
@@ -401,7 +441,7 @@ class Settings_Integration implements Integration_Interface {
 		\wp_enqueue_media();
 		$this->asset_manager->enqueue_script( 'new-settings' );
 		$this->asset_manager->enqueue_style( 'new-settings' );
-		if ( \YoastSEO()->classes->get( Promotion_Manager::class )->is( 'black-friday-2024-promotion' ) ) {
+		if ( \YoastSEO()->classes->get( Promotion_Manager::class )->is( 'black-friday-promotion' ) ) {
 			$this->asset_manager->enqueue_style( 'black-friday-banner' );
 		}
 		$this->asset_manager->localize_script( 'new-settings', 'wpseoScriptData', $this->get_script_data() );
@@ -471,6 +511,7 @@ class Settings_Integration implements Integration_Interface {
 			'currentPromotions'              => \YoastSEO()->classes->get( Promotion_Manager::class )->get_current_promotions(),
 			'llmsTxt'                        => $this->llms_txt_configuration->get_configuration(),
 			'initialLlmTxtPages'             => $this->get_site_llms_txt_pages( $settings ),
+			'schemaFrameworkConfiguration'   => $this->schema_configuration->get_configuration(),
 		];
 	}
 
@@ -821,7 +862,7 @@ class Settings_Integration implements Integration_Interface {
 			$settings['wpseo_titles']['breadcrumbs-sep'] = \html_entity_decode(
 				$settings['wpseo_titles']['breadcrumbs-sep'],
 				( \ENT_NOQUOTES | \ENT_HTML5 ),
-				'UTF-8'
+				'UTF-8',
 			);
 		}
 
@@ -831,7 +872,7 @@ class Settings_Integration implements Integration_Interface {
 		$settings['blogdescription'] = \html_entity_decode(
 			$settings['blogdescription'],
 			( \ENT_NOQUOTES | \ENT_HTML5 ),
-			'UTF-8'
+			'UTF-8',
 		);
 
 		if ( isset( $settings['wpseo_llmstxt']['other_included_pages'] ) ) {
@@ -953,7 +994,7 @@ class Settings_Integration implements Integration_Interface {
 		foreach ( $post_types as $post_type ) {
 			$transformed[ $post_type->name ] = [
 				'name'                 => $post_type->name,
-				'route'                => $this->get_route( $post_type->name, $post_type->rewrite, $post_type->rest_base ),
+				'route'                => $this->route_helper->get_route( $post_type->name, $post_type->rewrite, $post_type->rest_base ),
 				'label'                => $post_type->label,
 				'singularLabel'        => $post_type->labels->singular_name,
 				'hasArchive'           => $this->post_type_helper->has_archive( $post_type ),
@@ -1006,7 +1047,7 @@ class Settings_Integration implements Integration_Interface {
 		foreach ( $taxonomies as $taxonomy ) {
 			$transformed[ $taxonomy->name ] = [
 				'name'          => $taxonomy->name,
-				'route'         => $this->get_route( $taxonomy->name, $taxonomy->rewrite, $taxonomy->rest_base ),
+				'route'         => $this->route_helper->get_route( $taxonomy->name, $taxonomy->rewrite, $taxonomy->rest_base ),
 				'label'         => $taxonomy->label,
 				'showUi'        => $taxonomy->show_ui,
 				'singularLabel' => $taxonomy->labels->singular_name,
@@ -1014,7 +1055,7 @@ class Settings_Integration implements Integration_Interface {
 					$taxonomy->object_type,
 					static function ( $object_type ) use ( $post_type_names ) {
 						return \in_array( $object_type, $post_type_names, true );
-					}
+					},
 				),
 				'isNew'         => \in_array( $taxonomy->name, $new_taxonomies, true ),
 			];
@@ -1024,35 +1065,10 @@ class Settings_Integration implements Integration_Interface {
 			$transformed,
 			static function ( $a, $b ) {
 				return \strnatcmp( $a['label'], $b['label'] );
-			}
+			},
 		);
 
 		return $transformed;
-	}
-
-	/**
-	 * Gets the route from a name, rewrite and rest_base.
-	 *
-	 * @param string $name      The name.
-	 * @param array  $rewrite   The rewrite data.
-	 * @param string $rest_base The rest base.
-	 *
-	 * @return string The route.
-	 */
-	protected function get_route( $name, $rewrite, $rest_base ) {
-		$route = $name;
-		if ( isset( $rewrite['slug'] ) ) {
-			$route = $rewrite['slug'];
-		}
-		if ( ! empty( $rest_base ) ) {
-			$route = $rest_base;
-		}
-		// Always strip leading slashes.
-		while ( \substr( $route, 0, 1 ) === '/' ) {
-			$route = \substr( $route, 1 );
-		}
-
-		return $route;
 	}
 
 	/**

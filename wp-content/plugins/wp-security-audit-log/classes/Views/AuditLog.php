@@ -96,6 +96,7 @@ class WSAL_Views_AuditLog extends WSAL_AbstractView {
 		add_action( 'admin_init', array( $this, 'handle_form_submission' ) );
 
 		add_action( 'wp_ajax_wsal_export_csv_results', array( '\WSAL\Writers\CSV_Writer', 'write_csv_ajax' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_plugin_install_script' ) );
 
 		CSV_Writer::init();
 
@@ -204,8 +205,6 @@ class WSAL_Views_AuditLog extends WSAL_AbstractView {
 			endif;
 		}
 
-		// phpcs:disable
-		// phpcs:enable
 
 		// Check anonymous mode.
 		if ( 'anonymous' === \WSAL\Helpers\Settings_Helper::get_option_value( 'freemius_state', 'anonymous' ) ) { // If user manually opt-out then don't show the notice.
@@ -235,8 +234,6 @@ class WSAL_Views_AuditLog extends WSAL_AbstractView {
 		// Display add-on available notice.
 		$screen = get_current_screen();
 
-		// phpcs:disable
-		// phpcs:enable
 	}
 
 	/**
@@ -511,8 +508,6 @@ class WSAL_Views_AuditLog extends WSAL_AbstractView {
 
 		$wsal_db = Connection::get_connection();
 
-		// phpcs:disable
-		// phpcs:enable
 
 		$alert_meta = Occurrences_Entity::get_meta_array( (int) $get_array['occurrence'], array(), $wsal_db );
 
@@ -564,8 +559,6 @@ class WSAL_Views_AuditLog extends WSAL_AbstractView {
 		die( json_encode( array_slice( $grp1 + $grp2, 0, 7 ) ) ); // phpcs:ignore
 	}
 
-	// phpcs:disable
-	// phpcs:enable
 
 	/**
 	 * Ajax callback to download failed login log.
@@ -933,6 +926,21 @@ class WSAL_Views_AuditLog extends WSAL_AbstractView {
 		wp_send_json_success();
 	}
 
-	// phpcs:disable
-	// phpcs:enable
+
+	/**
+	 * If the plugin-install script from core is not enqueued, add it
+	 *
+	 * ! This script is from the WP core and is necessary to handle the responsive resize of the thickbox modal.
+	 * ! The modal is used in events associated with plugins on the 'View plugin information' link.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 *
+	 * @since 5.5.0
+	 */
+	public static function add_plugin_install_script( $hook_suffix ) {
+		// Verify that script is not enqueued and if we're in the main Event List View.
+		if ( ! wp_script_is( 'plugin-install', 'enqueued' ) && 'toplevel_page_wsal-auditlog' === $hook_suffix ) {
+			wp_enqueue_script( 'plugin-install' );
+		}
+	}
 }

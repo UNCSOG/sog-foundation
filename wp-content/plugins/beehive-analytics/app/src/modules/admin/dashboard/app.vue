@@ -19,9 +19,7 @@
 			</template>
 		</sui-header>
 
-		<summary-widget :stats="stats.summary" :loading="loading"/>
-
-		<tutorial-slider/>
+		<summary-widget :stats="stats.summary" :loading="loading" />
 
 		<div class="sui-row">
 			<div class="sui-col-lg-6">
@@ -66,7 +64,6 @@ import StatisticsWidget from './widgets/statistics-widget'
 import RefreshButton from '@/components/elements/refresh-button'
 import SuiCalendarRange from '@/components/sui/sui-calendar-range'
 import WelcomeModal from '@/components/elements/modals/welcome-modal'
-import TutorialSlider from '@/components/elements/tutorial-slider.vue'
 
 export default {
 	name: 'App',
@@ -84,7 +81,6 @@ export default {
 		RefreshButton,
 		StatisticsWidget,
 		SuiCalendarRange,
-		TutorialSlider,
 	},
 
 	data() {

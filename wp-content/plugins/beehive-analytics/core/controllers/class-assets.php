@@ -230,10 +230,6 @@ class Assets extends Base {
 					'src'  => 'accounts.min.js',
 					'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common', 'clipboard' ),
 				),
-				'beehive-tutorials'  => array(
-					'src'  => 'tutorials.min.js',
-					'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common' ),
-				),
 				'beehive-common'     => array(
 					'src'  => 'chunk-common.min.js',
 					'deps' => array( 'jquery' ),
@@ -281,9 +277,6 @@ class Assets extends Base {
 				),
 				'beehive-accounts'  => array(
 					'src' => 'accounts.min.css',
-				),
-				'beehive-tutorials' => array(
-					'src' => 'tutorials.min.css',
 				),
 			);
 		} else {
