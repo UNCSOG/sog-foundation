@@ -18,6 +18,8 @@ class Admins
             'chancef',
             'leo1',
             'cisarano',
+            'haciali',
+            'vanton'
         ];
     }
 }
