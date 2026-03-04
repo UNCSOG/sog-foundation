@@ -49,7 +49,7 @@ class Template_Loader extends Gamajo_Template_Loader {
    *
    * @var string
    */
-  protected $plugin_directory = UTILITY_BAR_PLUGIN_DIR;
+  protected $plugin_directory = SOG_UTILITY_BAR_PLUGIN_DIR;
 
   /**
    * Directory name where templates are found in this plugin.

@@ -1,11 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&family=Source+Serif+4:ital,opsz@0,8..60;1,8..60&display=swap');
 
-body.alert-published .wp-site-blocks{
-      padding-top: 0;
+body.alert-published {
+  .wp-site-blocks{
+    padding-top: 0;
+  }
 }
 
-.site-banner{
-      margin-block-start: 0;
-      margin-top: 0;
+.site-banner {
+  margin-block-start: 0;
+  margin-top: 0;
 }
 
+// Menu alignment: right, left, center
+[data-menu-align="right"] {
+  #utiltity-bar-nav {
+    justify-content: flex-end !important;
+    flex-direction: row !important; // row-reverse !important;
+  }
+}
+
+[data-menu-align="left"] {
+  #utiltity-bar-nav {
+    justify-content: flex-start !important;
+    flex-direction: row !important;
+  }
+}
+
+[data-menu-align="center"] {
+  #utiltity-bar-nav {
+    justify-content: center !important;
+    flex-direction: row !important;
+  }
+}
+
+// Hide the mobile-only title by default, and show it only on small screens
+// .mobile-only.unc-utility-bar-short-title {
+//   display: none;
+// }
+
+// Small screens and down
+// @media (max-width: 600px) {
+@media only screen and (max-width: 40em) {
+  .mobile-only.unc-utility-bar-short-title {
+    display: block !important;
+  }
+
+  .desktop-only.unc-utility-bar-title {
+    display: none !important;
+  }
+}
+
+// Medium screens and up
+@media only screen and (min-width: 40.063em) {
+  .mobile-only.unc-utility-bar-short-title {
+    display: none !important;
+  }
+
+  .desktop-only.unc-utility-bar-title {
+    display: block !important;
+  }
+}

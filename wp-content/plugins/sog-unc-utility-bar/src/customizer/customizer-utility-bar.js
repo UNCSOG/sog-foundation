@@ -52,7 +52,34 @@ domReady(function () {
 			}
 			el.classList.add(newval);
 			el.dataset.color = newval;
-			
+
+		});
+	});
+
+	wp.customize("utility_bar_menu_alignment", function (value) {
+		value.bind(function (newval) {
+			var el = document.getElementById("unc-utility-bar");
+			if (el) {
+				el.dataset.menuAlign = newval;
+			}
+		});
+	});
+
+	wp.customize("utility_bar_show_title", function (value) {
+		value.bind(function (newval) {
+			var title = document.getElementById("unc-ub-title");
+			if (title) {
+				title.style.display = newval === "no" ? "none" : "";
+			}
+		});
+	});
+
+	wp.customize("utility_bar_title_text", function (value) {
+		value.bind(function (newval) {
+			var title = document.getElementById("unc-ub-title");
+			if (title) {
+				title.textContent = newval || "The University of North Carolina at Chapel Hill";
+			}
 		});
 	});
 });

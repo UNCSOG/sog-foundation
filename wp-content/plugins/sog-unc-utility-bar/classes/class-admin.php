@@ -4,9 +4,9 @@
  * Administration
  * Setting that are here
  * Banner Massage
- * 
- * @package Utility_Bar\Admin 
- * 
+ *
+ * @package Utility_Bar\Admin
+ *
  */
 
 namespace Utility_Bar;
@@ -108,12 +108,12 @@ class Admin {
                   'show_in_rest' => false
             ));
 
-            add_settings_field( 
-                  'banner_msg_wysiwyg', 
-                  'Banner Message', 
+            add_settings_field(
+                  'banner_msg_wysiwyg',
+                  'Banner Message',
                   array( $this, 'render_wysiwyg'),
-                  'unc_utility_bar', 
-                  'unc_utility_bar_site_banner_section' 
+                  'unc_utility_bar',
+                  'unc_utility_bar_site_banner_section'
           );
 
             register_setting('unc_utility_bar', '_unc_utility_banner_display_bool', array(
@@ -135,7 +135,7 @@ class Admin {
             //       'unc_utility_bar_site_banner_section'
             // );
 
-            
+
 
             add_settings_field(
                   'banner_display_bool',
@@ -154,6 +154,34 @@ class Admin {
                   null, //no header is added
                   'unc_utility_bar'
             );
+
+            // --- Menu Items settings ---
+            register_setting('unc_utility_bar', Menu_Items::OPTION_KEY, array(
+                  'type'              => 'array',
+                  'description'       => 'Utility bar menu items configuration',
+                  'sanitize_callback' => array('\Utility_Bar\Menu_Items', 'sanitize'),
+                  'default'           => Menu_Items::get_defaults(),
+                  'show_in_rest'      => false,
+            ));
+
+            add_settings_section(
+                  'unc_utility_bar_menu_items_section',
+                  'Menu Items',
+                  function () {
+                        echo '<p>Enable or disable the built-in menu items below, and add your own custom items.</p>';
+                  },
+                  'unc_utility_bar'
+            );
+
+            add_settings_field(
+                  'unc_utility_bar_menu_items',
+                  'Manage Menu Items',
+                  function () {
+                        $this->get_settings_template('menu-items');
+                  },
+                  'unc_utility_bar',
+                  'unc_utility_bar_menu_items_section'
+            );
       }
 
       /**
@@ -163,26 +191,26 @@ class Admin {
        * @return void
        */
       function get_settings_template($file_slug) {
-            include_once(UTILITY_BAR_PLUGIN_DIR . 'templates/admin/settings-fields/' . $file_slug . '.php');
+            include_once(SOG_UTILITY_BAR_PLUGIN_DIR . 'templates/admin/settings-fields/' . $file_slug . '.php');
       }
 
 
       /**
-       * render the wysiwyg used for the 
+       * render the wysiwyg used for the
        *
        * @return void
        */
       function render_wysiwyg(){
             $options = get_option('_unc_utility_banner_msg_string', "");
             $content = isset( $options ) ?  $options : false;
-            wp_editor( $content, 'banner_msg_string', array( 
+            wp_editor( $content, 'banner_msg_string', array(
                   'media_buttons' => false,
                   'textarea_name' => '_unc_utility_banner_msg_string',
                   'textarea_rows' => '10',
                   'wpautop' => true,
-                  
+
             ) );
-              
+
       }
 
 
@@ -194,14 +222,19 @@ class Admin {
             $version = Core::$version;
             $deps = [];
 
-            $assets_path = UTILITY_BAR_PLUGIN_DIR . 'build/admin/index.asset.php';
+            $assets_path = SOG_UTILITY_BAR_PLUGIN_DIR . 'build/admin/index.asset.php';
             if (file_exists($assets_path)) {
                   $assets_body = include_once($assets_path);
                   $version = $assets_body['version'];
                   $deps = $assets_body['dependencies'];
             }
 
-            wp_enqueue_style('alert-service-admin-styles', UTILITY_BAR_PLUGIN_URL . 'build/admin/index.css', [], $version);
+            wp_enqueue_style('alert-service-admin-styles', SOG_UTILITY_BAR_PLUGIN_URL . 'build/admin/index.css', [], $version);
+
+            // Menu items manager scripts
+            wp_enqueue_script('jquery-ui-sortable');
+            wp_enqueue_script('ub-menu-items-admin', SOG_UTILITY_BAR_PLUGIN_URL . 'assets/js/menu-items-admin.js', ['jquery', 'jquery-ui-sortable', 'wp-util'], Core::$version, true);
+            wp_enqueue_style('ub-menu-items-admin', SOG_UTILITY_BAR_PLUGIN_URL . 'assets/css/menu-items-admin.css', [], Core::$version);
       }
 
       /**

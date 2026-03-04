@@ -1,5 +1,5 @@
 {
-    "name": "unc/unc-utility-bar",
+    "name": "unc/sog-unc-utility-bar",
     "description": "A service for publishing, pushing, and receiving cap alerts, and displaying the unified ",
     "type": "wordpress-plugin",
     "authors": [

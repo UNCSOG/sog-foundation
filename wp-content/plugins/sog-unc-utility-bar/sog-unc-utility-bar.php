@@ -1,23 +1,41 @@
 <?php
 
 /**
- * Plugin Name: UNC Utility Bar
- * Description: The Unified UNC Utility bar with Alerts from Alert Carolina and a propper place to put your notifications on top of the page.  It is Network only
- * Author: H. Adam Lenz, UNC DIgital Services
- * Version: 2.2.4
+ * Plugin Name: SOG UNC Utility Bar
+ * Description: The Unified UNC Utility bar with Alerts from Alert Carolina and a proper place to put your notifications on top of the page.  It is Network only. Modified for the School of Government by Lindsay Hoyt, SOG IT.
+ * Author: H. Adam Lenz, UNC Digital Services
+ * Co-Author: Lindsay Hoyt, SOG IT
+ * Version: 0.0.2
  * License: GNU General Public License (Version 2 - GPLv2)
  */
 
 namespace Utility_Bar;
 
+use WP_CLI\Dispatcher\CommandFactory;
+
 if (!defined('ABSPATH')) {
     exit;
 }
 
-define('UTILITY_BAR_PLUGIN_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
-define('UTILITY_BAR_PLUGIN_URL', plugin_dir_url(__FILE__));
-include_once UTILITY_BAR_PLUGIN_DIR . 'classes/class-autoloader.php';
-include_once UTILITY_BAR_PLUGIN_DIR . 'src/vendor/autoload.php';
+define('SOG_UTILITY_BAR_PLUGIN_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+define('SOG_UTILITY_BAR_PLUGIN_URL', plugin_dir_url(__FILE__));
+
+
+// If you see an error about missing src/vendor/autoload.php, run this command in the plugin directory:
+// composer install
+if (!class_exists('Utility_Bar\\Autoloader')) {
+    include_once SOG_UTILITY_BAR_PLUGIN_DIR . 'classes/class-autoloader.php';
+}
+
+// Only include Composer autoload if not already loaded
+if (!class_exists('ComposerAutoloaderInit')) {
+    $autoload_path = SOG_UTILITY_BAR_PLUGIN_DIR . 'src/vendor/autoload.php';
+
+    if (file_exists($autoload_path)) {
+        include_once $autoload_path;
+    }
+}
+
 
 class Core {
 
@@ -43,7 +61,8 @@ class Core {
     public static $nonce = 'alert-service';
 
     function __construct() {
-        $autoloader = new Autoloader(__NAMESPACE__, UTILITY_BAR_PLUGIN_DIR);
+        $autoloader = new Autoloader(__NAMESPACE__, SOG_UTILITY_BAR_PLUGIN_DIR);
+
         spl_autoload_register(array($autoloader, 'autoloader'));
 
         //cli commands for the alert service
@@ -52,6 +71,7 @@ class Core {
              * Registers cli commands
              */
             $alert_service_cli = new CLI_Alert_Service();
+
             \WP_CLI::add_command('alert-service', $alert_service_cli);
         }
 
@@ -68,23 +88,20 @@ class Core {
                 $utility_bar = Blocks\Utility_Bar::getInstance();
                 $alert_banner = Blocks\Alert_Banner::getInstance();
                 $site_banner = Site_Banner_Display::getInstance();
+
                 add_action('customize_preview_init', array($this, 'customizer_preview_scripts'));
             }
         });
 
-
-
-
-        //displays the banner and adds a ton of filters
+        // displays the banner and adds a ton of filters
         // Alert_Banner_Display::getInstance();
 
-
-        //the rest endpoints should come after everything else is setup
+        // the rest endpoints should come after everything else is setup
         $rest = Rest_Endpoints::getInstance();
         $rest->check_passwords(true);
 
-        //the admins
-        //is_plugin_active_for_network();
+        // the admins
+        // is_plugin_active_for_network();
         $network_admin = Network_Admin::getInstance();
 
         //add scripts and styles
@@ -98,11 +115,11 @@ class Core {
     }
 
     function enqueue_scripts($hook) {
-        wp_enqueue_style('alert-service-frontend-style', UTILITY_BAR_PLUGIN_URL . 'build/frontend/index.css', [], self::$version);
+        wp_enqueue_style('alert-service-frontend-style', SOG_UTILITY_BAR_PLUGIN_URL . 'build/frontend/index.css', [], self::$version);
         wp_enqueue_script('container-query-polyfill', 'https://cdn.jsdelivr.net/npm/container-query-polyfill@1/dist/container-query-polyfill.modern.js', [], self::$version);
         if ('no' != get_theme_mod('utility_bar_display') && !Core::using_blocks()) {
-            wp_enqueue_style('utility-bar-utility-bar-styles', UTILITY_BAR_PLUGIN_URL . 'blocks/utility-bar/build/utility-bar-block.css', [], self::$version);
-            wp_enqueue_style('alert-utility-bar-styles', UTILITY_BAR_PLUGIN_URL . 'blocks/alert-banner/build/frontend/alert-banner-frontend.css', [], self::$version);
+            wp_enqueue_style('utility-bar-utility-bar-styles', SOG_UTILITY_BAR_PLUGIN_URL . 'blocks/utility-bar/build/utility-bar-block.css', [], self::$version);
+            wp_enqueue_style('alert-utility-bar-styles', SOG_UTILITY_BAR_PLUGIN_URL . 'blocks/alert-banner/build/frontend/alert-banner-frontend.css', [], self::$version);
         }
     }
 
@@ -113,13 +130,13 @@ class Core {
             $defs = self::get_scripts_asset_defs($script);
             $deps = array(...$defs['dependencies'], 'customize-preview');
             //error_log(var_export($deps, true));
-            wp_enqueue_script('unc_customizer_preview', UTILITY_BAR_PLUGIN_URL . $script, $deps, $defs['version'], true);
+            wp_enqueue_script('unc_customizer_preview', SOG_UTILITY_BAR_PLUGIN_URL . $script, $deps, $defs['version'], true);
         }
     }
 
     public static function get_scripts_asset_defs($script_path) {
         $assets_defs = [];
-        $assets_path = UTILITY_BAR_PLUGIN_DIR . str_replace('.js', '.asset.php', $script_path);
+        $assets_path = SOG_UTILITY_BAR_PLUGIN_DIR . str_replace('.js', '.asset.php', $script_path);
         //error_log('the path is ' . $assets_path);
         //error_log('the file exists:' . var_export(file_exists($assets_path), true));
 
@@ -155,8 +172,8 @@ class Core {
      */
     static function using_blocks() {
         // error_log( 'isblocktheme' . var_export( wp_is_block_theme(), true ) );
-        //error_log( var_export($GLOBALS['wp_theme_directories'],true) );
-        //if (class_exists('Classic_Editor') || class_exists('Gutenberg_Ramp')) {
+        // error_log( var_export($GLOBALS['wp_theme_directories'],true) );
+        // if (class_exists('Classic_Editor') || class_exists('Gutenberg_Ramp')) {
         if (wp_is_block_theme()) {
             return true;
         } else {
@@ -173,7 +190,7 @@ class Core {
      */
     static function legacy_has_utility_bar() {
         $has_utility_bar = false;
-        //add or remove theme->template values here if you dont want the utility bar here
+        // add or remove theme->template values here if you don't want the utility bar here
         $themes_with_utility_bar = array(
             'alert-carolina',
             'apsa',

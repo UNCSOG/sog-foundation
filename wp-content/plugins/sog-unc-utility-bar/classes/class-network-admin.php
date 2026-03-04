@@ -2,9 +2,9 @@
 
 /**
  * Administration
- * 
+ *
  * @package Utility_Bar
- * 
+ *
  */
 
 namespace Utility_Bar;
@@ -56,15 +56,15 @@ class Network_Admin {
         $version = Core::$version;
         $deps = [];
 
-        $assets_path = UTILITY_BAR_PLUGIN_DIR . 'build/network-admin/index.asset.php';
+        $assets_path = SOG_UTILITY_BAR_PLUGIN_DIR . 'build/network-admin/index.asset.php';
         if (file_exists($assets_path)) {
             $assets_body = include_once($assets_path);
             $version = $assets_body['version'];
             $deps = $assets_body['dependencies'];
         }
 
-        wp_enqueue_style('alert-service-admin-styles', UTILITY_BAR_PLUGIN_URL . 'build/network-admin/index.css', [], $version);
-        wp_enqueue_script('alert-service-admin-scripts', UTILITY_BAR_PLUGIN_URL . 'build/network-admin/index.js', $deps, $version);
+        wp_enqueue_style('alert-service-admin-styles', SOG_UTILITY_BAR_PLUGIN_URL . 'build/network-admin/index.css', [], $version);
+        wp_enqueue_script('alert-service-admin-scripts', SOG_UTILITY_BAR_PLUGIN_URL . 'build/network-admin/index.js', $deps, $version);
     }
 
     /**
@@ -74,7 +74,7 @@ class Network_Admin {
     function admin_underscores_templates() {
         $screen = get_current_screen();
         if ('toplevel_page_alert-service-network' === $screen->id) {
-            include(UTILITY_BAR_PLUGIN_DIR . 'templates/admin/admin-modal.php');
+            include(SOG_UTILITY_BAR_PLUGIN_DIR . 'templates/admin/admin-modal.php');
         }
     }
 

@@ -2,9 +2,9 @@
 
 /**
  * blocks
- * 
+ *
  * @package Alert_Service
- * 
+ *
  */
 
 namespace Utility_Bar;
@@ -53,7 +53,7 @@ class Block_Controller {
         //register alert banner block
         $alert_banner = \Utility_Bar\Blocks\Alert_Banner::getInstance();
         register_block_type_from_metadata(
-            UTILITY_BAR_PLUGIN_DIR . 'blocks/alert-banner',
+            SOG_UTILITY_BAR_PLUGIN_DIR . 'blocks/alert-banner',
             array('render_callback' => function ($atts) use ($alert_banner) {
                 //$alert_banner = \Utility_Bar\Blocks\Alert_Banner::getInstance();
                 return $alert_banner->render_callback($atts);
@@ -62,7 +62,7 @@ class Block_Controller {
 
         //register utility bar block
         register_block_type_from_metadata(
-            UTILITY_BAR_PLUGIN_DIR . 'blocks/utility-bar',
+            SOG_UTILITY_BAR_PLUGIN_DIR . 'blocks/utility-bar',
         );
     }
 
@@ -78,13 +78,13 @@ class Block_Controller {
      * registers a style
      * use enqueue_block_editor_assets or enqueue_block_assets to get here
      *
-     * @param [type] $file_path relative to UTILITY_BAR_PLUGIN_URL
+     * @param [type] $file_path relative to SOG_UTILITY_BAR_PLUGIN_URL
      * @return void
      */
     public static function register_block_script($path, $slug, $type = 'script') {
         //the path
-        $url = UTILITY_BAR_PLUGIN_URL . $path;
-        $dir = UTILITY_BAR_PLUGIN_DIR . $path;
+        $url = SOG_UTILITY_BAR_PLUGIN_URL . $path;
+        $dir = SOG_UTILITY_BAR_PLUGIN_DIR . $path;
         $version = Core::$version;
         $deps = [];
         //the assets file

@@ -82,7 +82,7 @@ $black: #151515;
 		padding: 0;
 	}
 
-	//the row eveything is in
+	//the row everything is in
 	//used for container queries
 	.utility-bar-row {
 		height: $row-height;
@@ -102,7 +102,7 @@ $black: #151515;
 		align-items: center;
 		flex: 0;
 	}
-	
+
 	//this is the default style of the logo
 	#utility-bar-unc-link > #unc-interlocking-logo {
 		margin: 0 1.6px 0 4px;
@@ -142,21 +142,11 @@ $black: #151515;
 	//the university of north carolina text
 	#unc-ub-title {
 		font-size: 16px !important;
-		//not shown until large
 		font-family: $serif;
-		display: none;
-
-		@container utility-bar-row (min-width: #{$large}) {
-			display: flex;
-		}
-
-		// span.em {
-		// 	font-style: italic;
-		// 	white-space: pre;
-		// }
+		display: flex;
 	}
 
-	//the navigaiton links
+	//the navigation links
 	#utiltity-bar-nav {
 		margin: 0 16px 0 16px;
 		padding-left: 0;
@@ -194,15 +184,34 @@ $black: #151515;
 					padding-left: 3px;
 					padding-right: 3px;
 				}
-			}
+	#utiltity-bar-nav {
+		margin: 0 16px 0 16px;
+		padding-left: 0;
+		display: flex;
+		flex: 1 1 auto;
+		max-width: calc(100% - 60px);
+		align-items: stretch;
+		flex-wrap: nowrap;
+		//justify-content: start;
+		justify-content: space-between;
 
-			&.md-down-hidden-list-item {
-				display: none;
+	// Menu alignment via data-menu-align attribute
+	&[data-menu-align="left"] #utiltity-bar-nav {
+		@container utility-bar-row (min-width: #{$large}) {
+			justify-content: flex-start;
+		}
+	}
 
-				@container utility-bar-row (min-width: #{$small}) {
-					display: inline;
-				}
-			}
+	&[data-menu-align="center"] #utiltity-bar-nav {
+		@container utility-bar-row (min-width: #{$large}) {
+			justify-content: center;
+		}
+	}
+
+	&[data-menu-align="right"] #utiltity-bar-nav,
+	&:not([data-menu-align]) #utiltity-bar-nav {
+		@container utility-bar-row (min-width: #{$large}) {
+			justify-content: flex-end;
 		}
 	}
 
@@ -405,7 +414,7 @@ $black: #151515;
 	}
 }
 
-//dont allow clicking in the editor
+//don't allow clicking in the editor
 .editor-styles-wrapper .wp-block-utility-bar-utility-bar {
 	a,
 	a:hover {

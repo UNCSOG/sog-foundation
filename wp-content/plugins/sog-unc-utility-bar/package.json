@@ -1,7 +1,7 @@
 {
   "name": "utility-bar",
   "version": "2.2.1",
-  "description": "The Unified UNC Utility bar with Alerts from Alert Carolina and a propper place to put your notifications on top of the page",
+  "description": "The Unified UNC Utility bar with Alerts from Alert Carolina and a proper place to put your notifications on top of the page",
   "main": "index.js",
   "scripts": {
     "build": "npm-run-all clean build:*",

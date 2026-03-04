@@ -1,0 +1,105 @@
+/**
+ * Menu Items Admin Styles
+ */
+
+#ub-menu-items-manager {
+    max-width: 900px;
+}
+
+.ub-menu-items-table {
+    border-collapse: collapse;
+}
+
+.ub-menu-items-table th,
+.ub-menu-items-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+}
+
+.ub-menu-items-table thead th {
+    font-weight: 600;
+}
+
+.ub-col-sort {
+    width: 30px;
+    text-align: center;
+    cursor: grab;
+}
+
+.ub-col-enabled,
+.ub-col-mobile {
+    width: 70px;
+    text-align: center;
+}
+
+.ub-col-actions {
+    width: 80px;
+    text-align: center;
+}
+
+.ub-drag-handle {
+    cursor: grab;
+    color: #999;
+}
+
+.ub-drag-handle:hover {
+    color: #333;
+}
+
+.ub-menu-item-row input[type="text"],
+.ub-menu-item-row input[type="url"] {
+    width: 100%;
+}
+
+.ub-menu-item-row input[readonly] {
+    background-color: #f0f0f1;
+    color: #50575e;
+    cursor: default;
+}
+
+.ub-default-item {
+    background-color: #f9f9f9;
+}
+
+.ub-custom-item {
+    background-color: #fff;
+}
+
+.ub-remove-item {
+    color: #b32d2e;
+    border-color: #b32d2e !important;
+    padding: 2px 6px !important;
+    min-height: 28px !important;
+}
+
+.ub-remove-item:hover {
+    background: #b32d2e !important;
+    color: #fff !important;
+}
+
+.ub-remove-item .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+
+/* Sortable placeholder */
+.ui-sortable-placeholder {
+    visibility: visible !important;
+    background: #e8f0fe !important;
+    border: 1px dashed #4f94d4;
+    height: 40px;
+}
+
+/* Dragging state */
+.ui-sortable-helper {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ub-col-actions .description {
+    color: #999;
+    font-style: italic;
+    font-size: 12px;
+}
