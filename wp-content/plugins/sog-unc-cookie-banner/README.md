@@ -1,4 +1,4 @@
-# SOG UNC Cookie Banner Plugin
+# UNC Cookie Banner Plugin
 
 **Requires at least:** WordPress 5.8
 **Tested up to:** WordPress 6.3.2
@@ -28,38 +28,4 @@ Navigate to the 'Cookie Banner Settings' page in the WordPress Network Dashboard
    - `npm run build` for production (Minifies CSS and JS along with compiling SASS to CSS).
 
 ## Support and Issues
-If you encounter any issues or have questions regarding this plugin, please visit the https://sc.unc.edu/itsds/wp-plugins/sog-unc-cookie-banner/ for support and reporting issues.
-
-## Install commands
-
-If you want to add this as a subtree to another repository:
-
-```
-git subtree add --prefix=wp-content/plugins/sog-unc-cookie-banner ssh://git@sc.unc.edu/sog-it/sog-unc-cookie-banner.git main --squash
-```
-
-If you want to push changes back to the subtree repository:
-
-```
-git subtree push --prefix=wp-content/plugins/sog-unc-cookie-banner ssh://git@sc.unc.edu/sog-it/sog-unc-cookie-banner.git main
-```
-
-If you want to pull updates from the subtree repository:
-
-```
-git subtree pull --prefix=wp-content/plugins/sog-unc-cookie-banner ssh://git@sc.unc.edu/sog-it/sog-unc-cookie-banner.git main --squash
-```
-
-## Plugin Activate Command
-
-If the following command doesn't work for you try logging into the website and manually activating it on the plugins page.
-
-```
-ddev wp plugin activate sog-unc-cookie-banner
-```
-
-or
-
-```
-wp plugin activate sog-unc-cookie-banner
-```
+If you encounter any issues or have questions regarding this plugin, please visit the https://sc.unc.edu/itsds/wp-plugins/unc-cookie-banner/ for support and reporting issues.

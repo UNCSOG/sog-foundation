@@ -1,0 +1,63 @@
+# SOG UNC Cookie Banner Plugin
+
+**Requires at least:** WordPress 5.8
+**Tested up to:** WordPress 6.3.2
+**Requires PHP:** 7.4
+**Version:** 0.0.1
+
+UNC Cookie Banner is a WordPress plugin designed to display a customizable cookie consent banner across all blogs in a network. It aids in compliance with data protection laws and ensures users are informed about the use of cookies on the websites. Single Site installs will also function properly without exclude blogs function.
+
+## Features
+- **Exclude Certain Pages:** Allows the user to exclude certain pages on your site from displaying the cookie banner.
+  - Use Case: We display a site on our TV's in the building we don't want the cookie banner to display on it.
+
+## Configuration
+Navigate to the 'Cookie Banner Settings' page in the WordPress Network Dashboard to customize the banner text, button text, and other settings.
+
+### Prerequisites
+- Node.js and NPM.
+
+### Setup & Build
+1. Open a terminal and navigate to the plugin directory.
+2. Run `npm install` to install the required dependencies.
+3. Modify the SASS and JS files in the `/src` directory as needed.
+4. Run the appropriate build command:
+   - `npm run start` for development (Compiles SASS to CSS without minification).
+   - `npm run build` for production (Minifies CSS and JS along with compiling SASS to CSS).
+
+## Support and Issues
+If you encounter any issues or have questions regarding this plugin, please visit the https://sc.unc.edu/sog-it/sog-unc-cookie-banner for support and reporting issues.
+
+## Install commands
+
+If you want to add this as a subtree to another repository:
+
+```
+git subtree add --prefix=wp-content/plugins/sog-unc-cookie-banner git@sc.unc.edu:sog-it/sog-unc-cookie-banner.git main --squash
+```
+
+If you want to push changes back to the subtree repository:
+
+```
+git subtree push --prefix=wp-content/plugins/sog-unc-cookie-banner git@sc.unc.edu:sog-it/sog-unc-cookie-banner.git main
+```
+
+If you want to pull updates from the subtree repository:
+
+```
+git subtree pull --prefix=wp-content/plugins/sog-unc-cookie-banner git@sc.unc.edu:sog-it/sog-unc-cookie-banner.git main --squash
+```
+
+## Plugin Activate Command
+
+If the following command doesn't work for you try logging into the website and manually activating it on the plugins page.
+
+```
+ddev wp plugin activate sog-unc-cookie-banner
+```
+
+or
+
+```
+wp plugin activate sog-unc-cookie-banner
+```
