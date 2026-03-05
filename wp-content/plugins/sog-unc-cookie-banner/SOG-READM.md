@@ -61,3 +61,6 @@ or
 ```
 wp plugin activate sog-unc-cookie-banner
 ```
+
+## ToDo's
+On the activation plugin page after activating the plugin add a link that takes users to the plugins settings page.
