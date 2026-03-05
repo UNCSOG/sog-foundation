@@ -63,19 +63,94 @@
                         </div>
 
                         <div class="col-sm-12 col-md-4 sog-websites-container">
-                            <h4>Please visit other School of Government websites:</h4>
+                            <h4><?php esc_html_e('Please visit other School of Government websites:', 'sog-foundation-parent'); ?></h4>
+
                             <ul class="list-unstyled">
-                                <li><a href="https://sog.unc.edu" title="" target="_blank">School of Government</a></li>
-                                <li><a href="https://books.sog.unc.edu" title="" target="_blank">School of Government - Publications</a></li>
-                                <li><a href="https://canons.sog.unc.edu" title="" target="_blank">Coates' Canons: NC Local Government Law </a></li>
-                                <li><a href="https://ced.sog.unc.edu" title="" target="_blank">Community and Economic Development </a></li>
-                                <li><a href="https://deathandtaxes.sog.unc.edu" title="" target="_blank">Death and Taxes</a></li>
-                                <li><a href="https://efc.web.unc.edu" title="" target="_blank">Environmental Finance</a></li>
-                                <li><a href="https://elinc.sog.unc.edu" title="" target="_blank">Environmental Law in Context</a></li>
-                                <li><a href="https://ncimpact.sog.unc.edu/facts-that-matter-blog" title="" target="_blank">Facts That Matter</a></li>
-                                <li><a href="https://mpamatters.web.unc.edu" title="" target="_blank">MPA Matters</a></li>
-                                <li><a href="https://nccriminallaw.sog.unc.edu" title="" target="_blank">North Carolina Criminal Law</a></li>
-                                <li><a href="https://civil.sog.unc.edu" title="" target="_blank">On the Civil Side</a></li>
+                                <?php
+                                $sog_sites = get_theme_mod('sog_site_selector', []);
+
+                                if (!empty($sog_sites) && is_array($sog_sites)) :
+                                    $sog_site_target = get_theme_mod('sog_site_selector_target', '_blank');
+                                    $sog_site_title = get_theme_mod('sog_site_selector_title', '');
+                                    $choices = [
+                                        'https://sog.unc.edu' => 'School of Government',
+                                        'https://books.sog.unc.edu' => 'School of Government - Publications',
+                                        'https://canons.sog.unc.edu' => "Coates' Canons: NC Local Government Law",
+                                        'https://ced.sog.unc.edu' => 'Community and Economic Development',
+                                        'https://deathandtaxes.sog.unc.edu' => 'Death and Taxes',
+                                        'https://efc.web.unc.edu' => 'Environmental Finance Center',
+                                        'https://elinc.sog.unc.edu' => 'Environmental Law in Context',
+                                        'https://ncimpact.sog.unc.edu/facts-that-matter-blog' => 'Facts That Matter',
+                                        'https://nccriminallaw.sog.unc.edu' => 'North Carolina Criminal Law',
+                                        'https://civil.sog.unc.edu' => 'On the Civil Side',
+                                        'https://defendermanuals.sog.unc.edu' => 'Defender Manuals',
+                                        'https://benchbook.sog.unc.edu' => 'Bench Book',
+                                        'https://far.sog.unc.edu' => 'Faculty Activity Record',
+                                        'https://lrs.sog.unc.edu' => 'Legislative Reporting Service',
+                                        'https://crimes.sog.unc.edu' => 'Crimes',
+                                        'https://ncpro.sog.unc.edu/' => 'NC PRO',
+                                        'https://protectadults.sog.unc.edu' => 'Protect Adults',
+                                        'https://clerks.sog.unc.edu' => 'Clerks',
+                                        'https://mpa.unc.edu' => 'Masters of Public Administration',
+                                        'http://courseplanner.mpa.unc.edu/' => 'MPA Course Planner',
+                                        'https://courseplanner-demo.mpa.unc.edu/' => 'MPA Course Planner Demo',
+                                        'https://mpa4esc.web.unc.edu' => 'MPA4ESC',
+                                        'https://carolinampa.web.unc.edu' => 'Carolina MPA',
+                                        'https://ncfinanceconnect.com' => 'NC Finance Connect',
+                                        'https://continuing-professional-education.sog.unc.edu' => 'Continuing Professional Education',
+                                        'https://lfnc.sog.unc.edu' => 'LFNC',
+                                        'https://sun.sog.unc.edu' => 'SUN',
+                                        'https://lgwi.web.unc.edu' => 'LGWI',
+                                        'https://sogappreciate.web.unc.edu' => 'SOG Appreciate',
+                                        'https://sogteaching.web.unc.edu/' => 'SOG Teaching',
+                                        'https://engage.web.unc.edu' => 'Engage',
+                                        'https://ncimpact.sog.unc.edu' => 'ncImpact',
+                                        'https://itd.sog.unc.edu' => 'ITD',
+                                        'https://efc.sog.unc.edu' => 'Environmental Finance Center',
+                                        'https://dashboards.efc.sog.unc.edu' => 'EFC Dashboards',
+                                        'https://budgetgame.sog.unc.edu' => 'Budget Game',
+                                        'https://publicdefense.sog.unc.edu' => 'Public Defense',
+                                        'https://report.web.unc.edu' => 'Report',
+                                        'https://hsdocs.web.unc.edu' => 'HS Docs',
+                                        'https://ccat.sog.unc.edu' => 'CCAT',
+                                        'https://arpa.sog.unc.edu' => 'ARPA',
+                                        'https://cplg.sog.unc.edu' => 'CPLG',
+                                        'https://dfi.sog.unc.edu' => 'DFI',
+                                        'https://humanservices.sog.unc.edu' => 'Human Services',
+                                        'https://civilianboards.sog.unc.edu' => 'Civilian Boards',
+                                        'https://lgnc.sog.unc.edu' => 'LGNC',
+                                        'https://toolsfordecisionmaking.sog.unc.edu' => 'Tools for Decision Making',
+                                        'https://sogimpact.sog.unc.edu' => 'SOG Impact',
+                                        'https://benchmarking.sog.unc.edu' => 'Benchmarking',
+                                        'https://servicemural.unc.edu' => 'Service Mural',
+                                        'https://lar.sog.unc.edu/' => 'LAR',
+                                        'https://cjil.sog.unc.edu' => 'CJIL',
+                                        'https://cjil.shinyapps.io/MeasuringJustice/' => 'Measuring Justice',
+                                        'https://courtappearance.cjil.sog.unc.edu' => 'Court Appearance',
+                                        'https://orp.sites.unc.edu/' => 'ORP',
+                                        'http://hrp.sog.unc.edu/' => 'HRP',
+                                        'https://ncrecoveryportal.com/' => 'NC Recovery Portal',
+                                        'https://leadership.sog.unc.edu' => 'Public Leadership Blog',
+                                        'https://podcast.sog.unc.edu' => 'Podcast',
+                                        'https://civic.sog.unc.edu/' => 'Civic',
+                                        'https://cupso.org' => 'CUPSO',
+                                        'https://ncadcj.org' => 'NCADCJ',
+                                        'https://www.ncmanagers.org' => 'NC Managers',
+                                    ];
+
+                                    foreach ($sog_sites as $url) {
+                                        $label = isset($choices[$url]) ? $choices[$url] : $url;
+
+                                        echo '<li><a href="' . esc_url($url) . '" target="' . esc_attr($sog_site_target) . '"';
+
+                                        if (!empty($sog_site_title)) {
+                                            echo ' title="' . esc_attr($sog_site_title) . '"';
+                                        }
+
+                                        echo ' rel="noopener noreferrer">' . esc_html($label) . '</a></li>';
+                                    }
+                                endif;
+                                ?>
                             </ul>
                         </div>
                     </div>

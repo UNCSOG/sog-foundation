@@ -6,6 +6,7 @@
  * @since v1.0
  */
 $theme_customizer = __DIR__ . '/inc/customizer.php';
+
 if (is_readable($theme_customizer)) {
     require_once $theme_customizer;
 }
@@ -317,15 +318,15 @@ function sog_foundation_parent_password_form()
     $label = 'pwbox-' . (empty($post->ID) ? rand() : $post->ID);
 
     $output = '<div class="row">';
-    $output .= '<form action="' . esc_url(site_url('wp-login.php?action=postpass', 'login_post')) . '" method="post">';
-    $output .= '<h4 class="col-md-12 alert alert-warning">' . esc_html__('This content is password protected. To view it please enter your password below.', 'sog-foundation-parent') . '</h4>';
-    $output .= '<div class="col-md-6">';
-    $output .= '<div class="input-group">';
-    $output .= '<input type="password" name="post_password" id="' . esc_attr($label) . '" placeholder="' . esc_attr__('Password', 'sog-foundation-parent') . '" class="form-control" />';
-    $output .= '<div class="input-group-append"><input type="submit" name="submit" class="btn btn-primary" value="' . esc_attr__('Submit', 'sog-foundation-parent') . '" /></div>';
-    $output .= '</div><!-- /.input-group -->';
-    $output .= '</div><!-- /.col -->';
-    $output .= '</form>';
+        $output .= '<form action="' . esc_url(site_url('wp-login.php?action=postpass', 'login_post')) . '" method="post">';
+            $output .= '<h4 class="col-md-12 alert alert-warning">' . esc_html__('This content is password protected. To view it please enter your password below.', 'sog-foundation-parent') . '</h4>';
+            $output .= '<div class="col-md-6">';
+                $output .= '<div class="input-group">';
+                    $output .= '<input type="password" name="post_password" id="' . esc_attr($label) . '" placeholder="' . esc_attr__('Password', 'sog-foundation-parent') . '" class="form-control" />';
+                    $output .= '<div class="input-group-append"><input type="submit" name="submit" class="btn btn-primary" value="' . esc_attr__('Submit', 'sog-foundation-parent') . '" /></div>';
+                $output .= '</div><!-- /.input-group -->';
+            $output .= '</div><!-- /.col -->';
+        $output .= '</form>';
     $output .= '</div><!-- /.row -->';
 
     return $output;
@@ -523,11 +524,13 @@ if (function_exists('register_nav_menus')) {
 
 // Custom Nav Walker: wp_bootstrap_navwalker().
 $custom_walker = __DIR__ . '/inc/wp-bootstrap-navwalker.php';
+
 if (is_readable($custom_walker)) {
     require_once $custom_walker;
 }
 
 $custom_walker_footer = __DIR__ . '/inc/wp-bootstrap-navwalker-footer.php';
+
 if (is_readable($custom_walker_footer)) {
     require_once $custom_walker_footer;
 }

@@ -239,7 +239,7 @@ function sog_foundation_parent_customize($wp_customize) {
             $wp_customize,
             'sog_site_selector',
             [
-                'type' => 'checkbox',
+                'type' => 'checkboxes',
                 'label' => __('Choose SOG Sites', 'sog-foundation-parent'),
                 'description' => __('Select one or more School of Government related sites.'),
                 'section' => 'theme_header_section',
@@ -333,6 +333,7 @@ function sog_foundation_parent_customize($wp_customize) {
             'sanitize_callback' => 'sanitize_text_field',
         ]
     );
+
     $wp_customize->add_control(
         'sog_site_selector_target',
         [
