@@ -43,6 +43,9 @@ The Unified UNC Utility bar with Alerts from Alert Carolina and a proper place t
   - [School of Government Additions](#school-of-government-additions)
   - [SCSS Build/Compile Instructions](#scss-buildcompile-instructions)
     - [Troubleshooting](#troubleshooting)
+  - [Install commands](#install-commands)
+  - [Plugin Activate Commands](#plugin-activate-commands)
+  - [ToDo's](#todos)
 
 ## Parts
 
@@ -280,3 +283,36 @@ To compile the SCSS files for this plugin, follow these steps:
    npx sass src/frontend/_frontend-general.scss build/frontend/frontend-general.css
    ```
 - Make sure to re-run the build command after making changes to any SCSS files.
+
+
+## Install commands
+
+If you want to add this as a subtree to another repository:
+```
+git subtree add --prefix=wp-content/plugins/sog-unc-utility-bar git@sc.unc.edu:sog-it/sog-unc-utility-bar.git master --squash
+```
+
+If you want to push changes back to the subtree repository:
+```
+git subtree push --prefix=wp-content/plugins/sog-unc-utility-bar git@sc.unc.edu:sog-it/sog-unc-utility-bar.git master
+```
+
+If you want to pull updates from the subtree repository:
+```
+git subtree pull --prefix=wp-content/plugins/sog-unc-utility-bar git@sc.unc.edu:sog-it/sog-unc-utility-bar.git master --squash
+```
+
+## Plugin Activate Commands
+
+If the following command doesn't work for you try logging into the website and manually activating it on the plugins page.
+```
+ddev wp plugin activate sog-unc-utility-bar
+```
+
+or
+```
+wp plugin activate sog-unc-utility-bar
+```
+
+## ToDo's
+On the activation plugin page after activating the plugin add a link that takes users to the plugins settings page.
