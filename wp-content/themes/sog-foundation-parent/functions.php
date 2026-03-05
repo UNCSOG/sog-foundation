@@ -696,3 +696,37 @@ function parent_theme_sidebar_toggle_callback() {
     <label for="sidebar_enabled">Enable sidebar for selected content types</label>
     <?php
 }
+
+// Add a theme setting for displaying associated sog websites in the footer.
+function parent_theme_register_footer_settings() {
+    register_setting('parent_theme_settings', 'display_sog_websites');
+
+    add_settings_field(
+        'display_sog_websites',
+        'Display SOG Websites in Footer',
+        'parent_theme_display_sog_websites_callback',
+        'parent_theme_settings',
+        'parent_theme_layout_section'
+    );
+
+    // the options for the sites to displayed are defined in the customizer, so we can reuse those.
+    add_settings_field(
+        'navbar_position',
+        'Navbar Position',
+        'parent_theme_navbar_position_callback',
+        'parent_theme_settings',
+        'parent_theme_layout_section',
+        'parent_theme_navbar_position_callback'
+    );
+
+    // Adjust the header text. the default text is 'Please visit other School of Government websites:' which is and h4.
+
+    // <h4>Please visit other School of Government websites:</h4>
+
+
+     // sites
+    // <ul class="list-unstyled">
+
+    // </ul>
+}
+add_action('admin_init', 'parent_theme_register_footer_settings');
