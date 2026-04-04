@@ -20,14 +20,14 @@ If you need to pull this into an existing repo (like a pantheon website) use a g
 
 ```bash
 # from the project root dir
-git subtree add --prefix=wp-content/plugins/sog-saml-conf git@sc.unc.edu:sog-it/sog-saml-conf.git main
+git subtree add --prefix=wp-content/plugins/sog-saml-conf git@sc.unc.edu:sog-it/sog-saml-conf.git main --squash
 ```
 
 If you need to update the plugin you can pull updates for that submodule and merge them into the site repo.
 
 ```bash
 # Run from the project root
-git subtree pull --prefix=wp-content/plugins/sog-saml-conf git@sc.unc.edu:sog-it/sog-saml-conf.git main
+git subtree pull --prefix=wp-content/plugins/sog-saml-conf git@sc.unc.edu:sog-it/sog-saml-conf.git main --squash
 git commit -m "updating sog-saml-conf"
 ```
 
