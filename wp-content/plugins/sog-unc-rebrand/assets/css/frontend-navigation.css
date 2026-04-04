@@ -1,0 +1,52 @@
+/* Dropdown menu support */
+.sog-rebrand__nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sog-rebrand__nav li {
+  position: relative;
+}
+.sog-rebrand__nav li ul {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 180px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 1000;
+  padding: 0.5em 0;
+}
+.sog-rebrand__nav li:hover > ul,
+.sog-rebrand__nav li:focus-within > ul,
+.sog-rebrand__nav li.open > ul {
+  display: block;
+}
+.sog-rebrand__nav li ul li {
+  position: relative;
+}
+.sog-rebrand__nav li ul li ul {
+  left: 100%;
+  top: 0;
+}
+.sog-rebrand__nav li > a {
+  display: block;
+  padding: 0.5em 1em;
+  color: #1E3A57;
+  text-decoration: none;
+  background: none;
+}
+.sog-rebrand__nav li > a:hover,
+.sog-rebrand__nav li > a:focus {
+  background: #f0f4f8;
+  color: #0056b3;
+}
+.sog-rebrand__nav li.menu-item-has-children > a:after {
+  content: " ▼";
+  font-size: 0.7em;
+}
+.sog-rebrand__nav li ul li.menu-item-has-children > a:after {
+  content: " ▶";
+  float: right;
+}

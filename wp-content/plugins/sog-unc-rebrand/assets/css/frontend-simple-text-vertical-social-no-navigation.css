@@ -1,0 +1,14 @@
+:is(
+	.sog-rebrand__header[data-sog-rebrand-component="header"],
+	.sog-rebrand__footer[data-sog-rebrand-component="footer"],
+	.sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
+) {
+	/* -------------------------------------------------------
+	 * Header core: simple-text-vertical-social-no-navigation
+	 * Template: core-simple-text-vertical-social-no-nav.php
+	 * ------------------------------------------------------- */
+
+	& .sog-rebrand__header-core--simple-text-vertical-social-no-navigation .sog-rebrand__header-shell {
+		grid-template-rows: minmax(0, 1fr) auto auto;
+	}
+}
