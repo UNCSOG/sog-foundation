@@ -1,0 +1,59 @@
+:is(
+	.sog-rebrand__header[data-sog-rebrand-component="header"],
+	.sog-rebrand__footer[data-sog-rebrand-component="footer"],
+	.sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
+) {
+	/* -------------------------------------------------------
+	 * Header core: simple-text-vertical-line-alternate
+	 * Template: core-simple-text-vertical-line-alternate.php
+	 * ------------------------------------------------------- */
+
+    & .sog-rebrand__header-bottom {
+        background: var(--sog-rebrand-header-bottom-bg);
+        border-top: 0 solid var(--sog-rebrand-header-bottom-border) !important;
+        color: var(--sog-rebrand-header-bottom-text);
+    }
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__header-shell {
+		grid-template-columns: 1fr;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__header-shell .sog-rebrand__header-separator {
+		margin: 0 !important;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .site-description-school-name-cluster {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.625rem;
+		flex: 1 0 0;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__brand-title.site-name {
+		color: var(--sog-rebrand-font-body);
+		font-family: Montserrat;
+		font-size: 1rem;
+		font-style: normal;
+		font-weight: 600;
+		line-height: 1.25rem; /* 125% */
+		letter-spacing: 0.06rem;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__brand-title.site-tagline {
+		color: var(--sog-rebrand-font-body);
+		font-family: "Open Sans";
+		font-size: 1.875rem;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 1.875rem; /* 100% */
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__brand-title.school-name {
+		color: var(--sog-rebrand-font-body);
+		font-family: "Open Sans";
+		font-size: 1.5rem;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1.875rem; /* 125% */
+	}
+}

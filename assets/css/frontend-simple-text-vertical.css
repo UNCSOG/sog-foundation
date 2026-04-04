@@ -1,0 +1,43 @@
+:is(
+	.sog-rebrand__header[data-sog-rebrand-component="header"],
+	.sog-rebrand__footer[data-sog-rebrand-component="footer"],
+	.sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
+) {
+	/* -------------------------------------------------------
+	 * Header core: simple-text-vertical
+	 * Template: core-simple-text-vertical.php
+     * Description: A simple header layout with the site title
+     * and optional school name stacked vertically, and the
+     * navigation and search (if enabled) in a second row below.
+     * The header separator is removed in this layout, but the
+     * bottom border of the header is retained.
+	 * ------------------------------------------------------- */
+
+	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__header-shell {
+		grid-template-rows: minmax(0, 1fr) auto auto;
+		grid-template-columns: 1fr;
+		gap: 0.625rem;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__inner .sog-rebrand__header-shell .sog-rebrand__brand-cluster .sog-rebrand__brand-title.site-name,
+	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__inner .sog-rebrand__header-shell .sog-rebrand__brand-cluster a.sog-rebrand__brand-link .sog-rebrand__brand-title.site-name {
+		font-size: 1.875rem !important;
+		font-weight: 700;
+		font-style: normal;
+		letter-spacing: normal;
+		line-height: 1.875rem; /* 1.25; */
+		/* Customizable via CSS var; Montserrat as default if var is unset */
+		font-family: var(--sog-rebrand-header-text, 'Open Sans', sans-serif);
+		color: var(--sog-rebrand-header-text-color, inherit);
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__brand-title.school-name,
+	& .sog-rebrand__header-core--simple-text-vertical a.sog-rebrand__brand-link .sog-rebrand__brand-title.school-name {
+		font-family: var(--sog-rebrand-font-body, 'Open Sans', sans-serif);
+		font-size: 1.5rem;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1.875rem; /* 125% */
+		color: var(--sog-rebrand-header-school-name-color, inherit);
+	}
+}
