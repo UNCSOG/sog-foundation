@@ -1,0 +1,44 @@
+/* Sets the backgroun to white instead of the normal gray */
+.sog_help_posts_page_help_menu_slug,
+.sog_help_posts_page_tabs_menu_slug {
+	background-color: #ffffff;
+}
+
+/* just to create a litte spacing around the content */
+#sog_help_posts .tab-content {
+	/* to match default nav-tab wp styling */
+	margin:1rem 1rem 1rem .5rem;
+}
+
+/* Makes the header center and adds some spacing */
+.help_tabs_header {
+	margin:1rem 0;
+	text-align:center;
+}
+
+/* Makes the actice tab text color white */
+#sog_help_posts .nav-tab-active {
+	color:#ffffff;
+}
+
+/* To give the instrucitons a little breathing room. */
+.admin_header_help {
+	margin:1rem;
+	padding:1rem;
+}
+
+
+#sog_help_posts a {
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-webkit-border-bottom-right-radius: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+}

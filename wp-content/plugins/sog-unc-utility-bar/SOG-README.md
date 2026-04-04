@@ -1,4 +1,4 @@
-# UNC Utility Bar
+# SOG UNC Utility Bar
 
 **Contributors:** H. Adam Lenz, Douglas Slingerland
 **Co-Contributors:** Lindsay Hoyt
@@ -9,7 +9,7 @@
 
 The Unified UNC Utility bar with Alerts from Alert Carolina and a proper place to put your notifications on top of the page
 
-- [UNC Utility Bar](#unc-utility-bar)
+- [SOG UNC Utility Bar](#sog-unc-utility-bar)
   - [Parts](#parts)
   - [Body Classes](#body-classes)
   - [Standalone Utility Bar](#standalone-utility-bar)

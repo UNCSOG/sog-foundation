@@ -36,6 +36,13 @@ if (!class_exists('ComposerAutoloaderInit')) {
     }
 }
 
+// Add Settings link to plugin row on Plugins page
+add_filter('network_admin_plugin_action_links_' . plugin_basename(__FILE__), function($links) {
+    $settings_url = network_admin_url('admin.php?page=alert-service');
+    $settings_link = '<a href="' . esc_url($settings_url) . '">' . __('Settings') . '</a>';
+    array_unshift($links, $settings_link);
+    return $links;
+});
 
 class Core {
 
