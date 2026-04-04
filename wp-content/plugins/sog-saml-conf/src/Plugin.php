@@ -13,7 +13,11 @@ class Plugin
 
     public function register_hooks(): void
     {
-        if (getenv('PANTHEON_ENVIRONMENT')) {
+        if (isset($_ENV['IS_DDEV_PROJECT'])) {
+            require_once(__DIR__ . '/../env/local.php');
+            add_action('init', [$this, 'enable_local_admin']);
+        }
+        elseif (getenv('PANTHEON_ENVIRONMENT')) {
             switch ($_ENV['PANTHEON_ENVIRONMENT']) {
                 case 'live':
                     add_action('init', [$this, 'disable_local_admin']);
