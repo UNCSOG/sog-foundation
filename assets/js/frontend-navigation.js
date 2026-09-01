@@ -2,6 +2,10 @@
 jQuery(function($) {
   // Open submenu on click for touch devices
   $('.sog-rebrand__nav li.menu-item-has-children > a').on('click', function(e) {
+    if ($(this).closest('.sog-rebrand__mobile-nav').length) {
+      return;
+    }
+
     var $parent = $(this).parent();
     if ($parent.hasClass('open')) {
       $parent.removeClass('open');
@@ -25,6 +29,10 @@ jQuery(function($) {
 
   // Keyboard navigation: open submenu on Enter/Space
   $('.sog-rebrand__nav li.menu-item-has-children > a').on('keydown', function(e) {
+    if ($(this).closest('.sog-rebrand__mobile-nav').length) {
+      return;
+    }
+
     if (e.key === 'Enter' || e.key === ' ') {
       $(this).trigger('click');
       e.preventDefault();

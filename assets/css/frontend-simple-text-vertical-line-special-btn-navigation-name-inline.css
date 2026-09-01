@@ -93,113 +93,40 @@
 	}
 
     & .sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline .school-name {
-		font-family: var(--sog-rebrand-header-school-name-font, var(--sog-rebrand-font-body));
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', Arial, sans-serif);
 		color: var(--sog-rebrand-header-school-name-color, inherit);
-		font-size: 1.875rem;
-		font-style: normal;
-		font-weight: 700;
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.875rem);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 700);
+		text-transform: var(--sog-rebrand-header-school-name-text-transform, none);
 		line-height: 1.875rem; /* 100% */
 		grid-column: span 3 / span 3;
 	}
 
 	& .sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline .sog-rebrand__brand-cluster--site-name-description .site-name,
-	& .sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline .sog-rebrand__brand-cluster--site-name-description a .site-name,
-	& .sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline .sog-rebrand__brand-cluster--site-name-description .site-description {
-		font-family: var(--sog-rebrand-header-text);
+	& .sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline .sog-rebrand__brand-cluster--site-name-description a .site-name {
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
 		color: var(--sog-rebrand-header-text-color, inherit);
-		font-size: 1rem;
-		font-style: normal;
-		font-weight: 600;
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1rem);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 600);
+		text-transform: var(--sog-rebrand-header-site-name-text-transform, none);
 		line-height: 1.25rem; /* 125% */
 		letter-spacing: 0.06rem;
 		align-self: flex-start;
-        height: inherit;
+		height: inherit;
 	}
 
-    & .sog-rebrand__footer-richtext form {
-        margin-bottom: 0.9375rem !important;
-    }
-
-    & .sog-rebrand__footer-richtext form label.mailchimp-label {
-        color: var(--sog-rebrand-footer-text, #FFF) !important;
-        font-family: "Open Sans" !important;
-        font-size: 1rem !important;
-        font-style: normal !important;
-        font-weight: 500 !important;
-        line-height: 1.625rem !important; /* 162.5% */
-        margin-bottom: 0.625rem !important;
-    }
-
-    & .sog-rebrand__footer-richtext form .mailchimp-form {
-        display: flex !important;
-        height: 2.875rem !important;
-        align-items: center !important;
-        gap: 1.25rem !important;
-    }
-
-    & .sog-rebrand__footer-richtext form .mailchimp-form input[type="email"] {
-        display: flex !important;
-        width: 15.375rem !important;
-        padding: 0.375rem 0.875rem !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: flex-start !important;
-        gap: 0.625rem !important;
-    }
-
-    & .sog-rebrand__footer-richtext form .mailchimp-form input#mailchimp-signup-btn {
-        border-radius: 0.3125rem !important;
-        background-color: #4B9CD3 !important;
-        color: #FFFFFF !important;
-        font-family: "Open Sans", sans-serif !important;
-        font-size: 1rem !important;
-        font-style: normal !important;
-        font-weight: 500 !important;
-        line-height: 1.625rem !important; /* 162.5% */
-    }
-}
-
-@media (max-width: 782px) {
-    :is(
-        .sog-rebrand__header[data-sog-rebrand-component="header"],
-        .sog-rebrand__footer[data-sog-rebrand-component="footer"],
-        .sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
-    ) {
-        & .sog-rebrand__footer-logos .sog-rebrand__footer-logo-item:nth-child(1) .sog-rebrand__footer-logo-image,
-		& .sog-rebrand__footer-logos .logo-site-name-container .sog-rebrand__footer-logo-item .sog-rebrand__footer-logo-image {
-			width: 10.3125rem !important;
-			height: 3.1875rem !important;
-			aspect-ratio: 55/17;
-		}
-
-		& .sog-rebrand__footer-logos .sog-rebrand__footer-logo-item:nth-child(2) .sog-rebrand__footer-logo-image,
-		& .sog-rebrand__footer-logos .sog-rebrand__footer-logo-item:nth-child(3) .sog-rebrand__footer-logo-image {
-			width: 9.5rem !important;
-			height: 2.6875rem !important;
-			aspect-ratio: 152/43 !important;
-		}
-
-        & ul.sog-rebrand__menu.sog-rebrand__menu--footer li a {
-            font-family: "Open Sans";
-            font-size: 1rem;
-            font-style: normal;
-            font-weight: 500;
-            line-height: 1.625rem; /* 162.5% */
-            text-decoration-line: underline;
-            text-decoration-style: solid;
-            text-decoration-skip-ink: auto;
-            text-decoration-thickness: auto;
-            text-underline-offset: auto;
-            text-underline-position: from-font;
-        }
-
-        & .sog-rebrand__footer-richtext form label.mailchimp-label {
-            text-align: center !important;
-        }
-
-        & .sog-rebrand__footer-richtext form .mailchimp-form {
-            flex-direction: column !important;
-            height: auto !important;
-        }
-    }
+	& .sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline .sog-rebrand__brand-cluster--site-name-description .site-description {
+		font-family: var(--sog-rebrand-header-site-description-font-family, 'Open Sans', Arial, sans-serif);
+		color: var(--sog-rebrand-header-text-color, inherit);
+		font-size: var(--sog-rebrand-header-site-description-font-size, 1rem);
+		font-style: var(--sog-rebrand-header-site-description-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-description-font-weight, 600);
+		text-transform: var(--sog-rebrand-header-site-description-text-transform, none);
+		line-height: 1.25rem; /* 125% */
+		letter-spacing: 0.06rem;
+		align-self: flex-start;
+		height: inherit;
+	}
 }

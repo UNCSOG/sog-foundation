@@ -26,6 +26,7 @@ $logo_url           = isset( $args['logo_url'] ) ? (string) $args['logo_url'] : 
 $header_main_menu   = isset( $args['header_main_menu'] ) ? (string) $args['header_main_menu'] : '';
 $header_bottom_menu = isset( $args['header_bottom_menu'] ) ? (string) $args['header_bottom_menu'] : '';
 $mobile_nav_id      = isset( $args['mobile_nav_id'] ) ? (string) $args['mobile_nav_id'] : 'sog-rebrand-mobile-nav';
+$navigation_styles  = isset( $args['navigation_styles'] ) ? (string) $args['navigation_styles'] : '';
 
 $show_mobile_toggle = ! empty( $header_main_menu ) || ! empty( $header_bottom_menu );
 
@@ -61,16 +62,9 @@ $special_btn_style_parts = array(
 );
 
 $special_btn_style = implode( '', $special_btn_style_parts );
-$site_name_style = '';
-$school_name_style = '';
-
-if ( ! empty( $settings['header_school_name_text_transform'] ) ) {
-	$school_name_style = 'text-transform:' . esc_attr( $settings['header_school_name_text_transform'] ) . ';';
-}
-
-if ( ! empty( $settings['header_site_name_text_transform'] ) ) {
-	$site_name_style = 'text-transform:' . esc_attr( $settings['header_site_name_text_transform'] ) . ';';
-}
+$school_name_style      = isset( $args['school_name_style'] ) ? (string) $args['school_name_style'] : '';
+$site_name_style        = isset( $args['site_name_style'] ) ? (string) $args['site_name_style'] : '';
+$site_description_style = isset( $args['site_description_style'] ) ? (string) $args['site_description_style'] : '';
 ?>
 
 <div class="sog-rebrand__header-core sog-rebrand__header-core--simple-text sog-rebrand__header-core--simple-text-vertical-line-special-btn-navigation-name-inline">
@@ -80,7 +74,7 @@ if ( ! empty( $settings['header_site_name_text_transform'] ) ) {
 				<p class="sog-rebrand__brand-title school-name" style="<?php echo esc_attr( $school_name_style ); ?>color: var(--sog-rebrand-header-school-name-color)"><?php echo esc_html( $school_name ); ?></p>
 			</div>
 
-			<div class="sog-rebrand__header-separator<?php echo ! empty( $settings['header_separator_hide_mobile'] ) ? ' sog-rebrand__header-separator--hide-mobile' : ''; ?>" style="<?php echo esc_attr( sprintf( 'border-top:%1$spx %2$s %3$s;', (int) $settings['header_separator_thickness'], esc_attr( (string) $settings['header_separator_style'] ), esc_attr( (string) $settings['header_separator_color'] ) ) ); ?>"></div>
+			<div class="sog-rebrand__header-separator<?php echo ! empty( $settings['header_separator_hide_mobile'] ) ? ' sog-rebrand__header-separator--hide-mobile' : ''; ?>" style="<?php echo esc_attr( sprintf( 'border-top:%1$spx %2$s %3$s;padding:%4$spx %5$spx %6$spx %7$spx;', (int) $settings['header_separator_thickness'], esc_attr( (string) $settings['header_separator_style'] ), esc_attr( (string) $settings['header_separator_color'] ), (int) ( $settings['header_separator_padding_top'] ?? 0 ), (int) ( $settings['header_separator_padding_right'] ?? 0 ), (int) ( $settings['header_separator_padding_bottom'] ?? 0 ), (int) ( $settings['header_separator_padding_left'] ?? 0 ) ) ); ?>"></div>
 
 			<div class="sog-rebrand__brand-cluster sog-rebrand__brand-cluster--nav-special-btn-names-inline">
 				<div class="sog-rebrand__brand-cluster sog-rebrand__brand-cluster--site-name-description">
@@ -98,38 +92,33 @@ if ( ! empty( $settings['header_site_name_text_transform'] ) ) {
 
 					<?php if ( ! empty( $site_description ) ) : ?>
 						<div class="sog-rebrand__brand-cluster">
-							<p class="sog-rebrand__brand-title site-tagline site-description"><?php echo esc_html( $site_description ); ?></p>
+							<p class="sog-rebrand__brand-title site-tagline site-description" style="<?php echo esc_attr( $site_description_style ); ?>"><?php echo esc_html( $site_description ); ?></p>
 						</div>
 					<?php endif; ?>
 				</div>
 
-				<div class="sog-rebrand__desktop-nav">
-					<?php if ( $header_main_menu ) : ?>
-						<nav class="sog-rebrand__nav" aria-label="<?php echo esc_attr__( 'Header menu', 'sog-unc-rebrand' ); ?>">
-							<?php echo wp_kses_post( $header_main_menu ); ?>
-						</nav>
-					<?php endif; ?>
+				<?php if ( $header_main_menu || $settings['header_special_button_enabled'] ) : ?>
+					<div class="sog-rebrand__desktop-nav sog-rebrand__navigation-cluster" style="<?php echo $navigation_styles; ?>">
+						<?php if ( $header_main_menu ) : ?>
+							<nav class="sog-rebrand__nav" aria-label="<?php echo esc_attr__( 'Header menu', 'sog-unc-rebrand' ); ?>">
+								<?php echo wp_kses_post( $header_main_menu ); ?>
+							</nav>
+						<?php endif; ?>
 
-					<?php
-					// Special individual button
-					if (
-						!empty($settings['header_special_button_text']) &&
-						!empty($settings['header_special_button_url'])
-					) :
-					?>
-						<a href="<?php echo esc_url($settings['header_special_button_url']); ?>" class="<?php echo esc_attr($special_btn_classes); ?>" style="<?php echo esc_attr($special_btn_style); ?>" target="<?php echo !empty($settings['header_special_button_new_tab']) ? '_blank' : '_self'; ?>" rel="<?php echo !empty($settings['header_special_button_new_tab']) ? 'noopener noreferrer' : ''; ?>">
-							<span><?php echo esc_html($settings['header_special_button_text']); ?></span>
-						</a>
-					<?php endif; ?>
+						<?php if( $settings['header_special_button_enabled'] ) : ?>
+							<?php load_template( SOG_UNC_REBRAND_PATH . 'templates/header/special-button.php', false, array( 'settings' => $settings ) ); ?>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
 
-					<?php if ( $show_mobile_toggle ) : ?>
-						<button class="sog-rebrand__menu-toggle" type="button" aria-expanded="false" aria-controls="<?php echo esc_attr( $mobile_nav_id ); ?>">
-							<span class="sog-rebrand__menu-toggle-label"><?php echo esc_html__( 'Menu', 'sog-unc-rebrand' ); ?></span>
-							<span class="sog-rebrand__menu-toggle-bars" aria-hidden="true"></span>
-						</button>
-					<?php endif; ?>
-				</div>
 			</div>
+
+			<?php if ( $show_mobile_toggle ) : ?>
+				<button class="sog-rebrand__menu-toggle" type="button" aria-expanded="false" aria-controls="<?php echo esc_attr( $mobile_nav_id ); ?>" style="<?php echo $navigation_styles; ?>">
+					<span class="sog-rebrand__menu-toggle-label"><?php echo esc_html__( 'Menu', 'sog-unc-rebrand' ); ?></span>
+					<span class="sog-rebrand__menu-toggle-bars" aria-hidden="true"></span>
+				</button>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>

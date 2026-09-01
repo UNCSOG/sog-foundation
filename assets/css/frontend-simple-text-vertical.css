@@ -10,7 +10,12 @@
      * and optional school name stacked vertically, and the
      * navigation and search (if enabled) in a second row below.
      * The header separator is removed in this layout, but the
-     * bottom border of the header is retained.
+     * bottom border of the header is retained. 
+	 * 
+	 * Vertical w/o Line 
+	 * with the site name then school and description (has school
+	 * name, site name, site description and the menu both for
+	 * desktop and mobile; social media).
 	 * ------------------------------------------------------- */
 
 	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__header-shell {
@@ -19,25 +24,39 @@
 		gap: 0.625rem;
 	}
 
+	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__brand-social-grid {
+		display: grid;
+		grid-template-rows: 1fr;
+		grid-template-columns: 1fr auto;
+		width: 100%;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__social-grid-column {
+		align-self: var(--sog-rebrand-social-grid-align, center);
+	}
+
+    & .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__site-name-search-cluster {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+    }
+
 	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__inner .sog-rebrand__header-shell .sog-rebrand__brand-cluster .sog-rebrand__brand-title.site-name,
 	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__inner .sog-rebrand__header-shell .sog-rebrand__brand-cluster a.sog-rebrand__brand-link .sog-rebrand__brand-title.site-name {
-		font-size: 1.875rem !important;
-		font-weight: 700;
-		font-style: normal;
-		letter-spacing: normal;
-		line-height: 1.875rem; /* 1.25; */
-		/* Customizable via CSS var; Montserrat as default if var is unset */
-		font-family: var(--sog-rebrand-header-text, 'Open Sans', sans-serif);
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1.875rem);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 700);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		text-transform: var(--sog-rebrand-header-site-name-text-transform, none);
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Open Sans', sans-serif);
 		color: var(--sog-rebrand-header-text-color, inherit);
+		letter-spacing: normal;
 	}
 
 	& .sog-rebrand__header-core--simple-text-vertical .sog-rebrand__brand-title.school-name,
 	& .sog-rebrand__header-core--simple-text-vertical a.sog-rebrand__brand-link .sog-rebrand__brand-title.school-name {
-		font-family: var(--sog-rebrand-font-body, 'Open Sans', sans-serif);
-		font-size: 1.5rem;
-		font-style: normal;
-		font-weight: 400;
-		line-height: 1.875rem; /* 125% */
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', sans-serif);
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.5rem);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 400);
 		color: var(--sog-rebrand-header-school-name-color, inherit);
 	}
 }

@@ -96,13 +96,19 @@ class Assets {
 			'simple-text-vertical',
 			'simple-text-vertical-line',
 			'simple-text-vertical-line-alternate',
+			'simple-text-vertical-line-double-search',
+			'simple-text-vertical-line-site-name-school-name-tagline',
 			'simple-text-vertical-line-special-btn-navigation-name-inline',
 			'simple-text-vertical-nav-search',
+			'simple-text-vertical-nav-inline-school-name',
 			'simple-text-vertical-no-navigation',
-			'simple-text-vertical-search',
 			'simple-text-vertical-social-give',
-			'simple-text-vertical-social-navigation',
 			'simple-text-vertical-social-no-navigation',
+			'simple-text-nav-inline-site-name',
+			'simple-text-vertical-line-tagline-school-name-site-name',
+			'footer',
+			'navigation',
+			'searchform',
 		);
 
 		foreach ( $variant_stylesheets as $variant ) {
@@ -145,6 +151,34 @@ class Assets {
 
 		wp_enqueue_media();
 		wp_enqueue_style( 'wp-color-picker' );
+
+		wp_add_inline_style(
+			'wp-color-picker',
+			'.iris-picker .iris-picker-inner .iris-square {
+				height: 99.125px !important;
+			}'
+		);
+
+		wp_add_inline_style(
+			'wp-color-picker',
+			'.iris-picker .iris-picker-inner .iris-slider.iris-strip {
+				height: 99.317px !important;
+			}'
+		);
+
+		wp_add_inline_style(
+			'wp-color-picker',
+			'.iris-picker .iris-palette-container .iris-palette {
+				display: inline-block !important;
+				float: none !important;
+				width: 20px !important;
+				height: 20px !important;
+				margin: 2px !important;
+				border-radius: 2px;
+				box-shadow: 0 1px 2px rgba(0,0,0,.25);
+				cursor: pointer;
+			}'
+		);
 
 		wp_enqueue_script(
 			'sog-unc-rebrand-admin',

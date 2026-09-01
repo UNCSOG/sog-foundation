@@ -1,0 +1,100 @@
+:is(
+	.sog-rebrand__header[data-sog-rebrand-component="header"],
+	.sog-rebrand__footer[data-sog-rebrand-component="footer"],
+	.sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
+) {
+	/* -------------------------------------------------------
+	 * Header core: simple-text-vertical-line-site-name-school-name-tagline
+	 * Template: core-simple-text-vertical-line-site-name-school-name-tagline.php
+	 * ------------------------------------------------------- */
+
+    & .sog-rebrand__header-bottom {
+        background: var(--sog-rebrand-header-bottom-bg);
+        border-top: 0 solid var(--sog-rebrand-header-bottom-border) !important;
+        color: var(--sog-rebrand-header-bottom-text);
+    }
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__inner .sog-rebrand__header-shell {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto auto auto auto !important;
+		gap: 0;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .site-name-school-name-cluster {
+		grid-row: 1;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__header-separator {
+		grid-row: 2;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__brand-title.site-tagline.site-description {
+		grid-row: 3;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__desktop-nav.sog-rebrand__navigation-cluster {
+		grid-row: 4;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__menu-toggle {
+		grid-row: 5;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__header-shell .sog-rebrand__header-separator {
+		margin: 0 !important;
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .site-name-school-name-cluster {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.625rem;
+		flex: 1 0 0;
+	}
+
+	/* site name */
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__brand-title.site-name {
+		color: var(--sog-rebrand-header-text);
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1rem);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 600);
+		letter-spacing: 0.06rem;
+	}
+
+	/* site description */
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__brand-title.site-tagline {
+		color: var(--sog-rebrand-header-site-description-color, var(--sog-rebrand-font-body));
+		font-family: var(--sog-rebrand-header-site-description-font-family, 'Open Sans', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-site-description-font-size, 1.875rem);
+		font-style: var(--sog-rebrand-header-site-description-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-description-font-weight, 700);
+	}
+
+	/* school name */
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__brand-title.school-name {
+		color: var(--sog-rebrand-header-school-name-color, var(--sog-rebrand-font-body));
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.5rem);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 400);
+	}
+}
+
+.sog-rebrand__header[data-sog-rebrand-component="header"] {
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline .sog-rebrand__inner .sog-rebrand__header-shell {
+		grid-template-rows: auto auto auto auto auto !important;
+	}
+}
+
+/* @media (max-width: 782px) {
+	& .sog-rebrand__header-core--simple-text-vertical-line-site-name-school-name-tagline {
+		& .sog-rebrand__brand-title,
+		& .sog-rebrand__brand-subtitle,
+		& .sog-rebrand__brand-title.school-name,
+		& .sog-rebrand__brand-title.site-name,
+		& .sog-rebrand__brand-title.site-tagline {
+			line-height: normal !important;
+		}
+	}
+} */

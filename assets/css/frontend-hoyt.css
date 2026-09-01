@@ -14,6 +14,24 @@
 	.sog-rebrand__footer[data-sog-rebrand-component="footer"],
 	.sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
 ) {
+	/* Header font variables (with fallbacks) */
+	--sog-rebrand-header-school-name-text-transform: none;
+	--sog-rebrand-header-school-name-font-family: 'Open Sans', Arial, sans-serif;
+	--sog-rebrand-header-school-name-font-weight: 700;
+	--sog-rebrand-header-school-name-font-style: normal;
+	--sog-rebrand-header-school-name-font-size: 1.875rem;
+	--sog-rebrand-header-site-name-text-transform: none;
+	--sog-rebrand-header-site-name-color: var(--sog-rebrand-header-text);
+	--sog-rebrand-header-site-name-font-family: 'Montserrat', Arial, sans-serif;
+	--sog-rebrand-header-site-name-font-weight: 600;
+	--sog-rebrand-header-site-name-font-style: normal;
+	--sog-rebrand-header-site-name-font-size: 1rem;
+	--sog-rebrand-header-site-description-text-transform: none;
+	--sog-rebrand-header-site-description-font-family: 'Open Sans', Arial, sans-serif;
+	--sog-rebrand-header-site-description-font-size: 1rem;
+	--sog-rebrand-header-site-description-font-weight: 600;
+	--sog-rebrand-header-site-description-font-style: normal;
+
 	& .sog-rebrand__header-shell {
 		min-height: 7.25rem;
 		padding-top: 1.875rem;
@@ -84,8 +102,14 @@
 		padding-right: var(--special-btn-padding-right);
 	}
 
-	& .sog-rebrand__header-special-button:hover {
+	& .sog-rebrand__header-special-button:hover,
+	& .sog-rebrand__header-special-button:focus,
+	& .sog-rebrand__header-special-button:target,
+	& .sog-rebrand__header-special-button:active,
+	& .sog-rebrand__header-special-button.active,
+	& .sog-rebrand__header-special-button:focus-visible {
 		background-color: var(--special-btn-hover-bg, inherit);
+		color: var(--special-btn-hover-color, var(--special-btn-color));
 	}
 
 	& .sog-rebrand__header-give-button {
@@ -126,8 +150,14 @@
 		padding-right: var(--give-btn-padding-right);
 	}
 
-	& .sog-rebrand__header-give-button:hover {
+	& .sog-rebrand__header-give-button:hover,
+	& .sog-rebrand__header-give-button:focus,
+	& .sog-rebrand__header-give-button:target,
+	& .sog-rebrand__header-give-button:active,
+	& .sog-rebrand__header-give-button.active,
+	& .sog-rebrand__header-give-button:focus-visible {
 		background-color: var(--give-btn-hover-bg, inherit);
+		color: var(--give-btn-hover-color, var(--give-btn-color));
 	}
 }
 
@@ -206,14 +236,10 @@
 		gap: var(--sog-rebrand-logo-gap-2, 41px) !important;
 	}
 
-	& .sog-rebrand__footer-columns-group {
-		grid-template-columns: minmax(min(100%, 10rem), var(--sog-rebrand-footer-column-2-width, 1fr)) minmax(min(100%, 10rem), var(--sog-rebrand-footer-column-3-width, 1fr));
-	}
-
 	& .sog-rebrand__footer-columns-group .sog-rebrand__footer-column {
-		gap: 1.25rem;
+		/* gap: 1.25rem; */
 		display: grid;
-        /* gap: var(--footer_give_social_gap, 1.25rem); */
+        gap: var(--footer_give_social_gap, 2.125rem);
         /* display: flex;
         flex-direction: column; */
 	}
@@ -260,6 +286,7 @@
 
 	& .sog-rebrand__footer-give-button:hover {
 		background-color: var(--give-btn-hover-bg, inherit);
+		color: var(--give-btn-hover-color, var(--give-btn-color));
 	}
 
 	/* & .sog-rebrand__footer-logo-item--hide-mobile, */
@@ -304,6 +331,7 @@
 	& .sog-rebrand__footer-row--bottom-hide-mobile {
 		display: none !important;
 	}
+
 }
 
 @media (min-width: 783px) and (max-width: 880.98px) {
@@ -671,4 +699,10 @@
 
 .text-uppercase {
 	text-transform: uppercase !important;
+}
+
+.hide,
+.hidden {
+	display: none !important;
+	visibility: hidden !important;
 }

@@ -21,24 +21,16 @@ $site_name          = isset( $args['site_name'] ) ? (string) $args['site_name'] 
 $site_description   = isset( $args['site_description'] ) ? (string) $args['site_description'] : '';
 $logo_url           = isset( $args['logo_url'] ) ? (string) $args['logo_url'] : '';
 
-$site_name_style = '';
-$school_name_style = '';
-
-if ( ! empty( $settings['header_school_name_text_transform'] ) ) {
-	$school_name_style = 'text-transform:' . esc_attr( $settings['header_school_name_text_transform'] ) . ';';
-}
-
-if ( ! empty( $settings['header_site_name_text_transform'] ) ) {
-	$site_name_style = 'text-transform:' . esc_attr( $settings['header_site_name_text_transform'] ) . ';';
-}
+$school_name_style      = isset( $args['school_name_style'] ) ? (string) $args['school_name_style'] : '';
+$site_name_style        = isset( $args['site_name_style'] ) ? (string) $args['site_name_style'] : '';
+$site_description_style = isset( $args['site_description_style'] ) ? (string) $args['site_description_style'] : '';
+$social_links           = isset( $args['social_links'] ) && is_array( $args['social_links'] ) ? $args['social_links'] : array();
 ?>
 <div class="sog-rebrand__header-core sog-rebrand__header-core--simple-text sog-rebrand__header-core--simple-text-vertical-social-no-navigation">
 	<div class="sog-rebrand__inner">
 		<div class="sog-rebrand__header-shell">
 			<div class="sog-rebrand__brand-cluster">
-				<?php // var_dump($logo_url, $settings['header_text_links_enabled']);
-
-				if ( !empty($settings['header_text_links_enabled']) ) : ?>
+				<?php if ( !empty($settings['header_text_links_enabled']) ) : ?>
 					<?php if( $logo_url  ) : ?>
 						<a class="sog-rebrand__brand-link" href="<?php echo esc_url( $logo_url ); ?>">
 							<span class="sog-rebrand__brand-title site-name" style="<?php echo esc_attr( $site_name_style ); ?>"><?php echo esc_html( $site_name ); ?></span>
@@ -49,42 +41,19 @@ if ( ! empty( $settings['header_site_name_text_transform'] ) ) {
 				<?php endif; ?>
 			</div>
 
+			<div class="sog-rebrand__header-separator<?php echo ! empty( $settings['header_separator_hide_mobile'] ) ? ' sog-rebrand__header-separator--hide-mobile' : ''; ?>" style="<?php echo esc_attr( sprintf( 'border-top:%1$spx %2$s %3$s;padding:%4$spx %5$spx %6$spx %7$spx;', (int) $settings['header_separator_thickness'], esc_attr( (string) $settings['header_separator_style'] ), esc_attr( (string) $settings['header_separator_color'] ), (int) ( $settings['header_separator_padding_top'] ?? 0 ), (int) ( $settings['header_separator_padding_right'] ?? 0 ), (int) ( $settings['header_separator_padding_bottom'] ?? 0 ), (int) ( $settings['header_separator_padding_left'] ?? 0 ) ) ); ?>"></div>
+
 			<div class="sog-rebrand__brand-cluster">
 				<p class="sog-rebrand__brand-title school-name" style="<?php echo esc_attr( $school_name_style ); ?>color: var(--sog-rebrand-header-school-name-color)"><?php echo esc_html( $school_name ); ?></p>
 			</div>
 
 			<?php if ( ! empty( $site_description ) ) : ?>
 				<div class="sog-rebrand__brand-cluster">
-					<p class="sog-rebrand__brand-title site-tagline site-description"><?php echo esc_html( $site_description ); ?></p>
+					<p class="sog-rebrand__brand-title site-tagline site-description" style="<?php echo esc_attr( $site_description_style ); ?>"><?php echo esc_html( $site_description ); ?></p>
 				</div>
 			<?php endif; ?>
 
-			<?php if ( ! empty( $social_links ) ) : ?>
-				<ul class="sog-rebrand__menu sog-rebrand__menu--social social-header<?php echo !empty($settings['header_social_links_hide_mobile']) ? ' sog-rebrand__hide-mobile' : ''; ?>" data-sog-rebrand-alignment="<?php echo esc_attr( (string) $settings['header_social_links_alignment'] ); ?>" role="list">
-					<?php foreach ( $social_links as $social_link ) : ?>
-						<?php
-						$link_name = isset( $social_link['name'] ) ? (string) $social_link['name'] : ( isset( $social_link['label'] ) ? (string) $social_link['label'] : '' );
-						$icon_svg  = isset( $social_link['svg'] ) ? (string) $social_link['svg'] : '';
-						$has_icon = '' !== $icon_svg;
-						?>
-
-						<li class="menu-item">
-							<a
-								href="<?php echo esc_url( $social_link['url'] ); ?>"
-								class="sog-rebrand__social-link<?php echo $has_icon ? '' : ' sog-rebrand__social-link--text'; ?>"
-								aria-label="<?php echo esc_attr( $link_name ); ?>"
-							><?php
-								if ( $has_icon ) {
-									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG markup was sanitized before storage.
-									echo $icon_svg;
-								} else {
-									echo esc_html( $link_name );
-								}
-							?></a>
-						</li>
-					<?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
+			<?php load_template( SOG_UNC_REBRAND_PATH . 'templates/header/social-media.php', null, array( 'settings' => $settings, 'social_links' => $social_links ) ); ?>
 		</div>
 	</div>
 </div>

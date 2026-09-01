@@ -1,5 +1,9 @@
 # Plugin Change Log
 
+## June 25, 2026 - Version 0.3
+
+## April 5, 2026 - Version 0.2.1
+
 ## April 3, 2026 - Version 0.2.0
 
 1. Updated the .gitignore file.
