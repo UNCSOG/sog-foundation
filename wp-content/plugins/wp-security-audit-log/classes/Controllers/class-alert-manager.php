@@ -42,18 +42,26 @@ if ( ! class_exists( '\WSAL\Controllers\Alert_Manager' ) ) {
 		 * Holds list of the ignored \WP_Post types.
 		 */
 		public const IGNORED_POST_TYPES = array(
-			'attachment',          // Attachment CPT.
-			'revision',            // Revision CPT.
-			'nav_menu_item',       // Nav menu item CPT.
-			'customize_changeset', // Customize changeset CPT.
-			'custom_css',          // Custom CSS CPT.
-			'wp_template',         // Gutenberg templates.
+			// Attachment CPT.
+			'attachment',
+			// Revision CPT.
+			'revision',
+			// Nav menu item CPT.
+			'nav_menu_item',
+			// Customize changeset CPT.
+			'customize_changeset',
+			// Custom CSS CPT.
+			'custom_css',
+			// Gutenberg templates.
+			'wp_template',
+			// WP Core collaborative editing sync storage. Stops 2055 event spam triggered by new WP collaborative feature.
+			'wp_sync_storage',
 		);
 
 		/**
 		 * Array of loggers (WSAL_AbstractLogger).
 		 *
-		 * @var WSAL_AbstractLogger[]
+		 * @var \WSAL_AbstractLogger[]
 		 *
 		 * @since 4.5.0
 		 */
@@ -768,7 +776,7 @@ if ( ! class_exists( '\WSAL\Controllers\Alert_Manager' ) ) {
 				\esc_attr( $class ),
 				'<span style="color:#dc3232; font-weight:bold;">' . \esc_html__( 'ERROR:', 'wp-security-audit-log' ) . '</span>',
 				\esc_html( $message ),
-				'<a href="https://melapress.com/contact" target="_blank">' . \esc_html__( 'Contact us', 'wp-security-audit-log' ) . '</a>'
+				'<a href="https://melapress.com/contact/?utm_source=plugin&utm_medium=wsal&utm_campaign=error-notice-contact-us" target="_blank">' . \esc_html__( 'Contact us', 'wp-security-audit-log' ) . '</a>'
 			);
 		}
 
@@ -811,9 +819,11 @@ if ( ! class_exists( '\WSAL\Controllers\Alert_Manager' ) ) {
 						}
 					}
 					if ( 0 === $event_data['CurrentUserID'] ) {
-						if ( 'system' === \strtolower( $alert_obj['object'] ) ) {
+						$alert_object = \strtolower( (string) ( $alert_obj['object'] ?? '' ) );
+
+						if ( 'system' === $alert_object ) {
 							$event_data['Username'] = 'System';
-						} elseif ( str_starts_with( \strtolower( $alert_obj['object'] ), 'woocommerce' ) && 9130 !== (int) $event_id ) {
+						} elseif ( str_starts_with( $alert_object, 'woocommerce' ) && 9130 !== (int) $event_id ) {
 							$event_data['Username'] = 'WooCommerce System';
 						} else {
 							$event_data['Username'] = 'Unknown User';
@@ -823,9 +833,11 @@ if ( ! class_exists( '\WSAL\Controllers\Alert_Manager' ) ) {
 			}
 			if ( isset( $event_data['CurrentUserID'] ) && ! isset( $event_data['Username'] ) ) {
 				if ( 0 === $event_data['CurrentUserID'] ) {
-					if ( 'system' === \strtolower( $alert_obj['object'] ) ) {
+					$alert_object = \strtolower( (string) ( $alert_obj['object'] ?? '' ) );
+
+					if ( 'system' === $alert_object ) {
 						$event_data['Username'] = 'System';
-					} elseif ( str_starts_with( \strtolower( $alert_obj['object'] ), 'woocommerce' ) ) {
+					} elseif ( str_starts_with( $alert_object, 'woocommerce' ) ) {
 						$event_data['Username'] = 'WooCommerce System';
 					} else {
 						$event_data['Username'] = 'Unknown User';
@@ -1259,7 +1271,7 @@ if ( ! class_exists( '\WSAL\Controllers\Alert_Manager' ) ) {
 				array(
 					'Message' => $message,
 					'Context' => $args,
-					'Trace'   => debug_backtrace(),
+					'Trace'   => debug_backtrace(), //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
 				)
 			);
 		}
@@ -1350,6 +1362,8 @@ if ( ! class_exists( '\WSAL\Controllers\Alert_Manager' ) ) {
 					'denied'       => esc_html__( 'Denied', 'wp-security-audit-log' ),
 					'available'    => esc_html__( 'Available', 'wp-security-audit-log' ),
 					'completed'    => esc_html__( 'Completed', 'wp-security-audit-log' ),
+					'connected'    => esc_html__( 'Connected', 'wp-security-audit-log' ),
+					'disconnected' => esc_html__( 'Disconnected', 'wp-security-audit-log' ),
 				);
 				// sort the types alphabetically.
 				asort( self::$event_types );

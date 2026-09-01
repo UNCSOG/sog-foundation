@@ -4,7 +4,7 @@ class PostmanEmailit extends PostmanServiceRequest {
     /**
      * Success Code
      */
-    private $email_sent_code = 200;
+	private $email_sent_code = 200;
 
     /**
      * API Key
@@ -51,7 +51,7 @@ class PostmanEmailit extends PostmanServiceRequest {
         $content = json_encode( $content );
         return $this->request(
             'POST',
-            '/v1/emails',
+            '/v2/emails',
             $this->get_headers(),
             $content,
             $this->email_sent_code

@@ -378,7 +378,7 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 				$cached_message = isset( $cached_message ) ? $cached_message : sprintf(
 				/* Translators: 1: html that opens a link, 2: html that closes a link. */
 					__( 'This type of activity / change is no longer monitored. You can create your own custom event IDs to keep a log of such change. Read more about custom events %1$shere%2$s.', 'wp-security-audit-log' ),
-					'<a href="https://melapress.com/support/kb/create-custom-events-wordpress-activity-log/" rel="noopener noreferrer" target="_blank">',
+					'<a href="https://melapress.com/support/kb/create-custom-events-wordpress-activity-log/?utm_source=plugin&utm_medium=wsal&utm_campaign=event-custom-events-kb" rel="noopener noreferrer" target="_blank">',
 					'</a>'
 				);
 			}
@@ -407,7 +407,7 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 
 			foreach ( $meta_array as $name => $value ) {
 				if ( \is_array( $value ) || is_object( $value ) ) {
-					$value = \print_r( (array) $value, \true );
+					$value = \print_r( (array) $value, \true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 				}
 				$cached_message .= $name . ' : ' . $value . '<br>';
 			}
@@ -468,7 +468,8 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 			}
 
 			// Check if the meta is part of the occurrences table.
-			if ( in_array( $name, array_keys( self::$migrated_meta ), true ) ) {
+			$is_migrated_meta = in_array( $name, array_keys( self::$migrated_meta ), true );
+			if ( $is_migrated_meta ) {
 				$property_name = self::$migrated_meta[ $name ];
 				if ( isset( $data_collected[ $property_name ] ) ) {
 					$result = $data_collected[ $property_name ];
@@ -483,7 +484,10 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 				$result = $meta['value'];
 			}
 
-			$result = maybe_unserialize( $result );
+			if ( ! $is_migrated_meta ) {
+				$result = \maybe_unserialize( $result );
+			}
+
 			if ( 'CurrentUserRoles' === $name && is_string( $result ) ) {
 				$result = preg_replace( '/[\[\]"]/', '', $result );
 				$result = explode( ',', $result );
@@ -659,10 +663,13 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 
 			$sql = 'SELECT DISTINCT client_ip FROM ' . self::get_table_name();
 			if ( ! empty( $search ) ) {
-				$sql .= ' WHERE 1 AND client_ip LIKE "%' . $_wpdb->esc_like( $search ) . '%"';
+				$sql .= $_wpdb->prepare( ' WHERE client_ip LIKE %s', '%' . $_wpdb->esc_like( $search ) . '%' );
 			}
 			if ( ! is_null( $limit ) ) {
-				$sql .= ' LIMIT ' . $limit;
+				$limit = \absint( $limit );
+				if ( 0 < $limit ) {
+					$sql .= ' LIMIT ' . $limit;
+				}
 			}
 			$ips    = $_wpdb->get_col( $sql );
 			$result = array();
@@ -701,7 +708,7 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 						}
 
 						foreach ( self::$migrated_meta as $name => $new_name ) {
-							$prepared_array[ $result_row[ $table_name . 'id' ] ]['meta_values'][ $name ] = \maybe_unserialize( $result_row[ $table_name . $new_name ] );
+							$prepared_array[ $result_row[ $table_name . 'id' ] ]['meta_values'][ $name ] = $result_row[ $table_name . $new_name ];
 						}
 					}
 

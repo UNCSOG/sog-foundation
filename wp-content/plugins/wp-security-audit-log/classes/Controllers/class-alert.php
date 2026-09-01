@@ -348,7 +348,7 @@ if ( ! class_exists( '\WSAL\Controllers\Alert' ) ) {
 				}
 			}
 
-			if ( isset( $alert['links'] ) && ! empty( $alert['links'] ) && \is_array( $alert['links'] ) && \in_array( '%PostUrl%', $alert['links'] ) && Settings_Helper::get_url_parameters() ) {
+			if ( isset( $alert['links'] ) && ! empty( $alert['links'] ) && \is_array( $alert['links'] ) && \in_array( '%PostUrl%', $alert['links'], true ) && Settings_Helper::get_url_parameters() ) {
 				if ( isset( $meta_data['PostUrl'] ) ) {
 					$return = $meta_data['PostUrl'];
 
@@ -360,16 +360,25 @@ if ( ! class_exists( '\WSAL\Controllers\Alert' ) ) {
 
 					if ( $processed_url && isset( $processed_url['query'] ) ) {
 						$params = array();
-						parse_str( $processed_url['query'], $params );
+						\wp_parse_str( $processed_url['query'], $params );
 
 						if ( ! empty( $params ) ) {
 
-							$return_temp = esc_html__( 'Query params:', 'wp-security-audit-log' );
-							$return      = '';
+							$return_temp        = \esc_html__( 'Query params:', 'wp-security-audit-log' );
+							$return             = '';
+							$query_params_parts = array();
 							foreach ( $params as $key => $value ) {
-								$return .= $key . '=' . $value . ', ';
+								if ( is_array( $value ) ) {
+									$value = \wp_json_encode( $value );
+
+									if ( false === $value ) {
+										$value = '';
+									}
+								}
+
+								$query_params_parts[] = \esc_html( (string) $key ) . '=' . \esc_html( (string) $value );
 							}
-							$return = rtrim( $return, ', ' );
+							$return = implode( ', ', $query_params_parts );
 							$return = $return_temp . ' ' . $configuration['highlight_start_tag'] . $return . $configuration['highlight_end_tag'] . $configuration['end_of_line'];
 
 							$result = $return . \str_replace( array( 'http://%PostUrl%', 'https://%PostUrl%' ), $meta_data['PostUrl'], $result );
@@ -473,9 +482,96 @@ if ( ! class_exists( '\WSAL\Controllers\Alert' ) ) {
 				unset( $link_label );
 			}
 
+			// @free:start
+			$result = self::add_free_version_additional_links( $result, $alert );
+			// @free:end
+
 			return $result;
 		}
 
+		// @free:start
+		/**
+		 * Adds the free version additional links for the alert.
+		 *
+		 * @param array $result - The link collection.
+		 * @param array $alert - The alert data.
+		 *
+		 * @return array $result - The link collection.
+		 * @since 5.6.4
+		 */
+		private static function add_free_version_additional_links( array $result, array $alert ): array {
+			$alert_id = (int) ( $alert['code'] ?? 0 );
+
+			if ( 0 >= $alert_id ) {
+				return $result;
+			}
+
+			$free_version_additional_links = self::get_free_version_viewer_additional_links();
+
+			$hook_additional_links = (array) \apply_filters( 'wsal_free_additional_event_links', array() );
+
+			foreach ( $hook_additional_links as $event_id => $link_labels ) {
+				foreach ( (array) $link_labels as $link_label ) {
+					$free_version_additional_links[ (int) $event_id ][] = (string) $link_label;
+				}
+			}
+
+			if ( ! isset( $free_version_additional_links[ $alert_id ] ) ) {
+				return $result;
+			}
+
+			foreach ( (array) $free_version_additional_links[ $alert_id ] as $link_label ) {
+				$link_url              = 'https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=viewer-cta-' . $alert_id;
+				$result[ $link_label ] = array(
+					'url'              => $link_url,
+					'needs_formatting' => true,
+					'title'            => $link_label,
+					'label'            => $link_label,
+				);
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Returns the free version additional links shown in the log viewer.
+		 *
+		 * Each entry maps an event ID to one or more link labels.
+		 *
+		 * @return array $links - Map of event ID to link labels.
+		 *
+		 * @since 5.6.4
+		 */
+		private static function get_free_version_viewer_additional_links(): array {
+			$alerts_link_label   = \esc_html__( 'Get instant alerts for events like this with Premium', 'wp-security-audit-log' );
+			$sessions_link_label = \esc_html__( 'Monitor and manage active user sessions with Premium', 'wp-security-audit-log' );
+
+			return array(
+				/**
+				 * General events.
+				 */
+				1004 => array( $alerts_link_label ),
+				4002 => array( $alerts_link_label ),
+				4008 => array( $alerts_link_label ),
+				4025 => array( $alerts_link_label ),
+				6004 => array( $alerts_link_label ),
+				/**
+				 * Session management-related events.
+				 */
+				1000 => array( $sessions_link_label ),
+				1005 => array( $sessions_link_label ),
+				1007 => array( $sessions_link_label ),
+				1009 => array( $sessions_link_label ),
+			);
+		}
+		// @free:end
+
+		/**
+		 * Gets the post revision link title.
+		 *
+		 * @return string $title - Post revision link title.
+		 * @since 5.4.0
+		 */
 		private static function get_revision_link_title(): string {
 			if ( \defined( 'WP_POST_REVISIONS' ) && ! WP_POST_REVISIONS ) {
 				return esc_html__( 'Revisions are not enabled. Enable revisions to view the content changes. Read more.', 'wp-security-audit-log' );
@@ -496,7 +592,7 @@ if ( ! class_exists( '\WSAL\Controllers\Alert' ) ) {
 		 */
 		private static function get_post_revision_link( $post_id, $url ): string {
 			if ( \defined( 'WP_POST_REVISIONS' ) && ! WP_POST_REVISIONS ) {
-				return 'https://melapress.com/wordpress-revisions-posts-pages/#utm_source=plugin&utm_medium=link&utm_campaign=wsal';
+				return 'https://melapress.com/wordpress-revisions-posts-pages/?utm_source=plugin&utm_medium=wsal&utm_campaign=event-revisions-info';
 			} elseif ( '' !== $url ) {
 				return (string) WP_Content_Sensor::get_post_revision( $post_id );
 			} else {

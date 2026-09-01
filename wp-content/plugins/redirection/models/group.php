@@ -21,6 +21,12 @@ require_once __DIR__ . '/group-filter.php';
  *     enabled: bool,
  *     default?: bool
  * }
+ * @phpstan-type GroupExport array{
+ *     id: int,
+ *     name: string,
+ *     module_id: int,
+ *     status: string
+ * }
  * @phpstan-type GroupFilteredResult array{
  *     items: array<GroupJson>,
  *     total: int
@@ -30,6 +36,7 @@ require_once __DIR__ . '/group-filter.php';
 class Red_Group {
 	const DEFAULT_PER_PAGE = 25;
 	const MAX_PER_PAGE = 200;
+	const DROPDOWN_LIMIT = 1000;
 
 	/**
 	 * Group ID
@@ -60,6 +67,13 @@ class Red_Group {
 	private $status = 'enabled';
 
 	/**
+	 * Group position
+	 *
+	 * @var integer
+	 */
+	private $position = 0;
+
+	/**
 	 * Constructor
 	 *
 	 * @param GroupData|string $values Values.
@@ -75,6 +89,10 @@ class Red_Group {
 
 			if ( isset( $values->status ) ) {
 				$this->status = $values->status;
+			}
+
+			if ( isset( $values->position ) ) {
+				$this->position = intval( $values->position, 10 );
 			}
 		}
 	}
@@ -336,6 +354,15 @@ class Red_Group {
 	}
 
 	/**
+	 * Get the group position
+	 *
+	 * @return int
+	 */
+	public function get_position() {
+		return $this->position;
+	}
+
+	/**
 	 * Get filtered groups with pagination
 	 *
 	 * @param array<string, mixed> $params Filter and pagination parameters.
@@ -402,6 +429,62 @@ class Red_Group {
 	}
 
 	/**
+	 * Get all groups for use in a dropdown/select control
+	 *
+	 * Unlike get_filtered() this doesn't calculate a per-group redirect count, since
+	 * that isn't needed for a dropdown and would mean a query per group.
+	 *
+	 * @return GroupFilteredResult
+	 */
+	public static function get_for_dropdown() {
+		global $wpdb;
+
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id, name, module_id, status FROM {$wpdb->prefix}redirection_groups ORDER BY name ASC LIMIT %d",
+				self::DROPDOWN_LIMIT
+			)
+		);
+
+		$options = Red_Options::get();
+		$items = array();
+
+		foreach ( $rows as $row ) {
+			$group = new Red_Group( $row );
+			$group_json = $group->to_dropdown_json();
+
+			if ( $group->get_id() === $options['last_group_id'] ) {
+				$group_json['default'] = true;
+			}
+
+			$items[] = $group_json;
+		}
+
+		return array(
+			'items' => $items,
+			'total' => count( $items ),
+		);
+	}
+
+	/**
+	 * Convert group to a lightweight JSON representation for dropdowns
+	 *
+	 * @return GroupJson
+	 */
+	public function to_dropdown_json() {
+		$module = Red_Module::get( $this->get_module_id() );
+
+		return array(
+			'id' => $this->get_id(),
+			'name' => $this->get_name(),
+			'redirects' => 0,
+			'module_id' => $this->get_module_id(),
+			'moduleName' => $module ? $module->get_name() : '',
+			'enabled' => $this->is_enabled(),
+		);
+	}
+
+	/**
 	 * Convert group to JSON representation
 	 *
 	 * @return GroupJson
@@ -417,6 +500,20 @@ class Red_Group {
 			'moduleName' => $module ? $module->get_name() : '',
 			'enabled' => $this->is_enabled(),
 		);
+	}
+
+	/**
+	 * Convert group to export representation
+	 *
+	 * @return GroupExport
+	 */
+	public function to_export() {
+		return [
+			'id' => $this->get_id(),
+			'name' => $this->get_name(),
+			'module_id' => $this->get_module_id(),
+			'status' => $this->status,
+		];
 	}
 
 	/**

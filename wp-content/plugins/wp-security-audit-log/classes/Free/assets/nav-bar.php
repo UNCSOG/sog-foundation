@@ -6,6 +6,11 @@
  * @package wsal
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 ?>
 <style>
 /* Styles - START */
@@ -222,15 +227,28 @@
 <?php
 global $current_screen;
 
-$log_viewer = ( in_array( $current_screen->base, array( 'toplevel_page_wsal-auditlog', 'toplevel_page_wsal-auditlog-network' ), true ) ) ? 'active' : '';
-$settings   = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-settings', 'wp-activity-log_page_wsal-settings-network' ), true ) ) ? 'active' : '';
-$toggle     = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-togglealerts', 'wp-activity-log_page_wsal-togglealerts-network' ), true ) ) ? 'active' : '';
-$help       = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-help', 'wp-activity-log_page_wsal-help-network' ), true ) ) ? 'active' : '';
-$notifications       = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-notifications', 'wp-activity-log_page_wsal-notifications-network' ), true ) ) ? 'active' : '';
+$log_viewer    = ( in_array( $current_screen->base, array( 'toplevel_page_wsal-auditlog', 'toplevel_page_wsal-auditlog-network' ), true ) ) ? 'active' : '';
+$settings      = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-settings', 'wp-activity-log_page_wsal-settings-network' ), true ) ) ? 'active' : '';
+$toggle        = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-togglealerts', 'wp-activity-log_page_wsal-togglealerts-network' ), true ) ) ? 'active' : '';
+$help          = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-help', 'wp-activity-log_page_wsal-help-network' ), true ) ) ? 'active' : '';
+$notifications = ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-notifications', 'wp-activity-log_page_wsal-notifications-network' ), true ) ) ? 'active' : '';
+$cta_text      = \__( 'Unlock extra features with WP Activity Log Premium', 'wp-security-audit-log' );
+
+if ( in_array( $current_screen->base, array( 'toplevel_page_wsal-auditlog', 'toplevel_page_wsal-auditlog-network' ), true ) ) {
+	$cta_text = \__( 'Unlock Advanced Search & Filtering with Premium', 'wp-security-audit-log' );
+} elseif ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-notifications', 'wp-activity-log_page_wsal-notifications-network' ), true ) ) {
+	$cta_text = \__( 'Unlock Automated Reports & Alerts with Premium', 'wp-security-audit-log' );
+} elseif ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-settings', 'wp-activity-log_page_wsal-settings-network' ), true ) ) {
+	$cta_text = \__( 'Unlock User Session Management with Premium', 'wp-security-audit-log' );
+} elseif ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-togglealerts', 'wp-activity-log_page_wsal-togglealerts-network' ), true ) ) {
+	$cta_text = \__( 'Unlock More Logged Events with Premium', 'wp-security-audit-log' );
+} elseif ( in_array( $current_screen->base, array( 'wp-activity-log_page_wsal-help', 'wp-activity-log_page_wsal-help-network' ), true ) ) {
+	$cta_text = \__( 'Unlock Priority Support with Premium', 'wp-security-audit-log' );
+}
 ?>
 
 <nav id="wsal-navbar">
-	<a href="https://www.melapress.com/wordpress-activity-log/" target="_blank" class="wsal-logo-link">
+	<a href="https://melapress.com/wordpress-activity-log/?utm_source=plugin&utm_medium=wsal&utm_campaign=free-edition-header-logo" target="_blank" class="wsal-logo-link">
 		<img src="<?php echo \esc_url( WSAL_BASE_URL ); ?>classes/Free/assets/images/wp-activity-log-symbol.svg" alt="WP Activity Log" class="wsal-logo">
 	</a>
 	<div id="wsal-nav" class="nav">
@@ -308,7 +326,7 @@ $notifications       = ( in_array( $current_screen->base, array( 'wp-activity-lo
 		</ul>
 		<ul class="wsal-nav-right wsal-nav-list">
 			<li class="wsal-nav-item">
-				<a href="https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=header-upgrade-banner" target="_blank" class="wsal-nav-link cta-link"><?php echo esc_html__( 'Unlock extra features with WP Activity Log Premium', 'wp-security-audit-log' ); ?></a>
+				<a href="https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=header-upgrade-banner" target="_blank" class="wsal-nav-link cta-link"><?php echo \esc_html( $cta_text ); ?></a>
 			</li>
 		</ul>
 	</div>

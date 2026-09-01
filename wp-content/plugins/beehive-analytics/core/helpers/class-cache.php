@@ -36,6 +36,13 @@ class Cache {
 	const CACHE_VERSION_KEY = 'beehive_cache_version';
 
 	/**
+	 * Cache key for transient timestamp.
+	 *
+	 * @since 3.4.19
+	 */
+	const CACHE_TIMESTAMP_KEY = 'beehive_cache_timestamp';
+
+	/**
 	 * Transient expiry time for cache.
 	 *
 	 * By default it's 24 hours.
@@ -364,6 +371,23 @@ class Cache {
 		// Make sure it's int.
 		$version = ( (int) $version ) + 1;
 
+		// Store timestamp of refresh.
+		$timestamp = self::current_timestamp();
+
+		if ( $network ) {
+			set_site_transient(
+				self::CACHE_TIMESTAMP_KEY,
+				$timestamp,
+				self::expiry( self::CACHE_VERSION_KEY )
+			);
+		} else {
+			set_transient(
+				self::CACHE_TIMESTAMP_KEY,
+				$timestamp,
+				self::expiry( self::CACHE_VERSION_KEY )
+			);
+		}
+
 		// Update with new version.
 		if ( $network ) {
 			$success = set_site_transient(
@@ -474,5 +498,66 @@ class Cache {
 		 * @since 3.2.0
 		 */
 		return apply_filters( 'beehive_cache_expiry', $expire, $key );
+	}
+
+	/**
+	 * Get current timestamp with filter support.
+	 *
+	 * This wrapper allows filtering the current timestamp,
+	 * useful for testing or custom time handling.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return int Current Unix timestamp.
+	 */
+	public static function current_timestamp() {
+		/**
+		 * Filter the current timestamp.
+		 *
+		 * Useful for testing or custom time handling scenarios.
+		 *
+		 * @param int $timestamp Current Unix timestamp.
+		 *
+		 * @since 3.5.0
+		 */
+		return apply_filters( 'beehive_current_timestamp', time() );
+	}
+
+	/**
+	 * Get the last cache refresh timestamp.
+	 *
+	 * @param bool $network Network flag.
+	 *
+	 * @return int|false Timestamp or false if not found.
+	 */
+	public static function get_refresh_timestamp( $network = false ) {
+		// Check if transient is disabled.
+		if ( ! self::can_transient() ) {
+			return false;
+		}
+
+		// Get timestamp based on network flag.
+		$timestamp = $network ? get_site_transient( self::CACHE_TIMESTAMP_KEY ) : get_transient( self::CACHE_TIMESTAMP_KEY );
+
+		// If timestamp doesn't exist (e.g., after plugin upgrade), initialize it with current time.
+		if ( empty( $timestamp ) ) {
+			$timestamp = self::current_timestamp();
+			// Store the timestamp for future use.
+			if ( $network ) {
+				set_site_transient(
+					self::CACHE_TIMESTAMP_KEY,
+					$timestamp,
+					self::expiry( self::CACHE_EXPIRY )
+				);
+			} else {
+				set_transient(
+					self::CACHE_TIMESTAMP_KEY,
+					$timestamp,
+					self::expiry( self::CACHE_EXPIRY )
+				);
+			}
+		}
+
+		return $timestamp;
 	}
 }

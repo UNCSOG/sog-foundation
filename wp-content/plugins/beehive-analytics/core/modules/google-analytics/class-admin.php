@@ -73,15 +73,6 @@ class Admin extends Base {
 			)
 		);
 
-		// Include required google vars.
-		add_filter(
-			'beehive_assets_scripts_localize_vars_beehive-statistics-page',
-			array(
-				Google_Auth\Views\Admin::instance(),
-				'google_vars',
-			)
-		);
-
 		// Add statistics report items to settings.
 		add_filter(
 			'beehive_settings_report_tree',
@@ -311,29 +302,14 @@ class Admin extends Base {
 	 */
 	public function get_styles( $styles, $admin ) {
 		if ( $admin ) {
-			// Settings.
-			$styles['beehive-ga-admin'] = array(
-				'src' => 'ga-admin.min.css',
-			);
-
-			// Statistics page.
-			$styles['beehive-statistics-page'] = array(
-				'src' => 'ga-statistics-page.min.css',
-			);
-
 			// Post statistics.
 			$styles['beehive-post-statistics'] = array(
-				'src' => 'ga-post-statistics.min.css',
+				'src' => 'blocks/index.css',
 			);
 
 			// Dashboard widget.
 			$styles['beehive-dashboard-widget'] = array(
-				'src' => 'ga-dashboard-widget.min.css',
-			);
-
-			// All statistics page.
-			$styles['beehive-statistics-page'] = array(
-				'src' => 'ga-statistics-page.min.css',
+				'src' => 'visitors-widget/index.css',
 			);
 		}
 
@@ -352,34 +328,16 @@ class Admin extends Base {
 	 */
 	public function get_scripts( $scripts, $admin ) {
 		if ( $admin ) {
-			// GA settings.
-			$scripts['beehive-ga-admin'] = array(
-				'src'  => 'ga-admin.min.js',
-				'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common' ),
-			);
-
-			// Statistics page.
-			$scripts['beehive-statistics-page'] = array(
-				'src'  => 'ga-statistics-page.min.js',
-				'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common' ),
-			);
-
 			// Post statistics.
 			$scripts['beehive-post-statistics'] = array(
-				'src'  => 'ga-post-statistics.min.js',
-				'deps' => array( 'beehive-vendors', 'beehive-common' ),
+				'src'  => 'blocks/index.js',
+				'deps' => array(),
 			);
 
 			// Dashboard widget.
 			$scripts['beehive-dashboard-widget'] = array(
-				'src'  => 'ga-dashboard-widget.min.js',
-				'deps' => array( 'beehive-sui-dashboard-widget', 'beehive-vendors', 'beehive-common' ),
-			);
-
-			// Dashboard widget SUI.
-			$scripts['beehive-sui-dashboard-widget'] = array(
-				'src'  => 'sui-dashboard-widget.min.js',
-				'deps' => array( 'jquery' ),
+				'src'  => 'visitors-widget/index.js',
+				'deps' => array( 'wp-element', 'wp-i18n' ),
 			);
 		}
 
@@ -416,20 +374,13 @@ class Admin extends Base {
 	 */
 	public function setup_i18n( $strings, $script ) {
 		switch ( $script ) {
-			case 'beehive-ga-admin':
+			case 'beehive-admin':
 				// Add settings strings.
 				$strings = array_merge_recursive(
 					$strings,
 					Locale::welcome(),
 					Locale::auth_form(),
 					Data\Locale::admin(),
-					Data\Locale::statistics()
-				);
-				break;
-			case 'beehive-statistics-page':
-				// Add statistics strings.
-				$strings = array_merge_recursive(
-					$strings,
 					Data\Locale::statistics()
 				);
 				break;

@@ -1,0 +1,2924 @@
+# Copyright (C) 2026 WPMU DEV
+# This file is distributed under the GNU General Public License (Version 2 - GPLv2).
+msgid ""
+msgstr ""
+"Project-Id-Version: Beehive Pro 3.5.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/build\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-31T15:03:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ga_trans\n"
+
+#: src/layout/Wrapper/Wrapper.tsx:105
+msgid "Check out our <link>All-in-One WordPress Toolkit</link>"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:110
+msgid "To get the most out of the plugin, <link>see the Help section</link>"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:47
+msgid "Upgrade to pro"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:57
+msgid "More from WPMU DEV"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:67
+#: core/data/class-locale.php:63
+msgid "Plugins"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:71
+#: core/data/class-locale.php:67
+msgid "Community"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:78
+#: core/data/class-locale.php:62
+msgid "The Hub"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:79
+#: core/data/class-locale.php:74
+msgid "Free Plugins"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:80
+#: core/data/class-locale.php:75
+msgid "Membership"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:81
+#: core/controllers/class-admin.php:187
+#: core/data/class-locale.php:64
+msgid "Roadmap"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:82
+#: core/controllers/class-admin.php:182
+#: core/data/class-locale.php:65
+msgid "Support"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:83
+#: core/controllers/class-admin.php:129
+#: core/data/class-locale.php:66
+msgid "Docs"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:84
+#: core/data/class-locale.php:69
+msgid "Terms of Service"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:85
+#: core/data/class-locale.php:70
+msgid "Privacy Policy"
+msgstr ""
+
+#: src/layout/Wrapper/Wrapper.tsx:94
+msgid "Analytics"
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:17
+#: core/data/class-locale.php:259
+msgid "Your Google account is connected. You can now view analytics in your WordPress Dashboard."
+msgstr ""
+
+#. translators: %s: Link to All Statistics page.
+#: src/pages/accounts/accounts.tsx:22
+#: core/data/class-locale.php:247
+msgid "Note: Your account is already configured at the network level. Optionally, you can set up a different account by adding it below."
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:42
+#: core/controllers/class-menu.php:164
+#: core/data/class-locale.php:205
+msgid "Accounts"
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:47
+msgid "Connect Google account and Services to your website."
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:48
+msgid "Connect Google account and Services to your website. <link>Learn more</link>"
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:55
+msgid "Google Accounts"
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:56
+#: src/pages/ga/main.tsx:25
+#: src/pages/ga/tabs/account.tsx:63
+#: src/pages/gtm/main.tsx:21
+#: core/data/class-locale.php:80
+msgid "Account"
+msgstr ""
+
+#: src/pages/accounts/accounts.tsx:56
+#: core/data/class-locale.php:240
+msgid "Authenticate with Google to easily connect Google Services to your website and display statistics in your WordPress Dashboard."
+msgstr ""
+
+#: src/pages/accounts/modals/logout.tsx:13
+msgid "Logging out will remove analytics from your Dashboard. Are you sure you want to logout?"
+msgstr ""
+
+#: src/pages/accounts/modals/logout.tsx:20
+#: src/pages/gtm/modals/deactivate.tsx:22
+#: src/pages/settings/modals/add-user.tsx:67
+#: src/pages/settings/modals/reset.tsx:33
+#: core/data/class-locale.php:44
+msgid "Cancel"
+msgstr ""
+
+#: src/pages/accounts/modals/logout.tsx:24
+#: src/pages/accounts/modules/account.tsx:151
+msgid "Logout"
+msgstr ""
+
+#: src/pages/accounts/modals/logout.tsx:9
+#: core/data/class-locale.php:213
+msgid "Log out"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:105
+#: core/data/class-locale.php:210
+msgid "Google Client Secret"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:106
+#: core/data/class-locale.php:225
+msgid "Paste Google Client Secret here"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:111
+#: core/data/class-locale.php:95
+#: core/data/class-locale.php:211
+msgid "Authorize"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:119
+#: core/data/class-locale.php:217
+msgid "URI Redirects"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:123
+#: core/data/class-locale.php:243
+msgid "Copy the below URIs and enter them into the “Authorized redirect URIs” list when you create the API project in the Google Developers Console."
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:129
+msgid "URI redirects"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:147
+#: core/data/class-locale.php:214
+msgid "No account information"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:29
+#: core/data/class-locale.php:228
+msgid "Please enter Client ID."
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:33
+#: core/data/class-locale.php:229
+msgid "Please enter Client Secret."
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:69
+#: src/pages/onboarding/modules/get-started.tsx:37
+#: src/pages/onboarding/tabs/connect.tsx:7
+#: ../common/components/google/google.tsx:7
+#: components/google/google.tsx:7
+#: core/data/class-locale.php:321
+msgid "Connect with Google"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:72
+#: core/data/class-locale.php:212
+msgid "Set up API Project"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:78
+msgid "Easily connect with Google by clicking the “Connect with Google” button and pasting the access code below."
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:90
+msgid "If you're a site admin and experienced with Google's tools, you might want to set up an API Project instead. Need help setting this up? Check the docs <link>here</link>."
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:98
+#: core/data/class-locale.php:209
+msgid "Google Client ID"
+msgstr ""
+
+#: src/pages/accounts/modules/account.tsx:99
+#: core/data/class-locale.php:224
+msgid "Paste Google Client ID here"
+msgstr ""
+
+#: src/pages/dashboard/main.tsx:31
+#: core/controllers/class-admin.php:128
+#: core/controllers/class-menu.php:138
+#: core/data/class-locale.php:370
+msgid "Dashboard"
+msgstr ""
+
+#: src/pages/dashboard/main.tsx:50
+#: src/pages/ga/section/header.tsx:104
+msgid "Refreshing..."
+msgstr ""
+
+#: src/pages/dashboard/main.tsx:51
+#: src/pages/ga/section/header.tsx:105
+#: src/main.tsx:119
+#: core/data/class-locale.php:86
+#: core/modules/google-analytics/data/class-locale.php:94
+msgid "Refresh data"
+msgstr ""
+
+#: src/pages/dashboard/main.tsx:61
+#: src/pages/ga/section/header.tsx:115
+msgid "Clear Beehive's local analytics cache and grab the latest data from Google"
+msgstr ""
+
+#: src/pages/dashboard/modules/analytics-table/analytics-table.tsx:21
+#: core/data/class-locale.php:397
+msgid "Google Analytics 4"
+msgstr ""
+
+#: src/pages/dashboard/modules/analytics-table/analytics-table.tsx:29
+#: src/pages/dashboard/modules/gtm-table/gtm-table.tsx:30
+#: core/data/class-locale.php:394
+msgid "Active"
+msgstr ""
+
+#: src/pages/dashboard/modules/analytics-table/analytics-table.tsx:30
+#: src/pages/dashboard/modules/gtm-table/gtm-table.tsx:31
+#: core/data/class-locale.php:395
+msgid "Inactive"
+msgstr ""
+
+#: src/pages/dashboard/modules/gtm-table/gtm-table.tsx:23
+#: core/data/class-locale.php:392
+msgid "GTM Account"
+msgstr ""
+
+#: src/pages/dashboard/modules/gtm-table/gtm-table.tsx:42
+#: src/pages/gtm/tabs/settings.tsx:46
+#: core/data/class-locale.php:396
+#: core/modules/google-tag-manager/data/class-locale.php:99
+msgid "Variables"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:32
+msgid "Summary"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:53
+msgid "Top page"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:56
+#: src/tabs/traffic.tsx:21
+msgid "Top search engine"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:57
+#: src/tabs/traffic.tsx:32
+#: core/data/class-locale.php:383
+#: core/modules/google-analytics/data/class-locale.php:111
+msgid "None"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:57
+#: src/tabs/traffic.tsx:26
+msgid "Top medium"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:72
+#: ../common/hooks/useSummary/useSummary.ts:7
+#: ../common/utils/constants.ts:27
+#: hooks/useSummary/useSummary.ts:7
+#: utils/constants.ts:27
+#: src/tabs/general.tsx:11
+#: core/data/class-locale.php:377
+#: core/modules/google-analytics/data/class-locale.php:41
+#: core/modules/google-analytics/data/class-locale.php:99
+#: core/modules/google-analytics/data/class-locale.php:263
+#: core/modules/google-analytics/views/class-stats.php:274
+msgid "Pageviews"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:81
+msgid "-"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:85
+#: core/data/class-locale.php:378
+msgid "New Users"
+msgstr ""
+
+#: src/pages/dashboard/sections/summary/summary.tsx:93
+msgid "<strong>Last refresh:</strong> <last_updated/>"
+msgstr ""
+
+#: src/pages/dashboard/widgets/analytics/analytics.tsx:10
+#: core/data/class-locale.php:373
+msgid "Analytics Configuration"
+msgstr ""
+
+#: src/pages/dashboard/widgets/analytics/analytics.tsx:11
+#: core/data/class-locale.php:407
+msgid "Monitor Google Analytics 4 status."
+msgstr ""
+
+#: src/pages/dashboard/widgets/analytics/analytics.tsx:13
+msgid "Learn more"
+msgstr ""
+
+#: src/pages/dashboard/widgets/gtm/gtm.tsx:10
+#: src/pages/gtm/main.tsx:116
+#: src/pages/gtm/tabs/account.tsx:32
+#: core/data/class-locale.php:372
+#: core/modules/google-tag-manager/class-admin.php:60
+#: core/modules/google-tag-manager/data/class-locale.php:37
+msgid "Google Tag Manager"
+msgstr ""
+
+#: src/pages/dashboard/widgets/gtm/gtm.tsx:12
+#: src/pages/gtm/main.tsx:86
+#: core/data/class-locale.php:406
+#: core/modules/google-tag-manager/data/class-locale.php:68
+msgid "Set up Google Tag Manager on your website and assign predefined and customizable variables to the data layer."
+msgstr ""
+
+#: src/pages/dashboard/widgets/gtm/gtm.tsx:14
+#: core/data/class-locale.php:415
+msgid "Google Tag Manager has not been added to your website. Add your Container ID to finish setup."
+msgstr ""
+
+#: src/pages/dashboard/widgets/gtm/gtm.tsx:15
+#: src/pages/onboarding/modules/analytics.tsx:71
+msgid "Finish setup"
+msgstr ""
+
+#: src/pages/dashboard/widgets/gtm/gtm.tsx:19
+#: core/data/class-locale.php:402
+msgid "Configure"
+msgstr ""
+
+#: src/pages/dashboard/widgets/gtm/gtm.tsx:22
+#: src/pages/gtm/main.tsx:100
+#: core/data/class-locale.php:90
+msgid "Activate"
+msgstr ""
+
+#: src/pages/dashboard/widgets/statistics/statistics.tsx:17
+#: src/pages/ga/main.tsx:17
+#: src/pages/settings/tabs/general.tsx:12
+#: src/pages/settings/tabs/permissions.tsx:26
+#: core/data/class-locale.php:137
+#: core/data/class-locale.php:371
+#: core/modules/google-analytics/class-admin.php:184
+#: core/modules/google-analytics/class-admin.php:188
+#: core/modules/google-analytics/data/class-locale.php:237
+msgid "Statistics"
+msgstr ""
+
+#: src/pages/dashboard/widgets/statistics/statistics.tsx:19
+msgid "View your website's full analytics report with Sessions, Users, Pageviews, Average Time and Bounce Rate"
+msgstr ""
+
+#: src/pages/dashboard/widgets/statistics/statistics.tsx:21
+msgid "You need to authenticate with your Google account to automatically get the measurement ID for this website and enable access to statistics, or you can add the measurement ID manually."
+msgstr ""
+
+#: src/pages/dashboard/widgets/statistics/statistics.tsx:22
+#: core/data/class-locale.php:376
+msgid "Configure account"
+msgstr ""
+
+#: src/pages/dashboard/widgets/statistics/statistics.tsx:24
+#: core/data/class-locale.php:412
+msgid "We haven't collected enough data. Please check back soon."
+msgstr ""
+
+#: src/pages/dashboard/widgets/statistics/statistics.tsx:26
+msgid "View full report"
+msgstr ""
+
+#: src/pages/ga/context/context.tsx:14
+#: src/pages/ga/tabs/settings.tsx:24
+msgid "Google Analytics configuration has been saved."
+msgstr ""
+
+#: src/pages/ga/main.tsx:28
+#: src/pages/ga/tabs/settings.tsx:77
+#: src/pages/gtm/main.tsx:24
+#: src/pages/gtm/tabs/settings.tsx:21
+#: src/pages/settings/main.tsx:59
+#: src/pages/settings/tabs/data-settings.tsx:48
+#: src/pages/settings/tabs/permissions.tsx:29
+#: core/controllers/class-menu.php:189
+#: core/data/class-locale.php:79
+#: core/data/class-locale.php:116
+msgid "Settings"
+msgstr ""
+
+#: src/pages/ga/section/header.tsx:25
+#: core/endpoints/class-actions.php:134
+msgid "Data refreshed. New data should begin feeding shortly."
+msgstr ""
+
+#: src/pages/ga/section/header.tsx:38
+#: core/modules/google-analytics/class-admin.php:154
+#: core/modules/google-analytics/class-admin.php:155
+#: core/modules/google-analytics/data/class-locale.php:236
+msgid "Google Analytics"
+msgstr ""
+
+#: src/pages/ga/section/header.tsx:43
+msgid "Tracking and analysis of website traffic and user behavior."
+msgstr ""
+
+#: src/pages/ga/section/header.tsx:44
+msgid "Tracking and analysis of website traffic and user behavior. <link>Learn more</link>"
+msgstr ""
+
+#: src/pages/ga/section/header.tsx:60
+#: core/modules/google-analytics/data/class-locale.php:256
+msgid "Compare to last period"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:114
+#: src/pages/ga/tabs/settings.tsx:89
+#: src/pages/gtm/tabs/account.tsx:51
+#: src/pages/gtm/tabs/settings.tsx:38
+#: src/pages/settings/tabs/data-settings.tsx:44
+#: src/pages/settings/tabs/general.tsx:29
+#: src/pages/settings/tabs/permissions.tsx:23
+msgid "Save settings"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:117
+msgid "Analytics profile"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:117
+msgid "Authenticate with Google to connect your Analytics profile and begin feeding analytics to your WordPress Dashboard."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:121
+msgid "You don't have any Google Analytics profile connected to your account. To get going, just <link>sign up for Google Analytics</link>."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:125
+#: ../common/components/select-accounts/select-accounts.tsx:201
+#: components/select-accounts/select-accounts.tsx:201
+msgid "Choose your view (data stream)"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:125
+#: ../common/components/select-accounts/select-accounts.tsx:201
+#: components/select-accounts/select-accounts.tsx:201
+msgid "Site not here? Try logging into another <link>Google account</link>."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:128
+#: core/data/class-locale.php:333
+msgid "No website information"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:132
+msgid "Multiple analytics accounts are linked to your Google account. To enhance your site's performance, we display the list of streams from a maximum of 25 accounts."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:133
+msgid "Multiple analytics accounts are linked to your Google account. To enhance your site's performance, we display the list of streams from a maximum of 25 accounts. <link>Learn more</link>"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:136
+msgid "To choose your profile first you need to go to the <link>Accounts page</link> and connect your Google account."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:139
+msgid "Automatically detect measurement ID"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:170
+#: src/pages/onboarding/tabs/measurement.tsx:41
+#: core/data/class-locale.php:290
+#: core/modules/google-analytics/data/class-locale.php:196
+msgid "Measurement ID"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:170
+msgid "Copy and paste your Google Analytics Measurement ID to add it to your website."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:172
+msgid "Add your Measurement ID"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:172
+msgid "This Measurement ID is being output in the <head> section of your pages."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:173
+msgid "G-XXXXXXXXXX"
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:183
+msgid "We couldn't automatically detect the measurement ID. Please check your analytics account is configured correctly for this account or try to manually paste your Google Analytics measurement ID."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:184
+msgid "Whoops, looks like that's an invalid measurement ID. Double check you have your <link>Analytics 4 measurement ID</link> and try again."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:31
+msgid "Tracking code added successfully."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:39
+#: src/pages/onboarding/tabs/measurement.tsx:21
+msgid "Please enter a valid Google Analytics Measurement ID."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:64
+#: core/modules/google-analytics/data/class-locale.php:211
+msgid "Connect and authenticate your Google Analytics account to view analytics data on Beehive's Dashboard. If you only want to connect your site to Google Analytics without displaying the analytics data on Beehive's dashboard, add the Measurement ID in the corresponding field."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:65
+msgid "Your Google account is now connected and analytics are being tracked. You can view this site's analytics on the <link>Statistics page</link>."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:78
+msgid "To automatically detect your measurement ID first you need to connect the Google account in the <a1>Accounts Page</a1> or alternatively you can manually paste your Google Analytics tracking ID. If you're still stuck you can <a2>contact support</a2> for assistance."
+msgstr ""
+
+#: src/pages/ga/tabs/account.tsx:92
+msgid "We couldn't automatically detect the measurement ID. Please check your analytics account is configured correctly for this account."
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:101
+#: core/modules/google-analytics/data/class-locale.php:188
+msgid "Enable IP Anonymization"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:105
+#: core/modules/google-analytics/data/class-locale.php:190
+msgid "Whole network tracking"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:106
+#: core/modules/google-analytics/data/class-locale.php:189
+#: core/modules/google-analytics/data/class-locale.php:191
+msgid "Force on sub-sites tracking"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:113
+#: core/modules/google-analytics/data/class-locale.php:183
+msgid "Display Advertising"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:113
+msgid "Enable support for Google's Display Advertising and get additional demographic and interests reports. You can read more about it <link>here</link>."
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:117
+#: core/modules/google-analytics/data/class-locale.php:184
+msgid "Enable Display Advertising Support"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:121
+msgid "Note: Enabling this feature requires <link>updating your privacy policy</link>."
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:126
+#: core/modules/google-analytics/data/class-locale.php:185
+msgid "Exclude Roles from Tracking"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:126
+#: core/modules/google-analytics/data/class-locale.php:218
+msgid "Choose which user roles you want to exclude from having their activity tracked when they're logged in and visiting the site."
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:127
+#: core/modules/google-analytics/data/class-locale.php:197
+msgid "User Roles"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:128
+msgid "Select Roles"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:144
+#: core/modules/google-analytics/data/class-locale.php:186
+msgid "Statistics in post types"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:144
+#: core/modules/google-analytics/data/class-locale.php:219
+msgid "Choose which post types you want to include the statistics meta box in. By default, it will only display on posts and pages."
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:146
+#: core/modules/google-analytics/data/class-locale.php:198
+msgid "Post Types"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:92
+#: core/data/class-locale.php:280
+#: core/modules/google-analytics/data/class-locale.php:181
+msgid "Admin pages tracking"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:92
+#: core/modules/google-analytics/data/class-locale.php:205
+msgid "When enabled, the activity in the wp-admin area will be tracked and included in statistics. By default, only the activity on the front-end pages of your site are tracked."
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:93
+#: src/pages/onboarding/tabs/measurement.tsx:54
+#: core/data/class-locale.php:281
+#: core/modules/google-analytics/data/class-locale.php:182
+msgid "Enable Admin pages tracking"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:98
+#: core/modules/google-analytics/data/class-locale.php:187
+msgid "IP Anonymization"
+msgstr ""
+
+#: src/pages/ga/tabs/settings.tsx:98
+msgid "When enabled, visitor IP addresses will be <link>anonymized</link>."
+msgstr ""
+
+#: src/pages/ga/widgets/medium/medium.tsx:13
+msgid "Medium"
+msgstr ""
+
+#: src/pages/ga/widgets/medium/medium.tsx:22
+#: src/pages/ga/widgets/search-engine/search-engine.tsx:22
+#: src/pages/ga/widgets/social-network/social-network.tsx:22
+#: src/pages/ga/widgets/top-countries/top-countries.tsx:47
+#: src/pages/ga/widgets/top-pages/top-pages.tsx:32
+msgid "No Information available."
+msgstr ""
+
+#: src/pages/ga/widgets/real-time/real-time.tsx:16
+#: core/modules/google-analytics/data/class-locale.php:254
+msgid "Real-Time Visitors"
+msgstr ""
+
+#: src/pages/ga/widgets/real-time/real-time.tsx:19
+msgid "Reload"
+msgstr ""
+
+#: src/pages/ga/widgets/real-time/real-time.tsx:36
+msgid "Visitors now"
+msgstr ""
+
+#: src/pages/ga/widgets/real-time/real-time.tsx:47
+#: core/modules/google-analytics/stats/formatters/class-ga4.php:165
+msgid "Desktop"
+msgstr ""
+
+#: src/pages/ga/widgets/real-time/real-time.tsx:48
+#: core/modules/google-analytics/stats/formatters/class-ga4.php:169
+msgid "Mobile"
+msgstr ""
+
+#: src/pages/ga/widgets/real-time/real-time.tsx:49
+#: core/modules/google-analytics/stats/formatters/class-ga4.php:173
+msgid "Tablet"
+msgstr ""
+
+#: src/pages/ga/widgets/search-engine/search-engine.tsx:13
+msgid "Search Engine"
+msgstr ""
+
+#: src/pages/ga/widgets/social-network/social-network.tsx:13
+msgid "Social Network"
+msgstr ""
+
+#: src/pages/ga/widgets/top-countries/top-countries.tsx:21
+msgid "Country"
+msgstr ""
+
+#: src/pages/ga/widgets/top-countries/top-countries.tsx:22
+#: ../common/hooks/useSummary/useSummary.ts:5
+#: ../common/utils/constants.ts:13
+#: hooks/useSummary/useSummary.ts:5
+#: utils/constants.ts:13
+#: core/data/class-locale.php:385
+#: core/modules/google-analytics/data/class-locale.php:42
+#: core/modules/google-analytics/data/class-locale.php:98
+#: core/modules/google-analytics/data/class-locale.php:261
+#: core/modules/google-analytics/views/class-stats.php:264
+msgid "Sessions"
+msgstr ""
+
+#: src/pages/ga/widgets/top-countries/top-countries.tsx:40
+#: core/modules/google-analytics/data/class-locale.php:116
+#: core/modules/google-analytics/data/class-locale.php:253
+#: core/modules/google-analytics/views/class-stats.php:304
+#: core/modules/google-analytics/views/class-stats.php:342
+msgid "Top Countries"
+msgstr ""
+
+#: src/pages/ga/widgets/top-pages/top-pages.tsx:22
+#: core/modules/google-analytics/data/class-locale.php:250
+#: core/modules/google-analytics/views/class-stats.php:338
+msgid "Top Pages"
+msgstr ""
+
+#: src/pages/ga/widgets/top-pages/top-pages.tsx:42
+#: src/tabs/top-pages.tsx:27
+msgid "Most Visited"
+msgstr ""
+
+#: src/pages/ga/widgets/top-pages/top-pages.tsx:45
+#: src/tabs/top-pages.tsx:30
+#: core/data/class-locale.php:388
+msgid "Avg. time"
+msgstr ""
+
+#: src/pages/ga/widgets/top-pages/top-pages.tsx:48
+#: src/tabs/top-pages.tsx:33
+#: core/modules/google-analytics/data/class-locale.php:115
+msgid "Views"
+msgstr ""
+
+#: src/pages/ga/widgets/top-pages/top-pages.tsx:51
+#: src/tabs/top-pages.tsx:36
+#: core/modules/google-analytics/data/class-locale.php:259
+msgid "Trend"
+msgstr ""
+
+#: src/pages/ga/widgets/visitor/visitor.tsx:17
+#: src/pages/gtm/tabs/settings.tsx:54
+#: core/modules/google-analytics/class-admin.php:106
+#: core/modules/google-analytics/data/class-locale.php:248
+#: core/modules/google-analytics/views/class-stats.php:334
+#: core/modules/google-tag-manager/data/class-locale.php:101
+msgid "Visitors"
+msgstr ""
+
+#: src/pages/ga/widgets/visitor/visitor.tsx:24
+msgid "A Google Analytics account hasn't been linked yet. To see statistics, <link>link an account.</link>"
+msgstr ""
+
+#: src/pages/ga/widgets/visitor/visitor.tsx:32
+msgid "There's no analytics data to display yet. Either you haven't had traffic to this site, or we don't have any data from the API yet. Please check back in a few hours."
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:11
+#: core/modules/google-tag-manager/data/class-locale.php:143
+#: core/modules/google-tag-manager/data/class-locale.php:162
+msgid "Enable this to include a dataLayer event after a successful form submission."
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:12
+msgid "<link>Activate Hustle</link> to enable. This will include a dataLayer event after a successful form submission."
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:52
+#: core/modules/google-tag-manager/data/class-locale.php:133
+msgid "Forminator Forms"
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:58
+#: core/modules/google-tag-manager/data/class-locale.php:134
+msgid "Forminator Polls"
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:64
+#: core/modules/google-tag-manager/data/class-locale.php:135
+msgid "Forminator Quizzes"
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:70
+#: core/modules/google-tag-manager/data/class-locale.php:136
+msgid "Hustle Leads"
+msgstr ""
+
+#: src/pages/gtm/constants/constants.tsx:8
+msgid "<link>Install Hustle</link> to enable. This will include a dataLayer event after a successful form submission."
+msgstr ""
+
+#: src/pages/gtm/context/context.tsx:10
+#: src/pages/gtm/tabs/account.tsx:40
+#: src/pages/gtm/tabs/settings.tsx:30
+msgid "GTM configuration has been saved."
+msgstr ""
+
+#: src/pages/gtm/main.tsx:121
+msgid "Track and manage site data in Google Tag Manager."
+msgstr ""
+
+#: src/pages/gtm/main.tsx:122
+msgid "Track and manage site data in Google Tag Manager. <link>Learn more</link>"
+msgstr ""
+
+#: src/pages/gtm/main.tsx:89
+msgid "GTM has been activated."
+msgstr ""
+
+#: src/pages/gtm/modals/deactivate.tsx:10
+#: core/modules/google-tag-manager/data/class-locale.php:38
+msgid "Deactivate Google Tag Manager"
+msgstr ""
+
+#: src/pages/gtm/modals/deactivate.tsx:15
+#: core/modules/google-tag-manager/data/class-locale.php:46
+msgid "Google Tag Manager will no longer be installed on your website. Are you sure you want to deactivate it?"
+msgstr ""
+
+#: src/pages/gtm/modals/deactivate.tsx:26
+msgid "GTM has been deactivated."
+msgstr ""
+
+#: src/pages/gtm/modals/deactivate.tsx:39
+#: src/pages/gtm/tabs/account.tsx:56
+#: src/pages/gtm/tabs/settings.tsx:43
+#: core/modules/google-tag-manager/data/class-locale.php:42
+msgid "Deactivate"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:44
+msgid "Add global variables that will show on all pages. To see some examples, please visit the <link>Google Tag Manager Reference.</link>"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:55
+#: src/pages/gtm/modules/default.tsx:35
+#: src/pages/gtm/modules/visitors.tsx:35
+#: core/modules/google-tag-manager/data/class-locale.php:104
+msgid "Variable"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:58
+#: src/pages/gtm/modules/default.tsx:38
+#: src/pages/gtm/modules/visitors.tsx:38
+msgid "Custom name"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:66
+msgid "No variables added yet. Please add variable using the button below."
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:72
+#: core/modules/google-tag-manager/data/class-locale.php:107
+msgid "Name"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:77
+#: core/modules/google-tag-manager/data/class-locale.php:108
+msgid "Value"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:82
+msgid "Remove Variable"
+msgstr ""
+
+#: src/pages/gtm/modules/custom.tsx:92
+#: core/modules/google-tag-manager/data/class-locale.php:111
+msgid "Add Variable"
+msgstr ""
+
+#: src/pages/gtm/modules/default.tsx:55
+#: src/pages/gtm/modules/visitors.tsx:55
+msgid "Custom label"
+msgstr ""
+
+#: src/pages/gtm/modules/integrations.tsx:28
+msgid "Integrate your plugins with Google Tag Manager adding a dataLayer event to fire a conversion tracking tag after each successful user interaction."
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:23
+msgid "Please enter a valid Google Tag Manager Container ID."
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:32
+#: core/modules/google-tag-manager/data/class-locale.php:69
+msgid "Place the Container ID on your website to easily start tracking and managing your tags in the Tag Manager interface."
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:59
+#: core/modules/google-tag-manager/data/class-locale.php:64
+msgid "Container ID"
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:59
+#: core/modules/google-tag-manager/data/class-locale.php:70
+msgid "Copy and paste your Google Tag Manager container ID to add it to your website."
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:61
+#: core/modules/google-tag-manager/data/class-locale.php:65
+msgid "GTM ID"
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:62
+msgid "Having trouble finding your GTM ID? Go to the <link>help center</link> and follow the steps."
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:65
+msgid "This tracking ID is being output in the <head> section of your pages."
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:66
+msgid "GTM-XXXXXXX"
+msgstr ""
+
+#: src/pages/gtm/tabs/account.tsx:71
+msgid "Whoops, looks like that's an invalid container ID. Double-check you have your <link>Google Tag Manager ID</link> and try again."
+msgstr ""
+
+#: src/pages/gtm/tabs/settings.tsx:22
+msgid "Google Tag Manager has not been added to your website yet. You can easily add it by entering your Container ID on the Google Tag Manager <link>Account Page.</link>"
+msgstr ""
+
+#: src/pages/gtm/tabs/settings.tsx:46
+#: core/modules/google-tag-manager/data/class-locale.php:139
+msgid "Assign variables to the data layer to simplify and automate your tags in Google Tag Manager."
+msgstr ""
+
+#: src/pages/gtm/tabs/settings.tsx:53
+#: core/modules/google-tag-manager/data/class-locale.php:100
+msgid "Default"
+msgstr ""
+
+#: src/pages/gtm/tabs/settings.tsx:55
+#: core/modules/google-tag-manager/data/class-locale.php:102
+msgid "Integrations"
+msgstr ""
+
+#: src/pages/gtm/tabs/settings.tsx:56
+#: core/modules/google-tag-manager/data/class-locale.php:103
+msgid "Custom"
+msgstr ""
+
+#: src/pages/onboarding/context/context.tsx:15
+msgid "Onboarding settings have been saved."
+msgstr ""
+
+#: src/pages/onboarding/main.tsx:13
+msgid "Your Google account is connected. Choose your analytics profile to finish setup and view analytics in your WordPress Dashboard."
+msgstr ""
+
+#: src/pages/onboarding/main.tsx:15
+msgid "All-in-one analytics plugin to effortlessly monitor the Google Analytics and reports of your WordPress site directly from your admin dashboard."
+msgstr ""
+
+#: src/pages/onboarding/modules/analytics.tsx:29
+msgid "Choose your Analytics 4 Stream"
+msgstr ""
+
+#: src/pages/onboarding/modules/analytics.tsx:29
+msgid "Select your Google Analytics 4 stream and begin feeding analytics to your WordPress dashboard."
+msgstr ""
+
+#: src/pages/onboarding/modules/analytics.tsx:44
+#: src/pages/onboarding/modules/get-started.tsx:29
+msgid "Skip"
+msgstr ""
+
+#: src/pages/onboarding/modules/analytics.tsx:79
+msgid "Display analytics to"
+msgstr ""
+
+#: src/pages/onboarding/modules/get-started.tsx:14
+msgid "Let’s Get Started"
+msgstr ""
+
+#: src/pages/onboarding/modules/get-started.tsx:14
+msgid "To get started, connect your Google Analytics account. Alternatively, you can paste your analytics code to enable tracking without reports."
+msgstr ""
+
+#: src/pages/onboarding/modules/get-started.tsx:37
+msgid "Connect Beehive to your Google Analytics account."
+msgstr ""
+
+#: src/pages/onboarding/modules/get-started.tsx:38
+#: src/pages/onboarding/tabs/measurement.tsx:31
+#: core/data/class-locale.php:286
+msgid "Add Google Analytics Measurement ID"
+msgstr ""
+
+#: src/pages/onboarding/modules/get-started.tsx:38
+msgid "Paste your Analytics Measurement ID to enable tracking without reports."
+msgstr ""
+
+#: src/pages/onboarding/tabs/connect.tsx:15
+msgid "Sign in with Google"
+msgstr ""
+
+#: src/pages/onboarding/tabs/connect.tsx:9
+msgid "Click on the button below to easily connect with your Google account."
+msgstr ""
+
+#: src/pages/onboarding/tabs/measurement.tsx:33
+msgid "Paste your Google Analytics 4 Measurement ID in the field below to enable analytics tracking. You can get your <link>Measurement ID here</link>."
+msgstr ""
+
+#: src/pages/onboarding/tabs/measurement.tsx:35
+msgid "here"
+msgstr ""
+
+#: src/pages/onboarding/tabs/measurement.tsx:42
+msgid "Please enter a valid Google Analytics Tracking ID."
+msgstr ""
+
+#: src/pages/onboarding/tabs/measurement.tsx:51
+msgid "Enter your analytics measurement ID"
+msgstr ""
+
+#: src/pages/onboarding/tabs/measurement.tsx:54
+msgid "When enabled you will get statistics from all admin pages."
+msgstr ""
+
+#: src/pages/onboarding/tabs/measurement.tsx:87
+msgid "Save"
+msgstr ""
+
+#: src/pages/settings/context/context.tsx:13
+msgid "Settings have been saved."
+msgstr ""
+
+#: src/pages/settings/main.tsx:20
+#: src/pages/settings/tabs/general.tsx:22
+#: core/data/class-locale.php:117
+msgid "General"
+msgstr ""
+
+#: src/pages/settings/main.tsx:23
+#: src/pages/settings/tabs/data-settings.tsx:37
+#: core/data/class-locale.php:119
+msgid "Data & Settings"
+msgstr ""
+
+#: src/pages/settings/main.tsx:25
+#: src/pages/settings/tabs/permissions.tsx:11
+#: core/data/class-locale.php:118
+#: core/data/class-locale.php:125
+msgid "Permissions"
+msgstr ""
+
+#: src/pages/settings/main.tsx:64
+msgid "Manage general settings, data and permissions."
+msgstr ""
+
+#: src/pages/settings/main.tsx:65
+msgid "Manage general settings, data and permissions. <link>Learn more</link>"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:40
+#: core/data/class-locale.php:161
+msgid "Add User"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:44
+#: core/data/class-locale.php:183
+msgid "Type the username in the searchbox to add. You can add as many users as you like."
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:46
+#: core/data/class-locale.php:147
+msgid "Search users"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:47
+#: core/data/class-locale.php:148
+msgid "Type Username"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:49
+msgid "Type username to search"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:56
+msgid "No users found"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:57
+msgid "Please enter 2 or more characters"
+msgstr ""
+
+#: src/pages/settings/modals/add-user.tsx:86
+#: core/data/class-locale.php:84
+msgid "Add"
+msgstr ""
+
+#: src/pages/settings/modals/reset.tsx:11
+msgid "The plugin settings have been reset"
+msgstr ""
+
+#: src/pages/settings/modals/reset.tsx:20
+#: src/pages/settings/tabs/data-settings.tsx:66
+#: core/data/class-locale.php:150
+msgid "Reset Settings"
+msgstr ""
+
+#: src/pages/settings/modals/reset.tsx:25
+msgid "Are you sure you want to reset Beehive’s settings back to the factory defaults?"
+msgstr ""
+
+#: src/pages/settings/modals/reset.tsx:27
+msgid "Please note that you may lose access to the settings page due to the resetting of permissions if you are not an admin user."
+msgstr ""
+
+#: src/pages/settings/modals/reset.tsx:38
+#: src/pages/settings/tabs/data-settings.tsx:70
+#: core/data/class-locale.php:152
+#: core/data/class-locale.php:162
+msgid "Reset"
+msgstr ""
+
+#: src/pages/settings/modules/recipient.tsx:27
+#: core/modules/google-tag-manager/data/class-locale.php:112
+msgid "Remove"
+msgstr ""
+
+#: src/pages/settings/modules/settings.tsx:31
+msgid "User role"
+msgstr ""
+
+#: src/pages/settings/modules/settings.tsx:32
+msgid "Custom users"
+msgstr ""
+
+#: src/pages/settings/modules/settings.tsx:43
+msgid "You don’t have access to this page."
+msgstr ""
+
+#: src/pages/settings/modules/settings.tsx:49
+#: src/pages/settings/modules/statistics.tsx:150
+#: core/data/class-locale.php:144
+msgid "Allow sub-site admins to override these permissions."
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:115
+msgid "Network Administrator Role"
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:116
+msgid "Administrator Role"
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:120
+msgid "Network Administrators have access to Beehive statistics by default."
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:121
+#: core/data/class-locale.php:166
+msgid "Administrators have access to Beehive statistics by default."
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:140
+msgid "Specify a custom capability that, if a user role matches it, can see analytics. You can view default capabilities <link>here</link>."
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:143
+#: core/data/class-locale.php:129
+msgid "Set custom capability"
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:85
+#: core/data/class-locale.php:133
+msgid "Roles"
+msgstr ""
+
+#: src/pages/settings/modules/statistics.tsx:88
+#: core/data/class-locale.php:134
+msgid "Capabilities"
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:102
+#: core/data/class-locale.php:145
+msgid "Users who don’t have access to settings"
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:114
+#: core/data/class-locale.php:146
+msgid "Users who have access to settings"
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:127
+#: core/data/class-locale.php:121
+msgid "Add user"
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:81
+#: core/data/class-locale.php:180
+msgid "In addition to the enabled user roles you can include or exclude individual users."
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:88
+#: core/data/class-locale.php:159
+msgid "Exclude"
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:91
+#: core/data/class-locale.php:160
+msgid "Include"
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:95
+#: core/data/class-locale.php:182
+msgid "Exclude users who match the user roles you specified in the User Role tab, but don't want to allow access. Note: You can also exclude users with the Administrator role if necessary."
+msgstr ""
+
+#: src/pages/settings/tabs/custom-users.tsx:97
+#: core/data/class-locale.php:181
+msgid "Include users who don’t match the user roles you specified in the User Role tab, but that you want to allow access."
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:37
+#: core/data/class-locale.php:184
+msgid "Control what to do with your settings if Beehive is reset or removed from the site. The Settings in this area refer to the configuration options for each module."
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:47
+#: core/data/class-locale.php:149
+msgid "Uninstallation"
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:47
+#: core/data/class-locale.php:185
+msgid "When you uninstall this plugin, what do you want to do with your settings?"
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:48
+#: core/data/class-locale.php:186
+msgid "Choose whether to save your settings for next time or reset them."
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:58
+#: core/data/class-locale.php:151
+msgid "Preserve"
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:66
+msgid "This will instantly revert all settings to their default states."
+msgstr ""
+
+#: src/pages/settings/tabs/data-settings.tsx:73
+#: core/data/class-locale.php:189
+msgid "Note: This will instantly revert all settings to their default states and will remove your Google authentication and your statistics reports."
+msgstr ""
+
+#: src/pages/settings/tabs/general.tsx:32
+#: core/data/class-locale.php:153
+msgid "Statistics Tab"
+msgstr ""
+
+#: src/pages/settings/tabs/general.tsx:32
+msgid "When enabled, the Statistics page will be moved to a top-level position in your wp-admin sidebar instead of its default position in the plugin's Google Analytics menu."
+msgstr ""
+
+#: src/pages/settings/tabs/general.tsx:33
+#: core/data/class-locale.php:154
+msgid "Show the statistics tab in the WP Admin sidebar"
+msgstr ""
+
+#: src/pages/settings/tabs/general.tsx:38
+#: core/data/class-locale.php:155
+msgid "Set the menu title for the statistics page"
+msgstr ""
+
+#: src/pages/settings/tabs/general.tsx:39
+msgid "Title for the statistics page"
+msgstr ""
+
+#: src/pages/settings/tabs/permissions.tsx:26
+#: src/pages/settings/tabs/user-role.tsx:30
+msgid "Choose which user roles or capabilities can view statistics in their WordPress Dashboard area."
+msgstr ""
+
+#: src/pages/settings/tabs/permissions.tsx:29
+msgid "By default, all administrators have access to Beehive’s settings. You can configure and add permissions for other roles, as well as prevent or grant access for specific users."
+msgstr ""
+
+#: src/pages/settings/tabs/user-role.tsx:33
+msgid "<strong>Note:</strong> By default, all Administrators have access to Beehive. You can exclude custom users with the Administrator role in the Custom Users / Exclude tab."
+msgstr ""
+
+#: ../common/components/charts/LineChart.tsx:187
+#: components/charts/LineChart.tsx:187
+msgid "No data available"
+msgstr ""
+
+#: ../common/components/copy-button/copy-button.tsx:18
+#: components/copy-button/copy-button.tsx:18
+msgid "URL copied"
+msgstr ""
+
+#: ../common/components/copy-button/copy-button.tsx:18
+#: components/copy-button/copy-button.tsx:18
+msgid "Copy url"
+msgstr ""
+
+#: ../common/components/google/GoogleAuthentication.tsx:25
+#: components/google/GoogleAuthentication.tsx:25
+msgid "Google authentication failed. No authorization code was received. Please try connecting again."
+msgstr ""
+
+#: ../common/components/google/GoogleAuthentication.tsx:36
+#: components/google/GoogleAuthentication.tsx:36
+#: core/data/class-locale.php:251
+msgid "Your Google account has been connected successfully."
+msgstr ""
+
+#: ../common/components/loading/loading.tsx:14
+#: components/loading/loading.tsx:14
+msgid "Fetching data..."
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:181
+#: components/select-accounts/select-accounts.tsx:181
+#: core/data/class-locale.php:323
+msgid "Choose your account"
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:183
+#: components/select-accounts/select-accounts.tsx:183
+msgid "No accounts found"
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:190
+#: components/select-accounts/select-accounts.tsx:190
+#: core/data/class-locale.php:324
+msgid "Choose your property"
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:195
+#: components/select-accounts/select-accounts.tsx:195
+#: core/data/class-locale.php:331
+msgid "Select Property to load streams"
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:197
+#: components/select-accounts/select-accounts.tsx:197
+msgid "No properties found"
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:208
+#: components/select-accounts/select-accounts.tsx:208
+msgid "Select stream to complete setup"
+msgstr ""
+
+#: ../common/components/select-accounts/select-accounts.tsx:210
+#: components/select-accounts/select-accounts.tsx:210
+msgid "No streams found"
+msgstr ""
+
+#: ../common/components/splash/splash.tsx:15
+#: components/splash/splash.tsx:15
+msgid "Splash image"
+msgstr ""
+
+#: ../common/hooks/useAuth.ts:43
+#: hooks/useAuth.ts:43
+msgid "We couldn't connect your Google account. Please try reconnecting with the \"Connect\" button below. Alternately, you can set up a new API project with Google and use that instead. If you're still stuck you can contact support for assistance."
+msgstr ""
+
+#: ../common/hooks/useSettings.ts:38
+#: ../common/hooks/useUsers.ts:37
+#: hooks/useSettings.ts:38
+#: hooks/useUsers.ts:37
+msgid "Settings updated successfully"
+msgstr ""
+
+#: ../common/hooks/useSummary/useSummary.ts:10
+#: ../common/utils/constants.ts:48
+#: hooks/useSummary/useSummary.ts:10
+#: utils/constants.ts:48
+#: core/data/class-locale.php:389
+#: core/modules/google-analytics/data/class-locale.php:45
+#: core/modules/google-analytics/data/class-locale.php:102
+msgid "Bounce Rate"
+msgstr ""
+
+#: ../common/hooks/useSummary/useSummary.ts:6
+#: ../common/utils/constants.ts:20
+#: hooks/useSummary/useSummary.ts:6
+#: utils/constants.ts:20
+#: src/tabs/general.tsx:7
+#: core/data/class-locale.php:386
+#: core/modules/google-analytics/data/class-locale.php:40
+#: core/modules/google-analytics/data/class-locale.php:103
+#: core/modules/google-analytics/data/class-locale.php:262
+#: core/modules/google-analytics/views/class-stats.php:269
+msgid "Users"
+msgstr ""
+
+#: ../common/hooks/useSummary/useSummary.ts:8
+#: hooks/useSummary/useSummary.ts:8
+#: core/data/class-locale.php:387
+#: core/modules/google-analytics/data/class-locale.php:43
+#: core/modules/google-analytics/data/class-locale.php:100
+#: core/modules/google-analytics/views/class-stats.php:279
+msgid "Pages/Sessions"
+msgstr ""
+
+#: ../common/hooks/useSummary/useSummary.ts:9
+#: hooks/useSummary/useSummary.ts:9
+msgid "Average Time"
+msgstr ""
+
+#: ../common/hooks/useUsersData.ts:36
+#: hooks/useUsersData.ts:36
+msgid "Users updated successfully"
+msgstr ""
+
+#: ../common/utils/constants.ts:101
+#: utils/constants.ts:101
+msgid "Branda"
+msgstr ""
+
+#: ../common/utils/constants.ts:102
+#: utils/constants.ts:102
+msgid "No-code white label plugin"
+msgstr ""
+
+#: ../common/utils/constants.ts:107
+#: utils/constants.ts:107
+msgid "SmartCrawl"
+msgstr ""
+
+#: ../common/utils/constants.ts:108
+#: utils/constants.ts:108
+msgid "WordPress SEO plugin"
+msgstr ""
+
+#: ../common/utils/constants.ts:113
+#: utils/constants.ts:113
+msgid "Broken Link Checker"
+msgstr ""
+
+#: ../common/utils/constants.ts:114
+#: utils/constants.ts:114
+msgid "Scan broken links"
+msgstr ""
+
+#: ../common/utils/constants.ts:119
+#: utils/constants.ts:119
+msgid "Everything you need for WordPress"
+msgstr ""
+
+#: ../common/utils/constants.ts:120
+#: utils/constants.ts:120
+msgid "Get all 12 WPMU DEV premium plugins and more starting from just $3/month."
+msgstr ""
+
+#: ../common/utils/constants.ts:16
+#: utils/constants.ts:16
+#: core/modules/google-analytics/data/class-locale.php:54
+msgid "Total number of Sessions within the date range. A session is the period of time user is actively engaged with your website, app, etc."
+msgstr ""
+
+#: ../common/utils/constants.ts:23
+#: utils/constants.ts:23
+#: src/tabs/general.tsx:8
+#: core/modules/google-analytics/data/class-locale.php:48
+msgid "Users who have initiated at least one session during the date range."
+msgstr ""
+
+#: ../common/utils/constants.ts:30
+#: utils/constants.ts:30
+#: src/tabs/general.tsx:12
+#: core/modules/google-analytics/data/class-locale.php:51
+msgid "Pageviews is the total number of pages viewed. Repeated views of a single page are counted."
+msgstr ""
+
+#: ../common/utils/constants.ts:34
+#: utils/constants.ts:34
+msgid "Page / Sessions"
+msgstr ""
+
+#: ../common/utils/constants.ts:37
+#: utils/constants.ts:37
+#: core/modules/google-analytics/data/class-locale.php:57
+msgid "Pages/Sessions (Average Page Depth) is the average number of pages viewed during a session. Repeated views of a single page are counted."
+msgstr ""
+
+#: ../common/utils/constants.ts:41
+#: utils/constants.ts:41
+msgid "Avg Time"
+msgstr ""
+
+#: ../common/utils/constants.ts:44
+#: utils/constants.ts:44
+#: core/modules/google-analytics/data/class-locale.php:60
+msgid "The average length of a session."
+msgstr ""
+
+#: ../common/utils/constants.ts:51
+#: utils/constants.ts:51
+msgid "The percentage of single-page sessions in which there was no interaction with the page. A bounced session has a duration of <seconds /> seconds."
+msgstr ""
+
+#: ../common/utils/constants.ts:71
+#: utils/constants.ts:71
+msgid "Smush"
+msgstr ""
+
+#: ../common/utils/constants.ts:72
+#: utils/constants.ts:72
+msgid "Best image optimization"
+msgstr ""
+
+#: ../common/utils/constants.ts:77
+#: utils/constants.ts:77
+msgid "Forminator"
+msgstr ""
+
+#: ../common/utils/constants.ts:78
+#: utils/constants.ts:78
+msgid "Best form builder plugin"
+msgstr ""
+
+#: ../common/utils/constants.ts:83
+#: utils/constants.ts:83
+msgid "Defender"
+msgstr ""
+
+#: ../common/utils/constants.ts:84
+#: utils/constants.ts:84
+msgid "Best security plugin"
+msgstr ""
+
+#: ../common/utils/constants.ts:89
+#: utils/constants.ts:89
+msgid "Hustle"
+msgstr ""
+
+#: ../common/utils/constants.ts:90
+#: utils/constants.ts:90
+msgid "Best newsletter plugin"
+msgstr ""
+
+#: ../common/utils/constants.ts:95
+#: utils/constants.ts:95
+msgid "Hummingbird"
+msgstr ""
+
+#: ../common/utils/constants.ts:96
+#: utils/constants.ts:96
+msgid "Performance optimization"
+msgstr ""
+
+#: ../common/utils/http.tsx:179
+#: utils/http.tsx:179
+msgid "Something went wrong, please try again or contact support if the problem persists."
+msgstr ""
+
+#: src/main.tsx:17
+msgid "No popular posts."
+msgstr ""
+
+#: src/main.tsx:7
+#: core/modules/google-analytics/widgets/class-popular.php:279
+msgid "Loading..."
+msgstr ""
+
+#: src/main.tsx:122
+#: core/modules/google-analytics/data/class-locale.php:93
+msgid "See all stats"
+msgstr ""
+
+#: src/main.tsx:53
+#: core/modules/google-analytics/data/class-locale.php:95
+msgid "General stats"
+msgstr ""
+
+#: src/main.tsx:58
+#: core/modules/google-analytics/data/class-locale.php:96
+msgid "Audience"
+msgstr ""
+
+#: src/main.tsx:63
+#: core/modules/google-analytics/data/class-locale.php:97
+#: core/modules/google-analytics/views/class-stats.php:296
+msgid "Top Pages & Views"
+msgstr ""
+
+#: src/main.tsx:68
+#: core/modules/google-analytics/data/class-locale.php:104
+#: core/modules/google-analytics/views/class-stats.php:300
+msgid "Traffic"
+msgstr ""
+
+#: src/main.tsx:95
+#: core/modules/google-analytics/data/class-locale.php:88
+msgid "It may take up to 24 hours for data to begin feeding. Please check back soon."
+msgstr ""
+
+#: src/main.tsx:98
+msgid "A Google Analytics account hasn't been linked yet. To see statistics, <link>link an account</link>."
+msgstr ""
+
+#: src/tabs/audience.tsx:18
+#: src/tabs/general.tsx:39
+#: src/tabs/top-pages.tsx:20
+#: src/tabs/traffic.tsx:37
+msgid "Refreshing data..."
+msgstr ""
+
+#: src/tabs/general.tsx:15
+#: core/data/class-locale.php:379
+#: core/modules/google-analytics/data/class-locale.php:105
+msgid "Top Page"
+msgstr ""
+
+#: src/tabs/general.tsx:17
+msgid "The page with the most views during the date range."
+msgstr ""
+
+#: src/tabs/general.tsx:20
+#: core/modules/google-analytics/data/class-locale.php:106
+msgid "Top Country"
+msgstr ""
+
+#: src/tabs/general.tsx:22
+msgid "The country with the most users during the date range."
+msgstr ""
+
+#: src/tabs/general.tsx:25
+#: core/modules/google-analytics/data/class-locale.php:107
+msgid "Top Referral"
+msgstr ""
+
+#: src/tabs/general.tsx:27
+msgid "The referral source with the most users during the date range."
+msgstr ""
+
+#: src/tabs/general.tsx:30
+#: core/data/class-locale.php:380
+#: core/modules/google-analytics/data/class-locale.php:108
+#: core/modules/google-analytics/views/class-stats.php:314
+#: core/modules/google-analytics/views/class-stats.php:354
+msgid "Top Search Engine"
+msgstr ""
+
+#: src/tabs/general.tsx:32
+msgid "The search engine with the most users during the date range."
+msgstr ""
+
+#: src/tabs/traffic.tsx:31
+msgid "Top referral"
+msgstr ""
+
+#. Plugin Name of the plugin
+#: google-analytics-async.php
+#: core/helpers/class-general.php:82
+msgid "Beehive Pro"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: google-analytics-async.php
+msgid "https://wpmudev.com/project/beehive-analytics-pro/"
+msgstr ""
+
+#. Description of the plugin
+#: google-analytics-async.php
+msgid "Enables Google Analytics for your site with statistics inside WordPress admin panel. Single and multi site compatible!"
+msgstr ""
+
+#. Author of the plugin
+#: google-analytics-async.php
+msgid "WPMU DEV"
+msgstr ""
+
+#. Author URI of the plugin
+#: google-analytics-async.php
+msgid "https://wpmudev.com"
+msgstr ""
+
+#: core/controllers/class-admin.php:129
+msgid "Documentation"
+msgstr ""
+
+#: core/controllers/class-admin.php:139
+#: core/controllers/class-menu.php:214
+#: core/controllers/class-menu.php:215
+msgid "Get Beehive Pro"
+msgstr ""
+
+#: core/controllers/class-admin.php:142
+msgid "Renew Your Membership"
+msgstr ""
+
+#: core/controllers/class-admin.php:142
+msgid "Renew Membership"
+msgstr ""
+
+#: core/controllers/class-admin.php:173
+msgid "View Details"
+msgstr ""
+
+#: core/controllers/class-admin.php:178
+msgid "Get Premium Support"
+msgstr ""
+
+#: core/controllers/class-admin.php:178
+msgid "Premium Support"
+msgstr ""
+
+#: core/controllers/class-admin.php:181
+msgid "Rate Beehive"
+msgstr ""
+
+#: core/controllers/class-admin.php:182
+msgid "Get Support"
+msgstr ""
+
+#: core/controllers/class-admin.php:187
+msgid "View our Public Roadmap"
+msgstr ""
+
+#: core/controllers/class-compatibility.php:68
+msgid "Manage Settings"
+msgstr ""
+
+#: core/controllers/class-compatibility.php:77
+msgid "View Analytics"
+msgstr ""
+
+#: core/controllers/class-gdpr.php:51
+msgid "This website uses Google Analytics to track website traffic. Collected data is processed in such a way that visitors cannot be identified."
+msgstr ""
+
+#: core/controllers/class-menu.php:137
+msgid "Beehive Dashboard"
+msgstr ""
+
+#: core/controllers/class-menu.php:163
+msgid "Beehive Accounts"
+msgstr ""
+
+#: core/controllers/class-menu.php:188
+msgid "Beehive Settings"
+msgstr ""
+
+#: core/data/class-locale.php:41
+msgid "Close this dialog."
+msgstr ""
+
+#: core/data/class-locale.php:42
+msgid "Go back to previous slide."
+msgstr ""
+
+#: core/data/class-locale.php:43
+msgid "Continue"
+msgstr ""
+
+#: core/data/class-locale.php:47
+msgid "Dismiss this notice"
+msgstr ""
+
+#: core/data/class-locale.php:48
+msgid "Changes were saved successfully."
+msgstr ""
+
+#: core/data/class-locale.php:49
+msgid "Could not save the changes. Please try again."
+msgstr ""
+
+#: core/data/class-locale.php:52
+msgid "Open item"
+msgstr ""
+
+#: core/data/class-locale.php:55
+msgid "Select this item"
+msgstr ""
+
+#: core/data/class-locale.php:56
+msgid "Open or close this item"
+msgstr ""
+
+#: core/data/class-locale.php:59
+msgid "View Documentation"
+msgstr ""
+
+#: core/data/class-locale.php:68
+msgid "Academy"
+msgstr ""
+
+#: core/data/class-locale.php:71
+msgid "Facebook"
+msgstr ""
+
+#: core/data/class-locale.php:72
+msgid "X"
+msgstr ""
+
+#: core/data/class-locale.php:73
+msgid "Instagram"
+msgstr ""
+
+#: core/data/class-locale.php:78
+#: core/data/class-locale.php:83
+msgid "Dismiss"
+msgstr ""
+
+#: core/data/class-locale.php:85
+msgid "Adding"
+msgstr ""
+
+#: core/data/class-locale.php:87
+msgid "Refreshing data"
+msgstr ""
+
+#: core/data/class-locale.php:88
+msgid "Reload data"
+msgstr ""
+
+#: core/data/class-locale.php:89
+msgid "Reloading data"
+msgstr ""
+
+#: core/data/class-locale.php:91
+msgid "Activating"
+msgstr ""
+
+#: core/data/class-locale.php:92
+msgid "Save Changes"
+msgstr ""
+
+#: core/data/class-locale.php:93
+msgid "Saving Changes"
+msgstr ""
+
+#: core/data/class-locale.php:94
+msgid "Open options"
+msgstr ""
+
+#: core/data/class-locale.php:96
+msgid "Got it"
+msgstr ""
+
+#: core/data/class-locale.php:97
+msgid "Copy"
+msgstr ""
+
+#: core/data/class-locale.php:100
+msgid "Clear Beehive's local analytics cache and grab the latest data from Google."
+msgstr ""
+
+#: core/data/class-locale.php:120
+#: core/data/class-locale.php:124
+msgid "Tracking Settings"
+msgstr ""
+
+#: core/data/class-locale.php:135
+msgid "User Role"
+msgstr ""
+
+#: core/data/class-locale.php:136
+msgid "Custom Users"
+msgstr ""
+
+#: core/data/class-locale.php:138
+msgid "Google Analytics Settings"
+msgstr ""
+
+#: core/data/class-locale.php:139
+msgid "Dashboard Analytics"
+msgstr ""
+
+#: core/data/class-locale.php:140
+msgid "Custom Capability"
+msgstr ""
+
+#: core/data/class-locale.php:141
+msgid "Administrator"
+msgstr ""
+
+#: core/data/class-locale.php:142
+#: core/helpers/class-permission.php:334
+msgid "Network Administrator"
+msgstr ""
+
+#: core/data/class-locale.php:143
+msgid "Connected Google Account"
+msgstr ""
+
+#: core/data/class-locale.php:158
+msgid "Processing"
+msgstr ""
+
+#: core/data/class-locale.php:163
+msgid "Resetting"
+msgstr ""
+
+#: core/data/class-locale.php:167
+msgid "Network administrators have access to Beehive statistics by default."
+msgstr ""
+
+#: core/data/class-locale.php:170
+msgid "Choose which user roles or capabilities can view statistics in their WordPress Dashboard area. "
+msgstr ""
+
+#: core/data/class-locale.php:171
+msgid "By default, all administrators have access to Beehive’s settings. You can configure and add permissions for other roles, as well as prevent or grant access to custom users to access Beehive’s settings."
+msgstr ""
+
+#: core/data/class-locale.php:172
+msgid "By default, only network administrators and site admins have access to Beehive’s settings. You can configure and add permissions for other roles, as well as prevent or grant access to custom users to access Beehive’s settings."
+msgstr ""
+
+#: core/data/class-locale.php:173
+msgid "Log in to your Google Analytics account to to auto configure tracking code and improve the statistics accuracy. Alternatively if you don’t wan to log in, you can add the tracking ID below."
+msgstr ""
+
+#: core/data/class-locale.php:174
+msgid "Choose which Pro Site levels can configure analytics settings."
+msgstr ""
+
+#: core/data/class-locale.php:175
+msgid "Choose which Pro Site levels can view analytics in their WP Admin Dashboard."
+msgstr ""
+
+#. translators: %s: WordPress.org link.
+#: core/data/class-locale.php:177
+#, php-format
+msgid "Specify a custom capability that, if a user role matches it, can see analytics. You can view default capabilities <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: core/data/class-locale.php:178
+msgid "Choose which user roles can have access and configure Beehive’s settings."
+msgstr ""
+
+#: core/data/class-locale.php:179
+msgid "Note: By default, all Administrators have access to Beehive. You can exclude custom users with the Administrator role in the Custom Users / Exclude tab."
+msgstr ""
+
+#: core/data/class-locale.php:187
+msgid "Needing to start fresh? Use this button to roll back to the default settings."
+msgstr ""
+
+#: core/data/class-locale.php:188
+msgid "Are you sure you want to reset Beehive’s settings back to the factory defaults? Please, note that you may lose access to the settings page due to the resetting of permissions <strong>if you are not an admin user</strong>."
+msgstr ""
+
+#: core/data/class-locale.php:190
+msgid "When enabled, the statistics tab will be added to the top level of the WP Admin sidebar. By default, it will only display in the plugin menu."
+msgstr ""
+
+#: core/data/class-locale.php:208
+msgid "Google Account"
+msgstr ""
+
+#: core/data/class-locale.php:215
+msgid "Start of authorized redirect URIs section"
+msgstr ""
+
+#: core/data/class-locale.php:216
+msgid "End of authorized redirect URIs section"
+msgstr ""
+
+#: core/data/class-locale.php:220
+msgid "Logging out"
+msgstr ""
+
+#: core/data/class-locale.php:233
+msgid "If you're a site admin and experienced with Google's tools, you might want to set up an API Project instead."
+msgstr ""
+
+#. translators: %s: Beehive docs link.
+#: core/data/class-locale.php:235
+#, php-format
+msgid "If you're a site admin and experienced with Google's tools, you might want to set up an API Project instead. Need help setting this up? Check the docs <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: core/data/class-locale.php:238
+msgid "Authenticate with Google to easily connect Google Services network-wide and display statistics on all subsites by default."
+msgstr ""
+
+#: core/data/class-locale.php:239
+msgid "Authenticate with Google to easily connect Google Services and improve the accuracy of statistics."
+msgstr ""
+
+#: core/data/class-locale.php:241
+msgid "Logging out will remove analytics from your Dashboard."
+msgstr ""
+
+#: core/data/class-locale.php:242
+msgid "Are you sure you want to logout?"
+msgstr ""
+
+#: core/data/class-locale.php:248
+msgid "Your Google Analytics account has been connected successfully. Choose which analytics profile you want to use for showing statistics."
+msgstr ""
+
+#. translators: %1$s: Google support doc link. %2$s WPMUDEV support link.
+#: core/data/class-locale.php:250
+#, php-format
+msgid "We couldn't authorize your Google account. Please fill in <a href=\"%1$s\" target=\"_blank\">your API information</a> again, or connect with Google using the button below in side tab. If you're still stuck, please <a href=\"%2$s\" target=\"_blank\">contact support</a> for assistance."
+msgstr ""
+
+#: core/data/class-locale.php:253
+msgid "We couldn't authorize your Google account. Please fill in your API information again, or connect with Google using the button in the side tab."
+msgstr ""
+
+#. translators: %s: WPMUDEV support link.
+#: core/data/class-locale.php:255
+#, php-format
+msgid "We couldn't authorize your Google account. Please fill in your API information again, or connect with Google using the button in the side tab. If you're still stuck, please <a href=\"%s\" target=\"_blank\">contact support</a> for assistance."
+msgstr ""
+
+#: core/data/class-locale.php:258
+#: core/modules/google-auth/endpoints/class-auth.php:132
+msgid "You have been successfully logged out."
+msgstr ""
+
+#: core/data/class-locale.php:260
+msgid "URI redirect copied to clipboard."
+msgstr ""
+
+#: core/data/class-locale.php:277
+msgid "Please use valid Google Analytics 4 Measurement ID Ex : G-XXXXXXXXXX"
+msgstr ""
+
+#: core/data/class-locale.php:282
+msgid "Finishing Setup..."
+msgstr ""
+
+#: core/data/class-locale.php:283
+msgid "Setup Google Account"
+msgstr ""
+
+#. translators: %s: Beehive plugin name.
+#: core/data/class-locale.php:285
+#, php-format
+msgid "Welcome to %s"
+msgstr ""
+
+#: core/data/class-locale.php:287
+msgid "Set up your account"
+msgstr ""
+
+#: core/data/class-locale.php:288
+msgid "Display Analytics statistics to:"
+msgstr ""
+
+#: core/data/class-locale.php:289
+msgid "Network-wide Measurement ID"
+msgstr ""
+
+#: core/data/class-locale.php:291
+msgid "Why do I need to connect with Google?"
+msgstr ""
+
+#: core/data/class-locale.php:294
+msgid "Save Code"
+msgstr ""
+
+#: core/data/class-locale.php:297
+msgid "When enabled, you will get statistics from all admin pages."
+msgstr ""
+
+#: core/data/class-locale.php:298
+msgid "Please wait a few moments while we set up your account. Note that data can take up to 24 hours to display."
+msgstr ""
+
+#: core/data/class-locale.php:299
+msgid "Let's get started by connecting your Google Analytics account to get your tracking ID. This will enable statistics for your whole network and all subsites. Alternately, you can choose to enable network-wide tracking by adding a tracking ID manually below."
+msgstr ""
+
+#. translators: %s: Current user name.
+#: core/data/class-locale.php:301
+#, php-format
+msgid "%s, welcome to the hottest Google Analytics plugin for WordPress. Let's get started by connecting your Google Analytics account to feed your analytics data. If you only want to enable tracking without reports, you can paste your Measurement ID via the link below."
+msgstr ""
+
+#: core/data/class-locale.php:302
+msgid "Your account was connected successfully! The next step is to choose your Analytics Data Stream to start feeding data."
+msgstr ""
+
+#. translators: %s: Link to get measurement id.
+#: core/data/class-locale.php:304
+#, php-format
+msgid "Paste your Google Analytics 4 Measurement ID in the field below to enable analytics tracking. You can get your Measurement ID <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: core/data/class-locale.php:305
+msgid "We need to authenticate your account with Google to ensure you actually own the analytics data."
+msgstr ""
+
+#: core/data/class-locale.php:322
+msgid "Choose your view (profile)"
+msgstr ""
+
+#: core/data/class-locale.php:325
+msgid "Choose your stream"
+msgstr ""
+
+#: core/data/class-locale.php:326
+msgid "Automatically detect Measurement ID"
+msgstr ""
+
+#: core/data/class-locale.php:327
+msgid "Add Measurement ID"
+msgstr ""
+
+#: core/data/class-locale.php:330
+msgid "Select Account to load properties"
+msgstr ""
+
+#: core/data/class-locale.php:332
+msgid "Select Stream"
+msgstr ""
+
+#: core/data/class-locale.php:334
+msgid "Select a website"
+msgstr ""
+
+#: core/data/class-locale.php:337
+msgid "Easily connect with Google by clicking the “Connect with Google” button."
+msgstr ""
+
+#. translators: %s: Google support doc link.
+#: core/data/class-locale.php:342
+#, php-format
+msgid "We couldn't connect your Google account. Please try reconnecting with the \"Connect\" button below. Alternately, you can set up a <a href=\"%s\" target=\"_blank\">new API project</a> with Google and use that instead."
+msgstr ""
+
+#. translators: %1$s: Google support doc link. %2$s WPMUDEV support link.
+#: core/data/class-locale.php:346
+#, php-format
+msgid "We couldn't connect your Google account. Please try reconnecting with the \"Connect\" button below. Alternately, you can set up a <a href=\"%1$s\" target=\"_blank\">new API project</a> with Google and use that instead. If you're still stuck you can <a href=\"%2$s\" target=\"_blank\">contact support</a> for assistance."
+msgstr ""
+
+#: core/data/class-locale.php:353
+msgid "A tracking ID is what connects your website to your Google Analytics account. Use 'Automatically detect tracking ID,' and Beehive will find and set up your tracking code automatically."
+msgstr ""
+
+#: core/data/class-locale.php:381
+#: core/modules/google-analytics/data/class-locale.php:109
+#: core/modules/google-analytics/views/class-stats.php:309
+#: core/modules/google-analytics/views/class-stats.php:346
+msgid "Top Medium"
+msgstr ""
+
+#: core/data/class-locale.php:382
+msgid "Never"
+msgstr ""
+
+#: core/data/class-locale.php:384
+msgid "Coming Soon"
+msgstr ""
+
+#: core/data/class-locale.php:390
+msgid "View Full Report"
+msgstr ""
+
+#: core/data/class-locale.php:391
+#: core/modules/google-analytics/data/class-locale.php:113
+#: core/modules/google-analytics/data/class-locale.php:255
+msgid "Fetching latest data..."
+msgstr ""
+
+#: core/data/class-locale.php:393
+msgid "Error"
+msgstr ""
+
+#: core/data/class-locale.php:400
+msgid "Finish Setup"
+msgstr ""
+
+#: core/data/class-locale.php:401
+msgid "Learn More"
+msgstr ""
+
+#: core/data/class-locale.php:405
+msgid "View your websites full analytics report with Sessions, Users Pageviews, Average time and Bounce Rate."
+msgstr ""
+
+#: core/data/class-locale.php:410
+msgid "You need to authenticate with your Google account to automatically get the tracking ID for this website and enable access to statistics, or you can add the tracking ID manually."
+msgstr ""
+
+#: core/data/class-locale.php:411
+msgid "Authenticate with Google Analytics account to automatically get the tracking code for this website and enable statistics for whole network. Alternatively, you can just enable network wide tracking by adding in the Settings."
+msgstr ""
+
+#. translators: %s: Link to statistics page.
+#: core/data/class-locale.php:414
+#, php-format
+msgid "Your account has been set up successfully. You can view the statistics <a href=\"%s\">here</a>."
+msgstr ""
+
+#: core/endpoints/class-actions.php:60
+msgid "The action type to perform."
+msgstr ""
+
+#: core/endpoints/class-actions.php:70
+#: core/endpoints/class-settings.php:73
+#: core/endpoints/class-settings.php:99
+#: core/modules/google-analytics/endpoints/v1/class-data.php:71
+#: core/modules/google-analytics/endpoints/v1/class-data.php:95
+#: core/modules/google-analytics/endpoints/v1/class-data.php:119
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:505
+msgid "The network flag."
+msgstr ""
+
+#: core/endpoints/class-actions.php:110
+msgid "Unknown action."
+msgstr ""
+
+#: core/endpoints/class-actions.php:179
+msgid "Plugin settings reset successfully."
+msgstr ""
+
+#: core/endpoints/class-actions.php:179
+msgid "Couldn't reset the settings."
+msgstr ""
+
+#: core/endpoints/class-data.php:62
+msgid "Search term to search"
+msgstr ""
+
+#: core/endpoints/class-data.php:67
+msgid "User IDs to exclude."
+msgstr ""
+
+#: core/endpoints/class-data.php:75
+msgid "User roles to exclude."
+msgstr ""
+
+#: core/endpoints/class-data.php:83
+msgid "User roles to include."
+msgstr ""
+
+#: core/endpoints/class-data.php:91
+msgid "Should include super admins if it is network site. Default is false."
+msgstr ""
+
+#: core/endpoints/class-settings.php:63
+#: core/endpoints/class-settings.php:85
+msgid "The settings group name."
+msgstr ""
+
+#: core/endpoints/class-settings.php:68
+#: core/endpoints/class-settings.php:90
+msgid "The settings item key."
+msgstr ""
+
+#: core/endpoints/class-settings.php:95
+msgid "The settings value to update."
+msgstr ""
+
+#: core/helpers/class-general.php:82
+#: core/helpers/class-general.php:85
+msgid "Beehive"
+msgstr ""
+
+#: core/helpers/class-general.php:218
+msgid "User"
+msgstr ""
+
+#: core/helpers/class-general.php:337
+msgid "Autoloader is missing. Please run `composer install` if you are on development version."
+msgstr ""
+
+#: core/modules/google-analytics/class-admin.php:133
+msgid "Statistics for last 30 days"
+msgstr ""
+
+#: core/modules/google-analytics/class-helper.php:99
+msgid "You need to authenticate with your Google account to enable access to statistics."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:44
+#: core/modules/google-analytics/data/class-locale.php:101
+#: core/modules/google-analytics/views/class-stats.php:284
+msgid "Avg. Time"
+msgstr ""
+
+#. translators: %1$s: No. of users. %2$s: Date period.
+#: core/modules/google-analytics/data/class-locale.php:50
+#, php-format
+msgid "%1$d users who have initiated at least one session between %2$s."
+msgstr ""
+
+#. translators: %1$s: No. of views. %2$s: Date period.
+#: core/modules/google-analytics/data/class-locale.php:53
+#, php-format
+msgid "%1$d views of this page between %2$s."
+msgstr ""
+
+#. translators: %1$s: No. of sessions. %2$s: Date period.
+#: core/modules/google-analytics/data/class-locale.php:56
+#, php-format
+msgid "%1$d number of sessions within %2$s."
+msgstr ""
+
+#. translators: %1$d: No. of page sessions. %2$s: Date period.
+#: core/modules/google-analytics/data/class-locale.php:59
+#, php-format
+msgid "%1$d page sessions between %2$s."
+msgstr ""
+
+#. translators: %1$s: Length of sessions. %2$s: Date period.
+#: core/modules/google-analytics/data/class-locale.php:62
+#, php-format
+msgid "This page has an average session length of %1$s between %2$s."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:63
+msgid "The percentage of single-page sessions in which there was no interaction with the page. A bounced session has a duration of 0 seconds."
+msgstr ""
+
+#. translators: %1$s: No. of single-page sessions. %2$s: Date period.
+#: core/modules/google-analytics/data/class-locale.php:65
+#, php-format
+msgid "%1$s of single-page sessions without interaction between %2$s."
+msgstr ""
+
+#. translators: %s: Link to login.
+#. translators: %s: Link to accounts page.
+#: core/modules/google-analytics/data/class-locale.php:85
+#: core/modules/google-analytics/data/class-locale.php:241
+#, php-format
+msgid "A Google Analytics account hasn't been linked yet. To see statistics, <a href=\"%s\">link an account</a>."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:110
+#: core/modules/google-analytics/views/class-stats.php:319
+#: core/modules/google-analytics/views/class-stats.php:350
+msgid "Top Social Network"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:112
+msgid "No data available."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:114
+#: core/modules/google-analytics/data/class-locale.php:258
+msgid "Top Pages/most visited"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:117
+msgid "Returning visitors"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:118
+msgid "New visitors"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:123
+msgid "No data for this period of time"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:124
+msgid "returning visitors"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:125
+msgid "new visitors"
+msgstr ""
+
+#. translators: %s: Google support doc link.
+#: core/modules/google-analytics/data/class-locale.php:141
+#, php-format
+msgid "Note: Enabling this feature requires <a href=\"%s\" target=\"_blank\">updating your privacy policy</a>."
+msgstr ""
+
+#. translators: %s: Link to statistics page.
+#: core/modules/google-analytics/data/class-locale.php:143
+#, php-format
+msgid "Your Google account is now connected and you can view this site's analytics on the <a href=\"%s\">Statistics page</a>."
+msgstr ""
+
+#. translators: %s: Google analytics signup link.
+#: core/modules/google-analytics/data/class-locale.php:145
+#: core/modules/google-analytics/data/class-locale.php:149
+#, php-format
+msgid "You don't have any Google Analytics profile connected to your account. To get going, just <a href=\"%s\" target=\"_blank\">sign up for Google Analytics</a>."
+msgstr ""
+
+#. translators: %s: Link to accounts page.
+#: core/modules/google-analytics/data/class-locale.php:153
+#, php-format
+msgid "To choose your profile first you need to go to the <a href=\"%s\">Authentication</a> page and connect your Google account."
+msgstr ""
+
+#. translators: %1$s: < and %2$s: >.
+#: core/modules/google-analytics/data/class-locale.php:155
+#, php-format
+msgid "You've selected to automatically detect the measurement ID in the Account settings. This measurement ID is being output in the %1$shead%2$s section of your pages."
+msgstr ""
+
+#. translators: %s: Google support docs link.
+#: core/modules/google-analytics/data/class-locale.php:158
+#, php-format
+msgid " To learn more about Analytics 4 Beta features, check out <a href=\"%s\" target=\"_blank\">What's new</a>."
+msgstr ""
+
+#. translators: %s: Google support docs link.
+#: core/modules/google-analytics/data/class-locale.php:163
+#, php-format
+msgid "Whoops, looks like that's an invalid measurement ID. Double check you have your <a href=\"%s\" target=\"_blank\">Analytics 4 measurement ID</a> and try again."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:166
+msgid "Please select a valid property."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:167
+msgid "Please select a valid stream."
+msgstr ""
+
+#. translators: %s: Google API error message.
+#: core/modules/google-analytics/data/class-locale.php:169
+#, php-format
+msgid "Google API error: %s"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:172
+#, php-format
+msgid "Multiple analytics accounts are linked to your Google account. To enhance your site's performance, we display the list of streams from a maximum of 25 accounts. <a href=\"%s\" target=\"_blank\">Learn more</a>"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:178
+msgid "E.g: G-XXXXXXXXXX"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:192
+msgid "Pro Site Permissions"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:193
+msgid "Analytics 4 Profile"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:194
+msgid "Use a different measurement ID"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:195
+msgid "Network Measurement ID"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:202
+msgid "Note: This will only feed data to Google, to view analytics in your Dashboard you'll need to authenticate your account on the Settings tab."
+msgstr ""
+
+#. translators: %s: Google support docs link.
+#: core/modules/google-analytics/data/class-locale.php:207
+#, php-format
+msgid "Enable support for Google's Display Advertising and get additional demographic and interest reports. You can read more about it <a href=\"%s\" target=\"_blank\">here</a>."
+msgstr ""
+
+#. translators: %s: Google support docs link.
+#: core/modules/google-analytics/data/class-locale.php:209
+#, php-format
+msgid "When enabled, visitor IP address will be <a href=\"%s\" target=\"_blank\">anonymized</a>."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:210
+msgid "We see you have Pro Sites active. Choose which levels you want to access analytics."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:212
+msgid "Authenticate with Google to connect your Google Analytics 4 profile and begin feeding analytics to your WordPress Dashboard."
+msgstr ""
+
+#. translators: %s Google account setup link.
+#: core/modules/google-analytics/data/class-locale.php:214
+#, php-format
+msgid "Site not here? Try logging into another <a href=\"%s\">Google account</a>"
+msgstr ""
+
+#. translators: %s Google account setup link.
+#: core/modules/google-analytics/data/class-locale.php:215
+msgid "Note: Currently your statistics are provided from network wide measurement ID. You can increase stats accuracy by logging in and configuring your own stream."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:216
+msgid "Copy and paste your Google Analytics ID to add it to your website. Note: The new Google Analytics 4 is now the default experience for all new properties."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:217
+msgid "Copy and paste your Google Analytics ID to add it to your website. Note: This measurement ID will track your whole network. To track subsites, you need to add the Measurement ID separately for each one."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:242
+msgid "A Google Analytics account hasn't been linked yet."
+msgstr ""
+
+#. translators: %s: Link to accounts page.
+#: core/modules/google-analytics/data/class-locale.php:244
+#, php-format
+msgid "A Google Analytics account hasn’t been linked yet. To see real-time statistics, <a href=\"%s\">link an account</a>."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:245
+msgid "There's no analytics data to display yet. Either you haven't had traffic to this site or we don't have any data from API yet. Please check back in few hours."
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:249
+msgid "Mediums"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:251
+msgid "Search Engines"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:252
+msgid "Social Networks"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:257
+msgid "No information"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:260
+msgid "Avg. Sessions"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:264
+msgid "has"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:265
+msgid "Page/Sessions"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:266
+#: core/modules/google-analytics/views/class-stats.php:289
+msgid "Bounce Rates"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:267
+msgid "Country Code"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:268
+msgid "Country Name"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:269
+msgid "Visits Percentage"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:270
+msgid "Total Visits"
+msgstr ""
+
+#: core/modules/google-analytics/data/class-locale.php:273
+msgid "Visitors chart is empty. There's no data to display."
+msgstr ""
+
+#. translators: %s: Percent no. of visits per country.
+#: core/modules/google-analytics/data/class-locale.php:275
+#, php-format
+msgid "%s visits."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-data.php:90
+msgid "The selected account ID."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-data.php:114
+msgid "The selected property ID."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-data.php:144
+msgid "Property parameter is required."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-data.php:199
+msgid "Account parameter is required."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:152
+msgid "No. of items required."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:172
+msgid "Should force skip cache."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:443
+msgid "Analytics API is up and working."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:453
+msgid "Analytics API is not ready."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:478
+msgid "Couldn't fetch data. Please try again later."
+msgstr ""
+
+#: core/modules/google-analytics/endpoints/v1/class-stats.php:492
+msgid "The date in YYYY-MM-DD format."
+msgstr ""
+
+#: core/modules/google-analytics/stats/formatters/class-ga4.php:957
+msgid "Other"
+msgstr ""
+
+#: core/modules/google-analytics/views/class-stats.php:245
+msgid "Dashboard Widget"
+msgstr ""
+
+#: core/modules/google-analytics/views/class-stats.php:249
+#: core/modules/google-analytics/views/class-stats.php:253
+msgid "General Stats"
+msgstr ""
+
+#: core/modules/google-analytics/views/class-stats.php:260
+msgid "Audiences"
+msgstr ""
+
+#: core/modules/google-analytics/views/class-stats.php:330
+msgid "Statistics/Google Analytics"
+msgstr ""
+
+#: core/modules/google-analytics/widgets/class-popular.php:48
+#: core/modules/google-analytics/widgets/class-popular.php:112
+msgid "Most popular posts"
+msgstr ""
+
+#: core/modules/google-analytics/widgets/class-popular.php:49
+msgid "Your site's most popular posts."
+msgstr ""
+
+#: core/modules/google-analytics/widgets/class-popular.php:154
+msgid "No data yet."
+msgstr ""
+
+#: core/modules/google-auth/endpoints/class-auth.php:63
+#: core/modules/google-auth/endpoints/class-auth.php:102
+msgid "Network flag"
+msgstr ""
+
+#: core/modules/google-auth/endpoints/class-auth.php:83
+msgid "The client ID from Google API project."
+msgstr ""
+
+#: core/modules/google-auth/endpoints/class-auth.php:88
+msgid "The client secret from Google API project."
+msgstr ""
+
+#: core/modules/google-auth/endpoints/class-auth.php:93
+msgid "Where are you going to use the auth URL (default \"settings\")."
+msgstr ""
+
+#. translators: %s Support url.
+#: core/modules/google-auth/endpoints/class-auth.php:189
+#, php-format
+msgid "We couldn't authorize your Google account. Please fill in your API information again, or connect with Google using the button below in side tab. If you're still stuck, please <a href=\"%s\">contact support</a> for assistance."
+msgstr ""
+
+#: core/modules/google-tag-manager/class-admin.php:59
+msgid "Google Tag Manager Settings"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:43
+msgid "Deactivating"
+msgstr ""
+
+#. translators: %s: Link to support page.
+#: core/modules/google-tag-manager/data/class-locale.php:72
+#, php-format
+msgid "Having trouble finding your GTM ID? Go to the <a href=\"%s\" target=\"_blank\">help center</a> and follow the steps."
+msgstr ""
+
+#. translators: %s: <head>.
+#: core/modules/google-tag-manager/data/class-locale.php:74
+#, php-format
+msgid "This tracking ID is being output in the %s section of your pages."
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:77
+msgid "Google Tag Manager has been successfully added to your website."
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:78
+msgid "Google Tag Manager has been successfully added to your website. Note: Your network container ID will be ignored since duplicated Container IDs are not supported by Google Tag Manager."
+msgstr ""
+
+#. translators: %s: Link to GTM docs.
+#: core/modules/google-tag-manager/data/class-locale.php:80
+#, php-format
+msgid "Whoops, looks like that's an invalid container ID. Double-check you have your <a href=\"%s\" target=\"_blank\">Google Tag Manager ID</a> and try again."
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:105
+msgid "Custom Name"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:106
+msgid "Variable Name"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:115
+msgid "Post ID"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:116
+msgid "Post title"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:117
+msgid "Post type"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:118
+msgid "Post date"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:119
+msgid "Post author ID"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:120
+msgid "Post author name"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:121
+msgid "Post categories"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:122
+msgid "Post tags"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:125
+msgid "Logged in status"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:126
+msgid "Logged in user role"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:127
+msgid "Logged in user ID"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:128
+msgid "Logged in user name"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:129
+msgid "Logged in user email"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:130
+msgid "Logged in user creation date"
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:140
+msgid "Integrate your plugins with Google Tag Manager adding a data layer event to fire a conversion tracking tag after each successful user interaction."
+msgstr ""
+
+#. translators: %s: Link to GTM references page.
+#: core/modules/google-tag-manager/data/class-locale.php:142
+#, php-format
+msgid "Add global variables that will show on all pages. To see some examples, please visit the <a href=\"%s\" target=\"_blank\">Google Tag Manager Reference</a>."
+msgstr ""
+
+#. translators: %s: Link to Forminator.
+#: core/modules/google-tag-manager/data/class-locale.php:145
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">Install Forminator</a> to enable. This will  include a dataLayer event after a successful form submission."
+msgstr ""
+
+#. translators: %s: Link to Forminator.
+#: core/modules/google-tag-manager/data/class-locale.php:147
+#, php-format
+msgid "<a href=\"%s\">Activate Forminator</a> to enable. This will  include a dataLayer event after a successful form submission."
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:148
+msgid "Enable this to include a dataLayer event after a successful poll submission."
+msgstr ""
+
+#. translators: %s: Link to plugins page.
+#: core/modules/google-tag-manager/data/class-locale.php:150
+#, php-format
+msgid "<a href=\"%s\">Update Forminator</a> to enable. This will  include a dataLayer event after a successful poll submission."
+msgstr ""
+
+#. translators: %s: Link to plugins page.
+#: core/modules/google-tag-manager/data/class-locale.php:152
+#, php-format
+msgid "<a href=\"%s\">Activate Forminator</a> to enable. This will  include a dataLayer event after a successful poll submission."
+msgstr ""
+
+#. translators: %s: Link to Forminator.
+#: core/modules/google-tag-manager/data/class-locale.php:154
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">Install Forminator</a> to enable. This will  include a dataLayer event after a successful poll submission."
+msgstr ""
+
+#: core/modules/google-tag-manager/data/class-locale.php:155
+msgid "Enable this to include a dataLayer event after a successful quiz submission."
+msgstr ""
+
+#. translators: %s: Link to plugins page.
+#: core/modules/google-tag-manager/data/class-locale.php:157
+#, php-format
+msgid "<a href=\"%s\">Update Forminator</a> to enable. This will include a dataLayer event after a successful quiz submission."
+msgstr ""
+
+#. translators: %s: Link to plugins page.
+#: core/modules/google-tag-manager/data/class-locale.php:159
+#, php-format
+msgid "<a href=\"%s\">Activate Forminator</a> to enable. This will include a dataLayer event after a successful quiz submission."
+msgstr ""
+
+#. translators: %s: Link to Forminator.
+#: core/modules/google-tag-manager/data/class-locale.php:161
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">Install Forminator</a> to enable. This will include a dataLayer event after a successful quiz submission."
+msgstr ""
+
+#. translators: %s: Link to Hustle.
+#: core/modules/google-tag-manager/data/class-locale.php:164
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">Install Hustle</a> to enable. This will include a dataLayer event after a successful form submission."
+msgstr ""
+
+#. translators: %s: Link to Hustle.
+#: core/modules/google-tag-manager/data/class-locale.php:166
+#, php-format
+msgid "<a href=\"%s\">Activate Hustle</a> to enable. This will include a dataLayer event after a successful form submission."
+msgstr ""
+
+#. translators: %s: Link to GTM account setup page.
+#: core/modules/google-tag-manager/data/class-locale.php:170
+#, php-format
+msgid "Google Tag Manager has not been added to your website yet. You can easily add it by entering your Container ID on the Google Tag Manager <a href=\"%s\">Account Page</a>."
+msgstr ""
+
+#. translators: %s is error message from Google API.
+#: core/utils/abstracts/class-endpoint.php:131
+#: core/utils/abstracts/class-endpoint.php:134
+#, php-format
+msgid "Google API Error: %s"
+msgstr ""
+
+#: core/utils/abstracts/class-endpoint.php:139
+msgid "Unknown error occurred. Please try clearing cache."
+msgstr ""
+
+#: core/utils/abstracts/class-google-api.php:99
+msgid "Unknown error occurred."
+msgstr ""
+
+#. translators: %s: heart icon
+#: core/views/class-admin.php:194
+#, php-format
+msgid "Made with %s by WPMU DEV"
+msgstr ""
+
+#: core/views/class-admin.php:321
+#: core/views/class-admin.php:349
+msgid "Last week"
+msgstr ""
+
+#: core/views/class-admin.php:341
+msgid "Today"
+msgstr ""
+
+#: core/views/class-admin.php:345
+msgid "Yesterday"
+msgstr ""
+
+#: core/views/class-admin.php:353
+msgid "Last month"
+msgstr ""
+
+#: core/views/class-admin.php:357
+msgid "Last year"
+msgstr ""
+
+#: templates/popular-widget/admin.php:17
+msgid "Title"
+msgstr ""
+
+#: templates/popular-widget/admin.php:21
+msgid "Maximum number of posts to show:"
+msgstr ""

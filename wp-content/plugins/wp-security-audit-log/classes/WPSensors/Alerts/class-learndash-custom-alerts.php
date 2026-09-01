@@ -81,6 +81,40 @@ if ( ! \class_exists( '\WSAL\WP_Sensors\Alerts\LearnDash_Custom_Alerts' ) ) {
 			return \array_merge( $alerts, self::get_default_disabled_alerts() );
 		}
 
+		// @free:start
+		/**
+		 * Returns LearnDash free event IDs that have additional related events available only in WSAL Premium.
+		 *
+		 * Used to render an upgrade CTA at the bottom of the affected events in the log viewer.
+		 *
+		 * @return int[] $event_ids - Free event IDs that should display the premium CTA.
+		 *
+		 * @since 5.6.4
+		 */
+		public static function get_free_version_events(): array {
+			return array( 11000, 11001, 11004, 11021, 11200, 11201, 11207, 11216, 11301, 11400, 11401, 11405, 11500, 11501, 11504 );
+		}
+
+		/**
+		 * Add links to the events that have related events available only in premium.
+		 *
+		 * @param array $links - Existing event_id => label map.
+		 *
+		 * @return array $links - Merged event_id => label map.
+		 *
+		 * @since 5.6.4
+		 */
+		public static function add_link_to_free_events( array $links ): array {
+			$text = \esc_html__( 'Need more LearnDash coverage? Premium tracks additional events.', 'wp-security-audit-log' );
+
+			foreach ( self::get_free_version_events() as $event_id ) {
+				$links[ $event_id ] = $text;
+			}
+
+			return $links;
+		}
+		// @free:end
+
 		/**
 		 * Returns an array with all the events attached to the sensor (if there are different types of events, this method will merge them into one array - the events ids will be used as keys)
 		 *
@@ -201,6 +235,39 @@ if ( ! \class_exists( '\WSAL\WP_Sensors\Alerts\LearnDash_Custom_Alerts' ) ) {
 					array(),
 					'learndash_courses',
 					'duplicated',
+				),
+				11020 => array(
+					11020,
+					WSAL_INFORMATIONAL,
+					\esc_html__( 'A course was viewed', 'wp-security-audit-log' ),
+					\esc_html__( 'Viewed the course %PostTitle% page.', 'wp-security-audit-log' ),
+					array(
+						\esc_html__( 'Course ID', 'wp-security-audit-log' ) => '%PostID%',
+						\esc_html__( 'Course author', 'wp-security-audit-log' ) => '%CourseAuthor%',
+						\esc_html__( 'Course status', 'wp-security-audit-log' ) => '%PostStatus%',
+						\esc_html__( 'Category', 'wp-security-audit-log' ) => '%Category%',
+						\esc_html__( 'Course category', 'wp-security-audit-log' ) => '%CourseCategory%',
+						\esc_html__( 'URL', 'wp-security-audit-log' ) => '%PostUrl%',
+					),
+					Constants::wsaldefaults_build_links( array( 'EditorLinkPost' ) ),
+					'learndash_courses',
+					'viewed',
+				),
+				11021 => array(
+					11021,
+					WSAL_INFORMATIONAL,
+					\esc_html__( 'A course was opened in the editor', 'wp-security-audit-log' ),
+					\esc_html__( 'Opened the course %PostTitle% in the editor.', 'wp-security-audit-log' ),
+					array(
+						\esc_html__( 'Course ID', 'wp-security-audit-log' ) => '%PostID%',
+						\esc_html__( 'Course author', 'wp-security-audit-log' ) => '%CourseAuthor%',
+						\esc_html__( 'Course status', 'wp-security-audit-log' ) => '%PostStatus%',
+						\esc_html__( 'Category', 'wp-security-audit-log' ) => '%Category%',
+						\esc_html__( 'Course category', 'wp-security-audit-log' ) => '%CourseCategory%',
+					),
+					Constants::wsaldefaults_build_links( array( 'EditorLinkPost' ) ),
+					'learndash_courses',
+					'opened',
 				),
 				11080 => array(
 					11080,
@@ -350,6 +417,39 @@ if ( ! \class_exists( '\WSAL\WP_Sensors\Alerts\LearnDash_Custom_Alerts' ) ) {
 					array(),
 					'learndash_lessons',
 					'duplicated',
+				),
+				11215 => array(
+					11215,
+					WSAL_INFORMATIONAL,
+					\esc_html__( 'A lesson was viewed', 'wp-security-audit-log' ),
+					\esc_html__( 'Viewed the lesson %PostTitle% page.', 'wp-security-audit-log' ),
+					array(
+						\esc_html__( 'Lesson ID', 'wp-security-audit-log' ) => '%PostID%',
+						\esc_html__( 'Lesson author', 'wp-security-audit-log' ) => '%LessonAuthor%',
+						\esc_html__( 'Lesson status', 'wp-security-audit-log' ) => '%PostStatus%',
+						\esc_html__( 'Category', 'wp-security-audit-log' ) => '%Category%',
+						\esc_html__( 'Lesson category', 'wp-security-audit-log' ) => '%LessonCategory%',
+						\esc_html__( 'URL', 'wp-security-audit-log' ) => '%PostUrl%',
+					),
+					Constants::wsaldefaults_build_links( array( 'EditorLinkPost' ) ),
+					'learndash_lessons',
+					'viewed',
+				),
+				11216 => array(
+					11216,
+					WSAL_INFORMATIONAL,
+					\esc_html__( 'A lesson was opened in the editor', 'wp-security-audit-log' ),
+					\esc_html__( 'Opened the lesson %PostTitle% in the editor.', 'wp-security-audit-log' ),
+					array(
+						\esc_html__( 'Lesson ID', 'wp-security-audit-log' ) => '%PostID%',
+						\esc_html__( 'Lesson author', 'wp-security-audit-log' ) => '%LessonAuthor%',
+						\esc_html__( 'Lesson status', 'wp-security-audit-log' ) => '%PostStatus%',
+						\esc_html__( 'Category', 'wp-security-audit-log' ) => '%Category%',
+						\esc_html__( 'Lesson category', 'wp-security-audit-log' ) => '%LessonCategory%',
+					),
+					Constants::wsaldefaults_build_links( array( 'EditorLinkPost' ) ),
+					'learndash_lessons',
+					'opened',
 				),
 				11300 => array(
 					11300,

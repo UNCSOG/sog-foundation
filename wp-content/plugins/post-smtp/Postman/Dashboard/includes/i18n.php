@@ -45,17 +45,22 @@ return array(
 		),
 	),
 	'banners'       => array(
-		'configured'    => array(
+		'configured'       => array(
 			'text'   => __( 'Post SMTP is configured!', 'post-smtp' ),
 			'button' => __( 'Send a test email', 'post-smtp' ),
 		),
-		'notConfigured' => array(
+		'notConfigured'    => array(
 			'text'   => __( 'Post SMTP is not configured and is mimicking out-of-the-box WordPress email delivery.', 'post-smtp' ),
 			'button' => __( 'Setup the wizard', 'post-smtp' ),
 		),
-		'isLogOnly'     => array(
+		'isLogOnly'        => array(
 			'text'   => __( 'Postman is in non-Production mode and is dumping all emails.', 'post-smtp' ),
 			'button' => __( 'Setup the wizard', 'post-smtp' ),
+		),
+		// Shown on the child site when connected to MainWP parent but the parent mailer
+		// is not yet configured.
+		'mainwpConnected' => array(
+			'text' => __( 'Connected to the MainWP Parent Site.', 'post-smtp' ),
 		),
 	),
 	'cards'         => array(
@@ -229,6 +234,8 @@ return array(
 		'title'       => __( 'Pro Features', 'post-smtp' ),
 		'description' => __( 'Supercharge your Email', 'post-smtp' ),
 		'button'      => __( 'Get Post SMTP Pro', 'post-smtp' ),
+		'expandBanner'  => __( 'Expand Pro features banner', 'post-smtp' ),
+		'collapseBanner' => __( 'Collapse Pro features banner', 'post-smtp' ),
 		'list'        => array(
 			__( "Email Scheduling \r\n Quota Management", 'post-smtp' ),
 			__( "Email Report \r\n and Tracking", 'post-smtp' ),
@@ -238,6 +245,42 @@ return array(
 			__( "Microsoft 365 / \r\n Office 365", 'post-smtp' ),
 			__( "Amazon SES \r\n Support", 'post-smtp' ),
 			__( "Zoho Mail \r\n Support", 'post-smtp' ),
+		),
+		'integrationList' => array(
+			array(
+				'img'   => 'office-pro-feature.svg',
+				'label' => __( 'Microsoft 365', 'post-smtp' ),
+			),
+			array(
+				'img'   => 'aws-pro-feature.svg',
+				'label' => __( 'Amazon SES', 'post-smtp' ),
+			),
+			array(
+				'img'   => 'gmail-pro-feature.svg',
+				'label' => __( 'Gmail', 'post-smtp' ),
+			),
+			array(
+				'img'   => 'zoho-pro-feature.svg',
+				'label' => __( 'Zoho Mail', 'post-smtp' ),
+			),
+		),
+		'highlightList'   => array(
+			array(
+				'title' => __( 'Email Quota Management', 'post-smtp' ),
+				'img'   => 'email-quota.svg',
+			),
+			array(
+				'title' => __( 'Failed Email Alerts', 'post-smtp' ),
+				'img'   => 'failed-alert.svg',
+			),
+			array(
+				'title' => __( 'Email Log Attachments', 'post-smtp' ),
+				'img'   => 'email-log-attachment.svg',
+			),
+			array(
+				'title' => __( 'Email Reports', 'post-smtp' ),
+				'img'   => 'email-report.svg',
+			),
 		),
 	),
 	'settings'      => array(
@@ -250,9 +293,21 @@ return array(
 	),
 	'sidebar'       => array(
 		'titleTroubleshooting' => __( 'Troubleshooting', 'post-smtp' ),
-		'appointment'          => array(
-			'description' => __( 'Let Our Experts Handle Your Post SMTP Plugin Setup', 'post-smtp' ),
-			'button'      => __( 'Book Now', 'post-smtp' ),
+		'gmailOneClick'        => array(
+			'unlock'      => __( 'Unlock', 'post-smtp' ),
+			'badge'       => __( 'PRO', 'post-smtp' ),
+			'title'       => __( 'Gmail One-Click Setup', 'post-smtp' ),
+			'description' => __( 'Connect Gmail in seconds and skip the complex manual configuration.', 'post-smtp' ),
+			'benefits'    => array(
+				__( 'One-click Gmail authentication', 'post-smtp' ),
+				__( 'No App Passwords required', 'post-smtp' ),
+				__( 'No Google Cloud configuration', 'post-smtp' ),
+				__( 'Automatic OAuth setup', 'post-smtp' ),
+				__( 'Secure Gmail authentication', 'post-smtp' ),
+				__( 'Start sending emails instantly', 'post-smtp' ),
+			),
+			'button' => __( 'Upgrade to Pro', 'post-smtp' ),
+			'gifAlt' => __( 'Gmail One-Click Setup demo animation', 'post-smtp' ),
 		),
 		'troubleshooting'      => array(
 			__( 'Send test email', 'post-smtp' ),

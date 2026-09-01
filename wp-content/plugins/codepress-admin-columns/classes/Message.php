@@ -13,13 +13,13 @@ abstract class Message
     public const WARNING = 'notice-warning'; // yellow
     public const INFO = 'notice-info'; // blue
 
-    protected $message;
+    protected string $message;
 
-    protected $type;
+    protected ?string $type;
 
-    protected $id = '';
+    protected string $id = '';
 
-    public function __construct(string $message, string $type = null)
+    public function __construct(string $message, ?string $type = null)
     {
         if (null === $type) {
             $type = self::SUCCESS;
@@ -59,6 +59,9 @@ abstract class Message
         return $this->type;
     }
 
+    /**
+     * @return static
+     */
     public function set_type(string $type): self
     {
         $this->type = $type;
@@ -71,6 +74,9 @@ abstract class Message
         return $this->id;
     }
 
+    /**
+     * @return static
+     */
     public function set_id(string $id): self
     {
         $this->id = $id;

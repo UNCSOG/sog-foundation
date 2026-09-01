@@ -2,9 +2,10 @@
 
 namespace AC\Integration;
 
-use AC\Integration;
-use AC\ListScreen;
+use AC\PostType;
 use AC\Screen;
+use AC\TableScreen;
+use AC\Type\Integration;
 use AC\Type\Url\Site;
 
 final class EventsCalendar extends Integration
@@ -16,17 +17,11 @@ final class EventsCalendar extends Integration
             'ac-addon-events-calendar',
             __('Events Calendar', 'codepress-admin-columns'),
             'assets/images/addons/events-calendar.png',
-            sprintf(
-                '%s %s',
-                sprintf(
-                    __('Integrates %s with Admin Columns.', 'codepress-admin-columns'),
-                    __('Events Calendar', 'codepress-admin-columns')
-                ),
-                __(
-                    'Display, inline- and bulk-edit, export, smart filter and sort your Events, Organizers and Venues.',
-                    'codepress-admin-columns'
-                )
+            __(
+                'See event dates, venues, organizers, and ticket data at a glance. Sort by date, filter by venue, and bulk edit event details without opening each event individually.',
+                'codepress-admin-columns'
             ),
+            null,
             new Site(Site::PAGE_ADDON_EVENTS_CALENDAR)
         );
     }
@@ -42,18 +37,22 @@ final class EventsCalendar extends Integration
             'tribe_events',
             'tribe_organizer',
             'tribe_venue',
+            'tribe_event_series',
         ];
     }
 
     public function show_notice(Screen $screen): bool
     {
         return 'edit' === $screen->get_base()
-               && in_array($screen->get_post_type(), $this->get_post_types(), true);
+               && in_array($screen->get_post_type(), $this->get_post_types());
     }
 
-    public function show_placeholder(ListScreen $list_screen): bool
+    public function show_placeholder(TableScreen $table_screen): bool
     {
-        return in_array($list_screen->get_post_type(), $this->get_post_types(), true);
+        return $table_screen instanceof PostType && in_array(
+                (string)$table_screen->get_post_type(),
+                $this->get_post_types()
+            );
     }
 
 }

@@ -1,11 +1,18 @@
 
 .wrap summary                                                 { cursor: pointer; }
 .wdm-wpma-box, .toplevel_page_wdm_wpma_mail_queue form[action="options.php"] { padding: 2rem; background-color: #fff; }
-.toplevel_page_wdm_wpma_mail_queue form[action="options.php"] { background: url("../img/mail-queue-postman.svg?v=1.0.0") scroll no-repeat bottom 3.5rem right 2rem #fff; }
+.toplevel_page_wdm_wpma_mail_queue form[action="options.php"] { padding-right: 12rem; background: url("../img/mail-queue-postman.svg?v=1.0.0") scroll no-repeat bottom 3.5rem right 2rem #fff; }
+.toplevel_page_wdm_wpma_mail_queue form[action="options.php"] input[type="number"] { width: 5rem; }
+@media (max-width: 68.5em) {
+	.toplevel_page_wdm_wpma_mail_queue form[action="options.php"] { padding-right: 6rem; background-size: 63px 83px; background-position: bottom 2rem right 1rem; }
+}
 @media (min-width: 100em) {
 	.toplevel_page_wdm_wpma_mail_queue form[action="options.php"] { background-position: bottom 3.5rem right 5rem; }
 }
 .wdm-wpma-select-all                                          { margin-left: 0 !important; }
+/* .form-table prefix outweighs core's `.form-table td p` margin reset */
+.form-table p.wdm-wpma-rate-notice                            { display: block; max-width: 40em; margin: .75em 0 0; padding: .75em 1em; background: #fcf9e8; border-left: 4px solid #dba617; border-radius: .25em; }
+.form-table p.wdm-wpma-rate-notice[hidden]                    { display: none; } /* display:block above would override the hidden attribute */
 h1.wdm-wpma-title                                             { position: relative; padding: 3rem 0 3rem 7.5rem; }
 h1.wdm-wpma-title::before                                     { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 6rem; height: 6rem; background: url("../img/mail-queue-icon.gif?v=1.0.0") scroll no-repeat center center/contain transparent; }
 @media (-webkit-min-device-pixel-ratio: 1.5) {
@@ -13,10 +20,13 @@ h1.wdm-wpma-title::before                                     { content: ""; pos
 }
 .wdm-wpma-logo                                                { width: 18rem; height: auto; }
 .wdm-wpma-box + .wdm-wpma-box                                 { border-top: 1px solid #ddd; }
+.toplevel_page_wdm_wpma_mail_queue form h2                    { margin-bottom: .5em; }
+.toplevel_page_wdm_wpma_mail_queue form table + h2            { margin-top: 2.5em; }
 .wdm-wpma-box h2                                              { margin-top: .5em; font-size: 2.5em; }
 .wdm-wpma-box p                                               { font-size: 1rem; }
-span.wdm-wpma-status                                                   { background: #ccc; border-radius: 5px; display: inline-block; padding: 5px 10px; line-height: 1; }
-span.wdm-wpma-status + span.wdm-wpma-status                                     { margin-left: 10px; }
+span.wdm-wpma-status                                          { background: #ccc; border-radius: 5px; display: inline-block; padding: 5px 10px; line-height: 1; }
+span.wdm-wpma-status-event                                    { border-radius: 999em; white-space: nowrap; background-color: #00aabb; color: white; }
+span.wdm-wpma-status + span.wdm-wpma-status                   { margin-left: 10px; }
 .wdm-wpma-ok, .wdm-wpma-warning                               { padding: .25em .5em; border-radius: .25em; }
 .wdm-wpma-ok                                                  { background: green; color: white; }
 .wdm-wpma-warning                                             { background: red; color: white; }
@@ -24,15 +34,24 @@ span.wdm-wpma-status.wdm-wpma-status-high,
 span.wdm-wpma-status.wdm-wpma-status-sent,
 span.wdm-wpma-status.wdm-wpma-status-sent-from-queue          { background: green; color: white; }
 span.wdm-wpma-status.wdm-wpma-status-instant                  { background: orange; color: white; }
-span.wdm-wpma-status.wdm-wpma-status-alert                    { background: #1d2327; color: white; }
+span.wdm-wpma-status.wdm-wpma-status-alert                    { background: red; color: white; }
 .wdm-wpma-status-has-info                                     { position: relative; }
-.wdm-wpma-status-has-info::after                              { content: ""; position: absolute; right: -2em; top: 60%; transform: translateY(-50%); width: 1.5em; height: 1.5em; margin-left: .25em; background: scroll no-repeat center center/contain transparent; opacity: .35;
+.wdm-wpma-status-has-info::after                              { content: ""; position: absolute; right: -2em; top: 60%; transform: translateY(-50%); width: 1.5em; height: 1.5em; margin-left: .25em; background: scroll no-repeat center center/contain transparent; opacity: .5;
 	                                                              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='currentColor'%3E%3Cpath d='M10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-10a1 1 0 0 1 1 1v5a1 1 0 0 1-2 0V9a1 1 0 0 1 1-1zm0-1a1 1 0 1 1 0-2 1 1 0 0 1 0 2z'%3E%3C/path%3E%3C/svg%3E"); }
+table:has([name="wdm_wpma_settings[enabled]"] option[value="0"]:checked) tr:not(:has([name="wdm_wpma_settings[enabled]"])),
+table:has([name="wdm_wpma_settings[enabled]"] option[value="0"]:checked) ~ table tr,
+table:has([name="wdm_wpma_settings[enabled]"] option[value="0"]:checked) ~ h2,
+table:not(:has([name="wdm_wpma_settings[alert_enabled]"]:checked)) tr:has([name="wdm_wpma_settings[pause_on_alert]"]),
+table:not(:has([name="wdm_wpma_settings[alert_enabled]"]:checked)) tr:has([name="wdm_wpma_settings[email]"]) { opacity: .35; }
+table:has([name="wdm_wpma_settings[enabled]"] option[value="0"]:checked) tr:hover,
+table:has([name="wdm_wpma_settings[enabled]"] option[value="0"]:checked) ~ table tr:hover,
+table:not(:has([name="wdm_wpma_settings[alert_enabled]"]:checked)) tr:hover                                  { opacity: 1; }
 .wdm-wpma-info                                                { position: absolute; top: 50%; left: calc(100% + 1.25rem); z-index: 9; visibility: hidden; padding: .75rem; background-color: #1d2327; color: #fff; line-height: 1.35; border-radius: 5px; box-shadow: 0 .5rem 4rem -1rem rgba(0,0,0,.15); white-space: pre; }
 .wdm-wpma-status-has-info:hover .wdm-wpma-info                { visibility: visible; }
 .column-id                                                    { width: 30px; }
 .column-timestamp                                             { width: 150px; }
 .column-status                                                { width: 80px; }
+table:has(.wdm-wpma-status-event) .column-status              { width: 160px; }
 .column-message                                               { width: 20%; }
 .wdm-wpma-view-source                                         { position: relative; }
 .wdm-wpma-view-source::after                                  { content: ""; position: absolute; left: 0; top: 100%; width: 100%; height: 10px; }
@@ -41,3 +60,9 @@ span.wdm-wpma-status.wdm-wpma-status-alert                    { background: #1d2
 .wdm-wpma-email-source-meta summary                           { font-weight: bold; }
 .wdm-wpma-email-source-meta summary + pre                     { margin-top: .125rem; }
 .wdm-wpma-email-plain-text                                    { white-space: break-spaces; }
+.wdm-wpma-filters                                            { display: flex; align-items: center; flex-wrap: wrap; gap: .5em; }
+.wdm-wpma-filters .wdm-wpma-search-box                        { margin-left: 1.5em; display: inline-flex; align-items: center; gap: .25em; }
+.wdm-wpma-filters input[type="search"]                        { min-width: 16em; }
+/* Single Clear button is the only reset affordance — hide the browser's native
+   search-cancel "×" so there aren't two clear controls. */
+.wdm-wpma-filters input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }

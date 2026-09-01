@@ -39,7 +39,7 @@ class DefinitionNormalizer
      *
      * @throws InvalidDefinition
      */
-    public function normalizeRootDefinition($definition, string $name, array $wildcardsReplacements = null) : Definition
+    public function normalizeRootDefinition($definition, string $name, ?array $wildcardsReplacements = null) : Definition
     {
         if ($definition instanceof DefinitionHelper) {
             $definition = $definition->getDefinition($name);

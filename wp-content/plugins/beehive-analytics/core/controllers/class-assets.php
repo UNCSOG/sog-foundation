@@ -84,7 +84,7 @@ class Assets extends Base {
 		// Register all styles.
 		foreach ( $styles as $handle => $data ) {
 			// Get the source full url.
-			$src = empty( $data['external'] ) ? BEEHIVE_URL . 'app/assets/css/' . $data['src'] : $data['src'];
+			$src = empty( $data['external'] ) ? BEEHIVE_URL . 'build/' . $data['src'] : $data['src'];
 
 			// Register custom videos scripts.
 			wp_register_style(
@@ -116,7 +116,7 @@ class Assets extends Base {
 		// Register all available scripts.
 		foreach ( $scripts as $handle => $data ) {
 			// Get the source full url.
-			$src = empty( $data['external'] ) ? BEEHIVE_URL . 'app/assets/js/' . $data['src'] : $data['src'];
+			$src = empty( $data['external'] ) ? BEEHIVE_URL . 'build/' . $data['src'] : $data['src'];
 
 			// Register custom videos scripts.
 			wp_register_script(
@@ -126,6 +126,9 @@ class Assets extends Base {
 				empty( $data['version'] ) ? BEEHIVE_VERSION : $data['version'],
 				isset( $data['footer'] ) ? $data['footer'] : true
 			);
+
+			// Load translations for React components using @wordpress/i18n.
+			wp_add_inline_script( $handle, $this->load_script_translations(), 'before' );
 		}
 	}
 
@@ -143,7 +146,6 @@ class Assets extends Base {
 	 */
 	public function enqueue_script( $script ) {
 		static $vars_printed = false;
-
 		// Only if not enqueued already.
 		if ( ! wp_script_is( $script ) ) {
 			// Extra vars.
@@ -214,29 +216,13 @@ class Assets extends Base {
 	private function get_scripts( $admin = true ) {
 		if ( $admin ) {
 			$scripts = array(
-				'beehive-sui-common' => array(
-					'src'  => 'sui-common.min.js',
-					'deps' => array( 'jquery' ),
+				'beehive-admin'      => array(
+					'src'  => 'admin/index.js',
+					'deps' => array( 'wp-api-fetch', 'wp-i18n', 'wp-element' ),
 				),
-				'beehive-dashboard'  => array(
-					'src'  => 'dashboard.min.js',
-					'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common' ),
-				),
-				'beehive-settings'   => array(
-					'src'  => 'settings.min.js',
-					'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common' ),
-				),
-				'beehive-accounts'   => array(
-					'src'  => 'accounts.min.js',
-					'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common', 'clipboard' ),
-				),
-				'beehive-common'     => array(
-					'src'  => 'chunk-common.min.js',
-					'deps' => array( 'jquery' ),
-				),
-				'beehive-vendors'    => array(
-					'src'  => 'chunk-vendors.min.js',
-					'deps' => array( 'jquery' ),
+				'clipboard'          => array(
+					'src'  => 'clipboard.js',
+					'deps' => array(),
 				),
 			);
 		} else {
@@ -269,14 +255,8 @@ class Assets extends Base {
 	private function get_styles( $admin = true ) {
 		if ( $admin ) {
 			$styles = array(
-				'beehive-dashboard' => array(
-					'src' => 'dashboard.min.css',
-				),
-				'beehive-settings'  => array(
-					'src' => 'settings.min.css',
-				),
-				'beehive-accounts'  => array(
-					'src' => 'accounts.min.css',
+				'beehive-admin' => array(
+					'src' => 'admin/index.css',
 				),
 			);
 		} else {
@@ -317,5 +297,53 @@ class Assets extends Base {
 		}
 
 		return $scripts;
+	}
+
+	/**
+	 * Load script translations from .mo files for @wordpress/i18n.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return string JavaScript code to set locale data.
+	 */
+	private function load_script_translations() {
+		$translations = get_translations_for_domain( 'ga_trans' );
+		$locale       = array(
+			'translation-revision-date' => $translations->headers['PO-Revision-Date'] ?? '',
+			'domain'                    => 'messages',
+			'generator'                 => $translations->headers['X-Generator'] ?? '',
+			'locale_data'               => array(
+				'messages' => array(
+					'' => array(
+						'domain'       => 'messages',
+						'plural-forms' => $translations->headers['Plural-Forms'] ?? 'nplurals=2; plural=n > 1;',
+					),
+				),
+			),
+		);
+
+		if ( isset( $translations->headers['Language'] ) && $translations->headers['Language'] ) {
+			$locale['locale_data']['messages']['']['lang'] = $translations->headers['Language'];
+		}
+
+		foreach ( $translations->entries as $entry ) {
+			$key                                       = $entry->context ? $entry->context . chr( 4 ) . $entry->singular : $entry->singular;
+			$locale['locale_data']['messages'][ $key ] = array_filter(
+				$entry->translations,
+				function ( $translation ) {
+					return null !== $translation;
+				}
+			);
+		}
+
+		$json_translations = wp_json_encode( $locale );
+
+		return <<<JS
+			( function( domain, translations ) {
+				var localeData = translations.locale_data[ domain ] || translations.locale_data.messages
+				localeData[""].domain = domain
+				wp.i18n.setLocaleData( localeData, domain )
+			} )( 'ga_trans', {$json_translations} )
+		JS;
 	}
 }

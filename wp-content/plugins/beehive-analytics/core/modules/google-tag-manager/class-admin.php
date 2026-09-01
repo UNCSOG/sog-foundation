@@ -40,10 +40,6 @@ class Admin extends Base {
 		// Add i18n strings for the locale.
 		add_filter( 'beehive_i18n_get_locale_scripts', array( $this, 'setup_i18n' ), 10, 2 );
 
-		// Register assets.
-		add_filter( 'beehive_assets_get_scripts', array( $this, 'get_scripts' ), 10, 2 );
-		add_filter( 'beehive_assets_get_styles', array( $this, 'get_styles' ), 10, 2 );
-
 		// Admin admin class to our page.
 		add_filter( 'beehive_admin_body_classes_is_plugin_admin', array( $this, 'admin_body_class' ) );
 	}
@@ -81,7 +77,7 @@ class Admin extends Base {
 	 */
 	public function setup_i18n( $strings, $script ) {
 		switch ( $script ) {
-			case 'beehive-tag-manager':
+			case 'beehive-admin':
 				// Add strings.
 				$strings = array_merge_recursive(
 					$strings,
@@ -94,49 +90,6 @@ class Admin extends Base {
 		}
 
 		return $strings;
-	}
-
-	/**
-	 * Get the styles list to register.
-	 *
-	 * @param array $styles Styles list.
-	 * @param bool  $admin  Is admin assets?.
-	 *
-	 * @since 3.3.0
-	 *
-	 * @return array
-	 */
-	public function get_styles( $styles, $admin ) {
-		if ( $admin ) {
-			// Post statistics.
-			$styles['beehive-tag-manager'] = array(
-				'src' => 'gtm-settings.min.css',
-			);
-		}
-
-		return $styles;
-	}
-
-	/**
-	 * Get the scripts list to register.
-	 *
-	 * @param array $scripts Scripts list.
-	 * @param bool  $admin   Is admin assets?.
-	 *
-	 * @since 3.2.4
-	 *
-	 * @return array
-	 */
-	public function get_scripts( $scripts, $admin ) {
-		if ( $admin ) {
-			// Post statistics.
-			$scripts['beehive-tag-manager'] = array(
-				'src'  => 'gtm-settings.min.js',
-				'deps' => array( 'beehive-sui-common', 'beehive-vendors', 'beehive-common' ),
-			);
-		}
-
-		return $scripts;
 	}
 
 	/**

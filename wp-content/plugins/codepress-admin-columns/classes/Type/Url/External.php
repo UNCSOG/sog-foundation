@@ -4,36 +4,25 @@ declare(strict_types=1);
 
 namespace AC\Type\Url;
 
-use AC\Type\Url;
+use AC\Helper;
+use AC\Type\Uri;
 use InvalidArgumentException;
 
-class External implements Url
+class External extends Uri
 {
-
-    private $url;
 
     public function __construct(string $url)
     {
-        $this->url = $url;
+        parent::__construct($url);
 
         $this->validate();
     }
 
     private function validate(): void
     {
-        if ( ! ac_helper()->string->starts_with($this->url, 'https')) {
+        if ( ! Helper\Strings::create()->starts_with($this->url, 'https')) {
             throw new InvalidArgumentException('Not https');
         }
-    }
-
-    public function get_url(): string
-    {
-        return $this->url;
-    }
-
-    public function __toString(): string
-    {
-        return $this->get_url();
     }
 
 }

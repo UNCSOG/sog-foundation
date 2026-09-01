@@ -15,6 +15,8 @@ add_filter( 'rest_api_init', 'relevanssi_rest_api_disable' );
 add_action( 'switch_blog', 'relevanssi_switch_blog', 1, 2 );
 add_action( 'admin_init', 'relevanssi_admin_init' );
 add_action( 'admin_menu', 'relevanssi_menu' );
+add_action( 'admin_head', 'relevanssi_admin_icon_styles' );
+
 
 // Taking over the search.
 add_filter( 'posts_pre_query', 'relevanssi_query', 99, 2 );
@@ -23,6 +25,7 @@ add_filter( 'relevanssi_search_ok', 'relevanssi_block_on_admin_searches', 10, 2 
 add_filter( 'relevanssi_admin_search_ok', 'relevanssi_block_on_admin_searches', 10, 2 );
 add_filter( 'relevanssi_prevent_default_request', 'relevanssi_block_on_admin_searches', 10, 2 );
 add_filter( 'relevanssi_search_ok', 'relevanssi_control_media_queries', 11, 2 );
+add_filter( 'relevanssi_fallback', 'relevanssi_or_fallback', 10 );
 
 // Post indexing.
 global $wp_version;
@@ -58,6 +61,7 @@ add_action( 'relevanssi_custom_field_value', 'relevanssi_filter_custom_fields', 
 add_filter( 'relevanssi_index_custom_fields', 'relevanssi_remove_metadata_fields' );
 add_filter( 'relevanssi_join', 'relevanssi_post_date_throttle_join', 1 );
 add_filter( 'relevanssi_where', 'relevanssi_post_date_throttle_where', 1 );
+add_filter( 'relevanssi_results', 'relevanssi_add_exact_match_boost', 10, 2 );
 
 // Excerpts and highlights.
 add_action( 'relevanssi_pre_the_content', 'relevanssi_kill_autoembed' );
@@ -98,20 +102,6 @@ function relevanssi_init() {
 		$base = sanitize_file_name( wp_unslash( plugin_basename( $relevanssi_variables['file'] ) ) );
 		if ( $base === $page ) {
 			$on_relevanssi_page = true;
-		}
-	}
-
-	$restriction_notice = relevanssi_check_indexing_restriction();
-	if ( $restriction_notice ) {
-		if ( 'options-general.php' === $pagenow && $on_relevanssi_page ) {
-			if ( 'indexing' === $_GET['tab'] ) { // phpcs:ignore WordPress.Security.NonceVerification
-				add_action(
-					'admin_notices',
-					function () use ( $restriction_notice ) {
-						echo $restriction_notice; // phpcs:ignore WordPress.Security.EscapeOutput
-					}
-				);
-			}
 		}
 	}
 
@@ -200,23 +190,37 @@ function relevanssi_admin_init() {
  */
 function relevanssi_menu() {
 	global $relevanssi_variables;
-	$name = 'Relevanssi';
-	if ( RELEVANSSI_PREMIUM ) {
-		$name = 'Relevanssi Premium';
-	}
-	$plugin_page = add_options_page(
-		$name,
-		$name,
-		/**
-		 * Filters the capability required to access Relevanssi options.
-		 *
-		 * @param string The capability required. Default 'manage_options'.
-		 */
-		apply_filters( 'relevanssi_options_capability', 'manage_options' ),
-		$relevanssi_variables['file'],
+
+	$menu_title  = 'Relevanssi';
+	$page_title  = RELEVANSSI_PREMIUM ? __( 'Relevanssi Premium Settings', 'relevanssi' ) : __( 'Relevanssi Settings', 'relevanssi' );
+	$icon_url    = plugin_dir_url( $relevanssi_variables['file'] ) . 'images/relevanssi-icon.svg';
+	$parent_slug = $relevanssi_variables['file'];
+	$capability  = apply_filters( 'relevanssi_options_capability', 'manage_options' );
+
+	// Top level menu page.
+	$plugin_page = add_menu_page(
+		$page_title,
+		$menu_title,
+		$capability,
+		$parent_slug,
+		'relevanssi_options',
+		$icon_url,
+		98
+	);
+
+	// Submenu item: Settings.
+	add_submenu_page(
+		$parent_slug,
+		$page_title,
+		__( 'Settings', 'relevanssi' ),
+		$capability,
+		$parent_slug,
 		'relevanssi_options'
 	);
-	add_dashboard_page(
+
+	// Submenu item: User searches.
+	add_submenu_page(
+		$parent_slug,
 		__( 'User searches', 'relevanssi' ),
 		__( 'User searches', 'relevanssi' ),
 		/**
@@ -228,7 +232,10 @@ function relevanssi_menu() {
 		'relevanssi_user_searches',
 		'relevanssi_search_stats'
 	);
-	add_dashboard_page(
+
+	// Submenu item: Admin search.
+	add_submenu_page(
+		$parent_slug,
 		__( 'Admin search', 'relevanssi' ),
 		__( 'Admin search', 'relevanssi' ),
 		/**
@@ -240,12 +247,30 @@ function relevanssi_menu() {
 		'relevanssi_admin_search',
 		'relevanssi_admin_search_page'
 	);
+
 	require_once 'contextual-help.php';
 	add_action( 'load-' . $plugin_page, 'relevanssi_admin_help' );
 	if ( function_exists( 'relevanssi_premium_plugin_page_actions' ) ) {
 		// Loads contextual help and JS for Premium version.
 		relevanssi_premium_plugin_page_actions( $plugin_page );
 	}
+}
+
+/**
+ * Ensures the Relevanssi sidebar icon is styled correctly.
+ */
+function relevanssi_admin_icon_styles() {
+	echo '<style>
+        #adminmenu li[class*="relevanssi"] .wp-menu-image img {
+            width: 21px !important;
+            height: 21px !important;
+            max-width: 21px !important;
+            max-height: 21px !important;
+            padding: 6.5px 0 0 0 !important;
+            opacity: 1 !important;
+            filter: none !important;
+        }
+    </style>';
 }
 
 /**
@@ -497,10 +522,10 @@ function relevanssi_rest_api_disable() {
 function relevanssi_export_log_check() {
 	if ( isset( $_REQUEST['relevanssi_export'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification, just checking the parameter exists.
 		/**
-	 	* Filters the capability required to access Relevanssi options.
+		 * Filters the capability required to access Relevanssi options.
 		 *
-	 	* @param string The capability required. Default 'manage_options'.
-	 	*/
+		 * @param string $capability The capability required. Default 'manage_options'.
+		 */
 		if ( current_user_can( apply_filters( 'relevanssi_options_capability', 'manage_options' ) ) ) {
 			check_admin_referer( 'relevanssi_export_logs', '_relevanssi_export_nonce' );
 			relevanssi_export_log();
@@ -508,11 +533,11 @@ function relevanssi_export_log_check() {
 	}
 	if ( isset( $_REQUEST['relevanssi_export_clicks'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification, just checking the parameter exists.
 		/**
-	 	* Filters the capability required to access Relevanssi options.
+		 * Filters the capability required to access Relevanssi options.
 		 *
-	 	* @param string The capability required. Default 'manage_options'.
-	 	*/
-		 if ( current_user_can( apply_filters( 'relevanssi_options_capability', 'manage_options' ) ) ) {
+		 * @param string $capability The capability required. Default 'manage_options'.
+		 */
+		if ( current_user_can( apply_filters( 'relevanssi_options_capability', 'manage_options' ) ) ) {
 			check_admin_referer( 'relevanssi_export_logs', '_relevanssi_export_nonce' );
 			function_exists( 'relevanssi_export_click_log' ) && relevanssi_export_click_log();
 		}
@@ -525,7 +550,7 @@ function relevanssi_export_log_check() {
 function relevanssi_load_compatibility_code() {
 	class_exists( 'acf', false ) && require_once 'compatibility/acf.php';
 	class_exists( 'DGWT_WC_Ajax_Search', false ) && require_once 'compatibility/fibosearch.php';
-	class_exists('Inpsyde\MultilingualPress\MultilingualPress') && require_once 'compatibility/multilingualpress.php';
+	class_exists( 'Inpsyde\MultilingualPress\MultilingualPress' ) && require_once 'compatibility/multilingualpress.php';
 	class_exists( 'Jet_Smart_Filters', false ) && require_once 'compatibility/jetsmartfilters.php';
 	class_exists( 'MeprUpdateCtrl', false ) && MeprUpdateCtrl::is_activated() && require_once 'compatibility/memberpress.php';
 	class_exists( 'Obenland_Wp_Search_Suggest', false ) && require_once 'compatibility/wp-search-suggest.php';
@@ -534,6 +559,7 @@ function relevanssi_load_compatibility_code() {
 	class_exists( 'WooCommerce', false ) && require_once 'compatibility/woocommerce.php';
 	defined( 'AIOSEO_DIR' ) && require_once 'compatibility/aioseo.php';
 	defined( 'AVADA_VERSION' ) && require_once 'compatibility/avada.php';
+	defined( 'Barn2\Plugin\Document_Library_Advanced\PLUGIN_VERSION' ) && require_once 'compatibility/document-library-pro.php';
 	defined( 'BRICKS_VERSION' ) && require_once 'compatibility/bricks.php';
 	defined( 'CT_VERSION' ) && require_once 'compatibility/oxygen.php';
 	defined( 'ELEMENTOR_VERSION' ) && require_once 'compatibility/elementor.php';
@@ -542,6 +568,7 @@ function relevanssi_load_compatibility_code() {
 	defined( 'PRLI_PLUGIN_NAME' ) && require_once 'compatibility/pretty-links.php';
 	defined( 'SEOPRESS_VERSION' ) && require_once 'compatibility/seopress.php';
 	defined( 'SIMPLE_WP_MEMBERSHIP_VER' ) && require_once 'compatibility/simplemembership.php';
+	defined( 'SLIM_SEO_VER' ) && require_once 'compatibility/slimseo.php';
 	defined( 'THE_SEO_FRAMEWORK_VERSION' ) && require_once 'compatibility/seoframework.php';
 	defined( 'WPFD_VERSION' ) && require_once 'compatibility/wp-file-download.php';
 	defined( 'WPM_PRODUCT_GTIN_WC_VERSION' ) && require_once 'compatibility/product-gtin-ean-upc-isbn-for-woocommerce.php';

@@ -36,9 +36,7 @@ class Admin extends View {
 	public function init() {
 		// Localization.
 		add_filter( 'beehive_assets_scripts_common_localize_vars', array( $this, 'common_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-accounts', array( $this, 'google_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-dashboard', array( $this, 'google_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-settings', array( $this, 'google_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'google_vars' ) );
 	}
 
 	/**

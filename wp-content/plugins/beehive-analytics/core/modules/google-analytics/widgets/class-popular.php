@@ -84,11 +84,8 @@ class Popular extends Widget {
 		// Add instance to arguments.
 		$args['widget'] = $instance;
 
-		// Get cache first.
-		$cache = wp_cache_get( $this->id, 'widget' );
-
-		// Widget content.
-		$args['content'] = empty( $cache ) ? $this->cache_content() : $cache;
+		// Widget content - always use the React root div.
+		$args['content'] = '<div id="beehive-popular-widget-root"></div>';
 
 		// Render template.
 		Google_Analytics\Views\Stats::instance()->popular_widget_content( $args );
@@ -174,8 +171,8 @@ class Popular extends Widget {
 		if ( ! $admin ) {
 			// Most popular widget.
 			$scripts['beehive-popular-widget'] = array(
-				'src'  => 'ga-popular-posts.min.js',
-				'deps' => array( 'jquery' ),
+				'src'  => 'popular-widget/index.js',
+				'deps' => array( 'wp-blocks', 'wp-element' ),
 			);
 		}
 

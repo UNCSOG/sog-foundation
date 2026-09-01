@@ -84,7 +84,7 @@ class Admin extends Base {
 		$classes .= ' sui-beehive-admin ';
 
 		// Check if plugin admin.
-		$is_plugin_admin = General::is_plugin_settings() || General::is_plugin_dashboard() || General::is_plugin_accounts() ;
+		$is_plugin_admin = General::is_plugin_settings() || General::is_plugin_dashboard() || General::is_plugin_accounts();
 
 		/**
 		 * Filter to include current page for Beehive admin class.
@@ -98,10 +98,10 @@ class Admin extends Base {
 		// Only within our admin page.
 		if ( $is_plugin_admin ) {
 			// Shared UI.
-			$classes .= ' sui-' . str_replace( '.', '-', BEEHIVE_SUI_VERSION ) . ' ';
+			$classes .= '';
 		} else {
 			// Shared UI.
-			$classes .= ' sui-beehive-' . str_replace( '.', '-', BEEHIVE_SUI_VERSION ) . ' ';
+			$classes .= ' ';
 		}
 
 		return $classes;
@@ -128,16 +128,7 @@ class Admin extends Base {
 			'settings' => '<a href="' . Template::dashboard_url( $this->is_network() ) . '" aria-label="' . esc_attr( __( 'Dashboard', 'ga_trans' ) ) . '">' . __( 'Dashboard', 'ga_trans' ) . '</a>',
 			'docs'     => '<a href="https://wpmudev.com/docs/wpmu-dev-plugins/beehive/?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_pluginlist_docs" aria-label="' . esc_attr( __( 'Documentation', 'ga_trans' ) ) . '" target="_blank">' . __( 'Docs', 'ga_trans' ) . '</a>',
 		);
-
-		// WPMUDEV membership status.
-		$membership = General::membership_status();
-
-		// Expired membership.
-		if ( ! beehive_analytics()->is_pro() || 'upgrade' === $membership ) {
 			$custom['upgrade'] = '<a href="https://wpmudev.com/project/beehive-analytics-pro?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_pluginlist_upgrade" aria-label="' . esc_attr( __( 'Get Beehive Pro', 'ga_trans' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Get Beehive Pro', 'ga_trans' ) . '</a>';
-		} elseif ( 'renew' === $membership ) {
-			$custom['renew'] = '<a href="https://wpmudev.com/?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_pluginlist_renew" aria-label="' . esc_attr( __( 'Renew Your Membership', 'ga_trans' ) ) . '" target="_blank" style="color: #8D00B1;">' . esc_html__( 'Renew Membership', 'ga_trans' ) . '</a>';
-		}
 
 		// Merge custom links to first.
 		return array_merge( $custom, $links );
@@ -168,13 +159,8 @@ class Admin extends Base {
 			if ( isset( $links[2] ) ) {
 				$links[2] = '<a href="https://wpmudev.com/project/beehive-analytics-pro/" target="_blank">' . esc_html__( 'View Details', 'ga_trans' ) . '</a>';
 			}
-
-			if ( beehive_analytics()->is_pro() ) {
-				$custom['support'] = '<a href="https://wpmudev.com/get-support/" aria-label="' . esc_html__( 'Get Premium Support', 'ga_trans' ) . '" target="_blank">' . esc_html__( 'Premium Support', 'ga_trans' ) . '</a>';
-			} else {
 				$custom['rate']    = '<a href="https://wordpress.org/support/plugin/beehive-analytics/reviews/?rate=5#new-post" aria-label="' . esc_html__( 'Rate Beehive', 'ga_trans' ) . '" target="_blank">' . esc_html__( 'Rate Beehive', 'ga_trans' ) . '</a>';
 				$custom['support'] = '<a href="https://wordpress.org/support/plugin/beehive-analytics/" aria-label="' . esc_html__( 'Get Support', 'ga_trans' ) . '" target="_blank">' . esc_html__( 'Support', 'ga_trans' ) . '</a>';
-			}
 
 			$custom['roadmap'] = '<a href="https://wpmudev.com/roadmap/" aria-label="' . esc_html__( 'View our Public Roadmap', 'ga_trans' ) . '" target="_blank">' . esc_html__( 'Roadmap', 'ga_trans' ) . '</a>';
 

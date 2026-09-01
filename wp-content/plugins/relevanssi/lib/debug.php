@@ -65,7 +65,7 @@ function relevanssi_debug_posts( $posts ) {
 function relevanssi_debug_array( $array_value, $title ) {
 	echo '<h2>' . esc_html( $title ) . '</h2>';
 	echo '<pre>';
-	print_r( $array_value ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+	echo esc_html( print_r( $array_value, true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 	echo '</pre>';
 }
 
@@ -146,6 +146,9 @@ function relevanssi_debug_search_settings() {
 
 	$value = get_option( 'relevanssi_disable_or_fallback' );
 	echo "relevanssi_disable_or_fallback: $value<br />";
+
+	$value = get_option( 'relevanssi_enable_didyoumean', 'n/a' );
+	echo "relevanssi_enable_didyoumean: $value<br />";
 
 	$value = get_option( 'relevanssi_throttle' );
 	echo "relevanssi_throttle: $value<br />";

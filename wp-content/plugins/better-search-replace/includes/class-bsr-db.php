@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Processes database-related functionality.
  * @since      1.0
@@ -7,6 +6,10 @@
  * @package    Better_Search_Replace
  * @subpackage Better_Search_Replace/includes
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Prevent direct access.
 if ( ! defined( 'BSR_PATH' ) ) exit;
@@ -51,18 +54,19 @@ class BSR_DB {
 	public static function get_tables() {
 		global $wpdb;
 
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema discovery; not suitable for long-lived object cache.
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 
 			if ( is_main_site() ) {
-				$tables 	= $wpdb->get_col( 'SHOW TABLES' );
+				$tables = $wpdb->get_col( 'SHOW TABLES' );
 			} else {
-				$blog_id 	= get_current_blog_id();
-				$tables 	= $wpdb->get_col( "SHOW TABLES LIKE '" . $wpdb->base_prefix . absint( $blog_id ) . "\_%'" );
+				$blog_id = get_current_blog_id();
+				$tables  = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->base_prefix . absint( $blog_id ) . '\_%' ) );
 			}
-
 		} else {
 			$tables = $wpdb->get_col( 'SHOW TABLES' );
 		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return $tables;
 	}
@@ -75,16 +79,21 @@ class BSR_DB {
 	public static function get_sizes() {
 		global $wpdb;
 
-		$sizes 	= array();
-		$tables	= $wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
+		$sizes = array();
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Server metadata for admin display only.
+		$tables = $wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		if ( is_array( $tables ) && ! empty( $tables ) ) {
 
 			foreach ( $tables as $table ) {
 				$size = round( $table['Data_length'] / 1024 / 1024, 2 );
-				$sizes[$table['Name']] = sprintf( __( '(%s MB)', 'better-search-replace' ), $size );
+				$sizes[ $table['Name'] ] = sprintf(
+					/* translators: %s: table size in megabytes. */
+					__( '(%s MB)', 'better-search-replace' ),
+					$size
+				);
 			}
-
 		}
 
 		return $sizes;
@@ -110,9 +119,12 @@ class BSR_DB {
 			return 0;
 		}
 
-		$table 	= esc_sql( $table );
-		$rows 	= $this->wpdb->get_var( "SELECT COUNT(*) FROM `$table`" );
-		$pages 	= ceil( $rows / $this->page_size );
+		$wpdb = $this->wpdb;
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Row count on allowlisted table name; not suitable for object cache.
+		$rows = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $table ) );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		$pages = ceil( $rows / $this->page_size );
 
 		return absint( $pages );
 	}
@@ -142,31 +154,35 @@ class BSR_DB {
 	}
 
 	/**
-	 * Gets the columns in a table.
+	 * Gets the columns in a table and its primary key column names (composite keys supported).
+	 *
 	 * @access public
 	 * @param  string $table The table to check.
-	 * @return array
+	 * @return array First element: list of primary key column names (DESCRIBE order). Second: all column names.
 	 */
 	public function get_columns( $table ) {
-		$primary_key 	= null;
+		$primary_keys 	= null;
 		$columns 		= array();
 
 		if ( false === $this->table_exists( $table ) ) {
-			return array( $primary_key, $columns );
+			return array( $primary_keys, $columns );
 		}
 
-		$fields  		= $this->wpdb->get_results( 'DESCRIBE ' . $table );
+		$wpdb = $this->wpdb;
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- DESCRIBE on allowlisted table for SRDB column list.
+		$fields = $wpdb->get_results( $wpdb->prepare( 'DESCRIBE %i', $table ) );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 		if ( is_array( $fields ) ) {
 			foreach ( $fields as $column ) {
 				$columns[] = $column->Field;
-				if ( $column->Key == 'PRI' ) {
-					$primary_key = $column->Field;
+				if ( 'PRI' == $column->Key ) {
+					$primary_keys[] = $column->Field;
 				}
 			}
 		}
 
-		return array( $primary_key, $columns );
+		return array( $primary_keys, $columns );
 	}
 
 	/**
@@ -185,53 +201,77 @@ class BSR_DB {
 	 */
 	public function srdb( $table, $page, $args ) {
 
-		// Load up the default settings for this chunk.
-		$table 			= esc_sql( $table );
-		$current_page 	= absint( $page );
-		$pages 			= $this->get_pages_in_table( $table );
-		$done 			= false;
+		if ( ! $this->table_exists( $table ) ) {
+			$table_report = array(
+				'change'    => 0,
+				'updates'   => 0,
+				'start'     => microtime( true ),
+				'end'       => microtime( true ),
+				'errors'    => array(),
+				'skipped'   => true,
+			);
+			return array( 'table_complete' => true, 'table_report' => $table_report );
+		}
 
-		$args['search_for'] 	= str_replace( '#BSR_BACKSLASH#', '\\', $args['search_for'] );
-		$args['replace_with'] 	= str_replace( '#BSR_BACKSLASH#', '\\', $args['replace_with'] );
+		$wpdb = $this->wpdb;
+
+		$current_page = absint( $page );
+		$pages        = $this->get_pages_in_table( $table );
+		$done         = false;
+
+		$args['search_for']   = str_replace( '#BSR_BACKSLASH#', '\\', $args['search_for'] );
+		$args['replace_with'] = str_replace( '#BSR_BACKSLASH#', '\\', $args['replace_with'] );
 
 		$table_report = array(
-			'change' 	=> 0,
-			'updates' 	=> 0,
-			'start' 	=> microtime( true ),
-			'end'		=> microtime( true ),
-			'errors' 	=> array(),
-			'skipped' 	=> false
+			'change'   => 0,
+			'updates'  => 0,
+			'start'    => microtime( true ),
+			'end'      => microtime( true ),
+			'errors'   => array(),
+			'skipped'  => false,
 		);
 
 		// Get a list of columns in this table.
-		list( $primary_key, $columns ) = $this->get_columns( $table );
+		list( $primary_keys, $columns ) = $this->get_columns( $table );
 
 		// Bail out early if there isn't a primary key.
-		if ( null === $primary_key ) {
+		if ( empty( $primary_keys ) ) {
 			$table_report['skipped'] = true;
 			return array( 'table_complete' => true, 'table_report' => $table_report );
 		}
 
-		$current_row 	= 0;
-		$start 			= $page * $this->page_size;
-		$end 			= $this->page_size;
+		$current_row = 0;
+		$start       = $page * $this->page_size;
+		$end         = $this->page_size;
 
-		// Grab the content of the table.
-		$data = $this->wpdb->get_results( "SELECT * FROM `$table` LIMIT $start, $end", ARRAY_A );
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Paged read of allowlisted table for batch search/replace.
+		$data = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM %i LIMIT %d, %d',
+				$table,
+				$start,
+				$end
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 
-		// Loop through the data.
 		foreach ( $data as $row ) {
 			$current_row++;
-			$update_sql = array();
-			$where_sql 	= array();
-			$upd 		= false;
+			$update_sql    = array();
+			$where_sql     = array();
+			$update_values = array();
+			$where_values  = array();
+			$upd           = false;
 
-			foreach( $columns as $column ) {
+			foreach ( $columns as $column ) {
 
 				$data_to_fix = $row[ $column ];
 
-				if ( $column == $primary_key ) {
-					$where_sql[] = $column . ' = "' .  $this->mysql_escape_mimic( $data_to_fix ) . '"';
+				if ( in_array( $column, $primary_keys, true ) ) {
+					$where_sql[]    = '%i = %s';
+					$where_values[] = $column;
+					$where_values[] = $data_to_fix;
 					continue;
 				}
 
@@ -240,7 +280,7 @@ class BSR_DB {
 					continue;
 				}
 
-				if ( $this->wpdb->options === $table ) {
+				if ( $wpdb->options === $table ) {
 
 					// Skip any BSR options as they may contain the search field.
 					if ( isset( $should_skip ) && true === $should_skip ) {
@@ -250,8 +290,8 @@ class BSR_DB {
 
 					// If the Site URL needs to be updated, let's do that last.
 					if ( isset( $update_later ) && true === $update_later ) {
-						$update_later 	= false;
-						$edited_data 	= $this->recursive_unserialize_replace( $args['search_for'], $args['replace_with'], $data_to_fix, false, $args['case_insensitive'] );
+						$update_later = false;
+						$edited_data  = $this->recursive_unserialize_replace( $args['search_for'], $args['replace_with'], $data_to_fix, false, $args['case_insensitive'] );
 
 						if ( $edited_data != $data_to_fix ) {
 							$table_report['change']++;
@@ -268,7 +308,6 @@ class BSR_DB {
 					if ( 'siteurl' === $data_to_fix && $args['dry_run'] !== 'on' ) {
 						$update_later = true;
 					}
-
 				}
 
 				// Run a search replace on the data that'll respect the serialisation.
@@ -276,11 +315,12 @@ class BSR_DB {
 
 				// Something was changed
 				if ( $edited_data != $data_to_fix ) {
-					$update_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $edited_data ) . '"';
-					$upd = true;
+					$update_sql[]    = '%i = %s';
+					$update_values[] = $column;
+					$update_values[] = $edited_data;
+					$upd             = true;
 					$table_report['change']++;
 				}
-
 			}
 
 			// Determine what to do with updates.
@@ -288,26 +328,33 @@ class BSR_DB {
 				// Don't do anything if a dry run
 			} elseif ( $upd && ! empty( $where_sql ) ) {
 				// If there are changes to make, run the query.
-				$sql 	= 'UPDATE ' . $table . ' SET ' . implode( ', ', $update_sql ) . ' WHERE ' . implode( ' AND ', array_filter( $where_sql ) );
-				$result = $this->wpdb->query( $sql );
+				$sql_template = 'UPDATE %i SET ' . implode( ', ', $update_sql ) . ' WHERE ' . implode( ' AND ', array_filter( $where_sql ) );
+				$prepare_args = array_merge( array( $sql_template, $table ), $update_values, $where_values );
+
+				// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange -- Dynamic UPDATE: table and columns allowlisted; values passed through $wpdb->prepare().
+				$result = $wpdb->query( call_user_func_array( array( $wpdb, 'prepare' ), $prepare_args ) );
+				// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 				if ( ! $result ) {
-					$table_report['errors'][] = sprintf( __( 'Error updating row: %d.', 'better-search-replace' ), $current_row );
+					$table_report['errors'][] = sprintf(
+						/* translators: %d: database row number that failed to update. */
+						__( 'Error updating row: %d.', 'better-search-replace' ),
+						$current_row
+					);
 				} else {
 					$table_report['updates']++;
 				}
-
 			}
-
 		} // end row loop
 
 		if ( $current_page >= $pages - 1 ) {
 			$done = true;
 		}
 
-		// Flush the results and return the report.
 		$table_report['end'] = microtime( true );
-		$this->wpdb->flush();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Clear wpdb result buffers after batch SRDB.
+		$wpdb->flush();
+
 		return array( 'table_complete' => $done, 'table_report' => $table_report );
 	}
 
@@ -420,23 +467,6 @@ class BSR_DB {
 		return false;
 	}
 
-	/**
-	 * Mimics the mysql_real_escape_string function. Adapted from a post by 'feedr' on php.net.
-	 * @link   http://php.net/manual/en/function.mysql-real-escape-string.php#101248
-	 * @access public
-	 * @param  string $input The string to escape.
-	 * @return string
-	 */
-	public function mysql_escape_mimic( $input ) {
-	    if ( is_array( $input ) ) {
-	        return array_map( __METHOD__, $input );
-	    }
-	    if ( ! empty( $input ) && is_string( $input ) ) {
-	        return str_replace( array( '\\', "\0", "\n", "\r", "'", '"', "\x1a" ), array( '\\\\', '\\0', '\\n', '\\r', "\\'", '\\"', '\\Z' ), $input );
-	    }
-
-	    return $input;
-	}
 
 	/**
 	 * Return unserialized object or array
@@ -490,7 +520,7 @@ class BSR_DB {
 	 * @return bool
 	 */
 	private function table_exists( $table ) {
-		return in_array( $table, $this->get_tables() );
+		return in_array( $table, self::get_tables(), true );
 	}
 
 	/**

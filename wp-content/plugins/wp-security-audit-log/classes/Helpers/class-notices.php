@@ -5,7 +5,7 @@
  * @package    wsal
  * @subpackage helpers
  * @copyright  2026 Melapress
- * @license    https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
  * @link       https://wordpress.org/plugins/wp-security-audit-log/
  * @since 4.6.0
  */
@@ -16,7 +16,11 @@ namespace WSAL\Helpers;
 
 use WSAL\Helpers\Settings_Helper;
 use WSAL\Utils\Abstract_Migration;
-use WSAL\WP_Sensors\Helpers\LearnDash_Helper;
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 
@@ -49,6 +53,20 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 		private static $number_of_notices = 0;
 
 		/**
+		 * Checks if LearnDash plugin is active.
+		 *
+		 * ! We use this local function instead of LearnDash_Helper::is_learndash_active() to avoid a
+		 * ! hard dependency on the LearnDash_Helper class, which can cause a fatal error in some edge cases.
+		 *
+		 * @return bool
+		 *
+		 * @since 5.6.1
+		 */
+		private static function is_learndash_active(): bool {
+			return \function_exists( 'learndash_get_post_type_slug' );
+		}
+
+		/**
 		 * Sets the class hooks.
 		 *
 		 * @return void
@@ -70,6 +88,13 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 					self::display_notice_upgrade();
 				}
 
+				// @free:start
+				$notice_feature_highlight = Settings_Helper::get_boolean_option_value( Abstract_Migration::FEATURE_HIGHLIGHT_NOTICE, false );
+				if ( $notice_feature_highlight ) {
+					self::display_feature_highlight_notice();
+				}
+				// @free:end
+
 				// if ( 'free' === \WpSecurityAuditLog::get_plugin_version() ) {
 				// $ebook = Settings_Helper::get_boolean_option_value( self::EBOOK_NOTICE, false );
 				// if ( ! $ebook ) {
@@ -84,14 +109,10 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 
 				$learndash_update_notice = Settings_Helper::get_boolean_option_value( self::LEARNDASH_UPDATE_NOTICE, false );
 
-				if ( ! $learndash_update_notice && LearnDash_Helper::is_learndash_active() ) {
+				if ( ! $learndash_update_notice && self::is_learndash_active() ) {
 					self::display_learndash_update_notice();
-				} else {
-					$melapress_survey_2025 = Settings_Helper::get_boolean_option_value( 'melapress-survey-2025', false );
-
-					if ( ! $melapress_survey_2025 && ! self::is_black_friday_campaign_active() ) {
-						self::display_yearly_wsal_melapress_survey();
-					}
+				} elseif ( self::should_show_melapress_survey() ) {
+					self::display_melapress_product_survey();
 				}
 
 				// @free:start
@@ -118,6 +139,15 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 				++self::$number_of_notices;
 			}
 
+			// @free:start
+			$notice_feature_highlight = Settings_Helper::get_boolean_option_value( Abstract_Migration::FEATURE_HIGHLIGHT_NOTICE, false );
+			if ( $notice_feature_highlight ) {
+				\add_action( 'wp_ajax_wsal_dismiss_feature_highlight_notice', array( __CLASS__, 'dismiss_feature_highlight_notice' ) );
+
+				++self::$number_of_notices;
+			}
+			// @free:end
+
 			// ! \WpSecurityAuditLog::get_plugin_version() does not work in this hook action, do not use it.
 			// if ( 'free' === \WpSecurityAuditLog::get_plugin_version() ) {
 			// $ebook = Settings_Helper::get_boolean_option_value( self::EBOOK_NOTICE, false );
@@ -136,19 +166,16 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 
 			$learndash_update_notice = Settings_Helper::get_boolean_option_value( self::LEARNDASH_UPDATE_NOTICE, false );
 
-			if ( ! $learndash_update_notice && LearnDash_Helper::is_learndash_active() ) {
+			if ( ! $learndash_update_notice && self::is_learndash_active() ) {
 				\add_action( 'wp_ajax_dismiss_learndash_update_notice', array( __CLASS__, 'dismiss_learndash_update_notice' ) );
 
 				++self::$number_of_notices;
-			} else {
+			} elseif ( self::should_show_melapress_survey() ) {
 
-				$melapress_survey_2025 = Settings_Helper::get_boolean_option_value( 'melapress-survey-2025', false );
+				\add_action( 'wp_ajax_dismiss_melapress_survey', array( __CLASS__, 'dismiss_melapress_survey' ) );
+				\add_action( 'wp_ajax_take_melapress_survey', array( __CLASS__, 'take_melapress_survey' ) );
 
-				if ( ! $melapress_survey_2025 && ! self::is_black_friday_campaign_active() ) {
-					\add_action( 'wp_ajax_dismiss_melapress_survey', array( __CLASS__, 'dismiss_melapress_survey' ) );
-
-					++self::$number_of_notices;
-				}
+				++self::$number_of_notices;
 			}
 
 			// @free:start
@@ -164,10 +191,182 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 		 * Display upgrade notice.
 		 *
 		 * @since 5.1.0
+		 * @since 5.6.5 Replaced the large update banner with a minimal notice.
 		 */
 		public static function display_notice_upgrade() {
-			include_once WSAL_BASE_DIR . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Free' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'plugin-update-card.php';
+			$message = sprintf(
+				/* translators: 1: Plugin name. 2: Plugin version number. */
+				\__( '%1$s has been updated to version %2$s', 'wp-security-audit-log' ),
+				'<strong>WP Activity Log</strong>',
+				'<strong>' . WSAL_VERSION . '</strong>'
+			);
+
+			?>
+			<style>
+				.wsal-update-notice {
+					position: relative;
+					background-color: #fff;
+					border: 1px solid #c3c4c7;
+					border-left: 4px solid #009344;
+					margin: 64px 20px 16px 0;
+					padding: 0 40px 0 12px;
+					font-size: 0.8125rem;
+				}
+
+				.wsal-update-notice p {
+					margin: 0.5em 0;
+				}
+
+				.wsal-update-notice a {
+					color: #009344;
+				}
+
+				.wsal-update-notice strong {
+					color: #009344;
+				}
+
+				.wsal-update-notice-close {
+					position: absolute;
+					top: 0;
+					right: 1px;
+					padding: 9px;
+					border: none;
+					margin: 0;
+					background: none;
+					color: #787c82;
+					cursor: pointer;
+				}
+
+				.wsal-update-notice-close::before {
+					content: "\f153";
+					font-family: dashicons;
+					font-style: normal;
+					font-weight: normal;
+					font-size: 1rem;
+					line-height: 1.25;
+					-webkit-font-smoothing: antialiased;
+				}
+
+				.wsal-update-notice-close:hover,
+				.wsal-update-notice-close:focus {
+					color: #d63638;
+				}
+			</style>
+			<div class="wsal-update-notice wsal-notice"<?php echo self::should_show_black_friday_notice() ? ' style="display: none;"' : ''; ?> data-dismiss-action="wsal_dismiss_upgrade_notice" data-nonce="<?php echo \esc_attr( \wp_create_nonce( 'dismiss_upgrade_notice' ) ); ?>">
+				<p>
+					<?php echo \wp_kses( $message, Plugin_Settings_Helper::get_allowed_html_tags() ); ?>
+					&ndash; <a href="https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=plugin&utm_medium=wsal&utm_campaign=update-notice-changelog" target="_blank" rel="noopener"><?php \esc_html_e( 'view changelog', 'wp-security-audit-log' ); ?></a>
+				</p>
+				<button type="button" class="wsal-update-notice-close wsal-plugin-notice-close" aria-label="<?php \esc_attr_e( 'Dismiss this notice', 'wp-security-audit-log' ); ?>"></button>
+			</div>
+			<?php
 		}
+
+		// @free:start
+		/**
+		 * Display the feature highlight notice shown after a plugin upgrade.
+		 *
+		 * @return void
+		 *
+		 * @since 5.6.5
+		 */
+		public static function display_feature_highlight_notice() {
+			?>
+			<style>
+				.wsal-feature-highlight-notice {
+					position: relative;
+					display: flex;
+					gap: 16px;
+					background: #fafbf3;
+					border-radius: 5px;
+					box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
+					margin: 64px 20px 16px 0;
+					padding: 16px 48px 16px 16px;
+					color: #3c434a;
+				}
+
+				.wsal-update-notice ~ .wsal-feature-highlight-notice {
+					margin-top: 16px;
+				}
+
+				.wsal-feature-highlight-notice::before {
+					content: '';
+					background: url('<?php echo \esc_url( WSAL_BASE_URL ); ?>classes/Free/assets/images/wp-activity-log-icon.svg') no-repeat center / contain;
+					flex-shrink: 0;
+					height: 44px;
+					width: 44px;
+				}
+
+				.wsal-feature-highlight-notice h2 {
+					color: #3c434a;
+					font-size: 1.25rem;
+					font-weight: 600;
+					line-height: 1.3;
+					margin: 0 0 8px;
+					padding: 0;
+				}
+
+				.wsal-feature-highlight-notice p {
+					font-size: 0.875rem;
+					line-height: 1.6;
+					margin: 0 0 16px;
+				}
+
+				.wsal-feature-highlight-notice-upgrade {
+					background: #009344;
+					border-radius: 5px;
+					color: #fff;
+					display: inline-block;
+					font-size: 0.875rem;
+					line-height: 1;
+					padding: 8px 12px;
+					text-decoration: none;
+				}
+
+				.wsal-feature-highlight-notice-upgrade:hover,
+				.wsal-feature-highlight-notice-upgrade:focus {
+					background: #007a39;
+					color: #fff;
+				}
+
+				.wsal-feature-highlight-notice-close {
+					position: absolute;
+					top: 8px;
+					right: 5px;
+					padding: 6px;
+					border: none;
+					margin: 0;
+					background: none;
+					color: #787c82;
+					cursor: pointer;
+				}
+
+				.wsal-feature-highlight-notice-close::before {
+					content: "\f153";
+					font-family: dashicons;
+					font-style: normal;
+					font-weight: normal;
+					font-size: 1rem;
+					line-height: 1.25;
+					-webkit-font-smoothing: antialiased;
+				}
+
+				.wsal-feature-highlight-notice-close:hover,
+				.wsal-feature-highlight-notice-close:focus {
+					color: #d63638;
+				}
+			</style>
+			<div class="wsal-feature-highlight-notice wsal-notice" data-dismiss-action="wsal_dismiss_feature_highlight_notice" data-nonce="<?php echo \esc_attr( \wp_create_nonce( 'dismiss_feature_highlight_notice' ) ); ?>">
+				<div>
+					<h2><?php \esc_html_e( 'Know about important changes before they become problems', 'wp-security-audit-log' ); ?></h2>
+					<p><?php \esc_html_e( 'Receive alerts for critical activity, monitor active user sessions, and keep a complete audit trail of everything happening on your site.', 'wp-security-audit-log' ); ?></p>
+					<a class="wsal-feature-highlight-notice-upgrade" href="https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=update-feature-highlight-banner" target="_blank" rel="noopener"><?php \esc_html_e( 'Unlock Premium Features', 'wp-security-audit-log' ); ?></a>
+				</div>
+				<button type="button" class="wsal-feature-highlight-notice-close wsal-plugin-notice-close" aria-label="<?php \esc_attr_e( 'Dismiss this notice', 'wp-security-audit-log' ); ?>"></button>
+			</div>
+			<?php
+		}
+		// @free:end
 
 		/**
 		 * Display upgrade notice.
@@ -195,6 +394,28 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 			Settings_Helper::delete_option_value( Abstract_Migration::UPGRADE_NOTICE );
 			\wp_send_json_success();
 		}
+
+		// @free:start
+		/**
+		 * Method: Ajax request handler to dismiss the feature highlight notice.
+		 *
+		 * @return void
+		 *
+		 * @since 5.6.5
+		 */
+		public static function dismiss_feature_highlight_notice() {
+			if ( ! Settings_Helper::current_user_can( 'edit' ) ) {
+				\wp_send_json_error();
+			}
+
+			if ( ! \wp_verify_nonce( \sanitize_text_field( \wp_unslash( $_POST['nonce'] ?? '' ) ), 'dismiss_feature_highlight_notice' ) ) {
+				\wp_send_json_error( \esc_html__( 'nonce is not provided or incorrect', 'wp-security-audit-log' ) );
+			}
+
+			Settings_Helper::delete_option_value( Abstract_Migration::FEATURE_HIGHLIGHT_NOTICE );
+			\wp_send_json_success();
+		}
+		// @free:end
 
 		/**
 		 * Method: Ajax request handler to dismiss ebook notice.
@@ -253,27 +474,48 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 		}
 
 		/**
-		 * Ajax request handler to dismiss the melapress survey notice. Please note that this is different from the yearly survey, which is for all the version of the plugin.
+		 * Ajax request handler to dismiss the melapress survey notice (X button).
 		 *
 		 * @return void
 		 *
 		 * @since 5.5.3
+		 * @since 5.6.1 - Changed to temporary dismissal that resets on plugin upgrade.
 		 */
 		public static function dismiss_melapress_survey() {
 			if ( ! Settings_Helper::current_user_can( 'edit' ) || ! \current_user_can( 'manage_options' ) ) {
 				\wp_send_json_error();
 			}
 
-			$nonce_check = \check_ajax_referer( 'dismiss_melapress_survey', 'nonce' );
+			\check_ajax_referer( 'dismiss_melapress_survey', 'nonce' );
 
-			if ( ! $nonce_check ) {
-				\wp_send_json_error( \esc_html_e( 'nonce is not provided or incorrect', 'wp-security-audit-log' ) );
+			$update_setting = Settings_Helper::set_boolean_option_value( 'melapress-survey-dismissed', true );
+
+			if ( ! $update_setting ) {
+				\wp_send_json_error( \esc_html__( 'Failed to dismiss the survey. Please try again.', 'wp-security-audit-log' ) );
 			}
 
-			$update_yr_setting = Settings_Helper::set_option_value( 'melapress-survey-2025', true );
+			\wp_send_json_success();
+		}
 
-			if ( ! $update_yr_setting ) {
-				\wp_send_json_error( \esc_html__( 'Failed to dismiss the survey. Please try again.', 'wp-security-audit-log' ) );
+		/**
+		 * Ajax request handler when the user clicks "Take the survey".
+		 * Sets a permanent flag that persists across upgrades.
+		 *
+		 * @return void
+		 *
+		 * @since 5.6.1
+		 */
+		public static function take_melapress_survey() {
+			if ( ! Settings_Helper::current_user_can( 'edit' ) || ! \current_user_can( 'manage_options' ) ) {
+				\wp_send_json_error();
+			}
+
+			\check_ajax_referer( 'take_melapress_survey', 'nonce' );
+
+			$update_setting = Settings_Helper::set_boolean_option_value( 'melapress-survey-taken', true );
+
+			if ( ! $update_setting ) {
+				\wp_send_json_error( \esc_html__( 'Failed to save the survey preference. Please try again.', 'wp-security-audit-log' ) );
 			}
 
 			\wp_send_json_success();
@@ -338,11 +580,11 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 		}
 
 		/**
-		 * Display the 2025 WSAL survey admin notice
+		 * Display the Melapress product survey admin notice.
 		 *
 		 * @since 5.5.3
 		 */
-		public static function display_yearly_wsal_melapress_survey() {
+		public static function display_melapress_product_survey() {
 			// Show only to admins.
 			if ( ! \current_user_can( 'manage_options' ) ) {
 					return;
@@ -352,9 +594,9 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 
 
 			?>
-				<div style="position: relative; padding-top: 8px; padding-bottom: 8px; border-left-color: #009344;" class="wsal-notice notice notice-info" id="wsal-melapress-survey-notice" data-dismiss-action="dismiss_melapress_survey" data-nonce="<?php echo \esc_attr( \wp_create_nonce( 'dismiss_melapress_survey' ) ); ?>">
+				<div style="position: relative; padding-top: 8px; padding-bottom: 8px; border-left-color: #009344;" class="wsal-notice notice notice-info" id="wsal-melapress-survey-notice" data-dismiss-action="dismiss_melapress_survey" data-nonce="<?php echo \esc_attr( \wp_create_nonce( 'dismiss_melapress_survey' ) ); ?>" data-take-action="take_melapress_survey" data-take-nonce="<?php echo \esc_attr( \wp_create_nonce( 'take_melapress_survey' ) ); ?>">
 					<p style="font-weight:700; margin-top: 0;"><?php \esc_html_e( 'Got 2 minutes? Help us shape the future of WP Activity Log', 'wp-security-audit-log' ); ?></p>
-					<a href="<?php echo \esc_url( $melapress_survey_url ); ?>" target="_blank" rel="noopener" style="background-color: #009344;"  class="button button-primary"><?php \esc_html_e( 'Take the survey', 'wp-security-audit-log' ); ?></a>
+					<a href="<?php echo \esc_url( $melapress_survey_url ); ?>" target="_blank" rel="noopener" style="background-color: #009344;" class="button button-primary wsal-survey-take-btn"><?php \esc_html_e( 'Take the survey', 'wp-security-audit-log' ); ?></a>
 					<button type="button" class="notice-dismiss wsal-plugin-notice-close"><span class="screen-reader-text"><?php \esc_html_e( 'Dismiss this notice.', 'wp-security-audit-log' ); ?></span></button>
 				</div>
 			<?php
@@ -411,6 +653,39 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 
 			// Campaign runs from November 21 to December 1.
 			return $current_date >= '2025-11-21' && $current_date <= '2025-12-01';
+		}
+
+		/**
+		 * Check if the Melapress survey banner should be displayed.
+		 *
+		 * @return bool
+		 *
+		 * @since 5.6.1
+		 */
+		public static function should_show_melapress_survey(): bool {
+			// Permanent dismissal: user already took the survey.
+			if ( Settings_Helper::get_boolean_option_value( 'melapress-survey-taken', false ) ) {
+				return false;
+			}
+
+			// Temporary dismissal: user clicked X (resets on next upgrade).
+			if ( Settings_Helper::get_boolean_option_value( 'melapress-survey-dismissed', false ) ) {
+				return false;
+			}
+
+			// Don't show during Black Friday.
+			if ( self::is_black_friday_campaign_active() ) {
+				return false;
+			}
+
+			// On new installs, wait 15 days before showing.
+			$installed_at = Settings_Helper::get_option_value( 'plugin-installed-at', false );
+
+			if ( false !== $installed_at && ( time() - (int) $installed_at ) < 15 * DAY_IN_SECONDS ) {
+				return false;
+			}
+
+			return true;
 		}
 
 		/**
@@ -666,11 +941,11 @@ if ( ! class_exists( '\WSAL\Helpers\Notices' ) ) {
 			<script>
 				document.addEventListener('DOMContentLoaded', function() {
 					const wsalBfNotice = document.getElementById('wsal-black-friday-notice');
-					const wsalUpgradeNotice = document.querySelector('.wsal-plugin-update');
+					const wsalUpgradeNotice = document.querySelector('.wsal-update-notice');
 
 					const wsalShowUpgradeNotice = () => {
 						if (wsalUpgradeNotice) {
-							wsalUpgradeNotice.style.display = 'flex';
+							wsalUpgradeNotice.style.display = 'block';
 						}
 					};
 

@@ -3,25 +3,30 @@
 namespace AC\Check;
 
 use AC\Ajax;
-use AC\Asset\Location\Absolute;
+use AC\Asset\Location;
 use AC\Asset\Script;
 use AC\Capabilities;
 use AC\Message;
-use AC\Preferences;
+use AC\Notice\NoticeState;
 use AC\Registerable;
 use AC\Screen;
 use AC\Type\Url\Documentation;
 use AC\Type\Url\UtmTags;
 
-class Review
-    implements Registerable
+final class Review implements Registerable
 {
 
-    private $location;
+    private const SLUG = 'review';
+    private const DELAY_DAYS = 30;
 
-    public function __construct(Absolute $location)
+    private Location $location;
+
+    private NoticeState $state;
+
+    public function __construct(Location $location, NoticeState $state)
     {
         $this->location = $location;
+        $this->state = $state;
     }
 
     public function register(): void
@@ -33,23 +38,25 @@ class Review
 
     public function display(Screen $screen): void
     {
-        if ( ! $screen->has_screen()) {
-            return;
-        }
-
         if ( ! current_user_can(Capabilities::MANAGE)) {
             return;
         }
 
-        if ( ! $screen->is_admin_screen() && ! $screen->is_list_screen()) {
+        if ( ! $screen->has_screen()) {
             return;
         }
 
-        if ($this->get_preferences()->get('dismiss-review')) {
+        if ( ! $screen->is_admin_screen()) {
             return;
         }
 
-        if ( ! $this->first_login_compare()) {
+        if ($this->state->is_dismissed(self::SLUG)) {
+            return;
+        }
+
+        $this->state->track_first_seen(self::SLUG);
+
+        if ( ! $this->state->is_delay_met(self::SLUG, self::DELAY_DAYS)) {
             return;
         }
 
@@ -73,42 +80,15 @@ class Review
         return $handler;
     }
 
-    protected function get_preferences(): Preferences\User
-    {
-        return new Preferences\User('check-review');
-    }
-
-    protected function first_login_compare(): bool
-    {
-        // Show after 30 days
-        return time() - (30 * DAY_IN_SECONDS) > $this->get_first_login();
-    }
-
-    /**
-     * Return the Unix timestamp of first login
-     */
-    protected function get_first_login(): int
-    {
-        $timestamp = $this->get_preferences()->get('first-login-review');
-
-        if (empty($timestamp)) {
-            $timestamp = time();
-
-            $this->get_preferences()->set('first-login-review', $timestamp);
-        }
-
-        return $timestamp;
-    }
-
     public function ajax_dismiss_notice(): void
     {
         $this->get_ajax_handler()->verify_request();
-        $this->get_preferences()->set('dismiss-review', true);
+        $this->state->dismiss(self::SLUG);
     }
 
-    private function get_documentation_url(string $utm_medium): string
+    private function get_documentation_url(): string
     {
-        return (new UtmTags(new Documentation(), $utm_medium))->get_url();
+        return (new UtmTags(new Documentation(), 'review-notice'))->get_url();
     }
 
     protected function get_message(): string
@@ -153,7 +133,9 @@ class Review
                         'codepress-admin-columns'
                     ),
                     $product,
-                    '<a href="' . esc_url($this->get_documentation_url('review-notice')) . '" target="_blank">' . __(
+                    '<a href="' . esc_url(
+                        $this->get_documentation_url()
+                    ) . '" target="_blank">' . __(
                         'documentation page',
                         'codepress-admin-columns'
                     ) . '</a>'

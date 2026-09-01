@@ -8,9 +8,9 @@
  * @since      4.6.0
  *
  * @copyright  2026 Melapress
- * @license    https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
  *
- * @see       https://wordpress.org/plugins/wp-2fa/
+ * @see       https://wordpress.org/plugins/wp-security-audit-log/
  */
 
 declare(strict_types=1);
@@ -19,15 +19,20 @@ namespace WSAL\ListAdminEvents;
 
 use WSAL\Helpers\WP_Helper;
 use WSAL\Helpers\User_Utils;
-use WSAL\EventNotes\Event_Notes;
 use WSAL\Controllers\Constants;
 use WSAL\Controllers\Connection;
+use WSAL\EventNotes\Event_Notes;
 use WSAL\Helpers\Settings_Helper;
 use WSAL\Entities\Metadata_Entity;
 use WSAL\Controllers\Alert_Manager;
 use WSAL\Entities\Occurrences_Entity;
 use WSAL\CopyEventData\Copy_Event_Data;
 use WSAL\Helpers\DateTime_Formatter_Helper;
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/template.php';
@@ -163,6 +168,7 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 
 			self::$wsal_db = null;
 
+
 			$this->table_name = Occurrences_Entity::get_table_name( self::$wsal_db );
 			$this->table      = Occurrences_Entity::class;
 
@@ -174,36 +180,10 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 						echo '<div style="clear:both; float:right">';
 						$this->search_box(
 							__( 'Search', 'wp-security-audit-log' ),
-							strtolower( $this->table_name ) . '-find'
+							strtolower( $this->table_name ) . '-find',
+							true
 						);
 						echo '</div>';
-						$try_free_search = Settings_Helper::get_boolean_option_value( 'free-search-try' );
-
-						if ( $try_free_search ) {
-							global $wpdb;
-							echo '<style>
-							#darktooltip-' . \esc_attr( $wpdb->prefix ) . 'wsal_occurrences-find-search-input {
-								padding: 15px !important;
-								font-size: 1.2em !important;
-							}
-							</style>';
-							echo '<script>
-								document.addEventListener("readystatechange", event => { 
-
-									if (event.target.readyState === "complete") {
-										jQuery(".wsal_search_input").darkTooltip({
-														animation: "flipIn",
-														gravity: "east",
-														size: "medium",
-														trigger: "show",
-														autoClose: true,
-														autoCloseDuration: 5000,
-														autoPosition: true,
-													});
-									}
-								});
-							</script>';
-						}
 					}
 				},
 				999
@@ -225,49 +205,60 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 		/**
 		 * Displays the search box.
 		 *
-		 * @since 4.6.0
+		 * @param string $text - The 'submit' button label.
+		 * @param string $input_id - ID attribute value for the search input field.
+		 * @param bool   $show_search_cta - Whether to show the search CTA helper text.
 		 *
-		 * @param string $text     The 'submit' button label.
-		 * @param string $input_id ID attribute value for the search input field.
+		 * @return void - Outputs the search box markup.
+		 *
+		 * @since 4.6.0
+		 * @since 5.6.4 Added the $show_search_cta parameter.
 		 */
-		public function search_box( $text, $input_id ) {
-			if ( empty( $_REQUEST['s'] ) && ! $this->has_items() ) {
+		public function search_box( $text, $input_id, $show_search_cta = false ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display parameter, sanitized before use.
+			if ( empty( $_GET['s'] ) && ! $this->has_items() ) {
 				return;
 			}
 
 			$input_id = $input_id . '-search-input';
 
-			if ( ! empty( $_REQUEST['orderby'] ) ) {
-				echo '<input type="hidden" name="orderby" value="' . esc_attr( \sanitize_text_field( \wp_unslash( $_REQUEST['orderby'] ) ) ) . '" />';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display parameter, sanitized before use.
+			if ( ! empty( $_GET['orderby'] ) ) {
+				echo '<input type="hidden" name="orderby" value="' . \esc_attr( \sanitize_text_field( \wp_unslash( $_GET['orderby'] ) ) ) . '" />'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			}
-			if ( ! empty( $_REQUEST['order'] ) ) {
-				echo '<input type="hidden" name="order" value="' . esc_attr( \sanitize_text_field( \wp_unslash( $_REQUEST['order'] ) ) ) . '" />';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display parameter, sanitized before use.
+			if ( ! empty( $_GET['order'] ) ) {
+				echo '<input type="hidden" name="order" value="' . \esc_attr( \sanitize_text_field( \wp_unslash( $_GET['order'] ) ) ) . '" />'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			}
-			if ( ! empty( $_REQUEST['post_mime_type'] ) ) {
-				echo '<input type="hidden" name="post_mime_type" value="' . esc_attr( \sanitize_text_field( \wp_unslash( $_REQUEST['post_mime_type'] ) ) ) . '" />';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display parameter, sanitized before use.
+			if ( ! empty( $_GET['post_mime_type'] ) ) {
+				echo '<input type="hidden" name="post_mime_type" value="' . \esc_attr( \sanitize_text_field( \wp_unslash( $_GET['post_mime_type'] ) ) ) . '" />'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			}
-			if ( ! empty( $_REQUEST['detached'] ) ) {
-				echo '<input type="hidden" name="detached" value="' . esc_attr( \sanitize_text_field( \wp_unslash( $_REQUEST['detached'] ) ) ) . '" />';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display parameter, sanitized before use.
+			if ( ! empty( $_GET['detached'] ) ) {
+				echo '<input type="hidden" name="detached" value="' . \esc_attr( \sanitize_text_field( \wp_unslash( $_GET['detached'] ) ) ) . '" />'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			}
 			?>
-	<p class="search-box" style="position:relative">
-		<label class="screen-reader-text" for="<?php echo \esc_attr( $input_id ); ?>"><?php echo \esc_attr( $text ); ?>:</label>
-			<?php
-			$try_free_search = false;
-			// @free:start
-			$try_free_search = Settings_Helper::get_boolean_option_value( 'free-search-try' );
-			// @free:end
-
-			if ( $try_free_search ) {
-				?>
-					<span id="wsal_try_search"><?php echo esc_attr( ' Try the new search functionality' ); ?><span><input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" value="<?php _admin_search_query(); ?>" /><span><span>
+			<p class="search-box" style="position:relative">
+				<label class="screen-reader-text" for="<?php echo \esc_attr( $input_id ); ?>"><?php echo \esc_attr( $text ); ?>:</label>
 					<?php
-			} else {
-				?>
-					<input type="search" id="<?php echo esc_attr( $input_id ); ?>" class="wsal_search_input" name="s" value="<?php _admin_search_query(); ?>" />
-			<?php } ?>
-			<?php submit_button( $text, '', '', false, array( 'id' => 'search-submit' ) ); ?>
-	</p>
+					// @free:start
+					if ( $show_search_cta ) {
+						?>
+						<span class="wsal-search-helper-text">
+							<span class="dashicons dashicons-info" aria-hidden="true"></span>
+							<span><?php \esc_html_e( 'Quickly find the exact log data you need with advanced filters and saved searches with', 'wp-security-audit-log' ); ?>
+							<a href="<?php echo \esc_url( 'https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=audit-log-search-helper' ); ?>" target="_blank" rel="noopener noreferrer"><?php \esc_html_e( 'Premium', 'wp-security-audit-log' ); ?></a></span>
+						</span>
+						<?php
+					}
+					// @free:end
+					?>
+					<span class="wsal-search-controls">
+						<input type="search" id="<?php echo \esc_attr( $input_id ); ?>" class="wsal_search_input" name="s" value="<?php _admin_search_query(); ?>" />
+						<?php submit_button( $text, '', '', false, array( 'id' => 'search-submit' ) ); ?>
+					</span>
+			</p>
 			<?php
 		}
 
@@ -358,8 +349,6 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 			}
 
 			$this->_column_headers = array( self::$columns, $hidden, $sortable );
-			// phpcs:ignore
-			// usort( $items, [ &$this, 'usort_reorder' ] ); // phpcs:ignore
 
 			// Set the pagination.
 			$this->set_pagination_args(
@@ -436,8 +425,12 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 		 * @return void
 		 */
 		public function no_items() {
-			if ( null !== self::$wsal_db && isset( self::$wsal_db::$error_string ) && null !== self::$wsal_db::$error_string ) {
-				echo self::$wsal_db::$error_string;
+			/**
+			 * $error_string only exists on MySQL_Connection, not on wpdb.
+			 * Use property_exists() to avoid undefined property notices.
+			 */
+			if ( null !== self::$wsal_db && \property_exists( self::$wsal_db, 'error_string' ) && null !== self::$wsal_db::$error_string ) {
+				echo \wp_kses_post( self::$wsal_db::$error_string );
 			} else {
 				echo \esc_html__( 'No logs found', 'wp-security-audit-log' );
 			}
@@ -453,6 +446,7 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 		public function fetch_table_data() {
 			self::$query_occ = array();
 			$bid             = self::$query_args['site_id'];
+
 			if ( false !== $bid && -1 !== (int) $bid ) {
 				if ( 0 === (int) $bid ) {
 					self::$query_occ['AND'][] = array( ' site_id = 0 ' => $bid );
@@ -539,52 +533,6 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 			$this->items = $events;
 
 			return $this->items;
-
-			global $wpdb;
-
-
-			$per_page = $this->get_screen_option_per_page();
-
-			$current_page = $this->get_pagenum();
-			if ( 1 < $current_page ) {
-				$offset = $per_page * ( $current_page - 1 );
-			} else {
-				$offset = 0;
-			}
-
-			$search_string = ( isset( $_REQUEST['s'] ) ? \esc_sql( \sanitize_text_field( \wp_unslash( $_REQUEST['s'] ) ) ) : '' );
-
-			$search_sql = '';
-
-			if ( '' !== $search_string ) {
-				$search_sql = 'AND (`id` LIKE "%' . $wpdb->esc_like( $search_string ) . '%"';
-				foreach ( array_keys( Occurrences_Entity::get_fields() ) as $value ) {
-					$search_sql .= ' OR ' . $value . ' LIKE "%' . esc_sql( $wpdb->esc_like( $search_string ) ) . '%" ';
-				}
-				$search_sql .= ') ';
-			}
-
-			// Set query order arguments.
-			$order   = isset( self::$query_args['order'] ) ? self::$query_args['order'] : false;
-			$orderby = ( isset( $_GET['orderby'] ) && '' != $_GET['orderby'] ) ? \esc_sql( \sanitize_text_field( \wp_unslash( $_GET['orderby'] ) ) ) : '`id`';
-			$order   = ( isset( $_GET['order'] ) && '' != $_GET['orderby'] ) ? \esc_sql( \sanitize_text_field( \wp_unslash( $_GET['order'] ) ) ) : 'DESC';
-			$query   = 'SELECT
-			' . implode( ', ', array_keys( Occurrences_Entity::get_fields() ) ) . '
-		  FROM ' . $this->table_name . '  WHERE 1=1 ' . $search_sql . ' ORDER BY ' . $orderby . ' ' . $order;
-
-			$query .= Occurrences_Entity::get_connection()->prepare( ' LIMIT %d OFFSET %d;', $per_page, $offset );
-
-			// query output_type will be an associative array with ARRAY_A.
-			// phpcs:ignore
-			$query_results = Occurrences_Entity::get_connection()->get_results($query, ARRAY_A);
-
-			// phpcs:ignore
-			$this->count = Occurrences_Entity::get_connection()->get_var('SELECT COUNT(`id`) FROM ' . $this->table_name . '  WHERE 1=1 ' . $search_sql);
-
-			$this->items = $query_results;
-
-			// return result array to prepare_items.
-			return $query_results;
 		}
 
 		/**
@@ -684,7 +632,7 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 						// Additional user info tooltip.
 						$tooltip = User_Utils::get_tooltip_user_content( $user );
 
-						$uhtml = '<a class="tooltip" data-darktooltip="' . esc_attr( $tooltip ) . '" data-user="' . $user->user_login . '" href="' . $user_edit_link . '" target="_blank">' . esc_html( $display_name ) . '</a>';
+						$uhtml = '<a class="tooltip" data-darktooltip="' . \esc_attr( $tooltip ) . '" data-user="' . \esc_attr( $user->user_login ) . '" href="' . \esc_url( $user_edit_link ) . '" target="_blank">' . \esc_html( $display_name ) . '</a>';
 
 
 						$roles = User_Utils::get_roles_label( $item['user_roles'] );
@@ -706,7 +654,7 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 					$image = \apply_filters( 'wsal_get_user_image', $image, $item );
 					$uhtml = \apply_filters( 'wsal_get_user_html', $uhtml, $item );
 
-					$row_user_data = '<div style="float:left; margin:5px;">' . $image . '</div>' . '<span style="width:60%;float:left;">' . $uhtml . '<br/>' . $roles . '</span>';
+					$row_user_data = '<div style="float:left; margin:5px;">' . $image . '</div><span style="width:60%;float:left;">' . $uhtml . '<br/>' . $roles . '</span>';
 
 					/*
 					 * WSAL Filter: `wsal_auditlog_row_user_data`
@@ -719,8 +667,10 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 					 * @param integer $this->current_alert_id - Event database ID.
 					 */
 					return apply_filters( 'wsal_auditlog_row_user_data', $row_user_data, $item['id'] );
+
 				case 'scip':
 					$scip = $item['client_ip'];
+
 					if ( is_string( $scip ) ) {
 						$scip = str_replace( array( '"', '[', ']' ), '', $scip );
 					}
@@ -738,38 +688,48 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 						}
 					}
 
+					// If the IP is not valid, show it as plain escaped text without a link.
+					if ( ! filter_var( $scip, FILTER_VALIDATE_IP ) ) {
+						return \esc_html( $scip );
+					}
+
 					// If there's only one IP...
-					$link = 'https://whatismyipaddress.com/ip/' . $scip . '?utm_source=plugin&utm_medium=referral&utm_campaign=wsal';
+					$link = \esc_url( 'https://whatismyipaddress.com/ip/' . $scip . '?utm_source=plugin&utm_medium=referral&utm_campaign=wsal' );
+
 					if ( \class_exists( 'WSAL_SearchExtension' ) ) {
-						$tooltip = esc_attr__( 'Show me all activity originating from this IP Address', 'wp-security-audit-log' );
+						$tooltip = \esc_attr__( 'Show me all activity originating from this IP Address', 'wp-security-audit-log' );
 
 						if ( count( $oips ) < 2 ) {
-							return "<a class='search-ip' data-darktooltip='$tooltip' data-ip='$scip' target='_blank' href='$link'>" . esc_html( $scip ) . '</a>';
+							return "<a class='search-ip' data-darktooltip='$tooltip' data-ip='" . \esc_attr( $scip ) . "' target='_blank' href='" . \esc_url( $link ) . "'>" . \esc_html( $scip ) . '</a>';
 						}
 					} elseif ( count( $oips ) < 2 ) {
-						return "<a target='_blank' href='$link'>" . esc_html( $scip ) . '</a>';
+						return "<a target='_blank' href='" . \esc_url( $link ) . "'>" . \esc_html( $scip ) . '</a>';
 					}
 
 					// If there are many IPs...
 					if ( \class_exists( 'WSAL_SearchExtension' ) ) {
-						$tooltip = esc_attr__( 'Show me all activity originating from this IP Address', 'wp-security-audit-log' );
+						$tooltip = \esc_attr__( 'Show me all activity originating from this IP Address', 'wp-security-audit-log' );
 
-						$html = "<a class='search-ip' data-darktooltip='$tooltip' data-ip='$scip' target='_blank' href='https://whatismyipaddress.com/ip/$scip'>" . esc_html( $scip ) . '</a> <a href="javascript:;" onclick="jQuery(this).hide().next().show();">(more&hellip;)</a><div style="display: none;">';
+						$html = "<a class='search-ip' data-darktooltip='$tooltip' data-ip='" . \esc_attr( $scip ) . "' target='_blank' href='" . \esc_url( 'https://whatismyipaddress.com/ip/' . $scip ) . "'>" . \esc_html( $scip ) . '</a> <a href="javascript:;" onclick="jQuery(this).hide().next().show();">(more&hellip;)</a><div style="display: none;">';
+
 						foreach ( $oips as $ip ) {
-							if ($scip != $ip) { // phpcs:ignore
-								$html .= '<div>' . $ip . '</div>';
+							if ( $scip !== $ip ) {
+								$html .= '<div>' . \esc_html( $ip ) . '</div>';
 							}
 						}
+
 						$html .= '</div>';
 
 						return $html;
 					} else {
-						$html = "<a target='_blank' href='https://whatismyipaddress.com/ip/$scip'>" . esc_html( $scip ) . '</a> <a href="javascript:;" onclick="jQuery(this).hide().next().show();">(more&hellip;)</a><div style="display: none;">';
+						$html = "<a target='_blank' href='" . \esc_url( 'https://whatismyipaddress.com/ip/' . $scip ) . "'>" . \esc_html( $scip ) . '</a> <a href="javascript:;" onclick="jQuery(this).hide().next().show();">(more&hellip;)</a><div style="display: none;">';
+
 						foreach ( $oips as $ip ) {
-							if ($scip != $ip) { // phpcs:ignore
-								$html .= '<div>' . $ip . '</div>';
+							if ( $scip !== $ip ) {
+								$html .= '<div>' . \esc_html( $ip ) . '</div>';
 							}
 						}
+
 						$html .= '</div>';
 
 						return $html;
@@ -791,11 +751,23 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 
 					return $result;
 				case 'data':
-					$url     = admin_url( 'admin-ajax.php' ) . '?action=AjaxInspector&amp;occurrence=' . $item['id'];
-					$tooltip = esc_attr__( 'View all details of this change', 'wp-security-audit-log' );
+					$url = \add_query_arg(
+						array(
+							'action'     => 'AjaxInspector',
+							'occurrence' => (int) $item['id'],
+							'nonce'      => \wp_create_nonce( 'wsal_auditlog_viewer_nonce' ),
+						),
+						\admin_url( 'admin-ajax.php' )
+					);
 
-					$btns = '<a class="more-info button button-secondary data-event-inspector-link" data-darktooltip="' . $tooltip . '" data-inspector-active-text="' . __( 'Close inspector.', 'wp-security-audit-log' ) . '" title="' . __( 'Event data inspector', 'wp-security-audit-log' ) . '"' . ' href="' . $url . '">' . __( 'More details...', 'wp-security-audit-log' ) . '</a>';
+					$tooltip = \esc_attr__( 'View all details of this change', 'wp-security-audit-log' );
 
+					$btns = '<a class="more-info button button-secondary data-event-inspector-link" data-darktooltip="' . $tooltip . '" data-inspector-active-text="' . \esc_attr__( 'Close inspector.', 'wp-security-audit-log' ) . '" title="' . \esc_attr__( 'Event data inspector', 'wp-security-audit-log' ) . '" href="' . \esc_url( $url ) . '">' . \esc_html__( 'More details...', 'wp-security-audit-log' ) . '</a>';
+
+
+					// @free:start
+					$btns .= ' ' . \WSAL_Views_AuditLog::render_free_add_note_trigger( $item );
+					// @free:end
 
 					return $btns;
 
@@ -838,7 +810,7 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 			return sprintf(
 				'<label class="screen-reader-text" for="' . $this->table_name . '_' . $item['id'] . '">' . sprintf(
 					// translators: The column name.
-					__( 'Select %s' ),
+					__( 'Select %s', 'wp-security-audit-log' ),
 					'id'
 				) . '</label>'
 				. '<input type="checkbox" name="' . $this->table_name . '[]" id="' . $this->table_name . '_' . $item['id'] . '" value="' . $item['id'] . '" />'
@@ -1159,6 +1131,8 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 		 * Table navigation.
 		 *
 		 * @param string $which - Position of the nav.
+		 *
+		 * @since 5.6.4 - CSV export button now passes a server-side export token instead of a serialized query.
 		 */
 		public function extra_tablenav( $which ) {
 			// If the position is not top then render.
@@ -1174,7 +1148,7 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 				<div class="wsal-ssa wsal-ssa-<?php echo esc_attr( $which ); ?>">
 					<?php if ( WP_Helper::get_site_count() > 150 ) { ?>
 						<?php $curr = $curr ? get_blog_details( $curr ) : null; ?>
-						<?php $curr = $curr ? ( $curr->blogname . ' (' . $curr->domain . ')' ) : 'All Sites'; ?>
+						<?php $curr = $curr ? ( $curr->blogname . ' (' . $curr->domain . ')' ) : __( 'All Sites', 'wp-security-audit-log' ); ?>
 						<input type="text" class="wsal-ssas" value="<?php echo esc_attr( $curr ); ?>"/>
 					<?php } else { ?>
 						<select class="wsal-ssas" onchange="WsalSsasChange(value);">
@@ -1210,11 +1184,11 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 		public function search( $query, $connection = null ): array {
 			global $wpdb;
 
-			$search_string = ( isset( $_REQUEST['s'] ) ? \esc_sql( \sanitize_text_field( \wp_unslash( $_REQUEST['s'] ) ) ) : '' );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display parameter, sanitized before use.
+			$search_string = \sanitize_text_field( \wp_unslash( $_GET['s'] ?? '' ) );
 
 			if ( '' !== $search_string ) {
 				// @free:start
-				Settings_Helper::delete_option_value( 'free-search-try' );
 				$column_names = $this->table::get_fields();
 				unset( $column_names['user_roles'] );
 				unset( $column_names['severity'] );
@@ -1222,8 +1196,11 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 				// @free:end
 				unset( $column_names['created_on'] );
 				unset( $column_names['site_id'] );
+
+				$search = array();
+
 				foreach ( array_keys( $column_names ) as $value ) {
-					$search[] = array( $value . ' LIKE %s' => '%' . esc_sql( $wpdb->esc_like( $search_string ) ) . '%' );
+					$search[] = array( $value . ' LIKE %s' => '%' . $wpdb->esc_like( $search_string ) . '%' );
 				}
 
 				$query['OR'] = $search;
@@ -1233,8 +1210,8 @@ if ( ! class_exists( '\WSAL\ListAdminEvents\List_Events' ) ) {
 					$this->table::get_table_name( self::$wsal_db ) . '.id IN (
 					SELECT DISTINCT occurrence_id
 						FROM ' . Metadata_Entity::get_table_name( self::$wsal_db ) . '
-						WHERE TRIM(BOTH "\"" FROM value) LIKE %s
-					)' => '%' . $search_string . '%',
+						WHERE value LIKE %s
+					)' => '%' . $wpdb->esc_like( $search_string ) . '%',
 				);
 				// @free:end
 			}

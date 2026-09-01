@@ -2,9 +2,8 @@
 
 namespace AC\Integration;
 
-use AC\Integration;
-use AC\ListScreen;
 use AC\Screen;
+use AC\Type\Integration;
 use AC\Type\Url\Site;
 
 final class MediaLibraryAssistant extends Integration
@@ -17,9 +16,10 @@ final class MediaLibraryAssistant extends Integration
             __('Media Library Assistant', 'codepress-admin-columns'),
             'assets/images/addons/mla.png',
             __(
-                'The Media Library Assistant plugin from David Lingren provides several enhancements for managing the Media Library.',
+                'Take control of large media libraries. Add ALT text, captions, and custom metadata as columns - then filter, sort, and bulk update across thousands of files.',
                 'codepress-admin-columns'
             ),
+            null,
             new Site(Site::PAGE_ADDONS)
         );
     }
@@ -30,11 +30,6 @@ final class MediaLibraryAssistant extends Integration
     }
 
     public function show_notice(Screen $screen): bool
-    {
-        return false;
-    }
-
-    public function show_placeholder(ListScreen $list_screen): bool
     {
         return false;
     }

@@ -540,7 +540,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 				<input type="checkbox" class="' . esc_attr( $class ) . '" name="enable_gmail_oneclick" ' . $is_checked .'>
 				<span class="slider round"></span>
 			</label> 
-			'.esc_html__('Enable the option for a quick and easy way to connect with Google without the need of manually creating an app.', 'post-smtp').'
+			'.esc_html__('Enable the option for a quick, easy way to connect to Google Workspace (Gmail) API without manually creating an app.', 'post-smtp').'
 		</div>';
 	}
 
@@ -555,7 +555,18 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		// Action URLs for buttons.
 		$nonce               = wp_create_nonce( 'remove_oauth_action' );
 		$postman_auth_token  = get_option( 'postman_auth_token' );
-		$auth_url = get_option( 'post_smtp_gmail_auth_url' );
+
+		// Try to obtain a fresh Gmail OAuth URL (with a fresh nonce) at runtime.
+		$auth_url = '';
+		if ( function_exists( 'post_smtp_get_gmail_auth_url' ) ) {
+			$auth_url = post_smtp_get_gmail_auth_url();
+		}
+
+		// Fallback to the stored option if the runtime fetch failed.
+		if ( empty( $auth_url ) ) {
+			$auth_url = get_option( 'post_smtp_gmail_auth_url' );
+		}
+
 		$post_smtp_pro_options = get_option( 'post_smtp_pro', [] );
 		$bonus_extensions = isset( $post_smtp_pro_options['extensions'] ) ? $post_smtp_pro_options['extensions'] : array();
 		$gmail_oneclick_enabled = in_array( 'gmail-oneclick', $bonus_extensions );
@@ -570,7 +581,7 @@ class PostmanSmtpModuleTransport extends PostmanAbstractZendModuleTransport impl
 		// Determine whether to hide the entire Gmail auth section
 		$hide_style = $gmail_oneclick_enabled ? '' : 'style="display:none;"';
 		
-		$helping_text =  "<p>By signing in with Google, you can send emails using different 'From' addresses. To do this, disable the 'Force From Email' setting and use your registered aliases as the 'From' address across your WordPress site.</p> <p>Removing the OAuth connection will give you the ability to redo the OAuth connection or link to another Google account.</p>";
+		$helping_text =  "<p>Before proceeding, you’ll need to authorize this plugin to send emails using the Gmail API. This <a href=\"https://postmansmtp.com/docs/mailers/google-workspace-gmail-one-click-setup/\" target='_blank'>step-by-step guide</a> will walk you through the entire process.</p>";
 
 		echo '<div id="ps-gmail-auth-buttons" ' . $hide_style . '>';
 

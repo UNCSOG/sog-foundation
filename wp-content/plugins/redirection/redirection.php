@@ -3,11 +3,11 @@
 Plugin Name: Redirection
 Plugin URI: https://redirection.me/
 Description: Manage all your 301 redirects and monitor 404 errors
-Version: 5.7.5
+Version: 5.10.0
 Author: John Godley
 Text Domain: redirection
 Requires PHP: 7.4
-Requires at least: 6.5
+Requires at least: 6.7
 ============================================================================================================
 For full license details see license.txt
 ============================================================================================================
@@ -15,13 +15,15 @@ For full license details see license.txt
 
 define( 'REDIRECTION_DB_VERSION', '4.2' );     // DB schema version. Only change if DB needs changing
 define( 'REDIRECTION_FILE', __FILE__ );
+define( 'REDIRECTION_VERSION', '5.10.0' );
+define( 'REDIRECTION_MIN_WP', '6.6' );
 
 if ( ! defined( 'REDIRECTION_FLYING_SOLO' ) ) {
 	define( 'REDIRECTION_FLYING_SOLO', apply_filters( 'redirection_flying_solo', true ) );
 }
 
 // This file must support PHP < 7.4 so as not to crash
-if ( version_compare( PHP_VERSION, '7.4' ) < 0 ) {
+if ( version_compare( phpversion(), '7.4' ) < 0 ) {
 	add_filter( 'plugin_action_links_' . basename( dirname( REDIRECTION_FILE ) ) . '/' . basename( REDIRECTION_FILE ), 'red_deprecated_php' );
 
 	/**
@@ -37,28 +39,91 @@ if ( version_compare( PHP_VERSION, '7.4' ) < 0 ) {
 	return;
 }
 
-// TODO: remove this once version is stable
-if ( file_exists( __DIR__ . '/build/redirection-version.php' ) ) {
-	require_once __DIR__ . '/build/redirection-version.php';
-} else {
-	define( 'REDIRECTION_VERSION', '5.7.5' );
-	define( 'REDIRECTION_BUILD', 'e5bead9293c415a3ea00b2af86bd2010' );
-	define( 'REDIRECTION_MIN_WP', '6.5' );
+/**
+ * Autoload a namespaced class from a plugin directory.
+ *
+ * @param string $requested_class Requested class name.
+ * @param string $prefix Namespace prefix.
+ * @param string $base_dir Base directory.
+ * @return void
+ */
+function redirection_autoload_namespace( $requested_class, $prefix, $base_dir ) {
+	if ( strncmp( $prefix, $requested_class, strlen( $prefix ) ) !== 0 ) {
+		return;
+	}
+
+	$relative_class = substr( $requested_class, strlen( $prefix ) );
+	if ( $relative_class === '' ) {
+		return;
+	}
+
+	$normalize = static function ( $value ) {
+		$value = preg_replace( '/(?<!^)[A-Z]/', '-$0', $value );
+
+		if ( ! is_string( $value ) ) {
+			return '';
+		}
+
+		return str_replace( '_', '-', strtolower( $value ) );
+	};
+
+	$segments = explode( '\\', $relative_class );
+	$class_name = array_pop( $segments );
+	if ( ! is_string( $class_name ) || $class_name === '' ) {
+		return;
+	}
+
+	if ( count( $segments ) > 0 ) {
+		$base_dir .= implode( '/', array_map( $normalize, $segments ) ) . '/';
+	}
+
+	$path = $base_dir . 'class-' . $normalize( $class_name ) . '.php';
+
+	if ( file_exists( $path ) ) {
+		require_once $path;
+	}
 }
 
-require_once __DIR__ . '/redirection-settings.php';
-require_once __DIR__ . '/models/options.php';
-require_once __DIR__ . '/models/redirect/redirect.php';
-require_once __DIR__ . '/models/url/url.php';
-require_once __DIR__ . '/models/regex.php';
-require_once __DIR__ . '/models/module.php';
-require_once __DIR__ . '/models/log/log.php';
-require_once __DIR__ . '/models/flusher.php';
-require_once __DIR__ . '/models/match.php';
-require_once __DIR__ . '/models/action.php';
-require_once __DIR__ . '/models/request.php';
-require_once __DIR__ . '/models/header.php';
-require_once __DIR__ . '/models/group.php';
+/**
+ * Autoload namespaced Redirection classes from the includes directory.
+ *
+ * @param string $requested_class Requested class name.
+ * @return void
+ */
+function redirection_autoload( $requested_class ) {
+	redirection_autoload_namespace( $requested_class, 'Redirection\\', __DIR__ . '/includes/' );
+}
+
+spl_autoload_register( 'redirection_autoload' );
+
+/**
+ * Set REDIRECTION_REFACTOR to true to enable the refactor mode, using autoloading for all classes.
+ * This is implemented as a dual-mode plugin to allow for a smooth(er) transition to the new codebase.
+ *
+ * @return bool
+ */
+function red_is_refactor_enabled() {
+	// @phpstan-ignore booleanAnd.rightAlwaysTrue
+	return defined( 'REDIRECTION_REFACTOR' ) && REDIRECTION_REFACTOR;
+}
+
+if ( red_is_refactor_enabled() ) {
+	require_once __DIR__ . '/redirection-refactor.php';
+} else {
+	require_once __DIR__ . '/redirection-settings.php';
+	require_once __DIR__ . '/models/options.php';
+	require_once __DIR__ . '/models/redirect/redirect.php';
+	require_once __DIR__ . '/models/url/url.php';
+	require_once __DIR__ . '/models/regex.php';
+	require_once __DIR__ . '/models/module.php';
+	require_once __DIR__ . '/models/log/log.php';
+	require_once __DIR__ . '/models/flusher.php';
+	require_once __DIR__ . '/models/match.php';
+	require_once __DIR__ . '/models/action.php';
+	require_once __DIR__ . '/models/request.php';
+	require_once __DIR__ . '/models/header.php';
+	require_once __DIR__ . '/models/group.php';
+}
 
 /**
  * Clear PHP opcache when plugin is updated. This is to help with mid-update errors.
@@ -99,6 +164,18 @@ function red_is_wpcli() {
 }
 
 /**
+ * Detect a plain PHP CLI context (e.g., a cron script that loads wp-load.php
+ * directly). Distinct from red_is_wpcli(), which is only true under WP-CLI.
+ * Used to skip front-end redirect enforcement that would otherwise call die()
+ * and silently terminate the CLI process.
+ *
+ * @return bool
+ */
+function red_is_cli() {
+	return PHP_SAPI === 'cli';
+}
+
+/**
  * @return bool
  */
 function red_is_admin() {
@@ -113,10 +190,15 @@ function red_is_admin() {
  * @return void
  */
 function red_start_rest() {
-	require_once __DIR__ . '/redirection-admin.php';
-	require_once __DIR__ . '/api/api.php';
+	if ( red_is_refactor_enabled() ) {
+		Redirection\Api\Api::init();
+		Redirection\Plugin\Admin::init();
+		remove_action( 'rest_api_init', 'red_start_rest' );
+		return;
+	}
 
-	Redirection_Api::init();
+	require_once __DIR__ . '/redirection-admin.php';
+	Redirection\Api\Api::init();
 	Redirection_Admin::init();
 
 	remove_action( 'rest_api_init', 'red_start_rest' );
@@ -129,14 +211,35 @@ function redirection_locale() {
 	load_plugin_textdomain( 'redirection', false, dirname( plugin_basename( REDIRECTION_FILE ) ) . '/locale/' );
 }
 
-if ( red_is_admin() || red_is_wpcli() ) {
+if ( red_is_refactor_enabled() ) {
+	if ( red_is_admin() || red_is_wpcli() ) {
+		register_activation_hook( REDIRECTION_FILE, [ Redirection\Plugin\Admin::class, 'plugin_activated' ] );
+
+		// @phpstan-ignore return.void
+		add_action( 'init', [ Redirection\Plugin\Admin::class, 'init' ] );
+	} else {
+		// @phpstan-ignore return.void
+		add_action( 'plugins_loaded', [ Redirection\Plugin\Front::class, 'init' ] );
+	}
+
+	if ( red_is_wpcli() ) {
+		WP_CLI::add_command( 'redirection', Redirection\Plugin\Cli::class );
+
+		add_action(
+			Redirection\Plugin\Flusher::DELETE_HOOK,
+			function () {
+				$flusher = new Redirection\Plugin\Flusher();
+				$flusher->flush();
+			}
+		);
+	}
+} elseif ( red_is_admin() || red_is_wpcli() ) {
 	require_once __DIR__ . '/redirection-admin.php';
-	require_once __DIR__ . '/api/api.php';
 } else {
 	require_once __DIR__ . '/redirection-front.php';
 }
 
-if ( red_is_wpcli() ) {
+if ( ! red_is_refactor_enabled() && red_is_wpcli() ) {
 	require_once __DIR__ . '/redirection-cli.php';
 }
 

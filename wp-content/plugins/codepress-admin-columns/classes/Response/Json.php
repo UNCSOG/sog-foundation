@@ -9,28 +9,24 @@ use LogicException;
 class Json
 {
 
-    const MESSAGE = 'message';
+    public const MESSAGE = 'message';
 
-    /**
-     * @var array
-     */
-    protected $parameters = [];
+    protected array $parameters = [];
 
-    /**
-     * @var array
-     */
-    protected $headers = [];
+    protected array $headers = [];
 
-    /**
-     * @var int
-     */
-    protected $status_code = 200;
+    protected int $status_code = 200;
 
-    public function __construct()
+    public function __construct(array $parameters = [])
     {
         $this->set_header('Content-Type', 'application/json');
+
+        $this->parameters = $parameters;
     }
 
+    /**
+     * @return never
+     */
     public function send(): void
     {
         if (empty($this->parameters)) {
@@ -38,7 +34,6 @@ class Json
         }
 
         $this->send_response($this->parameters);
-        wp_send_json($this->parameters, $this->status_code);
     }
 
     private function send_response($data): void
@@ -69,12 +64,6 @@ class Json
         ]);
     }
 
-    /**
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this
-     */
     public function set_parameter($key, $value): self
     {
         $this->parameters[$key] = $value;

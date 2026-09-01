@@ -31,7 +31,7 @@ class ParameterResolver
      * @throws InvalidDefinition A parameter has no value defined or guessable.
      * @return array Parameters to use to call the function.
      */
-    public function resolveParameters(MethodInjection $definition = null, ReflectionMethod $method = null, array $parameters = [])
+    public function resolveParameters(?MethodInjection $definition = null, ?ReflectionMethod $method = null, array $parameters = [])
     {
         $args = [];
         if (!$method) {

@@ -15,7 +15,6 @@ namespace Beehive\Core\Views;
 defined( 'WPINC' ) || die;
 
 use Beehive\Core\Helpers;
-use Beehive\Core\Controllers\Assets;
 use Beehive\Core\Utils\Abstracts\View;
 
 /**
@@ -35,8 +34,8 @@ class Admin extends View {
 	public function init() {
 		// Localization.
 		add_filter( 'beehive_assets_scripts_common_localize_vars', array( $this, 'common_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-settings', array( $this, 'settings_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-dashboard', array( $this, 'dashboard_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'settings_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'dashboard_vars' ) );
 	}
 
 	/**
@@ -47,10 +46,7 @@ class Admin extends View {
 	 * @return void
 	 */
 	public function dashboard_page() {
-		echo '<div id="beehive-dashboard-app"></div>';
-
-		Assets::instance()->enqueue_style( 'beehive-dashboard' );
-		Assets::instance()->enqueue_script( 'beehive-dashboard' );
+		$this->render_admin_page();
 	}
 
 	/**
@@ -61,10 +57,7 @@ class Admin extends View {
 	 * @return void
 	 */
 	public function accounts_page() {
-		echo '<div id="beehive-accounts-app"></div>';
-
-		Assets::instance()->enqueue_style( 'beehive-accounts' );
-		Assets::instance()->enqueue_script( 'beehive-accounts' );
+		$this->render_admin_page();
 	}
 
 	/**
@@ -75,10 +68,7 @@ class Admin extends View {
 	 * @return void
 	 */
 	public function settings_page() {
-		echo '<div id="beehive-settings-app"></div>';
-
-		Assets::instance()->enqueue_style( 'beehive-settings' );
-		Assets::instance()->enqueue_script( 'beehive-settings' );
+		$this->render_admin_page();
 	}
 
 	/**
@@ -201,7 +191,7 @@ class Admin extends View {
 	 */
 	public function common_vars( $vars ) {
 		/* translators: %s: heart icon */
-		$footer_text  = sprintf( __( 'Made with %s by WPMU DEV', 'ga_trans' ), '<i class="sui-icon-heart"></i>' );
+		$footer_text  = sprintf( __( 'Made with %s by WPMU DEV', 'ga_trans' ), '♡' );
 		$custom_image = apply_filters( 'wpmudev_branding_hero_image', '' );
 		$whitelabled  = apply_filters( 'wpmudev_branding_hide_branding', false );
 
@@ -224,23 +214,62 @@ class Admin extends View {
 				'network' => $this->get_settings( true ),
 			);
 
+			// Get custom plugin config from whitelabel settings with fallback.
+			$labels_config = array(
+				'name'       => Helpers\General::plugin_name( false ),
+				'icon_type'  => '',
+				'icon_class' => '',
+				'thumb_id'   => '',
+				'icon_url'   => '',
+			);
+
 			// White labelling.
 			$vars['whitelabel'] = array(
 				'hide_branding' => apply_filters( 'wpmudev_branding_hide_branding', false ),
 				'hide_doc_link' => apply_filters( 'wpmudev_branding_hide_doc_link', false ),
 				'footer_text'   => apply_filters( 'wpmudev_branding_footer_text', $footer_text ),
+				'custom_footer' => apply_filters( 'wpmudev_branding_change_footer', false ),
 				'custom_image'  => $custom_image,
 				'is_unbranded'  => empty( $custom_image ) && $whitelabled,
 				'is_rebranded'  => ! empty( $custom_image ) && $whitelabled,
+				'labels_config' => $labels_config,
 			);
 
 			// Urls.
 			$vars['urls'] = array(
-				'base'     => BEEHIVE_URL,
-				'site_url' => $this->is_network() ? network_site_url() : site_url(),
-				'plugins'  => is_multisite() ? network_admin_url( 'plugins.php' ) : admin_url( 'plugins.php' ),
-				'settings' => Helpers\Template::settings_url( 'permissions', $this->is_network() ),
-				'accounts' => Helpers\Template::accounts_url( 'google', $this->is_network() ),
+				'base'           => BEEHIVE_URL,
+				'site_url'       => $this->is_network() ? network_site_url() : site_url(),
+				'plugins'        => is_multisite() ? network_admin_url( 'plugins.php' ) : admin_url( 'plugins.php' ),
+				'settings'       => Helpers\Template::settings_url( 'permissions', $this->is_network() ),
+				'accounts'       => Helpers\Template::accounts_url( 'google', $this->is_network() ),
+				'analytics_docs' => 'https://wpmudev.com/docs/wpmu-dev-plugins/beehive/#account-analytics',
+				'footer'         => array(
+					'pro'    => array(
+						'hub'       => 'https://wpmudev.com/hub2/',
+						'plugins'   => 'https://wpmudev.com/projects/category/plugins/',
+						'roadmap'   => 'https://wpmudev.com/roadmap/',
+						'support'   => 'https://wpmudev.com/hub/support/',
+						'docs'      => 'https://wpmudev.com/docs/',
+						'community' => 'https://wpmudev.com/hub2/community/',
+						'tos'       => 'https://wpmudev.com/terms-of-service/',
+						'privacy'   => 'https://incsub.com/privacy-policy/',
+					),
+					'free'   => array(
+						'free_plugins' => 'https://profiles.wordpress.org/wpmudev#content-plugins',
+						'membership'   => 'https://wpmudev.com/features/',
+						'roadmap'      => 'https://wpmudev.com/roadmap/',
+						'support'      => 'https://wordpress.org/support/plugin/beehive-analytics',
+						'docs'         => 'https://wpmudev.com/docs/',
+						'hub'          => 'https://wpmudev.com/hub-welcome/',
+						'tos'          => 'https://wpmudev.com/terms-of-service/',
+						'privacy'      => 'https://incsub.com/privacy-policy/',
+					),
+					'social' => array(
+						'facebook'  => 'https://www.facebook.com/wpmudev',
+						'twitter'   => 'https://twitter.com/wpmudev',
+						'instagram' => 'https://www.instagram.com/wpmu_dev/',
+					),
+				),
 			);
 
 			// Flags.
@@ -250,7 +279,6 @@ class Admin extends View {
 				'multisite'        => is_multisite() ? 1 : 0,
 				'admin'            => Helpers\Permission::is_admin_user( $this->is_network() ) ? 1 : 0,
 				'super_admin'      => is_multisite() && current_user_can( 'manage_network' ) ? 1 : 0,
-				'is_pro'           => beehive_analytics()->is_pro(),
 				'in_network_admin' => is_network_admin() ? 1 : 0,
 				'in_subsite_admin' => is_admin() && ! is_network_admin() ? 1 : 0,
 			);
@@ -409,6 +437,8 @@ class Admin extends View {
 		$users = array();
 
 		foreach ( $result as $user ) {
+			// Add avatar URL to each user.
+			$user->avatar_url   = get_avatar_url( $user->ID, array( 'size' => 80 ) );
 			$users[ $user->ID ] = $user;
 		}
 

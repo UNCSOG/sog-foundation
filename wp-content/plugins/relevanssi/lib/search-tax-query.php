@@ -212,7 +212,7 @@ function relevanssi_process_tax_query_row(
 	}
 
 	if ( $exists_query ) {
-		$taxonomy = sanitize_key($row['taxonomy']);
+		$taxonomy = sanitize_key( $row['taxonomy'] );
 		$operator = 'IN';
 		if ( 'not exists' === strtolower( $row['operator'] ) ) {
 			$operator = 'NOT IN';
@@ -406,11 +406,16 @@ function relevanssi_term_tax_id_from_row( array $row ): array {
 
 	if ( ! empty( $term_in ) ) {
 		$row_taxonomy = sanitize_text_field( $row['taxonomy'] );
+		if ( ! relevanssi_validate_taxonomy( $row_taxonomy ) ) {
+			return array();
+		}
+
+		$prepared = $wpdb->prepare( 'tt.taxonomy = %s', $row_taxonomy );
 
 		$tt_q = "SELECT tt.term_taxonomy_id
 				  FROM $wpdb->term_taxonomy AS tt
 				  LEFT JOIN $wpdb->terms AS t ON (tt.term_id=t.term_id)
-				  WHERE tt.taxonomy = '$row_taxonomy' AND t.$type IN ($term_in)";
+				  WHERE $prepared AND t.$type IN ($term_in)";
 		// Clean: $row_taxonomy is sanitized, each term in $term_in is sanitized.
 		$term_tax_id = $wpdb->get_col( $tt_q ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}

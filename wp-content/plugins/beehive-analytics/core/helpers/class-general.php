@@ -72,10 +72,12 @@ class General {
 	 *
 	 * @since 3.2.0
 	 *
+	 * @param bool $is_sidebar Whether to get the name for sidebar or not. We may want to use different name in sidebar.
+	 *
 	 * @return bool
 	 */
-	public static function plugin_name() {
-		$name = beehive_analytics()->is_pro() ? __( 'Beehive Pro', 'ga_trans' ) : __( 'Beehive', 'ga_trans' );
+	public static function plugin_name( $is_sidebar = true ) {
+			$name = __( 'Beehive', 'ga_trans' );
 
 		/**
 		 * Filter to modify Beehive plugin name.
@@ -209,54 +211,6 @@ class General {
 		}
 
 		return ucfirst( $name );
-	}
-
-	/**
-	 * Get the current membership status using Dash plugin.
-	 *
-	 * We will get the status using WPMUDEV Dashboard plugin.
-	 *
-	 * @since 3.2.0
-	 *
-	 * @return string
-	 */
-	public static function membership_status() {
-		static $status = null;
-
-		// Get the status.
-		if ( is_null( $status ) ) {
-			$status = 'renew';
-
-			// Dashboard is active and required methods are available.
-			if (
-				class_exists( 'WPMUDEV_Dashboard' )
-				&& isset( WPMUDEV_Dashboard::$api, WPMUDEV_Dashboard::$upgrader )
-				&& method_exists( WPMUDEV_Dashboard::$api, 'get_membership_status' )
-				&& method_exists( WPMUDEV_Dashboard::$upgrader, 'user_can_install' )
-			) {
-				// Check if current membership has access.
-				$has_access = WPMUDEV_Dashboard::$upgrader->user_can_install( 51, true );
-
-				// If no access and not an expired type request to upgrade.
-				if ( ! $has_access ) {
-					// Get membership type.
-					$membership_type = WPMUDEV_Dashboard::$api->get_membership_status();
-					// expired/free/inactive = renew.
-					$status = in_array( $membership_type, array( 'expired', 'free', '' ), true ) ? 'renew' : 'upgrade';
-				} else {
-					$status = 'pro';
-				}
-			}
-		}
-
-		/**
-		 * Filter to modify WPMUDEV membership status or user.
-		 *
-		 * @since 3.2.0
-		 *
-		 * @param string $status Status.
-		 */
-		return apply_filters( 'beehive_wpmudev_membership_status', $status );
 	}
 
 	/**

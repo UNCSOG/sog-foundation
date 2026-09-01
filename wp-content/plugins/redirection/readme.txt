@@ -2,8 +2,8 @@
 Contributors: johnny5
 Donate link: https://redirection.me/donation/
 Tags: redirect, htaccess, 301, 404, apache
-Tested up to: 6.9
-Stable tag: 5.7.5
+Tested up to: 7.1
+Stable tag: 5.10.0
 License: GPLv3
 
 Manage 301 redirects, track 404 errors, and improve your site. No knowledge of Apache or Nginx required.
@@ -18,7 +18,7 @@ It has been a WordPress plugin for over 10 years and has been recommended countl
 
 Full documentation can be found at [https://redirection.me](https://redirection.me)
 
-Redirection is compatible with PHP from 7.4 to 8.4.
+Redirection is compatible with PHP from 7.4 to 8.5.
 
 = Redirect manager =
 
@@ -187,6 +187,32 @@ The plugin works in a similar manner to how WordPress handles permalinks and sho
 == Changelog ==
 
 A x.1 version increase introduces new or updated features and can be considered to contain 'breaking' changes. A x.x.1 increase is purely a bug fix and introduces no new features, and can be considered as containing no breaking changes.
+
+= 5.10.0 - 29th August 2026 =
+* Add support for importing/exporting `_redirects` files
+* Add a Yoast SEO redirect importer
+* Allow more than 25 groups to be used in the admin UI
+* Fix passthrough redirects missing their target in the UI
+* Fix Apache error encoder for errors other than 403
+* Rework the database install process to avoid potential problems
+* Tighten capability checks and improve proxy IP address handling
+
+= 5.9.0 - 11th July 2026 =
+* New and more powerful import/export
+* Export everything, including settings
+* Copy/paste or type redirects directly in a text box
+* Preview imports and exports
+* Duplicate redirect support when importing
+* Improve .htaccess support
+
+= 5.8.1 - 1st July 2026 =
+* Escape CSV export values
+
+= 5.8.0 - 8th June 2026 =
+* Improve WP 7 UI
+* Fix missing time in logs
+* Don't run redirects on CLI usage
+* Allow editing of disabled redirects
 
 = 5.7.5 - 1st March 2026 =
 * Fix delete all regression from 5.7.4

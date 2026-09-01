@@ -203,9 +203,6 @@ class Menu extends Base {
 	 * @return array
 	 */
 	public function upgrade_menu( $menu_items ) {
-		if ( beehive_analytics()->is_pro() ) {
-			return $menu_items;
-		}
 		// Add upgrade page.
 		if ( current_user_can( Capability::SETTINGS_CAP ) ) {
 				$menu_items['https://wpmudev.com/project/beehive-analytics-pro/?utm_source=beehive&utm_medium=plugin&utm_campaign=beehive_submenu_upsell'] = array(

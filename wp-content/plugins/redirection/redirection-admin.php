@@ -1,9 +1,10 @@
 <?php
 
 require_once __DIR__ . '/models/monitor.php';
-require_once __DIR__ . '/models/file-io.php';
-require_once __DIR__ . '/database/database.php';
 require_once __DIR__ . '/redirection-capabilities.php';
+
+use Redirection\Database\Database;
+use Redirection\Database\Status;
 
 class Redirection_Admin {
 	/**
@@ -69,7 +70,6 @@ class Redirection_Admin {
 		register_uninstall_hook( REDIRECTION_FILE, [ 'Redirection_Admin', 'plugin_uninstall' ] );
 
 		$this->monitor = new Red_Monitor( Red_Options::get() );
-		$this->run_hacks();
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Redirection_Admin {
 	 * @return void
 	 */
 	public static function plugin_activated() {
-		Red_Database::apply_to_sites(
+		Database::apply_to_sites(
 			function () {
 				Red_Flusher::clear();
 				red_set_options();
@@ -90,7 +90,7 @@ class Redirection_Admin {
 	 * @return void
 	 */
 	public static function plugin_deactivated() {
-		Red_Database::apply_to_sites(
+		Database::apply_to_sites(
 			function () {
 				Red_Flusher::clear();
 			}
@@ -102,9 +102,9 @@ class Redirection_Admin {
 	 * @return void
 	 */
 	public static function plugin_uninstall() {
-		$database = Red_Database::get_latest_database();
+		$database = Database::get_latest_database();
 
-		Red_Database::apply_to_sites(
+		Database::apply_to_sites(
 			function () use ( $database ) {
 				$database->remove();
 			}
@@ -131,7 +131,7 @@ class Redirection_Admin {
 		}
 
 		// Default manual update, with nag
-		$status = new Red_Database_Status();
+		$status = new Status();
 
 		$message = false;
 		if ( $status->needs_installing() ) {
@@ -148,7 +148,7 @@ class Redirection_Admin {
 
 		// Known HTML and so isn't escaped
 		// phpcs:ignore
-		echo '<div class="update-nag notice notice-warning" style="width: 95%">' . $message . '</div>';
+		echo '<div class="update-nag notice notice-warning redirection-notice" style="width: 95%">' . $message . '</div>';
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Redirection_Admin {
 	 */
 	public function show_incomplete_installation_notice() {
 		?>
-		<div class="notice notice-error">
+		<div class="notice notice-error redirection-notice">
 			<p>
 				<strong><?php esc_html_e( 'Redirection Error: Incomplete Installation Detected', 'redirection' ); ?></strong>
 			</p>
@@ -179,8 +179,8 @@ class Redirection_Admin {
 	 */
 	private function automatic_upgrade() {
 		$loop = 0;
-		$status = new Red_Database_Status();
-		$database = new Red_Database();
+		$status = new Status();
+		$database = new Database();
 
 		// Loop until the DB is upgraded, or until a max is exceeded (just in case)
 		while ( $loop < 20 ) {
@@ -274,7 +274,7 @@ class Redirection_Admin {
 	 * @return array<int|string, string>
 	 */
 	public function plugin_settings( array $links ): array {
-		$status = new Red_Database_Status();
+		$status = new Status();
 		if ( $status->needs_updating() ) {
 			array_unshift( $links, '<a style="color: red" href="' . esc_url( $this->get_plugin_url() ) . '&amp;sub=support">' . __( 'Upgrade Database', 'redirection' ) . '</a>' );
 		}
@@ -323,7 +323,9 @@ class Redirection_Admin {
 	 * @return string|null
 	 */
 	private function get_query( $name ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading current admin query parameters to decide which view to render.
 		if ( isset( $_GET[ $name ] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading current admin query parameters to decide which view to render.
 			return sanitize_text_field( $_GET[ $name ] );
 		}
 
@@ -335,6 +337,8 @@ class Redirection_Admin {
 	 */
 	public function redirection_head() {
 		global $wp_version;
+
+		nocache_headers();
 
 		// Does user have access to this page?
 		if ( $this->get_current_page() === false ) {
@@ -348,12 +352,12 @@ class Redirection_Admin {
 
 			if ( $action === 'fixit' ) {
 				$this->run_fixit();
-			} elseif ( $action === 'rest_api' && isset( $_REQUEST['rest_api'] ) && is_string( $_REQUEST['rest_api'] ) ) {
+			} elseif ( $action === 'rest_api' && isset( $_REQUEST['rest_api'] ) && is_string( $_REQUEST['rest_api'] ) && Redirection_Capabilities::has_access( Redirection_Capabilities::CAP_OPTION_MANAGE ) ) {
 				$this->set_rest_api( intval( $_REQUEST['rest_api'], 10 ) );
 			}
 		}
 
-		$build = REDIRECTION_VERSION . '-' . REDIRECTION_BUILD;
+		$build = REDIRECTION_VERSION;
 		$preload = $this->get_preload_data();
 		$options = Red_Options::get();
 		$versions = array(
@@ -382,7 +386,7 @@ class Redirection_Admin {
 
 		$assets = include plugin_dir_path( REDIRECTION_FILE ) . 'build/redirection.asset.php';
 		$dependencies = $assets['dependencies'];
-		$version = $assets['version'];
+		$version = REDIRECTION_VERSION;
 
 		wp_enqueue_script( 'redirection', plugin_dir_url( REDIRECTION_FILE ) . 'build/redirection.js', $dependencies, $version, true );
 		wp_enqueue_style( 'redirection', plugin_dir_url( REDIRECTION_FILE ) . 'build/redirection.css', [], $version );
@@ -394,7 +398,7 @@ class Redirection_Admin {
 			$is_new = version_compare( (string) $options['update_notice'], $major_version ) < 0;
 		}
 
-		$status = new Red_Database_Status();
+		$status = new Status();
 		$status->check_tables_exist();
 
 		// Fix some sites having a version set to +OK - not sure why
@@ -426,6 +430,7 @@ class Redirection_Admin {
 				'preload' => $preload,
 				'versions' => implode( "\n", $versions ),
 				'version' => REDIRECTION_VERSION,
+				'build' => REDIRECTION_VERSION,
 				'database' => $status->get_json(),
 				'caps' => [
 					'pages' => Redirection_Capabilities::get_available_pages(),
@@ -438,42 +443,6 @@ class Redirection_Admin {
 		wp_set_script_translations( 'redirection', 'redirection' );
 
 		$this->add_help_tab();
-	}
-
-	/**
-	 * Some plugins misbehave, so this attempts to 'fix' them so Redirection can get on with it's work
-	 * @return void
-	 */
-	private function run_hacks() {
-		add_filter( 'ip-geo-block-admin', array( $this, 'ip_geo_block' ) );
-	}
-
-	/**
-	 * This works around the IP Geo Block plugin being very aggressive and breaking Redirection
-	 *
-	 * @param array<string, mixed> $validate
-	 * @return array<string, mixed>
-	 */
-	public function ip_geo_block( array $validate ): array {
-		$url = Redirection_Request::get_request_url();
-		$override = array(
-			'tools.php?page=redirection.php',
-			'action=red_proxy&rest_path=redirection',
-		);
-
-		foreach ( $override as $path ) {
-			if ( strpos( $url, $path ) !== false ) {
-				return array(
-					'result' => 'passed',
-					'auth' => false,
-					'asn' => false,
-					'code' => false,
-					'ip' => false,
-				);
-			}
-		}
-
-		return $validate;
 	}
 
 	/**
@@ -503,19 +472,9 @@ class Redirection_Admin {
 	}
 
 	/**
-	 * @return array{importers: list<array{id: string, name: string, total: int}>}|array{pluginStatus: array<string, mixed>}|array{}
+	 * @return array{pluginStatus: array<string, mixed>}|array{}
 	 */
 	private function get_preload_data(): array {
-		$status = new Red_Database_Status();
-
-		if ( $status->needs_installing() ) {
-			include_once __DIR__ . '/models/importer.php';
-
-			return [
-				'importers' => Red_Plugin_Importer::get_plugins(),
-			];
-		}
-
 		if ( $this->get_current_page() === 'support' ) {
 			require_once dirname( REDIRECTION_FILE ) . '/models/fixer.php';
 
@@ -633,7 +592,7 @@ class Redirection_Admin {
 			return;
 		}
 		?>
-		<div class="notice notice-error">
+		<div class="notice notice-error redirection-notice">
 			<h1><?php echo esc_html( $this->fixit_failed->get_error_message() ); ?></h1>
 			<p><?php echo esc_html( $this->fixit_failed->get_error_data() ); ?></p>
 		</div>
@@ -676,7 +635,7 @@ class Redirection_Admin {
 				);
 				?>
 			</p>
-			<p><code><?php echo esc_html( plugin_dir_url( REDIRECTION_FILE ) . 'redirection.js?ver=' . rawurlencode( REDIRECTION_VERSION ) . '-' . rawurlencode( REDIRECTION_BUILD ) ); ?></code></p>
+			<p><code><?php echo esc_html( plugin_dir_url( REDIRECTION_FILE ) . 'redirection.js?ver=' . rawurlencode( REDIRECTION_VERSION ) ); ?></code></p>
 			<p><?php esc_html_e( 'Please note that Redirection requires the WordPress REST API to be enabled. If you have disabled this then you won\'t be able to use Redirection', 'redirection' ); ?></p>
 			<p>
 				<?php
@@ -806,8 +765,6 @@ class Redirection_Admin {
 		$current_page = $this->get_current_page();
 
 		if ( $page !== null && $current_page !== 'redirect' && $page === 'redirection.php' ) {
-			$this->try_export_logs();
-			$this->try_export_redirects();
 			$this->try_export_rss();
 		}
 	}
@@ -827,7 +784,7 @@ class Redirection_Admin {
 
 				$items = Red_Item::get_all_for_module( intval( $module, 10 ) );
 
-				$exporter = Red_FileIO::create( 'rss' );
+				$exporter = ( new \Redirection\ImportExport\FormatFactory() )->create( 'rss' );
 				if ( $exporter !== false ) {
 					$exporter->force_download();
 
@@ -837,52 +794,36 @@ class Redirection_Admin {
 			}
 		}
 	}
-
-	/**
-	 * @return void
-	 */
-	private function try_export_logs() {
-		if ( Redirection_Capabilities::has_access( Redirection_Capabilities::CAP_IO_MANAGE ) && isset( $_POST['export-csv'] ) && check_admin_referer( 'wp_rest' ) !== false ) {
-			if ( $this->get_current_page() === 'log' ) {
-				Red_Redirect_Log::export_to_csv();
-			} elseif ( $this->get_current_page() === '404s' ) {
-				Red_404_Log::export_to_csv();
-			}
-
-			die();
-		}
-	}
-
-	/**
-	 * @return void
-	 */
-	private function try_export_redirects() {
-		$sub = $this->get_query( 'sub' );
-		if ( $sub !== 'io' ) {
-			return;
-		}
-
-		$export = $this->get_query( 'export' );
-		$exporter = $this->get_query( 'exporter' );
-
-		if ( Redirection_Capabilities::has_access( Redirection_Capabilities::CAP_IO_MANAGE ) && $export !== null && $exporter !== null && check_admin_referer( 'wp_rest' ) !== false ) {
-			$export = Red_FileIO::export( $export, $exporter );
-
-			if ( $export !== false ) {
-				$export['exporter']->force_download();
-
-				// This data is not displayed and will be downloaded to a file
-				echo str_replace( '&amp;', '&', wp_kses( $export['data'], 'strip' ) );
-				die();
-			}
-		}
-	}
 }
 
 register_activation_hook( REDIRECTION_FILE, array( 'Redirection_Admin', 'plugin_activated' ) );
 
 // @phpstan-ignore return.void
 add_action( 'init', array( 'Redirection_Admin', 'init' ) );
+
+// Really wish this wasn't necessary, but some plugins aggressively mis-represent a problem and add a notice to every admin page. Here we remove
+// that notice so people don't contact Redirection support for a problem caused by another plugin.
+add_filter(
+	'option_rank_math_notifications',
+	function ( $notifications ) {
+		if ( ! is_admin() || ! is_array( $notifications ) ) {
+			return $notifications;
+		}
+
+		return array_values(
+			array_filter(
+				$notifications,
+				static function ( $notification ) {
+					if ( ! is_array( $notification ) || ! isset( $notification['options'] ) || ! is_array( $notification['options'] ) ) {
+						return true;
+					}
+
+					return ! isset( $notification['options']['id'] ) || $notification['options']['id'] !== 'conflicting_redirections_plugins';
+				}
+			)
+		);
+	}
+);
 
 // This is causing a lot of problems with the REST API - disable qTranslate
 add_filter(

@@ -122,7 +122,9 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 			if ( $session->isSetOauthInProgress() ) {
 				// there is only a three minute window that Postman will expect a Grant Code, once Grant is clicked by the user
 				$this->logger->debug( 'Looking for grant code' );
-				if ( isset( $_GET ['code'] ) ) {
+				$transactionId = $session->getOauthInProgress();
+				$incomingState = isset( $_GET['state'] ) ? sanitize_text_field( $_GET['state'] ) : '';
+				if ( isset( $_GET ['code'] ) && ! empty( $incomingState ) && $incomingState === $transactionId ) {
 					$this->logger->debug( 'Found authorization grant code' );
 
 					// queue the function that processes the incoming grant code
@@ -154,6 +156,8 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 					$this,
 					'postmanModifyLinksOnPluginsListPage',
 			) );
+
+			add_action( 'admin_head', array( $this, 'addPluginsPageProLinkStyles' ) );
 
 			require_once( 'PostmanPluginFeedback.php' );
 		}
@@ -297,6 +301,22 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 		 * @param mixed $links
 		 * @return multitype:
 		 */
+		public function addPluginsPageProLinkStyles() {
+			global $pagenow;
+
+			if ( 'plugins.php' !== $pagenow || post_smtp_has_pro() ) {
+				return;
+			}
+			?>
+			<style type="text/css">
+				.post-smtp-pro-link {
+					color: #00a32a !important;
+					font-weight: bold;
+				}
+			</style>
+			<?php
+		}
+
 		public function postmanModifyLinksOnPluginsListPage( $links ) {
 			// only administrators should be able to trigger this
 			if ( PostmanUtils::isAdmin() ) {
@@ -305,6 +325,18 @@ if ( ! class_exists( 'PostmanAdminController' ) ) {
 						sprintf( '<a href="%s" class="postman_settings">%s</a>',  admin_url( 'admin.php?page=postman%2Fconfiguration' ), __( 'Settings', 'post-smtp' ) ),
 						sprintf( '<a href="%s" class="postman_settings">%s</a>', 'https://postmansmtp.com', __( 'Visit us', 'post-smtp' ) ),
 				);
+
+				if ( ! post_smtp_has_pro() ) {
+					array_unshift(
+						$mylinks,
+						sprintf(
+							'<a href="%s" target="_blank" rel="noopener noreferrer" class="post-smtp-pro-link">%s</a>',
+							esc_url( 'https://postmansmtp.com/pricing/?utm_source=plugin&utm_medium=plugins_page' ),
+							esc_html__( 'Get Post SMTP Pro', 'post-smtp' )
+						)
+					);
+				}
+
 				return array_merge( $mylinks, $links );
 			}
 		}

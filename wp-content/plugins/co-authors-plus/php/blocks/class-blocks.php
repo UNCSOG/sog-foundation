@@ -121,13 +121,20 @@ class Blocks {
 	 * @since 3.6.0
 	 */
 	public static function enqueue_store(): void {
-		$asset = require dirname( COAUTHORS_PLUS_FILE ) . '/build/blocks-store/index.asset.php';
+		$asset_file = dirname( COAUTHORS_PLUS_FILE ) . '/build/blocks-store/index.asset.php';
+
+		if ( ! file_exists( $asset_file ) ) {
+			return;
+		}
+
+		$asset = require $asset_file;
 
 		wp_enqueue_script(
 			'coauthors-blocks-store',
 			plugins_url( '/co-authors-plus/build/blocks-store/index.js' ),
 			$asset['dependencies'],
-			$asset['version']
+			$asset['version'],
+			true
 		);
 
 		$data = apply_filters(

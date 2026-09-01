@@ -174,6 +174,10 @@ class Data extends Endpoint {
 
 		// Get the result.
 		$users = get_users( $args );
+		// Add avatar URL to each user.
+		foreach ( $users as $key => $user ) {
+			$users[ $key ]->avatar_url = get_avatar_url( $user->ID, array( 'size' => 80 ) );
+		}
 
 		// Send response.
 		return $this->get_response( $users );

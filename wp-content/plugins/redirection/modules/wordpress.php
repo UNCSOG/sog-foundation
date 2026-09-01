@@ -1,5 +1,7 @@
 <?php
 
+use Redirection\Database\Status;
+
 /**
  * WordPress redirect module.
  *
@@ -167,7 +169,7 @@ class WordPress_Module extends Red_Module {
 	 */
 	public function log_back_compat( $insert ) {
 		// Remove columns not supported in older versions
-		$status = new Red_Database_Status();
+		$status = new Status();
 
 		if ( ! $status->does_support( '4.2' ) ) {
 			foreach ( [ 'request_data', 'request_method', 'http_code', 'domain', 'redirect_by' ] as $ignore ) {
@@ -304,6 +306,13 @@ class WordPress_Module extends Red_Module {
 	 * @return void
 	 */
 	public function canonical_domain() {
+		// In a plain PHP CLI bootstrap (e.g. a cron script that loads wp-load.php)
+		// there is no real HTTP request to redirect. Running die() here would
+		// silently terminate the CLI process before user code can execute.
+		if ( red_is_cli() ) {
+			return;
+		}
+
 		$target = $this->get_canonical_target();
 
 		if ( $target !== false ) {
@@ -320,6 +329,12 @@ class WordPress_Module extends Red_Module {
 	 */
 	public function init() {
 		if ( $this->matched !== false ) {
+			return;
+		}
+
+		// Skip the redirect loop in a plain PHP CLI bootstrap. A matched rule
+		// would call wp_redirect()+die() and silently terminate the CLI process.
+		if ( red_is_cli() ) {
 			return;
 		}
 

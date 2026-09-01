@@ -6,8 +6,8 @@
  * @subpackage helpers
  * @since      4.6.0
  * @copyright  2026 Melapress
- * @license    https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
- * @link       https://wordpress.org/plugins/wp-2fa/
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
+ * @link       https://wordpress.org/plugins/wp-security-audit-log/
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ if ( ! class_exists( '\WSAL\Helpers\User_Utils' ) ) {
 		/**
 		 * Build the correct label to display for a given user.
 		 *
-		 * @param WP_User $user   WordPress user object.
+		 * @param \WP_User $user   WordPress user object.
 		 *
 		 * @return string
 		 *
@@ -169,11 +169,11 @@ if ( ! class_exists( '\WSAL\Helpers\User_Utils' ) ) {
 				return '';
 			}
 
-			$tooltip  = '<strong>' . esc_attr__( 'Username: ', 'wp-security-audit-log' ) . '</strong>' . $user->data->user_login . '</br>';
-			$tooltip .= ( ! empty( $user->data->first_name ) ) ? '<strong>' . esc_attr__( 'First name: ', 'wp-security-audit-log' ) . '</strong>' . $user->data->first_name . '</br>' : '';
-			$tooltip .= ( ! empty( $user->data->last_name ) ) ? '<strong>' . esc_attr__( 'Last Name: ', 'wp-security-audit-log' ) . '</strong>' . $user->data->last_name . '</br>' : '';
-			$tooltip .= '<strong>' . esc_attr__( 'Email: ', 'wp-security-audit-log' ) . '</strong>' . $user->data->user_email . '</br>';
-			$tooltip .= '<strong>' . esc_attr__( 'Nickname: ', 'wp-security-audit-log' ) . '</strong>' . $user->data->user_nicename . '</br></br>';
+			$tooltip  = '<strong>' . \esc_attr__( 'Username: ', 'wp-security-audit-log' ) . '</strong>' . \esc_html( $user->data->user_login ) . '</br>';
+			$tooltip .= ( ! empty( $user->data->first_name ) ) ? '<strong>' . \esc_attr__( 'First name: ', 'wp-security-audit-log' ) . '</strong>' . \esc_html( $user->data->first_name ) . '</br>' : '';
+			$tooltip .= ( ! empty( $user->data->last_name ) ) ? '<strong>' . \esc_attr__( 'Last Name: ', 'wp-security-audit-log' ) . '</strong>' . \esc_html( $user->data->last_name ) . '</br>' : '';
+			$tooltip .= '<strong>' . \esc_attr__( 'Email: ', 'wp-security-audit-log' ) . '</strong>' . \esc_html( $user->data->user_email ) . '</br>';
+			$tooltip .= '<strong>' . \esc_attr__( 'Nickname: ', 'wp-security-audit-log' ) . '</strong>' . \esc_html( $user->data->user_nicename ) . '</br></br>';
 
 			/**
 			 * WSAL Filter: `wsal_additional_user_tooltip_content'
@@ -185,7 +185,7 @@ if ( ! class_exists( '\WSAL\Helpers\User_Utils' ) ) {
 			 * @param string $content Blank string to append to.
 			 * @param object  $user  - User object.
 			 */
-			$additional_content = apply_filters( 'wsal_additional_user_tooltip_content', '', $user );
+			$additional_content = \wp_kses_post( (string) \apply_filters( 'wsal_additional_user_tooltip_content', '', $user ) );
 
 			$tooltip .= $additional_content;
 

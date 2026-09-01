@@ -1,12 +1,12 @@
-﻿# Co-Authors Plus
+# Co-Authors Plus
 
-Stable tag: 3.7.0  
-Requires at least: 5.9  
-Tested up to: 6.8  
+Stable tag: 4.1.1  
+Requires at least: 6.4  
+Tested up to: 7.0  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
-Tags: authors, users, multiple authors, co-authors, multi-author, publishing  
+Tags: authors, users, multiple authors, co-authors, multi-author  
 Contributors: batmoo, danielbachhuber, automattic, GaryJ  
 
 Assign multiple bylines to posts, pages, and custom post types with a search-as-you-type input box.
@@ -17,16 +17,22 @@ Assign multiple bylines to posts, pages, and custom post types via a search-as-y
 
 Add writers as bylines without creating WordPress user accounts. Simply [create a guest author profile](https://github.com/Automattic/Co-Authors-Plus/wiki/Creating-and-editing-guest-authors) for the writer and assign the byline as you normally would.
 
-On the frontend, use the [Co-Authors Plus template tags](https://github.com/Automattic/Co-Authors-Plus/wiki/Template-tags) to list co-authors anywhere you'd normally list the author.
+On the frontend, use the [Co-Authors Plus template tags](https://github.com/Automattic/Co-Authors-Plus/wiki/Template-tags) or the [block editor blocks](https://github.com/Automattic/Co-Authors-Plus/wiki/Blocks) to list co-authors anywhere you'd normally list the author.
 
-**For more detailed documentation refer to [the GitHub Wiki for this plugin](https://github.com/Automattic/Co-Authors-Plus/wiki).**
+## Documentation
+
+- **Usage** — themer and site-owner guides live on the [GitHub Wiki](https://github.com/Automattic/Co-Authors-Plus/wiki): template tags, blocks, guest author management, and multisite.
+- **Developer reference** — lives in-repo under [`docs/`](./docs/) (not bundled in the distribution ZIP):
+  - [Filters and actions](./docs/filters.md)
+  - [REST API](./docs/rest-api.md)
+  - [Upgrading to 4.0](./docs/upgrading-to-4.0.md)
 
 Co-Authors Plus is an almost complete rewrite of the [Co-Authors](https://wordpress.org/plugins/co-authors/) plugin originally developed by Weston Ruter (2007). The original plugin was inspired by the '[Multiple Authors](https://txfx.net/2005/08/16/new-plugin-multiple-authors/)' plugin by Mark Jaquith (2005).
 
 ## Installation
 
 1. IMPORTANT: If you are using the original Co-Authors plugin, disable it before installing Co-Authors Plus.
-2. Extract the coauthors-plus.zip file and upload its contents to the `/wp-content/plugins/` directory. Alternately, you can install directly from the Plugin directory within your WordPress Install.
+2. Extract the co-authors-plus.zip file and upload its contents to the `/wp-content/plugins/` directory. Alternately, you can install directly from the Plugin directory within your WordPress Install.
 3. Activate the plugin through the "Plugins" menu in WordPress.
 4. Place [co-authors template tags](https://github.com/Automattic/Co-Authors-Plus/wiki/Template-tags) in your template.
 5. Add co-authors to your posts and pages.
@@ -67,4 +73,4 @@ Yes! You can disable guest authors entirely through a filter. Having the followi
 
 ## Change Log
 
-[View the change log](https://github.com/Automattic/Co-Authors-Plus/blob/master/CHANGELOG.md).
+[View the change log](https://github.com/Automattic/co-authors-plus/blob/develop/CHANGELOG.md).

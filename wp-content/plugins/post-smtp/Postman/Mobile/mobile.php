@@ -45,11 +45,11 @@ class Post_SMTP_Mobile {
 		add_filter( 'post_smtp_sanitize', array( $this, 'sanitize' ), 10, 3 );
         add_filter( 'post_smtp_admin_tabs', array( $this, 'tabs' ), 11 );
        
-		include_once 'includes/functions.php';
-        include_once 'includes/rest-api/v1/rest-api.php';
-        include_once 'includes/rest-api/v2/rest-api.php';
-        include_once 'includes/controller/v1/controller.php';
-        include_once 'includes/email-content.php';
+		include_once __DIR__ . '/includes/functions.php';
+        include_once __DIR__ . '/includes/rest-api/v1/rest-api.php';
+        include_once __DIR__ . '/includes/rest-api/v2/rest-api.php';
+        include_once __DIR__ . '/includes/controller/v1/controller.php';
+        include_once __DIR__ . '/includes/email-content.php';
         
         if( isset( $_GET['page'] ) && $_GET['page'] == 'postman/configuration' ) {
 			
@@ -131,28 +131,64 @@ class Post_SMTP_Mobile {
     }
 
     /**
-     * Generate QR code
+     * Resolve which QR code class to use, without loading our phpqrcode lib if another plugin
+     * has already loaded one (avoids "Constant already defined" / "Cannot redeclare class").
      *
      * @since 2.7.0
-     * @version 1.0.0
+     * @return string|null Class name with static png() method, or null if none available.
+     */
+    private function get_qrcode_class() {
+        $candidates = array( 'QRcode', 'Yeekitqrcode' );
+        $candidates = apply_filters( 'post_smtp_qrcode_class_candidates', $candidates );
+        foreach ( $candidates as $class_name ) {
+            if ( class_exists( $class_name ) && method_exists( $class_name, 'png' ) ) {
+                return $class_name;
+            }
+        }
+        if ( class_exists( 'QRcode', false ) ) {
+            return null;
+        }
+        if ( defined( 'QR_MODE_NUL' ) || class_exists( 'qrstr' ) ) {
+            return null;
+        }
+        include_once dirname( __FILE__ ) . '/includes/phpqrcode/qrlib.php';
+        return class_exists( 'QRcode' ) ? 'QRcode' : null;
+    }
+
+    /**
+     * Generate QR code
+     *
+     * Safely loads the bundled PHPQRCode library and avoids fatals if another
+     * plugin/theme has defined an incompatible QRcode class.
+     *
+     * @since 2.7.0
+     * @version 1.1.0
      */
     public function generate_qr_code() {
 
-        if ( !class_exists('QRcode') ) {
-            include_once 'includes/phpqrcode/qrlib.php';
+        $qr_class = $this->get_qrcode_class();
+        if ( $qr_class === null ) {
+            $this->qr_code = null;
+            return;
         }
-        $nonce = get_transient( 'post_smtp_auth_nonce' );
-		$authkey = $nonce ? $nonce : $this->generate_auth_key();
-		$site_title = get_bloginfo( 'name' );
+
+        $nonce      = get_transient( 'post_smtp_auth_nonce' );
+        $authkey    = $nonce ? $nonce : $this->generate_auth_key();
+        $site_title = get_bloginfo( 'name' );
+
         set_transient( 'post_smtp_auth_nonce', $authkey, 1800 );
+
         $endpoint = site_url( "?authkey={$authkey}&site_title={$site_title}" );
+
         ob_start();
-        QRcode::png( urlencode_deep( $endpoint ) );
+        $qr_class::png( urlencode_deep( $endpoint ) );
         $result_qr_content_in_png = ob_get_contents();
         ob_end_clean();
-        // PHPQRCode change the content-type into image/png... we change it again into html
-        header("Content-type: text/html");
-        $this->qr_code =  base64_encode( $result_qr_content_in_png );
+
+        // PHPQRCode changes the content-type to image/png; restore HTML.
+        header( 'Content-type: text/html' );
+
+        $this->qr_code = base64_encode( $result_qr_content_in_png );
 
     }
 
@@ -163,18 +199,11 @@ class Post_SMTP_Mobile {
      * @version 1.0.0
      */
     private function generate_auth_key() {
-
-        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $chars .= '!@#$%^*()';
-        $chars .= '-_ []{}<>~`+,.;:/|';
-
-        $pass = array(); //remember to declare $pass as an array
-        $alphaLength = strlen( $chars ) - 1; //put the length -1 in cache
-        for ( $i = 0; $i < 32; $i++ ) {
-            $n = rand( 0, $alphaLength );
-            $pass[] = $chars[$n];
+        try {
+            return bin2hex( random_bytes( 16 ) );
+        } catch ( Exception $e ) {
+            return md5( uniqid( (string) mt_rand(), true ) );
         }
-        return implode( $pass ); //turn the array into a string
 
     }
 
@@ -223,14 +252,16 @@ class Post_SMTP_Mobile {
                 <div class="mobile-app-internal-box ps-qr-box" style="line-height: 30px;">
                     <?php 
                     if( !$this->app_connected ) {
-                        
-                        echo '<img src="data:image/jpeg;base64,'. $this->qr_code.'" width="300"/>'; 
-                        ?>
-                        <div>
-                            <a href="<?php echo esc_url( admin_url( "admin-post.php?action=regenerate-qrcode&_psnonce=$nonce" ) ); ?>"><?php _e( 'Regenerate QR Code', 'post-smtp' ) ?></a>
-                        </div>
-                        <?php
-
+                        if ( $this->qr_code !== null ) {
+                            echo '<img src="data:image/png;base64,' . esc_attr( $this->qr_code ) . '" width="300"/>';
+                            ?>
+                            <div>
+                                <a href="<?php echo esc_url( admin_url( "admin-post.php?action=regenerate-qrcode&_psnonce=$nonce" ) ); ?>"><?php _e( 'Regenerate QR Code', 'post-smtp' ) ?></a>
+                            </div>
+                            <?php
+                        } else {
+                            echo '<p>' . esc_html__( 'QR code is unavailable because another plugin has already loaded a conflicting QR code library. Please temporarily disable other plugins that use QR codes, or contact support.', 'post-smtp' ) . '</p>';
+                        }
                     }
 					else {
 						
@@ -240,15 +271,22 @@ class Post_SMTP_Mobile {
 						
 						foreach( $this->app_connected as $device ) {
 							
-							$url = admin_url( "admin.php?action=post_smtp_disconnect_app&auth_token={$device['fcm_token']}&ps_disconnect_app_nonce={$nonce}" );
+							$url = add_query_arg(
+								array(
+									'action' => 'post_smtp_disconnect_app',
+									'auth_token' => sanitize_text_field( (string) $device['fcm_token'] ),
+									'ps_disconnect_app_nonce' => $nonce,
+								),
+								admin_url( 'admin.php' )
+							);
 							$checked = $device['enable_notification'] == 1 ? 'checked="checked"' : '';
 							
-							echo  esc_html( $device['device'] ) . "<a href='{$url}' style='color: red'>Disconnect</a>";
+							echo esc_html( $device['device'] ) . "<a href='" . esc_url( $url ) . "' style='color: red'>Disconnect</a>";
 							echo '<br />';
 							echo sprintf(
 								'<label for="enable-app-notice">%s <input type="checkbox" id="enable-app-notice" name="postman_app_connection[%s]" %s /></label>',
 								__( 'Send failed email notification' ),
-								$device['fcm_token'],
+								esc_attr( $device['fcm_token'] ),
 								$checked
 							);
 							
@@ -334,7 +372,7 @@ class Post_SMTP_Mobile {
 		if( isset( $_GET['action'] ) && $_GET['action'] == 'post_smtp_disconnect_app' ) {
 			
 			$connected_devices = get_option( 'post_smtp_mobile_app_connection' );
-			$auth_token = $_GET['auth_token'];
+			$auth_token = isset( $_GET['auth_token'] ) ? sanitize_text_field( wp_unslash( $_GET['auth_token'] ) ) : '';
 			$server_url = get_option( 'post_smtp_server_url' );
 			
 			if( $connected_devices && isset( $connected_devices[$auth_token] ) ) {
@@ -378,6 +416,13 @@ class Post_SMTP_Mobile {
      * @version 1.0.0
      */
     public function dismiss_app_notice() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'Sorry, you are not allowed to perform this action.', 'post-smtp' ) );
+        }
+
+        if( ! isset( $_GET['_psnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_psnonce'] ) ), 'ps-dismiss-app-notice' ) ) {
+            wp_die( 'Security check' );
+        }
 
         if( isset( $_GET['action'] ) && $_GET['action'] === 'ps_dimiss_app_notice' ) {
 

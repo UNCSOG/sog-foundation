@@ -45,7 +45,7 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 		/**
 		 * Active view.
 		 *
-		 * @var WSAL_AbstractView|null
+		 * @var \WSAL_AbstractView|null
 		 */
 		protected static $active_view = false;
 
@@ -67,7 +67,6 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 				'\WSAL\Views\Premium_Features',
 			);
 
-            // phpcs:ignore
 
 			/**
 			 * Skipped Views.
@@ -109,6 +108,9 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 
 			// Add plugin shortcut links.
 			add_filter( 'plugin_action_links_' . WSAL_BASE_NAME, array( __CLASS__, 'add_plugin_shortcuts' ) );
+
+			// Register shared scripts early so extension callbacks at priority 10 can use them as dependencies.
+			add_action( 'admin_enqueue_scripts', array( 'WSAL_Views_AuditLog', 'register_scripts' ), 9 );
 
 			// Render header.
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'render_view_header' ) );
@@ -213,7 +215,7 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 					array( self::$views[0], 'set_hook_suffix' ),
 					add_menu_page(
 						'WP Activity Log',
-						'WP Activity Log' . self::get_updates_count_html(),
+						'WP Activity Log',
 						'read', // No capability requirement.
 						$main_view_menu_slug,
 						array( __CLASS__, 'render_view_body' ),
@@ -266,18 +268,7 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 					}
 				}
 
-                // phpcs:disable
-                /* @free:start */
-                // phpcs:enable
-				// add_submenu_page(
-				// 'wsal-auditlog',
-				// 'Pricing',
-				// '<span class="fs-submenu-item wp-security-audit-log pricing ">Pricing&nbsp;&nbsp;➤</span>',
-				// 'read', // No capability requirement.
-				// 'pricing',
-				// array(),
-				// 300
-				// );
+				// @free:start
 				add_submenu_page(
 					'wsal-auditlog',
 					'Upgrade',
@@ -287,56 +278,8 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 					array(),
 					301
 				);
-                // phpcs:disable
-                /* @free:end */
-                // phpcs:enable
+				// @free:end
 			}
-		}
-
-		/**
-		 * Returns the HTML that shows baboon notifications about the banners we have not confirmed.
-		 *
-		 * @return string
-		 *
-		 * @since 5.2.2
-		 */
-		public static function get_updates_count_html(): string {
-			$count      = Notices::get_number_of_notices();
-			$count_html = '';
-
-			if ( 0 < $count ) {
-				$style = '<style>
-					#wsal-notices-menu .update-count {
-						position: absolute !important;
-						top: 2px !important;
-						right: 4px !important;
-						min-width: 20px !important;
-						margin-right: 2px !important;
-						line-height: 1.2rem !important;
-						background: #d63638 !important;
-						border-radius: 50% !important;
-						display: inline-block !important;
-						vertical-align: top !important;
-						z-index: 26 !important;
-						font-weight: bold !important;
-					}
-					#wsal-notices-menu.update-plugins {
-						display: inline !important;
-						background: none !important;
-					}
-				</style>';
-
-				$count_html = $style;
-
-				/**
-				 * . sprintf(
-				 * ' <span id="wsal-notices-menu" class="update-plugins"><span class="update-count">%d</span></span>',
-				 * \number_format_i18n( $count )
-				 * );
-				 */
-			}
-
-			return $count_html;
 		}
 
 		/**
@@ -350,13 +293,14 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 			self::reorder_views();
 
 			$new_links = array();
+
 			foreach ( self::$views as $view ) {
 				if ( \call_user_func( array( $view, 'has_plugin_shortcut_link' ) ) ) {
 					$new_links[] = '<a href="' . add_query_arg( 'page', \call_user_func( array( $view, 'get_safe_view_name' ) ), \network_admin_url( 'admin.php' ) ) . '">' . \call_user_func( array( $view, 'get_name' ) ) . '</a>';
 
 					if ( 1 === count( $new_links ) && ! wsal_freemius()->is__premium_only() ) {
 						// Trial link.
-						$trial_link  = 'https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=link&utm_campaign=wsal';
+						$trial_link  = 'https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=plugins-page-get-premium';
 						$new_links[] = '<a style="font-weight:bold; color:#049443 !important" href="' . $trial_link . '" target="_blank">' . __( 'Get Premium!', 'wp-security-audit-log' ) . '</a>';
 					}
 				}
@@ -365,30 +309,9 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 		}
 
 		/**
-		 * Returns page id of current page (or false on error).
-		 *
-		 * @return int
-		 *
-		 * @since 5.0.0
-		 */
-		protected static function get_backend_page_index() {
-			// Get current view via $_GET array.
-			$current_view = ( isset( $_GET['page'] ) ) ? \sanitize_text_field( \wp_unslash( $_GET['page'] ) ) : '';
-
-			if ( isset( $current_view ) ) {
-				foreach ( self::$views as $i => $view ) {
-					if ( \call_user_func( array( $view, 'get_safe_view_name' ) ) === $current_view ) {
-						return $i;
-					}
-				}
-			}
-			return false;
-		}
-
-		/**
 		 * Returns the current active view or null if none.
 		 *
-		 * @return WSAL_AbstractView|null
+		 * @return \WSAL_AbstractView|null
 		 *
 		 * @since 5.0.0
 		 */
@@ -434,7 +357,11 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 			}
 
 			global $pagenow;
-			if ( 'admin.php' === $pagenow && ( isset( $_GET['page'] ) && 'wsal-auditlog-pricing' === $_GET['page'] ) ) {
+
+			$is_auditlog_price_page = ( isset( $_GET['page'] ) && 'wsal-auditlog-pricing' === \sanitize_text_field( \wp_unslash( $_GET['page'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+			// No nonce needed, this only reads the standard WP admin routing parameter for a strict string comparison.
+			if ( 'admin.php' === $pagenow && $is_auditlog_price_page ) {
 				?>
 				<style>
 					.fs-full-size-wrapper {
@@ -566,8 +493,8 @@ if ( ! class_exists( '\WSAL\Helpers\View_Manager' ) ) {
 				return;
 			}
 
-			// Get page query parameter.
-            $page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : false; // phpcs:ignore
+			// No nonce needed, this only reads the standard WP admin routing parameter for a strict string comparison.
+			$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			if ( 'wsal-auditlog-account' === $page ) {
 				echo '<style type="text/css">#fs_sites {display:none;}</style>';

@@ -22,7 +22,7 @@ class DefinitionFile extends DefinitionArray
     /**
      * @param string $file File in which the definitions are returned as an array.
      */
-    public function __construct($file, Autowiring $autowiring = null)
+    public function __construct($file, ?Autowiring $autowiring = null)
     {
         // Lazy-loading to improve performances
         $this->file = $file;

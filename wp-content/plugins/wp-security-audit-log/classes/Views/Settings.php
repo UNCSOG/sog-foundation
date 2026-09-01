@@ -334,9 +334,12 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 	 * {@inheritDoc}
 	 */
 	public function render() {
-		// Verify nonce if a form is submitted.
-		if ( isset( $_POST['_wpnonce'] ) ) {
-			check_admin_referer( 'wsal-settings' );
+		$is_settings_save_request   = isset( $_POST['submit'] );
+		$is_settings_import_request = isset( $_POST['import'] );
+
+		// Verify nonce before processing any settings-changing form action.
+		if ( $is_settings_save_request || $is_settings_import_request ) {
+			\check_admin_referer( 'wsal-settings' );
 		}
 
 		if ( ! Settings_Helper::current_user_can( 'edit' ) ) {
@@ -346,7 +349,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		// Check to see if section parameter is set in the URL.
 		$section = isset( $_GET['section'] ) ? \sanitize_text_field( wp_unslash( $_GET['section'] ) ) : false;
 
-		if ( isset( $_POST['submit'] ) ) {
+		if ( $is_settings_save_request ) {
 			try {
 				$this->save(); // Save settings.
 				if ( 'sms-provider' === $this->current_tab && $section && 'test' === $section ) :
@@ -369,7 +372,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 			}
 		}
 
-		if ( isset( $_POST['import'] ) ) {
+		if ( $is_settings_import_request ) {
 			call_user_func( $this->wsal_setting_tabs[ $this->current_tab ]['save'] );
 		}
 
@@ -400,7 +403,6 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 			<input type="hidden" id="ajaxurl" value="<?php echo esc_attr( admin_url( 'admin-ajax.php' ) ); ?>" />
 			<?php wp_nonce_field( 'wsal-settings' ); ?>
 
-			<div id="audit-log-adverts"></div>
 			<div class="nav-tabs">
 				<?php
 				if ( ! empty( $this->current_tab ) && ! empty( $this->wsal_setting_tabs[ $this->current_tab ]['render'] ) ) {
@@ -482,7 +484,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		<h3><?php esc_html_e( 'Display latest events widget in Dashboard & Admin bar', 'wp-security-audit-log' ); ?></h3>
 		<p class="description">
 			<?php
-			echo sprintf(
+			printf(
 				/* translators: Max number of dashboard widget alerts. */
 				esc_html__( 'The events widget displays the latest %d security events in the dashboard and the admin bar notification displays the latest event.', 'wp-security-audit-log' ),
 				esc_html( Settings_Helper::DASHBOARD_WIDGET_MAX_ALERTS )
@@ -515,9 +517,6 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 				$disabled = '';
 				$label    = esc_html__( 'Admin bar notification', 'wp-security-audit-log' );
 				if ( ! wsal_freemius()->is_free_plan() ) {
-					// $disabled = 'disabled';
-					// $label    = esc_html__( 'Admin bar notification', 'wp-security-audit-log' );
-
 					?>
 					<th><label for="admin_bar_notif_on"><?php echo esc_html( $label ); ?></label></th>
 					<td>
@@ -545,10 +544,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 				$disabled = '';
 				$label    = esc_html__( 'Admin bar notification updates', 'wp-security-audit-log' );
 				if ( ! wsal_freemius()->is_free_plan() ) {
-					// $disabled = 'disabled';
-					// $label    = esc_html__( 'Admin bar notification updates', 'wp-security-audit-log' );
-				
-				?>
+					?>
 				<th><label for="admin_bar_notif_refresh"><?php echo esc_html( $label ); ?></label></th>
 				<td>
 					<fieldset <?php echo esc_attr( $disabled ); ?>>
@@ -602,7 +598,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 						// Get login page notification text.
 						$wsal_lpn_text = WSAL\Helpers\Settings_Helper::get_option_value( 'login_page_notification_text', false );
 						if ( ! $wsal_lpn_text ) {
-							$wsal_lpn_text = __( 'For security and auditing purposes, a record of all of your logged-in actions and changes within the WordPress dashboard will be recorded in an activity log with the <a href="https://melapress.com/?utm_source=plugin&utm_medium=referral&utm_campaign=wsal&utm_content=settings+pages" target="_blank">WP Activity Log plugin</a>. The audit log also includes the IP address where you accessed this site from.', 'wp-security-audit-log' );
+							$wsal_lpn_text = __( 'For security and auditing purposes, a record of all of your logged-in actions and changes within the WordPress dashboard will be recorded in an activity log with the <a href="https://melapress.com/?utm_source=plugin&utm_medium=wsal&utm_campaign=login-page-notification" target="_blank">WP Activity Log plugin</a>. The audit log also includes the IP address where you accessed this site from.', 'wp-security-audit-log' );
 						}
 						// Allowed HTML tags for this setting.
 						$allowed_tags = array(
@@ -640,7 +636,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		<h3><?php esc_html_e( 'Is your website running behind a firewall or reverse proxy?', 'wp-security-audit-log' ); ?></h3>
 		<p class="description">
 			<?php
-			echo sprintf(
+			printf(
 				/* translators: Learn more link. */
 				esc_html__( 'If your website is running behind a web application firewall or reverse proxy, use the setting below to select the HTTP header the plugin should retrieve the end user IP from - %s.', 'wp-security-audit-log' ),
 				'<a href="https://melapress.com/support/kb/wp-activity-log-support-reverse-proxies-web-application-firewalls/?utm_source=plugin&utm_medium=wsal&utm_campaign=settings-page-link-1" target="_blank">' . esc_html__( 'learn more', 'wp-security-audit-log' ) . '</a>'
@@ -748,7 +744,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 						</label>
 						<div id="proxy_header_input" style="margin-left: 30px;<?php echo \esc_attr( $style ); ?>">
 							<label for="custom_proxy_header">
-								<input id="custom_proxy_header" type="text" name="CustomProxyIpHeader" id="CustomProxyIpHeader" value="<?php echo Settings_Helper::get_option_value( 'proxy-custom-header' ); ?>"/>
+								<input id="custom_proxy_header" type="text" name="CustomProxyIpHeader" value="<?php echo \esc_attr( Settings_Helper::get_option_value( 'proxy-custom-header' ) ); ?>"/>
 							</label>
 						</div>
 						<br/>
@@ -902,7 +898,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		<h3><?php esc_html_e( 'Which email address should the plugin use as a from address?', 'wp-security-audit-log' ); ?></h3>
 		<p class="description">
 				<?php
-				echo sprintf(
+				printf(
 					// translators: 1 - domain name derived from site URL.
 					\esc_html__( 'By default, the plugin sends emails from wp-activity-log@%1$s. You can customize both the “From” email address and display name using the settings below.', 'wp-security-audit-log' ),
 					\wp_parse_url( \network_home_url(), PHP_URL_HOST ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -919,8 +915,8 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 							<?php $use_email = Settings_Helper::get_option_value( 'use-email', 'default_email' ); ?>
 							<label for="default_email">
 								<input type="radio" name="use-email" id="default_email" value="default_email" <?php checked( $use_email, 'default_email' ); ?> />
-								<?php esc_html_e( 'Use the email address ', 'wp-security-audit-log' ); ?>
-								<?php echo ( Email_Helper::get_default_email_address( true ) ); ?>
+								<?php \esc_html_e( 'Use the email address ', 'wp-security-audit-log' ); ?>
+								<?php echo \esc_html( Email_Helper::get_default_email_address( true ) ); ?>
 							</label>
 							<br>
 							<label for="custom_email">
@@ -1030,7 +1026,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		<p class="description">
 			<?php
 			esc_html_e( 'The plugin uses an efficient way to store the activity log data in the WordPress database, though the more data you keep the more disk space will be required. ', 'wp-security-audit-log' );
-			$retention_help_text = __( '<a href="https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=link&utm_campaign=wsal" target="_blank">Upgrade to Premium</a> to store the activity log data in an external database.', 'wp-security-audit-log' );
+			$retention_help_text = __( '<a href="https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=settings-retention-upgrade" target="_blank">Upgrade to Premium</a> to store the activity log data in an external database.', 'wp-security-audit-log' );
 
 			// phpcs:disable
 			// phpcs:enable
@@ -1227,7 +1223,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 							<img src="<?php echo esc_html( trailingslashit( WSAL_BASE_URL ) . 'img/help/website-file-changes-monitor.jpg' ); ?>">
 							<h4><?php echo esc_html__( 'Melapress File Monitor', 'wp-security-audit-log' ); ?></h4>
 							<p><?php echo esc_html__( 'To keep a log of file changes please install Melapress File Monitor, a plugin which is also developed by us.', 'wp-security-audit-log' ); ?></p><br>
-							<p><button class="install-addon button button-primary" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wsal-install-addon' ) ); ?>" data-plugin-slug="website-file-changes-monitor/website-file-changes-monitor.php" data-plugin-download-url="https://downloads.wordpress.org/plugin/website-file-changes-monitor.latest-stable.zip"><?php esc_html_e( 'Install plugin now', 'wp-security-audit-log' ); ?></button><span class="spinner" style="display: none; visibility: visible; float: none; margin: 0 0 0 8px;"></span> <a href="https://melapress.com/support/kb/wp-activity-log-wordpress-files-changes-warning-activity-logs/?utm_source=plugin&utm_medium=link&utm_campaign=wsal" rel="noopener noreferrer" target="_blank" style="margin-left: 15px;"><?php esc_html_e( 'Learn More', 'wp-security-audit-log' ); ?></a></p>
+							<p><button class="install-addon button button-primary" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wsal-install-addon' ) ); ?>" data-plugin-slug="website-file-changes-monitor/website-file-changes-monitor.php" data-plugin-download-url="https://downloads.wordpress.org/plugin/website-file-changes-monitor.latest-stable.zip"><?php esc_html_e( 'Install plugin now', 'wp-security-audit-log' ); ?></button><span class="spinner" style="display: none; visibility: visible; float: none; margin: 0 0 0 8px;"></span> <a href="https://melapress.com/support/kb/wp-activity-log-wordpress-files-changes-warning-activity-logs/?utm_source=plugin&utm_medium=wsal&utm_campaign=settings-file-monitor-learn-more" rel="noopener noreferrer" target="_blank" style="margin-left: 15px;"><?php esc_html_e( 'Learn More', 'wp-security-audit-log' ); ?></a></p>
 						</div>
 					<?php else : ?>
 						<?php
@@ -1448,7 +1444,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		?>
 		<p class="description">
 			<?php esc_html_e( 'These settings are for advanced users.', 'wp-security-audit-log' ); ?>
-			<?php echo sprintf( __( 'If you have any questions <a href="https://melapress.com/contact/?utm_source=plugin&utm_medium=referral&utm_source=plugin&utm_medium=link&utm_campaign=wsal" target="_blank">contact us</a>.', 'wp-security-audit-log' ), Plugin_Settings_Helper::get_allowed_html_tags() ); // phpcs:ignore ?>
+			<?php echo sprintf( __( 'If you have any questions <a href="https://melapress.com/contact/?utm_source=plugin&utm_medium=wsal&utm_campaign=settings-advanced-contact-us" target="_blank">contact us</a>.', 'wp-security-audit-log' ), Plugin_Settings_Helper::get_allowed_html_tags() ); // phpcs:ignore ?>
 		</p>
 
 		<h3><?php esc_html_e( 'Reset plugin settings to default', 'wp-security-audit-log' ); ?></h3>
@@ -1751,7 +1747,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 
 		$result = array_filter(
 			$items_to_filter,
-			function( $value ) use ( $term ) {
+			function ( $value ) use ( $term ) {
 				return strpos( strtolower( $value ), strtolower( $term ) ) !== false;
 			}
 		);
@@ -1924,7 +1920,6 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 
 		$total = Occurrences_Entity::count_records();
 
-
 		$result = Database_Manager::purge_activity();
 
 		if ( $result ) {
@@ -2013,11 +2008,12 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 						<p class="description">
 							<?php
 							$next = (int) wp_next_scheduled( 'wsal_cleanup_hook' );
-							echo esc_html__( 'The next scheduled purging of activity log data that is older than ', 'wp-security-audit-log' );
-							echo esc_html( $pruning_date . ' ' . $pruning_unit );
-							echo sprintf(
-								' is in %s.',
-								esc_html( human_time_diff( time(), $next ) )
+
+							printf(
+								/* translators: 1: retention period, 2: time until next scheduled cleanup. */
+								\esc_html__( 'The next scheduled purging of activity log data that is older than %1$s is in %2$s.', 'wp-security-audit-log' ),
+								\esc_html( $pruning_date . ' ' . $pruning_unit ),
+								\esc_html( human_time_diff( time(), $next ) )
 							);
 							echo '<!-- ' . esc_html( gmdate( 'dMy H:i:s', $next ) ) . ' --> ';
 							echo esc_html__( 'You can run the purging process now by clicking the button below.', 'wp-security-audit-log' );

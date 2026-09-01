@@ -5,15 +5,9 @@ namespace AC;
 class View implements Renderable
 {
 
-    /**
-     * @var array
-     */
-    private $data = [];
+    private array $data = [];
 
-    /**
-     * @var string|null
-     */
-    private $template;
+    private ?string $template;
 
     public function __construct(array $data = [])
     {
@@ -30,9 +24,9 @@ class View implements Renderable
         return $this->get($key);
     }
 
-    public function __set($key, $value)
+    public function __set($key, $value): void
     {
-        return $this->set($key, $value);
+        $this->set($key, $value);
     }
 
     public function set(string $key, $value): self
@@ -69,9 +63,7 @@ class View implements Renderable
          */
         $paths = apply_filters(
             'ac/view/templates',
-            [
-                Container::get_location()->with_suffix('templates')->get_path(),
-            ],
+            [],
             $this->template
         );
 

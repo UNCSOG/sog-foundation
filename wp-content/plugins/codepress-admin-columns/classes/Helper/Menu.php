@@ -2,14 +2,14 @@
 
 namespace AC\Helper;
 
-class Menu
+class Menu extends Creatable
 {
 
     public function get_menu_label(int $menu_item_id): string
     {
         global $wpdb;
 
-        return (string)$wpdb->prepare(
+        return (string)$wpdb->get_var($wpdb->prepare(
             "
 			SELECT t.name
 				FROM $wpdb->terms AS t
@@ -20,16 +20,10 @@ class Menu
     			WHERE menu.ID = %d
 			",
             $menu_item_id
-        );
+        ));
     }
 
-    /**
-     * @param int    $object_id
-     * @param string $object_type
-     *
-     * @return int[] Term Ids
-     */
-    public function get_ids($object_id, $object_type)
+    public function get_ids(int $object_id, string $object_type): array
     {
         return get_posts([
             'post_type'      => 'nav_menu_item',
@@ -39,24 +33,20 @@ class Menu
             'meta_query'     => [
                 [
                     'key'   => '_menu_item_object_id',
-                    'value' => (int)$object_id,
+                    'value' => $object_id,
                 ],
                 [
                     'key'   => '_menu_item_object',
-                    'value' => (string)$object_type,
+                    'value' => $object_type,
                 ],
             ],
         ]);
     }
 
     /**
-     * @param array $terms_ids
-     * @param array $args
-     *
-     * @return array
-     * @see WP_Term_Query::__construct() for available $args
+     * @see WP_Term_Query::__construct() for supported arguments.
      */
-    public function get_terms(array $terms_ids, array $args = [])
+    public function get_terms(array $terms_ids, array $args = []): array
     {
         if ( ! $terms_ids) {
             return [];

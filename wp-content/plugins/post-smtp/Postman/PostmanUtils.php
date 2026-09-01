@@ -14,6 +14,7 @@ class PostmanUtils {
 	private static $emailValidator;
 
 	const POSTMAN_SETTINGS_PAGE_STUB = 'postman';
+	const POSTMAN_CONFIGURATION_PAGE_STUB = 'postman/configuration';
 	const REQUEST_OAUTH2_GRANT_SLUG = 'postman/requestOauthGrant';
 	const POSTMAN_EMAIL_LOG_PAGE_STUB = 'postman_email_log';
 
@@ -31,6 +32,23 @@ class PostmanUtils {
 	 */
 	public static function staticInit() {
 		PostmanUtils::$logger = new PostmanLogger( 'PostmanUtils' );
+		add_filter( 'map_meta_cap', array( __CLASS__, 'mapPostmanMetaCap' ), 10, 4 );
+	}
+
+	/**
+	 * Let Role Editor (and similar) grant Post SMTP caps without requiring both.
+	 *
+	 * @param string[] $caps
+	 * @param string   $cap
+	 * @param int      $user_id
+	 * @param array    $args
+	 * @return string[]
+	 */
+	public static function mapPostmanMetaCap( $caps, $cap, $user_id, $args ) {
+		if ( Postman::MANAGE_POSTMAN_CAPABILITY_NAME === $cap || Postman::MANAGE_POSTMAN_CAPABILITY_LOGS === $cap ) {
+			return array( $cap );
+		}
+		return $caps;
 	}
 
 	/**
@@ -61,10 +79,17 @@ class PostmanUtils {
 	}
 
 	/**
-	 * Returns an escaped URL
+	 * Returns an escaped URL for Postman settings (legacy top-level menu)
 	 */
 	public static function getSettingsPageUrl() {
 		return menu_page_url( self::POSTMAN_SETTINGS_PAGE_STUB, self::NO_ECHO );
+	}
+
+	/**
+	 * Returns an escaped URL for Postman configuration panel
+	 */
+	public static function getConfigurationPageUrl() {
+		return menu_page_url( self::POSTMAN_CONFIGURATION_PAGE_STUB, self::NO_ECHO );
 	}
 
 	public static function isCurrentPagePostmanAdmin( $page = 'postman' ) {
@@ -265,11 +290,19 @@ class PostmanUtils {
 
 	static function deleteLockFile( $tempDirectory = null ) {
 		$path = PostmanUtils::calculateTemporaryLockPath( $tempDirectory );
-		$success = file_exists($path) ? @unlink($path) : true;
-		if ( PostmanUtils::$logger->isTrace() ) {
-			PostmanUtils::$logger->trace( sprintf( 'Deleting file %s : %s', $path, $success ) );
+
+		if ( file_exists( $path ) ) {
+			$success = @unlink( $path );
+			if (PostmanUtils::$logger->isTrace()) {
+				PostmanUtils::$logger->trace( sprintf( 'Deleting file %s : %s', $path, $success ) );
+			}
+			return $success;
+		} else {
+			if (PostmanUtils::$logger->isTrace()) {
+				PostmanUtils::$logger->trace( sprintf( 'Lock file %s does not exist.', $path ) );
+			}
+			return false;
 		}
-		return $success;
 	}
 	static function createLockFile( $tempDirectory = null ) {
 		if ( self::lockFileExists() ) {
@@ -343,7 +376,27 @@ class PostmanUtils {
 		if ( $logger->isTrace() ) {
 			$logger->trace( 'calling current_user_can' );
 		}
-		return current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_NAME ) && is_admin();
+		if ( current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_NAME ) ) {
+			return is_admin();
+		}
+		// Allow admin bootstrap on wizard redirect when caps are stale (e.g. Cloudways Redis).
+		if ( is_admin() && current_user_can( 'manage_options' ) ) {
+			if ( get_option( 'post_smtp_activation_redirect' ) ) {
+				return true;
+			}
+			$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+			if ( 'postman/configuration_wizard' === $page ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Users who may view and manage email logs but not Post SMTP settings.
+	 */
+	public static function canManagePostmanLogs() {
+		return current_user_can( Postman::MANAGE_POSTMAN_CAPABILITY_LOGS ) && is_admin();
 	}
 
 	/**
@@ -368,14 +421,36 @@ class PostmanUtils {
 			PostmanUtils::$emailValidator = new Postman_Zend_Validate_EmailAddress();
 		}
 		if ( strpos( $email, ',' ) !== false ) {
-		    $emails = explode(',', $email);
-		    $result = [];
-		    foreach ( $emails as $email ) {
-		        $result[] = PostmanUtils::$emailValidator->isValid( $email );
-            }
+			$emails = explode( ',', $email );
+			$result = array();
+			foreach ( $emails as $e ) {
+				$result[] = PostmanUtils::validateEmailOne( trim( $e ) );
+			}
+			return ! in_array( false, $result );
+		}
+		return PostmanUtils::validateEmailOne( trim( $email ) );
+	}
 
-		    return ! in_array(false, $result );
-        }
+	/**
+	 * Validates a single e-mail address. Accepts IDN (punycode) domains that the
+	 * Zend validator rejects (e.g. noreply@xn--m1acit.xn--p1ai) using a basic
+	 * format check so valid international addresses are not rejected.
+	 *
+	 * @param string $email Single email address (no commas).
+	 * @return bool
+	 */
+	private static function validateEmailOne( $email ) {
+		$at = strrpos( $email, '@' );
+		if ( $at !== false ) {
+			$domain = substr( $email, $at + 1 );
+			if ( strpos( $domain, 'xn--' ) !== false ) {
+				$local = substr( $email, 0, $at );
+				if ( $local !== '' && $domain !== '' && strpos( $domain, '.' ) !== false
+					&& preg_match( '/^[a-z0-9.\x2d]+$/i', $domain ) && strlen( $domain ) <= 253 ) {
+					return true;
+				}
+			}
+		}
 		return PostmanUtils::$emailValidator->isValid( $email );
 	}
 

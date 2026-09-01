@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
-Tested up to: 6.9
-Stable tag: 5.6.0
+Tested up to: 7.1
+Stable tag: 5.6.6
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -239,33 +239,21 @@ These capabilities make WP Activity Log a **comprehensive solution for site secu
 
 == Changelog ==
 
-= 5.6.0 (2026-01-29) =
+= 5.6.6 (2026-08-24) =
 
-* **NEW: LearnDash support**
-	 * WP Activity Log can now keep a log of 100+ user actions and settings changes in LearnDash. Refer to the [LearnDash activity log event IDs](https://melapress.com/support/kb/wp-activity-log-list-event-ids/#learndash-events) for the complete list.
-	
- * **Plugin improvements & Enhancements**
-	 * User login events now include the login URL as metadata. Mainly event ID's 1000, 1002, 1003, 1004, 1005.
-	 * Moved all the plugin's settings into the sitemeta table on multisite installs. Credit to [https://github.com/nicomollet](https://github.com/nicomollet) for the recommended fix.
-	 * Reviewed and improved input sanitization across all user and third-party data handling points.
-	 * Suppressed the activity log events generated automatically during the plugin install, to reduce event noise.
-	 * Replaced the "esc_html_e" with the "esc_html__" in some scenarios, as an improvement.
-	 * Updated event ID's 5032, 5033, 6079 to correctly attribute them to "System" instead of the logged-in user, and changed the IP address to server IP, reflecting that the update checks were run by the system, and that they were not user actions.
-	 * Removed the title from the "disable this type of event" hover over tooltip in the activity log viewer for cleaner UI presentation.
-	 * Removed obsolete "Modify" button from event IDs 1002, 1003, 6007, and 6023 tooltips.
+ * **Functionality & plugin improvements**
 
- * **Security fix**
-	 * Fixed a reported XSS. Credits to Steven Julian.
+	 *  Improved username search queries by using WordPress prepared statements.
+	 *  Replaced `json_encode()` with `wp_json_encode()` in Search extension AJAX responses for better character encoding support.
+	 *  Made connection validation messages translatable by passing them to JavaScript through WordPress localization.
+	 *  Updated the PHP_CodeSniffer development dependency to version 3.13.6.
+	 *  Improved order editor link handling by applying WordPress URL escaping.
+	 *  Added automated validation for Free builds to prevent Premium-only files or functionality from being included.
 
  * **Bug fixes**
-	 * Fixed PHP 8.3 TypeError in WooCommerce product editing caused by strpos() receiving a false value instead of string in class-woocommerce-sensor-helper-second.php line 290, which was preventing users from editing products and causing critical failure notices.
-	 * Fixed email validation in periodic reports configuration to accept longer custom domain TLDs, such as .digital.
-	 * Fixed a conflict when WP Activity Log is network-activated on multisite installations alongside SearchWP.
-	 * Fixed the Activity Log menu icon styling on multisite sub-sites by correcting a CSS selector.
-	 * Fixed a number of PHP warnings in the WP 2FA sensor by resolving undefined variable issues in class-wp-2fa-sensor.php that occurred during WP 2FA plugin installation where WP Activity Log was already activated.
-	 * Fixed a fatal PHP TypeError in the IP address normalization module where str_replace() received a boolean false instead of a string during a cron job execution on newer PHP versions.
-	 * Fixed a PHP warning for undefined array key "Network" in class-wp-plugins-themes-sensor.php line 603, that occurred in edge cases during plugin/theme operations on live websites.
-	 * Fixed a number of PHP warnings that occurred when attempting to read properties (ID and post_title) on null objects in the WooCommerce activity log sensor.
-	 * Fixed an edge where false positive event ID 9119 was triggering when WooCommerce product low stock threshold remained unchanged.
+
+	 *  Fixed compatibility with WP 7.1 by addressing a fatal `strtolower()` error in the Log Viewer on PHP 8.2 and 8.3 when another plugin or theme registers a non-string callback identifier for admin notices.
+	 *  Fixed a fatal error on the Reports page and other file operations when WordPress cannot initialize its filesystem. The affected page now remains available and displays a clear warning.
+	 *  Fixed the file append option incorrectly replacing existing file contents instead of adding new content.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.

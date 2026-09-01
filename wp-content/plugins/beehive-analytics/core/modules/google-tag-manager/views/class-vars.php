@@ -43,7 +43,7 @@ class Vars extends Base {
 		add_filter( 'beehive_assets_scripts_common_localize_vars', array( $this, 'common_vars' ) );
 
 		// Setup vars required for settings.
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-tag-manager', array( $this, 'settings_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'settings_vars' ) );
 	}
 
 	/**

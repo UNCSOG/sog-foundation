@@ -8,23 +8,29 @@ use WP_Comments_List_Table;
 class Comment implements ListTable
 {
 
-    use WpListTableTrait;
+    private WP_Comments_List_Table $table;
 
     public function __construct(WP_Comments_List_Table $table)
     {
         $this->table = $table;
     }
 
-    public function get_column_value(string $column, $id): string
+    public function render_cell(string $column_id, $row_id): string
     {
+        $comment = get_comment($row_id);
+
+        if ( ! $comment) {
+            return '';
+        }
+
         ob_start();
 
-        $method = 'column_' . $column;
+        $method = 'column_' . $column_id;
 
         if (method_exists($this->table, $method)) {
-            call_user_func([$this->table, $method], get_comment($id));
+            call_user_func([$this->table, $method], $comment);
         } else {
-            $this->table->column_default(get_comment($id), $column);
+            $this->table->column_default($comment, $column_id);
         }
 
         return ob_get_clean();
@@ -32,9 +38,15 @@ class Comment implements ListTable
 
     public function render_row($id): string
     {
+        $comment = get_comment($id);
+
+        if ( ! $comment) {
+            return '';
+        }
+
         ob_start();
 
-        $this->table->single_row(get_comment($id));
+        $this->table->single_row($comment);
 
         return ob_get_clean();
     }

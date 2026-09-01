@@ -1,9 +1,10 @@
 === Better Search Replace ===
 Contributors: wpengine, deliciousbrains, mattshaw
-Tags: search replace, search and replace, update urls, database, search replace database, update database urls, update live url, better search replace, search&replace
-Requires at least: 3.0.1
-Tested up to: 6.7
-Stable tag: 1.4.10
+Tags: search replace, search and replace, search replace database, update database urls, update live url
+Requires at least: 6.2
+Tested up to: 7.0
+Requires PHP: 8.1
+Stable tag: 1.4.11
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,13 +31,6 @@ When moving your WordPress site to a new domain or server, you will likely run i
 > **[Learn more about Better Search Replace Pro](https://bettersearchreplace.com/)**
 
 The search and replace functionality is heavily based on interconnect/it's great and open-source Search Replace DB script, modified to use WordPress native database functions to ensure compatibility.
-
-**Supported Languages**
-
-* English
-* French
-* German
-* Spanish
 
 **Want to contribute?**
 
@@ -70,11 +64,16 @@ Yes! This plugin should be compatible with any host.
 
 = Can I damage my site with this plugin? =
 
-Yes! Entering a wrong search or replace string could damage your database. Because of this, it is always adviseable to have a backup of your database before using this plugin.
+Yes! Entering a wrong search or replace string could damage your database. Because of this, it is always advisable to have a backup of your database before using this plugin.
 
 = How does this work on WordPress Multisite? =
 
-When running this plugin on a WordPress Multisite installation, it will only be loaded and visible for Network admins. Network admins can go to the dashboard of any subsite to run a search/replace on just the tables for that subsite, or go to the dashboard of the main/base site to run a search/replace on all tables.
+When this plugin is installed on a WordPress multisite network:
+
+* Subsite administrators can only search and replace within tables that belong to that subsite by visiting Dashboard > Tools > Better Search Replace from WP Admin of the subsite.
+* Network administrators (i.e. Super Admins) and administrators of the primary site can search and replace across all tables in the multisite network by visiting Dashboard > Tools > Better Search Replace from WP Admin of the primary site.
+
+To change which users have access to the plugin, the user capability can be modified via code using the `bsr_capability` filter.
 
 = How can I use this plugin when changing URLs? =
 
@@ -94,6 +93,13 @@ More information on moving WordPress can be found [here](http://codex.wordpress.
 2. After running a search/replace dry-run.
 
 == Changelog ==
+
+= 1.4.11 - June 29, 2026 =
+* New: Requires WordPress 6.2+
+* New: Requires PHP 8.1+
+* Fix: Core tables altered to have compound primary keys are now properly handled during search and replace
+* Fix: SQL injection vulnerability on multibyte charsets (GBK, Big5) has been resolved by replacing charset-unaware string escaping with `$wpdb->prepare()` (props to jonghan via Intigriti)
+* Fix: Improved security and stability
 
 = 1.4.10 - January 14, 2025 =
 * Fix: Improved security and stability

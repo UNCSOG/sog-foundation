@@ -3,9 +3,9 @@ Contributors: msaari
 Donate link: https://www.relevanssi.com/buy-premium/
 Tags: search, relevance, better search, product search, woocommerce search
 Requires at least: 4.9
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.1
-Stable tag: 4.26.0
+Stable tag: 4.28.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,13 +128,32 @@ Each document database is full of useless words. All the little words that appea
 * John Calahan for extensive 4.0 beta testing.
 
 == Changelog ==
-= 4.26.0 =
+= 4.28.2 =
+* Security: Fix for a vulnerability in the debugging mode.
+
+= 4.28.1 =
+* Minor fix: Some setting values were not displayed correctly on the searching settings page.
+
+= 4.28.0 =
+* Completely new settings pages! All Relevanssi features are also consolidated under one sidebar menu item.
+* Compatibility: Added built-in support for Document Library Pro above-documents search box.
+* Compatibility: Added support for Slim SEO 'Hide from search results' feature.
+
+= 4.27.2 =
 * Security: Fixes a vulnerability where a contributor-level user could make a SQL injection.
-* Minor fix: Relevanssi now ignores the contents of SVG tags.
-* Minor fix: The `relevanssi_missing_sort_key` hook did not fire for `menu_order`. It does now, if `menu_order` is 0.
-* Minor fix: Relevanssi no longer breaks image cloning in MultilingualPress.
-* Minor fix: Synced pattern contents are now indexed recursively so that, for example, the `relevanssi_noindex` class works.
+* Minor fix: Remove warnings caused by removed synced patterns.
+
+= 4.27.1 =
+* Minor fix: Remove complaints from meta_queries.
+
+= 4.27.0 =
+* New feature: Setting to disable all 'post_type' parameters to let Relevanssi control the post types in the search.
+* New feature: New filter hook `relevanssi_truncate_search_queries` can be used to truncate search queries to a certain length to eliminate too long queries.
+* New feature: New filter hook `relevanssi_allow_meta_query_regexp` allows REGEXP or NOT REGEXP meta queries. They are blocked by default for security reasons.
+* New feature: New shortcode `[relevanssi_didyoumean]` makes it easier to add a "Did you mean" suggestion on a search results page without modifying the template code.
+* Minor fix: You can now assign anonymous functions to the `relevanssi_indexing_restriction` filter hook.
+* Minor fix: Relevanssi now clears the scheduled actions on deactivation, not on uninstall.
 
 == Upgrade notice ==
-= 4.26.0 =
-* SQL injection safety, many bug fixes.
+= 4.28.2 =
+* Debugging mode vulnerability fix.

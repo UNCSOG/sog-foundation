@@ -1,15 +1,15 @@
 === Beehive Analytics - Google Analytics Dashboard ===
 Plugin Name: Beehive Analytics - Google Analytics Dashboard
-Version: 3.4.19.1
+Version: 3.5.2
 Plugin URI: https://wpmudev.com/project/beehive-analytics-pro/
 Tags: google analytics, google analytics dashboard, google tag manager, wordpress analytics, website Analytics
 Author URI: https://wpmudev.com/
 Author: WPMU DEV
 Contributors: WPMUDEV
 Requires at least: 6.4
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.4.19.1
+Stable tag: 3.5.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -231,6 +231,13 @@ Download Beehive and bring Google Analytics to your WordPress dashboard.
 6. Analytics Data
 
 == Changelog ==
+
+= 3.5.2 (2026-04-07) =
+
+- New: Refactored admin interface for improved performance and maintainability.
+- Enhance: Improved mobile responsive design across all admin pages.
+- Enhance: Improved timestamp retrieval and display for statistics refresh.
+- Enhance: Better statistics visualization with actual values and percentages in charts.
 
 = 3.4.19.1 (2025-12-17) =
 

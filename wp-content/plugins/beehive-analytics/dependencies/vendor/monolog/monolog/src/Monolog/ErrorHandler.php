@@ -136,7 +136,24 @@ class ErrorHandler
      */
     protected function defaultErrorLevelMap() : array
     {
-        return [\E_ERROR => LogLevel::CRITICAL, \E_WARNING => LogLevel::WARNING, \E_PARSE => LogLevel::ALERT, \E_NOTICE => LogLevel::NOTICE, \E_CORE_ERROR => LogLevel::CRITICAL, \E_CORE_WARNING => LogLevel::WARNING, \E_COMPILE_ERROR => LogLevel::ALERT, \E_COMPILE_WARNING => LogLevel::WARNING, \E_USER_ERROR => LogLevel::ERROR, \E_USER_WARNING => LogLevel::WARNING, \E_USER_NOTICE => LogLevel::NOTICE, \E_STRICT => LogLevel::NOTICE, \E_RECOVERABLE_ERROR => LogLevel::ERROR, \E_DEPRECATED => LogLevel::NOTICE, \E_USER_DEPRECATED => LogLevel::NOTICE];
+        return [
+            \E_ERROR => LogLevel::CRITICAL,
+            \E_WARNING => LogLevel::WARNING,
+            \E_PARSE => LogLevel::ALERT,
+            \E_NOTICE => LogLevel::NOTICE,
+            \E_CORE_ERROR => LogLevel::CRITICAL,
+            \E_CORE_WARNING => LogLevel::WARNING,
+            \E_COMPILE_ERROR => LogLevel::ALERT,
+            \E_COMPILE_WARNING => LogLevel::WARNING,
+            \E_USER_ERROR => LogLevel::ERROR,
+            \E_USER_WARNING => LogLevel::WARNING,
+            \E_USER_NOTICE => LogLevel::NOTICE,
+            2048 => LogLevel::NOTICE,
+            // E_STRICT
+            \E_RECOVERABLE_ERROR => LogLevel::ERROR,
+            \E_DEPRECATED => LogLevel::NOTICE,
+            \E_USER_DEPRECATED => LogLevel::NOTICE,
+        ];
     }
     /**
      * @phpstan-return never
@@ -235,7 +252,7 @@ class ErrorHandler
                 return 'E_USER_WARNING';
             case \E_USER_NOTICE:
                 return 'E_USER_NOTICE';
-            case \E_STRICT:
+            case 2048:
                 return 'E_STRICT';
             case \E_RECOVERABLE_ERROR:
                 return 'E_RECOVERABLE_ERROR';

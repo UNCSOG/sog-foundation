@@ -16,6 +16,7 @@ defined( 'WPINC' ) || die;
 
 use WP_REST_Request;
 use WP_REST_Response;
+use Beehive\Core\Helpers\Cache;
 use Beehive\Core\Modules\Google_Analytics;
 use Beehive\Core\Utils\Abstracts\Endpoint;
 
@@ -257,8 +258,8 @@ class Stats extends Endpoint {
 		// Send response.
 		return $this->get_stats_response(
 			array(
-				'stats'   => $stats,
-				'periods' => array(
+				'stats'        => $stats,
+				'periods'      => array(
 					'current'  => array(
 						'from' => $from,
 						'to'   => $to,
@@ -268,6 +269,7 @@ class Stats extends Endpoint {
 						'to'   => $prev_period['to'],
 					),
 				),
+				'last_updated' => Cache::get_refresh_timestamp( $network ),
 			),
 			$exception
 		);

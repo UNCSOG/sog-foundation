@@ -2,31 +2,38 @@
 
 namespace AC\Asset;
 
-class Style extends Enqueueable {
+class Style extends Enqueueable
+{
 
-	public function register(): void {
-		if ( ! $this->location instanceof Location ) {
-			return;
-		}
+    public function register(): void
+    {
+        if ( ! $this->location instanceof Location) {
+            return;
+        }
 
-		wp_register_style(
-			$this->get_handle(),
-			$this->location->get_url(),
-			$this->dependencies,
-			$this->get_version()
-		);
-	}
+        $version = $this->get_version();
 
-	public function enqueue(): void {
-		if ( wp_style_is( $this->get_handle() ) ) {
-			return;
-		}
+        wp_register_style(
+            $this->get_handle(),
+            $this->location->get_url(),
+            $this->dependencies,
+            $version !== null
+                ? (string)$version
+                : null
+        );
+    }
 
-		if ( ! wp_style_is( $this->get_handle(), 'registered' ) ) {
-			$this->register();
-		}
+    public function enqueue(): void
+    {
+        if (wp_style_is($this->get_handle())) {
+            return;
+        }
 
-		wp_enqueue_style( $this->get_handle() );
-	}
+        if ( ! wp_style_is($this->get_handle(), 'registered')) {
+            $this->register();
+        }
+
+        wp_enqueue_style($this->get_handle());
+    }
 
 }

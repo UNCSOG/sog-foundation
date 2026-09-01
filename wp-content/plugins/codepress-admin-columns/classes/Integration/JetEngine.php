@@ -2,9 +2,9 @@
 
 namespace AC\Integration;
 
-use AC\Integration;
-use AC\ListScreen;
 use AC\Screen;
+use AC\Type\Integration;
+use AC\Type\Url\External;
 use AC\Type\Url\Site;
 
 final class JetEngine extends Integration
@@ -16,14 +16,11 @@ final class JetEngine extends Integration
             'ac-addon-jetengine',
             'JetEngine',
             'assets/images/addons/jetengine.svg?v3',
-            sprintf(
-                '%s %s',
-                __('Integrates JetEngine with Admin Columns.', 'codepress-admin-columns'),
-                __(
-                    'Display, inline- and bulk-edit, export, smart filter and sort your JetEngine contents on any admin list table.',
-                    'codepress-admin-columns'
-                )
+            __(
+                'Display and manage JetEngine custom fields, relations, and meta data in any list table. Edit, filter, and sort JetEngine content the same way you manage native WordPress data.',
+                'codepress-admin-columns'
             ),
+            new External('https://crocoblock.com/plugins/jetengine/'),
             new Site(Site::PAGE_ADDON_JETENGINE)
         );
     }
@@ -35,22 +32,13 @@ final class JetEngine extends Integration
 
     public function show_notice(Screen $screen): bool
     {
-        return in_array(
-            $screen->get_id(),
-            [
-                'toplevel_page_jet-engine',
-                'jetengine_page_jet-engine-meta',
-                'jetengine_page_jet-engine-cpt',
-                'jetengine_page_jet-engine-cpt-tax',
-                'jetengine_page_jet-engine-relations',
-            ],
-            true
-        );
-    }
-
-    public function show_placeholder(ListScreen $list_screen): bool
-    {
-        return true;
+        return in_array($screen->get_id(), [
+            'toplevel_page_jet-engine',
+            'jetengine_page_jet-engine-meta',
+            'jetengine_page_jet-engine-cpt',
+            'jetengine_page_jet-engine-cpt-tax',
+            'jetengine_page_jet-engine-relations',
+        ]);
     }
 
 }

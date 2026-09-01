@@ -73,31 +73,8 @@ final class Beehive extends Base {
 	private function run() {
 		// Run free version.
 		Core::instance()->setup();
-
-		if ( $this->is_pro() ) {
-			// Run Pro version.
-			Pro::instance()->setup();
-		} else {
 			// Run free version.
 			Free::instance()->setup();
-		}
-	}
-
-	/**
-	 * Check if current version is Pro.
-	 *
-	 * We could use BEEHIVE_PRO and BEEHIVE_FREE constants to check
-	 * the Pro vs Free comparison. But checking class file is more
-	 * reliable.
-	 *
-	 * @since 3.2.0
-	 *
-	 * @return bool
-	 */
-	public function is_pro() {
-		return defined( 'BEEHIVE_PRO' ) && BEEHIVE_PRO && (
-				! defined( 'BEEHIVE_FREE' ) || ! BEEHIVE_FREE
-			);
 	}
 
 	/**
@@ -109,11 +86,6 @@ final class Beehive extends Base {
 	 * @since 3.2.0
 	 */
 	private function define() {
-		// Shared UI version.
-		if ( ! defined( 'BEEHIVE_SUI_VERSION' ) ) {
-			define( 'BEEHIVE_SUI_VERSION', '2.12.23' );
-		}
-
 		// Plugin directory.
 		if ( ! defined( 'BEEHIVE_DIR' ) ) {
 			define( 'BEEHIVE_DIR', plugin_dir_path( BEEHIVE_PLUGIN_FILE ) );

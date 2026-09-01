@@ -50,6 +50,36 @@ jQuery( document ).ready( function() {
 		  })
 	});
 
+  /**
+   * "Take the survey" button. Fires a separate AJAX action for permanent dismissal.
+   * 
+   * @since 5.6.1
+   */
+	jQuery( document ).on( 'click', '.wsal-notice .wsal-survey-take-btn', function() {
+		const noticeElm = jQuery( this ).closest( '.wsal-notice' );
+		const takeAction = noticeElm.attr( 'data-take-action' );
+		const takeNonce = noticeElm.attr( 'data-take-nonce' );
+		if ( ! takeAction ) {
+			return;
+		}
+
+		jQuery.ajax( {
+			type: 'POST',
+			url: wsalCommonData.ajaxURL,
+			async: true,
+			data: {
+				action: takeAction,
+				nonce: takeNonce
+			}
+		} );
+
+		noticeElm.fadeTo( 100, 0, function() {
+			noticeElm.slideUp( 100, function() {
+				noticeElm.remove();
+			} );
+		} );
+	} );
+
 	/**
 	 * Check & Load New Alerts on WP-Admin bar.
 	 *
@@ -80,18 +110,6 @@ jQuery( document ).ready( function() {
 		// Make the first call on page load.
 		wsalRefresh();
 	}
-
-	jQuery( 'a.wsal-dismiss-notification' ).click( function() {
-		var nfe = jQuery( this ).parents( 'div:first' );
-		var nfn = nfe.attr( 'data-notice-name' );
-		jQuery.ajax({
-			type: 'POST',
-			url: wsalCommonData.ajaxURL,
-			async: false,
-			data: { action: 'AjaxDismissNotice', notice: nfn }
-		});
-		nfe.fadeOut();
-	});
 
 	jQuery( 'head' ).append( '<style>.wp-submenu .dashicons-external:before{vertical-align: bottom;}</style>' );
 
@@ -188,7 +206,7 @@ jQuery( document ).ready( function() {
 		var linkItem = jQuery( '.fs-submenu-item.wp-security-audit-log.pricing' ).parent();
 		jQuery( linkItem ).attr( {
 			target: '_blank', 
-			href: 'https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=link&utm_campaign=wsal',
+			href: 'https://melapress.com/wordpress-activity-log/pricing/?utm_source=plugin&utm_medium=wsal&utm_campaign=admin-menu-upgrade',
 		} );
 	}
 });

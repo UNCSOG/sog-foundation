@@ -38,14 +38,13 @@ class Stats extends View {
 		add_filter( 'beehive_assets_scripts_common_localize_vars', array( $this, 'common_vars' ) );
 
 		// Setup vars for the scripts.
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-post-statistics', array( $this, 'post_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-post-statistics', array( $this, 'stats_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'post_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'stats_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-admin', array( $this, 'admin_vars' ) );
 		add_filter( 'beehive_assets_scripts_localize_vars_beehive-dashboard-widget', array( $this, 'stats_vars' ) );
 		add_filter( 'beehive_assets_scripts_localize_vars_beehive-dashboard-widget', array( $this, 'admin_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-statistics-page', array( $this, 'stats_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-ga-admin', array( $this, 'stats_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-ga-admin', array( $this, 'admin_vars' ) );
-		add_filter( 'beehive_assets_scripts_localize_vars_beehive-dashboard', array( $this, 'stats_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-post-statistics', array( $this, 'post_vars' ) );
+		add_filter( 'beehive_assets_scripts_localize_vars_beehive-post-statistics', array( $this, 'stats_vars' ) );
 	}
 
 	/**
@@ -55,7 +54,7 @@ class Stats extends View {
 	 * @since 3.2.0
 	 */
 	public function dashboard_widget() {
-		echo '<div id="beehive-dashboard-statistics-app"></div>';
+		echo '<div id="beehive-ga-dashboard-widget-root"></div>';
 
 		// Enqueue assets.
 		Assets::instance()->enqueue_style( 'beehive-dashboard-widget' );
@@ -72,7 +71,7 @@ class Stats extends View {
 	 */
 	public function popular_widget_content( $args = array() ) {
 		// Render popular widget form template.
-		$this->view( 'stats/google/popular-widget/front', $args );
+		$this->view( 'popular-widget/front', $args );
 	}
 
 	/**
@@ -85,7 +84,7 @@ class Stats extends View {
 	 */
 	public function popular_widget_form( $args = array() ) {
 		// Render popular widget form template.
-		$this->view( 'stats/google/popular-widget/admin', $args );
+		$this->view( 'popular-widget/admin', $args );
 	}
 
 	/**
@@ -97,7 +96,7 @@ class Stats extends View {
 	 * @since 3.2.0
 	 */
 	public function post_widget() {
-		echo '<div id="beehive-post-statistics-app"></div>';
+		echo '<div id="beehive-ga-post-statistics-root"></div>';
 
 		// Enqueue assets.
 		Assets::instance()->enqueue_style( 'beehive-post-statistics' );
@@ -105,17 +104,13 @@ class Stats extends View {
 	}
 
 	/**
-	 * Render stats page content for the dashboard.
+	 * Render statistics page for post.
 	 *
 	 * @return void
 	 * @since 3.2.7
 	 */
 	public function stats_page() {
-		echo '<div id="beehive-statistics-app"></div>';
-
-		// Enqueue assets.
-		Assets::instance()->enqueue_style( 'beehive-statistics-page' );
-		Assets::instance()->enqueue_script( 'beehive-statistics-page' );
+		$this->render_admin_page();
 	}
 
 	/**
@@ -125,11 +120,7 @@ class Stats extends View {
 	 * @since 3.3.0
 	 */
 	public function settings_page() {
-		echo '<div id="beehive-ga-admin-app"></div>';
-
-		// Enqueue assets.
-		Assets::instance()->enqueue_style( 'beehive-ga-admin' );
-		Assets::instance()->enqueue_script( 'beehive-ga-admin' );
+		$this->render_admin_page();
 	}
 
 	/**

@@ -149,7 +149,7 @@ class Template {
 	 * @return string
 	 */
 	public static function asset_url( $url = '' ) {
-		return BEEHIVE_URL . 'app/assets/' . $url;
+		return BEEHIVE_URL . 'build/' . $url;
 	}
 
 	/**

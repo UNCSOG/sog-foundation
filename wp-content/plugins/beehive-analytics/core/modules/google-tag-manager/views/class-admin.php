@@ -14,15 +14,12 @@ namespace Beehive\Core\Modules\Google_Tag_Manager\Views;
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
 
-use Beehive\Core\Controllers\Assets;
-use Beehive\Core\Utils\Abstracts\Base;
-
 /**
- * Class Scripts
+ * Class Admin
  *
  * @package Beehive\Core\Modules\Google_Tag_Manager\Views
  */
-class Admin extends Base {
+class Admin extends \Beehive\Core\Utils\Abstracts\View {
 
 	/**
 	 * Render GTM admin settings page.
@@ -32,10 +29,6 @@ class Admin extends Base {
 	 * @return void
 	 */
 	public function settings() {
-		echo '<div id="beehive-tag-manager-app"></div>';
-
-		// Enqueue assets.
-		Assets::instance()->enqueue_style( 'beehive-tag-manager' );
-		Assets::instance()->enqueue_script( 'beehive-tag-manager' );
+		$this->render_admin_page();
 	}
 }

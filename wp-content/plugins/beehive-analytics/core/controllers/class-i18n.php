@@ -69,37 +69,17 @@ class I18n extends Base {
 		// Common strings.
 		$strings = Locale::common();
 
-		switch ( $type ) {
-			case 'beehive-settings':
-				// Add strings.
-				$strings = array_merge_recursive(
-					$strings,
-					Locale::settings(),
-					Locale::onboarding(),
-					Locale::auth_form(),
-					Locale::welcome()
-				);
-				break;
-			case 'beehive-accounts':
-				// Add strings.
-				$strings = array_merge_recursive(
-					$strings,
-					Locale::accounts(),
-					Locale::auth_form(),
-					Locale::welcome()
-				);
-				break;
-			case 'beehive-dashboard':
-				// Add strings.
-				$strings = array_merge_recursive(
-					$strings,
-					Locale::dashboard(),
-					Locale::settings(),
-					Locale::onboarding(),
-					Locale::auth_form(),
-					Locale::welcome(),
-				);
-				break;
+		// Add strings.
+		if ( 'beehive-admin' === $type ) {
+			$strings = array_merge_recursive(
+				$strings,
+				Locale::settings(),
+				Locale::onboarding(),
+				Locale::auth_form(),
+				Locale::welcome(),
+				Locale::accounts(),
+				Locale::dashboard()
+			);
 		}
 
 		/**

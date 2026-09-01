@@ -217,7 +217,7 @@ class PostmanSendTestEmailController {
 										</div>
 
 										<span id="when-button-clicked" class="float-left spinner" style="margin-top: 10px;display: none;"></span>
-										<button class="button button-primary ps-blue-button ps-next-button">
+										<button type="button" class="button button-primary ps-blue-button ps-next-button">
 											' . esc_html__( 'Send Test Email', 'post-smtp' ) . '
 											<span class="dashicons dashicons-email"></span>
 										</button>
@@ -362,21 +362,30 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 			'test_mode',
 		) );
 		
-		// Postman API: retrieve the result of sending this message from Postman
+		// Postman API: retrieve the result of sending this message from Postman.
 		$result = apply_filters( 'postman_wp_mail_result', null );
-		
+
+		// Normalise result to an array to avoid notices/fatals when no result is available
+		// (for example, when email is sent via a remote MainWP Dashboard site).
+		if ( ! is_array( $result ) ) {
+			$result = array();
+		}
+
+		$time       = isset( $result['time'] ) ? $result['time'] : 0;
+		$transcript = isset( $result['transcript'] ) ? $result['transcript'] : '';
+
 		// post-handling
 		if ( $success ) {
 			$this->logger->debug( 'Test Email delivered to server' );
 			// the message was sent successfully, generate an appropriate message for the user
-			$statusMessage = sprintf( __( 'Your message was delivered (%d ms) to the SMTP server! Congratulations :)', 'post-smtp' ), $result ['time'] );
+			$statusMessage = sprintf( __( 'Your message was delivered (%d ms) to the SMTP server! Congratulations :)', 'post-smtp' ), $time );
 			
 			$this->logger->debug( 'statusmessage: ' . $statusMessage );
 			
 			// compose the JSON response for the caller
 			$response = array(
-				'message' => $statusMessage,
-				'transcript' => $result ['transcript'],
+				'message'     => $statusMessage,
+				'transcript'  => $transcript,
 			);
 			
 			// log the response
@@ -388,16 +397,26 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 			// send the JSON response
 			wp_send_json_success( $response );
 		} else {
-			$this->logger->error( 'Test Email NOT delivered to server - ' . $result ['exception']->getCode() );
+
+			$exception_code    = 0;
+			$exception_message = __( 'An unknown error occurred while sending the test email.', 'post-smtp' );
+
+			if ( isset( $result['exception'] ) && $result['exception'] instanceof Exception ) {
+				$exception_code    = $result['exception']->getCode();
+				$exception_message = $result['exception']->getMessage();
+			}
+
+			$this->logger->error( 'Test Email NOT delivered to server - ' . $exception_code );
+
 			// the message was NOT sent successfully, generate an appropriate message for the user
-			$statusMessage = $result ['exception']->getMessage();
+			$statusMessage = $exception_message;
 			
 			$this->logger->debug( 'statusmessage: ' . $statusMessage );
 			
 			// compose the JSON response for the caller
 			$response = array(
-				'message' => $statusMessage,
-				'transcript' => $result ['transcript'],
+				'message'     => $statusMessage,
+				'transcript'  => $transcript,
 			);
 			
 			// log the response
@@ -477,11 +496,6 @@ class PostmanSendTestEmailAjaxController extends PostmanAbstractAjaxHandler {
 			'<html xmlns="http://www.w3.org/1999/xhtml">',
 			'<head>',
 			'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
-			'<style type="text/css" media="all">',
-			'.wporg-notification .im {',
-			'	color: #888;',
-			'} /* undo a GMail-inserted style */',
-			'</style>',
 			'</head>',
 			'<body class="wporg-notification">',
 			'	<div style="style=" width: 600px; margin: 0 auto;">',

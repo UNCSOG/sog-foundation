@@ -10,12 +10,4 @@ if (!class_exists('ComposerAutoloaderInitAdminColumns', false) && !interface_exi
     spl_autoload_call('AC\Vendor\ComposerAutoloaderInitAdminColumns');
 }
 
-// Exposed functions. For more information see:
-// https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
-if (!function_exists('composerRequireAdminColumns')) {
-    function composerRequireAdminColumns() {
-        return \AC\Vendor\composerRequireAdminColumns(...func_get_args());
-    }
-}
-
 return $loader;

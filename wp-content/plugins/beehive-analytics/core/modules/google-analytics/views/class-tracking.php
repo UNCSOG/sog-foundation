@@ -185,13 +185,8 @@ class Tracking extends Base {
 
 		// Get the first ID.
 		$first_key = array_keys( $items )[0];
-
 		?>
-		<?php if ( beehive_analytics()->is_pro() ) : ?>
-			<!-- Google Analytics tracking code output by Beehive Analytics Pro -->
-		<?php else : ?>
-			<!-- Google Analytics tracking code output by Beehive Analytics -->
-		<?php endif; ?>
+		<!-- Google Analytics tracking code output by <?php echo esc_html( $comment_text ?? 'Beehive Analytics' ); ?> -->
 		<?php // phpcs:ignore ?>
 		<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $first_key ); ?>&l=<?php echo esc_attr( $data_layer ); ?>"></script>
 		<script>

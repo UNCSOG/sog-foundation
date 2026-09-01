@@ -5,8 +5,8 @@
  * @package    wsal
  * @subpackage utils
  * @copyright  2026 Melapress
- * @license    https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
- * @link       https://wordpress.org/plugins/wp-2fa/
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
+ * @link       https://wordpress.org/plugins/wp-security-audit-log/
  */
 
 namespace WSAL\Utils;
@@ -58,6 +58,13 @@ if ( ! class_exists( '\WSAL\Utils\Abstract_Migration' ) ) {
 		 * That is a global constant used for showing the upgrade notice.
 		 */
 		public const UPGRADE_NOTICE = 'upgrade-notice-show';
+
+		/**
+		 * That is a global constant used for showing the feature highlight notice after an upgrade (free edition only).
+		 *
+		 * @since 5.6.5
+		 */
+		public const FEATURE_HIGHLIGHT_NOTICE = 'feature-highlight-notice-show';
 
 		/**
 		 * Extracted version from the DB (WP option)
@@ -129,6 +136,9 @@ if ( ! class_exists( '\WSAL\Utils\Abstract_Migration' ) ) {
 				if ( '0000' === $stored_version_as_number && ! WP_Helper::is_plugin_installed() ) {
 					// That is first install of the plugin, store the version and leave.
 					self::store_updated_version();
+
+					// Store installation timestamp for time-delayed notices (e.g. survey banner).
+					Settings_Helper::set_option_value( 'plugin-installed-at', time() );
 
 					$disabled_alerts = WP_Helper::get_global_option( 'disabled-alerts', false );
 
@@ -270,6 +280,15 @@ if ( ! class_exists( '\WSAL\Utils\Abstract_Migration' ) ) {
 
 				if ( '0.0.0' !== (string) static::$stored_version ) {
 					WP_Helper::set_global_option( self::UPGRADE_NOTICE, true );
+
+					// @free:start
+					WP_Helper::set_global_option( self::FEATURE_HIGHLIGHT_NOTICE, true );
+					// @free:end
+
+					/**
+					 * Reset survey dismiss so the banner reappears after each upgrade.
+					 */
+					Settings_Helper::delete_option_value( 'melapress-survey-dismissed' );
 				}
 			}
 		}

@@ -1,26 +1,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .admin_page_postman-configuration_wizard {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
 }
-.admin_page_postman-configuration_wizard::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+
+.admin_page_postman-configuration_wizard::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+.ps-wizard-top {
+  width: 95%;
+  max-width: 1400px;
+  margin: 30px auto 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .ps-logo {
-  text-align: center;
-  margin: 50px 0;
+  text-align: left;
+  margin: 0;
+}
+
+.ps-back-dashboard {
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: 1px solid #E2E9FB !important;
+  background: #ffffff !important;
+  color: #214A72 !important;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08);
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-back-dashboard::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('../images/arrow-left-circle.svg') no-repeat center center;
+  background-size: contain;
+}
+
+.ps-back-dashboard:hover,
+.ps-back-dashboard:focus {
+  background: #f5f5f5;
+  border-color: #E2E9FB;
+  color: #214A72;
 }
 
 .ps-wizard-outer {
-  border: 2px solid #375caf;
+  border: 2px solid #375CAF;
   border-radius: 7px;
-  width: 875px;
+  width: 95%;
+  max-width: 875px;
   margin: 0 auto;
 }
 
 .ps-wizard-nav {
-  width: 32%;
+  /* width: 32%; */
   float: left;
 }
 
@@ -34,12 +80,17 @@
 }
 
 .ps-wizard-footer {
-  background: #f1f1f1;
+  /* background: #fff; */
   padding: 17px 0;
 }
 
-.ps-wizard-nav {
+/* .ps-wizard-nav {
   border-right: 1px solid #d9d9d9;
+} */
+
+.ps-wizard-pages {
+  border-left: 1px solid #d9d9d9;
+  padding-left: 20px;
 }
 
 .ps-wizard-section .ps-wizard-nav {
@@ -112,7 +163,7 @@
 
 .ps-wizard-nav table,
 .ps-wizard-footer table {
-  padding: 0 25px;
+  padding: 0 8px;
 }
 
 .ps-wizard-edit span {
@@ -131,29 +182,19 @@
 }
 
 .ps-active-nav .ps-wizard-circle span.ps-tick:before {
-  background-color: #375caf;
+  background-color: #214A72;
 }
 
-.ps-in-active-nav  .ps-wizard-circle span.ps-tick:before {
-  background-color: #d9d9d9;
+.ps-in-active-nav .ps-wizard-circle span.ps-tick:before {
+  /* background-color: #d9d9d9; */
+  border: 2px solid #CDCDCD;
 }
 
 .ps-active-nav .ps-wizard-circle span.ps-tick:before,
-.ps-in-active-nav .ps-wizard-circle span.ps-tick:before
- {
-  content: '';
-  height: 35px;
-  width: 35px;
-  border-radius: 40px;
-  display: inline-block;
-  vertical-align: top;
-  line-height: 1;
-  margin: 4.4px 4.6px;
-}
+.ps-in-active-nav .ps-wizard-circle span.ps-tick:before {}
 
 .ps-active-nav .ps-wizard-circle span.ps-tick,
-.ps-in-active-nav .ps-wizard-circle span.ps-tick
- {
+.ps-in-active-nav .ps-wizard-circle span.ps-tick {
   display: inline-table;
   width: 48px;
   height: 48px;
@@ -162,11 +203,12 @@
 .ps-wizard-circle span.ps-tick {
   font-size: 44px;
   display: inline-table;
-  color: #375caf;
+  color: #214A72;
 }
 
 .ps-wizard-text {
   font-weight: 600;
+  color: #214A72
 }
 
 .ps-wizard-footer-left {
@@ -194,20 +236,20 @@
 .ps-active-nav .ps-wizard-line:after {
   content: '';
   position: absolute;
-  width: 3px;
-  height: 39px;
-  left: 23px;
-  bottom: 41px;
+  width: 1.5px;
+  height: 26px;
+  left: 24px;
+  bottom: 49px;
   z-index: -3;
 }
 
 .ps-in-active-nav .ps-wizard-line:after {
-  background: #d9d9d9;
+  background: #CDCDCD;
 }
 
 .ps-active-nav .ps-wizard-line:after,
 .ps-wizard-line:after {
-  background: #375caf;
+  background: #214A72;
 }
 
 .ps-wizard-footer .ps-active-nav .ps-wizard-line:after {
@@ -215,7 +257,7 @@
 }
 
 .ps-wizard-screens-container {
-  padding: 0 25px;
+  padding: 0 25px 0px 0px;
 }
 
 .ps-wizard-step {
@@ -225,6 +267,7 @@
 .ps-wizard-pages p {
   font-weight: 600;
   font-size: 12px;
+  color: #707070;
 }
 
 .ps-wizard-pages a {
@@ -232,7 +275,7 @@
 }
 
 .smtp-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 842px !important;
+  height: 870px !important;
 }
 
 .gmail_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
@@ -240,23 +283,23 @@
 }
 
 .mandrill_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 540px !important;
+  height: 520px !important;
 }
 
 .sendgrid_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 608px !important;
+  height: 590px !important;
 }
 
 .mailersend_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 608px !important;
+  height: 520px !important;
 }
 
 .mailgun_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 770px !important;
+  height: 750px !important;
 }
 
 .sendinblue_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 590px !important;
+  height: 570px !important;
 }
 
 .resend_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
@@ -264,19 +307,19 @@
 }
 
 .postmark_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 540px !important;
+  height: 520px !important;
 }
 
 .sparkpost_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 540px !important;
+  height: 520px !important;
 }
 
 .elasticemail_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 540px !important;
+  height: 520px !important;
 }
 
 .office365_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-   height: 1047px !important;
+  height: 1047px !important;
 }
 
 .zohomail_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
@@ -288,27 +331,33 @@
 }
 
 .mailjet_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 645px !important;
+  height: 625px !important;
 }
 
 .sendpulse_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-  height: 640px !important;
+  height: 650px !important;
 }
+
 .emailit_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-    height: 494px !important;
+  height: 475px !important;
 }
+
 .maileroo_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
+  height: 475px !important;
+}
+
+.mailtrap_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
   height: 494px !important;
 }
-.mailtrap_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-   height: 494px !important;
-}
+
 .sweego_api-outer .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
-   height: 494px !important;
+  height: 494px !important;
 }
+
 .gmail-enabled .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
   height: 1021px !important;
 }
+
 .office-enabled .ps-wizard-footer-left .ps-in-active-nav .ps-wizard-line:after {
   height: 840px !important
 }
@@ -323,7 +372,13 @@
 
 .ps-wizard-sockets {
   display: flex;
-  margin: 15px 0 15px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ps-wizard-divider {
+  border-top: 1px solid #E0E0E0;
+  margin: 24px 0;
 }
 
 .ps-wizard-socket-radio label {
@@ -340,44 +395,94 @@
   padding: 8px 20px 3px 20px;
 }
 
+.ps-wizard-socket-radio img[src*="cloudflare"] {
+  width: 70px;
+  height: auto;
+  object-fit: contain;
+  padding: 8px 0 3px 0;
+}
+
+.ps-wizard-socket-radio img[src*="smtpcom"] {
+  width: 40px;
+  height: auto;
+  object-fit: contain;
+  padding: 8px 0 3px 0;
+}
+
 .ps-wizard-socket-tick-container {
   transition: .5s ease;
   opacity: 0;
   position: absolute;
-  top: 29%;
-  left: 29%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
+  right: 0px;
   cursor: pointer;
+  top: 0;
 }
 
-.ps-wizard-socket-check:checked + label > .ps-wizard-socket-tick-container {
+.ps-wizard-socket-check:checked+label>.ps-wizard-socket-tick-container {
   opacity: 1;
 }
 
 .ps-wizard-socket-radio {
-  border: 2px solid #000;
-  width: 100px;
-  height: 66px;
-  margin-right: 15px;
-}
-
-.ps-wizard-socket-radio input {
-  display: none!important;
+  background: #FAFAFA;
+  border: 1px solid #EFEFEF;
+  width: 115px;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 5px;
 }
 
 .ps-wizard-socket-radio label {
-  margin: 0!important;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ps-wizard-socket-radio label .ps-wizard-socket-tick svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ps-wizard-see-more-outer .ps-wizard-socket-radio,
+.ps-wizard-see-more-outer .ps-wizard-socket-radio label {
+  cursor: pointer;
+}
+
+.ps-wizard-see-more-icon {
+  width: 50px;
+  height: 32px;
+  margin: 8px auto 4px;
+  background: url('../images/seemore.png') no-repeat center center;
+  background-size: contain;
+}
+
+.ps-wizard-see-more-text {
+  margin-top: 2px;
+}
+
+.ps-pro-extension-outer {
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  background: linear-gradient(113deg, rgba(0, 168, 255, 0.00) 0.45%, rgba(63, 140, 216, 0.20) 46.66%, rgba(142, 210, 245, 0.20) 50.11%, rgba(142, 210, 245, 0.00) 99.55%), #FAFAFA;
+
+}
+
+.ps-wizard-socket-radio input {
+  display: none !important;
+}
+
+.ps-wizard-socket-radio label {
+  margin: 0 !important;
+  /* display: inline-block; */
 }
 
 .ps-wizard-socket-tick span {
-  font-size: 15px;
-  background-color: #4caf50;
+  font-size: 13px;
+  background-color: #214A72;
   color: #fff;
   border-radius: 100%;
-  height: 15px;
-  width: 15px;
+  height: 14px;
+  width: 14px;
   border: 2px solid #fff;
 }
 
@@ -387,26 +492,81 @@
 
 .ps-wizard-sockets h4 {
   margin: 0;
+  color: #214A72;
+}
+
+.ps-step-heading {
+  color: #214A72;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.ps-from-address {
+  color: #214A72;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  /* 142.857% */
+}
+
+.ps-from-description {
+  color: #707070;
+}
+
+.ps-from-label {
+  color: #214A72;
+}
+
+.ps-wizard-step-4 .ps-feedback-heading {
+  color: #214A72;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0 0 8px;
+}
+
+.ps-wizard-step-4 .ps-feedback-heading .ps-heart {
+  color: #ff4b4b;
+  margin-right: 6px;
 }
 
 .ps-wizard-socket-radio:has(.ps-wizard-socket-check:checked) {
-  border: 2px solid #4db556;
+  border: 1px solid #214A72;
 }
 
 .button-primary.ps-blue-btn {
-  border: #485b87;
-  background: #375caf;
-  border-radius: 0px;
+  border: #214A72;
+  background: #214A72;
+  border-radius: 4px;
   line-height: 40px;
   width: 184px;
 }
 
-.button-primary.ps-blue-btn.focus, 
-.button-primary.ps-blue-btn.hover, 
-.button-primary.ps-blue-btn:focus, 
+.ps-blue-btn span{
+    line-height: 1.4 !important;
+}
+
+.button-primary.ps-blue-btn.ps-disabled {
+  background: #cccccc;
+  border-color: #999999;
+  color: #666666 !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.button-primary.ps-blue-btn.focus,
+.button-primary.ps-blue-btn.hover,
+.button-primary.ps-blue-btn:focus,
 .button-primary.ps-blue-btn:hover {
-  background: #4c6fbd;
-  border-color: #4c6fbd;
+  background: #214A72;
+  border-color: #214A72;
 }
 
 .button-primary.ps-yellow-btn {
@@ -418,17 +578,17 @@
   color: #000 !important;
 }
 
-.button-primary.ps-yellow-btn.focus, 
-.button-primary.ps-yellow-btn.hover, 
-.button-primary.ps-yellow-btn:focus, 
+.button-primary.ps-yellow-btn.focus,
+.button-primary.ps-yellow-btn.hover,
+.button-primary.ps-yellow-btn:focus,
 .button-primary.ps-yellow-btn:hover {
   background: #ffac31;
   border-color: #000000;
 }
 
-.button-primary.ps-blue-btn .dashicons, 
+.button-primary.ps-blue-btn .dashicons,
 .button-primary.ps-yellow-btn .dashicons {
-  vertical-align: middle;
+  vertical-align: sub !important;
   font-size: 15px;
 }
 
@@ -441,24 +601,25 @@
 }
 
 .ps-wizard-footer-right .ps-wizard-step-1,
-.ps-wizard-footer-right .ps-wizard-step-2, 
+.ps-wizard-footer-right .ps-wizard-step-2,
 .ps-wizard-footer-right .ps-wizard-step-3,
 .ps-wizard-footer-right .ps-wizard-step-4 {
   padding: 15px 10px;
 }
 
 .ps-wizard-error {
-  color: red;
+  color: red !important;
 }
 
 .ps-wizard-success {
-  color: green;
+  color: green !important;
 }
 
 .ps-wizard-error,
 .ps-wizard-success {
-  display: inline-block;
-  font-weight: 600;;
+  display: block;
+  font-weight: 600;
+  ;
 }
 
 .ps-loading-test-report {
@@ -472,6 +633,7 @@
 
 .ps-wizard-edit .dashicons-edit {
   cursor: pointer;
+  display: none;
 }
 
 .ps-wizard-socket {
@@ -481,7 +643,7 @@
 .ps-wizard-back {
   font-size: 12px;
   text-decoration: none;
-  color: #375caf!important;
+  color: #375caf !important;
 }
 
 .ps-wizard-back span {
@@ -491,20 +653,36 @@
 
 .ps-wizard-socket h3 {
   margin: 5px 0;
+  color: #214A72;
 }
 
 .ps-form-ui label {
   font-weight: 600;
+  color: #214A72;
 }
 
-.ps-form-ui input[type="text"], 
+.ps-form-ui input[type="text"],
 .ps-form-ui select {
-  width: 100%!important;
-  max-width: 100%!important;
+  width: 100% !important;
+  max-width: 100% !important;
   height: 37px;
   margin-top: 5px;
-  border: 1px solid #000;
+  border-radius: 2px;
+  border: 1px solid #DCDFE5 !important;
+  background: #FDFDFE !important;
   border-radius: 0;
+}
+
+.ps-switch-1 .slider {
+  background-color: #fff !important;
+  border-radius: 20px;
+  border: 0.5px solid #C2CDD9 !important;
+}
+
+.ps-switch-1 .slider:before {
+  background-color: #C2CDD9 !important;
+  left: 1px !important;
+  bottom: 1px !important;
 }
 
 .ps-form-control {
@@ -524,8 +702,29 @@
   display: inline-block;
 }
 
-.ps-form-switch-control .ps-switch-1 input:checked + .slider {
-  background-color: #375caf;
+.ps-wizard-toggle-row {
+  margin-top: 10px;
+}
+
+.ps-wizard-toggle-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.ps-wizard-toggle-description {
+  margin: 0;
+  color: #707070;
+}
+
+.ps-form-switch-control .ps-switch-1 input:checked+.slider {
+  /* background-color: #214A72 !important; */
+  border-color: #214A72 !important;
+}
+
+.ps-form-switch-control .ps-switch-1 input:checked+.slider:before {
+  background-color: #214A72 !important;
 }
 
 .ps-wizard-congrates {
@@ -541,8 +740,8 @@
 }
 
 .ps-wizard-card {
-    background: whitesmoke;
-    padding: 8px 15px;
+  background: whitesmoke;
+  padding: 8px 15px;
 }
 
 .ps-wizard-card p {
@@ -550,7 +749,8 @@
 }
 
 .ps-wizard-page-footer {
-  width: 875px;
+  width: 95%;
+  max-width: 875px;
   text-align: center;
   margin: 45px auto;
 }
@@ -568,6 +768,7 @@
   width: auto;
 }
 
+
 .ps-pro-extension-outer {
   position: relative;
 }
@@ -581,16 +782,42 @@
 }
 
 .ps-pro-extension-tag {
-  position: absolute;
-  left: 1px;
-  top: 1px;
-  background: #FF9900;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: bold;
-  font-family: sans-serif;
-  padding: 0px 3px;
+  color: transparent;
+  background: url(../images/probadge.svg) no-repeat center;
+  left: auto;
+  right: 4px;
+  background-size: 100%;
+  width: 30px;
+  height: 15px;
+  top: 5px;
 }
+
+/* Finished + currently active step */
+.ps-wizard-nav tr.finished.ps-active-nav span.ps-tick:before {
+  background: url(../images/finished-white.svg) #214A72 no-repeat center !important;
+  border-color: #214A72;
+}
+
+.ps-wizard-nav tr.finished:not(.ps-active-nav) span.ps-tick:before {
+  background: url(../images/finished.svg) no-repeat center;
+  background-size: 20px;
+}
+
+.ps-wizard-nav tr:not(.ps-active-nav, .ps-in-active-nav) span.ps-tick.dashicons-yes-alt:before {
+  background: url(../images/check.svg) #214A72 no-repeat center;
+  background-size: 30px;
+}
+
+.ps-wizard-nav span.ps-tick:before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  display: block;
+  border: 1px solid #CDCDCD;
+  border-radius: 100%;
+}
+
+.ps-wizard-nav span.ps-tick:before {}
 
 .ps-pro-popup-overlay {
   display: none;
@@ -700,6 +927,7 @@ span.ps-pro-close-popup {
   -webkit-text-fill-color: transparent;
   font-weight: bolder;
 }
+
 #ps-pro-code-copy-notification .dashicons {
   vertical-align: middle;
 }
@@ -725,10 +953,11 @@ span.ps-pro-close-popup {
 }
 
 .ps-wizard-outer.smtp2go_api-outer .ps-wizard-footer-left .ps-wizard-line::after {
-  height: 534px !important;
+  height: 515px !important;
 }
+
 .ps-wizard-outer.default-outer .ps-wizard-footer-left .ps-wizard-line::after {
-  height: 418px !important;
+  height: 320px !important;
 }
 
 .ps-wizard-pro-tag {
@@ -738,26 +967,29 @@ span.ps-pro-close-popup {
   padding: 0px 8px;
   border-radius: 50px;
 }
+
 .ps-enable-gmail-one-click.disabled {
   pointer-events: all;
   opacity: 0;
   cursor: not-allowed;
 }
+
 .ps-hidden {
   display: none;
 }
 
-.ps-office365-btn{
+.ps-office365-btn {
   background-color: #4285f4 !important;
   border-radius: 0px !important;
   line-height: 40px !important;
   font-size: 15px !important;
-  width: 215px;
+  width: 250px !important;
   display: inline-flex !important;
   align-items: center;
   text-decoration: none;
   height: 50px;
 }
+
 .ps-office365-btn::before {
   content: '';
   font-size: 20px;
@@ -770,12 +1002,12 @@ span.ps-pro-close-popup {
   background-color: white;
 }
 
-.ps-gmail-btn{
+.ps-gmail-btn {
   background-color: #4285f4 !important;
   border-radius: 0px !important;
   line-height: 40px !important;
   font-size: 15px !important;
-  width: 184px;
+  width: 204px;
   display: inline-flex !important;
   align-items: center;
   text-decoration: none;
@@ -792,36 +1024,38 @@ span.ps-pro-close-popup {
   background-color: white;
   padding-top: 5px;
 }
-.ps-remove-gmail-btn{
+
+.ps-remove-gmail-btn {}
+
+.ps-remove-office365-btn {
+  background: none !important;
+  color: red !important;
+  font-size: 10px !important;
+  margin-left: 20px !important;
+  border: none !important;
+  margin-top: 30px !important;
+  text-decoration: underline !important;
 }
 
-.ps-remove-office365-btn{
-    background: none !important;
-    color: red !important;
-    font-size: 10px !important;
-    margin-left: 20px !important;
-    border: none !important;
-    margin-top: 30px !important;
-    text-decoration: underline !important;
+
+.ps-wizard-socket .ps-remove-gmail-btn {
+  margin-top: 20px !important
 }
 
-  
-.ps-wizard-socket .ps-remove-gmail-btn{
-  margin-top:20px !important
-}
-.ps-disable-gmail-setup b{
+.ps-disable-gmail-setup b {
   display: inline-block;
   margin-left: 5px;
   margin-top: 30px !important;
- color: green;
+  color: green;
 }
-.ps-connect-with{
-	margin-left: 20px;
+
+.ps-connect-with {
+  margin-left: 20px;
 }
 
 /* Lets make wiz3rd responsive */
 .ps-dns-results p {
-  margin: 0;  
+  margin: 0;
 }
 
 .ps-dns-heading {
@@ -894,9 +1128,11 @@ span.ps-pro-close-popup {
   margin: auto;
   font-size: 17px;
 }
-.ps-pro-popup-body .ps-pro-popup-content *:not(.dashicons){
+
+.ps-pro-popup-body .ps-pro-popup-content *:not(.dashicons) {
   font-family: "Poppins", sans-serif;
 }
+
 .ps-pro-popup-content h4 {
   font-weight: 400;
   font-size: 14px;
@@ -920,6 +1156,7 @@ span.ps-pro-close-popup {
 .ps-pro-popup-body .ps-pro-popup-content strong {
   font-weight: 700;
 }
+
 .ps-pro-coupon span.copy-icon {
   position: absolute;
   width: 25px;
@@ -932,10 +1169,12 @@ span.ps-pro-close-popup {
   justify-content: center;
   color: #5E7CBF;
 }
+
 .ps-pro-coupon span.copy-icon svg {
   width: 15px;
   height: 15px;
 }
+
 .ps-pro-popup-content a.button {
   font-weight: 600;
   color: #fff !important;
@@ -943,6 +1182,7 @@ span.ps-pro-close-popup {
   width: auto;
   line-height: normal;
 }
+
 div#ps-pro-code-copy-notification {
   position: absolute;
   color: rgb(179, 213, 182);
@@ -958,23 +1198,26 @@ div#ps-pro-code-copy-notification {
   background: rgb(225, 253, 228);
   display: none;
 }
+
 /* Lets make wizard responsive */
 
-.wizard-btn-css{
-	background: none !important;
-	color: red !important;
-    font-size: 10px !important;
-    margin-left: 100px; 
+.wizard-btn-css {
+  background: none !important;
+  color: red !important;
+  font-size: 10px !important;
+  margin-left: 100px;
 }
-.wizard-btn{
-	margin-left: 0px !important;
+
+.wizard-btn {
+  margin-left: 0px !important;
 }
+
 .icon-circle {
   width: 24px;
   height: 24px;
   background-color: #28a745;
   border-radius: 50%;
-  display: inline-flex; 
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-top: 4px;
@@ -989,29 +1232,37 @@ div#ps-pro-code-copy-notification {
   transform: rotate(45deg);
   display: inline-block;
 }
-.ps-wizard-send-test-email:disabled{
- 	background: #cccccc;
-    border: 1px solid #999999;
-    color: #666666;
-    cursor: not-allowed;
-    opacity: 0.6;	
+
+.ps-wizard-send-test-email:disabled {
+  background: #cccccc;
+  border: 1px solid #999999;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.ps-disable-office365-setup b{
-    display: inline-block;
-    margin-left: 5px;
-    margin-top: 30px !important;
-    color: green;
+.ps-wizard-footer-right .ps-finish-wizard {
+  width: auto;
+  min-width: 184px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.ps-disable-office365-setup b {
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 30px !important;
+  color: green;
 }
 
 /* Office 365 Business Plan Upgrade Styles */
 .ps-office365-upgrade-required {
-  
-    cursor: not-allowed;
+
+  cursor: not-allowed;
 }
 
 .ps-office365-upgrade-required input[type="checkbox"] {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 label.ps-office365-upgrade-required:hover:before {
@@ -1021,7 +1272,7 @@ label.ps-office365-upgrade-required:hover:before {
   right: 0;
   width: 400px;
   height: 288px;
-   background: url(images/office-once-click.gif) no-repeat #ffff;
+  background: url(images/office-once-click.gif) no-repeat #ffff;
   box-shadow: 0px 3px 36px -7px #000;
   border-radius: 5px;
   z-index: 2;
@@ -1029,20 +1280,167 @@ label.ps-office365-upgrade-required:hover:before {
   background-size: 100%;
 
 }
-.ps-wizard .ps-wizard-footer .ps-wizard-nav .ps-wizard-line:after{
-	height: 540px;
+
+.ps-wizard .ps-wizard-footer .ps-wizard-nav .ps-wizard-line:after {
+  height: 325px;
 }
-.ps-wizard .ps-wizard-send-email .ps-wizard-footer .ps-wizard-nav .ps-wizard-line:after{
-	height: 345px;
+
+.ps-wizard.ps-see-more-open .ps-wizard-footer .ps-wizard-nav .ps-wizard-line:after {
+  height: 505px;
 }
+
+.ps-wizard .ps-wizard-send-email .ps-wizard-footer .ps-wizard-nav .ps-wizard-line:after {
+  height: 345px;
+}
+
 span.ps-wizard-line:after {
-    content: '';
-    position: absolute;
-    width: 3px;
-    height: 39px;
-    left: 23px;
-    bottom: 41px;
-    z-index: -3;
+  content: '';
+  position: absolute;
+  width: 1.5px;
+  height: 26px;
+  left: 24px;
+  bottom: 46px;
+  z-index: -3;
 }
 
 /* Lets make wizard responsive */
+.post-smtp_page_postman-configuration_wizard {
+  background-color: #fff;
+}
+
+.ps-force {
+  /* display: flex; */
+  /* width: 500px; */
+  padding: 10px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  background: #F8F8F8;
+  margin-top: 20px;
+}
+
+.ps-force span {
+  color: #707070;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.ps-force-heading {
+  margin: 0;
+  margin-right: 8px;
+  color: #214A72;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ps-home-middle-right {
+  height: 250px !important;
+  border-radius: 8.225px !important;
+  position: relative;
+  overflow: visible;
+}
+
+.ps-mobile-notice-content {
+  padding: 30px 30px 0px 0px;
+}
+
+
+.ps-mobile-feature-left {
+  font-size: 10.58px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.ps-mobile-feature-right {
+  font-size: 10.58px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.ps-app-download-button {
+  width: 130.622px;
+  height: 36.74px;
+}
+
+.ps-app-download-button a {
+  font-size: 5px;
+}
+
+.ps-mobile-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+}
+
+.ps-mobile-check svg {
+  display: block;
+}
+
+.ps-app-download-button {
+  width: 95px !important;
+  padding: 2px !important;
+  margin-top: 0px !important;
+  background-color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.ps-mobile-notice-content-title {
+  color: #214A72 !important;
+  font-family: Poppins;
+  font-size: 13.16px !important;
+  ;
+  font-style: normal;
+  font-weight: 700 !important;
+  ;
+  line-height: 150%;
+  /* 19.74px */
+}
+
+.ps-app-download-button a {
+  padding-top: 5px;
+}
+
+.ps-wizard-step-end.ps-active-nav .ps-wizard-circle span.ps-tick:before {}
+
+#ps-wizard-form .wizrd_footer {
+  display: flex;
+  align-items: center;
+  margin: 40px 0 0;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+#ps-wizard-form .wizrd_footer button {
+  padding: 10px 16px;
+  width: auto;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#ps-wizard-form .wizrd_footer button span.dashicons {
+  height: auto;
+}
+
+#ps-wizard-form .wizrd_footer p.ps-wizard-error {
+  margin: 0;
+}
+
+#ps-wizard-form .wizrd_footer p {
+  margin: 0 0 5px;
+}
+
+#ps-wizard-form .wizrd_footer p a {
+  font-style: normal;
+  font-weight: 700;
+}

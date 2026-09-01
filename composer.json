@@ -1,4 +1,7 @@
 {
+    "name": "unc-sog/sog-foundation",
+    "description": "UNC School of Government Foundation WordPress site",
+    "license": "proprietary",
     "type": "project",
     "config": {
         "vendor-dir": "vendor",
@@ -15,15 +18,14 @@
         }
     ],
     "require": {
-        "phpmailer/phpmailer": "~5.2",
         "wpackagist-plugin/beehive-analytics": "^3.4.17",
         "wpackagist-plugin/better-search-replace": "^1.4.10",
-        "wpackagist-plugin/co-authors-plus":"3.6.2",
-        "wpackagist-plugin/codepress-admin-columns":"4.7.7",
+        "wpackagist-plugin/co-authors-plus": "^4.1.1",
+        "wpackagist-plugin/codepress-admin-columns": "^7.0.19",
         "wpackagist-plugin/redirection": "^5.5.2",
-        "wpackagist-plugin/relevanssi":"4.23.1",
-        "wpackagist-plugin/wordpress-seo":"25.5",
-        "wpackagist-plugin/wp-ban":"1.69.1",
+        "wpackagist-plugin/relevanssi": "^4.28.2",
+        "wpackagist-plugin/wordpress-seo": "^28.3",
+        "wpackagist-plugin/wp-ban": "^2.0.0",
         "wpackagist-plugin/wp-saml-auth": "^2.2.0",
         "wpackagist-theme/twentytwentyfive": "^1.2",
         "pantheon-systems/upstream-management": "^1.0.1"

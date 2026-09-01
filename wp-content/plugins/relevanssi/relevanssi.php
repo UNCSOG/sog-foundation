@@ -13,16 +13,16 @@
  * Plugin Name: Relevanssi
  * Plugin URI: https://www.relevanssi.com/
  * Description: This plugin replaces WordPress search with a relevance-sorting search.
- * Version: 4.26.0
- * Author: Mikko Saari
- * Author URI: http://www.mikkosaari.fi/
+ * Version: 4.28.2
+ * Author: eurodata comesio solutions GmbH
+ * Author URI: https://www.relevanssi.com/
  * Text Domain: relevanssi
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 /**
- * Copyright 2025 Mikko Saari  (email: mikko@mikkosaari.fi)
+ * Copyright 2026 eurodata comesio solutions GmbH  (email: hello@relevanssi.com)
  * This file is part of Relevanssi, a search plugin for WordPress.
  *
  * Relevanssi is free software: you can redistribute it and/or modify
@@ -42,6 +42,8 @@
 define( 'RELEVANSSI_PREMIUM', false );
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'relevanssi_action_links' );
+
+register_deactivation_hook( __FILE__, 'relevanssi_deactivate' );
 
 global $wp_version;
 if ( version_compare( $wp_version, '5.1', '>=' ) ) {
@@ -67,10 +69,11 @@ $relevanssi_variables['database_version']                      = 9;
 $relevanssi_variables['file']                                  = __FILE__;
 $relevanssi_variables['plugin_dir']                            = plugin_dir_path( __FILE__ );
 $relevanssi_variables['plugin_basename']                       = plugin_basename( __FILE__ );
-$relevanssi_variables['plugin_version']                        = '4.26.0';
+$relevanssi_variables['plugin_version']                        = '4.28.2';
 
 require_once 'lib/admin-ajax.php';
 require_once 'lib/common.php';
+require_once 'lib/deactivate.php';
 require_once 'lib/debug.php';
 require_once 'lib/didyoumean.php';
 require_once 'lib/excerpts-highlights.php';
@@ -90,3 +93,36 @@ require_once 'lib/sorting.php';
 require_once 'lib/stopwords.php';
 require_once 'lib/user-searches.php';
 require_once 'lib/utils.php';
+
+require_once 'lib/settings/infrastructure/interface-relevanssi-setting-field.php';
+require_once 'lib/settings/infrastructure/class-relevanssi-abstract-setting-field.php';
+require_once 'lib/settings/infrastructure/class-relevanssi-setting-field-factory.php';
+require_once 'lib/settings/class-relevanssi-settings-renderer.php';
+
+require_once 'lib/settings/fields/class-relevanssi-setting-field-text.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-color.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-callback.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-textarea.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-custom-fields-group.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-select.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-checkbox.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-multicheckbox.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-radio.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-number.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-subheader.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-post-types-table.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-taxonomies-table.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-custom-fields-list.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-attachment-manager.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-media-upload.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-related-keywords.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-related-post-types.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-submit-button.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-upsell.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-redirects.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-synonyms.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-category-checklist.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-standalone-taxonomies.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-stopwords-manager.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-body-stopwords-manager.php';
+require_once 'lib/settings/fields/class-relevanssi-setting-field-weights-table.php';

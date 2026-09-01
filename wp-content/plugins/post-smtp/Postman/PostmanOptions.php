@@ -94,6 +94,10 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 	const SENDINBLUE_API_KEY = 'sendinblue_api_key';
 	const MAILTRAP_API_KEY = 'mailtrap_api_key';
 	const RESEND_API_KEY = 'resend_api_key';
+	const CLOUDFLARE_API_TOKEN = 'cloudflare_api_token';
+	const CLOUDFLARE_ACCOUNT_ID = 'cloudflare_account_id';
+	const SMTPCOM_API_KEY = 'smtpcom_api_key';
+	const SMTPCOM_CHANNEL = 'smtpcom_channel';
 	const MAILJET_API_KEY = 'mailjet_api_key';
 		const MAILJET_SECRET_KEY = 'mailjet_secret_key';
 		const SENDPULSE_API_KEY = 'sendpulse_api_key';
@@ -418,7 +422,13 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
 			}
 
 			if ( isset( $this->options [ PostmanOptions::BASIC_AUTH_PASSWORD ] ) ) {
-				return base64_decode( $this->options [ PostmanOptions::BASIC_AUTH_PASSWORD ] );
+				$value = $this->options [ PostmanOptions::BASIC_AUTH_PASSWORD ];
+				$decoded = base64_decode( $value, true );
+				// If decoding fails (e.g. password stored as plain text or from import), return as-is so auth still works.
+				if ( $decoded === false ) {
+					return $value;
+				}
+				return $decoded;
 			}
 		}
 
@@ -699,6 +709,80 @@ if ( ! class_exists( 'PostmanOptions' ) ) {
             }
 
         }
+
+		/**
+		 * Get Cloudflare API token.
+		 *
+		 * @since 3.2.0
+		 * @version 1.0
+		 *
+		 * @return string|null
+		 */
+		public function getCloudflareApiToken() {
+
+			if ( defined( 'POST_SMTP_API_KEY' ) ) {
+				return POST_SMTP_API_KEY;
+			}
+
+			if ( isset( $this->options[PostmanOptions::CLOUDFLARE_API_TOKEN] ) ) {
+				return base64_decode( $this->options[PostmanOptions::CLOUDFLARE_API_TOKEN] );
+			}
+
+			return null;
+		}
+
+		/**
+		 * Get Cloudflare account id.
+		 *
+		 * @since 3.2.0
+		 * @version 1.0
+		 *
+		 * @return string|null
+		 */
+		public function getCloudflareAccountId() {
+			if ( isset( $this->options[PostmanOptions::CLOUDFLARE_ACCOUNT_ID] ) ) {
+				return $this->options[PostmanOptions::CLOUDFLARE_ACCOUNT_ID];
+			}
+
+			return null;
+		}
+
+		/**
+		 * Get SMTP.com API key.
+		 *
+		 * @since 4.0.0
+		 * @version 1.0
+		 *
+		 * @return string|null
+		 */
+		public function getSmtpcomApiKey() {
+
+			if ( defined( 'POST_SMTP_API_KEY' ) ) {
+				return POST_SMTP_API_KEY;
+			}
+
+			if ( isset( $this->options[PostmanOptions::SMTPCOM_API_KEY] ) ) {
+				return base64_decode( $this->options[PostmanOptions::SMTPCOM_API_KEY] );
+			}
+
+			return null;
+		}
+
+		/**
+		 * Get SMTP.com channel.
+		 *
+		 * @since 4.0.0
+		 * @version 1.0
+		 *
+		 * @return string|null
+		 */
+		public function getSmtpcomChannel() {
+			if ( isset( $this->options[PostmanOptions::SMTPCOM_CHANNEL] ) ) {
+				return $this->options[PostmanOptions::SMTPCOM_CHANNEL];
+			}
+
+			return null;
+		}
 
 		/**
 		 * Gets Mailjet API key

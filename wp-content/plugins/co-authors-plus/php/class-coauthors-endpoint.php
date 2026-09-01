@@ -19,8 +19,9 @@ class Endpoints {
 	/**
 	 * Routes for various endpoints.
 	 */
-	const SEARCH_ROUTE  = 'search';
-	const AUTHORS_ROUTE = 'authors';
+	const SEARCH_ROUTE          = 'search';
+	const AUTHORS_ROUTE         = 'authors';
+	const AUTHORS_BY_TERMS_ROUTE = 'authors-by-term-ids';
 
 	/**
 	 * Link to remove from REST response to manage core author visibility in
@@ -43,7 +44,15 @@ class Endpoints {
 	 */
 	public function __construct( $coauthors_instance ) {
 		$this->coauthors = $coauthors_instance;
+	}
 
+	/**
+	 * Register the REST API hooks.
+	 *
+	 * Called from the composition root after construction so that creating an
+	 * instance has no global side effects.
+	 */
+	public function register_hooks(): void {
 		add_action( 'rest_api_init', array( $this, 'add_endpoints' ) );
 		add_action( 'wp_loaded', array( $this, 'modify_responses' ) );
 	}
@@ -97,6 +106,25 @@ class Endpoints {
 
 		register_rest_route(
 			static::NS,
+			static::AUTHORS_BY_TERMS_ROUTE,
+			array(
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( $this, 'get_coauthors_by_term_ids' ),
+					'permission_callback' => array( $this, 'can_edit_coauthors' ),
+					'args'                => array(
+						'ids' => array(
+							'description' => __( 'Comma-separated list of taxonomy term IDs.', 'co-authors-plus' ),
+							'required'    => true,
+							'type'        => 'string',
+						),
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			static::NS,
 			static::AUTHORS_ROUTE . static::ENDPOINT_POST_ID_REGEX,
 			array(
 				array(
@@ -136,7 +164,10 @@ class Endpoints {
 
 		if ( ! empty( $authors ) ) {
 			foreach ( $authors as $author ) {
-				$response[] = $this->_format_author_data( $author );
+				$formatted = $this->_format_author_data( $author );
+				if ( null !== $formatted ) {
+					$response[] = $formatted;
+				}
 			}
 		}
 
@@ -182,6 +213,38 @@ class Endpoints {
 	}
 
 	/**
+	 * Resolve taxonomy term IDs to rich co-author data.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response
+	 */
+	public function get_coauthors_by_term_ids( $request ): WP_REST_Response {
+		$response = array();
+		$ids      = array_map( 'absint', explode( ',', $request->get_param( 'ids' ) ) );
+
+		foreach ( $ids as $term_id ) {
+			$term = get_term( $term_id, $this->coauthors->coauthor_taxonomy );
+
+			if ( ! $term || is_wp_error( $term ) ) {
+				continue;
+			}
+
+			$author = $this->coauthors->get_coauthor_by( 'user_nicename', $term->slug );
+
+			if ( ! $author ) {
+				continue;
+			}
+
+			$formatted = $this->_format_author_data( $author );
+			if ( null !== $formatted ) {
+				$response[] = $formatted;
+			}
+		}
+
+		return rest_ensure_response( $response );
+	}
+
+	/**
 	 * Validate input arguments.
 	 *
 	 * @param mixed $param Value to validate.
@@ -204,18 +267,32 @@ class Endpoints {
 	 * Helper function to consistently format the author data for
 	 * the response.
 	 *
-	 * @param object  $author The result from co-authors methods.
-	 * @return array
+	 * Returns null if a valid taxonomy term can't be resolved for the author.
+	 * Callers should skip null entries: a coauthor row without a term id can't
+	 * be persisted by the editor (wp_set_object_terms would silently drop it),
+	 * so we exclude it from the response rather than feed the editor data it
+	 * can't round-trip.
+	 *
+	 * @param object $author The result from co-authors methods.
+	 * @return array|null
 	 */
-	public function _format_author_data( $author ): array {
+	public function _format_author_data( $author ): ?array {
+		$term = $this->coauthors->update_author_term( $author );
+
+		if ( ! $term || is_wp_error( $term ) ) {
+			return null;
+		}
+
+		$user_type = isset( $author->type ) && 'guest-author' === $author->type ? 'guest-user' : 'wp-user';
 
 		return array(
 			'id'           => esc_html( $author->ID ),
+			'termId'       => (int) $term->term_id,
 			'userNicename' => esc_html( rawurldecode( $author->user_nicename ) ),
 			'login'        => esc_html( $author->user_login ),
 			'email'        => sanitize_email( $author->user_email ),
 			'displayName'  => esc_html( str_replace( '∣', '|', $author->display_name ) ),
-			'avatar'       => esc_url( get_avatar_url( $author->ID ) ),
+			'avatar'       => esc_url( get_avatar_url( $author->ID, array( 'user_type' => $user_type ) ) ),
 			'userType'     => esc_html( $author->type ),
 		);
 	}
@@ -231,7 +308,10 @@ class Endpoints {
 
 		if ( ! empty( $authors ) ) {
 			foreach ( $authors as $author ) {
-				$response[] = $this->_format_author_data( $author );
+				$formatted = $this->_format_author_data( $author );
+				if ( null !== $formatted ) {
+					$response[] = $formatted;
+				}
 			}
 		}
 	}

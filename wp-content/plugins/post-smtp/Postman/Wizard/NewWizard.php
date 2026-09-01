@@ -39,7 +39,9 @@ class Post_SMTP_New_Wizard {
             'id'            =>  array()
         ),
         'p'             =>  array(),
-        'h3'            =>  array(),
+        'h3'            =>  array(
+            'class'         =>  array(),
+        ),
         'select'        =>  array(
             'name'          =>  array()
         ),
@@ -62,25 +64,31 @@ class Post_SMTP_New_Wizard {
 
         $this->socket_sequence = array(
             'gmail_api',
-            'resend_api',
-            'sendinblue_api',
-            'mailtrap_api',
             'sendgrid_api',
-            'mailgun_api',
-            'elasticemail_api',
-            'mandrill_api',
+            'sendinblue_api',
             'postmark_api',
-            'sparkpost_api',
-            'mailjet_api',
-            'smtp2go_api',
-            'sendpulse_api',
+            'maileroo_api',
+            'mailtrap_api',
             'mailersend_api',
             'emailit_api',
-            'maileroo_api',
-            'sweego_api'
+            'sweego_api',
+            'resend_api',
+            'cloudflare_api',
+            'smtpcom_api',
+            'elasticemail_api',
+            'mailgun_api',
+            'smtp2go_api',
+            'mandrill_api',
+            'sparkpost_api',
+            'mailjet_api',
+            'sendpulse_api',
             
         );
         
+        
+        $this->socket_sequence[] = 'smtp';
+        $this->socket_sequence[] = 'default';
+
         if( !is_plugin_active( 'post-smtp-pro/post-smtp-pro.php' ) ) {
 
             $this->socket_sequence[] = 'office365_api';
@@ -88,9 +96,6 @@ class Post_SMTP_New_Wizard {
             $this->socket_sequence[] = 'zohomail_api';
 
         }
-
-        $this->socket_sequence[] = 'smtp';
-        $this->socket_sequence[] = 'default';
         
         add_filter( 'post_smtp_legacy_wizard', '__return_false' );
         add_action( 'post_smtp_new_wizard', array( $this, 'load_wizard' ) );
@@ -98,6 +103,8 @@ class Post_SMTP_New_Wizard {
         add_action( 'wp_ajax_ps-save-wizard', array( $this, 'save_wizard' ) );
         add_action( 'wp_ajax_update_post_smtp_pro_option', array( $this, 'update_post_smtp_pro_option_callback' ) );
         add_action( 'wp_ajax_update_post_smtp_pro_option_office365', array( $this, 'update_post_smtp_pro_option_office365_callback' ) );
+        add_action( 'wp_ajax_ps_get_office365_auth_url', array( $this, 'ajax_get_office365_auth_url' ) );
+        add_action( 'wp_ajax_ps_get_gmail_auth_url', array( $this, 'ajax_get_gmail_auth_url' ) );
         add_action( 'admin_action_zoho_auth_request', array( $this, 'auth_zoho' ) );
         add_action( 'admin_post_remove_oauth_action', array( $this, 'post_smtp_remove_oauth_action' ) );
         add_action( 'admin_init', array( $this, 'handle_gmail_oauth_redirect' ) );
@@ -137,10 +144,15 @@ class Post_SMTP_New_Wizard {
  
         
         <div class="wrap">
-            <div class="ps-wizard">
+            <div class="ps-wizard-top">
                 <div class="ps-logo">
                     <img src="<?php echo esc_attr( POST_SMTP_ASSETS ) . '/images/logos/post-smtp-logo-large.svg'; ?>" width="250px" />
                 </div>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=postman' ) ); ?>" class="button ps-back-dashboard">
+                    <?php esc_html_e( 'Back to Dashboard', 'post-smtp' ); ?>
+                </a>
+            </div>
+            <div class="ps-wizard">
                 <div class="ps-wizard-outer <?php echo esc_attr( $socket ); ?>">
                     <div class="ps-wizard-section">
                         <div class="ps-wizard-nav">
@@ -155,10 +167,15 @@ class Post_SMTP_New_Wizard {
                                     <td class="ps-wizard-text"><?php _e( 'Configure Mailer Settings', 'post-smtp' ) ?></td>
                                     <td class="ps-wizard-edit"><span class="dashicons dashicons-edit" data-step="2"></span></td>
                                 </tr>
-                                <tr class="ps-wizard-step-end ps-in-active-nav">
+                                <tr class="ps-wizard-step-between ps-in-active-nav">
                                     <td class="ps-wizard-circle"><span class="ps-tick dashicons dashicons-yes-alt"><span class="ps-wizard-line"></span></span></td>
                                     <td class="ps-wizard-text"><?php _e( 'Send Test Email', 'post-smtp' ) ?></td>
                                     <td class="ps-wizard-edit"><span class="dashicons dashicons-edit" data-step="3"></span></td>
+                                </tr>
+                                <tr class="ps-wizard-step-end ps-in-active-nav finished">
+                                    <td class="ps-wizard-circle"><span class="ps-tick dashicons dashicons-yes-alt"><span class="ps-wizard-line"></span></span></td>
+                                    <td class="ps-wizard-text"><?php _e( 'Finish', 'post-smtp' ); ?></td>
+                                    <td class="ps-wizard-edit"><span class="dashicons dashicons-edit" data-step="4"></span></td>
                                 </tr>
                             </table>
                         </div>
@@ -167,25 +184,26 @@ class Post_SMTP_New_Wizard {
                                 <?php wp_nonce_field( 'post-smtp', 'security' );  ?>
                                 <div class="ps-wizard-screens-container">
                                     <div class="ps-wizard-step ps-wizard-step-1">
-                                        <p style="width: 70%; margin-bottom: 30px;"><?php echo esc_html__( 'Choose a mailer from the following options.', 'post-smtp' ); ?></p>
+                                        <p style="width: 100%; margin-bottom: 10px;color:#707070"><?php echo esc_html__( 'Choose a mailer from the following options.', 'post-smtp' ); ?></p>
                                         <div class="ps-wizard-sockets">      
                                         <?php
 
                                         $row  = 0;
+                                        $in_pro_row = false;
 
                                         $transports = array_merge( array_flip( $this->socket_sequence ), $transports );
                                         
                                         foreach( $transports as $key => $transport ) {
-
+                                            $class = '';
                                             $urls = array(
-                                                'default'           =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/smtp.png',
-                                                'smtp'              =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/smtp.png',
+                                                'default'           =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/smtp.svg',
+                                                'smtp'              =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/smtp.svg',
                                                 'gmail_api'         =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/gmail.png',
                                                 'mandrill_api'      =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/mandrill.png',
                                                 'sendgrid_api'      =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/sendgrid.png',
                                                 'mailersend_api'    =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/mailersend.png',
                                                 'mailgun_api'       =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/mailgun.png',
-                                                'sendinblue_api'    =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/brevo.png',
+                                                'sendinblue_api'    =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/brevo.svg',
                                                 'mailtrap_api'      =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/mailtrap.png',
                                                 'postmark_api'      =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/postmark.png',
                                                 'sparkpost_api'     =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/sparkpost.png',
@@ -197,6 +215,8 @@ class Post_SMTP_New_Wizard {
                                                 'aws_ses_api'       =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/amazon.png',
                                                 'zohomail_api'      =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/zoho.png',
                                                 'resend_api'        =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/resend.png',
+                                                'cloudflare_api'    =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/cloudflare-figma.svg',
+                                                'smtpcom_api'       =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/smtpcom.png',
                                                 'emailit_api'       =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/emailit.png',
                                                 'maileroo_api'      =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/maileroo.png',
                                                 'sweego_api'        =>  POST_SMTP_URL . '/Postman/Wizard/assets/images/sweego.png'
@@ -264,18 +284,31 @@ class Post_SMTP_New_Wizard {
 
                                             }
 
-                                            if( $row >= 4 ) {
+                                            // When we hit the first PRO mailer, close the current
+                                            // sockets row and start a dedicated PRO row so all
+                                            // PRO mailers appear together on their own line.
+                                            if ( ! empty( $is_pro ) && ! $in_pro_row ) {
+
+                                                $in_pro_row = true;
+                                                $row = 0;
+                                                ?>
+                                                
+                                                <?php
+
+                                            }
+
+                                            // Regular (non‑PRO) mailers are grouped in rows of 4.
+                                            if( $row >= 4 && empty( $is_pro ) ) {
 
                                                 $row = 0;
 
                                                 ?>
-                                                </div>
-                                                <div class="ps-wizard-sockets">
+                                               
                                                 <?php
 
 
                                             }
-
+                                            
                                             ?>
                                             <div class="ps-wizard-socket-radio-outer">
                                                 <div class="ps-wizard-socket-radio <?php echo !empty( $is_pro ) ? esc_attr( $is_pro ) . '-outer' : ''; ?>" <?php echo !empty( $is_pro ) ? 'data-url="' . esc_url( $product_url ) . '"' : ''; ?>>
@@ -289,7 +322,11 @@ class Post_SMTP_New_Wizard {
                                                         <img src="<?php echo esc_url( $url ); ?>">
                                                         <?php if( empty( $is_pro ) ) : ?>
                                                             <div class="ps-wizard-socket-tick-container">
-                                                                <div class="ps-wizard-socket-tick"><span class="dashicons dashicons-yes"></span></div>
+                                                                <div class="ps-wizard-socket-tick">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                                                    <path d="M6 1C3.245 1 1 3.245 1 6C1 8.755 3.245 11 6 11C8.755 11 11 8.755 11 6C11 3.245 8.755 1 6 1ZM8.39 4.85L5.555 7.685C5.485 7.755 5.39 7.795 5.29 7.795C5.19 7.795 5.095 7.755 5.025 7.685L3.61 6.27C3.465 6.125 3.465 5.885 3.61 5.74C3.755 5.595 3.995 5.595 4.14 5.74L5.29 6.89L7.86 4.32C8.005 4.175 8.245 4.175 8.39 4.32C8.535 4.465 8.535 4.7 8.39 4.85Z" fill="#214A72"/>
+                                                                    </svg>
+                                                                </div>
                                                             </div> 
                                                         <?php endif; ?>
                                                         <h4><?php echo esc_attr( $transport_name ); ?></h4>
@@ -303,21 +340,37 @@ class Post_SMTP_New_Wizard {
                                         }
                                         ?>
                                         </div>
-                                        <p style="width: 70%; margin-bottom: 30px;">
-                                        <?php echo sprintf(
-                                            '%1$s <i><a href="%2$s">%3$s</a></i>',
-                                            __( 'Need help in choosing one?', 'post-smtp' ),
-                                            esc_url( admin_url( 'admin.php?page=postman-contact' ) ),
-                                            __( 'Check out our Mailer Guide.', 'post-smtp' )
-                                        ); ?>
-                                        </p>
+                                        <div class="wizrd_footer">
+                                            <div class="box">
+                                                <p>
+                                                    <?php echo sprintf(
+                                                        '%1$s <i><a style="color: #707070;" target="_blank" href="%2$s">%3$s</a></i>',
+                                                        __( 'Need help in choosing one? Check out our ', 'post-smtp' ),
+                                                        esc_url( 'https://postmansmtp.com/docs/mailers/a-complete-guide-to-post-smtp-mailers/' ),
+                                                        __( ' Mailer Guide.', 'post-smtp' )
+                                                    ); ?>
+                                                    </p>
 
-                                        <p style="width: 70%; margin-bottom: 30px;">
-                                            <?php echo esc_html__( 'Did we miss out on what you are looking for? Feel free to suggest your Mailer.', 'post-smtp' ); ?>
+                                                    <p>
+                                                        <?php echo sprintf(
+                                                        '%1$s <i><a style="color: #707070;" target="_blank" href="%2$s">%3$s</a></i>',
+                                                        __( 'Did we miss out on what you are looking for? Feel free to ', 'post-smtp' ),
+                                                        esc_url( 'https://postmansmtp.com/roadmap/' ),
+                                                        __( 'Suggest your Mailer.', 'post-smtp' )
+                                                    ); ?>
+                                            </div>
+                                            <div class="box">
+                                                <div class="ps-wizard-step ps-wizard-step-1">
+                                                    <p class="ps-wizard-error"></p>
+                                                    <button type="button" class="button button-primary ps-blue-btn ps-wizard-next-btn" data-step="1"><?php _e( 'Continue', 'post-smtp' ) ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
+                                                    <div style="clear: both"></div>
+                                                </div>         
+                                            </div>
+                                        </div>
+                                        
                                         </p>
                                     </div>
                                     <div class="ps-wizard-step ps-wizard-step-2">
-                                        <a href="" data-step="1" class="ps-wizard-back"><span class="dashicons dashicons-arrow-left-alt"></span>Back</a>
                                         <?php
                                         if( !empty( $this->sockets ) ) {
 
@@ -347,16 +400,15 @@ class Post_SMTP_New_Wizard {
                                         ?>
                                     </div>
                                     <div class="ps-wizard-step ps-wizard-step-3">
-                                        <a href="" data-step="2" class="ps-wizard-back"><span class="dashicons dashicons-arrow-left-alt"></span><?php _e( 'Back', 'post-smtp' ) ?></a>
-                                        <p><?php _e( 'Send a test email message to check your SMTP mailer’s connection. If there is a problem, Post SMTP will give up after 60 seconds.', 'post-smtp' ); ?></p>
+                                        <p style="color: #707070;"><?php _e( 'This step allows you to send an email message for testing. If there is a problem, Post SMTP will give up after 60 seconds.', 'post-smtp' ); ?></p>
                                         <div class="ps-form-ui">
                                             <div class="ps-form-control">
                                                 <div><label><?php _e( 'Recipient Email Address', 'post-smtp' ) ?></label></div>
                                                 <input type="text" class="ps-test-to" required data-error="Enter Recipient Email Address" name="postman_test_options[test_email]" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" placeholder="Recipient Email Address">
                                                 <span class="ps-form-control-info"><?php _e( 'Enter the email address where you want to send a test email message.', 'post-smtp' ) ?></span>
-                                                <p class="ps-form-control-info"><?php _e( 'Are your WordPress emails getting broken? Here how you can ', 'post-smtp' ) ?> <a href="https://postmansmtp.com/fix-for-broken-emails/?utm_source=plugin&utm_medium=wizard&utm_campaign=plugin" target="_blank"><?php _e( 'fix Broken Emails', 'post-smtp' ) ?></a>.</p>
+                                                <p style="color: #B3B3B3;" class="ps-form-control-info"><?php _e( 'Are your WordPress emails getting broken? Check out our guide on', 'post-smtp' ) ?> <a href="https://postmansmtp.com/fix-for-broken-emails/?utm_source=plugin&utm_medium=wizard&utm_campaign=plugin" target="_blank"><?php _e( 'how to fix Broken Emails', 'post-smtp' ) ?></a>.</p>
                                             </div>
-                                            <button class="button button-primary ps-blue-btn ps-wizard-send-test-email" data-step="3"><?php _e( 'Send Test Email', 'post-smtp' ) ?> <span class="dashicons dashicons-email"></span></button>
+                                            <button type="button" class="button button-primary ps-blue-btn ps-wizard-send-test-email" data-step="3"><?php _e( 'Send Test Email', 'post-smtp' ) ?> <span class="dashicons dashicons-email"></span></button>
                                             <div>
                                                 <p class="ps-wizard-error"></p>
                                                 <p class="ps-wizard-success"></p>
@@ -365,7 +417,7 @@ class Post_SMTP_New_Wizard {
                                         </div>
                                     </div>
                                     <div class="ps-wizard-step ps-wizard-step-4">
-                                        <h4>❤ <?php _e( 'Share Your Feedback', 'post-smtp' ) ?></h4>
+                                        <h4 class="ps-feedback-heading"><span class="ps-heart">❤</span><?php _e( 'Share Your Feedback', 'post-smtp' ) ?></h4>
                                         <p><?php 
                                         /**
                                          * Translators: %1$s Text, %2$s URL, %3$s URL Text
@@ -376,37 +428,118 @@ class Post_SMTP_New_Wizard {
                                             esc_url( 'https://wordpress.org/support/plugin/post-smtp/reviews/#new-post' ),
                                             __( 'Leave a review here.', 'post-smtp' )
                                         ) ?></p>
-                                        <div class="ps-home-middle-right" style="background-image: url(<?php echo esc_url( POST_SMTP_ASSETS . 'images/icons/mobile-banner.png' ) ?>); float: unset; width: 100%; height: 230px;">
+                                        <div class="ps-home-middle-right" style="background: #E2E9FB;">
                                             <div class="ps-mobile-notice-content">
-                                                <p><?php _e( 'Introducing NEW Post SMTP Mobile App' ); ?></p>
+                                                <img src="<?php echo esc_url( POST_SMTP_URL . '/Postman/Wizard/assets/images/success-img.svg' ); ?>" >
+                                            </div> 
+                                            <div class="ps-mobile-notice-content">
+                                                <p class="ps-mobile-notice-content-title"><?php _e( 'The First & Only WP SMTP Plugin With a Mobile App', 'post-smtp' ); ?></p>
                                                 <div class="ps-mobile-notice-features">
                                                     <div class="ps-mobile-feature-left">
-                                                        <span class="dashicons dashicons-yes-alt"></span>
+                                                    <span class="ps-mobile-check">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                            <g clip-path="url(#clip0_1886_7278)">
+                                                                <path d="M8.40768 4.41333V4.75329C8.40723 5.54157 8.15198 6.30859 7.67999 6.93995C7.208 7.57131 6.54457 8.03318 5.78864 8.25669C5.03271 8.48019 4.22479 8.45335 3.48536 8.18017C2.74592 7.90699 2.11461 7.40211 1.68557 6.74081C1.25652 6.07952 1.05274 5.29726 1.1046 4.51068C1.15647 3.72411 1.46121 2.97538 1.97337 2.37615C2.48553 1.77692 3.17768 1.3593 3.94658 1.18558C4.71548 1.01186 5.51993 1.09134 6.23997 1.41217"
+                                                                stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8.77395 1.46289L4.7529 5.48394L3.65625 4.38729" stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_1886_7278">
+                                                                    <rect width="9.86985" height="9.86985" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        </span>
                                                         <?php _e( 'Easy Email Tracking', 'post-smtp' ) ?>
                                                         <br>
-                                                        <span class="dashicons dashicons-yes-alt"></span>
+                                                        <span class="ps-mobile-check">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                            <g clip-path="url(#clip0_1886_7278)">
+                                                                <path d="M8.40768 4.41333V4.75329C8.40723 5.54157 8.15198 6.30859 7.67999 6.93995C7.208 7.57131 6.54457 8.03318 5.78864 8.25669C5.03271 8.48019 4.22479 8.45335 3.48536 8.18017C2.74592 7.90699 2.11461 7.40211 1.68557 6.74081C1.25652 6.07952 1.05274 5.29726 1.1046 4.51068C1.15647 3.72411 1.46121 2.97538 1.97337 2.37615C2.48553 1.77692 3.17768 1.3593 3.94658 1.18558C4.71548 1.01186 5.51993 1.09134 6.23997 1.41217"
+                                                                stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8.77395 1.46289L4.7529 5.48394L3.65625 4.38729" stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_1886_7278">
+                                                                    <rect width="9.86985" height="9.86985" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        </span>
                                                         <?php _e( 'Quickly View Error Details', 'post-smtp' ) ?>
                                                         <br>
-                                                        <span class="dashicons dashicons-yes-alt"></span>
-                                                        <?php _e( 'Easy Email Tracking', 'post-smtp' ) ?>                                                   			
+                                                        <span class="ps-mobile-check">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                            <g clip-path="url(#clip0_1886_7278)">
+                                                                <path d="M8.40768 4.41333V4.75329C8.40723 5.54157 8.15198 6.30859 7.67999 6.93995C7.208 7.57131 6.54457 8.03318 5.78864 8.25669C5.03271 8.48019 4.22479 8.45335 3.48536 8.18017C2.74592 7.90699 2.11461 7.40211 1.68557 6.74081C1.25652 6.07952 1.05274 5.29726 1.1046 4.51068C1.15647 3.72411 1.46121 2.97538 1.97337 2.37615C2.48553 1.77692 3.17768 1.3593 3.94658 1.18558C4.71548 1.01186 5.51993 1.09134 6.23997 1.41217"
+                                                                stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8.77395 1.46289L4.7529 5.48394L3.65625 4.38729" stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_1886_7278">
+                                                                    <rect width="9.86985" height="9.86985" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        </span>
+                                                        <?php _e( 'Easy Email Tracking', 'post-smtp' ) ?>
                                                     </div>
                                                     <div class="ps-mobile-feature-right">
-                                                        <span class="dashicons dashicons-yes-alt"></span>
+                                                         <span class="ps-mobile-check">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                            <g clip-path="url(#clip0_1886_7278)">
+                                                                <path d="M8.40768 4.41333V4.75329C8.40723 5.54157 8.15198 6.30859 7.67999 6.93995C7.208 7.57131 6.54457 8.03318 5.78864 8.25669C5.03271 8.48019 4.22479 8.45335 3.48536 8.18017C2.74592 7.90699 2.11461 7.40211 1.68557 6.74081C1.25652 6.07952 1.05274 5.29726 1.1046 4.51068C1.15647 3.72411 1.46121 2.97538 1.97337 2.37615C2.48553 1.77692 3.17768 1.3593 3.94658 1.18558C4.71548 1.01186 5.51993 1.09134 6.23997 1.41217"
+                                                                stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8.77395 1.46289L4.7529 5.48394L3.65625 4.38729" stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_1886_7278">
+                                                                    <rect width="9.86985" height="9.86985" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        </span>
                                                         <?php _e( 'Get Email Preview', 'post-smtp' ) ?>                                               
                                                         <br>
-                                                        <span class="dashicons dashicons-yes-alt"></span>
+                                                        <span class="ps-mobile-check">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                            <g clip-path="url(#clip0_1886_7278)">
+                                                                <path d="M8.40768 4.41333V4.75329C8.40723 5.54157 8.15198 6.30859 7.67999 6.93995C7.208 7.57131 6.54457 8.03318 5.78864 8.25669C5.03271 8.48019 4.22479 8.45335 3.48536 8.18017C2.74592 7.90699 2.11461 7.40211 1.68557 6.74081C1.25652 6.07952 1.05274 5.29726 1.1046 4.51068C1.15647 3.72411 1.46121 2.97538 1.97337 2.37615C2.48553 1.77692 3.17768 1.3593 3.94658 1.18558C4.71548 1.01186 5.51993 1.09134 6.23997 1.41217"
+                                                                stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8.77395 1.46289L4.7529 5.48394L3.65625 4.38729" stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_1886_7278">
+                                                                    <rect width="9.86985" height="9.86985" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        </span>
                                                         <?php _e( 'Resend Failed Emails', 'post-smtp' ) ?>                                                    
                                                         <br>
-                                                        <span class="dashicons dashicons-yes-alt"></span>
+                                                        <span class="ps-mobile-check">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                            <g clip-path="url(#clip0_1886_7278)">
+                                                                <path d="M8.40768 4.41333V4.75329C8.40723 5.54157 8.15198 6.30859 7.67999 6.93995C7.208 7.57131 6.54457 8.03318 5.78864 8.25669C5.03271 8.48019 4.22479 8.45335 3.48536 8.18017C2.74592 7.90699 2.11461 7.40211 1.68557 6.74081C1.25652 6.07952 1.05274 5.29726 1.1046 4.51068C1.15647 3.72411 1.46121 2.97538 1.97337 2.37615C2.48553 1.77692 3.17768 1.3593 3.94658 1.18558C4.71548 1.01186 5.51993 1.09134 6.23997 1.41217"
+                                                                stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M8.77395 1.46289L4.7529 5.48394L3.65625 4.38729" stroke="#00B888" stroke-width="0.7311" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_1886_7278">
+                                                                    <rect width="9.86985" height="9.86985" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        </span>
                                                         <?php _e( 'Support multiple sites', 'post-smtp' ) ?>                                                      
                                                     </div>
                                                 </div>
-                                                <div style="display: flex; margin-top: 15px;">
+                                                <div style="display: flex;">
                                                     <div class="ps-app-download-button">
-                                                        <a href="https://play.google.com/store/apps/details?id=com.postsmtp&referrer=utm_source%3Dplugin%26utm_medium%3Ddashboard%26utm_campaign%3Dplugin%26anid%3Dadmob" target="_blank"><img src=<?php echo esc_url( POST_SMTP_URL . '/Postman/Wizard/assets/images/android-icon.png' ) ?>><div><p style="font-size: 12px;">Get it On</p><p style="font-size: 14px; font-weight: 750">Google Play</p></div></a>
+                                                        <a href="https://play.google.com/store/apps/details?id=com.postsmtp&referrer=utm_source%3Dplugin%26utm_medium%3Ddashboard%26utm_campaign%3Dplugin%26anid%3Dadmob" target="_blank"><img src="<?php echo esc_url( POST_SMTP_URL . '/Postman/Wizard/assets/images/androidicon.png' ); ?>"><div><p style="font-size: 8px;">Get it On</p><p style="font-size: 9px; font-weight: 750">Google Play</p></div></a>
                                                     </div>
                                                     <div class="ps-app-download-button">
-                                                        <a href="https://apps.apple.com/us/app/post-smtp/id6473368559?utm_source=plugin&utm_medium=dashboard&utm_campaign=plugin" target="_blank"><img src=<?php echo esc_url( POST_SMTP_URL . '/Postman/Wizard/assets/images/apple-icon.png' ) ?>><div><p style="font-size: 12px;">Download on the</p><p style="font-size: 14px; font-weight: 750;">App Store</p></div></a>
+                                                        <a href="https://apps.apple.com/us/app/post-smtp/id6473368559?utm_source=plugin&utm_medium=dashboard&utm_campaign=plugin" target="_blank"><img src="<?php echo esc_url( POST_SMTP_URL . '/Postman/Wizard/assets/images/apple-icon.png' ); ?>"><div><p style="font-size: 8px;">Download on the</p><p style="font-size: 9px; font-weight: 750;">App Store</p></div></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -420,30 +553,20 @@ class Post_SMTP_New_Wizard {
                     </div>
                     <div class="ps-wizard-footer">
                         <div class="ps-wizard-footer-left">
-                            <div class="ps-wizard-nav">
-                                <table>
-                                    <tr class="ps-in-active-nav">
-                                        <td class="ps-wizard-circle"><span class="ps-tick dashicons dashicons-yes-alt"><span class="ps-wizard-line"></span></span></td>
-                                        <td class="ps-wizard-text"></td>
-                                        <td class="ps-wizard-edit"><span class="dashicons dashicons-edit" data-step="4"></span></td>
-                                    </tr>
-                                </table>
-                            </div>
                         </div>
                         <div class="ps-wizard-footer-right">
-                            <div class="ps-wizard-step ps-wizard-step-1">
-                                <p class="ps-wizard-error"></p>
-                                <button class="button button-primary ps-blue-btn ps-wizard-next-btn" data-step="1"><?php _e( 'Continue', 'post-smtp' ) ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
-                                <div style="clear: both"></div>
-                            </div>
+                            
+                           
                             <div class="ps-wizard-step ps-wizard-step-2">
                                 <p class="ps-wizard-success"><?php echo ( isset( $_GET['success'] ) && isset( $_GET['msg'] ) ) ? sanitize_text_field( $_GET['msg'] ) : ''; ?></p>
                                 <p class="ps-wizard-error"><?php echo ( !isset( $_GET['success'] ) && isset( $_GET['msg'] ) ) ? sanitize_text_field( $_GET['msg'] ) : ''; ?></p>
-                                <button class="button button-primary ps-blue-btn ps-wizard-next-btn" data-step="2"></span><?php _e( 'Save and Continue', 'post-smtp' ) ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
+                                <a href="" data-step="1" class="ps-wizard-back"><span class="dashicons dashicons-arrow-left-alt"></span><?php _e( 'Back', 'post-smtp' ); ?></a>
+                                <button type="button" class="button button-primary ps-blue-btn ps-wizard-next-btn" data-step="2"><?php _e( 'Save and Continue', 'post-smtp' ) ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
                                 <div style="clear: both"></div>
                             </div>
                             <div class="ps-wizard-step ps-wizard-step-3">
-                                <button class="button button-primary ps-blue-btn ps-wizard-next-btn ps-finish-wizard" data-step="3"><?php _e( 'I\'ll send a test email later.', 'post-smtp' ) ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
+                                <a href="" data-step="2" class="ps-wizard-back"><span class="dashicons dashicons-arrow-left-alt"></span><?php _e( 'Back', 'post-smtp' ) ?></a>
+                                <button type="button" class="button button-primary ps-blue-btn ps-wizard-next-btn ps-finish-wizard" data-step="3"><?php _e( 'I\'ll send a test email later.', 'post-smtp' ) ?> <span class="dashicons dashicons-arrow-right-alt"></span></button>
                             </div>
                             <div class="ps-wizard-step ps-wizard-step-4">
                                 <div class="ps-wizard-congrates">
@@ -462,7 +585,7 @@ class Post_SMTP_New_Wizard {
                                 </div>
                                 <div class="ps-wizard-view-logs">
                                     <div><a href="<?php echo esc_url( admin_url( 'admin.php?page=postman_email_log' ) ); ?>" class="button button-primary ps-blue-btn"><?php esc_html_e( 'View logs', 'post-smtp' ); ?> <span class="dashicons dashicons-arrow-right-alt"></span></a></div>
-                                    <div><a href="<?php echo esc_url( admin_url( 'admin.php?page=postman' ) ); ?>" style="font-size: 12px; color: #999999;"><?php esc_html_e( 'Skip to dashboard', 'post-smtp' ); ?></a></div>
+                                    <div style="text-align:center"><a href="<?php echo esc_url( admin_url( 'admin.php?page=postman' ) ); ?>" style="font-size: 12px; color: #999999;"><?php esc_html_e( 'Skip to dashboard', 'post-smtp' ); ?></a></div>
                                 </div>
                                 <div style="clear: both"></div>
                             </div>
@@ -497,6 +620,8 @@ class Post_SMTP_New_Wizard {
             'Step2E3'           => __( 'Please try again, something went wrong.', 'post-smtp' ),
             'Step3E4'           => __( 'Please enter recipient email address.', 'post-smtp' ),
             'finish'            => __( 'Finish', 'post-smtp' ),
+           // 'seeMoreLabel'      => __( 'See More', 'post-smtp' ),
+           // 'seeLessLabel'      => __( 'See Less', 'post-smtp' ),
             'adminURL'          => admin_url(),
             'connectivityTestMsg'  => sprintf( 
                 '%1$s %2$s <a href="%3$s" target="_blank">%4$s</a> %5$s',
@@ -508,6 +633,12 @@ class Post_SMTP_New_Wizard {
             ),
             // Add the nonce for pro option AJAX
             'pro_option_nonce' => wp_create_nonce('update_post_smtp_pro_option'),
+             // Nonce and messages for Gmail One-Click auth AJAX
+            'office365_auth_nonce' => wp_create_nonce( 'ps_get_office365_auth_url' ),
+            'office365AuthErrorText' => __( 'Failed to start Office 365 authentication. Please reload the page and try again.', 'post-smtp' ),
+            // Nonce and messages for Gmail One-Click auth AJAX
+            'gmail_auth_nonce' => wp_create_nonce( 'ps_get_gmail_auth_url' ),
+            'gmailAuthErrorText' => __( 'Failed to start Google authentication. Please reload the page and try again.', 'post-smtp' ),
         );
 
         if( class_exists( 'Post_Smtp_Office365' ) ) {
@@ -532,8 +663,23 @@ class Post_SMTP_New_Wizard {
         $office365_icon_url = POST_SMTP_URL . '/Postman/Wizard/assets/images/ms365.png';
 		$localized['office365_icon'] = $office365_icon_url; 
 
-        wp_enqueue_style( 'post-smtp-wizard', POST_SMTP_URL . '/Postman/Wizard/assets/css/wizard.css', array(), POST_SMTP_VER );
-        wp_enqueue_script( 'post-smtp-wizard', POST_SMTP_URL . '/Postman/Wizard/assets/js/wizard.js', array( 'jquery' ), POST_SMTP_VER );
+        wp_enqueue_style( 'post-smtp-wizard', POST_SMTP_URL . '/Postman/Wizard/assets/css/wizard.css', array(), POST_SMTP_VER  );
+        // and place it at that path so this enqueue works.
+        wp_enqueue_script(
+            'post-smtp-party',
+            POST_SMTP_URL . '/Postman/Wizard/assets/js/party.min.js',
+            array(),
+            POST_SMTP_VER ,
+            true
+        );
+
+        wp_enqueue_script(
+            'post-smtp-wizard',
+            POST_SMTP_URL . '/Postman/Wizard/assets/js/wizard.js',
+            array( 'jquery', 'post-smtp-party' ),
+            POST_SMTP_VER,
+            true
+        );
         wp_localize_script( 'post-smtp-wizard', 'PostSMTPWizard', $localized );
 
     }
@@ -555,20 +701,21 @@ class Post_SMTP_New_Wizard {
         $html = '
         <div class="ps-form-ui ps-name-email-settings">
             <div class="ps-form-control">
-                <h3>From Address</h3>
-                <p>'. sprintf(
+                <h3 class="ps-step-heading">Configure Mailer Settings</h3>
+                <h3 class="ps-from-address">From Address</h3>
+                <p class="ps-from-description">'. sprintf(
                     '%1$s',
-                    esc_html__( 'It is important to indicate the origin (email and name) of a message for the receiver. The From Address provides these details.', 'post-smtp' )
+                    esc_html__( 'It is important to indicate the origin (email and name) of a message for the receiver. The “From Address” provides these details.', 'post-smtp' )
                 ) .'</p>
-                     <p>'. sprintf(
+                <p class="ps-from-description">'. sprintf(
                     '%1$s',
                     esc_html__( 'You may edit the following field if you do not wish to use default settings.', 'post-smtp' )
                 ) .'</p>
-                <div><label>From Email</label></div>
-                <input type="text" class="ps-from-email" required data-error="'.__( 'Please enter From Email.', 'post-smtp' ).'" name="postman_options['.esc_attr( PostmanOptions::MESSAGE_SENDER_EMAIL ).']" value="'.$from_email.'" placeholder="From Email">
-                <span class="ps-form-control-info">'.__( 'The email address that emails are sent from.', 'post-smtp' ).'</span>
-                <div class="ps-form-control-info">'.__( 'Please note that other plugins may override this field, to prevent this use the setting below.', 'post-smtp' ).'</div>
-                <div>
+                <div><label class="ps-from-label">From Email</label></div>
+                <input type="text" class="ps-from-email" required data-error="'.__( 'Please enter From Email.', 'post-smtp' ).'" name="postman_options['.esc_attr( PostmanOptions::MESSAGE_SENDER_EMAIL ).']" value="'.$from_email.'" placeholder="Email address that emails are sent from">
+
+                 <div class="ps-force ps-force-email">
+                   <p class="ps-force-heading">'.esc_html__( 'Force From Email', 'post-smtp' ).'</p>
                     <div class="ps-form-switch-control">
                         <label class="ps-switch-1">
                             <input type="checkbox" '.$from_email_enforced.' name="postman_options['.esc_attr( PostmanOptions::PREVENT_MESSAGE_SENDER_EMAIL_OVERRIDE ).']">
@@ -577,22 +724,17 @@ class Post_SMTP_New_Wizard {
                     </div>
                     <span>'.
                     sprintf( 
-                        '%1$s <b>%2$s</b> %3$s <b>%4$s</b> %5$s <b>%6$s</b>',
-                        __( 'Check this to prevent changes on the', 'post-smtp' ),
-                        __( 'From Email', 'post-smtp' ),
-                        __( 'field by other', 'post-smtp' ),
-                        __( 'Plugins', 'post-smtp' ),
-                        __( 'and', 'post-smtp' ),
-                        __( 'Themes', 'post-smtp' )
-                    ).
-                    '</span>
+                        '%1$s <b>%2$s</b>',
+                        __( 'Enable this option to prevent other plugins or themes from modifying the', 'post-smtp' ),
+                        __( 'From Email', 'post-smtp' )
+                    ).'.</span>
                 </div> 
             </div>
             <div class="ps-form-control">
-                <div><label>From Name</label></div>
-                <input type="text" class="ps-from-name" required data-error="'.__( 'Please enter From Name.', 'post-smtp' ).'" name="postman_options['.esc_attr( PostmanOptions::MESSAGE_SENDER_NAME ).']" value="'.$from_name.'" placeholder="From Name">
-                <span class="ps-form-control-info">'.__( 'The name that emails are sent from.', 'post-smtp' ).'</span>
-                <div>
+                <div><label class="ps-from-label">From Name</label></div>
+                <input type="text" class="ps-from-name" required data-error="'.__( 'Please enter From Name.', 'post-smtp' ).'" name="postman_options['.esc_attr( PostmanOptions::MESSAGE_SENDER_NAME ).']" value="'.$from_name.'" placeholder="Name that is sending the emails">
+                <div class="ps-force ps-force-name">
+                    <p class="ps-force-heading">'.esc_html__( 'Force From Name', 'post-smtp' ).'</p>
                     <div class="ps-form-switch-control">
                         <label class="ps-switch-1">
                             <input type="checkbox" '.$from_name_enforced.' name="postman_options['.esc_attr( PostmanOptions::PREVENT_MESSAGE_SENDER_NAME_OVERRIDE ).']">
@@ -601,16 +743,13 @@ class Post_SMTP_New_Wizard {
                     </div>
                     <span>'.
                     sprintf( 
-                        '%1$s <b>%2$s</b> %3$s <b>%4$s</b> %5$s <b>%6$s</b>',
-                        __( 'Check this to prevent changes on the', 'post-smtp' ),
-                        __( 'From Name', 'post-smtp' ),
-                        __( 'field by other', 'post-smtp' ),
-                        __( 'Plugins', 'post-smtp' ),
-                        __( 'and', 'post-smtp' ),
-                        __( 'Themes', 'post-smtp' )
+                        '%1$s <b>%2$s</b>',
+                        __( 'Enable this option to prevent other plugins or themes from modifying the', 'post-smtp' ),
+                        __( 'From Name', 'post-smtp' )
                     ).
                     '</span>
                 </div>
+                <div class="ps-wizard-divider"></div>
             </div>
         </div>
         ';
@@ -669,6 +808,12 @@ class Post_SMTP_New_Wizard {
             case 'resend_api':
                 echo wp_kses( $this->render_resend_settings(), $this->allowed_tags );
             break;
+            case 'cloudflare_api':
+                echo wp_kses( $this->render_cloudflare_settings(), $this->allowed_tags );
+            break;
+            case 'smtpcom_api':
+                echo wp_kses( $this->render_smtpcom_settings(), $this->allowed_tags );
+            break;
             case 'postmark_api':
                 echo wp_kses( $this->render_postmark_settings(), $this->allowed_tags );
             break;
@@ -684,13 +829,13 @@ class Post_SMTP_New_Wizard {
             case 'elasticemail_api':
                 echo wp_kses( $this->render_elasticemail_settings(), $this->allowed_tags );
             break;
-            case 'aws_ses_api';
+            case 'aws_ses_api':
                 echo wp_kses( $this->render_amazonses_settings(), $this->allowed_tags );
             break;
-            case 'office365_api';
+            case 'office365_api':
                 echo wp_kses( $this->render_office365_settings(), $this->allowed_tags );
             break;
-            case 'zohomail_api';
+            case 'zohomail_api':
                 echo wp_kses( $this->render_zoho_settings(), $this->allowed_tags );
             break;
             case 'smtp2go_api':
@@ -730,45 +875,33 @@ class Post_SMTP_New_Wizard {
 
 
         $html = '<p>' . esc_html__( 'You can set up any SMTP of your choice, but it is important to remember that custom SMTP may not have adequate security.', 'post-smtp' ) . '</p>';
-        $html .= '<p>' . esc_html__( 'Kindly check our ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/configure-post-smtp-with-other-smtp" target="_blank">' . esc_html__( 'SMTP documentation', 'post-smtp' ) . '</a>' . esc_html__( ' before implementation.', 'post-smtp' ) . '</p>';
-
+        $html .= '<p>' . esc_html__( 'Kindly check our ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-other-smtp-with-post-smtp/" target="_blank">' . esc_html__( 'SMTP documentation', 'post-smtp' ) . '</a>' . esc_html__( ' before implementation.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>Host Name</label></div>
-            <input type="text" class="ps-smtp-host-name" required data-error="'.__( 'Please enter Host Name.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::HOSTNAME ) .']" value="'.$hostname.'" placeholder="Host Name">
-            <span class="ps-form-control-info">
-            '.__( 'Outgoing Mail Server Hostname', 'post-smtp' ).'
-            </span>
+            <input type="text" class="ps-smtp-host-name" required data-error="'.__( 'Please enter Host Name.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::HOSTNAME ) .']" value="'.$hostname.'" placeholder="Outgoing Mail Server Hostname">
         </div>
         ';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>Port</label></div>
-            <input type="text" class="ps-smtp-port" required data-error="'.__( 'Please enter Port.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::PORT ) .']" value="'.$port.'" placeholder="Port">
-            <span class="ps-form-control-info">
-            '.__( 'Outgoing Mail Server Port', 'post-smtp' ).'
-            </span>
+            <input type="text" class="ps-smtp-port" required data-error="'.__( 'Please enter Port.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::PORT ) .']" value="'.$port.'" placeholder="Outgoing Mail Server Port">
         </div>
         ';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>Username</label></div>
-            <input type="text" class="ps-smtp-username" required data-error="'.__( 'Please enter Username.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::BASIC_AUTH_USERNAME ) .']" value="'.$username.'" placeholder="Username">
-            <span class="ps-form-control-info">
-            '.__( 'The Username is usually the same as the Envelope-From Email Address.', 'post-smtp' ).'
-            </span>
+            <input type="text" class="ps-smtp-username" required data-error="'.__( 'Please enter Username.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::BASIC_AUTH_USERNAME ) .']" value="'.$username.'" placeholder="The Username is usually the same as “From Email” Address">
         </div>
         ';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>Password</label></div>
-            <input type="text" class="ps-smtp-password" required data-error="'.__( 'Please enter Password.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::BASIC_AUTH_PASSWORD ) .']" value="'.$password.'" placeholder="Password">
-            <span class="ps-form-control-info">
-            '.__( 'Password or App Password.', 'post-smtp' ).'
-            </span>
+            <input type="text" class="ps-smtp-password" required data-error="'.__( 'Please enter Password.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::BASIC_AUTH_PASSWORD ) .']" value="'.$password.'" placeholder="App Password">
         </div>
         ';
 
@@ -783,168 +916,168 @@ class Post_SMTP_New_Wizard {
      * @since 2.7.0
      * @version 1.0.0
      */
-public function render_gmail_settings() {
-    // Get the Client ID and Client Secret from options
-    $client_id = ! is_null( $this->options->getClientId() ) ? esc_attr( $this->options->getClientId() ) : '';
-    $client_secret = ! is_null( $this->options->getClientSecret() ) ? esc_attr( $this->options->getClientSecret() ) : '';
-    // Check if the 'success' parameter exists in URL
-    $required = isset( $_GET['success'] ) && $_GET['success'] == 1 ? '' : 'required';
 
-    // Retrieve options for premium features and extensions
-    $post_smtp_pro_options = get_option( 'post_smtp_pro', [] );
-    $postman_auth_token = get_option( 'postman_auth_token' );
-    $bonus_extensions = isset( $post_smtp_pro_options['extensions'] ) ? $post_smtp_pro_options['extensions'] : [];
-    $gmail_oneclick_enabled = in_array( 'gmail-oneclick', $bonus_extensions );
-    $auth_url = get_option( 'post_smtp_gmail_auth_url' );
-
-    // Setup classes and attributes for form visibility
-    $hidden_class = $gmail_oneclick_enabled ? 'ps-hidden' : '';
-    $client_id_required = $gmail_oneclick_enabled ? '' : 'required';
-    $client_secret_required = $gmail_oneclick_enabled ? '' : 'required';
-    $one_click_class = 'ps-enable-gmail-one-click';
-    $url = POST_SMTP_URL . '/Postman/Wizard/assets/images/wizard-google.png';
-    $transport_name = __( '<strong>1-Click</strong> Google Mailer Setup?', 'post-smtp' );
-    $product_url = postman_is_bfcm() ? 
-        'https://postmansmtp.com/cyber-monday-sale?utm_source=plugin&utm_medium=section_name&utm_campaign=BFCM&utm_id=BFCM_2024' : 
-        'https://postmansmtp.com/pricing/?utm_source=plugin&utm_medium=wizard_gmail_one_click&utm_campaign=plugin';
-
-
-    if ( isset( $_GET['success'] ) && $_GET['success'] == 1 ) {
-        $client_id_required     = '';
-        $client_secret_required = '';
-    }
-
-    // Prepare data for JSON encoding
-    $data = [
-        'url' => $url,
-        'transport_name' => $transport_name,
-        'product_url' => $product_url
-    ];
-    $json_data = htmlspecialchars( json_encode( $data ), ENT_QUOTES, 'UTF-8' );
-
-    // Begin HTML output
-    $html = '<p>' . esc_html__( 'Post SMTP offers two ways to connect Gmail API with WordPress: One-Click Setup (fastest) and Manual (free).', 'post-smtp' ) . '</p>';
-    $html .= '<hr />';
-    if ( post_smtp_has_pro() ) {
-        $one_click = true;
-        $html .= sprintf( '<h3>%1$s</h3>', __( 'One-Click Setup', 'post-smtp' ) );
-    } else {
-        $html .= sprintf(
-            '<h3 class="%1$s" >%1$s <span class="ps-wizard-pro-tag">%2$s</span></h3>',
-            __( 'One-Click Setup', 'post-smtp' ),
-            __( 'PRO', 'post-smtp' )
-        );
-        $one_click = 'disabled';
-        $one_click_class .= ' disabled';
-    }
-
-    $html .= __( '<p>Enable the option for a quick and easy way to connect with Google without the need of manually creating an app. <p>', 'post-smtp' );
-
-    // One-click switch control
-    $html .= "<div>
-        <div class='ps-form-switch-control'>
-            <label class='ps-switch-1 ".(!post_smtp_has_pro() ? 'ps-gmail-one-click' : '')." '>
-               
-                <input type='hidden' id='ps-one-click-data' value='" . esc_attr( $json_data ) . "'>
-                <input type='checkbox' class='$one_click_class' " . ( $gmail_oneclick_enabled ? 'checked' : '' ) . ">
-                <span class='slider round'></span>
-            </label> 
-        </div>
-    </div>";
-    // Client ID and Secret inputs
-    $html .= '<div class="ps-disable-one-click-setup ' . ( $gmail_oneclick_enabled ? 'ps-hidden' : '' ) . '">
+    public function render_gmail_settings() {
+        // Get the Client ID and Client Secret from options
+        $client_id = ! is_null( $this->options->getClientId() ) ? esc_attr( $this->options->getClientId() ) : '';
+        $client_secret = ! is_null( $this->options->getClientSecret() ) ? esc_attr( $this->options->getClientSecret() ) : '';
+        // Check if the 'success' parameter exists in URL
+        $required = isset( $_GET['success'] ) && $_GET['success'] == 1 ? '' : 'required';
     
-    <p>' . esc_html__( 'Manual Setup (FREE)', 'post-smtp' ) . '</p><p>' . esc_html__( 'The free Gmail mailer requires you to create an app manually to generate the Client ID and Client Secret.', 'post-smtp' ) . '</p>';
-
-    $html .= '
-    <div class="ps-form-control">
-        <div><label>' . __( 'Client ID', 'post-smtp' ) . '</label></div>
-        <input type="text" class="ps-gmail-api-client-id" ' . esc_attr( $client_id_required ) . ' data-error="' . esc_attr( __( 'Please enter Client ID.', 'post-smtp' ) ) . '" name="postman_options[' . esc_attr( PostmanOptions::CLIENT_ID ) . ']" value="' . $client_id . '" placeholder="Client ID">
-    </div>';
-
-    $html .= '
-    <div class="ps-form-control">
-        <div><label>' . __( 'Client Secret', 'post-smtp' ) . '</label></div>
-        <input type="text" class="ps-gmail-client-secret" ' . esc_attr( $client_secret_required ) . ' data-error="' . esc_attr( __( 'Please enter Client Secret.', 'post-smtp' ) ) . '" name="postman_options[' . esc_attr( PostmanOptions::CLIENT_SECRET ) . ']" value="' . $client_secret . '" placeholder="Client Secret">
-    </div>';
-
-    $html .= '
-    <div class="ps-form-control">
-        <div><label>' . __( 'Authorized JavaScript origins', 'post-smtp' ) . '</label></div>
-        <input type="text" class="ps-gmail-js-origin" value="' . esc_url( site_url() ) . '" readonly>
-    </div>';
-
-    $html .= '
-    <div class="ps-form-control">
-        <div><label>' . __( 'Authorized redirect URI', 'post-smtp' ) . '</label></div>
-        <input type="text" class="ps-gmail-redirect-uri" value="' . esc_url( admin_url( 'options-general.php?page=postman' ) ) . '" readonly>
-        <span class="ps-form-control-info">
-        ' . __( 'Please copy this URL into the "Authorized redirect URL" field of your Gmail account settings.', 'post-smtp' ) . '
-        </span>
-    </div>';
-
-    $html .= '
-    <h3>' . __( 'Authorization (Required)', 'post-smtp' ) . '</h3>
-    <p>' . __( 'Before continuing, you\'ll need to allow this plugin to send emails using Gmail API.', 'post-smtp' ) . '</p>
-    <input type="hidden"  class="ps-gmail-warning" ' . esc_attr( $client_id_required ) . ' data-error="' . esc_attr( __( 'Please authenticate by clicking Connect to Gmail API', 'post-smtp' ) ) . '" />
-    <a href="' . esc_url( admin_url( 'admin-post.php?action=postman/requestOauthGrant' ) ) . '" class="button button-primary ps-blue-btn" id="ps-wizard-connect-gmail">' . __( 'Connect to Gmail API', 'post-smtp' ) . '</a>';
-
-    // Remove OAuth action button
-    $html .= '</div>';
-    $html .= '<div class="ps-disable-gmail-setup ' . ( $gmail_oneclick_enabled ? '' : 'ps-hidden' ) . '">';
-    if ( post_smtp_has_pro() ) {
-        if ( $postman_auth_token && isset( $postman_auth_token['user_email'] ) ) {
-            $nonce = wp_create_nonce( 'remove_oauth_action' );
-            $action_url = esc_url( add_query_arg(
-                [
-                    '_wpnonce' => $nonce,
-                    'action' => 'remove_oauth_action',
-                ],
-                admin_url( 'admin-post.php' )
-            ) );
-            if ( isset( $postman_auth_token['user_email'] ) ) {
-                $html .= ' <span class="icon-circle"><span class="icon-check"></span> </span> <b class= "ps-wizard-success">' . sprintf( esc_html__('Connected with: %s', 'post-smtp'), esc_html( $postman_auth_token['user_email'] ) ) . '</b>';
-            }
-            $html .= '<a href="' . $action_url . '" class="ps-remove-gmail-btn ps-disable-gmail-setup wizard-btn-css">';
-            $html .= esc_html__( 'Remove Authorization', 'post-smtp' );
-            $html .= '</a>';
-        }else {
-                $html .= '<h3>' . esc_html__( 'Authorization (Required)', 'post-smtp' ) . '</h3>';
-                $html .= '<p>' . esc_html__( 'Before continuing, you\'ll need to allow this plugin to send emails using Gmail API.', 'post-smtp' ) . '</p>';
-                $html .= '<input type="hidden" ' . esc_attr( $required ) . ' data-error="' . esc_attr__( 'Please authenticate by clicking Connect to Gmail API', 'post-smtp' ) . '" />';
-                $html .= '<a href="' . esc_url( $auth_url ) . '" class="button button-primary ps-gmail-btn">';
-                $html .= esc_html__( 'Sign in with Google', 'post-smtp' );
-                $html .= '</a>';
-                $html .= "<p>By signing in with Google, you can send emails using different 'From' addresses. To do this, disable the 'Force From Email' setting and use your registered aliases as the 'From' address across your WordPress site.</p> <p>Removing the OAuth connection will give you the ability to redo the OAuth connection or link to another Google account.</p>";
+        // Retrieve options for premium features and extensions
+        $post_smtp_pro_options = get_option( 'post_smtp_pro', [] );
+        $postman_auth_token = get_option( 'postman_auth_token' );
+        $bonus_extensions = isset( $post_smtp_pro_options['extensions'] ) ? $post_smtp_pro_options['extensions'] : [];
+        $gmail_oneclick_enabled = in_array( 'gmail-oneclick', $bonus_extensions );
+        $auth_url = get_option( 'post_smtp_gmail_auth_url' );
+    
+        // Setup classes and attributes for form visibility
+        $hidden_class = $gmail_oneclick_enabled ? 'ps-hidden' : '';
+        $client_id_required = $gmail_oneclick_enabled ? '' : 'required';
+        $client_secret_required = $gmail_oneclick_enabled ? '' : 'required';
+        $one_click_class = 'ps-enable-gmail-one-click';
+        $url = POST_SMTP_URL . '/Postman/Wizard/assets/images/wizard-google.png';
+        $transport_name = __( '<strong>1-Click</strong> Google Mailer Setup?', 'post-smtp' );
+        $product_url = postman_is_bfcm() ? 
+            'https://postmansmtp.com/cyber-monday-sale?utm_source=plugin&utm_medium=section_name&utm_campaign=BFCM&utm_id=BFCM_2024' : 
+            'https://postmansmtp.com/pricing/?utm_source=plugin&utm_medium=wizard_gmail_one_click&utm_campaign=plugin';
+    
+    
+        if ( isset( $_GET['success'] ) && $_GET['success'] == 1 ) {
+            $client_id_required     = '';
+            $client_secret_required = '';
         }
+    
+        // Prepare data for JSON encoding
+        $data = [
+            'url' => $url,
+            'transport_name' => $transport_name,
+            'product_url' => $product_url
+        ];
+        $json_data = htmlspecialchars( json_encode( $data ), ENT_QUOTES, 'UTF-8' );
+    
+        // Begin HTML output
+        $html  = '<p>' . esc_html__( 'Post SMTP offers two ways to connect Gmail API with WordPress: One-Click Setup (fastest) and Manual (free).', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-force ps-wizard-toggle-row">';
+        if ( post_smtp_has_pro() ) {
+            $one_click = true;
+            $title_html = sprintf( '<h3>%1$s</h3>', __( 'One-Click Setup', 'post-smtp' ) );
+        } else {
+            $title_html = sprintf(
+                '<h3 class="%1$s" >%1$s <span class="ps-wizard-pro-tag">%2$s</span></h3>',
+                __( 'One-Click Setup', 'post-smtp' ),
+                __( 'PRO', 'post-smtp' )
+            );
+            $one_click = 'disabled';
+            $one_click_class .= ' disabled';
+        }
+
+        // Row with toggle + description aligned horizontally
+        $html .= $title_html;
+        $html .= "<div class='ps-wizard-toggle-inner'>";
+        $html .= "
+            <div class='ps-form-switch-control'>
+                <label class='ps-switch-1 ".(!post_smtp_has_pro() ? 'ps-gmail-one-click' : '')." '>
+                    <input type='hidden' id='ps-one-click-data' value='" . esc_attr( $json_data ) . "'>
+                    <input type='checkbox' class='$one_click_class' " . ( $gmail_oneclick_enabled ? 'checked' : '' ) . ">
+                    <span class='slider round'></span>
+                </label>
+            </div>";
+        $html .= '<p class="ps-wizard-toggle-description">' . esc_html__( 'Enable the option for a quick, easy way to connect to Google Workspace (Gmail) API without manually creating an app.', 'post-smtp' ) . '</p>';
+        $html .= '</div>'; // .ps-wizard-toggle-inner
+        $html .= '</div>'; // .ps-force.ps-wizard-toggle-row
+        // Client ID and Secret inputs
+        $html .= '<div class="ps-disable-one-click-setup ' . ( $gmail_oneclick_enabled ? 'ps-hidden' : '' ) . '">
+    
+        <h3 class="%1$s" >Manual Setup</h3>
+        <p>' . esc_html__( 'The free Gmail mailer requires you to create an app manually to generate the Client ID and Client Secret. This ', 'post-smtp' ) . ' <a href="' . esc_url( 'https://postmansmtp.com/docs/mailers/how-to-setup-gmail-with-post-smtp/' ) . '" target="_blank">' . esc_html__( 'step-by-step guide', 'post-smtp' ) . '</a> ' . esc_html__( 'will walk you through the whole process.', 'post-smtp' ) . '</p>';
+        $html .= '
+        <div class="ps-form-control">
+            <div><label>' . __( 'Client ID', 'post-smtp' ) . '</label></div>
+            <input type="text" class="ps-gmail-api-client-id" ' . esc_attr( $client_id_required ) . ' data-error="' . esc_attr( __( 'Please enter Client ID.', 'post-smtp' ) ) . '" name="postman_options[' . esc_attr( PostmanOptions::CLIENT_ID ) . ']" value="' . $client_id . '" placeholder="">
+        </div>';
+    
+        $html .= '
+        <div class="ps-form-control">
+            <div><label>' . __( 'Client Secret', 'post-smtp' ) . '</label></div>
+            <input type="text" class="ps-gmail-client-secret" ' . esc_attr( $client_secret_required ) . ' data-error="' . esc_attr( __( 'Please enter Client Secret.', 'post-smtp' ) ) . '" name="postman_options[' . esc_attr( PostmanOptions::CLIENT_SECRET ) . ']" value="' . $client_secret . '" placeholder="">
+        </div>';
+    
+        $html .= '
+        <div class="ps-form-control">
+            <div><label>' . __( 'Authorized JavaScript origins', 'post-smtp' ) . '</label></div>
+            <input type="text" class="ps-gmail-js-origin" value="' . esc_url( site_url() ) . '" readonly>
+        </div>';
+    
+        $html .= '
+        <div class="ps-form-control">
+            <div><label>' . __( 'Authorized redirect URI', 'post-smtp' ) . '</label></div>
+            <input type="text" class="ps-gmail-redirect-uri" value="' . esc_url( admin_url( 'options-general.php?page=postman' ) ) . '" readonly>
+            <span class="ps-form-control-info">'. esc_html__( 'Please copy this URL into the Authorized Redirect URI field of your Gmail account settings.', 'post-smtp' ) .'</span>
+        </div>';
+    
+        $html .= '
+         <h3>Authorization (Required)</h3>
+        <p>Before continuing, you will need to allow this plugin to send emails using Gmail API.</p>
+        
+        <input type="hidden"  class="ps-gmail-warning" ' . esc_attr( $client_id_required ) . ' data-error="' . esc_attr( __( 'Please authenticate by clicking Connect to Gmail API', 'post-smtp' ) ) . '" />
+        <a href="' . esc_url( admin_url( 'admin-post.php?action=postman/requestOauthGrant' ) ) . '" class="button button-primary ps-blue-btn" id="ps-wizard-connect-gmail">' . __( 'Connect to Gmail API', 'post-smtp' ) . '</a>';
+    
+        // Remove OAuth action button
+        $html .= '</div>';
+        $html .= '<div class="ps-disable-gmail-setup ' . ( $gmail_oneclick_enabled ? '' : 'ps-hidden' ) . '">';
+        if ( post_smtp_has_pro() ) {
+            if ( $postman_auth_token && isset( $postman_auth_token['user_email'] ) ) {
+                $nonce = wp_create_nonce( 'remove_oauth_action' );
+                $action_url = esc_url( add_query_arg(
+                    [
+                        '_wpnonce' => $nonce,
+                        'action' => 'remove_oauth_action',
+                    ],
+                    admin_url( 'admin-post.php' )
+                ) );
+                if ( isset( $postman_auth_token['user_email'] ) ) {
+                    $html .= ' <span class="icon-circle"><span class="icon-check"></span> </span> <b class= "ps-wizard-success">' . sprintf( esc_html__('Connected with: %s', 'post-smtp'), esc_html( $postman_auth_token['user_email'] ) ) . '</b>';
+                }
+                $html .= '<a href="' . $action_url . '" class="ps-remove-gmail-btn ps-disable-gmail-setup wizard-btn-css">';
+                $html .= esc_html__( 'Remove Authorization', 'post-smtp' );
+                $html .= '</a>';
+            }else {
+                    $html .= '<h3>' . esc_html__( 'Authorization (Required)', 'post-smtp' ) . '</h3>';
+                    $html .= "<p>Before proceeding, you’ll need to authorize this plugin to send emails using the Gmail API. This <a href=\"https://postmansmtp.com/docs/mailers/google-workspace-gmail-one-click-setup/\" target='_blank'>step-by-step guide</a> will walk you through the entire process.</p>";
+                    $html .= '<input type="hidden" ' . esc_attr( $required ) . ' data-error="' . esc_attr__( 'Please authenticate by clicking Connect to Gmail API', 'post-smtp' ) . '" />';
+                    // One-Click Gmail auth button: URL will be obtained via AJAX to ensure a fresh nonce.
+                    $html .= '<a href="#" class="button button-primary ps-gmail-btn ps-gmail-oneclick-btn">';
+                    $html .= esc_html__( 'Sign in with Google', 'post-smtp' );
+                    $html .= '</a>';
+                    $html .= "<p>By signing in with Google, you can send emails using different 'From' addresses. To do this, disable the 'Force From Email' setting and use your registered aliases as the 'From' address across your WordPress site.</p> <p>Removing the OAuth connection will give you the ability to redo the OAuth connection or link to another Google account.</p>";
+
+            }
+        }
+    
+        $html .= '</div>';
+    
+        return $html;
     }
-
-    $html .= '</div>';
-
-    return $html;
-}
 
     /**
      * Render Emailit Settings
      */
     public function render_emailit_settings() {
         $api_key = null !== $this->options->getEmailitApiKey() ? esc_attr ( $this->options->getEmailitApiKey() ) : '';
-        $html = sprintf(
-            '<p><a href="%1$s" target="_blank">%2$s</a> %3$s</p>',
-            esc_url( 'https://emailit.com/' ),
-            __( 'Emailit', 'post-smtp' ),
-            __( 'is a transactional email provider. Enter your API Key and Endpoint below.', 'post-smtp' )
-        );
+        $html = '<p>' . esc_html__( 'It is easy to integrate Emailit mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/emailit-with-post-smtp/" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-emailit-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::EMAILIT_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">
+            <input type="text" class="ps-emailit-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::EMAILIT_API_KEY ) .']" value="'.$api_key.'" placeholder="">
+            <div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.emailit.com/dashboard" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your Emailit account.', 'post-smtp' ) . '</div>
         </div>';
         return $html;
     }
 
-       /**
-     * Render Emailit Settings
+    /**
+     * Render Sweego Settings
      */
     public function render_sweego_settings() {
         $api_key = null !== $this->options->getSweegoApiKey() ? esc_attr ( $this->options->getSweegoApiKey() ) : '';
@@ -952,15 +1085,17 @@ public function render_gmail_settings() {
 			'<p>
 				%1$s <a href="%2$s" target="_blank">%3$s</a> %4$s
 			</p>',
-			__( 'Integrating Sweego with your WordPress site. We recommend checking the', 'post-smtp' ),
+			__( 'It is easy to integrate Sweego API mailer to your WordPress website.  We recommend checking the', 'post-smtp' ),
 			esc_url( 'https://postmansmtp.com/docs/mailers/how-to-setup-sweego-with-post-smtp/' ),
 			__( 'documentation', 'post-smtp' ),
 			__( 'for a successful integration.', 'post-smtp' )
 		);
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-sweego-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SWEEGO_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">
+            <input type="text" class="ps-sweego-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SWEEGO_API_KEY ) .']" value="'.$api_key.'" placeholder="">
+            <div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.sweego.io/login" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your Sweego account.', 'post-smtp' ) . '</div>
         </div>';
         return $html;
     }
@@ -970,16 +1105,13 @@ public function render_gmail_settings() {
      */
     public function render_maileroo_settings() {
         $api_key = null !== $this->options->getMailerooApiKey() ? esc_attr ( $this->options->getMailerooApiKey() ) : '';
-        $html = sprintf(
-            '<p><a href="%1$s" target="_blank">%2$s</a> %3$s</p>',
-            esc_url( 'https://maileroo.com/' ),
-            __( 'Maileroo', 'post-smtp' ),
-            __( 'is a transactional email provider. Enter your API Key and Endpoint below.', 'post-smtp' )
-        );
+        $html = '<p>' . esc_html__( 'It is easy to integrate Maileroo mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-maileroo-with-post-smtp" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-maileroo-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILEROO_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">
+            <input type="text" class="ps-maileroo-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILEROO_API_KEY ) .']" value="'.$api_key.'" placeholder="">
+            <div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.maileroo.com/dashboard" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your Maileroo account.', 'post-smtp' ) . '</div>
         </div>';
         return $html;
     }
@@ -996,11 +1128,11 @@ public function render_gmail_settings() {
 
 
         $html = '<p>' . esc_html__( 'It is easy to integrate Mandrill mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/how-to-setup-mandrill-with-post-smtp/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-mandrill-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MANDRILL_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
+            <input type="text" class="ps-mandrill-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MANDRILL_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1028,13 +1160,13 @@ public function render_gmail_settings() {
 
         $html = '<p>' . esc_html__( 'It is easy to integrate SendGrid mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/how-to-setup-sendgrid-with-post-smtp/" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
 
-
+        $html .= '<div class="ps-wizard-divider"></div>';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-sendgrid-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDGRID_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">
-            <div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.sendgrid.com/settings/api_keys" target="_blank">' . esc_html__( 'the API key above', 'post-smtp' ) . '</a> ' . esc_html__( 'in your SendGrid account.', 'post-smtp' ) . '</div>' .
+            <input type="text" class="ps-sendgrid-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDGRID_API_KEY ) .']" value="'.$api_key.'" placeholder="">
+            <div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.sendgrid.com/settings/api_keys" target="_blank">' . esc_html__( 'the API key', 'post-smtp' ) . '</a> ' . esc_html__( ' above in your SendGrid account.', 'post-smtp' ) . '</div>' .
         '</div>';
 
         // Region dropdown.
@@ -1063,12 +1195,12 @@ public function render_gmail_settings() {
         $api_key = null !== $this->options->getMailerSendApiKey() ? esc_attr ( $this->options->getMailerSendApiKey() ) : '';
 
         $html = '<p>' . esc_html__( 'It is easy to integrate MailerSend API mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/how-to-setup-mailersend-with-post-smtp/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-mailersend-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILERSEND_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
-         '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.mailersend.com/api-tokens" target="_blank">' . esc_html__( 'the API key', 'post-smtp' ) . '</a>' . esc_html__( ' in your Mailersend account.', 'post-smtp' ) . '</div>'
+            <input type="text" class="ps-mailersend-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILERSEND_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
+         '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.mailersend.com/api-tokens" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your MailerSend account.', 'post-smtp' ) . '</div>'
             .'
         </div>
         ';
@@ -1092,23 +1224,12 @@ public function render_gmail_settings() {
 
 
         $html = '<p>' . esc_html__( 'It is easy to integrate Mailgun mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/how-to-configure-post-smtp-with-mail-gun/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-mailgun-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILGUN_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
-            /**
-             * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
-             */
-            sprintf(
-                '<div class="ps-form-control-info">%1$s <a href="%2$s" target="_blank">%3$s</a></div><div class="ps-form-control-info">%4$s <a href="%5$s" target="_blank">%6$s</a></div>',
-                __( 'Create an account at', 'post-smtp' ),
-                esc_url( 'https://www.mailgun.com/' ),
-                esc_attr( 'Mailgun' ),
-                __( 'If you are already logged in follow this link to get an', 'post-smtp' ),
-                esc_url( 'https://app.mailgun.com/settings/api_security' ),
-                __( 'API Key.', 'post-smtp' )
-            )
+            <input type="text" class="ps-mailgun-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILGUN_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
+            '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app.mailgun.com/settings/api_security" target="_blank">' . esc_html__( 'the API key', 'post-smtp' ) . '</a>' . esc_html__( ' in your Mailgun account.', 'post-smtp' ) . '</div>'
             .'
         </div>
         ';
@@ -1116,24 +1237,16 @@ public function render_gmail_settings() {
         $html .= '
         <div class="ps-form-control">
             <div><label>Domain Name</label></div>
-            <input type="text" class="ps-mailgun-domain-name" required data-error="'.__( 'Please Domain Name.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILGUN_DOMAIN_NAME ) .']" value="'.$domain_name.'" placeholder="Domain Name">
+            <input type="text" class="ps-mailgun-domain-name" required data-error="'.__( 'Please Domain Name.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILGUN_DOMAIN_NAME ) .']" value="'.$domain_name.'" placeholder="">
             <span class="ps-form-control-info">'.
-            /**
-             * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
-             */
-            sprintf(
-                '%1$s <a href="%2$s" target="_blank">%3$s</a>',
-                __( ' Follow this link to get the Mailgun', 'post-smtp' ),
-                esc_url( 'https://app.mailgun.com/app/sending/domains' ),
-                __( 'Domain Name.', 'post-smtp' )
-            )
+            '<div class="ps-form-control-info">' . esc_html__( 'You can find the ', 'post-smtp' ) . '<a href="https://app.mailgun.com/app/sending/domains" target="_blank">' . esc_html__( 'Domain', 'post-smtp' ) . '</a>' . esc_html__( ' in your Mailgun account.', 'post-smtp' ) . '</div>'
             .'</span>
         </div>
         ';
 
         $html .= '
-        <div class="ps-form-control">
-            <div><label>Mailgun Europe Region?</label></div>
+        <div class="ps-form-control ps-force" >
+            <div><label>Mailgun Europe Region</label></div>
             <div class="ps-form-switch-control">
                 <label class="ps-switch-1">
                     <input type="checkbox" '.$region.' name="postman_options['.esc_attr( PostmanOptions::MAILGUN_REGION ).']">
@@ -1142,7 +1255,7 @@ public function render_gmail_settings() {
             </div>
             '.
 
-            '<div class="ps-form-control-info">' . esc_html__( 'Set your endpoint in Europe if your business operates under EU laws. ', 'post-smtp' ) . '<a href="https://www.mailgun.com/about/regions/" target="_blank">' . esc_html__( 'Learn', 'post-smtp' ) . '</a></div>'
+            '<div class="ps-form-control-info">' . esc_html__( 'Set your endpoint in Europe if your business operates under EU laws. ', 'post-smtp' ) . '<a href="https://www.mailgun.com/about/regions/" target="_blank">' . esc_html__( 'Learn more about Mailgun regions.', 'post-smtp' ) . '</a></div>'
             .'
         </div> 
         ';
@@ -1163,16 +1276,16 @@ public function render_gmail_settings() {
         $api_key = null !== $this->options->getSendinblueApiKey() ? esc_attr ( $this->options->getSendinblueApiKey() ) : '';
 
 
-        $html = '<p>' . esc_html__( 'It is easy to integrate Brevo mailer to your WordPress website. We recommend you to check the documentation for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html = '<p>' . esc_html__( 'It is easy to integrate Brevo mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-brevo-with-post-smtp/" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-brevo-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDINBLUE_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
+            <input type="text" class="ps-brevo-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDINBLUE_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
-             '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://login.brevo.com/?target=https%3A%2F%2Fapp.brevo.com%2Fsettings%2Fkeys%2Fapi" target="_blank">' . esc_html__( 'the API key', 'post-smtp' ) . '</a>' . esc_html__( ' in your Brevo account.', 'post-smtp' ) . '</div>'
+             '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://login.brevo.com/?target=https%3A%2F%2Fapp.brevo.com%2Fsettings%2Fkeys%2Fapi" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your Brevo account.', 'post-smtp' ) . '</div>'
             .
         '</div>
         ';
@@ -1192,16 +1305,16 @@ public function render_gmail_settings() {
         $api_key = null !== $this->options->getMailtrapApiKey() ? esc_attr ( $this->options->getMailtrapApiKey() ) : '';
 
 
-        $html = '<p>' . esc_html__( 'It is easy to integrate Mailtrap mailer to your WordPress website. We recommend you to check the documentation for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html = '<p>' . esc_html__( 'It is easy to integrate Mailtrap mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-mailtrap-with-post-smtp" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Token</label></div>
-            <input type="text" class="ps-mailtrap-api-key" required data-error="'.__( 'Please enter API Token.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILTRAP_API_KEY ) .']" value="'.$api_key.'" placeholder="API Token">'.
+            <input type="text" class="ps-mailtrap-api-key" required data-error="'.__( 'Please enter API Token.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILTRAP_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
-             '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://mailtrap.io/api-tokens" target="_blank">' . esc_html__( 'the API token', 'post-smtp' ) . '</a>' . esc_html__( ' in your Mailtrap account.', 'post-smtp' ) . '</div>'
+             '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://mailtrap.io/api-tokens" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your Mailtrap API account.', 'post-smtp' ) . '</div>'
             .
         '</div>
         ';
@@ -1221,38 +1334,81 @@ public function render_gmail_settings() {
 
         $api_key = null !== $this->options->getResendApiKey() ? esc_attr ( $this->options->getResendApiKey() ) : '';
 
-        $html = sprintf(
-            '<p><a href="%1$s" target="_blank">Resend</a> %2$s</p><p>%3$s</p><p>%4$s <a href="%5$s" target="_blank">%6$s</a>',
-            esc_url( 'https://resend.com/' ),
-            __( 'is a modern email API provider built for developers. It provides reliable email delivery with simple APIs and excellent deliverability.', 'post-smtp' ),
-            __( 'Resend offers a free plan to send up to 100 emails per day and 3,000 emails per month. You can start testing immediately and upgrade when needed.', 'post-smtp' ),
-            __( 'Let\'s get started with our', 'post-smtp' ),
-            esc_url( 'https://postmansmtp.com/documentation/sockets-addons/how-to-setup-resend-with-post-smtp/' ),
-            __( 'Resend Documentation', 'post-smtp' )
-        );
-
+        $html = '<p>' . esc_html__( 'It is easy to integrate Resend mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-resend-with-post-smtp" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-resend-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::RESEND_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
-            /**
-             * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
-             */
-            sprintf(
-                '<div class="ps-form-control-info">%1$s <a href="%2$s" target="_blank">%3$s</a></div><div class="ps-form-control-info">%4$s <a href="%5$s" target="_blank">%6$s</a></div>',
-                __( 'Create an account at', 'post-smtp' ),
-                esc_url( 'https://resend.com/' ),
-                esc_attr( 'Resend.com' ),
-                __( 'If you are already logged in follow this link to get an', 'post-smtp' ),
-                esc_url( 'https://resend.com/api-keys' ),
-                __( 'API Key.', 'post-smtp' )
-            )
+            <input type="text" class="ps-resend-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::RESEND_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
+            '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://resend.com/api-keys" target="_blank">' . esc_html__( 'the API tokens', 'post-smtp' ) . '</a>' . esc_html__( ' in your Resend account.', 'post-smtp' ) . '</div>'
             .
         '</div>
         ';
 
         return $html;
 
+    }
+
+    /**
+     * Render Cloudflare Settings
+     *
+     * @since 3.2.0
+     * @version 1.0.0
+     */
+    public function render_cloudflare_settings() {
+
+        $api_token  = null !== $this->options->getCloudflareApiToken() ? esc_attr( $this->options->getCloudflareApiToken() ) : '';
+        $account_id = null !== $this->options->getCloudflareAccountId() ? esc_attr( $this->options->getCloudflareAccountId() ) : '';
+
+        $html = '<p>' . esc_html__( 'It is easy to integrate Cloudflare mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://developers.cloudflare.com/email-routing/email-workers/send-email-workers/" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
+        $html .= '
+        <div class="ps-form-control">
+            <div><label>API Token</label></div>
+            <input type="text" class="ps-cloudflare-api-token" required data-error="'.__( 'Please enter API Token.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::CLOUDFLARE_API_TOKEN ) .']" value="'.$api_token.'" placeholder="">'.
+            '<div class="ps-form-control-info">' . esc_html__( 'Create a token in ', 'post-smtp' ) . '<a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Cloudflare', 'post-smtp' ) . '</a>' . esc_html__( ' that can send email using Email Routing.', 'post-smtp' ) . '</div>'
+            .
+        '</div>
+        <div class="ps-form-control">
+            <div><label>Account ID</label></div>
+            <input type="text" class="ps-cloudflare-account-id" required data-error="'.__( 'Please enter Account ID.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::CLOUDFLARE_ACCOUNT_ID ) .']" value="'.$account_id.'" placeholder="">'.
+            '<div class="ps-form-control-info">' . esc_html__( 'You can find the Account ID in your ', 'post-smtp' ) . '<a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Cloudflare dashboard', 'post-smtp' ) . '</a>.</div>'
+            .
+        '</div>
+        ';
+
+        return $html;
+    }
+
+    /**
+     * Render SMTP.com Settings
+     *
+     * @since 4.0.0
+     * @version 1.0.0
+     */
+    public function render_smtpcom_settings() {
+
+        $api_key = null !== $this->options->getSmtpcomApiKey() ? esc_attr( $this->options->getSmtpcomApiKey() ) : '';
+        $channel = null !== $this->options->getSmtpcomChannel() ? esc_attr( $this->options->getSmtpcomChannel() ) : '';
+
+        $html = '<p>' . esc_html__( 'It is easy to integrate SMTP.com mailer to your WordPress website. We recommend you to check the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-smtp-mailer-with-post-smtp/" target="_blank">' . esc_html__( 'documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
+        $html .= '
+        <div class="ps-form-control">
+            <div><label>API Key</label></div>
+            <input type="text" class="ps-smtpcom-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SMTPCOM_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
+            '<div class="ps-form-control-info">' . esc_html__( 'Create an API key in your ', 'post-smtp' ) . '<a href="https://www.smtp.com/" target="_blank">' . esc_html__( 'SMTP.com account', 'post-smtp' ) . '</a>.</div>'
+            .
+        '</div>
+        <div class="ps-form-control">
+            <div><label>Channel Name</label></div>
+            <input type="text" class="ps-smtpcom-channel" name="postman_options['. esc_attr( PostmanOptions::SMTPCOM_CHANNEL ) .']" value="'.$channel.'" placeholder="">'.
+            '<div class="ps-form-control-info">' . esc_html__( 'Optional channel name from your SMTP.com account.', 'post-smtp' ) . '</div>'
+            .
+        '</div>
+        ';
+
+        return $html;
     }
 
 
@@ -1266,13 +1422,12 @@ public function render_gmail_settings() {
 
         $api_key = null !== $this->options->getPostmarkApiKey() ? esc_attr ( $this->options->getPostmarkApiKey() ) : '';
 
-
         $html = '<p>' . esc_html__( 'It is easy to integrate Postmark mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/postmark/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-postmark-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::POSTMARK_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
+            <input type="text" class="ps-postmark-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::POSTMARK_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1296,14 +1451,12 @@ public function render_gmail_settings() {
     public function render_sparkpost_settings() {
 
         $api_key = null !== $this->options->getSparkPostApiKey() ? esc_attr ( $this->options->getSparkPostApiKey() ) : '';
-
-
         $html = '<p>' . esc_html__( 'It is easy to integrate SparkPost mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/sparkpost/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-sparkpost-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SPARKPOST_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
+            <input type="text" class="ps-sparkpost-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SPARKPOST_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1328,12 +1481,12 @@ public function render_gmail_settings() {
         $api_key = null !== $this->options->getElasticEmailApiKey() ? esc_attr ( $this->options->getElasticEmailApiKey() ) : '';
 
 
-        $html = '<p>' . esc_html__( 'It is easy to integrate Elastic Email mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/configure-post-smtp-with-elastic-email" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html = '<p>' . esc_html__( 'It is easy to integrate Elastic Email mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-elastic-mail-with-post-smtp/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-elasticemail-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::ELASTICEMAIL_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">'.
+            <input type="text" class="ps-elasticemail-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::ELASTICEMAIL_API_KEY ) .']" value="'.$api_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1359,18 +1512,18 @@ public function render_gmail_settings() {
         $secret_key = null !== $this->options->getMailjetApiKey() ? esc_attr ( $this->options->getMailjetSecretKey() ) : '';
 
 
-        $html = '<p>' . esc_html__( 'It is easy to integrate Mailjet mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/configure-post-smtp-with-mailjet" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html = '<p>' . esc_html__( 'It is easy to integrate Mailjet mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-mailjet-with-post-smtp/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-elasticemail-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILJET_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key"></div>
+            <input type="text" class="ps-elasticemail-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILJET_API_KEY ) .']" value="'.$api_key.'" placeholder=""></div>
         ';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>Secret Key</label></div>
-            <input type="text" class="ps-elasticemail-secret-key" required data-error="'.__( 'Please enter Secret Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILJET_SECRET_KEY ) .']" value="'.$secret_key.'" placeholder="Secret Key">'.
+            <input type="text" class="ps-elasticemail-secret-key" required data-error="'.__( 'Please enter Secret Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::MAILJET_SECRET_KEY ) .']" value="'.$secret_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1397,31 +1550,31 @@ public function render_gmail_settings() {
 
 
         $html = '<p>' . esc_html__( 'It is easy to integrate SendPulse mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/configure-post-smtp-with-sendpulse/?utm_source=plugin&utm_medium=wizard&utm_campaign=plugin" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>API ID</label></div>
-            <input type="text" class="ps-sendpulse-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDPULSE_API_KEY ) .']" value="'.$api_key.'" placeholder="API ID">
+            <input type="text" class="ps-sendpulse-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDPULSE_API_KEY ) .']" value="'.$api_key.'" placeholder="">
         '.
-        sprintf(
-            '<div class="ps-form-control-info"><a href="%1$s" target="_blank">%2$s</a> %3$s</div>',
-            esc_url( 'https://sendpulse.com/features/transactional' ),
-            __( 'Click here', 'post-smtp' ),
-            __( 'to create an account at SendPulse', 'post-smtp' )
-        ).
-        sprintf(
-            '<div class="ps-form-control-info">%1$s<a href="%2$s" target="_blank">%3$s</a></div>',
-            __( 'If you are already logged in follow this ink to get your API ID from Sendpulse ', 'post-smtp' ),
-            esc_url( 'https://login.sendpulse.com/settings/#api' ),
-            __( 'Get API ID', 'post-smtp' )
-        ).
+        // sprintf(
+        //     '<div class="ps-form-control-info"><a href="%1$s" target="_blank">%2$s</a> %3$s</div>',
+        //     esc_url( 'https://sendpulse.com/features/transactional' ),
+        //     __( 'Click here', 'post-smtp' ),
+        //     __( 'to create an account at SendPulse', 'post-smtp' )
+        // ).
+        // sprintf(
+        //     '<div class="ps-form-control-info">%1$s<a href="%2$s" target="_blank">%3$s</a></div>',
+        //     __( 'If you are already logged in follow this ink to get your API ID from Sendpulse ', 'post-smtp' ),
+        //     esc_url( 'https://login.sendpulse.com/settings/#api' ),
+        //     __( 'Get API ID', 'post-smtp' )
+        // ).
         '</div>'
         ;
 
         $html .= '
         <div class="ps-form-control">
             <div><label>API Secret</label></div>
-            <input type="text" class="ps-sendpulse-secret-key" required data-error="'.__( 'Please enter Secret Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDPULSE_SECRET_KEY ) .']" value="'.$secret_key.'" placeholder="API Secret">'.
+            <input type="text" class="ps-sendpulse-secret-key" required data-error="'.__( 'Please enter Secret Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SENDPULSE_SECRET_KEY ) .']" value="'.$secret_key.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1448,18 +1601,18 @@ public function render_gmail_settings() {
         $region = isset( $this->options_array[ PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_REGION ] ) ? $this->options_array[ PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_REGION ] : '';
 
 
-        $html = '<p>' . esc_html__( 'Due to the technical nature of this SMTP implementation, it is recommended to study this step-by-step guide at the time of setup.', 'post-smtp' ) . '</p>';
+        $html = '<p>' . esc_html__( 'Due to the technical nature of this SMTP implementation, it is recommended to study this ', 'post-smtp' ) . '<a href="' . esc_url( 'https://postmansmtp.com/docs/mailers/new-amazon-ses/' ) . '" target="_blank">' . esc_html__( 'step-by-step guide', 'post-smtp' ) . '</a>' . esc_html__( ' at the time of setup.', 'post-smtp' ) . '</p>';
         $html .= '<p>⚠️ ' . esc_html__( 'You must have a working SSL certificate installed on your WordPress site to use it with Amazon SES.', 'post-smtp' ) . '</p>';
-
+        $html .= '<div class="ps-wizard-divider"></div>';
         $html .= '
         <div class="ps-form-control">
             <div><label>Access Key ID</label></div>
-            <input type="text" class="ps-amazon-key-id" required data-error="'.__( 'Please enter Access Key ID', 'post-smtp' ).'" name="postman_options['. esc_attr( PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_ACCESS_KEY_ID ) .']" value="'.$access_key_id.'" placeholder="Access Key ID"></div>';
+            <input type="text" class="ps-amazon-key-id" required data-error="'.__( 'Please enter Access Key ID', 'post-smtp' ).'" name="postman_options['. esc_attr( PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_ACCESS_KEY_ID ) .']" value="'.$access_key_id.'" placeholder=""></div>';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>Access Key Secret</label></div>
-            <input type="text" class="ps-amazon-key-secret" required data-error="'.__( 'Please enter Access Key Secret', 'post-smtp' ).'" name="postman_options['. esc_attr( PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_SECRET_ACCESS_KEY ) .']" value="'.$access_key_secret.'" placeholder="Access Key Secret">'.
+            <input type="text" class="ps-amazon-key-secret" required data-error="'.__( 'Please enter Access Key Secret', 'post-smtp' ).'" name="postman_options['. esc_attr( PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_SECRET_ACCESS_KEY ) .']" value="'.$access_key_secret.'" placeholder="">'.
             /**
              * Translators: %1$s Text, %2$s URL, %3$s URL Text, %4$s Text, %5$s URL, %6$s URL Text
              */
@@ -1473,8 +1626,7 @@ public function render_gmail_settings() {
         $html .= '
         <div class="ps-form-control">
             <div><label>SES Region</label></div>
-            <input type="text" class="ps-amazon-region" required data-error="'.__( 'Please enter SES Region', 'post-smtp' ).'" name="postman_options['. esc_attr( PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_REGION ) .']" value="'.$region.'" placeholder="SES Region">
-            <span class="ps-form-control-info">' . esc_html__( 'Enter the correct region', 'post-smtp' ) . '</span>
+            <input type="text" class="ps-amazon-region" required data-error="'.__( 'Please enter SES Region', 'post-smtp' ).'" name="postman_options['. esc_attr( PostSMTPSES\PostSmtpAmazonSesTransport::OPTION_REGION ) .']" value="'.$region.'" placeholder="Enter the correct region">
         </div>
         ';
 
@@ -1506,9 +1658,7 @@ public function render_gmail_settings() {
         $office365_oneclick_enabled = in_array( 'microsoft-one-click', $extensions );
         $office365_auth_url = get_option( 'post_smtp_office365_auth_url' );
 
-
-        $html = '<p>' . esc_html__( 'To establish a SMTP connection, you will need to create an app in your Azure account. This step-by-step guide will walk you through the whole process.', 'post-smtp' ) . '</p>';
-
+        $html = '<p>' . esc_html__( 'To establish a SMTP connection, you will need to create an app in your Azure account. This ', 'post-smtp' ) . ' <a href="' . esc_url( 'https://postmansmtp.com/docs/mailers/how-to-setup-office-365-with-post-smtp/' ) . '" target="_blank">' . esc_html__( 'step-by-step guide', 'post-smtp' ) . '</a> ' . esc_html__( 'will walk you through the whole process.', 'post-smtp' ) . '</p>';
         // Setup classes and attributes for form visibility
         $hidden_class = $office365_oneclick_enabled ? 'ps-hidden' : '';
         // Conditional 'required' attribute for the fields - consider access token when one-click is enabled
@@ -1545,15 +1695,13 @@ public function render_gmail_settings() {
                 $required = ( ( isset( $_GET['success'] ) && $_GET['success'] == 1 ) || ( $has_access_token && $has_email ) ) && $client_id_required ? '' : 'required';
             }
 
-        $html .= __( 'The configuration steps are more technical than other options, so our detailed guide will walk you through the whole process.', 'post-smtp' );
-        $html .= '<hr />';
 
         if ( post_smtp_has_pro() ) {
             $one_click = true;
-            $html .= sprintf( '<h3>%1$s</h3>', __( 'One-Click Setup', 'post-smtp' ) );
+            $html .= sprintf( '<div class="ps-force"><h3>%1$s</h3>', __( 'One-Click Setup', 'post-smtp' ) );
         } else {
             $html .= sprintf(
-                '<h3>%1$s <span class="ps-wizard-pro-tag">%2$s</span></h3>',
+                '<div class="ps-force"><h3>%1$s <span class="ps-wizard-pro-tag">%2$s</span></h3>',
                 __( 'One-Click Setup', 'post-smtp' ),
                 __( 'PRO', 'post-smtp' )
             );
@@ -1561,7 +1709,7 @@ public function render_gmail_settings() {
             $one_click_class .= ' disabled';
         }
 
-        $html .= __( 'Enable the option for a quick and easy way to connect with Microsoft 365 / Outlook without the need of manually creating an app', 'post-smtp' );
+        $html .= __( 'Enable the option for a quick, easy way to connect to Microsoft 365 without manually creating an app.', 'post-smtp' );
 
         // Check if user has business plan for Office 365 one-click
         $is_business_plan = false;
@@ -1588,7 +1736,7 @@ public function render_gmail_settings() {
                     <span class='slider round'></span>
                 </label> 
             </div>
-        </div>";
+        </div></div>";
 
         // Show business plan upgrade notice if needed
         if ( post_smtp_has_pro() && !$is_business_plan ) {
@@ -1616,20 +1764,21 @@ public function render_gmail_settings() {
  	  
 		$html .= '<div class="ps-disable-one-click-setup ' . ( $office365_oneclick_enabled ? 'ps-hidden' : '' ) . '">';
 		
-        $html .= sprintf(
-            '<p><a href="%1$s" target="_blank">%2$s</a> %3$s </p><a href="%4$s" target="_blank">%5$s</a>',
-            esc_url( 'https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account?icid=azurefreeaccount' ),
-            __( 'Office 365', 'post-smtp' ),
-            __( 'is a popular transactional email provider that sends more than 35 billion emails every month. If you\'re just starting out, the free plan allows you to send up to 100 emails each day without entering your credit card details', 'post-smtp' ),
-            esc_url( 'https://postmansmtp.com/docs/mailers/microsoft-365-one-click-smtp/' ),
-            __( 'Read how to setup Office 365', 'post-smtp' )
-        );
+        // $html .= sprintf(
+        //     '<p><a href="%1$s" target="_blank">%2$s</a> %3$s </p><a href="%4$s" target="_blank">%5$s</a>',
+        //     esc_url( 'https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account?icid=azurefreeaccount' ),
+        //     __( 'Office 365', 'post-smtp' ),
+        //     __( 'is a popular transactional email provider that sends more than 35 billion emails every month. If you\'re just starting out, the free plan allows you to send up to 100 emails each day without entering your credit card details', 'post-smtp' ),
+        //     esc_url( 'https://postmansmtp.com/docs/mailers/microsoft-365-one-click-smtp/' ),
+        //     __( 'Read how to setup Office 365', 'post-smtp' )
+        // );
        
-		
+		$html .= '<hr /> <h3>Manual Setup</h3>';
+
         $html .= '
         <div class="ps-form-control">
             <div><label>'.__( 'Application (Client) ID', 'post-smtp' ).'</label></div>
-            <input type="text" class="ps-office365-client-id" ' . $client_id_required . '  data-error="'.__( 'Please enter Application (Client) ID.', 'post-smtp' ).'" name="postman_options[office365_app_id]" value="'.$app_client_id.'" placeholder="Application (Client) ID">
+            <input type="text" class="ps-office365-client-id" ' . $client_id_required . '  data-error="'.__( 'Please enter Application (Client) ID.', 'post-smtp' ).'" name="postman_options[office365_app_id]" value="'.$app_client_id.'" placeholder="">
             <span class="ps-form-control-info">'.
             '<div class="ps-form-control-info">' . esc_html__( 'You can find the ', 'post-smtp' ) . '<a href="https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?redirect_uri=https%3A%2F%2Fportal.azure.com%2Fsignin%2Findex%2F&response_type=code%20id_token&scope=https%3A%2F%2Fmanagement.core.windows.net%2F%2Fuser_impersonation%20openid%20email%20profile&state=OpenIdConnect.AuthenticationProperties%3D3ck4pNl3uhpmQz6zVF-QK4L_RKv9glDdJlITzamc-wID4UbZU1Qb1lYDEbqyr7cc4qml3HIpLuGSbrYKEdzvAnslPezoXRu-_TkLEDHNWCPkZE2SqMJPPkcruP29vocPdJeuKpQbUtwtOQkHhU_0dJU_drkiHPqXROXPu9GJQZyJCyQ5rGsQWp0iZFhlRou7VL8PQOzgBoaCvcVH6XzNgZJFgmeYXjmxj7qK_RUQAcm1BkN2p30gkxAiDgtXHUBNFg-qk0aK_n2Nu-eACOL9oW1dZ2PckrjpZNo7SNgCoxG7dzqRAl3nH-hMoqrCq7HyvoA6LQQ9Bx6r071wB-cbwQA6oNP5E4GLAu9WpGs-tsFJvqnq-QR0PM-FZlD1ZupsKIuyNAWm0s4SlLneNh5hi8aMbVo5AJA5G7221N3Vz3zk3jVsD6kq5JZnJZLALPq6BdmTuBvZZfAF6_pSO47bgxdh6hUVNsRSCtGOqTsGcd8&response_mode=form_post&nonce=638717524432120598.YjE5MDc1ZDctYThiZS00NzZhLTgzOGMtZGYwMzMxMTAxNzA3MjFhMWE0OGQtMjIxMS00NDRlLWI5Y2UtODg1YmFjOTNmNTIw&client_id=c44b4083-3bb0-49c1-b47d-974e53cbdf3c&site_id=501430&client-request-id=844ca630-139b-496b-b93c-9a7b66797706&x-client-SKU=ID_NET472&x-client-ver=7.5.0.0" target="_blank">' . esc_html__( 'client id', 'post-smtp' ) . '</a>' . esc_html__( ' here.', 'post-smtp' ) . '</div>'
             .'</span>
@@ -1639,7 +1788,7 @@ public function render_gmail_settings() {
         $html .= '
         <div class="ps-form-control">
             <div><label>'.__( 'Client Secret (Value)', 'post-smtp' ).'</label></div>
-            <input type="text" class="ps-office365-client-secret" ' . $client_secret_required . '  data-error="'.__( 'Please enter Client Secret (Value).', 'post-smtp' ).'" name="postman_options[office365_app_password]" value="'.$app_client_secret.'" placeholder="Client Secret (Value)">
+            <input type="text" class="ps-office365-client-secret" ' . $client_secret_required . '  data-error="'.__( 'Please enter Client Secret (Value).', 'post-smtp' ).'" name="postman_options[office365_app_password]" value="'.$app_client_secret.'" placeholder="">
             <span class="ps-form-control-info">'.
             /**
              * Translators: %1$s URL, %2$s URL Text, %3$s Text
@@ -1666,7 +1815,7 @@ public function render_gmail_settings() {
         ';
 
         $html .= '
-        <h3>'.__( 'Authorization (Required)', 'post-smtp' ).'</h3>
+        <h3>Authorization (Required)</h3>
         <p>'.__( 'Before continuing, you\'ll need to allow this plugin to send emails using your Office 365 account.', 'post-smtp' ).'</p>
           <input class="office_365-require" type="hidden" '.$required.'  data-error="Please authenticate by clicking Connect to Office 365" />
         <a class="button button-primary ps-blue-btn" id="ps-wizard-connect-office365">Connect to Office 365</a>';
@@ -1692,9 +1841,9 @@ public function render_gmail_settings() {
                 $html .= '</a>';
             }else {
                 $html .= '<h3>' . esc_html__( 'Authorization (Required)', 'post-smtp' ) . '</h3>';
-                $html .= '<p>' . esc_html__( 'Before continuing, you\'ll need to allow this plugin to send emails using Office 365 API.', 'post-smtp' ) . '</p>';
+                $html .= '<p>' . 'Before proceeding, you’ll need to authorize this plugin to send emails using the Office 365 API. This <a href="https://postmansmtp.com/docs/mailers/microsoft-365-one-click-setup/" target="_blank">step-by-step guide</a> will walk you through the entire process.</p>';
                 $html .= '<input class="office_365-require" type="hidden" ' . esc_attr( $required ) . ' value="' . ( ( $has_access_token && $has_email ) ? '1' : '' ) . '" data-error="' . esc_attr__( 'Please authenticate by clicking Connect to Office 365 API', 'post-smtp' ) . '" />';
-                $html .= '<a href="' . esc_url( $office365_auth_url ) . '" class="button button-primary ps-office365-btn">';
+                $html .= '<a href="#" class="button button-primary ps-office365-btn">';
                 $html .= esc_html__( 'Sign in with Microsoft', 'post-smtp' );
                 $html .= '</a>';
             }
@@ -1730,7 +1879,7 @@ public function render_gmail_settings() {
         $required = ( isset( $_GET['success'] ) && $_GET['success'] == 1 ) ? '' : 'required';
 
 
-            $html = '<p>' . esc_html__( 'It is recommended to study the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/zoho-mail-pro/" target="_blank">' . esc_html__( 'Zoho Mail integration doc', 'post-smtp' ) . '</a>' . esc_html__( ' at the time of setup.', 'post-smtp' ) . '</p>';
+        $html = '<p>' . esc_html__( 'It is recommended to study the ', 'post-smtp' ) . '<a href="https://postmansmtp.com/docs/mailers/how-to-setup-zoho-with-post-smtp/" target="_blank">' . esc_html__( 'Zoho Mail integration doc', 'post-smtp' ) . '</a>' . esc_html__( ' at the time of setup.', 'post-smtp' ) . '</p>';
 
         $html .= '
         <div class="ps-form-control">
@@ -1749,14 +1898,14 @@ public function render_gmail_settings() {
         $html .= '
         <div class="ps-form-control">
             <div><label>Client ID</label></div>
-            <input type="text" class="ps-zoho-client-id" required data-error="'.__( 'Please enter Client ID.', 'post-smtp' ).'" name="postman_options['. esc_attr( ZohoMailPostSMTP\ZohoMailTransport::OPTION_CLIENT_ID ) .']" value="'.$client_id.'" placeholder="Client ID">
+            <input type="text" class="ps-zoho-client-id" required data-error="'.__( 'Please enter Client ID.', 'post-smtp' ).'" name="postman_options['. esc_attr( ZohoMailPostSMTP\ZohoMailTransport::OPTION_CLIENT_ID ) .']" value="'.$client_id.'" placeholder="">
         </div>
         ';
 
         $html .= '
         <div class="ps-form-control">
             <div><label>Client Secret</label></div>
-            <input type="text" class="ps-zoho-client-secret" required data-error="'.__( 'Please enter Client Secret.', 'post-smtp' ).'" name="postman_options['. esc_attr( ZohoMailPostSMTP\ZohoMailTransport::OPTION_CLIENT_SECRET ) .']" value="'.$client_secret.'" placeholder="Client Secret">
+            <input type="text" class="ps-zoho-client-secret" required data-error="'.__( 'Please enter Client Secret.', 'post-smtp' ).'" name="postman_options['. esc_attr( ZohoMailPostSMTP\ZohoMailTransport::OPTION_CLIENT_SECRET ) .']" value="'.$client_secret.'" placeholder="">
             <div class="ps-form-control-info">
                 ' . esc_html__( 'Check your ', 'post-smtp' ) . '<a href="https://api-console.zoho.com/" target="_blank">' . esc_html__( 'Zoho API credentials', 'post-smtp' ) . '</a>' . esc_html__( ' to find the Client ID and Secret.', 'post-smtp' ) . '
             </div>
@@ -1768,7 +1917,7 @@ public function render_gmail_settings() {
             <div><label>Redirect URI</label></div>
             <input type="text" class="ps-zoho-redirect-uri" value="'.admin_url( 'admin.php?page=postman/' ).'" readonly>
             <span class="ps-form-control-info">
-            '.__( 'Please copy this URL into the "Redirect URL" field of your Zoho account settings.', 'post-smtp' ).'
+            '.sprintf( __( 'Please copy this URL into the %1$s"Redirect URI"%2$s field of your Zoho account settings.', 'post-smtp' ), '<b>', '</b>' ).'
             </span>
         </div>
         ';
@@ -1790,10 +1939,10 @@ public function render_gmail_settings() {
 
 
         echo '<p>' . esc_html__( 'It is easy to integrate SMTP2GO mailer to your WordPress website. We recommend you to ', 'post-smtp' ) . '<a href="https://postmansmtp.com/documentation/sockets-addons/how-to-setup-smtp2go-with-post-smtp/" target="_blank">' . esc_html__( 'check the documentation', 'post-smtp' ) . '</a>' . esc_html__( ' for a successful integration.', 'post-smtp' ) . '</p>';
-
+        echo '<div class="ps-wizard-divider"></div>';
         echo '<div class="ps-form-control">
             <div><label>API Key</label></div>
-            <input type="text" class="ps-smtp2go-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SMTP2GO_API_KEY ) .']" value="'.$api_key.'" placeholder="API Key">';
+            <input type="text" class="ps-smtp2go-api-key" required data-error="'.__( 'Please enter API Key.', 'post-smtp' ).'" name="postman_options['. esc_attr( PostmanOptions::SMTP2GO_API_KEY ) .']" value="'.$api_key.'" placeholder="">';
 
         echo '<div class="ps-form-control-info">' . esc_html__( 'You can find ', 'post-smtp' ) . '<a href="https://app-eu.smtp2go.com/sending/apikeys/" target="_blank">' . esc_html__( 'the API key', 'post-smtp' ) . '</a>' . esc_html__( ' in your SMTP2GO account.', 'post-smtp' ) . '</div>';
 
@@ -1812,7 +1961,9 @@ public function render_gmail_settings() {
     public function save_wizard() {
 
         $form_data = array();
-        parse_str( $_POST['FormData'], $form_data );
+        if ( isset( $_POST['FormData'] ) ) {
+            parse_str( wp_unslash( $_POST['FormData'] ), $form_data );
+        }
         $response = false;
 
         if( 
@@ -1851,6 +2002,10 @@ public function render_gmail_settings() {
                 $sanitized[PostmanOptions::SENDGRID_API_KEY] = isset( $sanitized[PostmanOptions::SENDGRID_API_KEY] ) ? $sanitized[PostmanOptions::SENDGRID_API_KEY] : '';
                 $sanitized['sendgrid_region']  = isset( $sanitized['sendgrid_region'] ) ? $sanitized['sendgrid_region'] : '';
                 $sanitized['resend_api_key']  = isset( $sanitized['resend_api_key'] ) ? $sanitized['resend_api_key'] : '';
+                $sanitized[PostmanOptions::CLOUDFLARE_API_TOKEN] = isset( $sanitized[PostmanOptions::CLOUDFLARE_API_TOKEN] ) ? $sanitized[PostmanOptions::CLOUDFLARE_API_TOKEN] : '';
+                $sanitized[PostmanOptions::CLOUDFLARE_ACCOUNT_ID] = isset( $sanitized[PostmanOptions::CLOUDFLARE_ACCOUNT_ID] ) ? $sanitized[PostmanOptions::CLOUDFLARE_ACCOUNT_ID] : '';
+                $sanitized[PostmanOptions::SMTPCOM_API_KEY] = isset( $sanitized[PostmanOptions::SMTPCOM_API_KEY] ) ? $sanitized[PostmanOptions::SMTPCOM_API_KEY] : '';
+                $sanitized[PostmanOptions::SMTPCOM_CHANNEL] = isset( $sanitized[PostmanOptions::SMTPCOM_CHANNEL] ) ? $sanitized[PostmanOptions::SMTPCOM_CHANNEL] : '';
                 $sanitized[PostmanOptions::EMAILIT_API_KEY]  = isset( $sanitized[PostmanOptions::EMAILIT_API_KEY] ) ? $sanitized[PostmanOptions::EMAILIT_API_KEY] : '';
                 $sanitized[PostmanOptions::MAILEROO_API_KEY]  = isset( $sanitized[PostmanOptions::MAILEROO_API_KEY] ) ? $sanitized[PostmanOptions::MAILEROO_API_KEY] : '';
                 $sanitized[PostmanOptions::SWEEGO_API_KEY]  = isset( $sanitized[PostmanOptions::SWEEGO_API_KEY] ) ? $sanitized[PostmanOptions::SWEEGO_API_KEY] : '';
@@ -1863,8 +2018,14 @@ public function render_gmail_settings() {
                 $sanitized['ses_access_key_id'] = isset( $sanitized['ses_access_key_id'] ) ? $sanitized['ses_access_key_id'] : '';
                 $sanitized['ses_secret_access_key'] = isset( $sanitized['ses_secret_access_key'] ) ? $sanitized['ses_secret_access_key'] : '';
                 $sanitized['ses_region'] = isset( $sanitized['ses_region'] ) ? $sanitized['ses_region'] : '';
-                $sanitized['enc_type'] = 'tls';
-                $sanitized['auth_type'] = 'login';
+                // Preserve encryption from form when set; for port 465 default to SSL (SMTPS), otherwise TLS
+                if ( empty( $sanitized['enc_type'] ) || ! in_array( $sanitized['enc_type'], array( 'none', 'ssl', 'tls' ), true ) ) {
+                    $port = isset( $sanitized['port'] ) ? absint( $sanitized['port'] ) : 0;
+                    $sanitized['enc_type'] = ( $port === 465 ) ? PostmanOptions::SECURITY_TYPE_SMTPS : PostmanOptions::SECURITY_TYPE_STARTTLS;
+                }
+                if ( empty( $sanitized['auth_type'] ) ) {
+                    $sanitized['auth_type'] = 'login';
+                }
                 $sanitized['slack_token'] = base64_decode( isset( $options['slack_token'] ) ? $options['slack_token'] : '' );
                 $sanitized['pushover_user'] = base64_decode( isset( $options['pushover_user'] ) ? $options['pushover_user'] : '' );
                 $sanitized['pushover_token'] = base64_decode( isset( $options['pushover_token'] ) ? $options['pushover_token'] : '' );
@@ -1876,17 +2037,98 @@ public function render_gmail_settings() {
                     $response = true;
                 } else {
                     $response = update_option( PostmanOptions::POSTMAN_OPTIONS , $options );
+                    do_action( 'post_smtp_wizard_configuration_saved' );
                 }
                 
             }
             
         }
-        //Prevent redirection
-        delete_transient( PostmanSession::ACTION );
+
+        // Prevent redirection after a normal settings save (see PostmanSession::ACTION).
+        if ( class_exists( 'PostmanSession' ) ) {
+            PostmanSession::getInstance()->unsetAction();
+        } else {
+            delete_transient( 'action' );
+        }
 
         wp_send_json( array(), 200 );
 
     }
+
+    /**
+     * AJAX callback to generate a fresh Office 365 One-Click OAuth URL.
+     *
+     * This endpoint is called when the user clicks the "Sign in with Office 365" button
+     * for the Office 365 One-Click setup. It validates the request nonce and current user
+     * capability, then uses the shared helper `post_smtp_get_office365_auth_url()` to
+     * create an auth URL that contains a fresh `office365_oauth_redirect` nonce.
+     *
+     * The URL is returned as JSON and the browser is redirected client-side.
+     *
+     * @since 3.1.0
+     */
+    public function ajax_get_office365_auth_url() {
+
+        // Capability check: Only allow administrators.
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Unauthorized.' ), 403 );
+        }
+
+        // Nonce check for CSRF protection.
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ps_get_office365_auth_url' ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid or missing nonce.' ), 400 );
+        }
+
+        if ( ! function_exists( 'post_smtp_get_office365_auth_url' ) ) {
+            wp_send_json_error( array( 'message' => 'Office 365 One-Click is not available.' ), 500 );
+        }
+
+        $auth_url = post_smtp_get_office365_auth_url();
+
+        if ( empty( $auth_url ) ) {
+            wp_send_json_error( array( 'message' => 'Failed to generate Office 365 auth URL.' ), 500 );
+        }
+
+        wp_send_json_success( array( 'auth_url' => esc_url_raw( $auth_url ) ) );
+    }
+
+    /**
+     * AJAX callback to generate a fresh Gmail One-Click OAuth URL.
+     *
+     * This endpoint is called when the user clicks the "Sign in with Google" button
+     * for the Gmail One-Click setup. It validates the request nonce and current user
+     * capability, then uses the shared helper `post_smtp_get_gmail_auth_url()` to
+     * create an auth URL that contains a fresh `gmail_oauth_redirect` nonce.
+     *
+     * The URL is returned as JSON and the browser is redirected client-side.
+     *
+     * @since 3.1.0
+     */
+    public function ajax_get_gmail_auth_url() {
+
+        // Capability check: Only allow administrators.
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => 'Unauthorized.' ), 403 );
+        }
+
+        // Nonce check for CSRF protection.
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ps_get_gmail_auth_url' ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid or missing nonce.' ), 400 );
+        }
+
+        if ( ! function_exists( 'post_smtp_get_gmail_auth_url' ) ) {
+            wp_send_json_error( array( 'message' => 'Gmail One-Click is not available.' ), 500 );
+        }
+
+        $auth_url = post_smtp_get_gmail_auth_url();
+
+        if ( empty( $auth_url ) ) {
+            wp_send_json_error( array( 'message' => 'Failed to generate Gmail auth URL.' ), 500 );
+        }
+
+        wp_send_json_success( array( 'auth_url' => esc_url_raw( $auth_url ) ) );
+    }
+    
 
     /**
      * Callback function to handle AJAX requests for updating the 'post_smtp_pro' option.
@@ -2109,7 +2351,24 @@ public function render_gmail_settings() {
 	public function handle_office365_oauth_redirect() {
 		// Check if the required OAuth parameters are present in the URL.
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'office365_oauth_redirect' ) {
-			// Sanitize and retrieve URL parameters
+			                     
+            // Capability check: Only allow administrators to update OAuth tokens
+            if ( ! current_user_can( 'manage_options' ) ) {
+                wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'post-smtp' ) );
+            }
+            
+            // CSRF protection: Verify nonce (required by security report)
+            if ( ! isset( $_GET['_wpnonce'] ) || empty( $_GET['_wpnonce'] ) ) {
+                wp_die( esc_html__( 'Security check failed. Nonce is missing.', 'post-smtp' ) );
+            }
+            
+            // Verify the nonce
+            $nonce = sanitize_text_field( $_GET['_wpnonce'] );
+            if ( ! wp_verify_nonce( $nonce, 'office365_oauth_redirect' ) ) {
+                wp_die( esc_html__( 'Security check failed. Invalid nonce. Please try again.', 'post-smtp' ) );
+            }
+
+            // Sanitize and retrieve URL parameters
 			$access_token  = sanitize_text_field( $_GET['access_token'] );
 			$refresh_token = isset( $_GET['refresh_token'] ) ? sanitize_text_field( $_GET['refresh_token'] ) : null;
 			$expires_in    = isset( $_GET['expires_in'] ) ? intval( $_GET['expires_in'] ) : 0;
@@ -2176,6 +2435,11 @@ public function render_gmail_settings() {
         // Check if the required OAuth parameters are present in the URL.
         if ( isset( $_GET['action'] ) && $_GET['action'] === 'gmail_oauth_redirect' ) {
             
+        // Ignore unrelated callbacks that accidentally reuse the same action parameter.
+        if ( ! isset( $_GET['access_token'] ) && ! isset( $_GET['error'] ) ) {
+            return;
+        }
+            
         // Capability check: Only allow administrators to update OAuth tokens
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'post-smtp' ) );
@@ -2213,9 +2477,6 @@ public function render_gmail_settings() {
             }
         }
     }
-
-
-
 }
 
 new Post_SMTP_New_Wizard();

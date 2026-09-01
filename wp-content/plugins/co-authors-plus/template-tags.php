@@ -1,5 +1,19 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * Get all co-authors for a given post.
+ *
+ * If the post has co-author terms assigned, returns the matching co-author
+ * objects (guest authors or WP users). Otherwise, falls back to the WordPress
+ * post author unless `$force_guest_authors` is enabled. Duplicates that arise
+ * from a guest author being linked to a WP user account are removed.
+ *
+ * @param int $post_id Optional. Post ID to fetch co-authors for. Defaults to the current post in the loop.
+ * @return array List of co-author objects, filtered through the `get_coauthors` filter.
+ */
 function get_coauthors( $post_id = 0 ) {
 	global $post, $post_ID, $coauthors_plus, $wpdb;
 
@@ -28,7 +42,7 @@ function get_coauthors( $post_id = 0 ) {
 			if ( $post && $post_id == $post->ID ) {
 				$post_author = get_userdata( $post->post_author );
 			} else {
-				$post_author = get_userdata( $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM $wpdb->posts WHERE ID = %d", $post_id ) ) );
+				$post_author = get_userdata( $wpdb->get_var( $wpdb->prepare( "SELECT post_author FROM $wpdb->posts WHERE ID = %d", $post_id ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Fallback when coauthor terms are empty, result is stable per post.
 			}
 			if ( ! empty( $post_author ) ) {
 				$coauthors[] = $post_author;
@@ -85,7 +99,35 @@ function is_coauthor_for_post( $user, $post_id = 0 ) {
 	return false;
 }
 
-// Helper function for the following new template tags
+/**
+ * Render or return a list of co-author values joined by configurable separators.
+ *
+ * Shared helper behind the various `coauthors_*()` template tags. Iterates over
+ * the co-authors of the current post and resolves each value via the chosen
+ * strategy:
+ *
+ * - `tag`: call `$tag` as a function (e.g. `get_the_author_meta`) with `$tag_args`.
+ * - `field`: read property `$tag` directly from the co-author object.
+ * - `callback`: call `$tag` with the current co-author object.
+ *
+ * Separators default to the `COAUTHORS_DEFAULT_*` constants when defined, and
+ * each is filterable via `coauthors_default_before`, `coauthors_default_between`,
+ * `coauthors_default_between_last`, and `coauthors_default_after`.
+ *
+ * @param string|callable $tag        Field name, function name, or callable, depending on `$type`.
+ * @param string          $type       Resolution strategy: 'tag', 'field', or 'callback'. Default 'tag'.
+ * @param array           $separators {
+ *     Optional separator overrides. Any missing key falls back to the matching filter.
+ *
+ *     @type string $before      Output before the list.
+ *     @type string $between     Delimiter between co-authors.
+ *     @type string $betweenLast Delimiter before the final co-author.
+ *     @type string $after       Output after the list.
+ * }
+ * @param mixed           $tag_args   Optional. Extra argument passed when `$type` is 'tag'. Default null.
+ * @param bool            $echo       Optional. Whether to echo the result. Default true.
+ * @return string The assembled output.
+ */
 function coauthors__echo( $tag, $type = 'tag', $separators = array(), $tag_args = null, $echo = true ) {
 
 	// Define the standard output separator. Constant support is for backwards compat.
@@ -114,6 +156,11 @@ function coauthors__echo( $tag, $type = 'tag', $separators = array(), $tag_args 
 	$output .= $separators['before'];
 	$i->iterate();
 	do {
+		// Skip if there's no valid author (e.g., post has no author)
+		if ( ! is_object( $i->current_author ) ) {
+			continue;
+		}
+
 		$author_text = '';
 
 		if ( 'tag' === $type ) {
@@ -125,7 +172,7 @@ function coauthors__echo( $tag, $type = 'tag', $separators = array(), $tag_args 
 		}
 
 		// Fallback to user_login if we get something empty
-		if ( empty( $author_text ) ) {
+		if ( empty( $author_text ) && ! empty( $i->current_author->user_login ) ) {
 			$author_text = $i->current_author->user_login;
 		}
 
@@ -239,7 +286,7 @@ function coauthors_posts_links_single( $author ) {
 		'before_html' => '',
 		'href'        => get_author_posts_url( $author->ID, $author->user_nicename ),
 		'rel'         => 'author',
-		/* translators: Author display name. */
+		/* translators: %s: author display name */
 		'title'       => sprintf( __( 'Posts by %s', 'co-authors-plus' ), apply_filters( 'the_author', $author->display_name ) ),
 		'class'       => 'author url fn',
 		'text'        => apply_filters( 'the_author', $author->display_name ),
@@ -401,31 +448,45 @@ function coauthors_emails( $between = null, $betweenLast = null, $before = null,
 /**
  * Outputs a single co-author, linked to their website if they've provided one.
  *
- * @param object $author
- * @return string
+ * Uses the passed $author object directly for display name, website, and URL to
+ * avoid relying on the global $authordata, which may be stale or overridden by
+ * the 'the_author' filter when CoAuthors_Template_Filters is active.
+ *
+ * @since 3.0
+ *
+ * @param object $author Co-author object (guest author or WP_User-like).
+ * @return string HTML link to the co-author's website, or their plain display name.
  */
 function coauthors_links_single( $author ) {
-	if ( 'guest-author' === $author->type && get_the_author_meta( 'website' ) ) {
+	$display_name = isset( $author->display_name ) ? $author->display_name : '';
+
+	// Guest authors store their personal site URL in the 'website' property, which
+	// is sourced from post meta and is not present on the global $authordata object.
+	// We therefore read it directly from the passed $author rather than via
+	// get_the_author_meta(), which would silently return empty for guest authors.
+	if ( 'guest-author' === $author->type && ! empty( $author->website ) ) {
 		return sprintf(
 			'<a href="%s" title="%s" rel="author external">%s</a>',
-			esc_url( get_the_author_meta( 'website' ) ),
+			esc_url( $author->website ),
 			/* translators: Author display name. */
-			esc_attr( sprintf( __( 'Visit %s&#8217;s website', 'co-authors-plus' ), esc_html( get_the_author() ) ) ),
-			esc_html( get_the_author() )
+			esc_attr( sprintf( __( 'Visit %s&#8217;s website', 'co-authors-plus' ), esc_html( $display_name ) ) ),
+			esc_html( $display_name )
 		);
 	}
 
-	if ( get_the_author_meta( 'url' ) ) {
+	// For regular WP users, the website URL lives in the user_url property.
+	$user_url = isset( $author->user_url ) ? $author->user_url : '';
+	if ( $user_url ) {
 		return sprintf(
 			'<a href="%s" title="%s" rel="author external">%s</a>',
-			esc_url( get_the_author_meta( 'url' ) ),
+			esc_url( $user_url ),
 			/* translators: Author display name. */
-			esc_attr( sprintf( __( 'Visit %s&#8217;s website', 'co-authors-plus' ), esc_html( get_the_author() ) ) ),
-			esc_html( get_the_author() )
+			esc_attr( sprintf( __( 'Visit %s&#8217;s website', 'co-authors-plus' ), esc_html( $display_name ) ) ),
+			esc_html( $display_name )
 		);
 	}
 
-	return esc_html( get_the_author() );
+	return esc_html( $display_name );
 }
 
 /**
@@ -500,7 +561,15 @@ function get_the_coauthor_meta( $field, $user_id = false ) {
 	return $meta;
 }
 
-
+/**
+ * Echo the requested meta field for each co-author of the current post.
+ *
+ * Each value is HTML-escaped before output. Values are concatenated with no
+ * separator between them.
+ *
+ * @param string $field   The user field to retrieve. See get_the_coauthor_meta() for accepted values.
+ * @param int    $user_id Optional. Restrict output to a single co-author by ID. Default 0 (all co-authors).
+ */
 function the_coauthor_meta( $field, $user_id = 0 ) {
 	// TODO: need before after options
 	$coauthor_meta = get_the_coauthor_meta( $field, $user_id );
@@ -541,7 +610,7 @@ function coauthors_get_users( $args = array() ) {
 		 */
 		'hide_empty' => (bool) $args['authors_with_posts_only'],
 	);
-	$author_terms = get_terms( $coauthors_plus->coauthor_taxonomy, $term_args );
+	$author_terms = get_terms( array_merge( array( 'taxonomy' => $coauthors_plus->coauthor_taxonomy ), $term_args ) );
 
 	$authors = array();
 	foreach ( $author_terms as $author_term ) {
@@ -635,7 +704,7 @@ function coauthors_wp_list_authors( $args = array() ) {
 				$link = $name;
 			}
 		} else {
-			/* translators: Author display name. */
+			/* translators: %s: author display name */
 			$link = '<a href="' . get_author_posts_url( $author->ID, $author->user_nicename ) . '" title="' . esc_attr( sprintf( __( 'Posts by %s', 'co-authors-plus' ), $name ) ) . '">' . esc_html( $name ) . '</a>';
 
 			if ( ( ! empty( $args['feed_image'] ) ) || ( ! empty( $args['feed'] ) ) ) {

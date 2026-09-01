@@ -19,19 +19,21 @@
  * @param array  $data The source data.
  */
 function relevanssi_add_matches( &$post, $data ) {
-	$hits['body']                 = $data['body_matches'][ $post->ID ] ?? 0;
-	$hits['title']                = $data['title_matches'][ $post->ID ] ?? 0;
-	$hits['taxonomy']['tag']      = $data['tag_matches'][ $post->ID ] ?? 0;
-	$hits['taxonomy']['category'] = $data['category_matches'][ $post->ID ] ?? 0;
-	$hits['taxonomy']['taxonomy'] = $data['taxonomy_matches'][ $post->ID ] ?? 0;
-	$hits['comment']              = $data['comment_matches'][ $post->ID ] ?? 0;
-	$hits['author']               = $data['author_matches'][ $post->ID ] ?? 0;
-	$hits['excerpt']              = $data['excerpt_matches'][ $post->ID ] ?? 0;
-	$hits['customfield']          = $data['customfield_matches'][ $post->ID ] ?? 0;
+	$object_id = isset( $post->blog_id ) ? $post->blog_id . '|' . $post->ID : $post->ID;
+
+	$hits['body']                 = $data['body_matches'][ $object_id ] ?? 0;
+	$hits['title']                = $data['title_matches'][ $object_id ] ?? 0;
+	$hits['taxonomy']['tag']      = $data['tag_matches'][ $object_id ] ?? 0;
+	$hits['taxonomy']['category'] = $data['category_matches'][ $object_id ] ?? 0;
+	$hits['taxonomy']['taxonomy'] = $data['taxonomy_matches'][ $object_id ] ?? 0;
+	$hits['comment']              = $data['comment_matches'][ $object_id ] ?? 0;
+	$hits['author']               = $data['author_matches'][ $object_id ] ?? 0;
+	$hits['excerpt']              = $data['excerpt_matches'][ $object_id ] ?? 0;
+	$hits['customfield']          = $data['customfield_matches'][ $object_id ] ?? 0;
 	$hits['mysqlcolumn']          = 0;
-	$hits['score']                = isset( $data['doc_weights'][ $post->ID ] ) ? round( $data['doc_weights'][ $post->ID ], 2 ) : 0;
-	$hits['terms']                = $data['term_hits'][ $post->ID ] ?? array();
-	$hits['missing_terms']        = $data['missing_terms'][ $post->ID ] ?? array();
+	$hits['score']                = isset( $data['doc_weights'][ $object_id ] ) ? round( $data['doc_weights'][ $object_id ], 2 ) : 0;
+	$hits['terms']                = $data['term_hits'][ $object_id ] ?? array();
+	$hits['missing_terms']        = $data['missing_terms'][ $object_id ] ?? array();
 
 	if ( function_exists( 'relevanssi_premium_add_matches' ) ) {
 		relevanssi_premium_add_matches( $hits, $data, $post->ID );
@@ -126,7 +128,7 @@ function relevanssi_generate_missing_terms_list( $post ) {
 					/**
 					 * Determines the tag used for missing terms, default <s>.
 					 *
-					 * @param string The tag, without angle brackets. Default 's'.
+					 * @param string $term The tag, without angle brackets. Default 's'.
 					 */
 					$tag = apply_filters( 'relevanssi_missing_terms_tag', 's' );
 					return $tag ? "<$tag>$term</$tag>" : $term;
@@ -184,7 +186,7 @@ function relevanssi_default_post_ok( $post_ok, $post_id ) {
 		$post_ok = false;
 	}
 
-	if (relevanssi_post_password_required( $post_id ) ) {
+	if ( relevanssi_post_password_required( $post_id ) ) {
 		/**
 		 * Filters whether password protected posts are shown in the search
 		 * results.
@@ -634,7 +636,7 @@ function relevanssi_tokenize( $str, $remove_stops = true, int $min_word_length =
 	/**
 	 * Disables stopwords completely.
 	 *
-	 * @param boolean If true, stopwords are not used. Default false.
+	 * @param boolean $disable If true, stopwords are not used. Default false.
 	 */
 	if ( apply_filters( 'relevanssi_disable_stopwords', false ) ) {
 		$stopword_list = array();
@@ -872,7 +874,7 @@ function relevanssi_add_synonyms( $query ) {
 			 * Controls how synonyms are handled when they appear inside
 			 * phrases.
 			 *
-			 * @param bool If true, synonyms inside phrases create new phrases.
+			 * @param bool $phrase If true, synonyms inside phrases create new phrases.
 			 * If false, synonyms inside phrases are ignored.
 			 */
 			if ( apply_filters( 'relevanssi_phrase_synonyms', true ) ) {
@@ -1029,7 +1031,7 @@ function relevanssi_add_highlight( $permalink, $link_post = null ) {
  * $post ID. Default null.
  * @return boolean True if the post ID or global $post matches the front page.
  */
-function relevanssi_is_front_page_id( ?int $post_id = null ): bool {
+function relevanssi_is_front_page_id( $post_id = null ): bool {
 	$frontpage_id = intval( get_option( 'page_on_front' ) );
 	if ( $post_id === $frontpage_id ) {
 		return true;
@@ -1068,14 +1070,14 @@ function relevanssi_permalink( $link, $link_post = null ) {
 	} elseif ( is_int( $link_post ) ) {
 		$link_post = relevanssi_get_post( $link_post );
 	}
-	if ( is_object( $link_post ) && ! property_exists( $link_post, 'relevance_score' ) ) {
+	if ( is_object( $link_post ) && ! is_wp_error( $link_post ) && ! property_exists( $link_post, 'relevance_score' ) ) {
 		// get_permalink( $post_id ) uses get_post() which eliminates Relevanssi
 		// data from the post, thus we use relevanssi_get_post() to get it.
 		$link_post = relevanssi_get_post( $link_post->ID );
 	}
 
 	// Using property_exists() to avoid troubles from magic variables.
-	if ( is_object( $link_post ) && property_exists( $link_post, 'relevanssi_link' ) ) {
+	if ( is_search() && is_object( $link_post ) && property_exists( $link_post, 'relevanssi_link' ) ) {
 		// $link_post->relevanssi_link can still be false.
 		if ( ! empty( $link_post->relevanssi_link ) ) {
 			$link = $link_post->relevanssi_link;
@@ -1150,8 +1152,7 @@ function relevanssi_wpmu_drop( $tables ) {
  * @global array  $relevanssi_variables The global Relevanssi variables.
  *
  * @param int     $limit  How many words to display, default 25.
- * @param boolean $wp_cli If true, return just a list of words. If false, print out
- * HTML code.
+ * @param boolean $wp_cli If true, return just a list of words. If false, print out HTML.
  *
  * @return array A list of words, if $wp_cli is true.
  */
@@ -1165,31 +1166,66 @@ function relevanssi_common_words( $limit = 25, $wp_cli = false ) {
 	$words = $wpdb->get_results( 'SELECT COUNT(*) as cnt, term FROM ' . $relevanssi_variables['relevanssi_table'] . " GROUP BY term ORDER BY cnt DESC LIMIT $limit" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
 	if ( ! $wp_cli ) {
-		printf( '<h2>%s</h2>', esc_html__( '25 most common words in the index', 'relevanssi' ) );
-		printf( '<p>%s</p>', esc_html__( "These words are excellent stopword material. A word that appears in most of the posts in the database is quite pointless when searching. This is also an easy way to create a completely new stopword list, if one isn't available in your language. Click the word to add the word to the stopword list. The word will also be removed from the index, so rebuilding the index is not necessary.", 'relevanssi' ) );
+		?>
+		<div class="relevanssi-common-words-section" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #f0f0f1;">
+			<h3>
+				<?php
+				/* translators: %d is the total number of common words evaluated. */
+				echo esc_html( sprintf( __( '%d Most Common Words in the Index', 'relevanssi' ), $limit ) );
+				?>
+			</h3>
+			<p class="description" style="margin-bottom: 16px; max-width: 800px;">
+				<?php esc_html_e( 'These words appear most frequently across your current database index. When a word appears in almost every post, it does not help filter search results effectively. Review these top candidates and add them as exclusions to optimize performance. Words added here are instantly dropped from the index without requiring a full reindexing.', 'relevanssi' ); ?>
+			</p>
 
-		?>
-<input type="hidden" name="dowhat" value="add_stopword" />
-<table class="form-table">
-<tr>
-	<th scope="row"><?php esc_html_e( 'Stopword Candidates', 'relevanssi' ); ?></th>
-	<td>
-<ul>
-		<?php
-		foreach ( $words as $word ) {
-			$stop = __( 'Add to stopwords', 'relevanssi' );
-			printf( '<li>%1$s (%2$d) <button name="term" value="%1$s" />%3$s</button>', esc_attr( $word->term ), esc_html( $word->cnt ), esc_html( $stop ) );
-			if ( RELEVANSSI_PREMIUM ) {
-				$body = __( 'Add to content stopwords', 'relevanssi' );
-				printf( ' <button name="body_term" value="%1$s" />%3$s</button>', esc_attr( $word->term ), esc_html( $word->cnt ), esc_html( $body ) );
-			}
-			echo '</li>';
-		}
-		?>
-	</ul>
-	</td>
-</tr>
-</table>
+			<input type="hidden" name="dowhat" value="add_stopword" />
+
+			<div class="relevanssi-common-words-container" style="background: #fff; border: 1px solid #c3c4c7; border-radius: 4px; padding: 16px; max-width: 800px; margin-left: auto; margin-right: auto;">
+				<?php if ( ! empty( $words ) ) : ?>
+					<ul class="relevanssi-word-candidates-list" style="margin: 0; padding: 0; list-style: none;">
+						<?php foreach ( $words as $word ) : ?>
+							<li style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; margin-bottom: 6px; background: #f6f7f7; border-radius: 4px; border: 1px solid #dcdcde;">
+								<span class="relevanssi-word-info" style="font-size: 13px; color: #1d2327;">
+									<strong style="font-family: monospace; font-size: 14px; color: #176E34;"><?php echo esc_html( $word->term ); ?></strong>
+									<span style="color: #646970; margin-left: 6px;">
+										<?php
+										/* translators: %d is the total instances a specific keyword appears in the index database. */
+										echo '(' . esc_html( sprintf( _n( 'appears %d time', 'appears %d times', $word->cnt, 'relevanssi' ), $word->cnt ) ) . ')';
+										?>
+									</span>
+								</span>
+
+								<div class="relevanssi-word-actions" style="display: flex; gap: 6px;">
+									<button type="submit" name="term" value="<?php echo esc_attr( $word->term ); ?>" class="button button-small" aria-label="
+									<?php
+										/* translators: %s is the literal keyword string token. */
+										echo esc_attr( sprintf( __( 'Add "%s" to global stopwords', 'relevanssi' ), $word->term ) );
+									?>
+									">
+										<?php esc_html_e( 'Add to Stopwords', 'relevanssi' ); ?>
+									</button>
+
+									<?php if ( RELEVANSSI_PREMIUM ) : ?>
+										<button type="submit" name="body_term" value="<?php echo esc_attr( $word->term ); ?>" class="button button-small button-secondary" aria-label="
+										<?php
+											/* translators: %s is the literal keyword string token. */
+											echo esc_attr( sprintf( __( 'Add "%s" to content body stopwords only', 'relevanssi' ), $word->term ) );
+										?>
+										">
+											<?php esc_html_e( 'Add to Content-Only', 'relevanssi' ); ?>
+										</button>
+									<?php endif; ?>
+								</div>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php else : ?>
+					<p style="margin: 0; font-style: italic; color: #646970; text-align: center; padding: 12px;">
+						<?php esc_html_e( 'The index is currently empty or contains no words.', 'relevanssi' ); ?>
+					</p>
+				<?php endif; ?>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -1207,7 +1243,8 @@ function relevanssi_get_forbidden_post_types() {
 	 *
 	 * @param array $forbidden_post_types An array of post type names.
 	 */
-	return apply_filters( 'relevanssi_forbidden_post_types',
+	return apply_filters(
+		'relevanssi_forbidden_post_types',
 		array(
 			'wp_template_part',     // WP template parts.
 			'wp_global_styles',     // WP global styles.
@@ -1312,7 +1349,7 @@ function relevanssi_get_forbidden_post_types() {
 			'wfocu_offer',          // WooFunnel.
 			'wp_font_family',       // WordPress.
 			'wp_font_face',         // WordPress.
-			'wpforms-template',	    // WP Forms.
+			'wpforms-template',     // WP Forms.
 		)
 	);
 }
@@ -1328,7 +1365,8 @@ function relevanssi_get_forbidden_taxonomies() {
 	 *
 	 * @param array $forbidden_taxonomies An array of taxonomy names.
 	 */
-	return apply_filters( 'relevanssi_forbidden_taxonomies',
+	return apply_filters(
+		'relevanssi_forbidden_taxonomies',
 		array(
 			'wp_template_part_area',        // WP templates.
 			'nav_menu',                     // Navigation menus.
@@ -1406,10 +1444,10 @@ function relevanssi_remove_page_builder_shortcodes( $content ) {
 	/**
 	 * Filters the page builder shortcode.
 	 *
-	 * @param array  An array of page builder shortcode regexes.
-	 * @param string Context, ie. the current filter hook, if you want your
-	 * changes to only count for indexing or for excerpts. In indexing, this
-	 * is 'relevanssi_post_content', for excerpts it's
+	 * @param array  $shortcodes An array of page builder shortcode regexes.
+	 * @param string $context    Context, ie. the current filter hook, if you
+	 * want your changes to only count for indexing or for excerpts. In
+	 * indexing, this is 'relevanssi_post_content', for excerpts it's
 	 * 'relevanssi_pre_excerpt_content'.
 	 */
 	$search_array = apply_filters(
@@ -1482,69 +1520,6 @@ function relevanssi_block_on_admin_searches( $allow, $query ) {
 		$allow = false;
 	}
 	return $allow;
-}
-
-/**
- * Checks if user has relevanssi_indexing_restriction filter functions in use.
- *
- * Temporary check for the changes in the relevanssi_indexing_restriction filter
- * in 2.8/4.7. Remove eventually. The function runs all non-Relevanssi filters
- * on relevanssi_indexing_restriction and reports all that return a string.
- *
- * @see relevanssi_init()
- *
- * @return string The notice, if there's something to complain about, empty
- * string otherwise.
- */
-function relevanssi_check_indexing_restriction() {
-	$notice = '';
-	if ( has_filter( 'relevanssi_indexing_restriction' ) ) {
-		global $wp_filter;
-		$callbacks = array_flip(
-			array_keys(
-				array_merge(
-					array(),
-					...$wp_filter['relevanssi_indexing_restriction']->callbacks
-				)
-			)
-		);
-		if ( isset( $callbacks['relevanssi_yoast_exclude'] ) ) {
-			unset( $callbacks['relevanssi_yoast_exclude'] );
-		}
-		if ( isset( $callbacks['relevanssi_seopress_exclude'] ) ) {
-			unset( $callbacks['relevanssi_seopress_exclude'] );
-		}
-		if ( isset( $callbacks['relevanssi_woocommerce_restriction'] ) ) {
-			unset( $callbacks['relevanssi_woocommerce_restriction'] );
-		}
-		if ( ! empty( $callbacks ) ) {
-			$returns_string = array();
-			foreach ( array_keys( $callbacks ) as $callback ) {
-				$return = call_user_func(
-					$callback,
-					array(
-						'mysql'  => '',
-						'reason' => '',
-					)
-				);
-				if ( is_string( $return ) ) {
-					$returns_string[] = '<code>' . $callback . '</code>';
-				}
-			}
-			if ( $returns_string ) {
-				$list_of_callbacks = implode( ', ', $returns_string );
-				$notice            = <<<EOH
-<div id="relevanssi-indexing_restriction-warning" class="notice notice-warn">
-<p>The filter hook <code>relevanssi_indexing_restriction</code> was changed
-recently. <a href="https://www.relevanssi.com/knowledge-base/controlling-attachment-types-index/">More
-information can be found here</a>. You're using the filter, so make sure your
-filter functions have been updated. Check these functions that return wrong
-format: $list_of_callbacks.</p></div>
-EOH;
-			}
-		}
-	}
-	return $notice;
 }
 
 /**
@@ -1644,21 +1619,19 @@ function relevanssi_generate_how_relevanssi_sees( $post_id, $display = true, $ty
 function relevanssi_fetch_sees_data( $post_id, $type = 'post' ) {
 	global $wpdb, $relevanssi_variables;
 
-	if ( 'post' === $type ) {
-		$query = $wpdb->prepare(
-			'SELECT * FROM ' . $relevanssi_variables['relevanssi_table'] . ' WHERE doc = %d', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
-			$post_id
-		);
-	}
 	if ( 'term' === $type ) {
 		$query = $wpdb->prepare(
 			'SELECT * FROM ' . $relevanssi_variables['relevanssi_table'] . ' WHERE type NOT IN ("post", "user") AND item = %d', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 			$post_id
 		);
-	}
-	if ( 'user' === $type ) {
+	} elseif ( 'user' === $type ) {
 		$query = $wpdb->prepare(
 			'SELECT * FROM ' . $relevanssi_variables['relevanssi_table'] . ' WHERE type = "user" AND item = %d', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+			$post_id
+		);
+	} else { // 'post'
+		$query = $wpdb->prepare(
+			'SELECT * FROM ' . $relevanssi_variables['relevanssi_table'] . ' WHERE doc = %d', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 			$post_id
 		);
 	}
@@ -1835,8 +1808,8 @@ function relevanssi_replace_synonyms_in_terms( array $terms ): array {
 					continue;
 				}
 				list( $key, $value ) = explode( '=', $pair );
-				if ( $value === $term ) {
-					$new_term[] = $key;
+				if ( trim( $value ) === $term ) {
+					$new_term[] = trim( $key );
 				}
 			}
 			if ( ! empty( $new_term ) ) {
@@ -1857,8 +1830,8 @@ function relevanssi_replace_synonyms_in_terms( array $terms ): array {
  * @return array An array of words with stemmed words replaced with their
  * originals.
  */
-function relevanssi_replace_stems_in_terms( array $terms, ?array $all_terms = null ): array {
-	if ( ! $all_terms ) {
+function relevanssi_replace_stems_in_terms( array $terms, array $all_terms = array() ): array {
+	if ( empty( $all_terms ) ) {
 		$all_terms = $terms;
 	}
 	$term_for_stem = array();
@@ -1922,7 +1895,7 @@ function relevanssi_bot_block_list(): array {
  *
  * @param array $custom_fields A list of custom field names.
  *
- * @return @array The custom fields with the excluded fields removed.
+ * @return array The custom fields with the excluded fields removed.
  */
 function relevanssi_remove_metadata_fields( array $custom_fields ): array {
 	$excluded_fields = array(
@@ -1969,16 +1942,19 @@ function relevanssi_list_all_indexed_custom_fields() {
 	if ( 'visible' === $custom_fields ) {
 		$custom_fields = $wpdb->get_col(
 			'SELECT DISTINCT(meta_key) ' .
-			"FROM $wpdb->postmeta AS pm, {$relevanssi_variables['relevanssi_table']} AS r " . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"WHERE pm.post_id = r.doc AND meta_key NOT LIKE '\_%'
-			ORDER BY meta_key ASC"
+			"FROM $wpdb->postmeta " . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"WHERE meta_key NOT LIKE '\_%'
+			AND post_id IN ( " .
+			"SELECT DISTINCT(doc) FROM {$relevanssi_variables['relevanssi_table']}" . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			') ORDER BY meta_key ASC'
 		);
 	} elseif ( 'all' === $custom_fields ) {
 		$custom_fields = $wpdb->get_col(
 			'SELECT DISTINCT(meta_key) ' .
-			"FROM $wpdb->postmeta AS pm, {$relevanssi_variables['relevanssi_table']} AS r " . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			'WHERE pm.post_id = r.doc
-			ORDER BY meta_key ASC'
+			"FROM $wpdb->postmeta " . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			'WHERE post_id IN ( ' .
+			"SELECT DISTINCT(doc) FROM {$relevanssi_variables['relevanssi_table']}" . // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			') ORDER BY meta_key ASC'
 		);
 	} else {
 		$custom_fields = explode( ',', $custom_fields );

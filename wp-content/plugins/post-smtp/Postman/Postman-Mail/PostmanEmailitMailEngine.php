@@ -44,10 +44,7 @@ if ( ! class_exists( 'PostmanEmailItMailEngine' ) ) {
 
 			// Recipients.
 			foreach ( (array) $message->getToRecipients() as $recipient ) {
-				if ( ! in_array( $recipient->getEmail(), $duplicates ) ) {
-					$recipients[] = $recipient->getEmail();
-					$duplicates[] = $recipient->getEmail();
-				}
+				$recipients[] = $recipient->getEmail();
 			}
 
 			// Subject and Body.
@@ -67,11 +64,29 @@ if ( ! class_exists( 'PostmanEmailItMailEngine' ) ) {
 
 			$content = [
 				'from'    => $from,
-				'to'      => implode( ',', $recipients ),
+				'to'      => $recipients,
 				'subject' => $subject,
 				'html'    => $htmlContent,
 				'text'    => wp_strip_all_tags( $textPart ?: $htmlPart ),
 			];
+
+			// CC.
+			$cc = [];
+			foreach ( (array) $message->getCcRecipients() as $recipient ) {
+				$cc[] = $recipient->getEmail();
+			}
+			if ( ! empty( $cc ) ) {
+				$content['cc'] = $cc;
+			}
+
+			// BCC.
+			$bcc = [];
+			foreach ( (array) $message->getBccRecipients() as $recipient ) {
+				$bcc[] = $recipient->getEmail();
+			}
+			if ( ! empty( $bcc ) ) {
+				$content['bcc'] = $bcc;
+			}
 
 			// Attachments.
 			$attachments = $this->addAttachmentsToMail( $message );
@@ -82,11 +97,12 @@ if ( ! class_exists( 'PostmanEmailItMailEngine' ) ) {
 			// Send.
 			try {
 				$this->logger->debug( 'Sending mail via EmailIt' );
-				$response = $emailit->send( $content );
+				$response     = $emailit->send( $content );
 				$responseCode = wp_remote_retrieve_response_code( $response );
 				$responseBody = wp_remote_retrieve_body( $response );
 
-				if ( $responseCode === 200 || $responseCode === 202 ) {
+				// Treat any 2xx status code (including 201 Created) as success.
+				if ( $responseCode >= 200 && $responseCode < 300 ) {
 					$this->transcript  = 'Email sent successfully.' . PHP_EOL;
 					$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS . PHP_EOL;
 					$this->transcript .= print_r( $content, true );
@@ -122,11 +138,11 @@ if ( ! class_exists( 'PostmanEmailItMailEngine' ) ) {
 					$fileName = basename( $file );
 					$fileType = wp_check_filetype( $file );
 					$result[] = [
-						'content'     => base64_encode( file_get_contents( $file ) ),
-						'type'        => $fileType['type'],
-						'filename'    => $fileName,
-						'disposition' => 'attachment',
-						'name'        => pathinfo( $fileName, PATHINFO_FILENAME ),
+						'content'      => base64_encode( file_get_contents( $file ) ),
+						'content_type' => $fileType['type'],
+						'filename'     => $fileName,
+						'disposition'  => 'attachment',
+						'name'         => pathinfo( $fileName, PATHINFO_FILENAME ),
 					];
 				}
 			}

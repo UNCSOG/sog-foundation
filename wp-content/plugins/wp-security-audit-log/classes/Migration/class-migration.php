@@ -5,8 +5,8 @@
  * @package    wsal
  * @subpackage utils
  * @copyright  2026 Melapress
- * @license    https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
- * @link       https://wordpress.org/plugins/wp-2fa/
+ * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
+ * @link       https://wordpress.org/plugins/wp-security-audit-log/
  */
 
 namespace WSAL\Utils;
@@ -448,8 +448,14 @@ if ( ! class_exists( '\WSAL\Utils\Migration' ) ) {
 
 						if ( ! empty( $notifications ) ) {
 							foreach ( $notifications as $notification ) {
-								$item = maybe_unserialize( $notification->option_value );
-								if ( strlen( $item->phone ) > 0 ) {
+								$item = \maybe_unserialize( $notification->option_value );
+
+								// Skip if the unserialized value is not a valid notification object.
+								if ( ! is_object( $item ) || ! isset( $item->phone ) ) {
+									continue;
+								}
+
+								if ( is_string( $item->phone ) && strlen( $item->phone ) > 0 ) {
 									$notifications_in_use = true;
 									break;
 								}
@@ -718,13 +724,6 @@ if ( ! class_exists( '\WSAL\Utils\Migration' ) ) {
 			WP_Helper::delete_global_option( 'disable-refresh' );
 			Plugin_Extensions::deactivate_plugins();
 			WP_Helper::set_global_option( 'extensions-merged-notice', true );
-			// phpcs:disable
-			/* @free:start */
-			// phpcs:enable
-			WP_Helper::set_global_option( 'free-search-try', true );
-			// phpcs:disable
-			/* @free:end */
-			// phpcs:enable
 		}
 
 		/**
@@ -1317,6 +1316,20 @@ if ( ! class_exists( '\WSAL\Utils\Migration' ) ) {
 			// Mark migration as complete!
 			\update_network_option( null, 'wsal_multisite_options_migrated', true );
 			\update_network_option( null, 'wsal_multisite_options_migrated_date', \current_time( 'mysql' ) );
+		}
+
+		/**
+		 * Migration for version 5.6.1
+		 *
+		 * Cleans up old survey banner option.
+		 *
+		 * @return void
+		 *
+		 * @since 5.6.1
+		 */
+		protected static function migrate_up_to_5610() {
+			// Remove old survey option so the banner shows again under the new scheme, issue 5546.
+			Settings_Helper::delete_option_value( 'melapress-survey-2025' );
 		}
 
 		/**

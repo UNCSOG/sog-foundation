@@ -349,7 +349,7 @@ class WP_SAML_Auth {
 					// to the IDP. However, when $permit_wp_login=false, hitting wp-login will always
 					// trigger the IDP redirect.
 					if ( ( $permit_wp_login && false === stripos( $redirect_to, 'action=wp-saml-auth' ) )
-						|| ( ! $permit_wp_login && false === stripos( $redirect_to, parse_url( wp_login_url(), PHP_URL_PATH ) ) ) ) {
+						|| ( ! $permit_wp_login && false === stripos( $redirect_to, wp_parse_url( wp_login_url(), PHP_URL_PATH ) ) ) ) {
 						add_filter(
 							'login_redirect',
 							function () use ( $redirect_to ) {
@@ -445,6 +445,16 @@ class WP_SAML_Auth {
 
 		$existing_user = get_user_by( $get_user_by, $attributes[ $attribute ][0] );
 		if ( $existing_user ) {
+			$field_map = [
+				'email' => 'user_email',
+				'login' => 'user_login',
+				'slug'  => 'user_nicename',
+			];
+			$user_field = isset( $field_map[ $get_user_by ] ) ? $field_map[ $get_user_by ] : $get_user_by;
+			if ( mb_strtolower( $existing_user->$user_field, 'UTF-8' ) !== mb_strtolower( $attributes[ $attribute ][0], 'UTF-8' ) ) {
+				return new WP_Error( 'wp_saml_auth_attribute_mismatch', esc_html__( 'SAML attribute does not exactly match the existing user. Please contact your administrator.', 'wp-saml-auth' ) );
+			}
+
 			/**
 			 * Runs after a existing user has been authenticated in WordPress
 			 *
@@ -472,7 +482,30 @@ class WP_SAML_Auth {
 		 * @param array $attributes Attributes from the SAML response.
 		 */
 		$user_args = apply_filters( 'wp_saml_auth_insert_user', $user_args, $attributes );
-		$user_id   = wp_insert_user( $user_args );
+
+		// In multisite, check if we should prevent auto-adding users to sites.
+		if ( is_multisite() ) {
+			/**
+			 * Controls whether auto-provisioned users should be added to sites in multisite.
+			 *
+			 * In multisite environments, when wp_insert_user() is called with a 'role' parameter,
+			 * WordPress automatically adds the user to the current site. During SAML login, this is
+			 * typically the main site (ID 1). Setting this filter to false will create network users
+			 * without adding them to any site.
+			 *
+			 * @param bool  $auto_add_to_blog Whether to add the user to sites. Default true.
+			 * @param int   $blog_id          The current blog ID where the user would be added.
+			 * @param array $user_args        Arguments passed to wp_insert_user().
+			 * @param array $attributes       Attributes from the SAML response.
+			 */
+			$auto_add_to_blog = apply_filters( 'wp_saml_auth_auto_add_to_blog', true, get_current_blog_id(), $user_args, $attributes );
+
+			if ( ! $auto_add_to_blog && isset( $user_args['role'] ) ) {
+				unset( $user_args['role'] );
+			}
+		}
+
+		$user_id = wp_insert_user( $user_args );
 		if ( is_wp_error( $user_id ) ) {
 			return $user_id;
 		}
@@ -480,7 +513,11 @@ class WP_SAML_Auth {
 		$user = get_user_by( 'id', $user_id );
 
 		/**
-		 * Runs after the user has been authenticated in WordPress
+		 * Runs after the user has been authenticated in WordPress.
+		 *
+		 * Note: Since 2.3.1, in multisite environments with the
+		 * wp_saml_auth_auto_add_to_blog filter returning false,
+		 * the user may have no role on the current site.
 		 *
 		 * @param WP_User $user       The new user object.
 		 * @param array   $attributes All attributes received from the SAML Response

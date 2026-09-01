@@ -2,208 +2,88 @@
 
 namespace AC\Helper;
 
-use DateTime;
 use DateTimeZone;
-use Exception;
 
-class Date
+class Date extends Creatable
 {
 
+    public function get_date_format(): string
+    {
+        return (string)get_option('date_format') ?: 'F j, Y';
+    }
+
+    public function get_time_format(): string
+    {
+        return (string)get_option('time_format') ?: 'H:i';
+    }
+
+    public function get_date_time_format(): string
+    {
+        return sprintf(
+            '%s %s',
+            $this->get_date_format(),
+            $this->get_time_format()
+        );
+    }
+
     /**
-     * @param string|int $date
+     * @depecated 7.0.11
      */
     public function strtotime($date): ?int
     {
-        if ( ! is_scalar($date) ||
-             empty($date) ||
-             in_array($date, ['0000-00-00 00:00:00', '0000-00-00', '00:00:00'], true)
-        ) {
-            return null;
-        }
-
-        // some plugins store dates in a jquery timestamp format, format is in ms since The Epoch.
-        // See http://api.jqueryui.com/datepicker/#utility-formatDate
-        if (is_numeric($date)) {
-            $length = strlen(trim($date));
-
-            // Dates before / around September 8th, 2001 are saved as 9 numbers * 1000 resulting in 12 numbers to store the time.
-            // Dates after September 8th are saved as 10 numbers * 1000, resulting in 13 numbers.
-            // For example the ACF Date and Time Picker uses this format.
-            // credits: Ben C
-            if (12 === $length || 13 === $length) {
-                return (int)round($date / 1000); // remove the ms
-            }
-
-            // Date format: yyyymmdd ( often used by ACF ) must start with 19xx or 20xx and is 8 long
-            // in theory a numeric string of 8 can also be a unix timestamp; no conversion would be needed
-            if (8 === $length && (strpos($date, '20') === 0 || strpos($date, '19') === 0)) {
-                return strtotime($date) ?: null;
-            }
-
-            return (int)$date;
-        }
+        _deprecated_function(__METHOD__, '7.0.11', 'strtotime()');
 
         return strtotime($date) ?: null;
     }
 
     /**
-     * @param string $date
-     * @param string $format
-     *
-     * @return int|false
+     * @depecated 7.0.11
      */
-    public function get_timestamp_from_format($date, $format)
+    public function time(string $date, ?string $format = null): ?string
     {
-        if ( ! $date) {
-            return false;
-        }
+        _deprecated_function(__METHOD__, '7.0.11', 'wp_date()');
 
-        // Already a timestamp
-        if ('U' === $format) {
-            return $date;
-        }
-
-        $_date = DateTime::createFromFormat($format, $date);
-
-        return $_date
-            ? $_date->format('U')
-            : false;
+        return wp_date($format ?? $this->get_time_format(), strtotime($date), new DateTimeZone('UTC')) ?: null;
     }
 
     /**
-     * @param string $date           PHP Date format
-     * @param string $display_format Date display format
-     *
-     * @return string Formatted date
-     * @since 1.3.1
+     * @depecated 7.0.11
      */
-    public function date($date, $display_format = '')
+    public function date(string $date, ?string $date_format = null): ?string
     {
-        $timestamp = $this->strtotime($date);
+        _deprecated_function(__METHOD__, '7.0.11', 'wp_date()');
 
-        return $this->date_by_timestamp($timestamp, $display_format);
+        return wp_date($date_format ?? $this->get_date_format(), strtotime($date), new DateTimeZone('UTC')) ?: null;
     }
 
     /**
-     * @param        $timestamp
-     * @param string $display_format Date display format
-     *
-     * @return string Formatted date
-     * @since 3.0
+     * @depecated 7.0.11
      */
-    public function date_by_timestamp($timestamp, $display_format = '')
+    public function date_by_timestamp(int $timestamp, ?string $date_format = null): ?string
     {
-        if ( ! $timestamp) {
-            return false;
-        }
+        _deprecated_function(__METHOD__, '7.0.11', 'wp_date()');
 
-        switch ($display_format) {
-            case 'wp_date' :
-                $display_format = get_option('date_format');
-
-                break;
-            case 'wp_date_time' :
-                $display_format = get_option('date_format') . ' ' . get_option('time_format');
-
-                break;
-        }
-
-        // Get date format from the General Settings
-        if ( ! $display_format) {
-            $display_format = get_option('date_format');
-        }
-
-        // Fallback in case the date format from General Settings is empty
-        if ( ! $display_format) {
-            $display_format = 'F j, Y';
-        }
-
-        return $this->format_date($display_format, $timestamp);
-    }
-
-    public function format_date($format, $timestamp = null, DateTimeZone $timezone = null)
-    {
-        if ( ! function_exists('wp_date')) {
-            return date_i18n($format, $timestamp);
-        }
-
-        if (null === $timezone) {
-            $timezone = new DateTimeZone(date_default_timezone_get());
-        }
-
-        // since WP 3.5
-        return wp_date($format, $timestamp, $timezone);
+        return wp_date($date_format ?? $this->get_date_format(), $timestamp, new DateTimeZone('UTC')) ?: null;
     }
 
     /**
-     * @return DateTimeZone|null
+     * @depecated 7.0.11
      */
-    public function timezone()
+    public function timezone(): DateTimeZone
     {
-        if ( ! function_exists('wp_timezone')) {
-            try {
-                return new DateTimeZone(get_option('timezone_string'));
-            } catch (Exception $e) {
-                return null;
-            }
-        }
+        _deprecated_function(__METHOD__, '7.0.11', 'wp_timezone()');
 
-        // since WP 3.5
         return wp_timezone();
     }
 
     /**
-     * @param string $date
-     * @param string $format
-     *
-     * @return string Formatted time
-     * @since 1.3.1
+     * @depecated 7.0
      */
-    public function time($date, $format = '')
+    public function format_date(string $format, ?int $timestamp = null, ?DateTimeZone $timezone = null): ?string
     {
-        $timestamp = ac_helper()->date->strtotime($date);
+        _deprecated_function(__METHOD__, '7.0', 'wp_date()');
 
-        if ( ! $format) {
-            $format = get_option('time_format');
-        }
-
-        if ( ! $timestamp) {
-            return false;
-        }
-
-        return $this->format_date($format, $timestamp);
-    }
-
-    /**
-     * Translate a jQuery date format to the PHP date format
-     *
-     * @param string $format jQuery date format
-     *
-     * @return string PHP date format
-     * @since 1.1
-     */
-    public function parse_jquery_dateformat($format)
-    {
-        $replace = [
-            '^dd^d' => 'j',
-            'dd'    => 'd',
-            'DD'    => 'l',
-            'o'     => 'z',
-            'MM'    => 'F',
-            '^mm^m' => 'n',
-            'mm'    => 'm',
-            'yy'    => 'Y',
-        ];
-
-        $replace_from = [];
-        $replace_to = [];
-
-        foreach ($replace as $from => $to) {
-            $replace_from[] = '/' . $from . '/';
-            $replace_to[] = $to;
-        }
-
-        return preg_replace($replace_from, $replace_to, $format);
+        return wp_date($format, $timestamp ?? time(), $timezone ?? new DateTimeZone('UTC')) ?: null;
     }
 
 }

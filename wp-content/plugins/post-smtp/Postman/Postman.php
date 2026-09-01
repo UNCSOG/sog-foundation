@@ -71,6 +71,8 @@ class Postman {
         require_once 'Postman-Mail/PostmanSendinblueTransport.php';
         require_once 'Postman-Mail/PostmanMailtrapTransport.php';
         require_once 'Postman-Mail/PostmanResendTransport.php';
+		require_once 'Postman-Mail/PostmanCloudflareTransport.php';
+		require_once 'Postman-Mail/PostmanSmtpcomTransport.php';
 		require_once 'Postman-Mail/PostmanMailjetTransport.php';
 		require_once 'Postman-Mail/PostmanEmailitTransport.php';
 		require_once 'Postman-Mail/PostmanMailerooTransport.php';
@@ -244,10 +246,25 @@ class Postman {
 		// register the email transports
 		$this->registerTransports( $this->rootPluginFilenameAndPath );
 
+
 		// register the setup_admin function on plugins_loaded because we need to call
 		// current_user_can to verify the capability of the current user
-		if ( PostmanUtils::isAdmin() && is_admin() ) {
-			$this->setup_admin();
+		if ( is_admin() ) {
+			if ( PostmanUtils::isAdmin() ) {
+				$this->setup_admin();
+			} elseif ( PostmanUtils::canManagePostmanLogs() ) {
+				$this->bootstrap_email_log_admin();
+			}
+		}
+
+		if ( get_option( 'post_smtp_activation_redirect' ) ) {
+			delete_option( 'post_smtp_activation_redirect' );
+			if ( PostmanUtils::isAdmin() ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=postman/configuration_wizard' ) );
+			} elseif ( PostmanUtils::canManagePostmanLogs() ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=postman_email_log' ) );
+			}
+			exit;
 		}
 		
 	}
@@ -276,6 +293,8 @@ class Postman {
 		require_once 'PostmanInstaller.php';
 		$upgrader = new PostmanInstaller();
 		$upgrader->activatePostman();
+		
+		add_option( 'post_smtp_activation_redirect', true );
 	}
 
 	/**
@@ -337,6 +356,39 @@ class Postman {
 					'print_signature',
 			) );
 		}
+	}
+
+	/**
+	 * Load email-log admin for users with manage_postman_logs only (Role Editor, etc.).
+	 */
+	public function bootstrap_email_log_admin() {
+		$this->logger->debug( 'Email log admin start-up sequence' );
+
+		require_once 'PostmanViewController.php';
+		require_once 'Postman-Email-Log/PostmanEmailLogController.php';
+		new PostmanEmailLogController( $this->rootPluginFilenameAndPath );
+
+		add_action( 'admin_init', array( $this, 'register_log_admin_assets' ), 0 );
+
+		if ( PostmanUtils::isCurrentPagePostmanAdmin( PostmanUtils::POSTMAN_EMAIL_LOG_PAGE_STUB ) ) {
+			add_action( 'in_admin_footer', array(
+				$this,
+				'print_signature',
+			) );
+		}
+	}
+
+	/**
+	 * Register styles/scripts required by the email log screen for log-only users.
+	 */
+	public function register_log_admin_assets() {
+		if ( ! PostmanUtils::canManagePostmanLogs() ) {
+			return;
+		}
+
+		$pluginData = apply_filters( 'postman_get_plugin_metadata', null );
+		wp_register_style( 'postman_style', plugins_url( 'style/postman.css', $this->rootPluginFilenameAndPath ), null, $pluginData['version'] );
+		wp_register_script( 'postman_script', plugins_url( 'script/postman.js', $this->rootPluginFilenameAndPath ), array( 'jquery' ), $pluginData['version'] );
 	}
 
 	/**
@@ -420,7 +472,7 @@ class Postman {
 			}
 			$msg = PostmanTransportRegistry::getInstance()->getReadyMessage();
 			$message = sprintf( $msg['message'] );
-			$goToSettings = sprintf( '<a href="%s">%s</a>', PostmanUtils::getSettingsPageUrl(), __( 'Settings', 'post-smtp' ) );
+			$goToSettings = sprintf( '<a href="%s">%s</a>', PostmanUtils::getConfigurationPageUrl(), __( 'Settings', 'post-smtp' ) );
 			$goToEmailLog = sprintf( '%s', _x( 'Email Log', 'The log of Emails that have been delivered', 'post-smtp' ) );
 			if ( PostmanOptions::getInstance()->isMailLoggingEnabled() ) {
 				$goToEmailLog = sprintf( '<a href="%s">%s</a>', PostmanUtils::getEmailLogPageUrl(), $goToEmailLog );
@@ -452,27 +504,8 @@ class Postman {
 
 		$postman_transport_registry = PostmanTransportRegistry::getInstance();
 
-        $postman_transport_registry->registerTransport( new PostmanDefaultModuleTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanSmtpModuleTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanGmailApiModuleTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanMandrillTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanSendGridTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanMailerSendTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanMailgunTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanSendinblueTransport( $rootPluginFilenameAndPath ) );
-        $postman_transport_registry->registerTransport( new PostmanMailtrapTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanResendTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanMailjetTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanSendpulseTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanPostmarkTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanSparkPostTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanElasticEmailTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanSmtp2GoTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanEmailitTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanMailerooTransport( $rootPluginFilenameAndPath ) );
-		$postman_transport_registry->registerTransport( new PostmanSweegoTransport( $rootPluginFilenameAndPath ) );
-
-		do_action( 'postsmtp_register_transport', $postman_transport_registry );
+		// Use centralized registration (idempotent — safe if already registered before init).
+		$postman_transport_registry->registerAllTransports( $rootPluginFilenameAndPath );
 	}
 
 	/**
