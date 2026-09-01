@@ -10,6 +10,7 @@ parameters:
         - wp-content/plugins/sog-user-import
         - wp-content/plugins/sog-unc-cookie-banner
         - wp-content/plugins/sog-unc-utility-bar
+        - wp-content/plugins/sog-unc-rebrand
         - wp-content/plugins/unc-cookie-banner
         - wp-content/plugins/unc-utility-bar
     excludePaths:

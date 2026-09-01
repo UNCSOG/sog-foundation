@@ -31,6 +31,8 @@ Then you can run the following commands:
     git subtree pull --prefix=wp-content/plugins/sog-unc-cookie-banner ssh://git@sc.unc.edu/sog-it/sog-unc-cookie-banner.git main --squash
     git subtree pull --prefix=wp-content/plugins/sog-unc-utility-bar git@sc.unc.edu:sog-it/sog-unc-utility-bar.git master --squash
     git subtree pull --prefix=wp-content/plugins/sog-unc-rebrand git@sc.unc.edu:sog-it/sog-unc-rebrand.git main --squash
+
+
     # git subtree pull --prefix=wp-content/plugins/unc-utility-bar ssh://git@sc.unc.edu/itsds/unc-utility-bar.git main --squash
     # git subtree pull --prefix=wp-content/plugins/unc-cookie-banner ssh://git@sc.unc.edu/itsds/unc-cookie-banner.git main --squash
 ```
