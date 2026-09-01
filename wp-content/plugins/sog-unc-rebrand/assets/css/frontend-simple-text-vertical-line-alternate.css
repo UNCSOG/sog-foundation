@@ -29,31 +29,31 @@
 		flex: 1 0 0;
 	}
 
+	/* site name */
 	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__brand-title.site-name {
-		color: var(--sog-rebrand-font-body);
-		font-family: Montserrat;
-		font-size: 1rem;
-		font-style: normal;
-		font-weight: 600;
-		line-height: 1.25rem; /* 125% */
+		color: var(--sog-rebrand-header-text);
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1rem);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 600);
 		letter-spacing: 0.06rem;
 	}
 
+	/* site description */
 	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__brand-title.site-tagline {
-		color: var(--sog-rebrand-font-body);
-		font-family: "Open Sans";
-		font-size: 1.875rem;
-		font-style: normal;
-		font-weight: 700;
-		line-height: 1.875rem; /* 100% */
+		color: var(--sog-rebrand-header-site-description-color, var(--sog-rebrand-font-body));
+		font-family: var(--sog-rebrand-header-site-description-font-family, 'Open Sans', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-site-description-font-size, 1.875rem);
+		font-style: var(--sog-rebrand-header-site-description-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-description-font-weight, 700);
 	}
 
+	/* school name */
 	& .sog-rebrand__header-core--simple-text-vertical-line-alternate .sog-rebrand__brand-title.school-name {
-		color: var(--sog-rebrand-font-body);
-		font-family: "Open Sans";
-		font-size: 1.5rem;
-		font-style: normal;
-		font-weight: 400;
-		line-height: 1.875rem; /* 125% */
+		color: var(--sog-rebrand-header-school-name-color, var(--sog-rebrand-font-body));
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.5rem);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 400);
 	}
 }

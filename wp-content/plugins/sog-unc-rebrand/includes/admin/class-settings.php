@@ -22,6 +22,13 @@ class Settings {
 	public const OPTION_NAME = 'sog_unc_rebrand_settings';
 
 	/**
+	 * Map of deprecated header variant slugs to their replacement slugs.
+	 */
+	private const DEPRECATED_VARIANTS = array(
+		'simple-text-vertical-search' => 'simple-text-vertical-line',
+	);
+
+	/**
 	 * Register admin settings hooks.
 	 *
 	 * @return void
@@ -32,6 +39,7 @@ class Settings {
 		add_action( 'admin_post_sog_unc_rebrand_export_preset', array( $this, 'handle_export_preset' ) );
 		add_action( 'admin_post_sog_unc_rebrand_import_preset', array( $this, 'handle_import_preset' ) );
 		add_action( 'admin_post_sog_unc_rebrand_apply_preset', array( $this, 'handle_apply_preset' ) );
+		add_action( 'admin_notices', array( $this, 'render_deprecated_variant_notice' ) );
 	}
 
 	/**
@@ -323,6 +331,7 @@ class Settings {
 			</nav>
 
 			<p class="description"><?php echo esc_html( $description ); ?></p>
+			<?php settings_errors( self::OPTION_NAME ); ?>
 
 			<form method="post" action="options.php">
 				<?php settings_fields( 'sog_unc_rebrand' ); ?>
@@ -348,7 +357,7 @@ class Settings {
 		$this->render_checkbox_field( 'header_enabled', __( 'Enable header output', 'sog-unc-rebrand' ), (bool) $settings['header_enabled'] );
 		$this->render_checkbox_field( 'footer_enabled', __( 'Enable footer output', 'sog-unc-rebrand' ), (bool) $settings['footer_enabled'] );
 		$this->render_checkbox_field( 'utility_bar_enabled', __( 'Enable UNC Utility Bar', 'sog-unc-rebrand' ), (bool) $settings['utility_bar_enabled'] );
-		$this->render_checkbox_field( 'load_frontend_fonts', __( 'Load Montserrat and Open Sans fonts', 'sog-unc-rebrand' ), (bool) $settings['load_frontend_fonts'] );
+		$this->render_checkbox_field( 'load_frontend_fonts', __( 'Load Montserrat, PT Sans and Open Sans fonts', 'sog-unc-rebrand' ), (bool) $settings['load_frontend_fonts'] );
 		$this->render_section_end();
 
 		$this->render_section_start(
@@ -396,13 +405,56 @@ class Settings {
 
 		$this->render_section_start( __( 'Header Core Content', 'sog-unc-rebrand' ) );
 		$this->render_checkbox_field('header_text_links_enabled', __( 'Enable header text links', 'sog-unc-rebrand' ), (bool) $settings['header_text_links_enabled'] );
-		$this->render_media_field( 'header_logo_image_url', __( 'Header logo image', 'sog-unc-rebrand' ), (string) $settings['header_logo_image_url'], array( 'condition_field' => 'header_core_variant', 'condition_value' => 'image-logo' ) );
+		$this->render_checkbox_field('header_separator_hide_mobile', __( 'Hide header separator on mobile', 'sog-unc-rebrand' ), (bool) $settings['header_separator_hide_mobile'] );
+		$this->render_number_field('header_separator_padding_top', __( 'Header separator padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_separator_padding_top'] ?? $defaults['header_separator_padding_top']));
+		$this->render_number_field('header_separator_padding_right', __( 'Header separator padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_separator_padding_right'] ?? $defaults['header_separator_padding_right']));
+		$this->render_number_field('header_separator_padding_bottom', __( 'Header separator padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_separator_padding_bottom'] ?? $defaults['header_separator_padding_bottom']));
+		$this->render_number_field('header_separator_padding_left', __( 'Header separator padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_separator_padding_left'] ?? $defaults['header_separator_padding_left']));
+		$this->render_media_field('header_logo_image_url', __( 'Header logo image', 'sog-unc-rebrand' ), (string) $settings['header_logo_image_url'], array( 'condition_field' => 'header_core_variant', 'condition_value' => 'image-logo' ) );
 		$this->render_text_field('header_school_name', __( 'School name', 'sog-unc-rebrand' ), (string) $settings['header_school_name']);
+		$this->render_select_field('header_school_name_text_transform', __( 'School name text transform', 'sog-unc-rebrand' ), (string) ($settings['header_school_name_text_transform'] ?? $defaults['header_school_name_text_transform']), $this->get_text_transform_style_options());
+		$this->render_select_field('header_school_name_text_decoration', __( 'School name text decoration', 'sog-unc-rebrand' ), (string) ($settings['header_school_name_text_decoration'] ?? $defaults['header_school_name_text_decoration']), $this->get_text_decoration_style_options());
+		$this->render_select_field('header_school_name_font_family', __( 'School name font family', 'sog-unc-rebrand' ), (string) ($settings['header_school_name_font_family'] ?? $defaults['header_school_name_font_family']), $this->get_font_family_options());
+		$this->render_number_field('header_school_name_font_size', __( 'School name font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_school_name_font_size']);
+		$this->render_number_field('header_mobile_school_name_font_size', __( 'Mobile school name font size (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_school_name_font_size'] ?? $defaults['header_mobile_school_name_font_size']));
+		$this->render_number_field('header_school_name_font_weight', __( 'School name font weight (px)', 'sog-unc-rebrand' ), (int) $settings['header_school_name_font_weight']);
+		$this->render_select_field('header_school_name_font_style', __( 'School name font style', 'sog-unc-rebrand' ), (string) $settings['header_school_name_font_style'], $this->get_font_style_options());
+		$this->render_text_field('header_school_name_line_height', __( 'School name line height', 'sog-unc-rebrand' ), (string) ( $settings['header_school_name_line_height'] ?? $defaults['header_school_name_line_height'] ));
+		$this->render_text_field('header_school_name_line_height_small_mobile', __( 'School name line height (small mobile)', 'sog-unc-rebrand' ), (string) ( $settings['header_school_name_line_height_small_mobile'] ?? $defaults['header_school_name_line_height_small_mobile'] ));
+		$this->render_number_field('header_school_name_padding_top', __( 'School name padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_school_name_padding_top'] ?? $defaults['header_school_name_padding_top']));
+		$this->render_number_field('header_school_name_padding_right', __( 'School name padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_school_name_padding_right'] ?? $defaults['header_school_name_padding_right']));
+		$this->render_number_field('header_school_name_padding_bottom', __( 'School name padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_school_name_padding_bottom'] ?? $defaults['header_school_name_padding_bottom']));
+		$this->render_number_field('header_school_name_padding_left', __( 'School name padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_school_name_padding_left'] ?? $defaults['header_school_name_padding_left']));
+
 		$this->render_text_field('header_text_main', __( 'Simple text main line/site name', 'sog-unc-rebrand' ), (string) $settings['header_text_main']);
+		$this->render_select_field('header_site_name_text_transform', __( 'Site name text transform', 'sog-unc-rebrand' ), (string) ($settings['header_site_name_text_transform'] ?? $defaults['header_site_name_text_transform']), $this->get_text_transform_style_options());
+		$this->render_select_field('header_site_name_text_decoration', __( 'Site name text decoration', 'sog-unc-rebrand' ), (string) ($settings['header_site_name_text_decoration'] ?? $defaults['header_site_name_text_decoration']), $this->get_text_decoration_style_options());
+		$this->render_select_field('header_site_name_font_family', __( 'Site name font family', 'sog-unc-rebrand' ), (string) ($settings['header_site_name_font_family'] ?? $defaults['header_site_name_font_family']), $this->get_font_family_options());
+		$this->render_number_field('header_site_name_font_size', __( 'Site name font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_name_font_size']);
+		$this->render_number_field('header_mobile_site_name_font_size', __( 'Mobile Site name font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_site_name_font_size']);
+		$this->render_number_field('header_site_name_font_weight', __( 'Site name font weight (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_name_font_weight']);
+		$this->render_select_field('header_site_name_font_style', __( 'Site name font style', 'sog-unc-rebrand' ), (string) $settings['header_site_name_font_style'], $this->get_font_style_options());
+		$this->render_text_field('header_site_name_line_height', __( 'Site name line height', 'sog-unc-rebrand' ), (string) ( $settings['header_site_name_line_height'] ?? $defaults['header_site_name_line_height'] ));
+		$this->render_text_field('header_site_name_line_height_small_mobile', __( 'Site name line height (small mobile)', 'sog-unc-rebrand' ), (string) ( $settings['header_site_name_line_height_small_mobile'] ?? $defaults['header_site_name_line_height_small_mobile'] ));
+		$this->render_number_field('header_site_name_padding_top', __( 'Site name padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_name_padding_top'] ?? $defaults['header_site_name_padding_top']));
+		$this->render_number_field('header_site_name_padding_right', __( 'Site name padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_name_padding_right'] ?? $defaults['header_site_name_padding_right']));
+		$this->render_number_field('header_site_name_padding_bottom', __( 'Site name padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_name_padding_bottom'] ?? $defaults['header_site_name_padding_bottom']));
+		$this->render_number_field('header_site_name_padding_left', __( 'Site name padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_name_padding_left'] ?? $defaults['header_site_name_padding_left']));
+
 		$this->render_text_field('header_text_subtext', __( 'Simple text subtext/description', 'sog-unc-rebrand' ), (string) $settings['header_text_subtext']);
-		$this->render_select_field('header_school_name_text_transform', __( 'Header school name text transform', 'sog-unc-rebrand' ), (string) ($settings['header_school_name_text_transform'] ?? $defaults['header_school_name_text_transform']), $this->get_text_transform_style_options());
-		$this->render_select_field('header_site_name_text_transform', __( 'Header site name text transform', 'sog-unc-rebrand' ), (string) ($settings['header_site_name_text_transform'] ?? $defaults['header_site_name_text_transform']), $this->get_text_transform_style_options());
-		$this->render_select_field('header_site_description_text_transform', __( 'Header site description text transform', 'sog-unc-rebrand' ), (string) ($settings['header_site_description_text_transform'] ?? $defaults['header_site_description_text_transform']), $this->get_text_transform_style_options());
+		$this->render_select_field('header_site_description_text_transform', __( 'Site description text transform', 'sog-unc-rebrand' ), (string) ($settings['header_site_description_text_transform'] ?? $defaults['header_site_description_text_transform']), $this->get_text_transform_style_options());
+		$this->render_select_field('header_site_description_text_decoration', __( 'Site description text decoration', 'sog-unc-rebrand' ), (string) ($settings['header_site_description_text_decoration'] ?? $defaults['header_site_description_text_decoration']), $this->get_text_decoration_style_options());
+		$this->render_select_field('header_site_description_font_family', __( 'Site description font family', 'sog-unc-rebrand' ), (string) ($settings['header_site_description_font_family'] ?? $defaults['header_site_description_font_family']), $this->get_font_family_options());
+		$this->render_number_field('header_site_description_font_size', __( 'Site description font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_description_font_size']);
+		$this->render_number_field('header_mobile_site_description_font_size', __( 'Mobile site description font size (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_site_description_font_size'] ?? $defaults['header_mobile_site_description_font_size']));
+		$this->render_number_field('header_site_description_font_weight', __( 'Site description font weight (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_description_font_weight']);
+		$this->render_select_field('header_site_description_font_style', __( 'Site description font style', 'sog-unc-rebrand' ), (string) $settings['header_site_description_font_style'], $this->get_font_style_options());
+		$this->render_text_field('header_site_description_line_height', __( 'Site description line height', 'sog-unc-rebrand' ), (string) ( $settings['header_site_description_line_height'] ?? $defaults['header_site_description_line_height'] ));
+		$this->render_text_field('header_site_description_line_height_small_mobile', __( 'Site description line height (small mobile)', 'sog-unc-rebrand' ), (string) ( $settings['header_site_description_line_height_small_mobile'] ?? $defaults['header_site_description_line_height_small_mobile'] ));
+		$this->render_number_field('header_site_description_padding_top', __( 'Site description padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_description_padding_top'] ?? $defaults['header_site_description_padding_top']));
+		$this->render_number_field('header_site_description_padding_right', __( 'Site description padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_description_padding_right'] ?? $defaults['header_site_description_padding_right']));
+		$this->render_number_field('header_site_description_padding_bottom', __( 'Site description padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_description_padding_bottom'] ?? $defaults['header_site_description_padding_bottom']));
+		$this->render_number_field('header_site_description_padding_left', __( 'Site description padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_site_description_padding_left'] ?? $defaults['header_site_description_padding_left']));
 		$this->render_section_end();
 
 		// Search fields
@@ -410,11 +462,25 @@ class Settings {
 		$search_condition = array('condition_field' => 'display_site_search_enabled', 'condition_value' => '1');
 		$this->render_checkbox_field( 'display_site_search_enabled', __( 'Display site search', 'sog-unc-rebrand' ), (bool) $settings['display_site_search_enabled'] );
 		$this->render_checkbox_field( 'display_site_search_mobile_enabled', __( 'Display site search on mobile', 'sog-unc-rebrand' ), (bool) $settings['display_site_search_mobile_enabled'], $search_condition );
-		$this->render_checkbox_field( 'site_search_inline_with_nav', __( 'Show search inline with navigation', 'sog-unc-rebrand' ), (bool) $settings['site_search_inline_with_nav'], $search_condition );
-		$this->render_checkbox_field( 'site_search_inline_with_header', __( 'Show search inline with header', 'sog-unc-rebrand' ), (bool) $settings['site_search_inline_with_header'], $search_condition );
-		$this->render_text_field( 'site_search_placeholder_text', __( 'Site search placeholder text', 'sog-unc-rebrand' ), (string) $settings['site_search_placeholder_text'], '', $search_condition );
+		$this->render_checkbox_field( 'display_site_search_inline_with_nav', __( 'Show search inline with navigation', 'sog-unc-rebrand' ), (bool) $settings['display_site_search_inline_with_nav'], $search_condition );
+		$this->render_checkbox_field( 'display_site_search_inline_with_header', __( 'Show search inline with school name in the header', 'sog-unc-rebrand' ), (bool) $settings['display_site_search_inline_with_header'], $search_condition );
+		$this->render_text_field( 'header_site_search_placeholder_text', __( 'Site search placeholder text', 'sog-unc-rebrand' ), (string) $settings['header_site_search_placeholder_text'], '', $search_condition );
 		$this->render_checkbox_field( 'header_search_icon_enabled', __( 'Show search icon in header', 'sog-unc-rebrand' ), (bool) $settings['header_search_icon_enabled'], $search_condition );
 		$this->render_text_field( 'header_search_button_text', __( 'Search button text in header', 'sog-unc-rebrand' ), (string) $settings['header_search_button_text'], '', $search_condition );
+		$this->render_number_field( 'header_site_search_border_thickness', __( 'Header site search border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_border_thickness'], $search_condition );
+		$this->render_number_field( 'header_site_search_border_radius_top_left', __( 'Header site search border radius top left (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_border_radius_top_left'], $search_condition );
+		$this->render_number_field( 'header_site_search_border_radius_top_right', __( 'Header site search border radius top right (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_border_radius_top_right'], $search_condition );
+		$this->render_number_field( 'header_site_search_border_radius_bottom_left', __( 'Header site search border radius bottom left (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_border_radius_bottom_left'], $search_condition );
+		$this->render_number_field( 'header_site_search_border_radius_bottom_right', __( 'Header site search border radius bottom right (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_border_radius_bottom_right'], $search_condition );
+		$this->render_select_field( 'header_site_search_border_style', __( 'Header site search border style (px)', 'sog-unc-rebrand' ), (string) $settings['header_site_search_border_style'], $this->get_border_style_options(), $search_condition );
+		$this->render_number_field( 'header_site_search_text_button_gap', __( 'Header site search gap (px) [the gap between the input field and the button]', 'sog-unc-rebrand' ), (int) $settings['header_site_search_text_button_gap'], $search_condition );
+		$this->render_number_field( 'header_site_search_button_border_thickness', __( 'Header site search button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_button_border_thickness'], $search_condition );
+		$this->render_number_field( 'header_site_search_button_border_radius_top_left', __( 'Header site search button border radius top left (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_button_border_radius_top_left'], $search_condition );
+		$this->render_number_field( 'header_site_search_button_border_radius_top_right', __( 'Header site search button border radius top right (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_button_border_radius_top_right'], $search_condition );
+		$this->render_number_field( 'header_site_search_button_border_radius_bottom_left', __( 'Header site search button border radius bottom left (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_button_border_radius_bottom_left'], $search_condition );
+		$this->render_number_field( 'header_site_search_button_border_radius_bottom_right', __( 'Header site search button border radius bottom right (px)', 'sog-unc-rebrand' ), (int) $settings['header_site_search_button_border_radius_bottom_right'], $search_condition );
+		$this->render_select_field( 'header_site_search_button_border_style', __( 'Header site search button border style (px)', 'sog-unc-rebrand' ), (string) $settings['header_site_search_button_border_style'], $this->get_border_style_options(), $search_condition );
+
 		$this->render_section_end();
 
 		// Give / donate button fields
@@ -422,24 +488,26 @@ class Settings {
 			__( 'Header Donate Button', 'sog-unc-rebrand' ),
 			__( 'Configure the header donate button text, URL, and styling. This only will display depending on the header variant you previously selected.', 'sog-unc-rebrand' )
 		);
-		$this->render_checkbox_field( 'header_give_button_hide_mobile', __( 'Hide Give button on mobile', 'sog-unc-rebrand' ), (bool) $settings['header_give_button_hide_mobile'] );
-		$this->render_text_field( 'header_give_button_text', __( 'Header Give button text', 'sog-unc-rebrand' ), (string) $settings['header_give_button_text'] );
-		$this->render_url_field( 'header_give_button_url', __( 'Header Give button URL', 'sog-unc-rebrand' ), (string) $settings['header_give_button_url'] );
-		$this->render_checkbox_field( 'header_give_button_new_tab', __( 'Open Give button link in a new tab', 'sog-unc-rebrand' ), (bool) $settings['header_give_button_new_tab'] );
-		$this->render_text_field( 'header_give_button_font_family', __( 'Give button font family', 'sog-unc-rebrand' ), (string) $settings['header_give_button_font_family'] );
-		$this->render_number_field( 'header_give_button_font_weight', __( 'Give button font weight', 'sog-unc-rebrand' ), (int) $settings['header_give_button_font_weight'] );
-		$this->render_text_field( 'header_give_button_font_style', __( 'Give button font style', 'sog-unc-rebrand' ), (string) $settings['header_give_button_font_style'] );
-		$this->render_number_field( 'header_give_button_font_size', __( 'Give button font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_font_size'] );
-		$this->render_text_field( 'header_give_button_font_line_height', __( 'Give button font line height', 'sog-unc-rebrand' ), (string) $settings['header_give_button_font_line_height'] );
-		$this->render_select_field( 'header_give_button_text_transform', __( 'Give button text transform', 'sog-unc-rebrand' ), (string) ($settings['header_give_button_text_transform'] ?? $defaults['header_give_button_text_transform']), $this->get_text_transform_style_options() );
-		$this->render_select_field( 'header_give_button_border_style', __( 'Give button border style', 'sog-unc-rebrand' ), (string) $settings['header_give_button_border_style'], $this->get_border_style_options() );
-		$this->render_number_field( 'header_give_button_border_thickness', __( 'Give button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_border_thickness'] );
-		$this->render_number_field( 'header_give_button_border_radius', __( 'Give button border radius (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_border_radius'] );
-		$this->render_select_field( 'header_give_button_text_decoration', __( 'Give button text decoration', 'sog-unc-rebrand' ), (string) $settings['header_give_button_text_decoration'], $this->get_text_decoration_style_options() );
-		$this->render_number_field( 'header_give_button_padding_top', __( 'Give button padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_top'] );
-		$this->render_number_field( 'header_give_button_padding_right', __( 'Give button padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_right'] );
-		$this->render_number_field( 'header_give_button_padding_bottom', __( 'Give button padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_bottom'] );
-		$this->render_number_field( 'header_give_button_padding_left', __( 'Give button padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_left'] );
+		$give_condition = array('condition_field' => 'header_give_button_enabled', 'condition_value' => '1');
+		$this->render_checkbox_field( 'header_give_button_enabled', __( 'Enable Give button', 'sog-unc-rebrand' ), (bool) $settings['header_give_button_enabled'] );
+		$this->render_checkbox_field( 'header_give_button_hide_mobile', __( 'Hide Give button on mobile', 'sog-unc-rebrand' ), (bool) $settings['header_give_button_hide_mobile'], $give_condition );
+		$this->render_text_field( 'header_give_button_text', __( 'Header Give button text', 'sog-unc-rebrand' ), (string) $settings['header_give_button_text'], '', $give_condition );
+		$this->render_url_field( 'header_give_button_url', __( 'Header Give button URL', 'sog-unc-rebrand' ), (string) $settings['header_give_button_url'], $give_condition );
+		$this->render_checkbox_field( 'header_give_button_new_tab', __( 'Open Give button link in a new tab', 'sog-unc-rebrand' ), (bool) $settings['header_give_button_new_tab'], $give_condition );
+		$this->render_select_field( 'header_give_button_font_family', __( 'Give button font family', 'sog-unc-rebrand' ), (string) $settings['header_give_button_font_family'], $this->get_font_family_options(), $give_condition );
+		$this->render_number_field( 'header_give_button_font_weight', __( 'Give button font weight', 'sog-unc-rebrand' ), (int) $settings['header_give_button_font_weight'], $give_condition );
+		$this->render_select_field( 'header_give_button_font_style', __( 'Give button font style', 'sog-unc-rebrand' ), (string) $settings['header_give_button_font_style'], $this->get_font_style_options(), $give_condition );
+		$this->render_number_field( 'header_give_button_font_size', __( 'Give button font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_font_size'], $give_condition );
+		$this->render_number_field( 'header_give_button_font_line_height', __( 'Give button font line height', 'sog-unc-rebrand' ), (int) $settings['header_give_button_font_line_height'], $give_condition );
+		$this->render_select_field( 'header_give_button_text_transform', __( 'Give button text transform', 'sog-unc-rebrand' ), (string) ($settings['header_give_button_text_transform'] ?? $defaults['header_give_button_text_transform']), $this->get_text_transform_style_options(), $give_condition );
+		$this->render_select_field( 'header_give_button_border_style', __( 'Give button border style', 'sog-unc-rebrand' ), (string) $settings['header_give_button_border_style'], $this->get_border_style_options(), $give_condition );
+		$this->render_number_field( 'header_give_button_border_thickness', __( 'Give button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_border_thickness'], $give_condition );
+		$this->render_number_field( 'header_give_button_border_radius', __( 'Give button border radius (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_border_radius'], $give_condition );
+		$this->render_select_field( 'header_give_button_text_decoration', __( 'Give button text decoration', 'sog-unc-rebrand' ), (string) $settings['header_give_button_text_decoration'], $this->get_text_decoration_style_options(), $give_condition );
+		$this->render_number_field( 'header_give_button_padding_top', __( 'Give button padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_top'], $give_condition );
+		$this->render_number_field( 'header_give_button_padding_right', __( 'Give button padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_right'], $give_condition );
+		$this->render_number_field( 'header_give_button_padding_bottom', __( 'Give button padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_bottom'], $give_condition );
+		$this->render_number_field( 'header_give_button_padding_left', __( 'Give button padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_give_button_padding_left'], $give_condition );
 		$this->render_section_end();
 
 		// Social Media links
@@ -454,22 +522,24 @@ class Settings {
 			__( 'Header Navigation Special Button', 'sog-unc-rebrand' ),
 			__( 'Configure the header special button text, URL, and styling. This only will display depending on the header variant you previously selected. This is a unique button that will be inline with the main menu but and be specifically tailor to your design.', 'sog-unc-rebrand' )
 		);
-		$this->render_text_field( 'header_special_button_text', __( 'Header Special button text', 'sog-unc-rebrand' ), (string) $settings['header_special_button_text'] );
-		$this->render_url_field( 'header_special_button_url', __( 'Header Special button URL', 'sog-unc-rebrand' ), (string) $settings['header_special_button_url'] );
-		$this->render_checkbox_field( 'header_special_button_new_tab', __( 'Open Special button link in a new tab', 'sog-unc-rebrand' ), (bool) $settings['header_special_button_new_tab'] );
-		$this->render_checkbox_field( 'header_special_button_hide_mobile', __( 'Hide Special button on mobile', 'sog-unc-rebrand' ), (bool) $settings['header_special_button_hide_mobile'] );
-		$this->render_number_field( 'header_special_button_border_thickness', __( 'Special button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['header_special_button_border_thickness'] );
-		$this->render_number_field( 'header_special_button_border_radius', __( 'Special button border radius (px)', 'sog-unc-rebrand' ), (int) $settings['header_special_button_border_radius'] );
-		$this->render_select_field( 'header_special_button_border_style', __( 'Special button border style', 'sog-unc-rebrand' ), (string) $settings['header_special_button_border_style'], $this->get_separator_style_options() );
-		$this->render_text_field( 'header_special_font_family', __( 'Special button font family', 'sog-unc-rebrand' ), (string) $settings['header_special_font_family'] );
-		$this->render_number_field( 'header_special_font_weight', __( 'Special button font weight', 'sog-unc-rebrand' ), (int) $settings['header_special_font_weight'] );
-		$this->render_text_field( 'header_special_font_style', __( 'Special button font style', 'sog-unc-rebrand' ), (string) $settings['header_special_font_style'] );
-		$this->render_number_field( 'header_special_font_size', __( 'Special button font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_special_font_size'] );
-		$this->render_select_field( 'header_special_text_transform', __( 'Special button text transform', 'sog-unc-rebrand' ), (string) $settings['header_special_text_transform'], $this->get_text_transform_style_options() );
-		$this->render_number_field( 'header_special_button_padding_top', __( 'Special button padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_top'] ?? $defaults['header_special_button_padding_top']) );
-		$this->render_number_field( 'header_special_button_padding_right', __( 'Special button padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_right'] ?? $defaults['header_special_button_padding_right']) );
-		$this->render_number_field( 'header_special_button_padding_bottom', __( 'Special button padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_bottom'] ?? $defaults['header_special_button_padding_bottom']) );
-		$this->render_number_field( 'header_special_button_padding_left', __( 'Special button padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_left'] ?? $defaults['header_special_button_padding_left']) );
+		$special_btn_condition = array('condition_field' => 'header_special_button_enabled', 'condition_value' => '1');
+		$this->render_checkbox_field( 'header_special_button_enabled', __( 'Enable Special button', 'sog-unc-rebrand' ), (bool) $settings['header_special_button_enabled'] );
+		$this->render_text_field( 'header_special_button_text', __( 'Header Special button text', 'sog-unc-rebrand' ), (string) $settings['header_special_button_text'], '', $special_btn_condition );
+		$this->render_url_field( 'header_special_button_url', __( 'Header Special button URL', 'sog-unc-rebrand' ), (string) $settings['header_special_button_url'], $special_btn_condition );
+		$this->render_checkbox_field( 'header_special_button_new_tab', __( 'Open Special button link in a new tab', 'sog-unc-rebrand' ), (bool) $settings['header_special_button_new_tab'], $special_btn_condition );
+		$this->render_checkbox_field( 'header_special_button_hide_mobile', __( 'Hide Special button on mobile', 'sog-unc-rebrand' ), (bool) $settings['header_special_button_hide_mobile'], $special_btn_condition );
+		$this->render_number_field( 'header_special_button_border_thickness', __( 'Special button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['header_special_button_border_thickness'], $special_btn_condition );
+		$this->render_number_field( 'header_special_button_border_radius', __( 'Special button border radius (px)', 'sog-unc-rebrand' ), (int) $settings['header_special_button_border_radius'], $special_btn_condition );
+		$this->render_select_field( 'header_special_button_border_style', __( 'Special button border style', 'sog-unc-rebrand' ), (string) $settings['header_special_button_border_style'], $this->get_separator_style_options(), $special_btn_condition );
+		$this->render_select_field( 'header_special_font_family', __( 'Special button font family', 'sog-unc-rebrand' ), (string) $settings['header_special_font_family'], $this->get_font_family_options(), $special_btn_condition );
+		$this->render_number_field( 'header_special_font_weight', __( 'Special button font weight', 'sog-unc-rebrand' ), (int) $settings['header_special_font_weight'], $special_btn_condition );
+		$this->render_select_field( 'header_special_font_style', __( 'Special button font style', 'sog-unc-rebrand' ), (string) $settings['header_special_font_style'], $this->get_font_style_options(), $special_btn_condition );
+		$this->render_number_field( 'header_special_font_size', __( 'Special button font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_special_font_size'], $special_btn_condition );
+		$this->render_select_field( 'header_special_text_transform', __( 'Special button text transform', 'sog-unc-rebrand' ), (string) $settings['header_special_text_transform'], $this->get_text_transform_style_options(), $special_btn_condition );
+		$this->render_number_field( 'header_special_button_padding_top', __( 'Special button padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_top'] ?? $defaults['header_special_button_padding_top']), $special_btn_condition );
+		$this->render_number_field( 'header_special_button_padding_right', __( 'Special button padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_right'] ?? $defaults['header_special_button_padding_right']), $special_btn_condition );
+		$this->render_number_field( 'header_special_button_padding_bottom', __( 'Special button padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_bottom'] ?? $defaults['header_special_button_padding_bottom']), $special_btn_condition );
+		$this->render_number_field( 'header_special_button_padding_left', __( 'Special button padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_special_button_padding_left'] ?? $defaults['header_special_button_padding_left']), $special_btn_condition );
 		$this->render_section_end();
 
 		$this->render_section_start(
@@ -489,32 +559,45 @@ class Settings {
 
 		// Header Navigation fields
 		$this->render_section_start( __( 'Header Navigation', 'sog-unc-rebrand' ) );
-		$this->render_text_field( 'header_navigation_font_family', __( 'Header navigation font family', 'sog-unc-rebrand' ), (string) $settings['header_navigation_font_family'] );
-		$this->render_text_field( 'header_navigation_font_style', __( 'Header navigation font style', 'sog-unc-rebrand' ), (string) $settings['header_navigation_font_style'] );
+		$this->render_select_field( 'header_navigation_font_family', __( 'Header navigation font family', 'sog-unc-rebrand' ), (string) $settings['header_navigation_font_family'], $this->get_font_family_options() );
+		$this->render_select_field( 'header_navigation_font_style', __( 'Header navigation font style', 'sog-unc-rebrand' ), (string) $settings['header_navigation_font_style'], $this->get_font_style_options() );
 		$this->render_number_field( 'header_navigation_font_weight', __( 'Header navigation font weight', 'sog-unc-rebrand' ), (int) $settings['header_navigation_font_weight'] );
 		$this->render_number_field( 'header_navigation_font_size', __( 'Header navigation font size (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_font_size'] );
 		$this->render_select_field( 'header_navigation_text_transform', __( 'Header navigation text transform', 'sog-unc-rebrand' ), (string) ($settings['header_navigation_text_transform'] ?? $defaults['header_navigation_text_transform']), $this->get_text_transform_style_options() );
 		$this->render_select_field( 'header_navigation_text_decoration', __( 'Header navigation text decoration', 'sog-unc-rebrand' ), (string) ($settings['header_navigation_text_decoration'] ?? $defaults['header_navigation_text_decoration']), $this->get_text_decoration_style_options() );
-		$this->render_number_field( 'header_navigation_item_padding_top', __( 'Header navigation item (a tag) padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_top'] );
-		$this->render_number_field( 'header_navigation_item_padding_right', __( 'Header navigation item (a tag) padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_right'] );
-		$this->render_number_field( 'header_navigation_item_padding_bottom', __( 'Header navigation item (a tag) padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_bottom'] );
-		$this->render_number_field( 'header_navigation_item_padding_left', __( 'Header navigation item (a tag) padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_left'] );
+		$this->render_number_field( 'header_navigation_item_padding_top', __( 'Header navigation item [a tag] padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_top'] );
+		$this->render_number_field( 'header_navigation_item_padding_right', __( 'Header navigation item [a tag] padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_right'] );
+		$this->render_number_field( 'header_navigation_item_padding_bottom', __( 'Header navigation item [a tag] padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_bottom'] );
+		$this->render_number_field( 'header_navigation_item_padding_left', __( 'Header navigation item [a tag] padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_navigation_item_padding_left'] );
 		$this->render_section_end();
 
 		// Header SubmenuNavigation fields
 		$this->render_section_start( __( 'Header Submenu Navigation', 'sog-unc-rebrand' ) );
-		$this->render_number_field( 'header_submenu_navigation_item_padding_top', __( 'Header submenu navigation item (a tag) padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_top'] );
-		$this->render_number_field( 'header_submenu_navigation_item_padding_right', __( 'Header submenu navigation item (a tag) padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_right'] );
-		$this->render_number_field( 'header_submenu_navigation_item_padding_bottom', __( 'Header submenu navigation item (a tag) padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_bottom'] );
-		$this->render_number_field( 'header_submenu_navigation_item_padding_left', __( 'Header submenu navigation item (a tag) padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_left'] );
+		$this->render_number_field( 'header_submenu_navigation_min_width', __( 'Header submenu navigation min width (px) [ul tag]', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_min_width'] );
+		$this->render_number_field( 'header_submenu_navigation_item_padding_top', __( 'Header submenu navigation item [a tag] padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_top'] );
+		$this->render_number_field( 'header_submenu_navigation_item_padding_right', __( 'Header submenu navigation item [a tag] padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_right'] );
+		$this->render_number_field( 'header_submenu_navigation_item_padding_bottom', __( 'Header submenu navigation item [a tag] padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_bottom'] );
+		$this->render_number_field( 'header_submenu_navigation_item_padding_left', __( 'Header submenu navigation item [a tag] padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_submenu_navigation_item_padding_left'] );
 		$this->render_section_end();
 
 		// Header Mobile Navigation fields
 		$this->render_section_start( __( 'Header Mobile Navigation', 'sog-unc-rebrand' ) );
-		$this->render_number_field( 'header_mobile_navigation_item_padding_top', __( 'Header mobile navigation item (a tag) padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_top'] );
-		$this->render_number_field( 'header_mobile_navigation_item_padding_right', __( 'Header mobile navigation item (a tag) padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_right'] );
-		$this->render_number_field( 'header_mobile_navigation_item_padding_bottom', __( 'Header mobile navigation item (a tag) padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_bottom'] );
-		$this->render_number_field( 'header_mobile_navigation_item_padding_left', __( 'Header mobile navigation item (a tag) padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_left'] );
+		$this->render_number_field( 'header_mobile_navigation_min_width', __( 'Header mobile navigation min width (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_min_width'] );
+		$this->render_number_field( 'header_mobile_navigation_item_padding_top', __( 'Header mobile navigation item [a tag] padding top (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_top'] );
+		$this->render_number_field( 'header_mobile_navigation_item_padding_right', __( 'Header mobile navigation item [a tag] padding right (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_right'] );
+		$this->render_number_field( 'header_mobile_navigation_item_padding_bottom', __( 'Header mobile navigation item [a tag] padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_bottom'] );
+		$this->render_number_field( 'header_mobile_navigation_item_padding_left', __( 'Header mobile navigation item [a tag] padding left (px)', 'sog-unc-rebrand' ), (int) $settings['header_mobile_navigation_item_padding_left'] );
+		$this->render_select_field( 'header_mobile_menu_level_two_placement', __( 'Header mobile menu level two placement', 'sog-unc-rebrand' ), (string) ($settings['header_mobile_menu_level_two_placement'] ?? $defaults['header_mobile_menu_level_two_placement']), $this->get_mobile_menu_level_two_placement_options() );
+		$this->render_number_field( 'header_mobile_menu_level_two_width', __( 'Header mobile menu level two width (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_menu_level_two_width'] ?? $defaults['header_mobile_menu_level_two_width']) );
+		$this->render_number_field( 'header_mobile_menu_level_two_item_padding_top', __( 'Header mobile navigation level two item [a tag] padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_menu_level_two_item_padding_top'] ?? $defaults['header_mobile_menu_level_two_item_padding_top']) );
+		$this->render_number_field( 'header_mobile_menu_level_two_item_padding_right', __( 'Header mobile navigation level two item [a tag] padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_menu_level_two_item_padding_right'] ?? $defaults['header_mobile_menu_level_two_item_padding_right']) );
+		$this->render_number_field( 'header_mobile_menu_level_two_item_padding_bottom', __( 'Header mobile navigation level two item [a tag] padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_menu_level_two_item_padding_bottom'] ?? $defaults['header_mobile_menu_level_two_item_padding_bottom']) );
+		$this->render_number_field( 'header_mobile_menu_level_two_item_padding_left', __( 'Header mobile navigation level two item [a tag] padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['header_mobile_menu_level_two_item_padding_left'] ?? $defaults['header_mobile_menu_level_two_item_padding_left']) );
+		$this->render_text_field( 'header_mobile_back_button_text', __( 'Header mobile menu back button text', 'sog-unc-rebrand' ), (string) ($settings['header_mobile_back_button_text'] ?? $defaults['header_mobile_back_button_text']) );
+		// $this->render_select_field( 'header_mobile_back_button_icon_mode', __( 'Header mobile menu back button icon mode', 'sog-unc-rebrand' ), (string) ($settings['header_mobile_back_button_icon_mode'] ?? $defaults['header_mobile_back_button_icon_mode']), $this->get_mobile_back_button_icon_mode_options() );
+		// $this->render_text_field( 'header_mobile_back_button_icon_glyph', __( 'Header mobile menu back button icon glyph', 'sog-unc-rebrand' ), (string) ($settings['header_mobile_back_button_icon_glyph'] ?? $defaults['header_mobile_back_button_icon_glyph']), __( 'Use a value that matches the selected icon mode. Example HTML: <i class="fa-solid fa-angle-right"></i>. Example Unicode: \\f104 or U+F104.', 'sog-unc-rebrand' ) );
+		// $this->render_select_field( 'header_mobile_back_button_icon_family', __( 'Header mobile menu back button icon family', 'sog-unc-rebrand' ), (string) ($settings['header_mobile_back_button_icon_family'] ?? $defaults['header_mobile_back_button_icon_family']), $this->get_mobile_back_button_icon_family_options() );
+		// $this->render_select_field( 'header_mobile_back_button_icon_pack_font_awesome', __( 'Header mobile menu back button Font Awesome icon pack', 'sog-unc-rebrand' ), (string) ($settings['header_mobile_back_button_icon_pack_font_awesome'] ?? $defaults['header_mobile_back_button_icon_pack_font_awesome']), $this->get_mobile_back_button_icon_pack_font_awesome_options(), array( 'condition_field' => 'header_mobile_back_button_icon_family', 'condition_value' => 'font-awesome' ) );
 		$this->render_section_end();
 	}
 
@@ -525,15 +608,61 @@ class Settings {
 	 * @return void
 	 */
 	public function render_utility_sections( array $settings ): void {
+		$defaults = $this->get_defaults();
+
 		$this->render_section_start(
 			__( 'Utility Bar', 'sog-unc-rebrand' ),
 			__( 'The utility bar is optional and appears as the first row of the header.', 'sog-unc-rebrand' )
 		);
 		$this->render_checkbox_field( 'utility_bar_menu_fallback_enabled', __( 'Use default UNC links when no menu is assigned', 'sog-unc-rebrand' ), (bool) $settings['utility_bar_menu_fallback_enabled'] );
-		$this->render_text_field( 'utility_bar_brand_label', __( 'Utility bar brand label', 'sog-unc-rebrand' ), (string) $settings['utility_bar_brand_label'] );
+		$this->render_checkbox_field( 'utility_bar_hide_mobile', __( 'Hide utility bar on mobile', 'sog-unc-rebrand' ), (bool) $settings['utility_bar_hide_mobile'] );
+		$this->render_checkbox_field( 'utility_bar_brand_logo_hide_mobile', __( 'Hide brand logo on mobile', 'sog-unc-rebrand' ), (bool) ($settings['utility_bar_brand_logo_hide_mobile'] ?? false) );
+		$this->render_checkbox_field( 'utility_bar_hide_label_mobile', __( 'Hide utility bar mobile label', 'sog-unc-rebrand' ), (bool) $settings['utility_bar_hide_label_mobile'] );
+		$this->render_checkbox_field( 'utility_bar_menu_separator_enabled', __( 'Enable utility bar menu separator', 'sog-unc-rebrand' ), (bool) ($settings['utility_bar_menu_separator_enabled'] ?? false) );
+		$this->render_checkbox_field( 'utility_bar_menu_separator_hide_mobile', __( 'Hide utility bar menu separator on mobile', 'sog-unc-rebrand' ), (bool) ($settings['utility_bar_menu_separator_hide_mobile'] ?? false) );
+		$this->render_number_field( 'utility_bar_height', __( 'Utility bar height (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_height'] ?? 30) );
 		$this->render_media_field( 'utility_bar_brand_logo_url', __( 'Utility bar brand logo', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_brand_logo_url'] ?? '') );
 		$this->render_number_field( 'utility_bar_brand_logo_width', __( 'Brand logo width (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_logo_width'] ?? 40) );
 		$this->render_number_field( 'utility_bar_brand_logo_height', __( 'Brand logo height (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_logo_height'] ?? 35) );
+		$this->render_number_field( 'utility_bar_margin_top', __( 'Utility bar margin top (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_margin_top'] ?? 0) );
+		$this->render_number_field( 'utility_bar_margin_right', __( 'Utility bar margin right (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_margin_right'] ?? 0) );
+		$this->render_number_field( 'utility_bar_margin_bottom', __( 'Utility bar margin bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_margin_bottom'] ?? 0) );
+		$this->render_number_field( 'utility_bar_margin_left', __( 'Utility bar margin left (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_margin_left'] ?? 0) );
+		$this->render_number_field( 'utility_bar_padding_top', __( 'Utility bar padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_padding_top'] ?? 0) );
+		$this->render_number_field( 'utility_bar_padding_right', __( 'Utility bar padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_padding_right'] ?? 0) );
+		$this->render_number_field( 'utility_bar_padding_bottom', __( 'Utility bar padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_padding_bottom'] ?? 0) );
+		$this->render_number_field( 'utility_bar_padding_left', __( 'Utility bar padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_padding_left'] ?? 0) );
+		$this->render_text_field( 'utility_bar_brand_label', __( 'Utility bar brand label', 'sog-unc-rebrand' ), (string) $settings['utility_bar_brand_label'] );
+		$this->render_text_field( 'utility_bar_brand_label_mobile', __( 'Utility bar brand label on mobile', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_brand_label_mobile'] ?? '') );
+		$this->render_select_field( 'utility_bar_brand_label_font_family', __( 'Utility bar brand label font family', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_brand_label_font_family'] ?? $defaults['utility_bar_brand_label_font_family']), $this->get_font_family_options() );
+		$this->render_number_field( 'utility_bar_brand_label_font_weight', __( 'Utility bar brand label font weight', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_label_font_weight'] ?? $defaults['utility_bar_brand_label_font_weight']) );
+		$this->render_select_field( 'utility_bar_brand_label_font_style', __( 'Utility bar brand label font style', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_brand_label_font_style'] ?? $defaults['utility_bar_brand_label_font_style']), $this->get_font_style_options() );
+		$this->render_number_field( 'utility_bar_brand_label_font_size', __( 'Utility bar brand label font size (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_label_font_size'] ?? $defaults['utility_bar_brand_label_font_size']) );
+		$this->render_select_field( 'utility_bar_brand_label_text_transform', __( 'Utility bar brand label text transform', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_brand_label_text_transform'] ?? $defaults['utility_bar_brand_label_text_transform']), $this->get_text_transform_style_options() );
+		$this->render_select_field( 'utility_bar_brand_label_text_decoration', __( 'Utility bar brand label text decoration', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_brand_label_text_decoration'] ?? $defaults['utility_bar_brand_label_text_decoration']), $this->get_text_decoration_style_options() );
+		$this->render_number_field( 'utility_bar_brand_label_padding_top', __( 'Utility bar brand label padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_label_padding_top'] ?? 0) );
+		$this->render_number_field( 'utility_bar_brand_label_padding_right', __( 'Utility bar brand label padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_label_padding_right'] ?? 0) );
+		$this->render_number_field( 'utility_bar_brand_label_padding_bottom', __( 'Utility bar brand label padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_label_padding_bottom'] ?? 0) );
+		$this->render_number_field( 'utility_bar_brand_label_padding_left', __( 'Utility bar brand label padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_brand_label_padding_left'] ?? 0) );
+		$this->render_select_field( 'utility_bar_menu_font_family', __( 'Utility bar menu font family', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_font_family'] ?? $defaults['utility_bar_menu_font_family']), $this->get_font_family_options() );
+		$this->render_number_field( 'utility_bar_menu_font_weight', __( 'Utility bar menu font weight', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_font_weight'] ?? $defaults['utility_bar_menu_font_weight']) );
+		$this->render_select_field( 'utility_bar_menu_font_style', __( 'Utility bar menu font style', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_font_style'] ?? $defaults['utility_bar_menu_font_style']), $this->get_font_style_options() );
+		$this->render_number_field( 'utility_bar_menu_font_size', __( 'Utility bar menu font size (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_font_size'] ?? $defaults['utility_bar_menu_font_size']) );
+		$this->render_select_field( 'utility_bar_menu_text_transform', __( 'Utility bar menu text transform', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_text_transform'] ?? $defaults['utility_bar_menu_text_transform']), $this->get_text_transform_style_options() );
+		$this->render_select_field( 'utility_bar_menu_text_decoration', __( 'Utility bar menu text decoration', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_text_decoration'] ?? $defaults['utility_bar_menu_text_decoration']), $this->get_text_decoration_style_options() );
+		$this->render_select_field( 'utility_bar_menu_alignment', __( 'Utility bar menu alignment', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_alignment'] ?? 'left'), $this->get_alignment_options() );
+		$this->render_number_field( 'utility_bar_menu_orientation', __( 'Utility bar menu orientation', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_orientation'] ?? 0), $this->get_orientation_options() );
+		$this->render_number_field( 'utility_bar_menu_item_padding_top', __( 'Utility bar menu item padding top (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_item_padding_top'] ?? 5) );
+		$this->render_number_field( 'utility_bar_menu_item_padding_right', __( 'Utility bar menu item padding right (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_item_padding_right'] ?? 20) );
+		$this->render_number_field( 'utility_bar_menu_item_padding_bottom', __( 'Utility bar menu item padding bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_item_padding_bottom'] ?? 5) );
+		$this->render_number_field( 'utility_bar_menu_item_padding_left', __( 'Utility bar menu item padding left (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_item_padding_left'] ?? 20) );
+		$this->render_text_field( 'utility_bar_menu_item_separator', __( 'Utility bar menu item separator', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_item_separator'] ?? $defaults['utility_bar_menu_item_separator']) );
+		$this->render_select_field( 'utility_bar_menu_item_separator_style', __( 'Utility bar menu item separator style', 'sog-unc-rebrand' ), (string) ($settings['utility_bar_menu_item_separator_style'] ?? $defaults['utility_bar_menu_item_separator_style']), $this->get_separator_style_options() );
+		$this->render_number_field( 'utility_bar_menu_item_separator_thickness', __( 'Utility bar menu item separator thickness (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_item_separator_thickness'] ?? $defaults['utility_bar_menu_item_separator_thickness']) );
+		$this->render_number_field( 'utility_bar_menu_separator_margin_top', __( 'Utility bar menu item separator margin top (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_separator_margin_top'] ?? $defaults['utility_bar_menu_separator_margin_top']) );
+		$this->render_number_field( 'utility_bar_menu_separator_margin_bottom', __( 'Utility bar menu item separator margin bottom (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_separator_margin_bottom'] ?? $defaults['utility_bar_menu_separator_margin_bottom']) );
+		$this->render_number_field( 'utility_bar_menu_separator_margin_left', __( 'Utility bar menu item separator margin left (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_separator_margin_left'] ?? $defaults['utility_bar_menu_separator_margin_left']) );
+		$this->render_number_field( 'utility_bar_menu_separator_margin_right', __( 'Utility bar menu item separator margin right (px)', 'sog-unc-rebrand' ), (int) ($settings['utility_bar_menu_separator_margin_right'] ?? $defaults['utility_bar_menu_separator_margin_right']) );
 		$this->render_section_end();
 	}
 
@@ -544,6 +673,8 @@ class Settings {
 	 * @return void
 	 */
 	public function render_color_sections( array $settings ): void {
+		$defaults = $this->get_defaults();
+
 		$this->render_section_start(
 			__( 'Header Colors', 'sog-unc-rebrand' ),
 			__( 'Colors used by the main header row and the lower navigation row.', 'sog-unc-rebrand' )
@@ -553,19 +684,42 @@ class Settings {
 		$this->render_color_field( 'header_text_color', __( 'Header text (site name) text color', 'sog-unc-rebrand' ), (string) $settings['header_text_color'] );
 		$this->render_color_field( 'header_subtext_color', __( 'Header subtext (site description/tagline) text color', 'sog-unc-rebrand' ), (string) $settings['header_subtext_color'] );
 		$this->render_color_field( 'header_bottom_background_color', __( 'Header bottom navigation background color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_background_color'] );
+		$this->render_color_field( 'header_bottom_hover_color', __( 'Header bottom navigation background hover color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_hover_color'] );
+		$this->render_color_field( 'header_bottom_text_color', __( 'Header bottom navigation text color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_text_color'] );
+		$this->render_color_field( 'header_bottom_text_hover_color', __( 'Header bottom navigation text hover color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_text_hover_color'] );
+		$this->render_color_field( 'header_bottom_text_active_color', __( 'Header bottom navigation text active color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_text_active_color'] );
+		$this->render_color_field( 'header_bottom_text_click_color', __( 'Header bottom navigation text clicked/pressed color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_text_click_color'] );
+		$this->render_color_field( 'header_submenu_menu_indicator_color', __( 'Header submenu indicator color', 'sog-unc-rebrand' ), (string) $settings['header_submenu_menu_indicator_color'] );
+		$this->render_color_field( 'header_submenu_menu_background_color', __( 'Header submenu menu background color', 'sog-unc-rebrand' ), (string) $settings['header_submenu_menu_background_color'] );
+		$this->render_color_field( 'header_submenu_menu_hover_color', __( 'Header submenu menu background hover color', 'sog-unc-rebrand' ), (string) $settings['header_submenu_menu_hover_color'] );
+		$this->render_color_field( 'header_submenu_menu_text_color', __( 'Header submenu menu text color', 'sog-unc-rebrand' ), (string) $settings['header_submenu_menu_text_color'] );
+		$this->render_color_field( 'header_submenu_menu_text_hover_color', __( 'Header submenu menu text hover color', 'sog-unc-rebrand' ), (string) $settings['header_submenu_menu_text_hover_color'] );
+		$this->render_color_field( 'header_mobile_menu_indicator_color', __( 'Header mobile menu indicator color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_indicator_color'] );
+		$this->render_color_field( 'header_mobile_menu_active_indicator_color', __( 'Header mobile menu active item indicator color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_active_indicator_color'] );
 		$this->render_color_field( 'header_mobile_menu_background_color', __( 'Header mobile menu background color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_background_color'] );
-		$this->render_color_field( 'header_mobile_menu_hover_color', __( 'Header mobile menu hover color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_hover_color'] );
 		$this->render_color_field( 'header_mobile_menu_text_color', __( 'Header mobile menu text color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_text_color'] );
-		$this->render_color_field( 'header_bottom_text_color', __( 'Header navigation text color', 'sog-unc-rebrand' ), (string) $settings['header_bottom_text_color'] );
+		$this->render_color_field( 'header_mobile_menu_hover_color', __( 'Header mobile menu background hover color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_hover_color'] );
+		$this->render_color_field( 'header_mobile_menu_text_hover_color', __( 'Header mobile menu text hover color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_text_hover_color'] );
+		$this->render_color_field( 'header_mobile_menu_text_click_color', __( 'Header mobile menu text clicked/pressed color', 'sog-unc-rebrand' ), (string) $settings['header_mobile_menu_text_click_color'] );
 		$this->render_color_field( 'header_separator_color', __( 'Header separator color', 'sog-unc-rebrand' ), (string) $settings['header_separator_color'] );
 		$this->render_color_field( 'header_give_button_background_color', __( 'Header Give button background color', 'sog-unc-rebrand' ), (string) $settings['header_give_button_background_color'] );
 		$this->render_color_field( 'header_give_button_hover_color', __( 'Header Give/Donate button hover color', 'sog-unc-rebrand' ), (string) $settings['header_give_button_hover_color'] );
 		$this->render_color_field( 'header_give_button_text_color', __( 'Header Give/Donate button text color', 'sog-unc-rebrand' ), (string) $settings['header_give_button_text_color'] );
+		$this->render_color_field( 'header_give_button_text_hover_color', __( 'Header Give/Donate button text hover color', 'sog-unc-rebrand' ), (string) $settings['header_give_button_text_hover_color'] );
 		$this->render_color_field( 'header_give_button_border_color', __( 'Header Give/Donate button border color', 'sog-unc-rebrand' ), (string) $settings['header_give_button_border_color'] );
 		$this->render_color_field( 'header_special_button_background_color', __( 'Header Special button background color', 'sog-unc-rebrand' ), (string) $settings['header_special_button_background_color'] );
-		$this->render_color_field( 'header_special_button_hover_color', __( 'Header Special button hover color', 'sog-unc-rebrand' ), (string) $settings['header_special_button_hover_color'] );
+		$this->render_color_field( 'header_special_button_hover_color', __( 'Header Special button background hover color', 'sog-unc-rebrand' ), (string) $settings['header_special_button_hover_color'] );
 		$this->render_color_field( 'header_special_button_text_color', __( 'Header Special button text color', 'sog-unc-rebrand' ), (string) $settings['header_special_button_text_color'] );
+		$this->render_color_field( 'header_special_button_text_hover_color', __( 'Header Special button text hover color', 'sog-unc-rebrand' ), (string) $settings['header_special_button_text_hover_color'] );
 		$this->render_color_field( 'header_special_button_border_color', __( 'Header Special button border color', 'sog-unc-rebrand' ), (string) $settings['header_special_button_border_color'] );
+		$this->render_color_field( 'header_site_search_border_color', __( 'Header site search border color (px)', 'sog-unc-rebrand' ), (string) $settings['header_site_search_border_color']);
+		$this->render_color_field( 'header_site_search_background_color', __( 'Header site search background color (px)', 'sog-unc-rebrand' ), (string) $settings['header_site_search_background_color']);
+		$this->render_color_field( 'header_site_search_button_background_color', __( 'Header site search button background color', 'sog-unc-rebrand' ), (string) $settings['header_site_search_button_background_color']);
+		$this->render_color_field( 'header_site_search_button_hover_color', __( 'Header site search button background hover color', 'sog-unc-rebrand' ), (string) $settings['header_site_search_button_hover_color']);
+		$this->render_color_field( 'header_site_search_button_text_color', __( 'Header site search button text / icon color', 'sog-unc-rebrand' ), (string) $settings['header_site_search_button_text_color']);
+		$this->render_color_field( 'header_site_search_button_text_hover_color', __( 'Header site search button text / icon hover color', 'sog-unc-rebrand' ), (string) $settings['header_site_search_button_text_hover_color']);
+		$this->render_color_field( 'header_site_search_button_border_color', __( 'Header site search button border color', 'sog-unc-rebrand' ), (string) $settings['header_site_search_button_border_color']);
+
 		$this->render_section_end();
 
 		$this->render_section_start(
@@ -574,6 +728,12 @@ class Settings {
 		);
 		$this->render_color_field( 'utility_bar_background_color', __( 'Utility bar background color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_background_color'] );
 		$this->render_color_field( 'utility_bar_text_color', __( 'Utility bar text color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_text_color'] );
+		$this->render_color_field( 'utility_bar_menu_text_color', __( 'Utility bar menu text color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_menu_text_color'] );
+		$this->render_color_field( 'utility_bar_menu_text_hover_color', __( 'Utility bar menu text hover color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_menu_text_hover_color'] );
+		$this->render_color_field( 'utility_bar_menu_text_click_color', __( 'Utility bar menu text clicked/pressed color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_menu_text_click_color'] );
+		$this->render_color_field( 'utility_bar_menu_active_color', __( 'Utility bar menu active color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_menu_active_color'] );
+		$this->render_color_field( 'utility_bar_menu_separator_color', __( 'Utility bar menu separator color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_menu_separator_color'] );
+		$this->render_color_field( 'utility_bar_menu_border_color', __( 'Utility bar menu border color', 'sog-unc-rebrand' ), (string) $settings['utility_bar_menu_border_color'] );
 		$this->render_section_end();
 
 		$this->render_section_start(
@@ -591,6 +751,7 @@ class Settings {
 		$this->render_color_field( 'footer_give_button_background_color', __( 'Give/Donate button background color', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_background_color'] );
 		$this->render_color_field( 'footer_give_button_hover_color', __( 'Give/Donate button hover color', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_hover_color'] );
 		$this->render_color_field( 'footer_give_button_text_color', __( 'Give/Donate button text color', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_text_color'] );
+		$this->render_color_field( 'footer_give_button_text_hover_color', __( 'Give/Donate button text hover color', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_text_hover_color'] );
 		$this->render_color_field( 'footer_give_button_border_color', __( 'Give/Donate button border color', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_border_color'] );
 		$this->render_section_end();
 	}
@@ -644,6 +805,15 @@ class Settings {
 			$this->render_text_field( 'footer_logo_' . $logo_index . '_text_lower', __( 'Text logo lower line', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_text_lower' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'text' ) );
 			$this->render_checkbox_field( 'footer_logo_' . $logo_index . '_link_new_tab', __( 'Open link in new tab', 'sog-unc-rebrand' ), (bool) $settings[ 'footer_logo_' . $logo_index . '_link_new_tab' ], array( 'condition_field' => 'footer_logo_' . $logo_index . '_link_url', 'condition_operator' => 'not-empty' ) );
 			$this->render_checkbox_field( 'footer_logo_' . $logo_index . '_hide_mobile', __( 'Hide logo on mobile', 'sog-unc-rebrand' ), (bool) $settings[ 'footer_logo_' . $logo_index . '_hide_mobile' ], array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image,text' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_width', __( 'Logo Width (px or rem [add which unit you want used here])', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_width' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_width_med_mobile', __( 'Logo Width  (px or rem [add which unit you want used here], medium mobile)', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_width_med_mobile' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_width_small_mobile', __( 'Logo Width (px or rem [add which unit you want used here], small mobile)', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_width_small_mobile' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_height', __( 'Logo Height (px or rem [add which unit you want used here])', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_height' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_height_med_mobile', __( 'Logo Height (px or rem [add which unit you want used here], medium mobile)', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_height_med_mobile' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_height_small_mobile', __( 'Logo Height (px or rem [add which unit you want used here], small mobile)', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_height_small_mobile' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_aspect_ratio', __( 'Logo Aspect Ratio', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_aspect_ratio' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_aspect_ratio_med_mobile', __( 'Logo Aspect Ratio (medium mobile)', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_aspect_ratio_med_mobile' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
+			$this->render_text_field( 'footer_logo_' . $logo_index . '_aspect_ratio_small_mobile', __( 'Logo Aspect Ratio (small mobile)', 'sog-unc-rebrand' ), (string) $settings[ 'footer_logo_' . $logo_index . '_aspect_ratio_small_mobile' ], '', array( 'condition_field' => 'footer_logo_' . $logo_index . '_type', 'condition_value' => 'image' ) );
 		}
 
 		$this->render_section_end();
@@ -652,11 +822,15 @@ class Settings {
 		$this->render_subsection_heading( __( 'Separator 1', 'sog-unc-rebrand' ) );
 		$this->render_select_field( 'footer_separator_1_style', __( 'Style', 'sog-unc-rebrand' ), (string) $settings['footer_separator_1_style'], $this->get_separator_style_options() );
 		$this->render_number_field( 'footer_separator_1_thickness', __( 'Thickness (px)', 'sog-unc-rebrand' ), (int) $settings['footer_separator_1_thickness'] );
+		$this->render_number_field( 'footer_separator_1_margin_top', __( 'Margin top (px)', 'sog-unc-rebrand' ), (int) $settings['footer_separator_1_margin_top'] );
+		$this->render_number_field( 'footer_separator_1_margin_bottom', __( 'Margin bottom (px)', 'sog-unc-rebrand' ), (int) $settings['footer_separator_1_margin_bottom'] );
 		$this->render_checkbox_field( 'footer_separator_1_hide_mobile', __( 'Hide on mobile', 'sog-unc-rebrand' ), (bool) $settings['footer_separator_1_hide_mobile'] );
 		$this->render_subsection_heading( __( 'Separator 2', 'sog-unc-rebrand' ) );
 		$this->render_select_field( 'footer_separator_2_style', __( 'Style', 'sog-unc-rebrand' ), (string) $settings['footer_separator_2_style'], $this->get_separator_style_options() );
 		$this->render_select_field( 'footer_separator_2_style_mobile', __( 'Style (mobile)', 'sog-unc-rebrand' ), (string) $settings['footer_separator_2_style_mobile'], $this->get_separator_style_options() );
 		$this->render_number_field( 'footer_separator_2_thickness', __( 'Thickness (px)', 'sog-unc-rebrand' ), (int) $settings['footer_separator_2_thickness'] );
+		$this->render_number_field( 'footer_separator_2_margin_top', __( 'Margin top (px)', 'sog-unc-rebrand' ), (int) $settings['footer_separator_2_margin_top'] );
+		$this->render_number_field( 'footer_separator_2_margin_bottom', __( 'Margin bottom (px)', 'sog-unc-rebrand' ), (int) $settings['footer_separator_2_margin_bottom'] );
 		$this->render_checkbox_field( 'footer_separator_2_hide_mobile', __( 'Hide on mobile', 'sog-unc-rebrand' ), (bool) $settings['footer_separator_2_hide_mobile'] );
 		$this->render_section_end();
 
@@ -670,15 +844,28 @@ class Settings {
 		for ( $column_index = 1; $column_index <= 3; $column_index++ ) {
 			$this->render_subsection_heading( sprintf( __( 'Column %d', 'sog-unc-rebrand' ), $column_index ) );
 			$this->render_select_field( 'footer_column_' . $column_index . '_mode', __( 'Content mode', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_mode' ], $this->get_footer_column_mode_options() );
+			$this->render_select_field( 'footer_column_' . $column_index . '_alignment', __( 'Column alignment', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_alignment' ], $this->get_alignment_options() );
 			$this->render_number_field( 'footer_column_' . $column_index . '_width', __( 'Width (%)', 'sog-unc-rebrand' ), (int) $settings[ 'footer_column_' . $column_index . '_width' ] );
 			$this->render_checkbox_field( 'footer_column_' . $column_index . '_hide_mobile', __( 'Hide on mobile', 'sog-unc-rebrand' ), (bool) $settings[ 'footer_column_' . $column_index . '_hide_mobile' ] );
 			$this->render_checkbox_field( 'footer_column_' . $column_index . '_copyright_enabled', __( 'Enable column 1 to show in the copyright row.', 'sog-unc-rebrand' ), (bool) ( $settings[ 'footer_column_' . $column_index . '_copyright_enabled' ] ?? false ), array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'wysiwyg,menu_wysiwyg,social_wysiwyg,give_wysiwyg,menu_social_wysiwyg,social_give_wysiwyg,menu_give_wysiwyg,menu_social_give_wysiwyg' ) );
 			$this->render_text_field( 'footer_column_' . $column_index . '_heading', __( 'Column heading', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_heading' ], '', array( 'condition_field' => 'footer_column_' . $column_index . '_mode' ) );
+			$this->render_text_field( 'footer_column_' . $column_index . '_heading_2', __( 'Column second menu heading', 'sog-unc-rebrand' ), (string) ( $settings[ 'footer_column_' . $column_index . '_heading_2' ] ?? '' ), '', array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'menus' ) );
 			$this->render_editor_field( 'footer_column_' . $column_index . '_content', __( 'WYSIWYG content', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_content' ], array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'wysiwyg,menu_wysiwyg,social_wysiwyg,give_wysiwyg,menu_social_wysiwyg,social_give_wysiwyg,menu_give_wysiwyg,menu_social_give_wysiwyg' ) );
+			$this->render_select_field( 'footer_column_' . $column_index . '_content_font_family', __( 'Content font family', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_content_font_family' ], $this->get_font_family_options(), array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'wysiwyg,menu_wysiwyg,social_wysiwyg,give_wysiwyg,menu_social_wysiwyg,social_give_wysiwyg,menu_give_wysiwyg,menu_social_give_wysiwyg' ) );
+			$this->render_select_field( 'footer_column_' . $column_index . '_content_font_style', __( 'Content font style', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_content_font_style' ], $this->get_font_style_options(), array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'wysiwyg,menu_wysiwyg,social_wysiwyg,give_wysiwyg,menu_social_wysiwyg,social_give_wysiwyg,menu_give_wysiwyg,menu_social_give_wysiwyg' ) );
+			$this->render_number_field( 'footer_column_' . $column_index . '_content_font_weight', __( 'Content font weight', 'sog-unc-rebrand' ), (int) $settings[ 'footer_column_' . $column_index . '_content_font_weight' ], array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'wysiwyg,menu_wysiwyg,social_wysiwyg,give_wysiwyg,menu_social_wysiwyg,social_give_wysiwyg,menu_give_wysiwyg,menu_social_give_wysiwyg' ) );
+			$this->render_number_field( 'footer_column_' . $column_index . '_content_font_size', __( 'Content font size (px)', 'sog-unc-rebrand' ), (int) $settings[ 'footer_column_' . $column_index . '_content_font_size' ], array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'wysiwyg,menu_wysiwyg,social_wysiwyg,give_wysiwyg,menu_social_wysiwyg,social_give_wysiwyg,menu_give_wysiwyg,menu_social_give_wysiwyg' ) );
 			$this->render_text_field( 'footer_column_' . $column_index . '_shortcode', __( 'Shortcode', 'sog-unc-rebrand' ), (string) $settings[ 'footer_column_' . $column_index . '_shortcode' ], __( 'Enter a shortcode, e.g. [my_shortcode]', 'sog-unc-rebrand' ), array( 'condition_field' => 'footer_column_' . $column_index . '_mode', 'condition_value' => 'shortcode,menu_shortcode,social_shortcode,give_shortcode,menu_social_shortcode,social_give_shortcode,menu_give_shortcode,menu_social_give_shortcode' ) );
 			$this->render_select_field( 'footer_column_' . $column_index . '_heading_alignment', __( 'Column heading alignment', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_heading_alignment'], $this->get_alignment_options() );
 			$this->render_select_field( 'footer_column_' . $column_index . '_heading_text_transform', __( 'Column heading text transform', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_heading_text_transform'], $this->get_text_transform_style_options() );
 			$this->render_select_field( 'footer_column_' . $column_index . '_heading_text_decoration', __( 'Column heading text decoration', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_heading_text_decoration'], $this->get_text_decoration_style_options() );
+			$this->render_select_field( 'footer_column_' . $column_index . '_menu_font_family', __( 'Footer menu font family', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_menu_font_family'], $this->get_font_family_options() );
+			$this->render_select_field( 'footer_column_' . $column_index . '_menu_font_style', __( 'Footer menu font style', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_menu_font_style'], $this->get_font_style_options() );
+			$this->render_number_field( 'footer_column_' . $column_index . '_menu_font_weight', __( 'Footer menu font weight', 'sog-unc-rebrand' ), (int) $settings['footer_column_' . $column_index . '_menu_font_weight'] );
+			$this->render_number_field( 'footer_column_' . $column_index . '_menu_font_size', __( 'Footer menu font size (px)', 'sog-unc-rebrand' ), (int) $settings['footer_column_' . $column_index . '_menu_font_size'] );
+			$this->render_select_field( 'footer_column_' . $column_index . '_menu_text_transform', __( 'Footer menu text transform', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_menu_text_transform'], $this->get_text_transform_style_options() );
+			$this->render_select_field( 'footer_column_' . $column_index . '_menu_text_decoration', __( 'Footer menu text decoration', 'sog-unc-rebrand' ), (string) $settings['footer_column_' . $column_index . '_menu_text_decoration'], $this->get_text_decoration_style_options() );
+			$this->render_text_field( 'footer_column_' . $column_index . '_menu_line_height', __( 'Footer menu line height', 'sog-unc-rebrand' ), (string) ( $settings[ 'footer_column_' . $column_index . '_menu_line_height' ] ?? '' ) );
 		}
 
 		$this->render_section_end();
@@ -704,31 +891,36 @@ class Settings {
 		$this->render_section_end();
 
 		// Footer Give Button fields
+		$give_button_condition = array( 'condition_fields' => array(
+			array( 'field' => 'footer_give_button_enabled', 'value' => '1' ),
+		) );
+
 		$this->render_section_start(
 			__( 'Footer Donate Button', 'sog-unc-rebrand' ),
 			__( 'Configure the footer donate button text, URL, and styling.', 'sog-unc-rebrand' )
 		);
-		$this->render_checkbox_field( 'footer_give_button_hide_mobile', __( 'Hide give button on mobile', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_hide_mobile'] );
-		$this->render_checkbox_field( 'footer_give_button_below_columns', __( 'Display give button below columns', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_below_columns'] );
-		$this->render_select_field( 'footer_give_button_orientation', __( 'Orientation', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_orientation'], $this->get_orientation_options() );
-		$this->render_select_field( 'footer_give_button_alignment', __( 'Footer give button alignment', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_alignment'], $this->get_alignment_options() );
-		$this->render_text_field( 'footer_give_button_text', __( 'Give button text', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_text'] );
-		$this->render_url_field( 'footer_give_button_url', __( 'Give button URL', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_url'] );
-		$this->render_text_field( 'footer_give_button_font_family', __( 'Give button font family', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_font_family'] );
-		$this->render_number_field( 'footer_give_button_font_weight', __( 'Give button font weight', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_font_weight'] );
-		$this->render_text_field( 'footer_give_button_font_style', __( 'Give button font style', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_font_style'] );
-		$this->render_number_field( 'footer_give_button_font_size', __( 'Give button font size (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_font_size'] );
-		$this->render_text_field( 'footer_give_button_font_line_height', __( 'Give button font line height', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_font_line_height'] );
-		$this->render_checkbox_field( 'footer_give_button_new_tab', __( 'Open give button link in new tab', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_new_tab'] );
-		$this->render_select_field( 'footer_give_button_text_transform', __( 'Give button text transform', 'sog-unc-rebrand' ), (string) ( $settings['footer_give_button_text_transform'] ?? $defaults['footer_give_button_text_transform'] ), $this->get_text_transform_style_options() );
-		$this->render_select_field( 'footer_give_button_border_style', __( 'Give button border style', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_border_style'], $this->get_border_style_options() );
-		$this->render_number_field( 'footer_give_button_border_thickness', __( 'Give button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_border_thickness'] );
-		$this->render_number_field( 'footer_give_button_border_radius', __( 'Give button border radius (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_border_radius'] );
-		$this->render_select_field( 'footer_give_button_text_decoration', __( 'Give button text decoration', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_text_decoration'], $this->get_text_decoration_style_options() );
-		$this->render_number_field( 'footer_give_button_padding_top', __( 'Give button padding top (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_top'] );
-		$this->render_number_field( 'footer_give_button_padding_right', __( 'Give button padding right (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_right'] );
-		$this->render_number_field( 'footer_give_button_padding_bottom', __( 'Give button padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_bottom'] );
-		$this->render_number_field( 'footer_give_button_padding_left', __( 'Give button padding left (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_left'] );
+		$this->render_checkbox_field( 'footer_give_button_enabled', __( 'Enable footer give button', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_enabled'] );
+		$this->render_checkbox_field( 'footer_give_button_hide_mobile', __( 'Hide give button on mobile', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_hide_mobile'], $give_button_condition );
+		$this->render_checkbox_field( 'footer_give_button_below_columns', __( 'Display give button below columns', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_below_columns'], $give_button_condition );
+		$this->render_select_field( 'footer_give_button_orientation', __( 'Orientation', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_orientation'], $this->get_orientation_options(), $give_button_condition );
+		$this->render_select_field( 'footer_give_button_alignment', __( 'Footer give button alignment', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_alignment'], $this->get_alignment_options(), $give_button_condition );
+		$this->render_text_field( 'footer_give_button_text', __( 'Give button text', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_text'], '', $give_button_condition );
+		$this->render_url_field( 'footer_give_button_url', __( 'Give button URL', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_url'], $give_button_condition );
+		$this->render_select_field( 'footer_give_button_font_family', __( 'Give button font family', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_font_family'], $this->get_font_family_options(), $give_button_condition );
+		$this->render_number_field( 'footer_give_button_font_weight', __( 'Give button font weight', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_font_weight'], $give_button_condition );
+		$this->render_select_field( 'footer_give_button_font_style', __( 'Give button font style', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_font_style'], $this->get_font_style_options(), $give_button_condition );
+		$this->render_number_field( 'footer_give_button_font_size', __( 'Give button font size (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_font_size'], $give_button_condition );
+		$this->render_number_field( 'footer_give_button_font_line_height', __( 'Give button font line height', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_font_line_height'], $give_button_condition );
+		$this->render_checkbox_field( 'footer_give_button_new_tab', __( 'Open give button link in new tab', 'sog-unc-rebrand' ), (bool) $settings['footer_give_button_new_tab'], $give_button_condition );
+		$this->render_select_field( 'footer_give_button_text_transform', __( 'Give button text transform', 'sog-unc-rebrand' ), (string) ( $settings['footer_give_button_text_transform'] ?? $defaults['footer_give_button_text_transform'] ), $this->get_text_transform_style_options(), $give_button_condition );
+		$this->render_select_field( 'footer_give_button_border_style', __( 'Give button border style', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_border_style'], $this->get_border_style_options(), $give_button_condition );
+		$this->render_number_field( 'footer_give_button_border_thickness', __( 'Give button border thickness (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_border_thickness'], $give_button_condition );
+		$this->render_number_field( 'footer_give_button_border_radius', __( 'Give button border radius (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_border_radius'], $give_button_condition );
+		$this->render_select_field( 'footer_give_button_text_decoration', __( 'Give button text decoration', 'sog-unc-rebrand' ), (string) $settings['footer_give_button_text_decoration'], $this->get_text_decoration_style_options(), $give_button_condition );
+		$this->render_number_field( 'footer_give_button_padding_top', __( 'Give button padding top (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_top'], $give_button_condition );
+		$this->render_number_field( 'footer_give_button_padding_right', __( 'Give button padding right (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_right'], $give_button_condition );
+		$this->render_number_field( 'footer_give_button_padding_bottom', __( 'Give button padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_bottom'], $give_button_condition );
+		$this->render_number_field( 'footer_give_button_padding_left', __( 'Give button padding left (px)', 'sog-unc-rebrand' ), (int) $settings['footer_give_button_padding_left'], $give_button_condition );
 		$this->render_section_end();
 
 		$this->render_section_start(
@@ -740,9 +932,30 @@ class Settings {
 		$this->render_checkbox_field( 'footer_bottom_show_menu', __( 'Show footer bottom menu', 'sog-unc-rebrand' ), (bool) $settings['footer_bottom_show_menu'], array( 'condition_field' => 'footer_bottom_enabled', 'condition_value' => '1' ) );
 		$this->render_checkbox_field( 'footer_bottom_hide_mobile', __( 'Hide entire footer bottom row on mobile', 'sog-unc-rebrand' ), (bool) $settings['footer_bottom_hide_mobile'], array( 'condition_field' => 'footer_bottom_enabled', 'condition_value' => '1' ) );
 		$this->render_text_field( 'footer_bottom_copyright_text', __( 'Copyright text', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_text'], __( 'Use {year} as a token for the current year.', 'sog-unc-rebrand' ), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_text_font_family', __( 'Copyright text font family', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_text_font_family'], $this->get_font_family_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_text_font_weight', __( 'Copyright text font weight', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_text_font_weight'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_text_font_style', __( 'Copyright text font style', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_text_font_style'], $this->get_font_style_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_text_font_size', __( 'Copyright text font size (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_text_font_size'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_text_field( 'footer_bottom_copyright_text_line_height', __( 'Copyright text line height (px or rem [add which unit you want used here])', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_text_line_height'], '', array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_text_transform', __( 'Copyright text transform', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_text_transform'], $this->get_text_transform_style_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_text_decoration', __( 'Copyright text decoration', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_text_decoration'], $this->get_text_decoration_style_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_text_padding_top', __( 'Copyright text padding top (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_text_padding_top'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_text_padding_right', __( 'Copyright text padding right (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_text_padding_right'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_text_padding_bottom', __( 'Copyright text padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_text_padding_bottom'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_text_padding_left', __( 'Copyright text padding left (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_text_padding_left'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_links_font_family', __( 'Copyright links font family', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_links_font_family'], $this->get_font_family_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_links_font_weight', __( 'Copyright links font weight', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_links_font_weight'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_links_font_style', __( 'Copyright links font style', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_links_font_style'], $this->get_font_style_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_links_font_size', __( 'Copyright links font size (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_links_font_size'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_text_field( 'footer_bottom_copyright_links_line_height', __( 'Copyright links line height (px or rem [add which unit you want used here])', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_links_line_height'], '', array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_links_transform', __( 'Copyright links transform', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_links_transform'], $this->get_text_transform_style_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_select_field( 'footer_bottom_copyright_links_decoration', __( 'Copyright links decoration', 'sog-unc-rebrand' ), (string) $settings['footer_bottom_copyright_links_decoration'], $this->get_text_decoration_style_options(), array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_links_padding_top', __( 'Copyright links padding top (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_links_padding_top'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_links_padding_right', __( 'Copyright links padding right (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_links_padding_right'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_links_padding_bottom', __( 'Copyright links padding bottom (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_links_padding_bottom'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+		$this->render_number_field( 'footer_bottom_copyright_links_padding_left', __( 'Copyright links padding left (px)', 'sog-unc-rebrand' ), (int) $settings['footer_bottom_copyright_links_padding_left'], array( 'condition_field' => 'footer_bottom_show_copyright', 'condition_value' => '1' ) );
+
 		$this->render_section_end();
-
-
 	}
 
 	/**
@@ -759,11 +972,63 @@ class Settings {
 
 		$settings = wp_parse_args( $saved, $this->get_defaults() );
 
+		// Migrate any deprecated header variant to its replacement and flag a notice.
+		if ( isset( $settings['header_core_variant'] ) && array_key_exists( $settings['header_core_variant'], self::DEPRECATED_VARIANTS ) ) {
+			$old_variant                       = $settings['header_core_variant'];
+			$new_variant                       = self::DEPRECATED_VARIANTS[ $old_variant ];
+			$settings['header_core_variant']   = $new_variant;
+			$saved['header_core_variant']      = $new_variant;
+			update_option( self::OPTION_NAME, $saved );
+			set_transient( 'sog_unc_rebrand_deprecated_variant_notice', $old_variant, 60 * 60 * 24 * 7 );
+		}
 
 		$settings['header_social_links'] = $this->normalize_social_links( $settings['header_social_links'] ?? array() );
 		$settings['footer_social_links'] = $this->normalize_social_links( $settings['footer_social_links'] ?? array() );
 
 		return $settings;
+	}
+
+	/**
+	 * Display an admin notice when a deprecated header variant was automatically migrated.
+	 *
+	 * @return void
+	 */
+	public function render_deprecated_variant_notice(): void {
+		$old_variant = get_transient( 'sog_unc_rebrand_deprecated_variant_notice' );
+
+		if ( ! $old_variant ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$new_variant = self::DEPRECATED_VARIANTS[ $old_variant ] ?? 'simple-text-vertical-line';
+		$header_page_url = admin_url( 'admin.php?page=sog-unc-rebrand-header' );
+		?>
+		<div class="notice notice-warning is-dismissible">
+			<p>
+				<strong><?php echo esc_html__( 'SOG Rebrand — Header variant updated', 'sog-unc-rebrand' ); ?></strong><br>
+				<?php
+					printf(
+						esc_html__(
+							'The previously selected header variant "%1$s" has been removed. It has been automatically switched to "%2$s" to prevent errors. Please review your %3$s and confirm the layout looks correct.',
+							'sog-unc-rebrand'
+						),
+						esc_html( (string) $old_variant ),
+						esc_html( (string) $new_variant ),
+						sprintf(
+							'<a href="%s">%s</a>',
+							esc_url( $header_page_url ),
+							esc_html__( 'Header Settings', 'sog-unc-rebrand' )
+						)
+					);
+				?>
+			</p>
+		</div>
+		<?php
+		delete_transient( 'sog_unc_rebrand_deprecated_variant_notice' );
 	}
 
 	/**
@@ -797,13 +1062,53 @@ class Settings {
 			'header_separator_color'                        => '#ffffff',
 			'header_separator_thickness'                    => 1,
 			'header_separator_hide_mobile'                  => false,
+			'header_separator_padding_top'                  => 0,
+			'header_separator_padding_right'                => 0,
+			'header_separator_padding_bottom'               => 0,
+			'header_separator_padding_left'                 => 0,
 			'header_core_background_color'                  => '#1E3A57',
 			'header_school_name_color'                      => '#ffffff',
 			'header_text_color'                             => '#ffffff',
 			'header_subtext_color'                          => '#d0d7e2',
+			'header_school_name_text_decoration'            => 'none',
 			'header_school_name_text_transform'             => 'none',
+			'header_school_name_font_family'                => 'Open Sans, sans-serif',
+			'header_school_name_font_weight'                => 600,
+			'header_school_name_font_style'                 => 'normal',
+			'header_school_name_font_size'                  => 18,
+			'header_mobile_school_name_font_size'           => 16,
+			'header_school_name_line_height'                => '',
+			'header_school_name_line_height_small_mobile'   => 'normal',
+			'header_school_name_padding_top'                => 0,
+			'header_school_name_padding_right'              => 0,
+			'header_school_name_padding_bottom'             => 0,
+			'header_school_name_padding_left'               => 0,
+			'header_site_name_text_decoration'              => 'none',
 			'header_site_name_text_transform'               => 'none',
+			'header_site_name_font_family'                  => 'Open Sans, sans-serif',
+			'header_site_name_font_weight'                  => 600,
+			'header_site_name_font_style'                   => 'normal',
+			'header_site_name_font_size'                    => 16,
+			'header_mobile_site_name_font_size'             => 16,
+			'header_site_name_line_height'                  => '',
+			'header_site_name_line_height_small_mobile'     => 'normal',
+			'header_site_name_padding_top'                  => 0,
+			'header_site_name_padding_right'                => 0,
+			'header_site_name_padding_bottom'               => 0,
+			'header_site_name_padding_left'                 => 0,
+			'header_site_description_text_decoration'       => 'none',
 			'header_site_description_text_transform'        => 'none',
+			'header_site_description_font_family'           => 'Open Sans, sans-serif',
+			'header_site_description_font_weight'           => 400,
+			'header_site_description_font_style'            => 'normal',
+			'header_site_description_font_size'             => 14,
+			'header_mobile_site_description_font_size'	    => 14,
+			'header_site_description_line_height'           => '',
+			'header_site_description_line_height_small_mobile' => 'normal',
+			'header_site_description_padding_top'           => 0,
+			'header_site_description_padding_right'         => 0,
+			'header_site_description_padding_bottom'        => 0,
+			'header_site_description_padding_left'          => 0,
 			'header_main_menu_enabled'                      => true,
 			'header_bottom_nav_enabled'                     => true,
 			'header_navigation_font_family'		            => 'Poppins, sans-serif',
@@ -812,20 +1117,42 @@ class Settings {
 			'header_navigation_font_size'		            => 16,
 			'header_navigation_text_transform'	            => 'none',
 			'header_navigation_text_decoration'	            => 'none',
-			'header_navigation_item_padding_top'            => 0,
-			'header_navigation_item_padding_right'          => 0,
-			'header_navigation_item_padding_bottom'         => 0,
-			'header_navigation_item_padding_left'           => 0,
-			'header_submenu_navigation_item_padding_top'    => 0,
-			'header_submenu_navigation_item_padding_right'  => 0,
-			'header_submenu_navigation_item_padding_bottom' => 0,
-			'header_submenu_navigation_item_padding_left'   => 0,
-			'header_mobile_navigation_item_padding_top'     => 0,
-			'header_mobile_navigation_item_padding_right'   => 0,
-			'header_mobile_navigation_item_padding_bottom'  => 0,
-			'header_mobile_navigation_item_padding_left'    => 0,
+			'header_navigation_item_padding_top'            => 5,
+			'header_navigation_item_padding_right'          => 20,
+			'header_navigation_item_padding_bottom'         => 5,
+			'header_navigation_item_padding_left'           => 20,
+			'header_submenu_navigation_min_width'           => 160,
+			'header_submenu_navigation_item_padding_top'    => 5,
+			'header_submenu_navigation_item_padding_right'  => 20,
+			'header_submenu_navigation_item_padding_bottom' => 5,
+			'header_submenu_navigation_item_padding_left'   => 20,
+			'header_submenu_menu_indicator_color'		    => '#ffffff',
+			'header_submenu_menu_background_color'          => '#1E3A57',
+			'header_submenu_menu_hover_color'               => '#d0d7e2',
+			'header_submenu_menu_text_color'                => '#ffffff',
+			'header_submenu_menu_text_hover_color'          => '#d0d7e2',
+			'header_mobile_navigation_min_width'            => 160,
+			'header_mobile_navigation_item_padding_top'     => 5,
+			'header_mobile_navigation_item_padding_right'   => 20,
+			'header_mobile_navigation_item_padding_bottom'  => 5,
+			'header_mobile_navigation_item_padding_left'    => 20,
+			'header_mobile_menu_level_two_placement'		=> 'right',
+			'header_mobile_menu_level_two_width'		       => 160,
+			'header_mobile_menu_level_two_item_padding_top'    => 5,
+			'header_mobile_menu_level_two_item_padding_right'  => 20,
+			'header_mobile_menu_level_two_item_padding_bottom' => 5,
+			'header_mobile_menu_level_two_item_padding_left'   => 20,
+			'header_mobile_back_button_text'                => __( 'Back', 'sog-unc-rebrand' ),
+			// 'header_mobile_back_button_icon_mode'           => 'unicode',
+			// 'header_mobile_back_button_icon_glyph'          => '\f104',
+			// 'header_mobile_back_button_icon_family'         => 'font-awesome',
+			// 'header_mobile_back_button_icon_pack_font_awesome' => 'classic',
+			'header_mobile_menu_indicator_color'		    => '#ffffff',
+			'header_mobile_menu_active_indicator_color'     => '#4B9CD3',
 			'header_mobile_menu_text_color'		            => '#ffffff',
 			'header_mobile_menu_hover_color'	            => '#d0d7e2',
+			'header_mobile_menu_text_hover_color'           => '#d0d7e2',
+			'header_mobile_menu_text_click_color'           => '#AFAFAF',
 			'header_mobile_menu_background_color'           => '#1E3A57',
 			'header_bottom_orientation'                     => 'horizontal',
 			'header_bottom_alignment'                       => 'space-between',
@@ -833,18 +1160,44 @@ class Settings {
 			'header_bottom_mobile_mode'                     => 'hamburger',
 			'header_bottom_background_color'                => '#1E3A57',
 			'header_bottom_text_color'                      => '#ffffff',
+			'header_bottom_text_hover_color'                => '#d0d7e2',
+			'header_bottom_text_active_color'               => '#ffffff',
+			'header_bottom_text_click_color'                => '#AFAFAF',
+			'header_bottom_hover_color'                     => '#4b9cd3',
 			'display_site_search_enabled'                   => false,
 			'display_site_search_mobile_enabled'            => false,
-			'site_search_inline_with_nav'                   => false,
-			'site_search_inline_with_header'                => false,
-			'site_search_placeholder_text'                  => __( 'Search the site...', 'sog-unc-rebrand' ),
+			'display_site_search_inline_with_nav'           => false,
+			'display_site_search_inline_with_header'        => false,
+			'header_site_search_placeholder_text'           => __( 'Search...', 'sog-unc-rebrand' ),
 			'header_search_icon_enabled'                    => true,
 			'header_search_button_text'                     => __( 'Search', 'sog-unc-rebrand' ),
+			'header_site_search_border_thickness'           => 1,
+            'header_site_search_border_radius_top_left'     => 4,
+            'header_site_search_border_radius_top_right'    => 0,
+            'header_site_search_border_radius_bottom_left'  => 4,
+            'header_site_search_border_radius_bottom_right' => 0,
+            'header_site_search_border_style'               => 'solid',
+            'header_site_search_border_color'               => '#999999',
+            'header_site_search_background_color' 			=> '#ffffff',
+            'header_site_search_text_button_gap'            => 1,
+            'header_site_search_button_background_color' 	=> '#ffffff',
+            'header_site_search_button_hover_color' 		=> '#1E3A57',
+			'header_site_search_button_text_color' 		    => '#999999',
+			'header_site_search_button_text_hover_color' 	=> '#ffffff',
+            'header_site_search_button_border_color' 		=> '#999999',
+            'header_site_search_button_border_thickness'    => 1,
+            'header_site_search_button_border_radius_top_left'     => 0,
+            'header_site_search_button_border_radius_top_right'    => 4,
+            'header_site_search_button_border_radius_bottom_left'  => 0,
+            'header_site_search_button_border_radius_bottom_right' => 4,
+            'header_site_search_button_border_style'        => 'solid',
+			'header_give_button_enabled'                    => false,
 			'header_give_button_text'                       => __( 'Give Now', 'sog-unc-rebrand' ),
 			'header_give_button_url'                        => '',
 			'header_give_button_background_color'           => '#4b9cd3',
 			'header_give_button_hover_color'                => '#1E3A57',
 			'header_give_button_text_color'                 => '#ffffff',
+			'header_give_button_text_hover_color'           => '#ffffff',
 			'header_give_button_new_tab'                    => true,
 			'header_give_button_text_transform'             => 'none',
 			'header_give_button_padding_top' 	            => 14,
@@ -865,6 +1218,7 @@ class Settings {
 			'header_social_links_alignment'                 => '',
 			'header_social_links'                           => array(),
 			'header_social_links_hide_mobile'               => false,
+			'header_special_button_enabled'                 => false,
 			'header_special_button_text'                    => '',
 			'header_special_button_url'                     => '',
 			'header_special_button_new_tab'                 => false,
@@ -872,6 +1226,7 @@ class Settings {
 			'header_special_button_background_color'        => '#4b9cd3',
 			'header_special_button_hover_color'             => '#1E3A57',
 			'header_special_button_text_color'              => '#ffffff',
+			'header_special_button_text_hover_color'        => '#ffffff',
 			'header_special_button_border_color'            => '#4b9cd3',
 			'header_special_button_border_thickness'        => 1,
 			'header_special_button_border_radius'           => 0,
@@ -881,13 +1236,79 @@ class Settings {
 			'header_special_font_style'                     => 'normal',
 			'header_special_font_size'                      => 16,
 			'header_special_text_transform'                 => 'capitalize',
+			'header_special_button_padding_top'             => 9,
+			'header_special_button_padding_right'           => 11,
+			'header_special_button_padding_bottom'          => 9,
+			'header_special_button_padding_left'            => 12,
 			'utility_bar_menu_fallback_enabled'            => true,
+			'utility_bar_hide_mobile'                      => false,
+			'utility_bar_brand_logo_hide_mobile'           => false,
+			'utility_bar_hide_label_mobile'                => false,
+			'utility_bar_menu_separator_enabled'		   => false,
+			'utility_bar_menu_separator_hide_mobile'       => false,
+			'utility_bar_menu_border_enabled'              => false,
+			'utility_bar_menu_border_hide_mobile'          => false,
+			'utility_bar_height'                           => 22,
 			'utility_bar_brand_logo_url'                   => '',
 			'utility_bar_brand_logo_width'                 => 40,
 			'utility_bar_brand_logo_height'                => 35,
+			'utility_bar_margin_top'                       => 0,
+			'utility_bar_margin_right'                     => 0,
+			'utility_bar_margin_bottom'                    => 0,
+			'utility_bar_margin_left'                      => 0,
+			'utility_bar_padding_top'                      => 0,
+			'utility_bar_padding_right'                    => 0,
+			'utility_bar_padding_bottom'                   => 0,
+			'utility_bar_padding_left'                     => 0,
 			'utility_bar_brand_label'                      => __( 'The University of North Carolina at Chapel Hill', 'sog-unc-rebrand' ),
+			'utility_bar_brand_label_mobile'               => __( 'UNC CH', 'sog-unc-rebrand' ),
+			'utility_bar_brand_label_font_family'          => 'Source Serif 4, sans-serif',
+			'utility_bar_brand_label_font_weight'          => 400,
+			'utility_bar_brand_label_font_style'           => 'normal',
+			'utility_bar_brand_label_font_size'            => 16,
+			'utility_bar_brand_label_text_transform'       => 'none',
+			'utility_bar_brand_label_text_decoration'      => 'none',
+			'utility_bar_brand_label_padding_top'          => 5,
+			'utility_bar_brand_label_padding_right'        => 20,
+			'utility_bar_brand_label_padding_bottom'       => 5,
+			'utility_bar_brand_label_padding_left'         => 20,
+			'utility_bar_menu_font_family'                 => 'Source Serif 4, sans-serif',
+			'utility_bar_menu_font_weight'                 => 400,
+			'utility_bar_menu_font_style'                  => 'normal',
+			'utility_bar_menu_font_size'                   => 16,
+			'utility_bar_menu_text_transform'              => 'none',
+			'utility_bar_menu_text_decoration'             => 'none',
+			'utility_bar_menu_alignment'                   => 'end',
+			'utility_bar_menu_orientation'                 => 'horizontal',
+			'utility_bar_menu_item_padding_top'            => 5,
+			'utility_bar_menu_item_padding_right'          => 20,
+			'utility_bar_menu_item_padding_bottom'         => 5,
+			'utility_bar_menu_item_padding_left'           => 20,
+			'utility_bar_menu_item_separator'              => '|',
+			'utility_bar_menu_item_separator_style'        => 'solid',
+			'utility_bar_menu_item_separator_thickness'    => 1,
+			'utility_bar_menu_border_style'                => 'solid',
+			'utility_bar_menu_border_thickness'            => 1,
+			'utility_bar_menu_border_margin_top'           => 5,
+			'utility_bar_menu_border_margin_bottom'        => 5,
+			'utility_bar_menu_border_margin_left'          => 10,
+			'utility_bar_menu_border_margin_right'         => 10,
+			'utility_bar_menu_separator_style'             => 'solid',
+			'utility_bar_menu_separator_thickness'         => 1,
+			'utility_bar_menu_separator_margin_top'        => 5,
+			'utility_bar_menu_separator_margin_bottom'     => 5,
+			'utility_bar_menu_separator_margin_left'       => 10,
+			'utility_bar_menu_separator_margin_right'      => 10,
 			'utility_bar_background_color'                 => '#4b9cd3',
 			'utility_bar_text_color'                       => '#1E3A57',
+			'utility_bar_menu_hover_color'                 => '#d0d7e2',
+			'utility_bar_menu_active_color'                => '#ffffff',
+			'utility_bar_menu_click_color'                 => '#AFAFAF',
+			'utility_bar_menu_text_color'                  => '#ffffff',
+			'utility_bar_menu_text_hover_color'            => '#d0d7e2',
+			'utility_bar_menu_text_click_color'            => '#AFAFAF',
+			'utility_bar_menu_separator_color'             => '#1E3A57',
+			'utility_bar_menu_border_color'                => '#1E3A57',
 			'footer_enabled'                               => true,
 			'footer_hook_mode'                             => 'known',
 			'footer_known_hook'                            => 'wp_footer',
@@ -913,11 +1334,15 @@ class Settings {
 			'footer_separator_1_style'                     => 'dashed',
 			'footer_separator_1_color'                     => '#ffffff',
 			'footer_separator_1_thickness'                 => 1,
+			'footer_separator_1_margin_top'                => 30,
+			'footer_separator_1_margin_bottom'             => 30,
 			'footer_separator_1_hide_mobile'               => false,
 			'footer_separator_2_style'                     => 'solid',
 			'footer_separator_2_style_mobile'              => 'dashed',
 			'footer_separator_2_color'                     => '#ffffff',
 			'footer_separator_2_thickness'                 => 1,
+			'footer_separator_2_margin_top'                => 35,
+			'footer_separator_2_margin_bottom'             => 20,
 			'footer_separator_2_hide_mobile'               => false,
 			'footer_column_gap'                            => 41,
 			'footer_column_2_gap'                          => 41,
@@ -931,6 +1356,29 @@ class Settings {
 			'footer_bottom_show_menu'                      => true,
 			'footer_bottom_hide_mobile'                    => false,
 			'footer_bottom_copyright_text'                 => __( '© Copyright {year}, The University of North Carolina at Chapel Hill', 'sog-unc-rebrand' ),
+			'footer_bottom_copyright_text_font_family'     => 'Montserrat, sans-serif',
+			'footer_bottom_copyright_text_font_weight'     => 400,
+			'footer_bottom_copyright_text_font_style'      => 'normal',
+			'footer_bottom_copyright_text_font_size'       => 16,
+			'footer_bottom_copyright_text_line_height'     => '1.87806rem',
+			'footer_bottom_copyright_text_transform'       => 'none',
+			'footer_bottom_copyright_text_decoration'      => 'none',
+			'footer_bottom_copyright_text_padding_top'     => 8,
+			'footer_bottom_copyright_text_padding_right'   => 16,
+			'footer_bottom_copyright_text_padding_bottom'  => 8,
+			'footer_bottom_copyright_text_padding_left'    => 16,
+			'footer_bottom_copyright_links_font_family'     => 'Montserrat, sans-serif',
+			'footer_bottom_copyright_links_font_weight'     => 400,
+			'footer_bottom_copyright_links_font_style'      => 'normal',
+			'footer_bottom_copyright_links_font_size'       => 16,
+			'footer_bottom_copyright_links_line_height'     => '2.5rem',
+			'footer_bottom_copyright_links_transform'       => 'none',
+			'footer_bottom_copyright_links_decoration'      => 'underline',
+			'footer_bottom_copyright_links_padding_top'     => 0,
+			'footer_bottom_copyright_links_padding_right'   => 16,
+			'footer_bottom_copyright_links_padding_bottom'  => 8,
+			'footer_bottom_copyright_links_padding_left'    => 16,
+			'footer_give_button_enabled'                   => false,
 			'footer_give_button_orientation'               => 'horizontal',
 			'footer_give_button_alignment'                 => '',
 			'footer_give_button_text'                      => __( 'Give Now', 'sog-unc-rebrand' ),
@@ -942,6 +1390,7 @@ class Settings {
 			'footer_give_button_background_color'          => '#4b9cd3',
 			'footer_give_button_hover_color'               => '#1E3A57',
 			'footer_give_button_text_color'                => '#ffffff',
+			'footer_give_button_text_hover_color'          => '#ffffff',
 			'footer_give_button_new_tab'                   => true,
 			'footer_give_button_font_family'               => 'Poppins, sans-serif',
 			'footer_give_button_font_weight'               => 600,
@@ -971,6 +1420,15 @@ class Settings {
 			'footer_logo_1_link_url'                       => '',
 			'footer_logo_1_link_new_tab'                   => false,
 			'footer_logo_1_hide_mobile'                    => false,
+			'footer_logo_1_width'                          => '14.75rem',
+			'footer_logo_1_width_med_mobile'               => '',
+			'footer_logo_1_width_small_mobile'             => '',
+			'footer_logo_1_height'                         => '',
+			'footer_logo_1_height_med_mobile'              => '',
+			'footer_logo_1_height_small_mobile'            => '',
+			'footer_logo_1_aspect_ratio'                   => '236/73',
+			'footer_logo_1_aspect_ratio_med_mobile'        => '118/36.5',
+			'footer_logo_1_aspect_ratio_small_mobile'      => '55/17',
 			'footer_logo_2_type'                           => 'none',
 			'footer_logo_2_image_url'                      => '',
 			'footer_logo_2_text_upper'                     => '',
@@ -978,6 +1436,15 @@ class Settings {
 			'footer_logo_2_link_url'                       => '',
 			'footer_logo_2_link_new_tab'                   => false,
 			'footer_logo_2_hide_mobile'                    => false,
+			'footer_logo_2_width'                          => '',
+			'footer_logo_2_width_med_mobile'               => '',
+			'footer_logo_2_width_small_mobile'             => '',
+			'footer_logo_2_height'                         => '',
+			'footer_logo_2_height_med_mobile'              => '',
+			'footer_logo_2_height_small_mobile'            => '',
+			'footer_logo_2_aspect_ratio'                   => '',
+			'footer_logo_2_aspect_ratio_med_mobile'        => '',
+			'footer_logo_2_aspect_ratio_small_mobile'      => '',
 			'footer_logo_3_type'                           => 'none',
 			'footer_logo_3_image_url'                      => '',
 			'footer_logo_3_text_upper'                     => '',
@@ -985,36 +1452,84 @@ class Settings {
 			'footer_logo_3_link_url'                       => '',
 			'footer_logo_3_link_new_tab'                   => false,
 			'footer_logo_3_hide_mobile'                    => false,
+			'footer_logo_3_width'                          => '',
+			'footer_logo_3_width_med_mobile'               => '',
+			'footer_logo_3_width_small_mobile'             => '',
+			'footer_logo_3_height'                         => '',
+			'footer_logo_3_height_med_mobile'              => '',
+			'footer_logo_3_height_small_mobile'            => '',
+			'footer_logo_3_aspect_ratio'                   => '88/19',
+			'footer_logo_3_aspect_ratio_med_mobile'        => '',
+			'footer_logo_3_aspect_ratio_small_mobile'      => '',
 			'footer_column_1_mode'                         => 'wysiwyg',
+			'footer_column_1_alignment'                    => 'center',
 			'footer_column_1_width'                        => 40,
 			'footer_column_1_hide_mobile'                  => false,
 			'footer_column_1_copyright_enabled'            => true,
 			'footer_column_1_content'                      => '',
+			'footer_column_1_content_font_family'          => 'Montserrat, sans-serif',
+			'footer_column_1_content_font_weight'          => 600,
+			'footer_column_1_content_font_style'           => 'normal',
+			'footer_column_1_content_font_size'            => 20,
 			'footer_column_1_shortcode'                    => '',
 			'footer_column_1_heading'                      => '',
+			'footer_column_1_heading_2'                    => '',
 			'footer_column_1_heading_alignment'            => 'left',
 			'footer_column_1_heading_text_transform'       => 'none',
 			'footer_column_1_heading_text_decoration'      => 'none',
+			'footer_column_1_menu_font_family'             => 'Open Sans, sans-serif',
+			'footer_column_1_menu_font_weight'             => 500,
+			'footer_column_1_menu_font_style'              => 'normal',
+			'footer_column_1_menu_font_size'               => 16,
+			'footer_column_1_menu_text_transform'          => 'none',
+			'footer_column_1_menu_text_decoration'         => 'none',
+			'footer_column_1_menu_line_height'             => '2em',
 			'footer_column_2_mode'                         => 'none',
+			'footer_column_2_alignment'                    => 'center',
 			'footer_column_2_width'                        => 30,
 			'footer_column_2_hide_mobile'                  => false,
 			'footer_column_2_copyright_enabled'            => false,
 			'footer_column_2_content'                      => '',
+			'footer_column_2_content_font_family'          => 'Montserrat, sans-serif',
+			'footer_column_2_content_font_weight'          => 600,
+			'footer_column_2_content_font_style'           => 'normal',
+			'footer_column_2_content_font_size'            => 20,
 			'footer_column_2_shortcode'                    => '',
 			'footer_column_2_heading'                      => '',
+			'footer_column_2_heading_2'                    => '',
 			'footer_column_2_heading_alignment'            => 'left',
 			'footer_column_2_heading_text_transform'       => 'none',
 			'footer_column_2_heading_text_decoration'      => 'none',
+			'footer_column_2_menu_font_family'             => 'Open Sans, sans-serif',
+			'footer_column_2_menu_font_weight'             => 500,
+			'footer_column_2_menu_font_style'              => 'normal',
+			'footer_column_2_menu_font_size'               => 16,
+			'footer_column_2_menu_text_transform'          => 'none',
+			'footer_column_2_menu_text_decoration'         => 'none',
+			'footer_column_2_menu_line_height'             => '2em',
 			'footer_column_3_mode'                         => 'none',
+			'footer_column_3_alignment'                    => 'center',
 			'footer_column_3_width'                        => 30,
 			'footer_column_3_hide_mobile'                  => false,
 			'footer_column_3_copyright_enabled'            => false,
 			'footer_column_3_content'                      => '',
+			'footer_column_3_content_font_family'          => 'Montserrat, sans-serif',
+			'footer_column_3_content_font_weight'          => 600,
+			'footer_column_3_content_font_style'           => 'normal',
+			'footer_column_3_content_font_size'            => 20,
 			'footer_column_3_shortcode'                    => '',
 			'footer_column_3_heading'                      => '',
+			'footer_column_3_heading_2'                    => '',
 			'footer_column_3_heading_alignment'            => 'left',
 			'footer_column_3_heading_text_transform'       => 'none',
 			'footer_column_3_heading_text_decoration'      => 'none',
+			'footer_column_3_menu_font_family'             => 'Open Sans, sans-serif',
+			'footer_column_3_menu_font_weight'             => 500,
+			'footer_column_3_menu_font_style'              => 'normal',
+			'footer_column_3_menu_font_size'               => 16,
+			'footer_column_3_menu_text_transform'          => 'none',
+			'footer_column_3_menu_text_decoration'         => 'none',
+			'footer_column_3_menu_line_height'             => '2em',
 		);
 	}
 
@@ -1058,6 +1573,9 @@ class Settings {
 		// Sanitize site search fields
 		$header_custom_hook = $this->sanitize_hook_name( $input['header_custom_hook'] ?? '' );
 		$footer_custom_hook = $this->sanitize_hook_name( $input['footer_custom_hook'] ?? '' );
+		// $mobile_back_button_icon_mode = $this->sanitize_enum( $input['header_mobile_back_button_icon_mode'] ?? '', array_keys( $this->get_mobile_back_button_icon_mode_options() ), $defaults['header_mobile_back_button_icon_mode'] );
+		// $mobile_back_button_icon_glyph_raw = (string) ( $input['header_mobile_back_button_icon_glyph'] ?? $defaults['header_mobile_back_button_icon_glyph'] );
+		// $mobile_back_button_icon_glyph = $this->sanitize_mobile_back_button_icon_value( $mobile_back_button_icon_glyph_raw, $mobile_back_button_icon_mode );
 
 		$sanitized = array(
 			'header_enabled'                       		        => ! empty( $input['header_enabled'] ),
@@ -1077,204 +1595,411 @@ class Settings {
 			'header_logo_custom_url'                		    => esc_url_raw( (string) ( $input['header_logo_custom_url'] ?? '' ) ),
 			'header_logo_image_url'               		        => esc_url_raw( (string) ( $input['header_logo_image_url'] ?? '' ) ),
 			'header_school_name'                 		        => sanitize_text_field( $input['header_school_name'] ?? '' ),
+			'header_school_name_text_decoration'       		    => $this->sanitize_enum( $input['header_school_name_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['header_school_name_text_decoration'] ),
+			'header_school_name_text_transform'       		    => $this->sanitize_enum( $input['header_school_name_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_school_name_text_transform'] ),
+			'header_school_name_font_family'                    => $this->sanitize_enum( $input['header_school_name_font_family'] ?? '', array_keys( $this->get_font_family_options() ), $defaults['header_school_name_font_family'] ),
+			'header_school_name_font_weight'                    => absint( $input['header_school_name_font_weight'] ?? $defaults['header_school_name_font_weight'] ),
+			'header_school_name_font_style'                     => $this->sanitize_enum( $input['header_school_name_font_style'] ?? '', array_keys( $this->get_font_style_options() ), $defaults['header_school_name_font_style'] ),
+			'header_school_name_font_size'                      => absint( $input['header_school_name_font_size'] ?? $defaults['header_school_name_font_size'] ),
+			'header_mobile_school_name_font_size'               => absint( $input['header_mobile_school_name_font_size'] ?? $defaults['header_mobile_school_name_font_size'] ),
+			'header_school_name_line_height'                    => sanitize_text_field( $input['header_school_name_line_height'] ?? $defaults['header_school_name_line_height'] ),
+			'header_school_name_line_height_small_mobile'       => sanitize_text_field( $input['header_school_name_line_height_small_mobile'] ?? $defaults['header_school_name_line_height_small_mobile'] ),
+			'header_school_name_padding_top'                    => absint( $input['header_school_name_padding_top'] ?? $defaults['header_school_name_padding_top'] ),
+			'header_school_name_padding_right'                  => absint( $input['header_school_name_padding_right'] ?? $defaults['header_school_name_padding_right'] ),
+			'header_school_name_padding_bottom'                 => absint( $input['header_school_name_padding_bottom'] ?? $defaults['header_school_name_padding_bottom'] ),
+			'header_school_name_padding_left'                   => absint( $input['header_school_name_padding_left'] ?? $defaults['header_school_name_padding_left'] ),
 			'header_text_main'                    		        => sanitize_text_field( $input['header_text_main'] ?? '' ),
+			'header_site_name_font_family'                      => $this->sanitize_enum( $input['header_site_name_font_family'] ?? '', array_keys( $this->get_font_family_options() ), $defaults['header_site_name_font_family'] ),
+			'header_site_name_font_weight'                      => absint( $input['header_site_name_font_weight'] ?? $defaults['header_site_name_font_weight'] ),
+			'header_site_name_font_style'                       => $this->sanitize_enum( $input['header_site_name_font_style'] ?? '', array_keys( $this->get_font_style_options() ), $defaults['header_site_name_font_style'] ),
+			'header_site_name_font_size'                        => absint( $input['header_site_name_font_size'] ?? $defaults['header_site_name_font_size'] ),
+			'header_mobile_site_name_font_size'				    => absint( $input['header_mobile_site_name_font_size'] ?? $defaults['header_mobile_site_name_font_size'] ),
+			'header_site_name_line_height'                      => sanitize_text_field( $input['header_site_name_line_height'] ?? $defaults['header_site_name_line_height'] ),
+			'header_site_name_line_height_small_mobile'         => sanitize_text_field( $input['header_site_name_line_height_small_mobile'] ?? $defaults['header_site_name_line_height_small_mobile'] ),
+			'header_site_name_text_decoration'      		    => $this->sanitize_enum( $input['header_site_name_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['header_site_name_text_decoration'] ),
+			'header_site_name_text_transform'        		    => $this->sanitize_enum( $input['header_site_name_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_site_name_text_transform'] ),
+			'header_site_name_padding_top'                      => absint( $input['header_site_name_padding_top'] ?? $defaults['header_site_name_padding_top'] ),
+			'header_site_name_padding_right'                    => absint( $input['header_site_name_padding_right'] ?? $defaults['header_site_name_padding_right'] ),
+			'header_site_name_padding_bottom'                   => absint( $input['header_site_name_padding_bottom'] ?? $defaults['header_site_name_padding_bottom'] ),
+			'header_site_name_padding_left'                     => absint( $input['header_site_name_padding_left'] ?? $defaults['header_site_name_padding_left'] ),
 			'header_text_subtext'                 		        => sanitize_text_field( $input['header_text_subtext'] ?? '' ),
+			'header_site_description_text_decoration'           => $this->sanitize_enum( $input['header_site_description_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['header_site_description_text_decoration'] ),
+			'header_site_description_text_transform'  		    => $this->sanitize_enum( $input['header_site_description_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_site_description_text_transform'] ),
+			'header_site_description_font_family'               => $this->sanitize_enum( $input['header_site_description_font_family'] ?? '', array_keys( $this->get_font_family_options() ), $defaults['header_site_description_font_family'] ),
+			'header_site_description_font_weight'               => absint( $input['header_site_description_font_weight'] ?? $defaults['header_site_description_font_weight'] ),
+			'header_site_description_font_style'                => $this->sanitize_enum( $input['header_site_description_font_style'] ?? '', array_keys( $this->get_font_style_options() ), $defaults['header_site_description_font_style'] ),
+			'header_site_description_font_size'                 => absint( $input['header_site_description_font_size'] ?? $defaults['header_site_description_font_size'] ),
+			'header_mobile_site_description_font_size'          => absint( $input['header_mobile_site_description_font_size'] ?? $defaults['header_mobile_site_description_font_size'] ),
+			'header_site_description_line_height'               => sanitize_text_field( $input['header_site_description_line_height'] ?? $defaults['header_site_description_line_height'] ),
+			'header_site_description_line_height_small_mobile'  => sanitize_text_field( $input['header_site_description_line_height_small_mobile'] ?? $defaults['header_site_description_line_height_small_mobile'] ),
+			'header_site_description_padding_top'               => absint( $input['header_site_description_padding_top'] ?? $defaults['header_site_description_padding_top'] ),
+			'header_site_description_padding_right'             => absint( $input['header_site_description_padding_right'] ?? $defaults['header_site_description_padding_right'] ),
+			'header_site_description_padding_bottom'            => absint( $input['header_site_description_padding_bottom'] ?? $defaults['header_site_description_padding_bottom'] ),
+			'header_site_description_padding_left'              => absint( $input['header_site_description_padding_left'] ?? $defaults['header_site_description_padding_left'] ),
 			'header_text_links_enabled'          		        => ! empty( $input['header_text_links_enabled'] ),
 			'header_separator_style'              		        => $this->sanitize_enum( $input['header_separator_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['header_separator_style'] ),
 			'header_separator_color'              		        => $this->sanitize_hex_color_with_default( $input['header_separator_color'] ?? '', $defaults['header_separator_color'] ),
 			'header_separator_thickness'           		        => absint( $input['header_separator_thickness'] ?? $defaults['header_separator_thickness'] ),
 			'header_separator_hide_mobile'           		    => ! empty( $input['header_separator_hide_mobile'] ),
+			'header_separator_padding_top'                      => absint( $input['header_separator_padding_top'] ?? $defaults['header_separator_padding_top'] ),
+			'header_separator_padding_right'                    => absint( $input['header_separator_padding_right'] ?? $defaults['header_separator_padding_right'] ),
+			'header_separator_padding_bottom'                   => absint( $input['header_separator_padding_bottom'] ?? $defaults['header_separator_padding_bottom'] ),
+			'header_separator_padding_left'                     => absint( $input['header_separator_padding_left'] ?? $defaults['header_separator_padding_left'] ),
 			'header_core_background_color'          		    => $this->sanitize_hex_color_with_default( $input['header_core_background_color'] ?? '', $defaults['header_core_background_color'] ),
 			'header_school_name_color'              		    => $this->sanitize_hex_color_with_default( $input['header_school_name_color'] ?? '', $defaults['header_school_name_color'] ),
 			'header_text_color'                      		    => $this->sanitize_hex_color_with_default( $input['header_text_color'] ?? '', $defaults['header_text_color'] ),
 			'header_subtext_color'                    		    => $this->sanitize_hex_color_with_default( $input['header_subtext_color'] ?? '', $defaults['header_subtext_color'] ),
-			'header_school_name_text_transform'       		    => $this->sanitize_enum( $input['header_school_name_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_school_name_text_transform'] ),
-			'header_site_name_text_transform'        		    => $this->sanitize_enum( $input['header_site_name_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_site_name_text_transform'] ),
-			'header_site_description_text_transform'  		    => $this->sanitize_enum( $input['header_site_description_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_site_description_text_transform'] ),
 			'header_main_menu_enabled'                		    => ! empty( $input['header_main_menu_enabled'] ),
 			'header_bottom_nav_enabled'               		    => ! empty( $input['header_bottom_nav_enabled'] ),
-			'header_navigation_font_family'		      		    => sanitize_text_field( $input['header_navigation_font_family'] ?? '' ),
-			'header_navigation_font_weight'		      		    => absint( $input['header_navigation_font_weight'] ?? $defaults['header_navigation_font_weight'] ),
-			'header_navigation_font_style'		      		    => sanitize_text_field( $input['header_navigation_font_style'] ?? '' ),
+			'header_navigation_font_family'       	      	    => $this->sanitize_enum( $input['header_navigation_font_family'] ?? '', array_keys( $this->get_font_family_options() ), $defaults['header_navigation_font_family'] ),
+			'header_navigation_font_weight'       	     	    => absint( $input['header_navigation_font_weight'] ?? $defaults['header_navigation_font_weight'] ),
+			'header_navigation_font_style'       	    	    => $this->sanitize_enum( $input['header_navigation_font_style'] ?? '', array_keys( $this->get_font_style_options() ), $defaults['header_navigation_font_style'] ),
 			'header_navigation_font_size'		      		    => absint( $input['header_navigation_font_size'] ?? $defaults['header_navigation_font_size'] ),
 			'header_navigation_text_transform'	      		    => $this->sanitize_enum( $input['header_navigation_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_navigation_text_transform'] ),
-			'	header_navigation_text_decoration'	  		    => $this->sanitize_enum( $input['header_navigation_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['header_navigation_text_decoration'] ),
+			'header_navigation_text_decoration'	  		        => $this->sanitize_enum( $input['header_navigation_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['header_navigation_text_decoration'] ),
 			'header_navigation_item_padding_top'				=> absint( $input['header_navigation_item_padding_top'] ?? $defaults['header_navigation_item_padding_top'] ),
 			'header_navigation_item_padding_right'				=> absint( $input['header_navigation_item_padding_right'] ?? $defaults['header_navigation_item_padding_right'] ),
 			'header_navigation_item_padding_bottom'				=> absint( $input['header_navigation_item_padding_bottom'] ?? $defaults['header_navigation_item_padding_bottom'] ),
 			'header_navigation_item_padding_left'				=> absint( $input['header_navigation_item_padding_left'] ?? $defaults['header_navigation_item_padding_left'] ),
+			'header_submenu_navigation_min_width'				=> absint( $input['header_submenu_navigation_min_width'] ?? $defaults['header_submenu_navigation_min_width'] ),
 			'header_submenu_navigation_item_padding_top'		=> absint( $input['header_submenu_navigation_item_padding_top'] ?? $defaults['header_submenu_navigation_item_padding_top'] ),
 			'header_submenu_navigation_item_padding_right'		=> absint( $input['header_submenu_navigation_item_padding_right'] ?? $defaults['header_submenu_navigation_item_padding_right'] ),
 			'header_submenu_navigation_item_padding_bottom'		=> absint( $input['header_submenu_navigation_item_padding_bottom'] ?? $defaults['header_submenu_navigation_item_padding_bottom'] ),
 			'header_submenu_navigation_item_padding_left'		=> absint( $input['header_submenu_navigation_item_padding_left'] ?? $defaults['header_submenu_navigation_item_padding_left'] ),
+			'header_mobile_menu_level_two_placement'			=> $this->sanitize_enum( $input['header_mobile_menu_level_two_placement'] ?? '', array_keys( $this->get_mobile_menu_level_two_placement_options() ), $defaults['header_mobile_menu_level_two_placement'] ),
+			'header_mobile_menu_level_two_width'				=> absint( $input['header_mobile_menu_level_two_width'] ?? $defaults['header_mobile_menu_level_two_width'] ),
+			'header_mobile_menu_level_two_item_padding_top'		=> absint( $input['header_mobile_menu_level_two_item_padding_top'] ?? $defaults['header_mobile_menu_level_two_item_padding_top'] ),
+			'header_mobile_menu_level_two_item_padding_right'	=> absint( $input['header_mobile_menu_level_two_item_padding_right'] ?? $defaults['header_mobile_menu_level_two_item_padding_right'] ),
+			'header_mobile_menu_level_two_item_padding_bottom'	=> absint( $input['header_mobile_menu_level_two_item_padding_bottom'] ?? $defaults['header_mobile_menu_level_two_item_padding_bottom'] ),
+			'header_mobile_menu_level_two_item_padding_left'    => absint( $input['header_mobile_menu_level_two_item_padding_left'] ?? $defaults['header_mobile_menu_level_two_item_padding_left'] ),
+			'header_mobile_back_button_text'                    => sanitize_text_field( $input['header_mobile_back_button_text'] ?? $defaults['header_mobile_back_button_text'] ),
+			// 'header_mobile_back_button_icon_mode'               => $mobile_back_button_icon_mode,
+			// 'header_mobile_back_button_icon_glyph'              => $mobile_back_button_icon_glyph,
+			// 'header_mobile_back_button_icon_family'             => $this->sanitize_enum( $input['header_mobile_back_button_icon_family'] ?? '', array_keys( $this->get_mobile_back_button_icon_family_options() ), $defaults['header_mobile_back_button_icon_family'] ),
+			// 'header_mobile_back_button_icon_pack_font_awesome'  => $this->sanitize_enum( $input['header_mobile_back_button_icon_pack_font_awesome'] ?? '', array_keys( $this->get_mobile_back_button_icon_pack_font_awesome_options() ), $defaults['header_mobile_back_button_icon_pack_font_awesome'] ),
+			'header_mobile_navigation_min_width'				=> absint( $input['header_mobile_navigation_min_width'] ?? $defaults['header_mobile_navigation_min_width'] ),
 			'header_mobile_navigation_item_padding_top'		    => absint( $input['header_mobile_navigation_item_padding_top'] ?? $defaults['header_mobile_navigation_item_padding_top'] ),
 			'header_mobile_navigation_item_padding_right'		=> absint( $input['header_mobile_navigation_item_padding_right'] ?? $defaults['header_mobile_navigation_item_padding_right'] ),
 			'header_mobile_navigation_item_padding_bottom'		=> absint( $input['header_mobile_navigation_item_padding_bottom'] ?? $defaults['header_mobile_navigation_item_padding_bottom'] ),
 			'header_mobile_navigation_item_padding_left'		=> absint( $input['header_mobile_navigation_item_padding_left'] ?? $defaults['header_mobile_navigation_item_padding_left'] ),
-			'header_bottom_orientation'              => $this->sanitize_enum( $input['header_bottom_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['header_bottom_orientation'] ),
-			'header_bottom_alignment'                => $this->sanitize_enum( $input['header_bottom_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['header_bottom_alignment'] ),
-			'header_bottom_spacing'                  => absint( $input['header_bottom_spacing'] ?? $defaults['header_bottom_spacing'] ),
-			'header_bottom_mobile_mode'              => $this->sanitize_enum( $input['header_bottom_mobile_mode'] ?? '', array_keys( $this->get_mobile_menu_mode_options() ), $defaults['header_bottom_mobile_mode'] ),
-			'header_bottom_background_color'         => $this->sanitize_hex_color_with_default( $input['header_bottom_background_color'] ?? '', $defaults['header_bottom_background_color'] ),
-			'header_bottom_text_color'               => $this->sanitize_hex_color_with_default( $input['header_bottom_text_color'] ?? '', $defaults['header_bottom_text_color'] ),
-			'display_site_search_enabled'            => !empty($input['display_site_search_enabled']),
-			'display_site_search_mobile_enabled'     => !empty($input['display_site_search_mobile_enabled']),
-			'site_search_inline_with_nav'            => !empty($input['site_search_inline_with_nav']),
-			'site_search_inline_with_header'         => !empty($input['site_search_inline_with_header']),
-			'site_search_placeholder_text'           => sanitize_text_field($input['site_search_placeholder_text'] ?? $defaults['site_search_placeholder_text']),
-			'header_search_icon_enabled'             => !empty($input['header_search_icon_enabled']),
-			'header_search_button_text'              => sanitize_text_field($input['header_search_button_text'] ?? $defaults['header_search_button_text']),
-			'header_give_button_text'                => sanitize_text_field( $input['header_give_button_text'] ?? $defaults['header_give_button_text'] ),
-			'header_give_button_url'                 => esc_url_raw( $input['header_give_button_url'] ?? $defaults['header_give_button_url'] ),
-			'header_give_button_background_color'    => $this->sanitize_hex_color_with_default( $input['header_give_button_background_color'] ?? '', $defaults['header_give_button_background_color'] ),
-			'header_give_button_hover_color'         => $this->sanitize_hex_color_with_default( $input['header_give_button_hover_color'] ?? '', $defaults['header_give_button_hover_color'] ),
-			'header_give_button_text_color'          => $this->sanitize_hex_color_with_default( $input['header_give_button_text_color'] ?? '', $defaults['header_give_button_text_color'] ),
-			'header_give_button_new_tab'             => ! empty( $input['header_give_button_new_tab'] ),
-			'header_give_button_font_family'         => sanitize_text_field( $input['header_give_button_font_family'] ?? $defaults['header_give_button_font_family'] ),
-			'header_give_button_font_weight'         => absint( $input['header_give_button_font_weight'] ?? $defaults['header_give_button_font_weight'] ),
-			'header_give_button_font_style'          => sanitize_text_field( $input['header_give_button_font_style'] ?? $defaults['header_give_button_font_style'] ),
-			'header_give_button_font_size'           => absint( $input['header_give_button_font_size'] ?? $defaults['header_give_button_font_size'] ),
-			'header_give_button_font_line_height'    => sanitize_text_field( $input['header_give_button_font_line_height'] ?? $defaults['header_give_button_font_line_height'] ),
-			'header_give_button_text_transform'      => $this->debug_log_enum('header_give_button_text_transform', $input['header_give_button_text_transform'] ?? '', $this->get_text_transform_style_options(), $defaults['header_give_button_text_transform'] ),
-			'header_give_button_border_color'        => $this->sanitize_hex_color_with_default( $input['header_give_button_border_color'] ?? '', $defaults['header_give_button_border_color'] ),
-			'header_give_button_border_thickness'    => absint( $input['header_give_button_border_thickness'] ?? $defaults['header_give_button_border_thickness'] ),
-			'header_give_button_border_radius'       => absint( $input['header_give_button_border_radius'] ?? $defaults['header_give_button_border_radius'] ),
-			'header_give_button_border_style'        => $this->sanitize_enum( $input['header_give_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['header_give_button_border_style'] ),
-			'header_give_button_text_decoration'     => $this->sanitize_enum( $input['header_give_button_text_decoration'] ?? '', $this->get_text_decoration_style_options(), $defaults['header_give_button_text_decoration'] ),
-			'header_give_button_padding_top' 	     => absint( $input['header_give_button_padding_top'] ?? $defaults['header_give_button_padding_top'] ),
-			'header_give_button_padding_right'       => absint( $input['header_give_button_padding_right'] ?? $defaults['header_give_button_padding_right'] ),
-			'header_give_button_padding_bottom'      => absint( $input['header_give_button_padding_bottom'] ?? $defaults['header_give_button_padding_bottom'] ),
-			'header_give_button_padding_left'        => absint( $input['header_give_button_padding_left'] ?? $defaults['header_give_button_padding_left'] ),
-			'header_give_button_hide_mobile'         => ! empty( $input['header_give_button_hide_mobile'] ),
-			'header_social_links_hide_mobile'        => ! empty( $input['header_social_links_hide_mobile'] ),
-			'header_social_links_alignment'          => $this->sanitize_enum( $input['header_social_links_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['header_social_links_alignment'] ),
-			'header_social_links'                    => $this->sanitize_social_links( $input['header_social_links'] ?? array() ),
-			'header_special_button_text'             => sanitize_text_field( $input['header_special_button_text'] ?? $defaults['header_special_button_text'] ),
-			'header_special_button_url'              => esc_url_raw( $input['header_special_button_url'] ?? $defaults['header_special_button_url'] ),
-			'header_special_button_new_tab'          => ! empty( $input['header_special_button_new_tab'] ),
-			'header_special_button_hide_mobile'      => ! empty( $input['header_special_button_hide_mobile'] ),
-			'header_special_button_background_color' => $this->sanitize_hex_color_with_default( $input['header_special_button_background_color'] ?? '', $defaults['header_special_button_background_color'] ),
-			'header_special_button_hover_color'      => $this->sanitize_hex_color_with_default( $input['header_special_button_hover_color'] ?? '', $defaults['header_special_button_hover_color'] ),
-			'header_special_button_text_color'       => $this->sanitize_hex_color_with_default( $input['header_special_button_text_color'] ?? '', $defaults['header_special_button_text_color'] ),
-			'header_special_button_border_color'     => $this->sanitize_hex_color_with_default( $input['header_special_button_border_color'] ?? '', $defaults['header_special_button_border_color'] ),
-			'header_special_button_border_thickness' => absint( $input['header_special_button_border_thickness'] ?? $defaults['header_special_button_border_thickness'] ),
-			'header_special_button_border_radius'    => absint( $input['header_special_button_border_radius'] ?? $defaults['header_special_button_border_radius'] ),
-			'header_special_button_border_style'     => $this->sanitize_enum( $input['header_special_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['header_special_button_border_style'] ),
-			'header_special_font_family'             => sanitize_text_field( $input['header_special_font_family'] ?? $defaults['header_special_font_family'] ),
-			'header_special_font_weight'             => absint( $input['header_special_font_weight'] ?? $defaults['header_special_font_weight'] ),
-			'header_special_font_style'              => sanitize_text_field( $input['header_special_font_style'] ?? $defaults['header_special_font_style'] ),
-			'header_special_font_size'               => absint( $input['header_special_font_size'] ?? $defaults['header_special_font_size'] ),
-			'header_special_text_transform'		     => $this->sanitize_enum( $input['header_special_text_transform'] ?? '', $this->get_text_transform_style_options(), $defaults['header_special_text_transform'] ),
-			'header_special_button_padding_top'      => absint( $input['header_special_button_padding_top'] ?? $defaults['header_special_button_padding_top'] ),
-			'header_special_button_padding_right'    => absint( $input['header_special_button_padding_right'] ?? $defaults['header_special_button_padding_right'] ),
-			'header_special_button_padding_bottom'   => absint( $input['header_special_button_padding_bottom'] ?? $defaults['header_special_button_padding_bottom'] ),
-			'header_special_button_padding_left'     => absint( $input['header_special_button_padding_left'] ?? $defaults['header_special_button_padding_left'] ),
-			'utility_bar_menu_fallback_enabled'      => ! empty( $input['utility_bar_menu_fallback_enabled'] ),
-			'utility_bar_brand_label'                => sanitize_text_field( $input['utility_bar_brand_label'] ?? '' ),
-			'utility_bar_brand_logo_url'             => esc_url_raw( (string) ( $input['utility_bar_brand_logo_url'] ?? '' ) ),
-			'utility_bar_background_color'           => $this->sanitize_hex_color_with_default( $input['utility_bar_background_color'] ?? '', $defaults['utility_bar_background_color'] ),
-			'utility_bar_text_color'                 => $this->sanitize_hex_color_with_default( $input['utility_bar_text_color'] ?? '', $defaults['utility_bar_text_color'] ),
-			'utility_bar_brand_logo_width'           => absint( $input['utility_bar_brand_logo_width'] ?? $defaults['utility_bar_brand_logo_width'] ),
-			'utility_bar_brand_logo_height'          => absint( $input['utility_bar_brand_logo_height'] ?? $defaults['utility_bar_brand_logo_height'] ),
-			'footer_enabled'                         => ! empty( $input['footer_enabled'] ),
-			'footer_hook_mode'                       => $footer_hook_mode,
-			'footer_known_hook'                      => $footer_known_hook,
-			'footer_custom_hook'                     => $footer_custom_hook,
-			'footer_hook'                            => 'custom' === $footer_hook_mode && $footer_custom_hook ? $footer_custom_hook : $footer_known_hook,
-			'footer_hook_priority'                   => absint( $input['footer_hook_priority'] ?? $defaults['footer_hook_priority'] ),
-			'footer_background_color'                => $this->sanitize_hex_color_with_default( $input['footer_background_color'] ?? '', $defaults['footer_background_color'] ),
-			'footer_text_color'                      => $this->sanitize_hex_color_with_default( $input['footer_text_color'] ?? '', $defaults['footer_text_color'] ),
-			'footer_heading_color'                   => $this->sanitize_hex_color_with_default( $input['footer_heading_color'] ?? '', $defaults['footer_heading_color'] ),
-			'footer_link_color'                      => $this->sanitize_hex_color_with_default( $input['footer_link_color'] ?? '', $defaults['footer_link_color'] ),
-			'footer_link_hover_color'                => $this->sanitize_hex_color_with_default( $input['footer_link_hover_color'] ?? '', $defaults['footer_link_hover_color'] ),
-			'footer_muted_text_color'                => $this->sanitize_hex_color_with_default( $input['footer_muted_text_color'] ?? '', $defaults['footer_muted_text_color'] ),
-			'footer_top_text_enabled'                => ! empty( $input['footer_top_text_enabled'] ),
-			'footer_top_text_heading'                => sanitize_text_field( $input['footer_top_text_heading'] ?? '' ),
-			'footer_top_text_content'                => wp_kses_post( $input['footer_top_text_content'] ?? '' ),
-			'footer_logos_enabled'                   => ! empty( $input['footer_logos_enabled'] ),
-			'footer_logos_orientation'               => $this->sanitize_enum( $input['footer_logos_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['footer_logos_orientation'] ),
-			'footer_logos_alignment'                 => $this->sanitize_enum( $input['footer_logos_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['footer_logos_alignment'] ),
-			'footer_logos_spacing'                   => absint( $input['footer_logos_spacing'] ?? $defaults['footer_logos_spacing'] ),
-			'footer_logos_mobile_carousel'           => ! empty( $input['footer_logos_mobile_carousel'] ),
-			'footer_logos_max_height'                => absint( $input['footer_logos_max_height'] ?? $defaults['footer_logos_max_height'] ),
-			'footer_logos_max_total_height'          => absint( $input['footer_logos_max_total_height'] ?? $defaults['footer_logos_max_total_height'] ),
-			'footer_separator_1_style'               => $this->sanitize_enum( $input['footer_separator_1_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['footer_separator_1_style'] ),
-			'footer_separator_1_color'               => $this->sanitize_hex_color_with_default( $input['footer_separator_1_color'] ?? '', $defaults['footer_separator_1_color'] ),
-			'footer_separator_1_thickness'           => absint( $input['footer_separator_1_thickness'] ?? $defaults['footer_separator_1_thickness'] ),
-			'footer_separator_1_hide_mobile'         => ! empty( $input['footer_separator_1_hide_mobile'] ),
-			'footer_separator_2_style'               => $this->sanitize_enum( $input['footer_separator_2_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['footer_separator_2_style'] ),
-			'footer_separator_2_style_mobile'        => $this->sanitize_enum( $input['footer_separator_2_style_mobile'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['footer_separator_2_style_mobile'] ),
-			'footer_separator_2_color'               => $this->sanitize_hex_color_with_default( $input['footer_separator_2_color'] ?? '', $defaults['footer_separator_2_color'] ),
-			'footer_separator_2_thickness'           => absint( $input['footer_separator_2_thickness'] ?? $defaults['footer_separator_2_thickness'] ),
-			'footer_separator_2_hide_mobile'         => ! empty( $input['footer_separator_2_hide_mobile'] ),
-			'footer_column_gap'                      => absint( $input['footer_column_gap'] ?? $defaults['footer_column_gap'] ),
-			'footer_column_2_gap'                    => absint( $input['footer_column_2_gap'] ?? $defaults['footer_column_2_gap'] ),
-			'footer_social_links_below_columns'      => ! empty( $input['footer_social_links_below_columns'] ),
-			'footer_social_links_orientation'        => $this->sanitize_enum( $input['footer_social_links_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['footer_social_links_orientation'] ),
-			'footer_social_links_alignment'          => $this->sanitize_enum( $input['footer_social_links_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['footer_social_links_alignment'] ),
-			'footer_social_links_hide_mobile'        => ! empty( $input['footer_social_links_hide_mobile'] ),
-			'footer_social_links'                    => $this->sanitize_social_links( $input['footer_social_links'] ?? array() ),
-			'footer_bottom_enabled'                  => ! empty( $input['footer_bottom_enabled'] ),
-			'footer_bottom_show_copyright'           => ! empty( $input['footer_bottom_show_copyright'] ),
-			'footer_bottom_show_menu'                => ! empty( $input['footer_bottom_show_menu'] ),
-			'footer_bottom_hide_mobile'              => ! empty( $input['footer_bottom_hide_mobile'] ),
-			'footer_bottom_copyright_text'           => sanitize_text_field( $input['footer_bottom_copyright_text'] ?? '' ),
-			'footer_give_social_gap'                 => absint( $input['footer_give_social_gap'] ?? $defaults['footer_give_social_gap'] ),
-			'footer_give_button_alignment'           => $this->sanitize_enum( $input['footer_give_button_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['footer_give_button_alignment'] ),
-			'footer_give_button_orientation'         => $this->sanitize_enum( $input['footer_give_button_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['footer_give_button_orientation'] ),
-			'footer_give_button_text'                => sanitize_text_field( $input['footer_give_button_text'] ?? $defaults['footer_give_button_text'] ),
-			'footer_give_button_url'                 => esc_url_raw( $input['footer_give_button_url'] ?? $defaults['footer_give_button_url'] ),
-			'footer_give_button_background_color'    => $this->sanitize_hex_color_with_default( $input['footer_give_button_background_color'] ?? '', $defaults['footer_give_button_background_color'] ),
-			'footer_give_button_hover_color'         => $this->sanitize_hex_color_with_default( $input['footer_give_button_hover_color'] ?? '', $defaults['footer_give_button_hover_color'] ),
-			'footer_give_button_text_color'          => $this->sanitize_hex_color_with_default( $input['footer_give_button_text_color'] ?? '', $defaults['footer_give_button_text_color'] ),
-			'footer_give_button_new_tab'             => ! empty( $input['footer_give_button_new_tab'] ),
-			'footer_give_button_font_family'         => sanitize_text_field( $input['footer_give_button_font_family'] ?? $defaults['footer_give_button_font_family'] ),
-			'footer_give_button_font_weight'         => absint( $input['footer_give_button_font_weight'] ?? $defaults['footer_give_button_font_weight'] ),
-			'footer_give_button_font_style'          => sanitize_text_field( $input['footer_give_button_font_style'] ?? $defaults['footer_give_button_font_style'] ),
-			'footer_give_button_font_size'           => absint( $input['footer_give_button_font_size'] ?? $defaults['footer_give_button_font_size'] ),
-			'footer_give_button_font_line_height'    => sanitize_text_field( $input['footer_give_button_font_line_height'] ?? $defaults['footer_give_button_font_line_height'] ),
-			'footer_give_button_text_transform'      => $this->sanitize_enum( $input['footer_give_button_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['footer_give_button_text_transform'] ),
-			'footer_give_button_border_color'        => $this->sanitize_hex_color_with_default( $input['footer_give_button_border_color'] ?? '', $defaults['footer_give_button_border_color'] ),
-			'footer_give_button_border_thickness'    => absint( $input['footer_give_button_border_thickness'] ?? $defaults['footer_give_button_border_thickness'] ),
-			'footer_give_button_border_radius'       => absint( $input['footer_give_button_border_radius'] ?? $defaults['footer_give_button_border_radius'] ),
-			'footer_give_button_border_style'        => $this->sanitize_enum( $input['footer_give_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['footer_give_button_border_style'] ),
-			'footer_give_button_text_decoration'     => $this->sanitize_enum( $input['footer_give_button_text_decoration'] ?? '', $this->get_text_decoration_style_options(), $defaults['footer_give_button_text_decoration'] ),
-			'footer_give_button_below_columns'       => ! empty( $input['footer_give_button_below_columns'] ),
-			'footer_give_button_padding_top' 	     => absint( $input['footer_give_button_padding_top'] ?? $defaults['footer_give_button_padding_top'] ),
-			'footer_give_button_padding_right'       => absint( $input['footer_give_button_padding_right'] ?? $defaults['footer_give_button_padding_right'] ),
-			'footer_give_button_padding_bottom'      => absint( $input['footer_give_button_padding_bottom'] ?? $defaults['footer_give_button_padding_bottom'] ),
-			'footer_give_button_padding_left'        => absint( $input['footer_give_button_padding_left'] ?? $defaults['footer_give_button_padding_left'] ),
-			'footer_give_button_hide_mobile'         => ! empty( $input['footer_give_button_hide_mobile'] ),
-			'excluded_post_ids'                      => $this->sanitize_line_delimited_absint_list( $input['excluded_post_ids'] ?? array() ),
-			'excluded_post_types'                    => $this->sanitize_line_delimited_key_list( $input['excluded_post_types'] ?? array() ),
-			'excluded_templates'                     => $this->sanitize_line_delimited_text_list( $input['excluded_templates'] ?? array() ),
-			'exclude_front_page'                     => ! empty( $input['exclude_front_page'] ),
-			'exclude_posts_page'                     => ! empty( $input['exclude_posts_page'] ),
-			'exclude_search'                         => ! empty( $input['exclude_search'] ),
-			'exclude_404'                            => ! empty( $input['exclude_404'] ),
+			'header_bottom_orientation'                         => $this->sanitize_enum( $input['header_bottom_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['header_bottom_orientation'] ),
+			'header_bottom_alignment'                           => $this->sanitize_enum( $input['header_bottom_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['header_bottom_alignment'] ),
+			'header_bottom_spacing'                             => absint( $input['header_bottom_spacing'] ?? $defaults['header_bottom_spacing'] ),
+			'header_bottom_mobile_mode'                         => $this->sanitize_enum( $input['header_bottom_mobile_mode'] ?? '', array_keys( $this->get_mobile_menu_mode_options() ), $defaults['header_bottom_mobile_mode'] ),
+			'header_bottom_background_color'                    => $this->sanitize_hex_color_with_default( $input['header_bottom_background_color'] ?? '', $defaults['header_bottom_background_color'] ),
+			'header_bottom_text_color'                          => $this->sanitize_hex_color_with_default( $input['header_bottom_text_color'] ?? '', $defaults['header_bottom_text_color'] ),
+			'header_bottom_text_hover_color'                    => $this->sanitize_hex_color_with_default( $input['header_bottom_text_hover_color'] ?? '', $defaults['header_bottom_text_hover_color'] ),
+			'header_bottom_text_active_color'                   => $this->sanitize_hex_color_with_default( $input['header_bottom_text_active_color'] ?? '', $defaults['header_bottom_text_active_color'] ),
+			'header_bottom_text_click_color'                    => $this->sanitize_hex_color_with_default( $input['header_bottom_text_click_color'] ?? '', $defaults['header_bottom_text_click_color'] ),
+			'header_bottom_hover_color'					        => $this->sanitize_hex_color_with_default( $input['header_bottom_hover_color'] ?? '', $defaults['header_bottom_hover_color'] ),
+			'header_mobile_menu_indicator_color'                => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_indicator_color'] ?? '', $defaults['header_mobile_menu_indicator_color'] ),
+			'header_mobile_menu_active_indicator_color'         => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_active_indicator_color'] ?? '', $defaults['header_mobile_menu_active_indicator_color'] ),
+			'header_mobile_menu_background_color'               => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_background_color'] ?? '', $defaults['header_mobile_menu_background_color'] ),
+			'header_mobile_menu_hover_color'                    => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_hover_color'] ?? '', $defaults['header_mobile_menu_hover_color'] ),
+			'header_mobile_menu_text_color'                     => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_text_color'] ?? '', $defaults['header_mobile_menu_text_color'] ),
+			'header_mobile_menu_text_hover_color'               => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_text_hover_color'] ?? '', $defaults['header_mobile_menu_text_hover_color'] ),
+			'header_mobile_menu_text_click_color'               => $this->sanitize_hex_color_with_default( $input['header_mobile_menu_text_click_color'] ?? '', $defaults['header_mobile_menu_text_click_color'] ),
+			'header_submenu_menu_indicator_color'		        => $this->sanitize_hex_color_with_default( $input['header_submenu_menu_indicator_color'] ?? '', $defaults['header_submenu_menu_indicator_color'] ),
+			'header_submenu_menu_background_color'              => $this->sanitize_hex_color_with_default( $input['header_submenu_menu_background_color'] ?? '', $defaults['header_submenu_menu_background_color'] ),
+			'header_submenu_menu_hover_color'                   => $this->sanitize_hex_color_with_default( $input['header_submenu_menu_hover_color'] ?? '', $defaults['header_submenu_menu_hover_color'] ),
+			'header_submenu_menu_text_color'                    => $this->sanitize_hex_color_with_default( $input['header_submenu_menu_text_color'] ?? '', $defaults['header_submenu_menu_text_color'] ),
+			'header_submenu_menu_text_hover_color'              => $this->sanitize_hex_color_with_default( $input['header_submenu_menu_text_hover_color'] ?? '', $defaults['header_submenu_menu_text_hover_color'] ),
+			'display_site_search_enabled'                       => !empty($input['display_site_search_enabled']),
+			'display_site_search_mobile_enabled'                => !empty($input['display_site_search_mobile_enabled']),
+			'display_site_search_inline_with_nav'               => !empty($input['display_site_search_inline_with_nav']),
+			'display_site_search_inline_with_header'            => !empty($input['display_site_search_inline_with_header']),
+			'header_site_search_placeholder_text'               => sanitize_text_field($input['header_site_search_placeholder_text'] ?? $defaults['header_site_search_placeholder_text']),
+			'header_search_icon_enabled'                        => !empty($input['header_search_icon_enabled']),
+			'header_search_button_text'                         => sanitize_text_field($input['header_search_button_text'] ?? $defaults['header_search_button_text']),
+			'header_site_search_button_background_color'           => $this->sanitize_hex_color_with_default( $input['header_site_search_button_background_color'] ?? '', $defaults['header_site_search_button_background_color'] ),
+			'header_site_search_button_hover_color'                => $this->sanitize_hex_color_with_default( $input['header_site_search_button_hover_color'] ?? '', $defaults['header_site_search_button_hover_color'] ),
+			'header_site_search_button_text_color'                 => $this->sanitize_hex_color_with_default( $input['header_site_search_button_text_color'] ?? '', $defaults['header_site_search_button_text_color'] ),
+			'header_site_search_button_text_hover_color'           => $this->sanitize_hex_color_with_default( $input['header_site_search_button_text_hover_color'] ?? '', $defaults['header_site_search_button_text_hover_color'] ),
+			'header_site_search_border_thickness' 			       => absint( $input['header_site_search_border_thickness'] ?? $defaults['header_site_search_border_thickness'] ),
+            'header_site_search_border_radius_top_left'            => absint( $input['header_site_search_border_radius_top_left'] ?? $defaults['header_site_search_border_radius_top_left'] ),
+            'header_site_search_border_radius_top_right'           => absint( $input['header_site_search_border_radius_top_right'] ?? $defaults['header_site_search_border_radius_top_right'] ),
+            'header_site_search_border_radius_bottom_left'	       => absint( $input['header_site_search_border_radius_bottom_left'] ?? $defaults['header_site_search_border_radius_bottom_left'] ),
+            'header_site_search_border_radius_bottom_right'	       => absint( $input['header_site_search_border_radius_bottom_right'] ?? $defaults['header_site_search_border_radius_bottom_right'] ),
+            'header_site_search_border_style'                      => $this->sanitize_enum( $input['header_site_search_border_style'] ?? '', $this->get_border_style_options(), $defaults['header_site_search_border_style'] ),
+            'header_site_search_border_color'                      => $this->sanitize_hex_color_with_default( $input['header_site_search_border_color'] ?? '', $defaults['header_site_search_border_color'] ),
+            'header_site_search_background_color'                  => $this->sanitize_hex_color_with_default( $input['header_site_search_background_color'] ?? '', $defaults['header_site_search_background_color'] ),
+            'header_site_search_text_button_gap'                   => absint( $input['header_site_search_text_button_gap'] ?? $defaults['header_site_search_text_button_gap'] ),
+            'header_site_search_button_border_color'               => $this->sanitize_hex_color_with_default( $input['header_site_search_button_border_color'] ?? '', $defaults['header_site_search_button_border_color'] ),
+            'header_site_search_button_border_thickness'           => absint( $input['header_site_search_button_border_thickness'] ?? $defaults['header_site_search_button_border_thickness'] ),
+            'header_site_search_button_border_radius_top_left'     => absint( $input['header_site_search_button_border_radius_top_left'] ?? $defaults['header_site_search_button_border_radius_top_left'] ),
+            'header_site_search_button_border_radius_top_right'    => absint( $input['header_site_search_button_border_radius_top_right'] ?? $defaults['header_site_search_button_border_radius_top_right'] ),
+            'header_site_search_button_border_radius_bottom_left'  => absint( $input['header_site_search_button_border_radius_bottom_left'] ?? $defaults['header_site_search_button_border_radius_bottom_left'] ),
+            'header_site_search_button_border_radius_bottom_right' => absint( $input['header_site_search_button_border_radius_bottom_right'] ?? $defaults['header_site_search_button_border_radius_bottom_right'] ),
+            'header_site_search_button_border_style'               => $this->sanitize_enum( $input['header_site_search_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['header_site_search_button_border_style'] ),
+			'header_give_button_enabled'                        => !empty($input['header_give_button_enabled']),
+			'header_give_button_text'                           => sanitize_text_field( $input['header_give_button_text'] ?? $defaults['header_give_button_text'] ),
+			'header_give_button_url'                            => esc_url_raw( $input['header_give_button_url'] ?? $defaults['header_give_button_url'] ),
+			'header_give_button_background_color'               => $this->sanitize_hex_color_with_default( $input['header_give_button_background_color'] ?? '', $defaults['header_give_button_background_color'] ),
+			'header_give_button_hover_color'                    => $this->sanitize_hex_color_with_default( $input['header_give_button_hover_color'] ?? '', $defaults['header_give_button_hover_color'] ),
+			'header_give_button_text_color'                     => $this->sanitize_hex_color_with_default( $input['header_give_button_text_color'] ?? '', $defaults['header_give_button_text_color'] ),
+			'header_give_button_text_hover_color'               => $this->sanitize_hex_color_with_default( $input['header_give_button_text_hover_color'] ?? '', $defaults['header_give_button_text_hover_color'] ),
+			'header_give_button_new_tab'                        => ! empty( $input['header_give_button_new_tab'] ),
+			'header_give_button_font_family'                    => $this->sanitize_enum( $input['header_give_button_font_family'] ?? $defaults['header_give_button_font_family'], array_keys( $this->get_font_family_options() ), $defaults['header_give_button_font_family'] ),
+			'header_give_button_font_weight'                    => absint( $input['header_give_button_font_weight'] ?? $defaults['header_give_button_font_weight'] ),
+			'header_give_button_font_style'                     => $this->sanitize_enum( $input['header_give_button_font_style'] ?? $defaults['header_give_button_font_style'], array_keys( $this->get_font_style_options() ), $defaults['header_give_button_font_style'] ),
+			'header_give_button_font_size'                      => absint( $input['header_give_button_font_size'] ?? $defaults['header_give_button_font_size'] ),
+			'header_give_button_font_line_height'               => absint( $input['header_give_button_font_line_height'] ?? $defaults['header_give_button_font_line_height'] ),
+			'header_give_button_text_transform'                 => $this->debug_log_enum('header_give_button_text_transform', $input['header_give_button_text_transform'] ?? '', $this->get_text_transform_style_options(), $defaults['header_give_button_text_transform'] ),
+			'header_give_button_border_color'                   => $this->sanitize_hex_color_with_default( $input['header_give_button_border_color'] ?? '', $defaults['header_give_button_border_color'] ),
+			'header_give_button_border_thickness'               => absint( $input['header_give_button_border_thickness'] ?? $defaults['header_give_button_border_thickness'] ),
+			'header_give_button_border_radius'                  => absint( $input['header_give_button_border_radius'] ?? $defaults['header_give_button_border_radius'] ),
+			'header_give_button_border_style'                   => $this->sanitize_enum( $input['header_give_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['header_give_button_border_style'] ),
+			'header_give_button_text_decoration'                => $this->sanitize_enum( $input['header_give_button_text_decoration'] ?? '', $this->get_text_decoration_style_options(), $defaults['header_give_button_text_decoration'] ),
+			'header_give_button_padding_top' 	                => absint( $input['header_give_button_padding_top'] ?? $defaults['header_give_button_padding_top'] ),
+			'header_give_button_padding_right'                  => absint( $input['header_give_button_padding_right'] ?? $defaults['header_give_button_padding_right'] ),
+			'header_give_button_padding_bottom'                 => absint( $input['header_give_button_padding_bottom'] ?? $defaults['header_give_button_padding_bottom'] ),
+			'header_give_button_padding_left'                   => absint( $input['header_give_button_padding_left'] ?? $defaults['header_give_button_padding_left'] ),
+			'header_give_button_hide_mobile'                    => ! empty( $input['header_give_button_hide_mobile'] ),
+			'header_social_links_hide_mobile'                   => ! empty( $input['header_social_links_hide_mobile'] ),
+			'header_social_links_alignment'                     => $this->sanitize_enum( $input['header_social_links_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['header_social_links_alignment'] ),
+			'header_social_links'                               => $this->sanitize_social_links( $input['header_social_links'] ?? array() ),
+			'header_special_button_enabled'                     => ! empty( $input['header_special_button_enabled'] ),
+			'header_special_button_text'                        => sanitize_text_field( $input['header_special_button_text'] ?? $defaults['header_special_button_text'] ),
+			'header_special_button_url'                         => esc_url_raw( $input['header_special_button_url'] ?? $defaults['header_special_button_url'] ),
+			'header_special_button_new_tab'                     => ! empty( $input['header_special_button_new_tab'] ),
+			'header_special_button_hide_mobile'                 => ! empty( $input['header_special_button_hide_mobile'] ),
+			'header_special_button_background_color'            => $this->sanitize_hex_color_with_default( $input['header_special_button_background_color'] ?? '', $defaults['header_special_button_background_color'] ),
+			'header_special_button_hover_color'                 => $this->sanitize_hex_color_with_default( $input['header_special_button_hover_color'] ?? '', $defaults['header_special_button_hover_color'] ),
+			'header_special_button_text_color'                  => $this->sanitize_hex_color_with_default( $input['header_special_button_text_color'] ?? '', $defaults['header_special_button_text_color'] ),
+			'header_special_button_text_hover_color'            => $this->sanitize_hex_color_with_default( $input['header_special_button_text_hover_color'] ?? '', $defaults['header_special_button_text_hover_color'] ),
+			'header_special_button_border_color'                => $this->sanitize_hex_color_with_default( $input['header_special_button_border_color'] ?? '', $defaults['header_special_button_border_color'] ),
+			'header_special_button_border_thickness'            => absint( $input['header_special_button_border_thickness'] ?? $defaults['header_special_button_border_thickness'] ),
+			'header_special_button_border_radius'               => absint( $input['header_special_button_border_radius'] ?? $defaults['header_special_button_border_radius'] ),
+			'header_special_button_border_style'                => $this->sanitize_enum( $input['header_special_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['header_special_button_border_style'] ),
+			'header_special_font_family'                        => $this->sanitize_enum( $input['header_special_font_family'] ?? $defaults['header_special_font_family'], array_keys( $this->get_font_family_options() ), $defaults['header_special_font_family'] ),
+			'header_special_font_weight'                        => absint( $input['header_special_font_weight'] ?? $defaults['header_special_font_weight'] ),
+			'header_special_font_style'                         => $this->sanitize_enum( $input['header_special_font_style'] ?? $defaults['header_special_font_style'], array_keys( $this->get_font_style_options() ), $defaults['header_special_font_style'] ),
+			'header_special_font_size'                          => absint( $input['header_special_font_size'] ?? $defaults['header_special_font_size'] ),
+			'header_special_text_transform'                     => $this->sanitize_enum( $input['header_special_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['header_special_text_transform'] ),
+			'header_special_button_padding_top'                 => absint( $input['header_special_button_padding_top'] ?? $defaults['header_special_button_padding_top'] ),
+			'header_special_button_padding_right'               => absint( $input['header_special_button_padding_right'] ?? $defaults['header_special_button_padding_right'] ),
+			'header_special_button_padding_bottom'              => absint( $input['header_special_button_padding_bottom'] ?? $defaults['header_special_button_padding_bottom'] ),
+			'header_special_button_padding_left'                => absint( $input['header_special_button_padding_left'] ?? $defaults['header_special_button_padding_left'] ),
+			'utility_bar_menu_fallback_enabled'                 => ! empty( $input['utility_bar_menu_fallback_enabled'] ),
+			'utility_bar_hide_mobile'                           => ! empty( $input['utility_bar_hide_mobile'] ),
+			'utility_bar_brand_logo_hide_mobile'                => ! empty( $input['utility_bar_brand_logo_hide_mobile'] ),
+			'utility_bar_hide_label_mobile'                     => ! empty( $input['utility_bar_hide_label_mobile'] ),
+			'utility_bar_menu_separator_enabled'		        => ! empty( $input['utility_bar_menu_separator_enabled'] ),
+			'utility_bar_menu_separator_hide_mobile'            => ! empty( $input['utility_bar_menu_separator_hide_mobile'] ),
+			'utility_bar_menu_border_enabled'                   => ! empty( $input['utility_bar_menu_border_enabled'] ),
+			'utility_bar_menu_border_hide_mobile'               => ! empty( $input['utility_bar_menu_border_hide_mobile'] ),
+			'utility_bar_height'                                => absint( $input['utility_bar_height'] ?? $defaults['utility_bar_height'] ),
+			'utility_bar_brand_logo_url'                        => esc_url_raw( (string) ( $input['utility_bar_brand_logo_url'] ?? '' ) ),
+			'utility_bar_brand_logo_width'                      => absint( $input['utility_bar_brand_logo_width'] ?? $defaults['utility_bar_brand_logo_width'] ),
+			'utility_bar_brand_logo_height'                     => absint( $input['utility_bar_brand_logo_height'] ?? $defaults['utility_bar_brand_logo_height'] ),
+			'utility_bar_margin_top'                            => absint( $input['utility_bar_margin_top'] ?? $defaults['utility_bar_margin_top'] ),
+			'utility_bar_margin_right'                          => absint( $input['utility_bar_margin_right'] ?? $defaults['utility_bar_margin_right'] ),
+			'utility_bar_margin_bottom'                         => absint( $input['utility_bar_margin_bottom'] ?? $defaults['utility_bar_margin_bottom'] ),
+			'utility_bar_margin_left'                           => absint( $input['utility_bar_margin_left'] ?? $defaults['utility_bar_margin_left'] ),
+			'utility_bar_padding_top'                           => absint( $input['utility_bar_padding_top'] ?? $defaults['utility_bar_padding_top'] ),
+			'utility_bar_padding_right'                         => absint( $input['utility_bar_padding_right'] ?? $defaults['utility_bar_padding_right'] ),
+			'utility_bar_padding_bottom'                        => absint( $input['utility_bar_padding_bottom'] ?? $defaults['utility_bar_padding_bottom'] ),
+			'utility_bar_padding_left'                          => absint( $input['utility_bar_padding_left'] ?? $defaults['utility_bar_padding_left'] ),
+			'utility_bar_brand_label'                           => sanitize_text_field( $input['utility_bar_brand_label'] ?? '' ),
+			'utility_bar_brand_label_mobile'                    => sanitize_text_field( $input['utility_bar_brand_label_mobile'] ?? '' ),
+			'utility_bar_brand_label_font_family'               => $this->sanitize_enum( $input['utility_bar_brand_label_font_family'] ?? $defaults['utility_bar_brand_label_font_family'], array_keys( $this->get_font_family_options() ), $defaults['utility_bar_brand_label_font_family'] ),
+			'utility_bar_brand_label_font_weight'               => absint( $input['utility_bar_brand_label_font_weight'] ?? $defaults['utility_bar_brand_label_font_weight'] ),
+			'utility_bar_brand_label_font_style'                => $this->sanitize_enum( $input['utility_bar_brand_label_font_style'] ?? $defaults['utility_bar_brand_label_font_style'], array_keys( $this->get_font_style_options() ), $defaults['utility_bar_brand_label_font_style'] ),
+			'utility_bar_brand_label_font_size'                 => absint( $input['utility_bar_brand_label_font_size'] ?? $defaults['utility_bar_brand_label_font_size'] ),
+			'utility_bar_brand_label_text_transform'            => $this->sanitize_enum( $input['utility_bar_brand_label_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['utility_bar_brand_label_text_transform'] ),
+			'utility_bar_brand_label_text_decoration'           => $this->sanitize_enum( $input['utility_bar_brand_label_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['utility_bar_brand_label_text_decoration'] ),
+			'utility_bar_brand_label_padding_top'               => absint( $input['utility_bar_brand_label_padding_top'] ?? $defaults['utility_bar_brand_label_padding_top'] ),
+			'utility_bar_brand_label_padding_right'             => absint( $input['utility_bar_brand_label_padding_right'] ?? $defaults['utility_bar_brand_label_padding_right'] ),
+			'utility_bar_brand_label_padding_bottom'            => absint( $input['utility_bar_brand_label_padding_bottom'] ?? $defaults['utility_bar_brand_label_padding_bottom'] ),
+			'utility_bar_brand_label_padding_left'              => absint( $input['utility_bar_brand_label_padding_left'] ?? $defaults['utility_bar_brand_label_padding_left'] ),
+			'utility_bar_menu_font_family'                      => $this->sanitize_enum( $input['utility_bar_menu_font_family'] ?? $defaults['utility_bar_menu_font_family'], array_keys( $this->get_font_family_options() ), $defaults['utility_bar_menu_font_family'] ),
+			'utility_bar_menu_font_weight'                      => absint( $input['utility_bar_menu_font_weight'] ?? $defaults['utility_bar_menu_font_weight'] ),
+			'utility_bar_menu_font_style'                       => $this->sanitize_enum( $input['utility_bar_menu_font_style'] ?? $defaults['utility_bar_menu_font_style'], array_keys( $this->get_font_style_options() ), $defaults['utility_bar_menu_font_style'] ),
+			'utility_bar_menu_font_size'                        => absint( $input['utility_bar_menu_font_size'] ?? $defaults['utility_bar_menu_font_size'] ),
+			'utility_bar_menu_text_transform'                   => $this->sanitize_enum( $input['utility_bar_menu_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['utility_bar_menu_text_transform'] ),
+			'utility_bar_menu_text_decoration'                  => $this->sanitize_enum( $input['utility_bar_menu_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['utility_bar_menu_text_decoration'] ),
+			'utility_bar_menu_alignment'                        => $this->sanitize_enum( $input['utility_bar_menu_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['utility_bar_menu_alignment'] ),
+			'utility_bar_menu_orientation'                      => $this->sanitize_enum( $input['utility_bar_menu_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['utility_bar_menu_orientation'] ),
+			'utility_bar_menu_item_padding_top'                 => absint( $input['utility_bar_menu_item_padding_top'] ?? $defaults['utility_bar_menu_item_padding_top'] ),
+			'utility_bar_menu_item_padding_right'               => absint( $input['utility_bar_menu_item_padding_right'] ?? $defaults['utility_bar_menu_item_padding_right'] ),
+			'utility_bar_menu_item_padding_bottom'              => absint( $input['utility_bar_menu_item_padding_bottom'] ?? $defaults['utility_bar_menu_item_padding_bottom'] ),
+			'utility_bar_menu_item_padding_left'                => absint( $input['utility_bar_menu_item_padding_left'] ?? $defaults['utility_bar_menu_item_padding_left'] ),
+			'utility_bar_menu_item_separator'                   => sanitize_text_field( $input['utility_bar_menu_item_separator'] ?? $defaults['utility_bar_menu_item_separator'] ),
+			'utility_bar_menu_item_separator_style'             => $this->sanitize_enum( $input['utility_bar_menu_item_separator_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['utility_bar_menu_item_separator_style'] ),
+			'utility_bar_menu_item_separator_thickness'         => absint( $input['utility_bar_menu_item_separator_thickness'] ?? $defaults['utility_bar_menu_item_separator_thickness'] ),
+			'utility_bar_menu_border_style'                     => $this->sanitize_enum( $input['utility_bar_menu_border_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['utility_bar_menu_border_style'] ),
+			'utility_bar_menu_border_thickness'                 => absint( $input['utility_bar_menu_border_thickness'] ?? $defaults['utility_bar_menu_border_thickness'] ),
+			'utility_bar_menu_border_margin_top'                => absint( $input['utility_bar_menu_border_margin_top'] ?? $defaults['utility_bar_menu_border_margin_top'] ),
+			'utility_bar_menu_border_margin_bottom'             => absint( $input['utility_bar_menu_border_margin_bottom'] ?? $defaults['utility_bar_menu_border_margin_bottom'] ),
+			'utility_bar_menu_border_margin_left'               => absint( $input['utility_bar_menu_border_margin_left'] ?? $defaults['utility_bar_menu_border_margin_left'] ),
+			'utility_bar_menu_border_margin_right'              => absint( $input['utility_bar_menu_border_margin_right'] ?? $defaults['utility_bar_menu_border_margin_right'] ),
+			'utility_bar_menu_separator_style'                  => $this->sanitize_enum( $input['utility_bar_menu_separator_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['utility_bar_menu_separator_style'] ),
+			'utility_bar_menu_separator_thickness'              => absint( $input['utility_bar_menu_separator_thickness'] ?? $defaults['utility_bar_menu_separator_thickness'] ),
+			'utility_bar_menu_separator_margin_top'             => absint( $input['utility_bar_menu_separator_margin_top'] ?? $defaults['utility_bar_menu_separator_margin_top'] ),
+			'utility_bar_menu_separator_margin_bottom'          => absint( $input['utility_bar_menu_separator_margin_bottom'] ?? $defaults['utility_bar_menu_separator_margin_bottom'] ),
+			'utility_bar_menu_separator_margin_left'            => absint( $input['utility_bar_menu_separator_margin_left'] ?? $defaults['utility_bar_menu_separator_margin_left'] ),
+			'utility_bar_menu_separator_margin_right'           => absint( $input['utility_bar_menu_separator_margin_right'] ?? $defaults['utility_bar_menu_separator_margin_right'] ),
+			'utility_bar_background_color'                      => $this->sanitize_hex_color_with_default( $input['utility_bar_background_color'] ?? '', $defaults['utility_bar_background_color'] ),
+			'utility_bar_text_color'                            => $this->sanitize_hex_color_with_default( $input['utility_bar_text_color'] ?? '', $defaults['utility_bar_text_color'] ),
+			'utility_bar_menu_hover_color'                      => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_hover_color'] ?? '', $defaults['utility_bar_menu_hover_color'] ),
+			'utility_bar_menu_active_color'                     => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_active_color'] ?? '', $defaults['utility_bar_menu_active_color'] ),
+			'utility_bar_menu_click_color'                      => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_click_color'] ?? '', $defaults['utility_bar_menu_click_color'] ),
+			'utility_bar_menu_text_color'                       => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_text_color'] ?? '', $defaults['utility_bar_menu_text_color'] ),
+			'utility_bar_menu_text_hover_color'                 => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_text_hover_color'] ?? '', $defaults['utility_bar_menu_text_hover_color'] ),
+			'utility_bar_menu_text_click_color'                 => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_text_click_color'] ?? '', $defaults['utility_bar_menu_text_click_color'] ),
+			'utility_bar_menu_separator_color'                  => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_separator_color'] ?? '', $defaults['utility_bar_menu_separator_color'] ),
+			'utility_bar_menu_border_color'                     => $this->sanitize_hex_color_with_default( $input['utility_bar_menu_border_color'] ?? '', $defaults['utility_bar_menu_border_color'] ),
+			'footer_enabled'                                    => ! empty( $input['footer_enabled'] ),
+			'footer_hook_mode'                                  => $footer_hook_mode,
+			'footer_known_hook'                                 => $footer_known_hook,
+			'footer_custom_hook'                                => $footer_custom_hook,
+			'footer_hook'                                       => 'custom' === $footer_hook_mode && $footer_custom_hook ? $footer_custom_hook : $footer_known_hook,
+			'footer_hook_priority'                              => absint( $input['footer_hook_priority'] ?? $defaults['footer_hook_priority'] ),
+			'footer_background_color'                           => $this->sanitize_hex_color_with_default( $input['footer_background_color'] ?? '', $defaults['footer_background_color'] ),
+			'footer_text_color'                                 => $this->sanitize_hex_color_with_default( $input['footer_text_color'] ?? '', $defaults['footer_text_color'] ),
+			'footer_heading_color'                              => $this->sanitize_hex_color_with_default( $input['footer_heading_color'] ?? '', $defaults['footer_heading_color'] ),
+			'footer_link_color'                                 => $this->sanitize_hex_color_with_default( $input['footer_link_color'] ?? '', $defaults['footer_link_color'] ),
+			'footer_link_hover_color'                           => $this->sanitize_hex_color_with_default( $input['footer_link_hover_color'] ?? '', $defaults['footer_link_hover_color'] ),
+			'footer_muted_text_color'                           => $this->sanitize_hex_color_with_default( $input['footer_muted_text_color'] ?? '', $defaults['footer_muted_text_color'] ),
+			'footer_top_text_enabled'                           => ! empty( $input['footer_top_text_enabled'] ),
+			'footer_top_text_heading'                           => sanitize_text_field( $input['footer_top_text_heading'] ?? '' ),
+			'footer_top_text_content'                           => wp_kses_post( $input['footer_top_text_content'] ?? '' ),
+			'footer_logos_enabled'                              => ! empty( $input['footer_logos_enabled'] ),
+			'footer_logos_orientation'                          => $this->sanitize_enum( $input['footer_logos_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['footer_logos_orientation'] ),
+			'footer_logos_alignment'                            => $this->sanitize_enum( $input['footer_logos_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['footer_logos_alignment'] ),
+			'footer_logos_spacing'                              => absint( $input['footer_logos_spacing'] ?? $defaults['footer_logos_spacing'] ),
+			'footer_logos_mobile_carousel'                      => ! empty( $input['footer_logos_mobile_carousel'] ),
+			'footer_logos_max_height'                           => absint( $input['footer_logos_max_height'] ?? $defaults['footer_logos_max_height'] ),
+			'footer_logos_max_total_height'                     => absint( $input['footer_logos_max_total_height'] ?? $defaults['footer_logos_max_total_height'] ),
+			'footer_separator_1_style'                          => $this->sanitize_enum( $input['footer_separator_1_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['footer_separator_1_style'] ),
+			'footer_separator_1_color'                          => $this->sanitize_hex_color_with_default( $input['footer_separator_1_color'] ?? '', $defaults['footer_separator_1_color'] ),
+			'footer_separator_1_thickness'                      => absint( $input['footer_separator_1_thickness'] ?? $defaults['footer_separator_1_thickness'] ),
+			'footer_separator_1_margin_top'                    => absint( $input['footer_separator_1_margin_top'] ?? $defaults['footer_separator_1_margin_top'] ),
+			'footer_separator_1_margin_bottom'                 => absint( $input['footer_separator_1_margin_bottom'] ?? $defaults['footer_separator_1_margin_bottom'] ),
+			'footer_separator_1_hide_mobile'                    => ! empty( $input['footer_separator_1_hide_mobile'] ),
+			'footer_separator_2_style'                          => $this->sanitize_enum( $input['footer_separator_2_style'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['footer_separator_2_style'] ),
+			'footer_separator_2_style_mobile'                   => $this->sanitize_enum( $input['footer_separator_2_style_mobile'] ?? '', array_keys( $this->get_separator_style_options() ), $defaults['footer_separator_2_style_mobile'] ),
+			'footer_separator_2_color'                          => $this->sanitize_hex_color_with_default( $input['footer_separator_2_color'] ?? '', $defaults['footer_separator_2_color'] ),
+			'footer_separator_2_thickness'                      => absint( $input['footer_separator_2_thickness'] ?? $defaults['footer_separator_2_thickness'] ),
+			'footer_separator_2_margin_top'                    => absint( $input['footer_separator_2_margin_top'] ?? $defaults['footer_separator_2_margin_top'] ),
+			'footer_separator_2_margin_bottom'                 => absint( $input['footer_separator_2_margin_bottom'] ?? $defaults['footer_separator_2_margin_bottom'] ),
+			'footer_separator_2_hide_mobile'                    => ! empty( $input['footer_separator_2_hide_mobile'] ),
+			'footer_column_gap'                                 => absint( $input['footer_column_gap'] ?? $defaults['footer_column_gap'] ),
+			'footer_column_2_gap'                               => absint( $input['footer_column_2_gap'] ?? $defaults['footer_column_2_gap'] ),
+			'footer_social_links_below_columns'                 => ! empty( $input['footer_social_links_below_columns'] ),
+			'footer_social_links_orientation'                   => $this->sanitize_enum( $input['footer_social_links_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['footer_social_links_orientation'] ),
+			'footer_social_links_alignment'                     => $this->sanitize_enum( $input['footer_social_links_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['footer_social_links_alignment'] ),
+			'footer_social_links_hide_mobile'                   => ! empty( $input['footer_social_links_hide_mobile'] ),
+			'footer_social_links'                               => $this->sanitize_social_links( $input['footer_social_links'] ?? array() ),
+			'footer_bottom_enabled'                             => ! empty( $input['footer_bottom_enabled'] ),
+			'footer_bottom_show_copyright'                      => ! empty( $input['footer_bottom_show_copyright'] ),
+			'footer_bottom_show_menu'                           => ! empty( $input['footer_bottom_show_menu'] ),
+			'footer_bottom_hide_mobile'                         => ! empty( $input['footer_bottom_hide_mobile'] ),
+			'footer_bottom_copyright_text'                      => sanitize_text_field( $input['footer_bottom_copyright_text'] ?? '' ),
+			'footer_bottom_copyright_text_font_family' 	        => $this->sanitize_enum( $input['footer_bottom_copyright_text_font_family'] ?? $defaults['footer_bottom_copyright_text_font_family'], array_keys( $this->get_font_family_options() ), $defaults['footer_bottom_copyright_text_font_family'] ),
+			'footer_bottom_copyright_text_font_weight'          => absint( $input['footer_bottom_copyright_text_font_weight'] ?? $defaults['footer_bottom_copyright_text_font_weight'] ),
+			'footer_bottom_copyright_text_font_style'           => $this->sanitize_enum( $input['footer_bottom_copyright_text_font_style'] ?? '', array_keys( $this->get_font_style_options() ), $defaults['footer_bottom_copyright_text_font_style'] ),
+			'footer_bottom_copyright_text_font_size'            => absint( $input['footer_bottom_copyright_text_font_size'] ?? $defaults['footer_bottom_copyright_text_font_size'] ),
+			'footer_bottom_copyright_text_line_height'          => absint( $input['footer_bottom_copyright_text_line_height'] ?? $defaults['footer_bottom_copyright_text_line_height'] ),
+			'footer_bottom_copyright_text_transform'            => $this->sanitize_enum( $input['footer_bottom_copyright_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['footer_bottom_copyright_text_transform'] ),
+			'footer_bottom_copyright_text_decoration'           => $this->sanitize_enum( $input['footer_bottom_copyright_text_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['footer_bottom_copyright_text_decoration'] ),
+			'footer_bottom_copyright_text_padding_top'          => absint( $input['footer_bottom_copyright_text_padding_top'] ?? $defaults['footer_bottom_copyright_text_padding_top'] ),
+			'footer_bottom_copyright_text_padding_right'        => absint( $input['footer_bottom_copyright_text_padding_right'] ?? $defaults['footer_bottom_copyright_text_padding_right'] ),
+			'footer_bottom_copyright_text_padding_bottom'       => absint( $input['footer_bottom_copyright_text_padding_bottom'] ?? $defaults['footer_bottom_copyright_text_padding_bottom'] ),
+			'footer_bottom_copyright_text_padding_left'         => absint( $input['footer_bottom_copyright_text_padding_left'] ?? $defaults['footer_bottom_copyright_text_padding_left'] ),
+			'footer_bottom_copyright_links_font_family' 	    => $this->sanitize_enum( $input['footer_bottom_copyright_links_font_family'] ?? $defaults['footer_bottom_copyright_links_font_family'], array_keys( $this->get_font_family_options() ), $defaults['footer_bottom_copyright_links_font_family'] ),
+			'footer_bottom_copyright_links_font_weight'         => absint( $input['footer_bottom_copyright_links_font_weight'] ?? $defaults['footer_bottom_copyright_links_font_weight'] ),
+			'footer_bottom_copyright_links_font_style'          => $this->sanitize_enum( $input['footer_bottom_copyright_links_font_style'] ?? '', array_keys( $this->get_font_style_options() ), $defaults['footer_bottom_copyright_links_font_style'] ),
+			'footer_bottom_copyright_links_font_size'           => absint( $input['footer_bottom_copyright_links_font_size'] ?? $defaults['footer_bottom_copyright_links_font_size'] ),
+			'footer_bottom_copyright_links_line_height'         => absint( $input['footer_bottom_copyright_links_line_height'] ?? $defaults['footer_bottom_copyright_links_line_height'] ),
+			'footer_bottom_copyright_links_transform'           => $this->sanitize_enum( $input['footer_bottom_copyright_links_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['footer_bottom_copyright_links_transform'] ),
+			'footer_bottom_copyright_links_decoration'          => $this->sanitize_enum( $input['footer_bottom_copyright_links_decoration'] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults['footer_bottom_copyright_links_decoration'] ),
+			'footer_bottom_copyright_links_padding_top'         => absint( $input['footer_bottom_copyright_links_padding_top'] ?? $defaults['footer_bottom_copyright_links_padding_top'] ),
+			'footer_bottom_copyright_links_padding_right'       => absint( $input['footer_bottom_copyright_links_padding_right'] ?? $defaults['footer_bottom_copyright_links_padding_right'] ),
+			'footer_bottom_copyright_links_padding_bottom'      => absint( $input['footer_bottom_copyright_links_padding_bottom'] ?? $defaults['footer_bottom_copyright_links_padding_bottom'] ),
+			'footer_bottom_copyright_links_padding_left'        => absint( $input['footer_bottom_copyright_links_padding_left'] ?? $defaults['footer_bottom_copyright_links_padding_left'] ),
+			'footer_give_social_gap'                            => absint( $input['footer_give_social_gap'] ?? $defaults['footer_give_social_gap'] ),
+			'footer_give_button_enabled'                        => ! empty( $input['footer_give_button_enabled'] ),
+			'footer_give_button_hide_mobile'                    => ! empty( $input['footer_give_button_hide_mobile'] ),
+			'footer_give_button_alignment'                      => $this->sanitize_enum( $input['footer_give_button_alignment'] ?? '', array_keys( $this->get_alignment_options() ), $defaults['footer_give_button_alignment'] ),
+			'footer_give_button_orientation'                    => $this->sanitize_enum( $input['footer_give_button_orientation'] ?? '', array_keys( $this->get_orientation_options() ), $defaults['footer_give_button_orientation'] ),
+			'footer_give_button_text'                           => sanitize_text_field( $input['footer_give_button_text'] ?? $defaults['footer_give_button_text'] ),
+			'footer_give_button_url'                            => esc_url_raw( $input['footer_give_button_url'] ?? $defaults['footer_give_button_url'] ),
+			'footer_give_button_background_color'               => $this->sanitize_hex_color_with_default( $input['footer_give_button_background_color'] ?? '', $defaults['footer_give_button_background_color'] ),
+			'footer_give_button_hover_color'                    => $this->sanitize_hex_color_with_default( $input['footer_give_button_hover_color'] ?? '', $defaults['footer_give_button_hover_color'] ),
+			'footer_give_button_text_color'                     => $this->sanitize_hex_color_with_default( $input['footer_give_button_text_color'] ?? '', $defaults['footer_give_button_text_color'] ),
+			'footer_give_button_text_hover_color'               => $this->sanitize_hex_color_with_default( $input['footer_give_button_text_hover_color'] ?? '', $defaults['footer_give_button_text_hover_color'] ),
+			'footer_give_button_new_tab'                        => ! empty( $input['footer_give_button_new_tab'] ),
+			'footer_give_button_font_family'                    => $this->sanitize_enum( $input['footer_give_button_font_family'] ?? $defaults['footer_give_button_font_family'], array_keys( $this->get_font_family_options() ), $defaults['footer_give_button_font_family'] ),
+			'footer_give_button_font_weight'                    => absint( $input['footer_give_button_font_weight'] ?? $defaults['footer_give_button_font_weight'] ),
+			'footer_give_button_font_style'                     => $this->sanitize_enum( $input['footer_give_button_font_style'] ?? $defaults['footer_give_button_font_style'], array_keys( $this->get_font_style_options() ), $defaults['footer_give_button_font_style'] ),
+			'footer_give_button_font_size'                      => absint( $input['footer_give_button_font_size'] ?? $defaults['footer_give_button_font_size'] ),
+			'footer_give_button_font_line_height'               => absint( $input['footer_give_button_font_line_height'] ?? $defaults['footer_give_button_font_line_height'] ),
+			'footer_give_button_text_transform'                 => $this->sanitize_enum( $input['footer_give_button_text_transform'] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults['footer_give_button_text_transform'] ),
+			'footer_give_button_border_color'                   => $this->sanitize_hex_color_with_default( $input['footer_give_button_border_color'] ?? '', $defaults['footer_give_button_border_color'] ),
+			'footer_give_button_border_thickness'               => absint( $input['footer_give_button_border_thickness'] ?? $defaults['footer_give_button_border_thickness'] ),
+			'footer_give_button_border_radius'                  => absint( $input['footer_give_button_border_radius'] ?? $defaults['footer_give_button_border_radius'] ),
+			'footer_give_button_border_style'                   => $this->sanitize_enum( $input['footer_give_button_border_style'] ?? '', $this->get_border_style_options(), $defaults['footer_give_button_border_style'] ),
+			'footer_give_button_text_decoration'                => $this->sanitize_enum( $input['footer_give_button_text_decoration'] ?? '', $this->get_text_decoration_style_options(), $defaults['footer_give_button_text_decoration'] ),
+			'footer_give_button_below_columns'                  => ! empty( $input['footer_give_button_below_columns'] ),
+			'footer_give_button_padding_top' 	                => absint( $input['footer_give_button_padding_top'] ?? $defaults['footer_give_button_padding_top'] ),
+			'footer_give_button_padding_right'                  => absint( $input['footer_give_button_padding_right'] ?? $defaults['footer_give_button_padding_right'] ),
+			'footer_give_button_padding_bottom'                 => absint( $input['footer_give_button_padding_bottom'] ?? $defaults['footer_give_button_padding_bottom'] ),
+			'footer_give_button_padding_left'                   => absint( $input['footer_give_button_padding_left'] ?? $defaults['footer_give_button_padding_left'] ),
+			'excluded_post_ids'                                 => $this->sanitize_line_delimited_absint_list( $input['excluded_post_ids'] ?? array() ),
+			'excluded_post_types'                               => $this->sanitize_line_delimited_key_list( $input['excluded_post_types'] ?? array() ),
+			'excluded_templates'                                => $this->sanitize_line_delimited_text_list( $input['excluded_templates'] ?? array() ),
+			'exclude_front_page'                                => ! empty( $input['exclude_front_page'] ),
+			'exclude_posts_page'                                => ! empty( $input['exclude_posts_page'] ),
+			'exclude_search'                                    => ! empty( $input['exclude_search'] ),
+			'exclude_404'                                       => ! empty( $input['exclude_404'] ),
 		);
 
+		// $this->add_mobile_back_button_icon_mode_warning( $mobile_back_button_icon_mode, $mobile_back_button_icon_glyph_raw );
+
 		for ( $logo_index = 1; $logo_index <= 3; $logo_index++ ) {
-			$sanitized[ 'footer_logo_' . $logo_index . '_type' ]         = $this->sanitize_enum( $input[ 'footer_logo_' . $logo_index . '_type' ] ?? '', array_keys( $this->get_footer_logo_type_options() ), $defaults[ 'footer_logo_' . $logo_index . '_type' ] );
-			$sanitized[ 'footer_logo_' . $logo_index . '_image_url' ]    = esc_url_raw( (string) ( $input[ 'footer_logo_' . $logo_index . '_image_url' ] ?? '' ) );
-			$sanitized[ 'footer_logo_' . $logo_index . '_text_upper' ]   = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_text_upper' ] ?? '' );
-			$sanitized[ 'footer_logo_' . $logo_index . '_text_lower' ]   = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_text_lower' ] ?? '' );
-			$sanitized[ 'footer_logo_' . $logo_index . '_link_url' ]     = esc_url_raw( (string) ( $input[ 'footer_logo_' . $logo_index . '_link_url' ] ?? '' ) );
-			$sanitized[ 'footer_logo_' . $logo_index . '_link_new_tab' ] = ! empty( $input[ 'footer_logo_' . $logo_index . '_link_new_tab' ] );
-			$sanitized[ 'footer_logo_' . $logo_index . '_hide_mobile' ]  = ! empty( $input[ 'footer_logo_' . $logo_index . '_hide_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_type' ]                       = $this->sanitize_enum( $input[ 'footer_logo_' . $logo_index . '_type' ] ?? '', array_keys( $this->get_footer_logo_type_options() ), $defaults[ 'footer_logo_' . $logo_index . '_type' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_image_url' ]                  = esc_url_raw( (string) ( $input[ 'footer_logo_' . $logo_index . '_image_url' ] ?? '' ) );
+			$sanitized[ 'footer_logo_' . $logo_index . '_text_upper' ]                 = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_text_upper' ] ?? '' );
+			$sanitized[ 'footer_logo_' . $logo_index . '_text_lower' ]                 = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_text_lower' ] ?? '' );
+			$sanitized[ 'footer_logo_' . $logo_index . '_link_url' ]                   = esc_url_raw( (string) ( $input[ 'footer_logo_' . $logo_index . '_link_url' ] ?? '' ) );
+			$sanitized[ 'footer_logo_' . $logo_index . '_link_new_tab' ]               = ! empty( $input[ 'footer_logo_' . $logo_index . '_link_new_tab' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_hide_mobile' ]                = ! empty( $input[ 'footer_logo_' . $logo_index . '_hide_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_width' ]                      = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_width' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_width' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_width_med_mobile' ]           = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_width_med_mobile' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_width_med_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_width_small_mobile' ]         = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_width_small_mobile' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_width_small_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_height' ]                     = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_height' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_height' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_height_med_mobile' ]          = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_height_med_mobile' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_height_med_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_height_small_mobile' ]        = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_height_small_mobile' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_height_small_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_aspect_ratio' ]               = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_aspect_ratio' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_aspect_ratio' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_aspect_ratio_med_mobile' ]    = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_aspect_ratio_med_mobile' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_aspect_ratio_med_mobile' ] );
+			$sanitized[ 'footer_logo_' . $logo_index . '_aspect_ratio_small_mobile' ]  = sanitize_text_field( $input[ 'footer_logo_' . $logo_index . '_aspect_ratio_small_mobile' ] ?? $defaults[ 'footer_logo_' . $logo_index . '_aspect_ratio_small_mobile' ] );
 		}
 
 		for ( $column_index = 1; $column_index <= 3; $column_index++ ) {
 			$sanitized[ 'footer_column_' . $column_index . '_mode' ]                    = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_mode' ] ?? '', array_keys( $this->get_footer_column_mode_options() ), $defaults[ 'footer_column_' . $column_index . '_mode' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_alignment' ]               = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_alignment' ] ?? '', array_keys( $this->get_alignment_options() ), $defaults[ 'footer_column_' . $column_index . '_alignment' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_width' ]                   = absint( $input[ 'footer_column_' . $column_index . '_width' ] ?? $defaults[ 'footer_column_' . $column_index . '_width' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_hide_mobile' ]             = ! empty( $input[ 'footer_column_' . $column_index . '_hide_mobile' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_copyright_enabled' ]       = ! empty( $input[ 'footer_column_' . $column_index . '_copyright_enabled' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_content' ]                 = wp_kses_post( $input[ 'footer_column_' . $column_index . '_content' ] ?? '' );
+			$sanitized[ 'footer_column_' . $column_index . '_content_font_family' ]     = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_content_font_family' ] ?? $defaults[ 'footer_column_' . $column_index . '_content_font_family' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_content_font_weight' ]     = absint( $input[ 'footer_column_' . $column_index . '_content_font_weight' ] ?? $defaults[ 'footer_column_' . $column_index . '_content_font_weight' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_content_font_style' ]      = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_content_font_style' ] ?? $defaults[ 'footer_column_' . $column_index . '_content_font_style' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_content_font_size' ]       = absint( $input[ 'footer_column_' . $column_index . '_content_font_size' ] ?? $defaults[ 'footer_column_' . $column_index . '_content_font_size' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_shortcode' ]               = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_shortcode' ] ?? '' );
 			$sanitized[ 'footer_column_' . $column_index . '_heading' ]                 = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_heading' ] ?? '' );
+			$sanitized[ 'footer_column_' . $column_index . '_heading_2' ]               = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_heading_2' ] ?? '' );
 			$sanitized[ 'footer_column_' . $column_index . '_heading_alignment' ]       = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_heading_alignment' ] ?? '', array_keys( $this->get_alignment_options() ), $defaults[ 'footer_column_' . $column_index . '_heading_alignment' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_heading_text_transform' ]  = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_heading_text_transform' ] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults[ 'footer_column_' . $column_index . '_heading_text_transform' ] );
 			$sanitized[ 'footer_column_' . $column_index . '_heading_text_decoration' ] = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_heading_text_decoration' ] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults[ 'footer_column_' . $column_index . '_heading_text_decoration' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_font_family' ]        = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_menu_font_family' ] ?? $defaults[ 'footer_column_' . $column_index . '_menu_font_family' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_font_weight' ]        = absint( $input[ 'footer_column_' . $column_index . '_menu_font_weight' ] ?? $defaults[ 'footer_column_' . $column_index . '_menu_font_weight' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_font_style' ]         = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_menu_font_style' ] ?? $defaults[ 'footer_column_' . $column_index . '_menu_font_style' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_font_size' ]          = absint( $input[ 'footer_column_' . $column_index . '_menu_font_size' ] ?? $defaults[ 'footer_column_' . $column_index . '_menu_font_size' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_text_transform' ]     = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_menu_text_transform' ] ?? '', array_keys( $this->get_text_transform_style_options() ), $defaults[ 'footer_column_' . $column_index . '_menu_text_transform' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_text_decoration' ]    = $this->sanitize_enum( $input[ 'footer_column_' . $column_index . '_menu_text_decoration' ] ?? '', array_keys( $this->get_text_decoration_style_options() ), $defaults[ 'footer_column_' . $column_index . '_menu_text_decoration' ] );
+			$sanitized[ 'footer_column_' . $column_index . '_menu_line_height' ]        = sanitize_text_field( $input[ 'footer_column_' . $column_index . '_menu_line_height' ] ?? $defaults[ 'footer_column_' . $column_index . '_menu_line_height' ] );
 		}
 
 		return $sanitized;
@@ -1481,12 +2206,52 @@ class Settings {
 			'header_school_name',
 			'header_text_main',
 			'header_text_subtext',
+			'header_school_name_text_decoration',
 			'header_school_name_text_transform',
+			'header_school_name_font_family',
+			'header_school_name_font_weight',
+			'header_school_name_font_style',
+			'header_school_name_font_size',
+			'header_mobile_school_name_font_size',
+			'header_school_name_line_height',
+			'header_school_name_line_height_small_mobile',
+			'header_school_name_padding_top',
+			'header_school_name_padding_right',
+			'header_school_name_padding_bottom',
+			'header_school_name_padding_left',
+			'header_site_name_text_decoration',
 			'header_site_name_text_transform',
+			'header_site_name_font_family',
+			'header_site_name_font_weight',
+			'header_site_name_font_style',
+			'header_site_name_font_size',
+			'header_mobile_site_name_font_size',
+			'header_site_name_line_height',
+			'header_site_name_line_height_small_mobile',
+			'header_site_name_padding_top',
+			'header_site_name_padding_right',
+			'header_site_name_padding_bottom',
+			'header_site_name_padding_left',
+			'header_site_description_text_decoration',
 			'header_site_description_text_transform',
+			'header_site_description_font_family',
+			'header_site_description_font_weight',
+			'header_site_description_font_style',
+			'header_site_description_font_size',
+			'header_mobile_site_description_font_size',
+			'header_site_description_line_height',
+			'header_site_description_line_height_small_mobile',
+			'header_site_description_padding_top',
+			'header_site_description_padding_right',
+			'header_site_description_padding_bottom',
+			'header_site_description_padding_left',
 			'header_separator_style',
 			'header_separator_thickness',
 			'header_separator_hide_mobile',
+			'header_separator_padding_top',
+			'header_separator_padding_right',
+			'header_separator_padding_bottom',
+			'header_separator_padding_left',
 			'header_text_links_enabled',
 			'header_main_menu_enabled',
 			'header_navigation_font_family',
@@ -1499,14 +2264,27 @@ class Settings {
 			'header_navigation_item_padding_right',
 			'header_navigation_item_padding_bottom',
 			'header_navigation_item_padding_left',
+			'header_submenu_navigation_min_width',
 			'header_submenu_navigation_item_padding_top',
 			'header_submenu_navigation_item_padding_right',
 			'header_submenu_navigation_item_padding_bottom',
 			'header_submenu_navigation_item_padding_left',
+			'header_mobile_navigation_min_width',
 			'header_mobile_navigation_item_padding_top',
 			'header_mobile_navigation_item_padding_right',
 			'header_mobile_navigation_item_padding_bottom',
 			'header_mobile_navigation_item_padding_left',
+			'header_mobile_menu_level_two_placement',
+			'header_mobile_menu_level_two_width',
+			'header_mobile_menu_level_two_item_padding_top',
+			'header_mobile_menu_level_two_item_padding_right',
+			'header_mobile_menu_level_two_item_padding_bottom',
+			'header_mobile_menu_level_two_item_padding_left',
+			'header_mobile_back_button_text',
+			// 'header_mobile_back_button_icon_mode',
+			// 'header_mobile_back_button_icon_glyph',
+			// 'header_mobile_back_button_icon_family',
+			// 'header_mobile_back_button_icon_pack_font_awesome',
 			'header_special_button_enabled',
 			'header_special_button_text',
 			'header_special_button_url',
@@ -1531,11 +2309,25 @@ class Settings {
 			'header_bottom_mobile_mode',
 			'display_site_search_enabled',
 			'display_site_search_mobile_enabled',
-			'site_search_inline_with_nav',
-			'site_search_inline_with_header',
-			'site_search_placeholder_text',
+			'display_site_search_inline_with_nav',
+			'display_site_search_inline_with_header',
+			'header_site_search_border_thickness',
+			'header_site_search_border_radius_top_left',
+			'header_site_search_border_radius_top_right',
+			'header_site_search_border_radius_bottom_left',
+			'header_site_search_border_radius_bottom_right',
+			'header_site_search_border_style',
+			'header_site_search_placeholder_text',
+			'header_site_search_text_button_gap',
 			'header_search_icon_enabled',
 			'header_search_button_text',
+			'header_site_search_button_border_thickness',
+			'header_site_search_button_border_radius_top_left',
+			'header_site_search_button_border_radius_top_right',
+			'header_site_search_button_border_radius_bottom_left',
+			'header_site_search_button_border_radius_bottom_right',
+			'header_site_search_button_border_style',
+			'header_give_button_enabled',
 			'header_give_button_text',
 			'header_give_button_url',
 			'header_give_button_new_tab',
@@ -1575,17 +2367,39 @@ class Settings {
 			'header_separator_color',
 			'header_bottom_background_color',
 			'header_bottom_text_color',
+			'header_bottom_text_hover_color',
+			'header_bottom_text_active_color',
+			'header_bottom_text_click_color',
+			'header_bottom_hover_color',
+			'header_mobile_menu_indicator_color',
+			'header_mobile_menu_active_indicator_color',
 			'header_mobile_menu_text_color',
+			'header_mobile_menu_text_hover_color',
+			'header_mobile_menu_text_click_color',
 			'header_mobile_menu_hover_color',
 			'header_mobile_menu_background_color',
+			'header_submenu_menu_indicator_color',
+			'header_submenu_menu_background_color',
+			'header_submenu_menu_hover_color',
+			'header_submenu_menu_text_color',
+			'header_submenu_menu_text_hover_color',
 			'header_give_button_background_color',
 			'header_give_button_hover_color',
 			'header_give_button_text_color',
+			'header_give_button_text_hover_color',
 			'header_give_button_border_color',
 			'header_special_button_background_color',
 			'header_special_button_hover_color',
 			'header_special_button_text_color',
+			'header_special_button_text_hover_color',
 			'header_special_button_border_color',
+			'header_site_search_border_color',
+			'header_site_search_background_color',
+			'header_site_search_button_background_color',
+			'header_site_search_button_hover_color',
+			'header_site_search_button_text_color',
+			'header_site_search_button_text_hover_color',
+			'header_site_search_button_border_color',
 			'utility_bar_background_color',
 			'utility_bar_text_color',
 			'footer_background_color',
@@ -1599,6 +2413,7 @@ class Settings {
 			'footer_give_button_background_color',
 			'footer_give_button_hover_color',
 			'footer_give_button_text_color',
+			'footer_give_button_text_hover_color',
 			'footer_give_button_border_color',
 		);
 
@@ -1619,11 +2434,15 @@ class Settings {
 			'footer_logos_max_total_height',
 			'footer_separator_1_style',
 			'footer_separator_1_thickness',
+			'footer_separator_1_margin_top',
+			'footer_separator_1_margin_bottom',
 			'footer_separator_1_hide_mobile',
 			'footer_separator_2_style',
 			'footer_separator_2_style_mobile',
 			'footer_separator_2_color',
 			'footer_separator_2_thickness',
+			'footer_separator_2_margin_top',
+			'footer_separator_2_margin_bottom',
 			'footer_separator_2_hide_mobile',
 			'footer_column_gap',
 			'footer_column_2_gap',
@@ -1637,6 +2456,29 @@ class Settings {
 			'footer_bottom_show_menu',
 			'footer_bottom_hide_mobile',
 			'footer_bottom_copyright_text',
+			'footer_bottom_copyright_text_font_family',
+			'footer_bottom_copyright_text_font_weight',
+			'footer_bottom_copyright_text_font_style',
+			'footer_bottom_copyright_text_font_size',
+			'footer_bottom_copyright_text_line_height',
+			'footer_bottom_copyright_text_transform',
+			'footer_bottom_copyright_text_decoration',
+			'footer_bottom_copyright_text_padding_top',
+			'footer_bottom_copyright_text_padding_right',
+			'footer_bottom_copyright_text_padding_bottom',
+			'footer_bottom_copyright_text_padding_left',
+			'footer_bottom_copyright_links_font_family',
+			'footer_bottom_copyright_links_font_weight',
+			'footer_bottom_copyright_links_font_style',
+			'footer_bottom_copyright_links_font_size',
+			'footer_bottom_copyright_links_line_height',
+			'footer_bottom_copyright_links_transform',
+			'footer_bottom_copyright_links_decoration',
+			'footer_bottom_copyright_links_padding_top',
+			'footer_bottom_copyright_links_padding_right',
+			'footer_bottom_copyright_links_padding_bottom',
+			'footer_bottom_copyright_links_padding_left',
+			'footer_give_button_enabled',
 			'footer_give_button_hide_mobile',
 			'footer_give_button_text',
 			'footer_give_button_url',
@@ -1669,19 +2511,40 @@ class Settings {
 			$footer_fields[] = 'footer_logo_' . $logo_index . '_link_url';
 			$footer_fields[] = 'footer_logo_' . $logo_index . '_link_new_tab';
 			$footer_fields[] = 'footer_logo_' . $logo_index . '_hide_mobile';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_width';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_width_med_mobile';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_width_small_mobile';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_height';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_height_med_mobile';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_height_small_mobile';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_aspect_ratio';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_aspect_ratio_med_mobile';
+			$footer_fields[] = 'footer_logo_' . $logo_index . '_aspect_ratio_small_mobile';
 		}
 
 		for ( $column_index = 1; $column_index <= 3; $column_index++ ) {
 			$footer_fields[] = 'footer_column_' . $column_index . '_mode';
+			$footer_fields[] = 'footer_column_' . $column_index . '_alignment';
 			$footer_fields[] = 'footer_column_' . $column_index . '_width';
 			$footer_fields[] = 'footer_column_' . $column_index . '_hide_mobile';
 			$footer_fields[] = 'footer_column_' . $column_index . '_copyright_enabled';
 			$footer_fields[] = 'footer_column_' . $column_index . '_content';
+			$footer_fields[] = 'footer_column_' . $column_index . '_content_font_family';
+			$footer_fields[] = 'footer_column_' . $column_index . '_content_font_weight';
+			$footer_fields[] = 'footer_column_' . $column_index . '_content_font_style';
+			$footer_fields[] = 'footer_column_' . $column_index . '_content_font_size';
 			$footer_fields[] = 'footer_column_' . $column_index . '_shortcode';
 			$footer_fields[] = 'footer_column_' . $column_index . '_heading';
 			$footer_fields[] = 'footer_column_' . $column_index . '_heading_alignment';
 			$footer_fields[] = 'footer_column_' . $column_index . '_heading_text_transform';
 			$footer_fields[] = 'footer_column_' . $column_index . '_heading_text_decoration';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_font_family';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_font_weight';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_font_style';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_font_size';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_text_transform';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_text_decoration';
+			$footer_fields[] = 'footer_column_' . $column_index . '_menu_line_height';
 		}
 
 		$page_fields = array(
@@ -1714,12 +2577,15 @@ class Settings {
 			'header_text_links_enabled',
 			'header_main_menu_enabled',
 			'header_bottom_nav_enabled',
+			'header_bottom_mobile_mode',
+			'header_give_button_enabled',
+			'header_special_button_enabled',
 			'header_special_button_hide_mobile',
 			'header_special_button_enabled',
 			'display_site_search_enabled',
 			'display_site_search_mobile_enabled',
-			'site_search_inline_with_nav',
-			'site_search_inline_with_header',
+			'display_site_search_inline_with_nav',
+			'display_site_search_inline_with_header',
 			'header_search_icon_enabled',
 			'header_give_button_new_tab',
 			'header_special_button_new_tab',
@@ -1747,6 +2613,7 @@ class Settings {
 			'footer_column_1_hide_mobile',
 			'footer_column_2_hide_mobile',
 			'footer_column_3_hide_mobile',
+			'footer_give_button_enabled',
 			'footer_give_button_new_tab',
 			'footer_give_button_below_columns',
 			'footer_give_button_hide_mobile',
@@ -2189,18 +3056,22 @@ class Settings {
 	 */
 	private function get_header_core_variant_options(): array {
 		return array(
-			'image-logo'  => __( 'Image logo', 'sog-unc-rebrand' ),
-			'simple-text' => __( 'Simple text', 'sog-unc-rebrand' ),
-			'simple-text-vertical' => __( 'Simple text - Vertical w/o line', 'sog-unc-rebrand' ),
-			'simple-text-vertical-line' => __( 'Simple text - Vertical w/ line: has site description or tagline below school name', 'sog-unc-rebrand' ),
-			'simple-text-vertical-line-alternate' => __( 'Simple text - Vertical w/ line alternate: has site description or tagline above school name', 'sog-unc-rebrand' ),
-			'simple-text-vertical-social-no-nav' => __( 'Simple text - Vertical w/ social media and no navigation', 'sog-unc-rebrand' ),
-			'simple-text-vertical-no-nav' => __( 'Simple text - Vertical no navigation', 'sog-unc-rebrand' ),
-			'simple-text-vertical-social-give' => __( 'Simple text - Vertical w/ social media and give button', 'sog-unc-rebrand' ),
-			'simple-text-vertical-search' => __( 'Simple text - Vertical w/ search', 'sog-unc-rebrand' ),
-			'simple-text-vertical-nav-search' => __( 'Simple text - Vertical navigation w/ search', 'sog-unc-rebrand' ),
-			'simple-text-vertical-nav-inline-school-name' => __( 'Simple text - Vertical navigation inline with school name', 'sog-unc-rebrand' ),
-			'simple-text-vertical-line-special-btn' => __( 'Simple text - Vertical w/ line line and special button inline with the navigation and the site name', 'sog-unc-rebrand' ),
+			'image-logo'                                                 => __( 'Image logo', 'sog-unc-rebrand' ),
+			'simple-text'                                                => __( 'Simple text', 'sog-unc-rebrand' ),
+			'simple-text-vertical'                                       => __( 'Simple text - Vertical w/o line: with the site name then school and description [has school name, site name, site description and the menu both for desktop and mobile]', 'sog-unc-rebrand' ),
+			'simple-text-vertical-no-nav'                                => __( 'Simple text - Vertical w/o line: no navigation or line', 'sog-unc-rebrand' ),
+			'simple-text-vertical-nav-search'                            => __( 'Simple text - Vertical w/o line: navigation w/ search and no line', 'sog-unc-rebrand' ),
+			'simple-text-vertical-nav-inline-school-name'                => __( 'Simple text - Vertical w/o line: navigation inline with school name', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line'                                  => __( 'Simple text - Vertical w/ line: has site description or tagline below school name', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line-site-name-school-name-tagline'    => __( 'Simple text - Vertical w/ line: has site name above school name and description/tagline below', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line-alternate'                        => __( 'Simple text - Vertical w/ line: alternate has site name and description or tagline above school name', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line-double-search'                    => __( 'Simple text - Vertical w/ line: has school name above site name / tagline and both search options. ', 'sog-unc-rebrand' ),
+			'simple-text-vertical-social-no-nav'                         => __( 'Simple text - Vertical w/ line: social media and no navigation', 'sog-unc-rebrand' ),
+			'simple-text-vertical-social-give'                           => __( 'Simple text - Vertical w/ line: social media and give button', 'sog-unc-rebrand' ),
+			'simple-text-vertical-search'                                => __( 'Simple text - Vertical w/ line: search', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line-special-btn'                      => __( 'Simple text - Vertical w/ line: inline with the navigation and the site name (special btn)', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line-nav-inline-site-name'             => __( 'Simple text - Vertical w/ line: navigation inline with site name', 'sog-unc-rebrand' ),
+			'simple-text-vertical-line-tagline-school-name-site-name'    => __( 'Simple text - Vertical w/ line: tagline, school, line, then site name (description/tagline and school name field shows above the site name)', 'sog-unc-rebrand' ),
 		);
 	}
 
@@ -2274,10 +3145,46 @@ class Settings {
 	 */
 	private function get_separator_style_options(): array {
 		return array(
-			'none'  => __( 'None', 'sog-unc-rebrand' ),
+			'none'   => __( 'None', 'sog-unc-rebrand' ),
 			'solid'  => __( 'Solid', 'sog-unc-rebrand' ),
 			'dotted' => __( 'Dotted', 'sog-unc-rebrand' ),
 			'dashed' => __( 'Dashed', 'sog-unc-rebrand' ),
+		);
+	}
+
+	/**
+	 * Get font family style options.
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_font_family_options(): array {
+		return array(
+			''               => __( 'Default / inherited', 'sog-unc-rebrand' ),
+			'Open Sans'      => __( 'Open Sans', 'sog-unc-rebrand' ),
+			'Montserrat'     => __( 'Montserrat', 'sog-unc-rebrand' ),
+			'Poppins'        => __( 'Poppins', 'sog-unc-rebrand' ),
+			'PT Sans'        => __( 'PT Sans', 'sog-unc-rebrand' ),
+			'Source Serif 4' => __( 'Source Serif 4', 'sog-unc-rebrand' ),
+		);
+	}
+
+	/**
+	 * Get font style options.
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_font_style_options(): array {
+		return array(
+			''              => __( 'Default / inherited', 'sog-unc-rebrand' ),
+			'normal'        => __( 'Normal', 'sog-unc-rebrand' ),
+			'italic'        => __( 'Italic', 'sog-unc-rebrand' ),
+			'oblique'       => __( 'Oblique', 'sog-unc-rebrand' ),
+			'initial'       => __( 'Initial', 'sog-unc-rebrand' ),
+			'revert'        => __( 'Revert', 'sog-unc-rebrand' ),
+			'revert-layer'  => __( 'Revert Layer', 'sog-unc-rebrand' ),
+			'unset'         => __( 'Unset', 'sog-unc-rebrand' ),
+			'medium'        => __( 'Medium', 'sog-unc-rebrand' ),
+			'semi-bold'     => __( 'Semi Bold', 'sog-unc-rebrand' ),
 		);
 	}
 
@@ -2309,9 +3216,9 @@ class Settings {
 	 */
 	private function get_text_decoration_style_options(): array {
 		return array(
-			'none'       => __( 'None', 'sog-unc-rebrand' ),
-			'underline'  => __( 'Underline', 'sog-unc-rebrand' ),
-			'overline'   => __( 'Overline', 'sog-unc-rebrand' ),
+			'none'         => __( 'None', 'sog-unc-rebrand' ),
+			'underline'    => __( 'Underline', 'sog-unc-rebrand' ),
+			'overline'     => __( 'Overline', 'sog-unc-rebrand' ),
 			'line-through' => __( 'Line Through', 'sog-unc-rebrand' ),
 		);
 	}
@@ -2323,15 +3230,91 @@ class Settings {
 	 */
 	private function get_border_style_options(): array {
 		return array(
-			'none'   => __( 'None', 'sog-unc-rebrand' ),
-			'solid'  => __( 'Solid', 'sog-unc-rebrand' ),
-			'dotted' => __( 'Dotted', 'sog-unc-rebrand' ),
-			'dashed' => __( 'Dashed', 'sog-unc-rebrand' ),
-			'double' => __( 'Double', 'sog-unc-rebrand' ),
-			'inset'  => __( 'Inset', 'sog-unc-rebrand' ),
-			'outset' => __( 'Outset', 'sog-unc-rebrand' ),
+			'none'         => __( 'None', 'sog-unc-rebrand' ),
+			'solid'        => __( 'Solid', 'sog-unc-rebrand' ),
+			'dotted'       => __( 'Dotted', 'sog-unc-rebrand' ),
+			'dashed'       => __( 'Dashed', 'sog-unc-rebrand' ),
+			'double'       => __( 'Double', 'sog-unc-rebrand' ),
+			'inset'        => __( 'Inset', 'sog-unc-rebrand' ),
+			'outset'       => __( 'Outset', 'sog-unc-rebrand' ),
+			'ridge'        => __( 'Ridge', 'sog-unc-rebrand' ),
+			'groove'       => __( 'Groove', 'sog-unc-rebrand' ),
+			'hidden'       => __( 'Hidden', 'sog-unc-rebrand' ),
+			'initial'      => __( 'Initial', 'sog-unc-rebrand' ),
+			'inherit'      => __( 'Inherit', 'sog-unc-rebrand' ),
+			'revert'       => __( 'Revert', 'sog-unc-rebrand' ),
+			'revert-layer' => __( 'Revert Layer', 'sog-unc-rebrand' ),
+			'unset'        => __( 'Unset', 'sog-unc-rebrand'	),
 		);
 	}
+
+	/**
+	 * Get mobile menu level two placement options.
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_mobile_menu_level_two_placement_options(): array {
+		return array(
+			'none'         => __( 'None', 'sog-unc-rebrand' ),
+			'left'         => __( 'Left', 'sog-unc-rebrand' ),
+			'right'        => __( 'Right', 'sog-unc-rebrand' ),
+		);
+	}
+
+	/**
+	 * Get icon-family choices for the mobile back button glyph.
+	 *
+	 * @return array<string, string>
+	 */
+	// private function get_mobile_back_button_icon_family_options(): array {
+	// 	return array(
+	// 		'none'            => __( 'No icon font (plain text/icon)', 'sog-unc-rebrand' ),
+	// 		'font-awesome'    => __( 'Font Awesome', 'sog-unc-rebrand' ),
+	// 		'bootstrap-icons' => __( 'Bootstrap Icons', 'sog-unc-rebrand' ),
+	// 		'material-icons'  => __( 'Material Icons', 'sog-unc-rebrand' ),
+	// 	);
+	// }
+
+	/**
+	 * Get icon mode choices for the mobile back button value.
+	 *
+	 * @return array<string, string>
+	 */
+	// private function get_mobile_back_button_icon_mode_options(): array {
+	// 	return array(
+	// 		'unicode' => __( 'Unicode', 'sog-unc-rebrand' ),
+	// 		'html'    => __( 'HTML', 'sog-unc-rebrand' ),
+	// 		'glyph'   => __( 'Glyph/Text', 'sog-unc-rebrand' ),
+	// 		'svg'     => __( 'SVG', 'sog-unc-rebrand' ),
+	// 	);
+	// }
+
+	/**
+	 * Get Font Awesome icon pack choices for mobile back button.
+	 *
+	 * @return array<string, string>
+	 */
+	// private function get_mobile_back_button_icon_pack_font_awesome_options(): array {
+	// 	return array(
+	// 		'brands'         => __( 'Brands', 'sog-unc-rebrand' ),
+	// 		'chisel'         => __( 'Chisel', 'sog-unc-rebrand' ),
+	// 		'classic'        => __( 'Classic', 'sog-unc-rebrand' ),
+	// 		'duotone'        => __( 'Duotone', 'sog-unc-rebrand' ),
+	// 		'etch'           => __( 'Etch', 'sog-unc-rebrand' ),
+	// 		'graphite'       => __( 'Graphite', 'sog-unc-rebrand' ),
+	// 		'jelly'          => __( 'Jelly', 'sog-unc-rebrand' ),
+	// 		'mosaic'         => __( 'Mosaic', 'sog-unc-rebrand' ),
+	// 		'notdog'         => __( 'Notdog', 'sog-unc-rebrand' ),
+	// 		'pixel'          => __( 'Pixel', 'sog-unc-rebrand' ),
+	// 		'sharp'          => __( 'Sharp', 'sog-unc-rebrand' ),
+	// 		'sharp-duotone'  => __( 'Sharp Duotone', 'sog-unc-rebrand' ),
+	// 		'slab'           => __( 'Slab', 'sog-unc-rebrand' ),
+	// 		'thumbprint'     => __( 'Thumbprint', 'sog-unc-rebrand' ),
+	// 		'utility'        => __( 'Utility', 'sog-unc-rebrand' ),
+	// 		'vellum'         => __( 'Vellum', 'sog-unc-rebrand' ),
+	// 		'whiteboard'     => __( 'Whiteboard', 'sog-unc-rebrand' ),
+	// 	);
+	// }
 
 	/**
 	 * Get footer logo type options.
@@ -2357,6 +3340,7 @@ class Settings {
 			'shortcode'                  => __( 'Shortcode', 'sog-unc-rebrand' ),
 			'wysiwyg'                    => __( 'WYSIWYG', 'sog-unc-rebrand' ),
 			'menu'                       => __( 'Menu', 'sog-unc-rebrand' ),
+			'menus'                      => __( 'Menu + Menu', 'sog-unc-rebrand' ),
 			'menu_shortcode'             => __( 'Menu + Shortcode', 'sog-unc-rebrand' ),
 			'menu_wysiwyg'               => __( 'Menu + WYSIWYG', 'sog-unc-rebrand' ),
 			'social'                     => __( 'Social links', 'sog-unc-rebrand' ),
@@ -2678,7 +3662,9 @@ class Settings {
 	private function get_condition_attributes( array $args ): string {
 		$attributes = array();
 
-		if ( ! empty( $args['condition_field'] ) ) {
+		if ( ! empty( $args['condition_fields'] ) && is_array( $args['condition_fields'] ) ) {
+			$attributes[] = 'data-condition-fields=\'' . esc_attr( (string) wp_json_encode( $args['condition_fields'] ) ) . "'";
+		} elseif ( ! empty( $args['condition_field'] ) ) {
 			$attributes[] = 'data-condition-field="' . esc_attr( (string) $args['condition_field'] ) . '"';
 		}
 
@@ -2863,6 +3849,81 @@ class Settings {
 
 		return (string) wp_kses( $svg, $this->get_allowed_svg_html() );
 	}
+
+	/**
+	 * Sanitize the mobile back button icon value based on selected mode.
+	 *
+	 * @param string $value Raw icon value.
+	 * @param string $mode Icon mode.
+	 * @return string
+	 */
+	private function sanitize_mobile_back_button_icon_value( string $value, string $mode ): string {
+		$value = trim( $value );
+
+		if ( '' === $value ) {
+			return '';
+		}
+
+		if ( 'svg' === $mode ) {
+			return $this->sanitize_svg_markup( $value );
+		}
+
+		if ( 'html' === $mode ) {
+			$allowed_html = array_merge(
+				$this->get_allowed_svg_html(),
+				array(
+					'i'      => array( 'class' => true, 'style' => true, 'aria-hidden' => true, 'role' => true ),
+					'span'   => array( 'class' => true, 'style' => true, 'aria-hidden' => true, 'role' => true ),
+					'em'     => array( 'class' => true, 'style' => true ),
+					'strong' => array( 'class' => true, 'style' => true ),
+					'b'      => array( 'class' => true, 'style' => true ),
+					'small'  => array( 'class' => true, 'style' => true ),
+				)
+			);
+
+			return (string) wp_kses( $value, $allowed_html );
+		}
+
+		return sanitize_text_field( $value );
+	}
+
+	/**
+	 * Add a warning when icon value appears to mismatch the selected mode.
+	 *
+	 * @param string $mode Selected icon mode.
+	 * @param string $value Raw icon value.
+	 * @return void
+	 */
+	// private function add_mobile_back_button_icon_mode_warning( string $mode, string $value ): void {
+	// 	$value = trim( $value );
+
+	// 	if ( '' === $value ) {
+	// 		return;
+	// 	}
+
+	// 	$looks_like_svg = 1 === preg_match( '/<\s*svg\b/i', $value );
+	// 	$looks_like_html = 1 === preg_match( '/<\s*\/?\s*[a-z][^>]*>/i', $value );
+	// 	$looks_like_unicode = 1 === preg_match( '/^(\\\\[uUxX][0-9a-fA-F]{2,6}|\\\\[0-9a-fA-F]{3,6}|U\+[0-9A-Fa-f]{4,6}|&#x[0-9a-fA-F]{2,6};?|&#[0-9]{2,7};?)$/', $value );
+	// 	$warning = '';
+
+	// 	if ( 'svg' === $mode && ! $looks_like_svg ) {
+	// 		$warning = __( 'Mobile back button icon: mode is set to SVG, but the icon value does not look like SVG markup.', 'sog-unc-rebrand' );
+	// 	} elseif ( 'html' === $mode && ! $looks_like_html ) {
+	// 		$warning = __( 'Mobile back button icon: mode is set to HTML, but the icon value does not look like HTML markup.', 'sog-unc-rebrand' );
+	// 	} elseif ( 'unicode' === $mode && ! $looks_like_unicode ) {
+	// 		$warning = __( 'Mobile back button icon: mode is set to Unicode, but the icon value does not look like a Unicode codepoint format.', 'sog-unc-rebrand' );
+	// 	} elseif ( 'glyph' === $mode && ( $looks_like_html || $looks_like_unicode ) ) {
+	// 		$warning = __( 'Mobile back button icon: mode is set to Glyph/Text, but the icon value looks like HTML or Unicode notation.', 'sog-unc-rebrand' );
+	// 	} elseif ( 'html' !== $mode && $looks_like_html ) {
+	// 		$warning = __( 'Mobile back button icon: HTML markup was entered, but icon mode is not set to HTML.', 'sog-unc-rebrand' );
+	// 	} elseif ( 'svg' !== $mode && $looks_like_svg ) {
+	// 		$warning = __( 'Mobile back button icon: SVG markup was entered, but icon mode is not set to SVG.', 'sog-unc-rebrand' );
+	// 	}
+
+	// 	if ( '' !== $warning ) {
+	// 		add_settings_error( self::OPTION_NAME, 'header_mobile_back_button_icon_mode_mismatch', $warning, 'warning' );
+	// 	}
+	// }
 
 	/**
 	 * Return the allowed SVG tags and attributes.

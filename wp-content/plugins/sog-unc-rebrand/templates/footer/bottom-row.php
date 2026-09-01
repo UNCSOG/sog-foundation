@@ -30,6 +30,8 @@ $separator_2_style        = (string) $settings['footer_separator_2_style'];
 $separator_2_style_mobile = (string) $settings['footer_separator_2_style_mobile'];
 $separator_2_color        = (string) $settings['footer_separator_2_color'];
 $separator_2_hide_mobile  = ! empty( $settings['footer_separator_2_hide_mobile'] );
+$separator_2_margin_top   = (int) ( $settings['footer_separator_2_margin_top'] ?? 24 );
+$separator_2_margin_bottom = (int) ( $settings['footer_separator_2_margin_bottom'] ?? 24 );
 
 $first_column_enabled                 = ! empty( $settings['footer_column_1_copyright_enabled'] ) || ! empty( $first_column['footer_column_1_copyright_enabled'] );
 $first_column_hidden                  = ! $first_column_enabled || ! empty( $settings['footer_column_1_hide_mobile'] );
@@ -40,14 +42,44 @@ $first_column_heading_text_transform  = (string) ( $settings['footer_column_1_he
 $first_column_heading_text_decoration = (string) ( $settings['footer_column_1_heading_text_decoration'] ?? 'none' );
 $first_column_menu                    = isset( $first_column['menu'] ) ? $first_column['menu'] : '';
 // $give_social_gap      = (int) ( $settings['footer_give_social_gap'] ?? 16 );
+
+$copyright_text_style  = sprintf(
+	'font-family:%1$s;font-weight:%2$s;font-style:%3$s;font-size:%4$spx;line-height:%5$s;text-transform:%6$s;text-decoration:%7$s;padding:%8$spx %9$spx %10$spx %11$spx;',
+	esc_attr( (string) ( $settings['footer_bottom_copyright_text_font_family'] ?? 'Montserrat, sans-serif' ) ),
+	(int) ( $settings['footer_bottom_copyright_text_font_weight'] ?? 400 ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_text_font_style'] ?? 'normal' ) ),
+	(int) ( $settings['footer_bottom_copyright_text_font_size'] ?? 16 ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_text_line_height'] ?? '1.87806rem' ) ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_text_transform'] ?? 'none' ) ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_text_decoration'] ?? 'none' ) ),
+	(int) ( $settings['footer_bottom_copyright_text_padding_top'] ?? 0 ),
+	(int) ( $settings['footer_bottom_copyright_text_padding_right'] ?? 16 ),
+	(int) ( $settings['footer_bottom_copyright_text_padding_bottom'] ?? 8 ),
+	(int) ( $settings['footer_bottom_copyright_text_padding_left'] ?? 16 )
+);
+
+$copyright_links_style = sprintf(
+	'--footer-bottom-links-font-family:%1$s;--footer-bottom-links-font-weight:%2$s;--footer-bottom-links-font-style:%3$s;--footer-bottom-links-font-size:%4$spx;--footer-bottom-links-line-height:%5$s;--footer-bottom-links-transform:%6$s;--footer-bottom-links-decoration:%7$s;--footer-bottom-links-padding-top:%8$spx;--footer-bottom-links-padding-right:%9$spx;--footer-bottom-links-padding-bottom:%10$spx;--footer-bottom-links-padding-left:%11$spx;',
+	esc_attr( (string) ( $settings['footer_bottom_copyright_links_font_family'] ?? 'Montserrat, sans-serif' ) ),
+	(int) ( $settings['footer_bottom_copyright_links_font_weight'] ?? 400 ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_links_font_style'] ?? 'normal' ) ),
+	(int) ( $settings['footer_bottom_copyright_links_font_size'] ?? 16 ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_links_line_height'] ?? '2.5rem' ) ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_links_transform'] ?? 'none' ) ),
+	esc_attr( (string) ( $settings['footer_bottom_copyright_links_decoration'] ?? 'underline' ) ),
+	(int) ( $settings['footer_bottom_copyright_links_padding_top'] ?? 0 ),
+	(int) ( $settings['footer_bottom_copyright_links_padding_right'] ?? 16 ),
+	(int) ( $settings['footer_bottom_copyright_links_padding_bottom'] ?? 8 ),
+	(int) ( $settings['footer_bottom_copyright_links_padding_left'] ?? 16 )
+);
 ?>
 
 <?php if ( !$separator_2_hide_mobile && '' !== $separator_2_style && '' !== $separator_2_color && '' !== $separator_2_thickness  ) : ?>
-	<div id="footer-separator-desktop" data-separator-style-desktop="<?php echo esc_attr( $separator_2_style ); ?>" class="sog-rebrand__footer-separator sog-rebrand__footer-separator--desktop sog-rebrand__footer-separator--medium-mobile" style="border-top:<?php echo esc_attr( sprintf( '%1$spx %2$s %3$s', $separator_2_thickness, $separator_2_style, $separator_2_color ) ); ?>;"></div>
+	<div id="footer-separator-desktop" data-separator-style-desktop="<?php echo esc_attr( $separator_2_style ); ?>" class="sog-rebrand__footer-separator sog-rebrand__footer-separator--desktop sog-rebrand__footer-separator--medium-mobile" style="<?php echo esc_attr( sprintf( 'border-top:%1$spx %2$s %3$s;margin-top:%4$spx;margin-bottom:%5$spx;', $separator_2_thickness, $separator_2_style, $separator_2_color, $separator_2_margin_top, $separator_2_margin_bottom ) ); ?>"></div>
 <?php endif; ?>
 
 <?php if ( !$separator_2_hide_mobile && '' !== $separator_2_style_mobile ) : ?>
-	<div id="footer-separator-mobile" data-separator-style-small-mobile="<?php echo esc_attr( $separator_2_style_mobile ); ?>" class="sog-rebrand__footer-separator sog-rebrand__footer-separator--small-mobile" style="border-top:<?php echo esc_attr( sprintf( '%1$spx %2$s %3$s', $separator_2_thickness, $separator_2_style_mobile, $separator_2_color ) ); ?>;"></div>
+	<div id="footer-separator-mobile" data-separator-style-small-mobile="<?php echo esc_attr( $separator_2_style_mobile ); ?>" class="sog-rebrand__footer-separator sog-rebrand__footer-separator--small-mobile" style="<?php echo esc_attr( sprintf( 'border-top:%1$spx %2$s %3$s;margin-top:%4$spx;margin-bottom:%5$spx;', $separator_2_thickness, $separator_2_style_mobile, $separator_2_color, $separator_2_margin_top, $separator_2_margin_bottom ) ); ?>"></div>
 <?php endif; ?>
 
 <script>
@@ -70,13 +102,13 @@ jQuery(function($) {
 <section class="sog-rebrand__footer-row sog-rebrand__footer-row--bottom<?php echo ! empty( $settings['footer_bottom_hide_mobile'] ) ? ' sog-rebrand__footer-row--bottom-hide-mobile' : ''; ?>">
 	<div class="sog-rebrand__footer-bottom-bar">
 		<?php if ( ! empty( $settings['footer_bottom_show_copyright'] ) ) : ?>
-			<p class="sog-rebrand__copyright">
+			<p class="sog-rebrand__copyright" style="<?php echo esc_attr( $copyright_text_style ); ?>">
 				<?php echo esc_html( str_replace( '{year}', wp_date( 'Y' ), (string) $settings['footer_bottom_copyright_text'] ) ); ?>
 			</p>
 		<?php endif; ?>
 
 		<?php if ( ! empty( $settings['footer_bottom_show_menu'] ) && $footer_bottom_menu ) : ?>
-			<nav class="sog-rebrand__nav" aria-label="<?php echo esc_attr__( 'Footer bottom navigation', 'sog-unc-rebrand' ); ?>">
+			<nav class="sog-rebrand__nav" style="<?php echo esc_attr( $copyright_links_style ); ?>" aria-label="<?php echo esc_attr__( 'Footer bottom navigation', 'sog-unc-rebrand' ); ?>">
 				<?php echo wp_kses_post( $footer_bottom_menu ); ?>
 			</nav>
 		<?php endif; ?>
@@ -96,7 +128,7 @@ jQuery(function($) {
 
 				<?php if ( in_array( $first_column_mode, $menu_modes, true ) ) : ?>
 					<?php if ( '' !== $first_column_heading ) : ?>
-						<p class="sog-rebrand__footer-column-heading" style="text-transform:<?php echo esc_attr( $first_column_heading_text_transform ); ?>;text-decoration:<?php echo esc_attr( $first_column_heading_text_decoration ); ?>;"><?php echo esc_html( $first_column_heading ); ?></p>
+						<h3 class="sog-rebrand__footer-column-heading" style="text-transform:<?php echo esc_attr( $first_column_heading_text_transform ); ?>;text-decoration:<?php echo esc_attr( $first_column_heading_text_decoration ); ?>;"><?php echo esc_html( $first_column_heading ); ?></h3>
 					<?php endif; ?>
 
 					<?php if ( $first_column_menu ) : ?>

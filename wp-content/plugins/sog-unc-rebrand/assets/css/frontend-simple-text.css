@@ -9,23 +9,46 @@
 	 * ------------------------------------------------------- */
 
 	& .sog-rebrand__header-core--simple-text .sog-rebrand__brand-title.school-name {
-		font-size: 1.875rem;
-		font-weight: 700;
-		font-style: normal;
-		letter-spacing: normal;
-		line-height: 1.875rem; /* 100% */
-		font-family: var(--sog-rebrand-header-school-name-font, var(--sog-rebrand-font-body));
 		color: var(--sog-rebrand-header-school-name-color, inherit);
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.875rem);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 700);
+		text-decoration: var(--sog-rebrand-header-school-name-text-decoration, none);
+		padding-top: var(--sog-rebrand-header-school-name-padding-top, 0px);
+		padding-right: var(--sog-rebrand-header-school-name-padding-right, 0px);
+		padding-bottom: var(--sog-rebrand-header-school-name-padding-bottom, 0px);
+		padding-left: var(--sog-rebrand-header-school-name-padding-left, 0px);
+		letter-spacing: normal;
 	}
 
-	& .sog-rebrand__header-core--simple-text .sog-rebrand__brand-title.site-name,
-	& .sog-rebrand__header-core--simple-text .sog-rebrand__brand-title.site-tagline {
-		font-family: var(--sog-rebrand-font-body);
-		font-size: 1rem;
-		font-weight: 600;
-		font-style: normal;
+	& .sog-rebrand__header-core--simple-text .sog-rebrand__brand-title.site-name {
+		color: var(--sog-rebrand-header-text);
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1rem);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 600);
+		text-decoration: var(--sog-rebrand-header-site-name-text-decoration, none);
+		padding-top: var(--sog-rebrand-header-site-name-padding-top, 0px);
+		padding-right: var(--sog-rebrand-header-site-name-padding-right, 0px);
+		padding-bottom: var(--sog-rebrand-header-site-name-padding-bottom, 0px);
+		padding-left: var(--sog-rebrand-header-site-name-padding-left, 0px);
 		letter-spacing: normal;
-		line-height: 0.06rem; /* 1.25; */
+		white-space: nowrap;
+	}
+
+	& .sog-rebrand__header-core--simple-text .sog-rebrand__brand-title.site-tagline {
+		color: var(--sog-rebrand-header-site-description-color, inherit);
+		font-family: var(--sog-rebrand-header-site-description-font-family, 'Open Sans', Arial, sans-serif);
+		font-size: var(--sog-rebrand-header-site-description-font-size, 1rem);
+		font-style: var(--sog-rebrand-header-site-description-font-style, normal);
+		font-weight: var(--sog-rebrand-header-site-description-font-weight, 600);
+		text-decoration: var(--sog-rebrand-header-site-description-text-decoration, none);
+		padding-top: var(--sog-rebrand-header-site-description-padding-top, 0px);
+		padding-right: var(--sog-rebrand-header-site-description-padding-right, 0px);
+		padding-bottom: var(--sog-rebrand-header-site-description-padding-bottom, 0px);
+		padding-left: var(--sog-rebrand-header-site-description-padding-left, 0px);
+		letter-spacing: normal;
 		white-space: nowrap;
 	}
 }
@@ -44,10 +67,10 @@
 		white-space: nowrap;
 	}
 
-	& .sog-rebrand__header-core--simple-text .sog-rebrand__menu a {
+	/* & .sog-rebrand__header-core--simple-text .sog-rebrand__menu a {
 		font-family: var(--sog-rebrand-font-heading);
 		font-size: 1rem;
 		font-weight: 700;
 		text-transform: capitalize;
-	}
+	} */
 }

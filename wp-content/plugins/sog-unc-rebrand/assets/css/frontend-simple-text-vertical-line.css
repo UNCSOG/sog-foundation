@@ -19,29 +19,27 @@
 	}
 
 	/* site-name: base typography (Montserrat default, overridden by CSS var below) */
-	& .sog-rebrand__header-core--simple-text-vertical-line .sog-rebrand__brand-title.site-name {
-		font-family: Montserrat;
-		font-size: 1rem;
-		font-style: normal;
-		font-weight: 600;
-		line-height: 1.25rem; /* 125% */
-		letter-spacing: 0.06rem;
-	}
-
-	/* site-name: customizable via CSS vars (override the Montserrat default above) */
 	& .sog-rebrand__header-core--simple-text-vertical-line .sog-rebrand__brand-title.site-name,
 	& .sog-rebrand__header-core--simple-text-vertical-line a .sog-rebrand__brand-title.site-name {
-		font-family: var(--sog-rebrand-header-text);
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1rem);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 600);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		text-transform: var(--sog-rebrand-header-site-name-text-transform, none);
+		letter-spacing: 0.06rem;
+		line-height: 1.25rem; /* 125% */
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
 		color: var(--sog-rebrand-header-text-color, inherit);
 	}
 
 	& .sog-rebrand__header-core--simple-text-vertical-line .sog-rebrand__brand-title.school-name {
-		font-size: 1.875rem;
-		font-weight: 700;
-		font-style: normal;
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.875rem);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 700);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		text-transform: var(--sog-rebrand-header-school-name-text-transform, none);
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', Arial, sans-serif);
+		color: var(--sog-rebrand-header-school-name-color, inherit);
 		letter-spacing: normal;
 		line-height: 1.875rem; /* 100% */
-		font-family: var(--sog-rebrand-header-school-name-font, var(--sog-rebrand-font-body));
-		color: var(--sog-rebrand-header-school-name-color, inherit);
+		padding-bottom: 1.875rem;
 	}
 }

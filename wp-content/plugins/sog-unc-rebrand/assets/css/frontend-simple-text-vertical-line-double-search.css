@@ -1,0 +1,61 @@
+:is(
+	.sog-rebrand__header[data-sog-rebrand-component="header"],
+	.sog-rebrand__footer[data-sog-rebrand-component="footer"],
+	.sog-rebrand__utility-bar[data-sog-rebrand-component="utility-bar"]
+) {
+	/* -------------------------------------------------------
+	 * Header core: simple-text-vertical-line-double-search
+	 * Template: core-simple-text-vertical-line-double-search.php
+	 * ------------------------------------------------------- */
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-double-search .sog-rebrand__header-shell {
+		grid-template-rows: minmax(0, 1fr) auto auto;
+		grid-template-columns: 1fr;
+		gap: 0.625rem;
+	}
+
+    & .sog-rebrand__header-core--simple-text-vertical-line-double-search .sog-rebrand__school-name-search-cluster {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+		/* padding-bottom: 1.875rem; */
+    }
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-double-search .sog-rebrand__header-shell .sog-rebrand__header-separator {
+		margin: 0 !important;
+	}
+
+	/* site-name: base typography (Montserrat default, overridden by CSS var below) */
+	& .sog-rebrand__header-core--simple-text-vertical-line-double-search .sog-rebrand__brand-title.site-name {
+		text-transform: var(--sog-rebrand-header-site-name-text-transform, none);
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
+		font-weight: var(--sog-rebrand-header-site-name-font-weight, 600);
+		font-style: var(--sog-rebrand-header-site-name-font-style, normal);
+		font-size: var(--sog-rebrand-header-site-name-font-size, 1rem);
+		line-height: 1.25rem; /* 125% */
+		letter-spacing: 0.06rem;
+	}
+
+	/* site-name: customizable via CSS vars (override the Montserrat default above) */
+	& .sog-rebrand__header-core--simple-text-vertical-line-double-search .sog-rebrand__brand-title.site-name,
+	& .sog-rebrand__header-core--simple-text-vertical-line-double-search a .sog-rebrand__brand-title.site-name {
+		font-family: var(--sog-rebrand-header-site-name-font-family, 'Montserrat', Arial, sans-serif);
+		color: var(--sog-rebrand-header-site-name-color, var(--sog-rebrand-header-text));
+	}
+
+	& .sog-rebrand__header-core--simple-text-vertical-line-double-search .sog-rebrand__brand-title.school-name {
+		text-transform: var(--sog-rebrand-header-school-name-text-transform, none);
+		font-family: var(--sog-rebrand-header-school-name-font-family, 'Open Sans', Arial, sans-serif);
+		font-weight: var(--sog-rebrand-header-school-name-font-weight, 700);
+		font-style: var(--sog-rebrand-header-school-name-font-style, normal);
+		font-size: var(--sog-rebrand-header-school-name-font-size, 1.875rem);
+		font-family: var(--sog-rebrand-header-school-name-font, var(--sog-rebrand-font-body));
+		/* color: var(--sog-rebrand-header-school-name-color, inherit); */
+		color: var(--sog-rebrand-header-school-name-color, #FFFFFF);
+		letter-spacing: normal;
+		line-height: 1.875rem; /* 100% */
+	}
+
+	& .sog-rebrand__site-search-container {
+		border: 0;
+	}
+}

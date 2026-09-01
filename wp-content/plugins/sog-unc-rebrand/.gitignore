@@ -16,3 +16,5 @@ xmlrpc.php
 readme.html
 phpstan.*
 .git/
+dev/*
+development/*
